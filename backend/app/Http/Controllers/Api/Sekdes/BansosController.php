@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Sekdes;
 
 use App\Http\Controllers\Controller;
 use App\Models\BantuanPenerima;
@@ -75,7 +75,6 @@ class BansosController extends Controller
 
         $warga = WargaProfile::with('kartuKeluarga')->findOrFail($validated['warga_profile_id']);
 
-        // Check if already registered
         $exists = BantuanPenerima::where('bantuan_sosial_id', $bansos->id)
             ->where('warga_profile_id', $warga->id)
             ->exists();
@@ -113,7 +112,6 @@ class BansosController extends Controller
             'published_at' => now(),
         ]);
 
-        // Update semua status penerima menjadi 'Siap Diambil'
         BantuanPenerima::where('bantuan_sosial_id', $bansos->id)
             ->where('status_penyaluran', 'Terdaftar')
             ->update(['status_penyaluran' => 'Siap Diambil']);

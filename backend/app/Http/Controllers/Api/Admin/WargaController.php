@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\KartuKeluarga;
@@ -14,17 +14,10 @@ class WargaController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $user = $request->user()->load('role', 'wargaProfile.rt');
         $query = WargaProfile::with(['kartuKeluarga', 'rt.rw.dusun', 'user']);
 
-        if ($user->hasRole('rt') || $user->hasRole('sekretaris_rt') || $user->hasRole('bendahara_rt')) {
-            $rtId = $user->wargaProfile ? $user->wargaProfile->rt_id : 1;
-            $query->where('rt_id', $rtId);
-        } elseif ($user->hasRole('rw')) {
-            $rwId = $user->wargaProfile && $user->wargaProfile->rt ? $user->wargaProfile->rt->rw_id : 1;
-            $query->whereHas('rt', function ($q) use ($rwId) {
-                $q->where('rw_id', $rwId);
-            });
+        if ($request->has('rt_id')) {
+            $query->where('rt_id', $request->query('rt_id'));
         }
 
         if ($request->has('search')) {

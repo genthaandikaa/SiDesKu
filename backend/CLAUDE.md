@@ -57,15 +57,32 @@ backend/app/
 +-- Http/
 |   +-- Controllers/
 |   |   +-- Api/
-|   |       +-- AuthController.php
-|   |       +-- ApbdesController.php
-|   |       +-- BansosController.php
-|   |       +-- DesaSettingController.php
-|   |       +-- KasRtController.php
-|   |       +-- PengaduanController.php
-|   |       +-- PublicInfoController.php
-|   |       +-- SuratController.php
-|   |       +-- WargaController.php
+|   |       +-- Admin/
+|   |       |   +-- AdminBansosController.php
+|   |       |   +-- AdminDesaSettingController.php
+|   |       |   +-- AdminWargaController.php
+|   |       +-- Auth/
+|   |       |   +-- AuthController.php
+|   |       +-- Bendahara/
+|   |       |   +-- ApbdesController.php
+|   |       +-- Public/
+|   |       |   +-- PublicInfoController.php
+|   |       |   +-- PublicSuratController.php
+|   |       +-- Rt/
+|   |       |   +-- KasRtController.php
+|   |       |   +-- RtPengaduanController.php
+|   |       |   +-- RtSuratController.php
+|   |       |   +-- RtWargaController.php
+|   |       +-- Rw/
+|   |       |   +-- RwSuratController.php
+|   |       |   +-- RwWargaController.php
+|   |       +-- Sekdes/
+|   |       |   +-- BansosController.php
+|   |       |   +-- DesaSettingController.php
+|   |       |   +-- SekdesSuratController.php
+|   |       +-- Warga/
+|   |           +-- PengaduanController.php
+|   |           +-- WargaSuratController.php
 |   +-- Requests/          <- BELUM ADA, wajib buat (Rule #1)
 |   +-- Resources/         <- BELUM ADA, wajib buat (Rule #5)
 +-- Models/

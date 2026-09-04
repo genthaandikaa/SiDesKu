@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Warga;
 
 use App\Http\Controllers\Controller;
 use App\Models\PengaduanWarga;
@@ -12,19 +12,15 @@ class PengaduanController extends Controller
     public function index(Request $request): JsonResponse
     {
         $user = $request->user()->load('wargaProfile.rt');
-        $query = PengaduanWarga::with(['wargaProfile.rt.rw', 'ditanggapiByUser.role']);
-
-        if ($user->hasRole('warga')) {
-            if (!$user->wargaProfile) {
-                return response()->json(['success' => true, 'data' => []]);
-            }
-            $query->where('warga_profile_id', $user->wargaProfile->id);
-        } elseif ($user->hasRole('rt') || $user->hasRole('sekretaris_rt')) {
-            $rtId = $user->wargaProfile ? $user->wargaProfile->rt_id : 1;
-            $query->where('rt_id', $rtId);
+        
+        if (!$user->wargaProfile) {
+            return response()->json(['success' => true, 'data' => []]);
         }
 
-        $pengaduans = $query->orderBy('created_at', 'desc')->get();
+        $pengaduans = PengaduanWarga::with(['wargaProfile.rt.rw', 'ditanggapiByUser.role'])
+            ->where('warga_profile_id', $user->wargaProfile->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -57,27 +53,5 @@ class PengaduanController extends Controller
             'message' => 'Aduan/aspirasi Anda berhasil dikirim ke pengurus RT dan Balai Desa.',
             'data' => $pengaduan->load('wargaProfile'),
         ], 201);
-    }
-
-    public function respond(Request $request, $id): JsonResponse
-    {
-        $validated = $request->validate([
-            'tanggapan' => 'required|string',
-            'status' => 'required|in:Ditinjau RT,Diproses Desa,Selesai,Ditolak',
-        ]);
-
-        $pengaduan = PengaduanWarga::findOrFail($id);
-        $pengaduan->update([
-            'tanggapan' => $validated['tanggapan'],
-            'status' => $validated['status'],
-            'ditanggapi_by_user_id' => $request->user()->id,
-            'ditanggapi_at' => now(),
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Tanggapan resmi berhasil disimpan.',
-            'data' => $pengaduan->fresh(['wargaProfile', 'ditanggapiByUser']),
-        ]);
     }
 }

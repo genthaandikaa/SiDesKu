@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\WargaProfile;
 use Illuminate\Http\JsonResponse;
@@ -86,7 +87,7 @@ class AuthController extends Controller
             'alamat' => 'nullable|string',
         ]);
 
-        $wargaRole = \App\Models\Role::where('slug', 'warga')->first();
+        $wargaRole = Role::where('slug', 'warga')->first();
         $roleId = $wargaRole ? $wargaRole->id : 9;
 
         $user = User::create([
