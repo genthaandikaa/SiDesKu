@@ -70,4 +70,30 @@ class PublicInfoController extends Controller
 
         return response()->json(['success' => true, 'data' => $logs]);
     }
+
+    public function getPublicHome(): JsonResponse
+    {
+        $desa = \App\Models\DesaSetting::first();
+        $totalWarga = WargaProfile::count();
+        $totalLaki = WargaProfile::where('jenis_kelamin', 'L')->count();
+        $totalPerempuan = WargaProfile::where('jenis_kelamin', 'P')->count();
+        $totalKK = KartuKeluarga::count();
+        $totalSuratSelesai = SuratRequest::where('status', 'completed')->count();
+        $pkhEligible = WargaProfile::where('status_ekonomi', 'Kurang Mampu (PKH/BLT Eligible)')->count();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'desa' => $desa,
+                'stats' => [
+                    'total_warga' => $totalWarga,
+                    'total_laki' => $totalLaki,
+                    'total_perempuan' => $totalPerempuan,
+                    'total_kk' => $totalKK,
+                    'total_surat_selesai' => $totalSuratSelesai,
+                    'pkh_eligible' => $pkhEligible,
+                ],
+            ],
+        ]);
+    }
 }

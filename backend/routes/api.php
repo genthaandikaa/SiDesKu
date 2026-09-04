@@ -47,6 +47,7 @@ Route::get('/settings/desa', [DesaSettingController::class, 'getSettings']);
 Route::get('/public/beritas', [PublicInfoController::class, 'getBeritas']);
 Route::get('/public/pengumumans', [PublicInfoController::class, 'getPengumumans']);
 Route::get('/public/stats', [PublicInfoController::class, 'getVillageStats']);
+Route::get('/public/home', [PublicInfoController::class, 'getPublicHome']);
 Route::get('/public/apbdes/summary', [ApbdesController::class, 'publicSummary']);
 
 // Layanan & Tracking Surat Publik
