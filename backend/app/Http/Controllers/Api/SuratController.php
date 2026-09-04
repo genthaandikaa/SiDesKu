@@ -121,10 +121,10 @@ class SuratController extends Controller
         $surat = SuratRequest::with('wargaProfile')->findOrFail($id);
         $user = $request->user();
 
-        $catatan = $request->input('catatan', 'Disetujui dan diteruskan ke Rukun Warga (RW).');
+        $catatan = $request->input('catatan', 'Permohonan disetujui RT 01 dan diteruskan ke Kepala Desa untuk legalisasi & TTD digital.');
 
         $surat->update([
-            'status' => 'pending_rw',
+            'status' => 'processed_sekdes',
         ]);
 
         SuratTracking::create([
@@ -143,14 +143,14 @@ class SuratController extends Controller
                 'nomor_tujuan' => $surat->wargaProfile->no_hp_wa,
                 'jenis_notifikasi' => 'SURAT_APPROVED_RT',
                 'judul' => 'Surat Disetujui RT',
-                'pesan' => "Halo {$surat->wargaProfile->nama_lengkap}, pengajuan surat {$surat->nomor_resi} telah DISETUJUI oleh RT dan saat ini diteruskan ke Ketua RW.",
+                'pesan' => "Halo {$surat->wargaProfile->nama_lengkap}, pengajuan surat {$surat->nomor_resi} telah DISETUJUI oleh Ketua RT dan diteruskan ke Kepala Desa untuk penerbitan dokumen sah.",
                 'status_pengiriman' => 'TERKIRIM',
             ]);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Surat berhasil disetujui RT dan diteruskan ke RW.',
+            'message' => 'Surat berhasil disetujui RT dan diteruskan ke Kepala Desa / Sekdes.',
             'data' => $surat->fresh(['trackings.actorUser']),
         ]);
     }
@@ -202,9 +202,9 @@ class SuratController extends Controller
         SuratTracking::create([
             'surat_request_id' => $surat->id,
             'actor_user_id' => $user->id,
-            'status_stage' => 'Sekretaris Desa',
+            'status_stage' => 'Kepala Desa / Sekdes',
             'status_action' => 'Ditandatangani',
-            'catatan' => "Surat resmi diterbitkan dengan nomor {$nomorResmi} dan dilegalisasi stempel QR digital sah.",
+            'catatan' => "Surat resmi diterbitkan dengan nomor {$nomorResmi} dan dilegalisasi stempel QR digital sah Kepala Desa.",
         ]);
 
         // WhatsApp notification ready

@@ -113,7 +113,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
   return (
     <div className="space-y-6 page-enter font-sans">
       
-      {/* --- ROW 1: TOP 4 METRIC CARDS WITH CIRCULAR DONUT GAUGES --- */}
+      {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <MetricStatCard
           title="Realisasi Pendapatan"
@@ -153,7 +153,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
         />
       </div>
 
-      {/* --- ROW 2: PERFORMANCE SPLINE CHART (8-COL) + MINI CALENDAR (4-COL) --- */}
+      {/* Financial Chart & Calendar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
         <div className="lg:col-span-8 space-y-5">

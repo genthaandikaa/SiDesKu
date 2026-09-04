@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, MapPin } from 'lucide-react';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, Clock, MapPin, HeartPulse, Building2, HandHeart } from 'lucide-react';
 
 interface AgendaItem {
   id: string;
@@ -165,35 +165,52 @@ export const MiniCalendarWidget: React.FC<MiniCalendarWidgetProps> = ({
           Agenda Mendatang
         </div>
 
-        {agendas.slice(0, 2).map((a) => (
-          <div
-            key={a.id}
-            className="p-2.5 rounded-2xl bg-slate-50 hover:bg-emerald-50/50 border border-slate-100 hover:border-emerald-200 transition-all space-y-1 text-xs"
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-extrabold text-slate-900 truncate pr-2">
-                {a.title}
-              </span>
-              <span className="text-[9px] font-black text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-md shrink-0">
-                Tgl {a.date}
-              </span>
-            </div>
-            <div className="flex items-center gap-3 text-[10px] text-slate-500 font-medium">
-              {a.time && (
-                <span className="flex items-center gap-1">
-                  <Clock className="w-3 h-3 text-slate-400" />
-                  <span>{a.time}</span>
+        {agendas.slice(0, 3).map((a) => {
+          const getCategoryIcon = (cat?: string, title?: string) => {
+            const str = `${cat || ''} ${title || ''}`.toLowerCase();
+            if (str.includes('kesehatan') || str.includes('posyandu')) {
+              return <HeartPulse className="w-3.5 h-3.5 text-rose-500 shrink-0" />;
+            }
+            if (str.includes('pemerintahan') || str.includes('rapat') || str.includes('koordinasi')) {
+              return <Building2 className="w-3.5 h-3.5 text-indigo-500 shrink-0" />;
+            }
+            if (str.includes('sosial') || str.includes('bansos') || str.includes('pkh') || str.includes('blt')) {
+              return <HandHeart className="w-3.5 h-3.5 text-amber-500 shrink-0" />;
+            }
+            return <CalendarIcon className="w-3.5 h-3.5 text-emerald-500 shrink-0" />;
+          };
+
+          return (
+            <div
+              key={a.id}
+              className="p-2.5 rounded-2xl bg-slate-50 hover:bg-emerald-50/50 border border-slate-100 hover:border-emerald-200 transition-all space-y-1 text-xs"
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-extrabold text-slate-900 truncate pr-2 flex items-center gap-1.5">
+                  {getCategoryIcon(a.category, a.title)}
+                  <span className="truncate">{a.title}</span>
                 </span>
-              )}
-              {a.location && (
-                <span className="flex items-center gap-1 truncate">
-                  <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
-                  <span className="truncate">{a.location}</span>
+                <span className="text-[9px] font-black text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-md shrink-0">
+                  Tgl {a.date}
                 </span>
-              )}
+              </div>
+              <div className="flex items-center gap-3 text-[10px] text-slate-500 font-medium">
+                {a.time && (
+                  <span className="flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-slate-400" />
+                    <span>{a.time}</span>
+                  </span>
+                )}
+                {a.location && (
+                  <span className="flex items-center gap-1 truncate">
+                    <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
+                    <span className="truncate">{a.location}</span>
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -20,6 +20,8 @@ import {
   ArrowRight,
   TrendingUp,
   Activity,
+  HeartPulse,
+  HandHeart,
   FileCheck2,
   Share2,
   Database,
@@ -31,9 +33,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 
-// =========================================================================
-// 1. SHARED VIEWS (Pengumuman, Agenda, Profil, Notifikasi)
-// =========================================================================
+// Shared views (Pengumuman, Agenda, Profil, Notifikasi)
 
 export const PengumumanView: React.FC<{ canCreate?: boolean }> = ({ canCreate }) => {
   const { user } = useAuth();
@@ -415,6 +415,14 @@ export const AgendaDesaView: React.FC = () => {
     },
   ];
 
+  const getCategoryIcon = (tipe: string) => {
+    const t = tipe.toLowerCase();
+    if (t.includes('kesehatan') || t.includes('posyandu')) return <HeartPulse className="w-5 h-5 text-emerald-700" />;
+    if (t.includes('pemerintahan') || t.includes('musrenbang')) return <Building2 className="w-5 h-5 text-emerald-700" />;
+    if (t.includes('sosial') || t.includes('blt') || t.includes('bansos')) return <HandHeart className="w-5 h-5 text-emerald-700" />;
+    return <Calendar className="w-5 h-5 text-emerald-700" />;
+  };
+
   return (
     <div className="space-y-6 animate-fade-in font-sans">
       <div>
@@ -426,32 +434,44 @@ export const AgendaDesaView: React.FC = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
         {events.map((ev) => (
-          <div key={ev.id} className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4 hover:border-emerald-300 transition-colors">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-              <Calendar className="w-5 h-5" />
+          <div
+            key={ev.id}
+            className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition-all hover:shadow-md h-full space-y-4"
+          >
+            <div className="space-y-4 flex-1 flex flex-col">
+              {/* Green Icon Box with Category Logo */}
+              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-100/70 flex items-center justify-center font-bold shrink-0">
+                {getCategoryIcon(ev.tipe)}
+              </div>
+
+              <div className="space-y-1 flex-1 flex flex-col justify-start">
+                <div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-black uppercase inline-block">
+                    {ev.tipe}
+                  </span>
+                </div>
+                {/* min-h-[3rem] ensures 1-line titles match 2-line titles in vertical height */}
+                <h3 className="text-base font-black text-slate-900 leading-snug pt-1 min-h-[3rem] flex items-start">
+                  {ev.judul}
+                </h3>
+              </div>
             </div>
 
-            <div className="space-y-1">
-              <span className="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-black uppercase">
-                {ev.tipe}
-              </span>
-              <h3 className="text-base font-black text-slate-900 leading-snug pt-1">{ev.judul}</h3>
-            </div>
-
-            <div className="space-y-1.5 text-xs text-slate-600 pt-2 border-t border-slate-100 font-medium">
+            {/* Bottom Details Section aligned horizontally with mt-auto */}
+            <div className="space-y-1.5 text-xs text-slate-600 pt-3 border-t border-slate-100 font-medium mt-auto">
               <div className="flex items-center gap-2 text-slate-800 font-bold">
-                <Clock className="w-3.5 h-3.5 text-emerald-600" />
-                <span>{ev.waktu}</span>
+                <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span className="truncate">{ev.waktu}</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                <span>{ev.tempat}</span>
+                <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="truncate">{ev.tempat}</span>
               </div>
               <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                <Users className="w-3.5 h-3.5 text-slate-400" />
-                <span>{ev.peserta}</span>
+                <Users className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                <span className="truncate">{ev.peserta}</span>
               </div>
             </div>
           </div>

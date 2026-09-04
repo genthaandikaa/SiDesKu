@@ -68,7 +68,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
   return (
     <div className="space-y-6 page-enter font-sans">
       
-      {/* --- ROW 1: TOP 4 METRIC CARDS WITH CIRCULAR DONUT GAUGES --- */}
+      {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <MetricStatCard
           title="Menunggu Verifikasi RW"
@@ -108,7 +108,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         />
       </div>
 
-      {/* --- ROW 2: PERFORMANCE SPLINE CHART (8-COL) + MINI CALENDAR (4-COL) --- */}
+      {/* Performance Chart & Calendar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
         <div className="lg:col-span-8 space-y-5">
@@ -244,7 +244,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         </div>
       </div>
 
-      {/* --- ROW 3: ANTREAN PERMOHONAN SURAT MASUK TABLE --- */}
+      {/* Table Permohonan Surat */}
       <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>

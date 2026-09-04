@@ -81,10 +81,171 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
   const pendingCount = surats.filter(s => s.status === 'processed_sekdes').length;
   const completedCount = surats.filter(s => s.status === 'completed').length;
 
+  // Antrean Verifikasi & Legalisasi Surat
+  if (['proses_surat', 'verifikasi_surat', 'persetujuan_surat'].includes(activeSubmenu)) {
+    const pendingSuratList = surats.filter(s => s.status === 'processed_sekdes' || s.status === 'pending_rt');
+    return (
+      <div className="space-y-6 animate-fade-in font-sans">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              Verifikasi & Legalisasi Surat Kepala Desa / Sekdes
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Periksa permohonan yang telah disetujui RT dan berikan tanda tangan digital & stempel QR sah.
+            </p>
+          </div>
+          <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-900 border border-amber-200">
+            {pendingCount} Dokumen Siap TTD QR
+          </span>
+        </div>
+
+        <div className="card-surface p-6 space-y-4">
+          <div className="overflow-x-auto border border-gray-200 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-[#f8faf9] text-gray-600 border-b border-gray-200 font-semibold">
+                <tr>
+                  <th className="p-3">No. Resi</th>
+                  <th className="p-3">Pemohon & NIK</th>
+                  <th className="p-3">Jenis Surat</th>
+                  <th className="p-3">Keperluan</th>
+                  <th className="p-3">Status Verifikasi</th>
+                  <th className="p-3 text-right">Aksi Legalisasi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {pendingSuratList.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="p-8 text-center text-gray-400">
+                      Tidak ada antrean surat yang perlu ditandatangani saat ini.
+                    </td>
+                  </tr>
+                ) : (
+                  pendingSuratList.map((s) => (
+                    <tr key={s.id} className="hover:bg-gray-50/80 transition-colors">
+                      <td className="p-3 font-mono font-bold text-gray-700">{s.nomor_resi}</td>
+                      <td className="p-3">
+                        <div className="font-bold text-gray-900">{s.warga_profile?.nama_lengkap}</div>
+                        <div className="text-[11px] text-gray-400 font-mono">NIK: {s.warga_profile?.nik}</div>
+                      </td>
+                      <td className="p-3 font-medium text-emerald-800">{s.surat_type?.nama_surat}</td>
+                      <td className="p-3 text-gray-600 max-w-xs truncate">{s.keperluan}</td>
+                      <td className="p-3">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                          <Clock size={10} />
+                          <span>Siap TTD Kepala Desa</span>
+                        </span>
+                      </td>
+                      <td className="p-3 text-right">
+                        <button 
+                          onClick={() => handleProcessSekdes(s.id)}
+                          disabled={isProcessing}
+                          className="px-3.5 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 press-down transition-all flex items-center gap-1.5 ml-auto cursor-pointer"
+                        >
+                          <ShieldCheck size={14} /> Terbitkan & Sahkan QR
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {printSurat && (
+          <CetakSuratModal 
+            surat={printSurat} 
+            desa={desa}
+            onClose={() => setPrintSurat(null)} 
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Riwayat Surat Selesai & Arsip Resmi Desa
+  if (['riwayat_surat', 'arsip_surat'].includes(activeSubmenu)) {
+    const completedSuratList = surats.filter(s => s.status === 'completed');
+    return (
+      <div className="space-y-6 animate-fade-in font-sans">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              Arsip & Riwayat Surat Selesai
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Buku register penerbitan dokumen resmi desa yang telah disahkan dengan TTD & Stempel QR Code.
+            </p>
+          </div>
+          <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-200">
+            {completedCount} Surat Resmi Terbit
+          </span>
+        </div>
+
+        <div className="card-surface p-6 space-y-4">
+          <div className="overflow-x-auto border border-gray-200 rounded-xl">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-[#f8faf9] text-gray-600 border-b border-gray-200 font-semibold">
+                <tr>
+                  <th className="p-3">No. Surat Resmi</th>
+                  <th className="p-3">No. Resi</th>
+                  <th className="p-3">Pemohon & NIK</th>
+                  <th className="p-3">Jenis Surat</th>
+                  <th className="p-3">Tanggal Terbit</th>
+                  <th className="p-3 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {completedSuratList.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="p-8 text-center text-gray-400">
+                      Belum ada riwayat surat selesai.
+                    </td>
+                  </tr>
+                ) : (
+                  completedSuratList.map((s) => (
+                    <tr key={s.id} className="hover:bg-gray-50/80 transition-colors">
+                      <td className="p-3 font-mono font-black text-emerald-800">{s.nomor_surat_resmi || '-'}</td>
+                      <td className="p-3 font-mono text-gray-500">{s.nomor_resi}</td>
+                      <td className="p-3">
+                        <div className="font-bold text-gray-900">{s.warga_profile?.nama_lengkap}</div>
+                        <div className="text-[11px] text-gray-400 font-mono">NIK: {s.warga_profile?.nik}</div>
+                      </td>
+                      <td className="p-3 font-medium text-slate-800">{s.surat_type?.nama_surat}</td>
+                      <td className="p-3 text-slate-500">{new Date(s.created_at).toLocaleDateString('id-ID')}</td>
+                      <td className="p-3 text-right">
+                        <button 
+                          onClick={() => setPrintSurat(s)}
+                          className="px-3.5 py-1.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 press-down flex items-center gap-1.5 ml-auto cursor-pointer border border-emerald-200"
+                        >
+                          <Printer size={14} /> Cetak PDF
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {printSurat && (
+          <CetakSuratModal 
+            surat={printSurat} 
+            desa={desa}
+            onClose={() => setPrintSurat(null)} 
+          />
+        )}
+      </div>
+    );
+  }
+
+  // Beranda Dashboard Sekdes
   return (
     <div className="space-y-6 page-enter font-sans">
       
-      {/* --- ROW 1: TOP 4 METRIC CARDS WITH CIRCULAR DONUT GAUGES --- */}
+      {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <MetricStatCard
           title="Siap Diterbitkan & TTD QR"
@@ -124,7 +285,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
         />
       </div>
 
-      {/* --- ROW 2: PERFORMANCE SPLINE CHART (8-COL) + MINI CALENDAR (4-COL) --- */}
+      {/* Performance Chart & Calendar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
         <div className="lg:col-span-8 space-y-5">
@@ -305,7 +466,11 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
         {activeTab === 'antrean' && (
           <div className="card-surface p-6 space-y-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <h2 className="text-sm font-bold text-gray-800 uppercase tracking-wide">Antrean Legalisasi & Penomoran</h2>
+              <div>
+                <h2 className="text-sm font-bold text-gray-800 uppercase tracking-wide">Antrean Legalisasi Kepala Desa & Riwayat Surat</h2>
+                <p className="text-xs text-slate-500 mt-0.5">Surat disetujui RT yang siap diverifikasi, ditandatangani QR, dan arsip dokumen selesai.</p>
+              </div>
+
               <div className="relative w-full sm:w-64">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                 <input 
@@ -316,6 +481,30 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                   onChange={e => setSearchTerm(e.target.value)}
                 />
               </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 pt-1 border-b border-slate-100 pb-3">
+              <button
+                type="button"
+                onClick={() => setSearchTerm('')}
+                className="px-3 py-1.5 rounded-xl text-xs font-black bg-slate-900 text-white shadow-2xs"
+              >
+                Semua Surat ({surats.length})
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearchTerm('processed_sekdes')}
+                className="px-3 py-1.5 rounded-xl text-xs font-black bg-amber-100 text-amber-900 border border-amber-200"
+              >
+                ⏳ Verifikasi Kepala Desa ({pendingCount})
+              </button>
+              <button
+                type="button"
+                onClick={() => setSearchTerm('completed')}
+                className="px-3 py-1.5 rounded-xl text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-200"
+              >
+                ✓ Riwayat Surat Selesai ({completedCount})
+              </button>
             </div>
 
             {loading ? (
@@ -356,25 +545,25 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                             <span className="text-gray-400 italic">Otomatis saat terbit</span>
                           )}
                         </td>
-                        <td className="p-3">
-                          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
-                            s.status === 'processed_sekdes' ? 'bg-amber-100 text-amber-800' :
-                            s.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
-                            'bg-gray-100 text-gray-600'
+                        <td className="p-3 whitespace-nowrap">
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap ${
+                            s.status === 'processed_sekdes' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                            s.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
+                            'bg-gray-100 text-gray-600 border border-gray-200'
                           }`}>
-                            {s.status === 'processed_sekdes' && <Clock size={10} />}
-                            {s.status === 'completed' && <CheckCircle size={10} />}
+                            {s.status === 'processed_sekdes' && <Clock size={12} />}
+                            {s.status === 'completed' && <CheckCircle size={12} />}
                             {s.status === 'processed_sekdes' ? 'Siap Diterbitkan' :
                              s.status === 'completed' ? 'Selesai & Sah' : s.status}
                           </span>
                         </td>
-                        <td className="p-3 text-right">
-                          <div className="flex justify-end gap-2">
+                        <td className="p-3 text-right whitespace-nowrap">
+                          <div className="flex justify-end gap-2 whitespace-nowrap">
                             {s.status === 'processed_sekdes' && (
                               <button 
                                 onClick={() => handleProcessSekdes(s.id)}
                                 disabled={isProcessing}
-                                className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 hover-glow press-down transition-all flex items-center gap-1"
+                                className="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-bold hover:bg-emerald-700 hover-glow press-down transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap"
                               >
                                 <ShieldCheck size={12} /> Terbitkan & Sahkan QR
                               </button>
@@ -382,7 +571,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                             {s.status === 'completed' && (
                               <button 
                                 onClick={() => setPrintSurat(s)}
-                                className="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-lg text-xs font-bold hover:bg-emerald-100 hover-glow press-down flex items-center gap-1 transition-all"
+                                className="px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100 hover-glow press-down flex items-center gap-1 transition-all cursor-pointer whitespace-nowrap"
                               >
                                 <Printer size={12} /> Cetak
                               </button>

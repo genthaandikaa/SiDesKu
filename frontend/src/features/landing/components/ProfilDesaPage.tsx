@@ -154,9 +154,7 @@ export const ProfilDesaPage: React.FC = () => {
   return (
     <div className="space-y-12 py-6 page-enter font-sans text-slate-800">
       
-      {/* =========================================================================
-          HERO BANNER (Clean, High Contrast, Gradient Emerald Background)
-         ========================================================================= */}
+      {/* Hero Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#0b3323] via-[#0f442f] to-[#072418] text-white shadow-xl relative overflow-hidden border border-emerald-800/80">
           
@@ -189,9 +187,7 @@ export const ProfilDesaPage: React.FC = () => {
         </div>
       </section>
 
-      {/* =========================================================================
-          MODE 1: SEBELUM LOGIN (Public Guest View -> Direktori Desa Kabupaten Kediri)
-         ========================================================================= */}
+      {/* Guest Mode View */}
       {!user && (
         <div className="space-y-12">
           
@@ -381,9 +377,7 @@ export const ProfilDesaPage: React.FC = () => {
         </div>
       )}
 
-      {/* =========================================================================
-          MODE 2: SETELAH LOGIN (Detail Profil Desa Khusus Pengguna & Endpoint Real)
-         ========================================================================= */}
+      {/* User Dashboard Profile View */}
       {user && (
         <div className="space-y-12">
           

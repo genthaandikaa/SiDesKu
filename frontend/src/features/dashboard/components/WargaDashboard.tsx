@@ -183,6 +183,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   const [suratSearch, setSuratSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<'Semua' | 'Kependudukan' | 'Sosial' | 'Keluarga' | 'Usaha' | 'Hukum'>('Semua');
   const [historySearch, setHistorySearch] = useState('');
+  const [historyStatusFilter, setHistoryStatusFilter] = useState<'semua' | 'selesai' | 'proses' | 'ditolak'>('semua');
 
   // Form State for Ajukan Surat
   const [selectedTypeId, setSelectedTypeId] = useState<number>(1);
@@ -272,15 +273,20 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   // Filtered lists
   const pendingSurats = surats.filter(s => ['pending_rt', 'pending_rw', 'processed_sekdes'].includes(s.status));
   const completedSurats = surats.filter(s => s.status === 'completed');
-  const searchedHistory = surats.filter(s => 
-    s.nomor_resi.toLowerCase().includes(historySearch.toLowerCase()) ||
-    s.surat_type?.nama_surat.toLowerCase().includes(historySearch.toLowerCase()) ||
-    s.keperluan.toLowerCase().includes(historySearch.toLowerCase())
-  );
+  const searchedHistory = surats.filter(s => {
+    const matchKeyword = s.nomor_resi.toLowerCase().includes(historySearch.toLowerCase()) ||
+      s.surat_type?.nama_surat.toLowerCase().includes(historySearch.toLowerCase()) ||
+      s.keperluan.toLowerCase().includes(historySearch.toLowerCase());
+    
+    if (!matchKeyword) return false;
 
-  // =========================================================================
-  // VIEW 2: AJUKAN SURAT (Full Dedicated Page with 14 Types & Search Filter)
-  // =========================================================================
+    if (historyStatusFilter === 'selesai') return s.status === 'completed';
+    if (historyStatusFilter === 'proses') return ['pending_rt', 'pending_rw', 'processed_sekdes'].includes(s.status);
+    if (historyStatusFilter === 'ditolak') return s.status === 'rejected';
+    return true;
+  });
+
+  // Form Pengajuan Surat
   if (activeSubmenu === 'ajukan_surat') {
     return (
       <div className="space-y-8 animate-fade-in font-sans">
@@ -476,9 +482,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     );
   }
 
-  // =========================================================================
-  // VIEW 3: STATUS SURAT (Proses Berjalan)
-  // =========================================================================
+  // Status Surat Proses
   if (activeSubmenu === 'status_surat') {
     return (
       <div className="space-y-6 animate-fade-in font-sans">
@@ -512,39 +516,34 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     <p className="text-xs text-slate-600 mt-0.5">Keperluan: {s.keperluan}</p>
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-900 self-start sm:self-auto">
-                    {s.status === 'processed_sekdes' ? 'Tahap 3: Verifikasi Sekdes' :
-                     s.status === 'pending_rw' ? 'Tahap 2: Menunggu Persetujuan RW' :
-                     'Tahap 1: Menunggu Persetujuan RT'}
+                    {s.status === 'processed_sekdes' || s.status === 'pending_rw' ? 'Tahap 2: Verifikasi & Legalisasi Kepala Desa' :
+                     'Tahap 1: Verifikasi Ketua RT 01'}
                   </span>
                 </div>
 
                 {/* Progress Steps Ribbon */}
-                <div className="grid grid-cols-3 gap-2 text-center text-xs pt-1">
-                  <div className={`p-2.5 rounded-2xl border font-bold ${
+                <div className="grid grid-cols-2 gap-3 text-center text-xs pt-1">
+                  <div className={`p-3 rounded-2xl border font-bold flex items-center justify-center gap-2 ${
                     s.status !== 'pending_rt' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse'
                   }`}>
-                    1. Ketua RT 01
+                    <span>1. Verifikasi Ketua RT 01</span>
+                    {s.status !== 'pending_rt' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
                   </div>
-                  <div className={`p-2.5 rounded-2xl border font-bold ${
-                    ['processed_sekdes', 'completed'].includes(s.status) ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 
-                    s.status === 'pending_rw' ? 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse' : 'bg-slate-50 border-slate-200 text-slate-400'
-                  }`}>
-                    2. Ketua RW 01
-                  </div>
-                  <div className={`p-2.5 rounded-2xl border font-bold ${
+                  <div className={`p-3 rounded-2xl border font-bold flex items-center justify-center gap-2 ${
                     s.status === 'completed' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' :
-                    s.status === 'processed_sekdes' ? 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse' : 'bg-slate-50 border-slate-200 text-slate-400'
+                    ['processed_sekdes', 'pending_rw'].includes(s.status) ? 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse' : 'bg-slate-50 border-slate-200 text-slate-400'
                   }`}>
-                    3. Penerbitan Sekdes
+                    <span>2. Legalisasi Kepala Desa / Sekdes</span>
+                    {s.status === 'completed' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
                   </div>
                 </div>
 
                 {/* Live Tracking Actions & Notes Strip */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs">
-                  <div className="text-slate-600">
-                    {s.status === 'pending_rt' && '⏳ Berkas telah masuk ke antrean Ketua RT 01 dan sedang menunggu pemeriksaan.'}
-                    {s.status === 'pending_rw' && '✅ Disetujui RT 01. Saat ini menunggu tanda tangan verifikasi Ketua RW 01.'}
-                    {s.status === 'processed_sekdes' && '✅ Disetujui RT & RW. Dokumen siap diterbitkan oleh Sekretaris Desa.'}
+                  <div className="text-slate-600 font-medium">
+                    {s.status === 'pending_rt' && '⏳ Berkas telah diajukan dan sedang menunggu verifikasi dari Ketua RT 01.'}
+                    {(s.status === 'processed_sekdes' || s.status === 'pending_rw') && '✅ Verifikasi RT 01 selesai. Saat ini berkas ada di meja Kepala Desa / Sekdes untuk penandatanganan QR sah.'}
+                    {s.status === 'completed' && '🎉 Surat telah selesai diverifikasi & diterbitkan secara resmi oleh Kepala Desa!'}
                   </div>
                   <button
                     onClick={() => setSelectedTrackingSurat(s)}
@@ -571,9 +570,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     );
   }
 
-  // =========================================================================
-  // VIEW 4: SURAT SELESAI (Siap Unduh & Cetak PDF)
-  // =========================================================================
+  // Surat Selesai & Dokumen Sah
   if (activeSubmenu === 'surat_selesai') {
     return (
       <div className="space-y-6 animate-fade-in font-sans">
@@ -651,9 +648,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     );
   }
 
-  // =========================================================================
-  // VIEW 5: RIWAYAT SURAT (Arsip Lengkap & Alasan Penolakan / Persetujuan)
-  // =========================================================================
+  // Riwayat Pengajuan Surat
   if (activeSubmenu === 'riwayat_surat') {
     return (
       <div className="space-y-6 animate-fade-in font-sans">
@@ -663,7 +658,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               Riwayat Seluruh Pengajuan Surat
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Arsip lengkap seluruh dokumen, riwayat persetujuan RT/RW, dan alasan penolakan berkas.
+              Arsip lengkap surat yang sudah selesai, dalam proses verifikasi RT & Kepala Desa, serta riwayat penolakan.
             </p>
           </div>
 
@@ -677,6 +672,50 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               className="w-full pl-10 pr-4 py-2.5 bg-white rounded-2xl border border-slate-200 text-xs font-medium focus:outline-none focus:border-emerald-500"
             />
           </div>
+        </div>
+
+        {/* Quick Filter Pills for Riwayat Surat */}
+        <div className="flex flex-wrap gap-2 pt-1">
+          <button
+            type="button"
+            onClick={() => setHistoryStatusFilter('semua')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+              historyStatusFilter === 'semua' ? 'bg-slate-900 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+            }`}
+          >
+            Semua Riwayat ({surats.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setHistoryStatusFilter('selesai')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
+              historyStatusFilter === 'selesai' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100/80'
+            }`}
+          >
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            <span>Surat Selesai & Sah ({completedSurats.length})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setHistoryStatusFilter('proses')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+              historyStatusFilter === 'proses' ? 'bg-amber-500 text-white shadow-xs' : 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100/80'
+            }`}
+          >
+            Dalam Proses ({pendingSurats.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setHistoryStatusFilter('ditolak')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+              historyStatusFilter === 'ditolak' ? 'bg-rose-600 text-white shadow-xs' : 'bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100/80'
+            }`}
+          >
+            Ditolak ({surats.filter(s => s.status === 'rejected').length})
+          </button>
         </div>
 
         <div className="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-xs">
@@ -870,13 +909,11 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     { label: 'Min', value: 6 },
   ];
 
-  // =========================================================================
-  // VIEW 1: BERANDA (MODERN MODULAR SAAS DASHBOARD OVERVIEW)
-  // =========================================================================
+  // Beranda Dashboard Warga
   return (
     <div className="space-y-6 animate-fade-in font-sans">
       
-      {/* --- ROW 1: TOP 4 METRIC CARDS WITH CIRCULAR DONUT GAUGES --- */}
+      {/* Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <MetricStatCard
           title="Total Surat Diajukan"
@@ -916,7 +953,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         />
       </div>
 
-      {/* --- ROW 2: PERFORMANCE AREA CHART (8-COL) + MINI CALENDAR (4-COL) --- */}
+      {/* Overview Chart & Calendar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
         <div className="lg:col-span-8 space-y-5">
@@ -1053,7 +1090,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         </div>
       </div>
 
-      {/* --- ROW 3: RECENT PERMOHONAN SURAT & DOKUMEN SAH TABLE --- */}
+      {/* Recent Documents Table */}
       <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>

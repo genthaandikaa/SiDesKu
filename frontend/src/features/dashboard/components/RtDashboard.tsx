@@ -7,7 +7,8 @@ import {
   Users,
   DollarSign,
   Clock,
-  ShieldCheck
+  ShieldCheck,
+  CheckCircle2
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { SuratRequest, WargaProfile } from '@/shared/types';
@@ -148,6 +149,438 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
   const pendingSurats = surats.filter((s) => s.status === 'pending_rt');
   const completedSurats = surats.filter((s) => s.status === 'completed');
 
+  // Persetujuan & Verifikasi Surat RT 01
+  if (activeSubmenu === 'persetujuan_surat') {
+    return (
+      <div className="space-y-6 animate-fade-in font-sans">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              Persetujuan & Verifikasi Surat RT 01
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Periksa dan berikan pengantar persetujuan RT untuk permohonan surat masuk dari warga RT 01.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-900 border border-amber-200">
+              {pendingSurats.length} Berkas Perlu ACC
+            </span>
+          </div>
+        </div>
+
+        <div className="card-surface p-6 sm:p-8 space-y-5">
+          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-50 text-gray-600 border-b border-gray-200 font-bold uppercase text-xs tracking-wider">
+                <tr>
+                  <th className="p-4">No. Resi</th>
+                  <th className="p-4">Nama Pemohon & NIK</th>
+                  <th className="p-4">Jenis Surat</th>
+                  <th className="p-4">Keperluan</th>
+                  <th className="p-4">Status Terkini</th>
+                  <th className="p-4 text-right">Aksi RT</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 bg-white">
+                {surats.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="p-8 text-center text-gray-400">
+                      Tidak ada permohonan surat masuk.
+                    </td>
+                  </tr>
+                ) : (
+                  surats.map((s, idx) => (
+                    <tr key={s.id} className="hover:bg-emerald-50/50 transition-colors">
+                      <td className="p-4 font-mono font-bold text-gray-700">{s.nomor_resi}</td>
+                      <td className="p-4">
+                        <div className="font-bold text-gray-900 text-base">{s.warga_profile?.nama_lengkap}</div>
+                        <div className="text-xs text-gray-500 font-mono mt-0.5">NIK: {s.warga_profile?.nik}</div>
+                      </td>
+                      <td className="p-4 font-semibold text-emerald-800">{s.surat_type?.nama_surat}</td>
+                      <td className="p-4 text-gray-600 max-w-xs truncate">{s.keperluan}</td>
+                      <td className="p-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
+                          s.status === 'pending_rt' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                          s.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
+                          s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
+                          'bg-blue-100 text-blue-800 border border-blue-200'
+                        }`}>
+                          {s.status === 'pending_rt' ? 'Perlu ACC RT 01' :
+                           ['processed_sekdes', 'pending_rw'].includes(s.status) ? 'Diteruskan ke Kepala Desa' :
+                           s.status === 'completed' ? 'Selesai & Sah' : 'Ditolak'}
+                        </span>
+                      </td>
+                      <td className="p-4 text-right whitespace-nowrap">
+                        {s.status === 'pending_rt' ? (
+                          <div className="flex items-center justify-end gap-2 whitespace-nowrap">
+                            <button
+                              onClick={() => handleApproveRt(s.id)}
+                              disabled={isProcessing}
+                              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-sm press-down hover-glow flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                            >
+                              <Check className="w-3.5 h-3.5" /> ACC & Teruskan ke Kades
+                            </button>
+                            <button
+                              onClick={() => setSelectedSurat(s)}
+                              className="px-3 py-2 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold text-xs transition-colors press-down border border-rose-200 flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                            >
+                              <XCircle className="w-3.5 h-3.5" /> Tolak
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 text-emerald-800 text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200/80 shadow-2xs whitespace-nowrap">
+                            {s.status === 'completed' ? '✓ Dokumen Terbit & Sah' : '✓ Disetujui RT 01'}
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Modal Reject Surat */}
+        {selectedSurat && (
+          <div className="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl modal-content animate-scale-up">
+              <div className="flex justify-between items-center pb-3 border-b border-gray-100">
+                <h3 className="font-black text-xl text-gray-900">Tolak Permohonan Surat</h3>
+                <button 
+                  onClick={() => {
+                    setSelectedSurat(null);
+                    setActionCatatan('');
+                  }} 
+                  className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                Tulis catatan perbaikan berkas untuk pemohon (<strong className="text-gray-900">{selectedSurat.warga_profile?.nama_lengkap}</strong>).
+              </p>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase mb-1.5">Catatan / Alasan Penolakan *</label>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder="Tulis alasan penolakan..."
+                  value={actionCatatan}
+                  onChange={(e) => setActionCatatan(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 text-xs sm:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-rose-500 transition-all outline-none resize-none"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button 
+                  onClick={() => {
+                    setSelectedSurat(null);
+                    setActionCatatan('');
+                  }} 
+                  className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-xs font-bold hover:bg-gray-50"
+                >
+                  Batal
+                </button>
+                <button 
+                  onClick={() => handleReject(selectedSurat.id)} 
+                  disabled={isProcessing || !actionCatatan.trim()}
+                  className="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white text-xs font-bold shadow-md"
+                >
+                  {isProcessing ? 'Memproses...' : 'Kirim Penolakan'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Riwayat Surat Selesai RT 01
+  if (activeSubmenu === 'riwayat_surat') {
+    return (
+      <div className="space-y-6 animate-fade-in font-sans">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            Riwayat Surat Selesai & Terbit RT 01
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500">
+            Arsip lengkap dokumen warga RT 01 yang telah selesai diverifikasi dan diterbitkan sah oleh Kepala Desa.
+          </p>
+        </div>
+
+        <div className="card-surface p-6 space-y-4">
+          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-50 text-gray-600 border-b border-gray-200 font-bold uppercase text-xs tracking-wider">
+                <tr>
+                  <th className="p-4">No. Resi & No. Resmi</th>
+                  <th className="p-4">Pemohon & NIK</th>
+                  <th className="p-4">Jenis Surat</th>
+                  <th className="p-4">Keperluan</th>
+                  <th className="p-4">Status & Pengesahan</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 bg-white">
+                {completedSurats.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="p-8 text-center text-gray-400">
+                      Belum ada surat yang selesai diproses.
+                    </td>
+                  </tr>
+                ) : (
+                  completedSurats.map((s) => (
+                    <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
+                      <td className="p-4">
+                        <div className="font-mono font-bold text-slate-900">{s.nomor_surat_resmi || s.nomor_resi}</div>
+                        <div className="text-xs text-slate-400 font-mono">Resi: {s.nomor_resi}</div>
+                      </td>
+                      <td className="p-4">
+                        <div className="font-bold text-slate-900">{s.warga_profile?.nama_lengkap}</div>
+                        <div className="text-xs text-slate-400 font-mono">NIK: {s.warga_profile?.nik}</div>
+                      </td>
+                      <td className="p-4 font-bold text-emerald-800">{s.surat_type?.nama_surat}</td>
+                      <td className="p-4 text-slate-600 max-w-xs truncate">{s.keperluan}</td>
+                      <td className="p-4">
+                        <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-200 inline-flex items-center gap-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Diterbitkan Kepala Desa</span>
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Data Warga RT 01
+  if (['data_warga', 'data_keluarga', 'peta_wilayah'].includes(activeSubmenu)) {
+    return (
+      <div className="space-y-6 animate-fade-in font-sans">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            Buku Induk Kependudukan & Data Warga RT 01
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500">
+            Pendataan lengkap seluruh kepala keluarga, warga aktif, kontak WhatsApp, dan klasifikasi ekonomi RT 01.
+          </p>
+        </div>
+
+        <div className="card-surface p-6 sm:p-8 space-y-5">
+          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-50 text-gray-600 border-b border-gray-200 font-bold uppercase text-xs tracking-wider">
+                <tr>
+                  <th className="p-4">Nama Lengkap</th>
+                  <th className="p-4">NIK & No. KK</th>
+                  <th className="p-4">No. WhatsApp</th>
+                  <th className="p-4">Status Keluarga</th>
+                  <th className="p-4">Klasifikasi Ekonomi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 bg-white">
+                {wargas.length === 0 ? (
+                  <tr><td colSpan={5} className="p-8 text-center text-gray-400">Belum ada data warga</td></tr>
+                ) : (
+                  wargas.map((w, idx) => (
+                    <tr key={w.id} className="hover:bg-emerald-50/50 transition-colors">
+                      <td className="p-4 font-bold text-gray-900 text-base">{w.nama_lengkap}</td>
+                      <td className="p-4 font-mono text-sm text-gray-600">
+                        <div>NIK: {w.nik}</div>
+                        <div className="text-xs text-gray-400 mt-0.5">KK: {w.kartu_keluarga?.no_kk || '-'}</div>
+                      </td>
+                      <td className="p-4 font-mono text-emerald-800 font-medium">{w.no_hp_wa || '-'}</td>
+                      <td className="p-4 text-gray-700">{w.status_keluarga}</td>
+                      <td className="p-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          w.status_ekonomi.includes('PKH') ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-gray-100 text-gray-700 border border-gray-200'
+                        }`}>
+                          {w.status_ekonomi}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Kas & Iuran RT 01
+  if (activeSubmenu === 'kas_rt') {
+    return (
+      <div className="space-y-6 animate-fade-in font-sans">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              Pembukuan Kas & Iuran Warga RT 01
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Pencatatan iuran kebersihan, keamanan, serta rekapitulasi pengeluaran kegiatan RT.
+            </p>
+          </div>
+
+          <button
+            onClick={() => setShowKasModal(true)}
+            className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md hover-glow shrink-0 cursor-pointer"
+          >
+            <Plus className="w-5 h-5" /> Catat Transaksi Kas
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+          <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200">
+            <div className="text-gray-600 font-medium">Total Iuran Masuk</div>
+            <div className="text-2xl font-black text-emerald-800 mt-2">
+              Rp {Number(kasData?.summary?.total_masuk || 25000).toLocaleString('id-ID')}
+            </div>
+          </div>
+          <div className="p-5 rounded-2xl bg-rose-50 border border-rose-200">
+            <div className="text-gray-600 font-medium">Total Pengeluaran</div>
+            <div className="text-2xl font-black text-rose-800 mt-2">
+              Rp {Number(kasData?.summary?.total_keluar || 150000).toLocaleString('id-ID')}
+            </div>
+          </div>
+          <div className="p-5 rounded-2xl bg-blue-50 border border-blue-200">
+            <div className="text-gray-600 font-medium">Saldo Akhir Kas</div>
+            <div className="text-2xl font-black text-blue-800 mt-2">
+              Rp {Number(kasData?.summary?.saldo || 0).toLocaleString('id-ID')}
+            </div>
+          </div>
+        </div>
+
+        <div className="card-surface p-6 space-y-4">
+          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+            <table className="w-full text-left text-sm">
+              <thead className="bg-gray-50 text-gray-600 border-b border-gray-200 font-bold uppercase text-xs tracking-wider">
+                <tr>
+                  <th className="p-4">Tanggal</th>
+                  <th className="p-4">Kategori</th>
+                  <th className="p-4">Keterangan</th>
+                  <th className="p-4">Jenis</th>
+                  <th className="p-4 text-right">Nominal</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 bg-white">
+                {kasData?.transactions && kasData.transactions.length > 0 ? (
+                  kasData.transactions.map((tx: any) => (
+                    <tr key={tx.id} className="hover:bg-emerald-50/50 transition-colors">
+                      <td className="p-4 font-mono text-gray-600">{new Date(tx.tanggal_transaksi).toLocaleDateString('id-ID')}</td>
+                      <td className="p-4 font-bold text-gray-900">{tx.category?.nama_kategori || 'Kas RT'}</td>
+                      <td className="p-4 text-gray-700">{tx.keterangan}</td>
+                      <td className="p-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
+                          tx.tipe === 'Pemasukan' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-rose-50 text-rose-800 border-rose-200'
+                        }`}>
+                          {tx.tipe}
+                        </span>
+                      </td>
+                      <td className={`p-4 text-right font-bold font-mono text-base ${
+                        tx.tipe === 'Pemasukan' ? 'text-emerald-700' : 'text-rose-700'
+                      }`}>
+                        {tx.tipe === 'Pemasukan' ? '+' : '-'} Rp {Number(tx.jumlah).toLocaleString('id-ID')}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr><td colSpan={5} className="p-8 text-center text-gray-400">Belum ada transaksi kas</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Modal Input Kas RT */}
+        {showKasModal && (
+          <div className="fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl max-w-md w-full p-8 space-y-6 shadow-2xl modal-content">
+              <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                <h3 className="font-black text-xl text-gray-900">Catat Transaksi Kas RT 01</h3>
+                <button onClick={() => setShowKasModal(false)} className="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full">✕</button>
+              </div>
+
+              <form onSubmit={handleAddKas} className="space-y-5">
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setKasTipe('Pemasukan')}
+                    className={`flex-1 py-3 rounded-xl text-sm font-bold shadow-sm ${
+                      kasTipe === 'Pemasukan' ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-gray-600 border border-gray-200'
+                    }`}
+                  >
+                    + Pemasukan
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setKasTipe('Pengeluaran')}
+                    className={`flex-1 py-3 rounded-xl text-sm font-bold shadow-sm ${
+                      kasTipe === 'Pengeluaran' ? 'bg-rose-600 text-white' : 'bg-gray-50 text-gray-600 border border-gray-200'
+                    }`}
+                  >
+                    - Pengeluaran
+                  </button>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 uppercase mb-2">Nominal (Rp)</label>
+                  <input
+                    type="number"
+                    required
+                    placeholder="Contoh: 50000"
+                    value={kasJumlah}
+                    onChange={(e) => setKasJumlah(Number(e.target.value))}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm bg-gray-50 focus:bg-white outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 uppercase mb-2">Keterangan Transaksi</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Contoh: Iuran sampah..."
+                    value={kasKeterangan}
+                    onChange={(e) => setKasKeterangan(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm bg-gray-50 focus:bg-white outline-none"
+                  />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={() => setShowKasModal(false)}
+                    className="px-5 py-2.5 rounded-xl border border-gray-300 text-gray-700 text-sm font-bold"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-md"
+                  >
+                    Simpan Transaksi
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Beranda Dashboard RT 01
   return (
     <div className="space-y-6 page-enter font-sans">
       
@@ -191,7 +624,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         />
       </div>
 
-      {/* --- ROW 2: PERFORMANCE AREA CHART (8-COL) + MINI CALENDAR (4-COL) --- */}
+      {/* Chart & Calendar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
         <div className="lg:col-span-8 space-y-5">
@@ -411,38 +844,39 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       </td>
                       <td className="p-4 font-semibold text-emerald-800">{s.surat_type?.nama_surat}</td>
                       <td className="p-4 text-gray-600 max-w-xs truncate">{s.keperluan}</td>
-                      <td className="p-4">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
+                      <td className="p-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap ${
                           s.status === 'pending_rt' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
                           s.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
                           s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
                           'bg-blue-100 text-blue-800 border border-blue-200'
                         }`}>
-                          {s.status === 'pending_rt' ? 'Perlu ACC RT' :
-                           s.status === 'pending_rw' ? 'Diteruskan ke RW' :
-                           s.status === 'processed_sekdes' ? 'Diproses Sekdes' :
+                          {s.status === 'pending_rt' ? 'Perlu ACC RT 01' :
+                           ['processed_sekdes', 'pending_rw'].includes(s.status) ? 'Diteruskan ke Kepala Desa' :
                            s.status === 'completed' ? 'Selesai & Sah' : 'Ditolak'}
                         </span>
                       </td>
-                      <td className="p-4 text-right">
+                      <td className="p-4 text-right whitespace-nowrap">
                         {s.status === 'pending_rt' ? (
-                          <div className="flex items-center justify-end gap-2">
+                          <div className="flex items-center justify-end gap-2 whitespace-nowrap">
                             <button
                               onClick={() => handleApproveRt(s.id)}
                               disabled={isProcessing}
-                              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-sm press-down hover-glow flex items-center gap-1.5"
+                              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-sm press-down hover-glow flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                             >
-                              <Check className="w-3.5 h-3.5" /> ACC & Teruskan
+                              <Check className="w-3.5 h-3.5" /> ACC & Teruskan ke Kades
                             </button>
                             <button
                               onClick={() => setSelectedSurat(s)}
-                              className="px-3 py-2 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold text-xs transition-colors press-down border border-rose-200 flex items-center gap-1.5"
+                              className="px-3 py-2 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold text-xs transition-colors press-down border border-rose-200 flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                             >
                               <XCircle className="w-3.5 h-3.5" /> Tolak
                             </button>
                           </div>
                         ) : (
-                          <span className="text-gray-400 text-xs italic">Telah Diperiksa</span>
+                          <span className="inline-flex items-center gap-1 text-emerald-800 text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200/80 shadow-2xs whitespace-nowrap">
+                            {s.status === 'completed' ? '✓ Dokumen Terbit & Sah' : '✓ Disetujui RT 01'}
+                          </span>
                         )}
                       </td>
                     </tr>

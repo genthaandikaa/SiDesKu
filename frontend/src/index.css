@@ -49,13 +49,13 @@ body {
   flex-direction: column;
 }
 
-/* --- Scrollbar --- */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #f8fafc; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* --- Entrance & Keyframe Animations --- */
+/* Entrance & Keyframe Animations */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -231,7 +231,7 @@ body {
   transform: scale(0.97);
 }
 
-/* --- Clean Modern Surfaces (Flowora-style) --- */
+/* Modern Surface Components */
 .card-modern {
   background: #ffffff;
   border: 1px solid #f1f5f9;
@@ -342,9 +342,7 @@ body {
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* =========================================================================
-   OFFICIAL A4 GOVERNMENT PRINT STYLES
-   ========================================================================= */
+/* Print Styles (A4 Government Format) */
 @media print {
   html, body {
     background: white !important;

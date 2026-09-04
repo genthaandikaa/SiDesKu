@@ -226,7 +226,7 @@ export const HomePage: React.FC = () => {
         </div>
       )}
 
-      {/* --- HERO SECTION (Flowora Composition: Left Headline & CTA + Right 3D Mockup) --- */}
+      {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-1 sm:pt-2">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left Column: Headline & Action */}
@@ -467,7 +467,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* --- 6-CAPABILITIES FEATURE ROW (U-Shape Infinite Conveyor Curve) --- */}
+      {/* Capabilities Conveyor */}
       <section className="py-8 sm:py-12 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="max-w-3xl space-y-2">
@@ -482,9 +482,6 @@ export const HomePage: React.FC = () => {
 
         {/* U-Shape Conveyor Belt */}
         <div className="relative w-full overflow-hidden py-8">
-          {/* Edge Masks for Smooth Visual Blend */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
           <div className="animate-marquee gap-6 px-4 items-center">
             {[...capabilitiesList, ...capabilitiesList, ...capabilitiesList].map((cap, idx) => {
@@ -511,7 +508,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* --- FEATURES GRID (Everything you need to get work done) --- */}
+      {/* Features Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
           <div className="pill-badge-emerald">
@@ -565,7 +562,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* --- SHOWCASE SECTION 1 (Plan, collaborate and deliver on time) --- */}
+      {/* Showcase Section 1 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Illustration / Card with Overlays */}
@@ -684,7 +681,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* --- SHOWCASE SECTION 2 (Bansos WhatsApp & Anti Pungli) --- */}
+      {/* Showcase Section 2 */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Text */}
@@ -906,7 +903,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* --- MINIMALIST STATS STRIP CARD (Matching Flowora 4-Stat Strip) --- */}
+      {/* Stats Strip */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="card-modern p-6 sm:p-8 bg-white">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
@@ -949,7 +946,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* --- TESTIMONIALS SECTION (Infinite Marquee Slider Animation) --- */}
+      {/* Testimonials */}
       <section className="py-8 overflow-hidden">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-10 px-4">
           <div className="pill-badge-emerald">
@@ -966,9 +963,6 @@ export const HomePage: React.FC = () => {
 
         {/* Single Clean Infinite Marquee Slider Row */}
         <div className="relative w-full overflow-hidden py-4">
-          {/* Gradient Edge Masks for Smooth Fade */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
 
           <div className="animate-marquee gap-6 px-4">
             {[...testimonials, ...testimonials].map((t, idx) => (
@@ -1008,7 +1002,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* --- FLOWING GRADIENT BOTTOM CTA BANNER (Flowora Vibrant Banner) --- */}
+      {/* Bottom CTA Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
         <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 rounded-3xl p-8 sm:p-14 text-white shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
           {/* Ambient Glows */}
