@@ -1,4 +1,4 @@
-﻿# Environment variables (SENSITIVE)
+# Environment variables (SENSITIVE)
 .env
 .env.*
 !.env.example
@@ -43,3 +43,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# AI Assistant Instructions & Configs
+CLAUDE.md
+**/CLAUDE.md
+
