@@ -139,6 +139,11 @@ class AuthController extends Controller
         ]);
     }
 
+    public function user(Request $request): JsonResponse
+    {
+        return $this->me($request);
+    }
+
     public function updateProfile(Request $request): JsonResponse
     {
         $user = $request->user();

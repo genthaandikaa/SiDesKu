@@ -19,26 +19,7 @@ use App\Http\Controllers\Api\Warga\WargaSuratController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| SiDesKu API Routes - Struktur Berdasarkan Role
-|--------------------------------------------------------------------------
-|
-| Rute API dikelompokkan secara terstruktur berdasarkan modul & role user:
-| 1. Public (Tanpa Autentikasi)
-| 2. Auth & Akun (Login, Register, Profil)
-| 3. Warga (Pengajuan Surat, Pengaduan Warga)
-| 4. RT (Verifikasi Surat RT, Kas RT, Data Warga RT)
-| 5. RW (Verifikasi Surat RW)
-| 6. Sekdes / Kades (Legalisasi & TTD QR, Bansos, Kop Surat)
-| 7. Bendahara Desa (APBDes Keuangan Desa)
-| 8. Admin (Master Kependudukan & Pengaturan Sistem)
-|
-*/
-
-// =========================================================================
-// 1. PUBLIC ROUTES (Tanpa Autentikasi)
-// =========================================================================
+// public routes
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::get('/settings/desa', [DesaSettingController::class, 'getSettings']);
@@ -57,24 +38,18 @@ Route::get('/public/surat/verify-qr/{hash}', [PublicSuratController::class, 'ver
 Route::get('/public/surat/qr/{hash?}', [PublicSuratController::class, 'getQrCodeSvg']);
 
 
-// =========================================================================
-// PROTECTED ROUTES (Memerlukan Token Sanctum)
-// =========================================================================
+// protected routes (auth:sanctum)
 Route::middleware('auth:sanctum')->group(function () {
 
-    // =====================================================================
-    // 2. AUTH & PROFIL (Api\Auth)
-    // =====================================================================
+    // authenticated user info & profile management
+    Route::get('/auth/user', [AuthController::class, 'user']);
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::match(['put', 'post'], '/auth/profile', [AuthController::class, 'updateProfile']);
     Route::match(['put', 'post'], '/auth/password', [AuthController::class, 'updatePassword']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/notifikasi-logs', [PublicInfoController::class, 'getNotifikasiLogs']);
 
-    // =====================================================================
-    // 3. PERSURATAN DIGITAL WORKFLOW (Multi-Role Dispatcher)
-    // =====================================================================
-    // List surat otomatis difilter sesuai role pemohon / verifikator
+    // surat digitalisasi & tracking (Api\Warga, Api\Rt, Api\Rw, Api\Sekdes)
     Route::get('/surats', function (Request $request) {
         $user = $request->user();
         if ($user->hasRole('warga')) {
@@ -112,25 +87,19 @@ Route::middleware('auth:sanctum')->group(function () {
         return app(SekdesSuratController::class)->reject($request, $id);
     });
 
-    // =====================================================================
-    // 4. KAS KEUANGAN RT (Api\Rt)
-    // =====================================================================
+    // kas dan keuangan RT (Api\Rt\KasRtController)
     Route::get('/kas-rt', [KasRtController::class, 'index']);
     Route::post('/kas-rt/categories', [KasRtController::class, 'storeCategory']);
     Route::post('/kas-rt/transactions', [KasRtController::class, 'store']);
     Route::post('/kas-rt/transaction', [KasRtController::class, 'store']); // alias
 
-    // =====================================================================
-    // 5. APBDES KEUANGAN DESA (Api\Bendahara)
-    // =====================================================================
+    // APBDes & Keuangan Desa (Api\Bendahara\ApbdesController)
     Route::get('/apbdes/categories', [ApbdesController::class, 'getCategories']);
     Route::post('/apbdes/records', [ApbdesController::class, 'store']);
     Route::put('/apbdes/records/{id}', [ApbdesController::class, 'update']);
     Route::delete('/apbdes/records/{id}', [ApbdesController::class, 'destroy']);
 
-    // =====================================================================
-    // 6. BANTUAN SOSIAL & BROADCAST WA (Api\Sekdes & Api\Admin)
-    // =====================================================================
+    // bantuan sosial & bansos desa (Api\Sekdes\BansosController)
     Route::get('/bansos', [BansosController::class, 'index']);
     Route::post('/bansos', [BansosController::class, 'store']);
     Route::get('/bansos/{id}', [BansosController::class, 'show']);
@@ -138,14 +107,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/bansos/{id}/publish-broadcast', [BansosController::class, 'publishAndBroadcast']);
     Route::post('/bansos/{id}/verify-disalurkan', [BansosController::class, 'verifyDisalurkan']);
 
-    // =====================================================================
-    // 7. PENGATURAN IDENTITAS DESA & KOP SURAT (Api\Sekdes & Api\Admin)
-    // =====================================================================
+    // pengaturan desa & settings (Api\Admin\DesaSettingController)
     Route::put('/settings/desa', [DesaSettingController::class, 'updateSettings']);
 
-    // =====================================================================
-    // 8. DATA KEPENDUDUKAN & WILAYAH (Api\Admin & Api\Rt)
-    // =====================================================================
+    // data warga & kartu keluarga (Api\Admin\WargaController)
     Route::get('/warga', function (Request $request) {
         $user = $request->user();
         if ($user->hasRole('rt') || $user->hasRole('sekretaris_rt')) {
@@ -156,9 +121,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/warga/kartu-keluarga', [AdminWargaController::class, 'getKartuKeluargas']);
     Route::get('/wilayah', [AdminWargaController::class, 'getWilayah']);
 
-    // =====================================================================
-    // 9. PENGADUAN & ASPIRASI WARGA (Api\Warga & Api\Rt)
-    // =====================================================================
+    // pengaduan warga (Api\Warga\PengaduanController & Api\Rt\RtPengaduanController)
     Route::get('/pengaduan', function (Request $request) {
         $user = $request->user();
         if ($user->hasRole('rt') || $user->hasRole('sekretaris_rt')) {
@@ -169,9 +132,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/pengaduan', [WargaPengaduanController::class, 'store']);
     Route::post('/pengaduan/{id}/respond', [RtPengaduanController::class, 'respond']);
 
-    // =====================================================================
-    // 10. DIRECT ROLE-PREFIXED ENDPOINTS (Kemudahan Navigasi & Coding)
-    // =====================================================================
+    // Route groups for specific roles (Warga, RT, RW, Sekdes, Bendahara)
+    Route::prefix('admin')->group(function () {
+        Route::get('/warga', [AdminWargaController::class, 'index']);
+        Route::get('/warga/kartu-keluarga', [AdminWargaController::class, 'getKartuKeluargas']);
+        Route::get('/wilayah', [AdminWargaController::class, 'getWilayah']);
+    });
+
     Route::prefix('warga')->group(function () {
         Route::get('/surats', [WargaSuratController::class, 'index']);
         Route::post('/surats', [WargaSuratController::class, 'store']);
