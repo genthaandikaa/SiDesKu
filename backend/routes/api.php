@@ -11,11 +11,7 @@ use App\Http\Controllers\Api\SuratController;
 use App\Http\Controllers\Api\WargaController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Public Routes (Landing Page, Tracking Resi, QR Verification, dsb.)
-|--------------------------------------------------------------------------
-*/
+// Public Routes (No Authentication Required)
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::get('/settings/desa', [DesaSettingController::class, 'getSettings']);
@@ -28,11 +24,7 @@ Route::get('/public/pengumumans', [PublicInfoController::class, 'getPengumumans'
 Route::get('/public/stats', [PublicInfoController::class, 'getVillageStats']);
 Route::get('/surat-types', [SuratController::class, 'getTypes']);
 
-/*
-|--------------------------------------------------------------------------
-| Protected Routes (Sanctum Authenticated)
-|--------------------------------------------------------------------------
-*/
+// Protected Routes (Authentication Required)
 Route::middleware('auth:sanctum')->group(function () {
     // Auth & Profile
     Route::get('/auth/me', [AuthController::class, 'me']);
