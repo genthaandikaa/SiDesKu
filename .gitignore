@@ -44,7 +44,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# AI Assistant Instructions & Configs (temporarily enabled for sync)
-# CLAUDE.md
-# **/CLAUDE.md
+# AI Assistant Instructions & Configs (local only)
+CLAUDE.md
+**/CLAUDE.md
 
