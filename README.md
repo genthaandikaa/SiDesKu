@@ -1,6 +1,6 @@
 <div align="center">
-  <!-- Header Banner: Animated Dark Emerald Wave with Twinkling Stars -->
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:064e3b,100:10b981&height=220&section=header&text=SiDesKu&fontSize=48&fontAlignY=38&animation=twinkling&desc=Sistem%20Informasi%20Desa%20%26%20Digitalisasi%20Layanan%20Publik%20Terpadu&descAlignY=58&descSize=17" width="100%"/>
+  <!-- Header Banner: Animated Dark Emerald Wave with Twinkling Stars & High-Contrast Crisp Typography -->
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:064e3b,100:10b981&height=220&section=header&text=SiDesKu&fontSize=48&fontAlignY=38&fontColor=ffffff&desc=Sistem%20Informasi%20Desa%20%26%20Digitalisasi%20Layanan%20Publik%20Terpadu&descAlignY=58&descSize=17&descColor=34d399&animation=twinkling" width="100%"/>
 
   <br/>
 
