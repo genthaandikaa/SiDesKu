@@ -389,3 +389,30 @@ body {
 .page-enter {
   animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
+
+/* Orbital Rotating Ecosystem */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverseSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-orbit-rotate {
+  animation: spinSlow 55s linear infinite;
+}
+
+.animate-orbit-counter {
+  animation: spinReverseSlow 55s linear infinite;
+}

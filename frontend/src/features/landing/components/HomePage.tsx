@@ -26,6 +26,9 @@ import {
   QrCode,
   ChevronDown,
   HelpCircle,
+  Play,
+  Pause,
+  MessageSquare,
 } from "lucide-react";
 import api from "@/shared/lib/axios";
 import { DesaSetting, Berita, Pengumuman } from "@/shared/types";
@@ -38,6 +41,7 @@ export const HomePage: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
   const [beritas, setBeritas] = useState<Berita[]>([]);
   const [pengumumans, setPengumumans] = useState<Pengumuman[]>([]);
+  const [isOrbitSpinning, setIsOrbitSpinning] = useState(true);
 
   // Typewriter animation effect for hero description
   const heroFullText =
@@ -120,36 +124,72 @@ export const HomePage: React.FC = () => {
     fetchHomeData();
   }, []);
 
-  const featureCards = [
+  const orbitalNodes = [
     {
-      title: "Manajemen Surat Mandiri",
-      desc: "Ajukan 8+ jenis surat keterangan secara online kapan saja tanpa perlu antre fisik.",
+      id: "surat",
+      title: "Layanan Surat Mandiri",
+      desc: "Pengajuan 14+ jenis surat online 24/7 dari rumah tanpa antre fisik.",
       icon: FileText,
-      color: "bg-emerald-50 text-emerald-600 border-emerald-100",
       link: "/layanan-surat",
+      x: -168,
+      y: -345,
     },
     {
+      id: "validasi",
       title: "Validasi Berjenjang RT/RW",
-      desc: "Koordinasi digital cepat dengan persetujuan satu-klik dari Ketua RT dan Ketua RW.",
+      desc: "Disposisi satu klik ke ponsel Ketua RT & RW secara berurutan.",
       icon: Users,
-      color: "bg-amber-50 text-amber-600 border-amber-100",
-      link: "/profil",
+      link: "/login",
+      x: 168,
+      y: -345,
     },
     {
-      title: "Otomasi WhatsApp Broadcast",
-      desc: "Notifikasi jadwal dan nomor antrean bansos PKH/BLT otomatis masuk ke ponsel warga.",
+      id: "legalitas",
+      title: "Legalitas QR Code & TTE",
+      desc: "Stempel QR & TTE sah resmi berstandar DPMPD Jawa Timur.",
+      icon: ShieldCheck,
+      link: "/lacak-surat",
+      x: 375,
+      y: -85,
+    },
+    {
+      id: "bansos",
+      title: "Otomasi Bansos & WA",
+      desc: "Jadwal & barcode antrean PKH/BLT otomatis ke WhatsApp warga.",
       icon: Zap,
-      color: "bg-emerald-50 text-emerald-600 border-emerald-100",
       link: "/bansos",
+      x: 300,
+      y: 240,
     },
     {
-      title: "Transparansi APBDes Terbuka",
-      desc: "Publikasi realisasi anggaran pendapatan dan belanja desa secara transparan & akuntabel.",
+      id: "apbdes",
+      title: "Transparansi APBDes",
+      desc: "Publikasi realisasi anggaran belanja desa terbuka & akuntabel.",
       icon: TrendingUp,
-      color: "bg-blue-50 text-blue-600 border-blue-100",
-      link: "/transparansi",
+      link: "/apbdes",
+      x: 0,
+      y: 385,
+    },
+    {
+      id: "aduan",
+      title: "Pengaduan & Aspirasi",
+      desc: "Sampaikan keluhan warga langsung dan pantau tindak lanjutnya.",
+      icon: MessageSquare,
+      link: "/layanan-surat",
+      x: -300,
+      y: 240,
+    },
+    {
+      id: "pelacak",
+      title: "Pelacak Resi Realtime",
+      desc: "Pantau posisi berkas dari RT, RW, hingga Sekdes secara transparan.",
+      icon: Search,
+      link: "/lacak-surat",
+      x: -375,
+      y: -85,
     },
   ];
+
 
   const capabilitiesList = [
     {
@@ -287,87 +327,20 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="space-y-12 sm:space-y-16 page-enter relative overflow-hidden">
-      {/* Clean Ambient Hero Section with Seamless Background */}
-      <section className="relative pt-2 sm:pt-4 pb-16 sm:pb-20 overflow-hidden">
-        {/* SVG Ambient Concentric Watermark Vectors */}
-        <svg
-          className="absolute -right-20 -top-20 w-[550px] h-[550px] text-emerald-200/35 pointer-events-none -z-10"
-          viewBox="0 0 400 400"
-          fill="none"
-        >
-          <circle
-            cx="200"
-            cy="200"
-            r="190"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeDasharray="6 6"
-          />
-          <circle
-            cx="200"
-            cy="200"
-            r="140"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          />
-          <circle
-            cx="200"
-            cy="200"
-            r="90"
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-          <circle
-            cx="200"
-            cy="200"
-            r="40"
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-        </svg>
-        <svg
-          className="absolute -left-20 top-1/4 w-[450px] h-[450px] text-teal-200/25 pointer-events-none -z-10"
-          viewBox="0 0 400 400"
-          fill="none"
-        >
-          <path
-            d="M 0,200 Q 100,70 200,200 T 400,200"
-            stroke="currentColor"
-            strokeWidth="2"
-            fill="none"
-          />
-          <path
-            d="M 0,230 Q 100,100 200,230 T 400,230"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            fill="none"
-            opacity="0.6"
-          />
-        </svg>
+      {/* Hero Section (Clean Normal Layout) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-12 sm:pb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          {/* Left Column: Headline & Action */}
+          <div className="lg:col-span-7 space-y-6">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs animate-fade-in">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              <span>Sistem Informasi & Tata Kelola Digital Desa Doko</span>
+            </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
-            {/* Left Column (60% Fibonacci): Headline & Action */}
-            <div className="lg:col-span-7 space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.08]">
-                Satu Portal. <br />
-                <span className="relative whitespace-nowrap text-emerald-700 inline-block">
-                  Semua Layanan Desa.
-                  <svg
-                    className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400"
-                    viewBox="0 0 100 20"
-                    preserveAspectRatio="none"
-                  >
-                    <path
-                      d="M0 15 Q 50 0, 100 12"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                  </svg>
-                </span>
-              </h1>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.08]">
+              Satu Portal. <br />
+              <span className="text-emerald-700">Semua Layanan Desa.</span>
+            </h1>
 
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl font-medium min-h-[4.5rem] sm:min-h-[4rem]">
                 {typedHeroText}
@@ -674,8 +647,7 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Floating Bridge Statistics Ribbon (Golden Ratio Fibonacci Transition) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-12 lg:-mt-14 relative z-20">
@@ -777,279 +749,166 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* SmartRT Signature: Ekosistem Digital Pelayanan Desa Terpadu (Central Smartphone with 6 Radial Callouts) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 relative">
-        <div className="text-center max-w-3xl mx-auto space-y-3 mb-12 sm:mb-16">
+      {/* SmartRT / Photo 4: Unified Orbital Ecosystem Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+        <div className="text-center max-w-3xl mx-auto space-y-3 mb-10 sm:mb-14">
           <div className="pill-badge-emerald">
-            <Smartphone className="w-3.5 h-3.5 text-emerald-600" />
-            <span>ARSITEKTUR TERINTEGRASI</span>
+            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            <span>ARSITEKTUR DIGITAL TERINTEGRASI</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             Ekosistem Pelayanan Desa dalam Satu Alur Digital
           </h2>
           <p className="text-sm sm:text-base text-slate-600">
-            Arsitektur cerdas yang menghubungkan permohonan warga, verifikasi
-            pengurus RT/RW, dan pengesahan balai desa tanpa birokrasi berbelit.
+            Solusi digital menyeluruh yang menghubungkan permohonan warga, koordinasi RT/RW berjenjang, dan transparansi balai desa serba cepat dan akurat.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Left 3 Features */}
-          <div className="lg:col-span-4 space-y-5">
-            <div className="card-modern p-5 bg-white/95 border border-slate-200/80 hover:border-emerald-300 hover-lift transition-all group">
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                  <FileText className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-sm text-slate-900 group-hover:text-emerald-700 transition-colors">
-                    1. Pengajuan Surat Mandiri 24/7
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    Warga dapat mengajukan surat keterangan dari rumah kapan
-                    saja tanpa perlu antre fisik di balai desa.
-                  </p>
-                </div>
-              </div>
+        {/* Showcase Container with Emerald Canvas & Orbit */}
+        <div className="relative overflow-hidden rounded-3xl sm:rounded-[2.5rem] bg-gradient-to-br from-[#00875a] via-[#047857] to-[#065f46] text-white p-6 sm:p-10 lg:p-12 shadow-2xl shadow-emerald-950/20 border border-emerald-500/20 group/orbit">
+          {/* Top Stage Bar */}
+          <div className="flex items-center justify-between relative z-30 pb-4 border-b border-white/10 mb-4 sm:mb-6">
+            <div className="flex items-center gap-2.5">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75" />
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-400" />
+              </span>
+              <span className="text-xs font-bold tracking-wider uppercase text-emerald-100">
+                SiDesKu Mobile App • Live Hub
+              </span>
             </div>
 
-            <div className="card-modern p-5 bg-white/95 border border-slate-200/80 hover:border-emerald-300 hover-lift transition-all group">
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:bg-amber-600 group-hover:text-white transition-colors">
-                  <Users className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-sm text-slate-900 group-hover:text-emerald-700 transition-colors">
-                    2. Validasi Berjenjang RT & RW
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    Disposisi otomatis mengalir berjenjang ke ponsel Ketua RT
-                    dan Ketua RW untuk persetujuan cepat satu sentuhan.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="card-modern p-5 bg-white/95 border border-slate-200/80 hover:border-emerald-300 hover-lift transition-all group">
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-teal-50 text-teal-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:bg-teal-600 group-hover:text-white transition-colors">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-sm text-slate-900 group-hover:text-emerald-700 transition-colors">
-                    3. Legalitas QR Code & TTE
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    Surat terbit dilengkapi Tanda Tangan Elektronik berstandar
-                    DPMPD Jawa Timur yang sah diakui instansi luar.
-                  </p>
-                </div>
-              </div>
-            </div>
+            {/* Orbit Rotation Toggle Button */}
+            <button
+              onClick={() => setIsOrbitSpinning((prev) => !prev)}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white backdrop-blur-md transition-all cursor-pointer shadow-sm"
+              title={isOrbitSpinning ? "Klik untuk menjeda putaran orbit" : "Klik untuk memutar orbit kembali"}
+            >
+              {isOrbitSpinning ? (
+                <>
+                  <Pause className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Jeda Orbit</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Putar Orbit</span>
+                </>
+              )}
+            </button>
           </div>
 
-          {/* Center Device Mockup (SmartRT Smartphone) */}
-          <div className="lg:col-span-4 flex justify-center relative my-4 lg:my-0">
-            {/* Ambient Radial Backlight */}
-            <div className="absolute -inset-6 bg-gradient-to-tr from-emerald-500/20 via-teal-400/20 to-emerald-600/15 rounded-[3.5rem] blur-2xl -z-10 pointer-events-none" />
-
-            {/* Smartphone Outer Shell */}
-            <div className="w-72 sm:w-80 rounded-[3rem] bg-slate-950 p-3.5 shadow-2xl border-4 border-slate-800 relative animate-float-gentle">
-              {/* Dynamic Island Notch */}
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 w-28 h-5 bg-black rounded-full z-20 flex items-center justify-between px-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-800" />
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              </div>
-
-              {/* Smartphone Screen Inner */}
-              <div className="bg-slate-50 rounded-[2.4rem] overflow-hidden border border-slate-200/90 text-slate-900 pt-9 pb-5 px-4 space-y-3 font-sans">
-                {/* Mobile Header */}
-                <div className="flex items-center justify-between pb-2.5 border-b border-slate-200/80">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src="/images/logo-kediri.png"
-                      alt="Kediri"
-                      className="h-6 w-auto"
-                    />
-                    <div>
-                      <div className="font-black text-[11px] text-slate-900 leading-tight">
-                        SiDesKu Kediri
-                      </div>
-                      <div className="text-[9px] text-emerald-600 font-bold">
-                        Desa Doko • Live
-                      </div>
-                    </div>
-                  </div>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[9px]">
-                    Aktif
-                  </span>
-                </div>
-
-                {/* Simulated Realtime Letter Tracking Box */}
-                <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-[10px]">
-                    <span className="font-bold text-slate-400">
-                      Resi: RESI-SKU-084
-                    </span>
-                    <span className="font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/80">
-                      RT & RW ACC
-                    </span>
-                  </div>
-                  <div className="font-extrabold text-xs text-slate-900">
-                    Surat Keterangan Usaha (KUR)
-                  </div>
-                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                    <div className="bg-emerald-600 h-full rounded-full w-4/5" />
-                  </div>
-                  <div className="flex items-center justify-between text-[9px] text-slate-500 font-medium">
-                    <span>Pemohon: Bambang Utomo</span>
-                    <span className="text-emerald-700 font-bold">
-                      Proses Sekdes
-                    </span>
-                  </div>
-                </div>
-
-                {/* Quick 1-Click Action Card */}
-                <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 p-3 rounded-2xl text-white shadow-md text-center space-y-1">
-                  <div className="text-[9px] font-bold text-emerald-100 uppercase tracking-wider">
-                    Disposisi Cepat
-                  </div>
-                  <div className="text-xs font-black">
-                    Persetujuan Berjenjang RT/RW
-                  </div>
-                  <div className="pt-1">
-                    <div className="w-full py-1.5 bg-white text-emerald-800 rounded-xl font-black text-[10px] shadow-xs flex items-center justify-center gap-1">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                      <span>1-Klik ACC Digital</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* QR Code Validation Badge */}
-                <div className="bg-white p-2.5 rounded-2xl border border-slate-200 flex items-center gap-3">
-                  <div className="p-1.5 bg-emerald-50 rounded-xl border border-emerald-100 shrink-0">
-                    <QrCode className="w-7 h-7 text-emerald-700" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-[10px] font-black text-slate-900">
-                      QR Code TTE Resmi
-                    </div>
-                    <div className="text-[9px] text-slate-500">
-                      Hash Code: d41d8cd98f00b204
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right 3 Features */}
-          <div className="lg:col-span-4 space-y-5">
-            <div className="card-modern p-5 bg-white/95 border border-slate-200/80 hover:border-emerald-300 hover-lift transition-all group">
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <Search className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-sm text-slate-900 group-hover:text-emerald-700 transition-colors">
-                    4. Pelacak Resi Realtime
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    Pantau posisi disposisi surat secara terbuka mulai dari
-                    antrean RT, verifikasi RW, hingga penandatanganan Sekdes.
-                  </p>
-                </div>
-              </div>
+          {/* Desktop Orbital Stage (>= 1024px) */}
+          <div className="hidden lg:flex items-center justify-center relative min-h-[900px] w-full overflow-hidden select-none">
+            {/* Concentric Orbit Rings (4 rings behind phone, matching Photo 4) */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+              <div className="w-[390px] h-[390px] rounded-full border border-white/25 absolute" />
+              <div className="w-[580px] h-[580px] rounded-full border border-white/20 absolute" />
+              <div className="w-[760px] h-[760px] rounded-full border border-white/20 absolute" />
+              <div className="w-[940px] h-[940px] rounded-full border border-white/15 absolute" />
+              {/* Radial Center Backlight */}
+              <div className="w-[480px] h-[480px] rounded-full bg-emerald-300/15 blur-3xl absolute" />
             </div>
 
-            <div className="card-modern p-5 bg-white/95 border border-slate-200/80 hover:border-emerald-300 hover-lift transition-all group">
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                  <Zap className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-sm text-slate-900 group-hover:text-emerald-700 transition-colors">
-                    5. Otomasi Broadcast Bansos
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    Jadwal pencairan dan barcode antrean PKH/BLT otomatis masuk
-                    ke WhatsApp warga tanpa risiko calo & pungli.
-                  </p>
-                </div>
-              </div>
+            {/* Center Static Smartphone Mockup (from user upload, sharpened) */}
+            <div className="relative z-20 flex flex-col items-center justify-center pointer-events-auto">
+              <img
+                src="/images/landing/mobile-preview-clean.png"
+                alt="SiDesKu Mobile Preview"
+                className="w-[270px] xl:w-[285px] h-auto object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)] animate-float-gentle select-none pointer-events-none"
+              />
             </div>
 
-            <div className="card-modern p-5 bg-white/95 border border-slate-200/80 hover:border-emerald-300 hover-lift transition-all group">
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 shadow-2xs group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-black text-sm text-slate-900 group-hover:text-emerald-700 transition-colors">
-                    6. Transparansi APBDes Terbuka
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    Publikasi realisasi anggaran pendapatan dan belanja desa
-                    yang dapat dipantau oleh seluruh masyarakat.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto space-y-3 mb-12">
-          <div className="pill-badge-emerald">
-            <Sparkles className="w-3 h-3 text-emerald-600" />
-            <span>FITUR UTAMA</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Semua yang Dibutuhkan untuk Layanan Cepat
-          </h2>
-          <p className="text-sm sm:text-base text-slate-600">
-            Solusi digital menyeluruh yang menggantikan birokrasi konvensional
-            menjadi serba praktis, otomatis, dan akurat.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featureCards.map((f) => {
-            const Icon = f.icon;
-            return (
-              <div
-                key={f.title}
-                className="card-modern p-7 flex flex-col justify-between hover-lift group"
-              >
-                <div className="space-y-4">
+            {/* Rotating Orbital Track (Nodes circle around the phone) */}
+            <div
+              className="absolute inset-0 w-full h-full animate-orbit-rotate group-hover/orbit:[animation-play-state:paused] pointer-events-none z-20"
+              style={{
+                animationPlayState: isOrbitSpinning ? "running" : "paused",
+              }}
+            >
+              {orbitalNodes.map((item) => {
+                const IconComponent = item.icon;
+                return (
                   <div
-                    className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${f.color} shadow-2xs group-hover:scale-105 transition-transform`}
+                    key={item.id}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+                    style={{
+                      left: `calc(50% + ${item.x}px)`,
+                      top: `calc(50% + ${item.y}px)`,
+                    }}
                   >
-                    <Icon className="w-6 h-6" />
+                    {/* Counter-rotation ensures text & icon stay 100% upright and readable */}
+                    <div
+                      className="animate-orbit-counter group-hover/orbit:[animation-play-state:paused]"
+                      style={{
+                        animationPlayState: isOrbitSpinning
+                          ? "running"
+                          : "paused",
+                      }}
+                    >
+                      <Link
+                        to={item.link}
+                        className="group flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 hover:border-white/40 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer max-w-[270px]"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center shrink-0 shadow-md text-white group-hover:bg-white group-hover:text-emerald-700 transition-all duration-300">
+                          <IconComponent className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-white text-sm leading-snug group-hover:text-emerald-200 transition-colors drop-shadow-xs whitespace-nowrap">
+                            {item.title}
+                          </h4>
+                          <p className="text-white/80 text-[11px] leading-snug mt-0.5">
+                            {item.desc}
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
+                );
+              })}
+            </div>
+          </div>
 
-                  <h3 className="font-extrabold text-base text-slate-900 group-hover:text-emerald-700 transition-colors leading-snug">
-                    {f.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
-                    {f.desc}
-                  </p>
-                </div>
+          {/* Mobile & Tablet Responsive View (< 1024px) */}
+          <div className="block lg:hidden space-y-8 relative z-10 select-none">
+            {/* Center Mobile Phone with Ambient Glowing Rings */}
+            <div className="relative flex items-center justify-center py-6">
+              <div className="absolute w-64 h-64 rounded-full border border-white/25 pointer-events-none" />
+              <div className="absolute w-80 h-80 rounded-full border border-white/15 pointer-events-none" />
+              <div className="absolute w-48 h-48 rounded-full bg-emerald-300/15 blur-2xl pointer-events-none" />
+              <img
+                src="/images/landing/mobile-preview-clean.png"
+                alt="SiDesKu Mobile Preview"
+                className="w-56 sm:w-64 h-auto object-contain drop-shadow-2xl relative z-10 animate-float-gentle"
+              />
+            </div>
 
-                <div className="pt-6 border-t border-slate-100 mt-6">
+            {/* Mobile Feature Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {orbitalNodes.map((item) => {
+                const IconComponent = item.icon;
+                return (
                   <Link
-                    to={f.link}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-900 group-hover:translate-x-1 transition-all"
+                    key={item.id}
+                    to={item.link}
+                    className="flex items-start gap-3.5 p-4 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all duration-200 active:scale-[0.98]"
                   >
-                    <span>Pelajari Selengkapnya</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
+                    <div className="w-10 h-10 rounded-full bg-white/20 border border-white/40 flex items-center justify-center shrink-0 text-white">
+                      <IconComponent className="w-5 h-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-bold text-white text-sm">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-white/80 leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
                   </Link>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          </div>
         </div>
       </section>
 
