@@ -34,10 +34,10 @@ class RtSuratController extends Controller
         $surat = SuratRequest::with('wargaProfile')->findOrFail($id);
         $user = $request->user();
 
-        $catatan = $request->input('catatan', 'Permohonan disetujui RT dan diteruskan ke Kantor Desa untuk legalisasi.');
+        $catatan = $request->input('catatan', 'Permohonan disetujui RT dan diteruskan ke Ketua RW untuk verifikasi.');
 
         $surat->update([
-            'status' => 'processed_sekdes',
+            'status' => 'approved_rt',
         ]);
 
         SuratTracking::create([
@@ -55,14 +55,14 @@ class RtSuratController extends Controller
                 'nomor_tujuan' => $surat->wargaProfile->no_hp_wa,
                 'jenis_notifikasi' => 'SURAT_APPROVED_RT',
                 'judul' => 'Surat Disetujui RT',
-                'pesan' => "Halo {$surat->wargaProfile->nama_lengkap}, pengajuan surat {$surat->nomor_resi} telah DISETUJUI oleh Ketua RT dan diteruskan ke Kantor Desa.",
+                'pesan' => "Halo {$surat->wargaProfile->nama_lengkap}, pengajuan surat {$surat->nomor_resi} telah DISETUJUI oleh Ketua RT dan diteruskan ke Ketua RW.",
                 'status_pengiriman' => 'TERKIRIM',
             ]);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Surat berhasil disetujui RT dan diteruskan ke Kantor Desa / Sekdes.',
+            'message' => 'Surat berhasil disetujui RT dan diteruskan ke Ketua RW.',
             'data' => $surat->fresh(['trackings.actorUser']),
         ]);
     }

@@ -82,32 +82,115 @@ export const BansosPage: React.FC = () => {
 
   return (
     <div className="space-y-14 py-8 page-enter">
-      {/* Header Banner */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#0b3323] via-[#0f442f] to-[#072418] text-white shadow-xl relative overflow-hidden border border-emerald-800/80">
-          
-          {/* Ambient Glows */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Clean Ambient Hero Section with SVG Vectors (Seamless) */}
+      <section className="relative pt-4 sm:pt-6 pb-16 sm:pb-20 overflow-hidden">
+        
+        {/* SVG Ambient Concentric Watermark Vectors */}
+        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-emerald-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+          <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="2" strokeDasharray="6 6" />
+          <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.5" />
+          <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" />
+          <circle cx="200" cy="200" r="40" stroke="currentColor" strokeWidth="1" />
+        </svg>
+        <svg className="absolute -left-20 top-1/4 w-[420px] h-[420px] text-teal-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+          <path d="M 0,200 Q 100,70 200,200 T 400,200" stroke="currentColor" strokeWidth="2" fill="none" />
+          <path d="M 0,230 Q 100,100 200,230 T 400,230" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.6" />
+        </svg>
 
-          <div className="max-w-3xl space-y-4 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-800/90 text-emerald-200 text-xs font-extrabold border border-emerald-600/60 shadow-xs">
-              <HeartHandshake className="w-4 h-4 text-emerald-300" />
-              <span>Jaring Pengaman Sosial & Kesejahteraan</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            
+            {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
+            <div className="lg:col-span-7 space-y-4 text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs">
+                <HeartHandshake className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Jaring Pengaman Sosial & Kesejahteraan</span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
+                Bantuan Sosial & Distribusi{' '}
+                <span className="relative whitespace-nowrap text-emerald-700 inline-block">
+                  Tepat Sasaran
+                  <svg className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400" viewBox="0 0 100 20" preserveAspectRatio="none">
+                    <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
+                  </svg>
+                </span>
+              </h1>
+
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
+                Informasi resmi program bantuan sosial (PKH, BLT-DD, BPNT), cek mandiri status kepesertaan NIK, dan sistem broadcast jadwal ke WhatsApp warga di Kabupaten Kediri tanpa potongan biaya.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-500 font-medium">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <strong className="text-slate-800">100% Bebas Pungli</strong> tanpa calo
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <strong className="text-slate-800">Data Terpadu DTKS</strong> valid
+                </span>
+              </div>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-              Bantuan Sosial & Distribusi Tepat Sasaran
-            </h1>
-            <p className="text-sm sm:text-base text-emerald-100/90 leading-relaxed font-medium">
-              Informasi resmi program bantuan sosial (PKH, BLT-DD, BPNT), cek mandiri status kepesertaan NIK, dan sistem broadcast jadwal ke WhatsApp warga di Kabupaten Kediri tanpa potongan biaya.
-            </p>
+
+            {/* Right Column (40% Fibonacci): Bansos Mockup Preview */}
+            <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
+              <div className="w-full max-w-md animate-float-gentle">
+                <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
+                  
+                  {/* Top Bar with Badge */}
+                  <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
+                        <HeartHandshake className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="font-black text-xs text-slate-900 leading-tight">
+                          Penyaluran Bansos PKH
+                        </div>
+                        <div className="text-[10px] text-emerald-600 font-bold">
+                          Kemensos & Pemkab Kediri
+                        </div>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] border border-emerald-200">
+                      Tersalurkan
+                    </span>
+                  </div>
+
+                  {/* Bansos Snapshot */}
+                  <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2 text-xs">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-500 font-medium">Keluarga Penerima (KPM):</span>
+                      <span className="font-black text-slate-900">84 KPM Terdaftar</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-500 font-medium">Status Penyaluran:</span>
+                      <span className="font-bold text-emerald-700">100% Tuntas Tahap III</span>
+                    </div>
+                    <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-1">
+                      <div className="bg-emerald-600 h-full rounded-full w-full" />
+                    </div>
+                  </div>
+
+                  {/* Trust Badge */}
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Notifikasi WA Otomatis Terkirim</span>
+                    </span>
+                    <span className="font-bold text-slate-700">Tepat Sasaran</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Cek NIK Kelayakan Mandiri */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6">
-        <div className="card-surface p-6 sm:p-8 space-y-6 shadow-sm">
+      {/* Cek NIK Kelayakan Mandiri: Floating Bridge Card (Golden Ratio Anchor) */}
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 -mt-10 sm:-mt-12 relative z-20">
+        <div className="bg-white rounded-[2rem] border border-slate-200/80 p-6 sm:p-8 space-y-5 shadow-xl shadow-slate-900/5">
           <div className="text-center space-y-1">
             <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 uppercase tracking-widest">
               <Search className="w-3.5 h-3.5" /> Pengecekan Mandiri

@@ -67,17 +67,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/surats/{id}', [WargaSuratController::class, 'show']);
 
     // Verifikasi & Aksi Ketua RT
-    Route::post('/surats/{id}/approve-rt', [RtSuratController::class, 'approveRt']);
-    Route::post('/surats/{id}/rt-action', [RtSuratController::class, 'handleAction']);
+    Route::middleware('role:rt,sekretaris_rt,admin')->group(function () {
+        Route::post('/surats/{id}/approve-rt', [RtSuratController::class, 'approveRt']);
+        Route::post('/surats/{id}/rt-action', [RtSuratController::class, 'handleAction']);
+    });
 
     // Verifikasi Ketua RW
-    Route::post('/surats/{id}/approve-rw', [RwSuratController::class, 'approveRw']);
+    Route::middleware('role:rw,admin')->group(function () {
+        Route::post('/surats/{id}/approve-rw', [RwSuratController::class, 'approveRw']);
+    });
 
     // Legalisasi & TTD QR Kepala Desa / Sekdes
-    Route::post('/surats/{id}/process-sekdes', [SekdesSuratController::class, 'processSekdes']);
+    Route::middleware('role:sekdes,kades,admin')->group(function () {
+        Route::post('/surats/{id}/process-sekdes', [SekdesSuratController::class, 'processSekdes']);
+    });
 
-    // Penolakan Surat (RT / RW / Sekdes)
-    Route::post('/surats/{id}/reject', function (Request $request, $id) {
+    // Penolakan Surat (RT / RW / Sekdes / Admin)
+    Route::middleware('role:rt,rw,sekdes,kades,admin')->post('/surats/{id}/reject', function (Request $request, $id) {
         $user = $request->user();
         if ($user->hasRole('rt')) {
             return app(RtSuratController::class)->reject($request, $id);
@@ -89,26 +95,32 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // kas dan keuangan RT (Api\Rt\KasRtController)
     Route::get('/kas-rt', [KasRtController::class, 'index']);
-    Route::post('/kas-rt/categories', [KasRtController::class, 'storeCategory']);
-    Route::post('/kas-rt/transactions', [KasRtController::class, 'store']);
-    Route::post('/kas-rt/transaction', [KasRtController::class, 'store']); // alias
+    Route::middleware('role:rt,bendahara_rt,admin')->group(function () {
+        Route::post('/kas-rt/categories', [KasRtController::class, 'storeCategory']);
+        Route::post('/kas-rt/transactions', [KasRtController::class, 'store']);
+        Route::post('/kas-rt/transaction', [KasRtController::class, 'store']); // alias
+    });
 
     // APBDes & Keuangan Desa (Api\Bendahara\ApbdesController)
     Route::get('/apbdes/categories', [ApbdesController::class, 'getCategories']);
-    Route::post('/apbdes/records', [ApbdesController::class, 'store']);
-    Route::put('/apbdes/records/{id}', [ApbdesController::class, 'update']);
-    Route::delete('/apbdes/records/{id}', [ApbdesController::class, 'destroy']);
+    Route::middleware('role:bendahara_desa,sekdes,kades,admin')->group(function () {
+        Route::post('/apbdes/records', [ApbdesController::class, 'store']);
+        Route::put('/apbdes/records/{id}', [ApbdesController::class, 'update']);
+        Route::delete('/apbdes/records/{id}', [ApbdesController::class, 'destroy']);
+    });
 
     // bantuan sosial & bansos desa (Api\Sekdes\BansosController)
     Route::get('/bansos', [BansosController::class, 'index']);
-    Route::post('/bansos', [BansosController::class, 'store']);
-    Route::get('/bansos/{id}', [BansosController::class, 'show']);
-    Route::post('/bansos/{id}/penerima', [BansosController::class, 'addPenerima']);
-    Route::post('/bansos/{id}/publish-broadcast', [BansosController::class, 'publishAndBroadcast']);
-    Route::post('/bansos/{id}/verify-disalurkan', [BansosController::class, 'verifyDisalurkan']);
+    Route::middleware('role:sekdes,kades,admin')->group(function () {
+        Route::post('/bansos', [BansosController::class, 'store']);
+        Route::get('/bansos/{id}', [BansosController::class, 'show']);
+        Route::post('/bansos/{id}/penerima', [BansosController::class, 'addPenerima']);
+        Route::post('/bansos/{id}/publish-broadcast', [BansosController::class, 'publishAndBroadcast']);
+        Route::post('/bansos/{id}/verify-disalurkan', [BansosController::class, 'verifyDisalurkan']);
+    });
 
     // pengaturan desa & settings (Api\Admin\DesaSettingController)
-    Route::put('/settings/desa', [DesaSettingController::class, 'updateSettings']);
+    Route::middleware('role:admin,sekdes,kades')->put('/settings/desa', [DesaSettingController::class, 'updateSettings']);
 
     // data warga & kartu keluarga (Api\Admin\WargaController)
     Route::get('/warga', function (Request $request) {

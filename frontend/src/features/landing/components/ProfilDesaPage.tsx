@@ -154,91 +154,167 @@ export const ProfilDesaPage: React.FC = () => {
   return (
     <div className="space-y-12 py-6 page-enter font-sans text-slate-800">
       
-      {/* Hero Banner */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#0b3323] via-[#0f442f] to-[#072418] text-white shadow-xl relative overflow-hidden border border-emerald-800/80">
-          
-          {/* Ambient Glows */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Clean Ambient Hero Section with SVG Vectors (Seamless) */}
+      <section className="relative pt-4 sm:pt-6 pb-16 sm:pb-20 overflow-hidden">
+        
+        {/* SVG Ambient Concentric Watermark Vectors */}
+        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-emerald-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+          <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="2" strokeDasharray="6 6" />
+          <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.5" />
+          <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" />
+          <circle cx="200" cy="200" r="40" stroke="currentColor" strokeWidth="1" />
+        </svg>
+        <svg className="absolute -left-20 top-1/4 w-[420px] h-[420px] text-teal-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+          <path d="M 0,200 Q 100,70 200,200 T 400,200" stroke="currentColor" strokeWidth="2" fill="none" />
+          <path d="M 0,230 Q 100,100 200,230 T 400,230" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.6" />
+        </svg>
 
-          <div className="max-w-3xl space-y-4 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-800/90 text-emerald-200 text-xs font-extrabold border border-emerald-600/60 shadow-xs">
-              <Compass className="w-4 h-4 text-emerald-300" />
-              <span>{user ? 'Profil Resmi Wilayah Desa' : 'Portal Direktori Wilayah Kabupaten Kediri'}</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            
+            {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
+            <div className="lg:col-span-7 space-y-4 text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs">
+                <Compass className="w-3.5 h-3.5 text-emerald-600" />
+                <span>{user ? 'Profil Resmi Wilayah Desa' : 'Portal Direktori Wilayah Kabupaten Kediri'}</span>
+              </div>
+
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
+                {user ? (
+                  <>
+                    Profil Wilayah & Tata Pamong{' '}
+                    <span className="relative whitespace-nowrap text-emerald-700 inline-block">
+                      Desa Doko
+                      <svg className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400" viewBox="0 0 100 20" preserveAspectRatio="none">
+                        <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
+                      </svg>
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Direktori Desa & Wilayah{' '}
+                    <span className="relative whitespace-nowrap text-emerald-700 inline-block">
+                      Kab. Kediri
+                      <svg className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400" viewBox="0 0 100 20" preserveAspectRatio="none">
+                        <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
+                      </svg>
+                    </span>
+                  </>
+                )}
+              </h1>
+
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
+                {user ? (
+                  'Informasi resmi mengenai sejarah, visi-misi, aparatur pemerintahan, persebaran rukun tetangga (RT/RW), dan potensi unggulan Desa Doko, Kec. Ngasem.'
+                ) : (
+                  'Informasi profil desa-desa yang telah terintegrasi dalam sistem administrasi digital mandiri Kabupaten Kediri, mencakup statistik RT, RW, dan populasi warga.'
+                )}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <a
+                  href="#daftar-desa"
+                  className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-700/20 transition-all press-down flex items-center gap-2 hover-glow"
+                >
+                  <span>Jelajahi Wilayah Terdaftar</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </a>
+                <div className="text-xs text-slate-500 font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 border border-slate-200/80 shadow-2xs">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Terintegrasi Standar Pemkab Kediri</span>
+                </div>
+              </div>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-              {user ? (
-                <>Profil Pemerintahan <span className="text-emerald-300">Desa Doko</span></>
-              ) : (
-                <>Direktori Desa & Wilayah <span className="text-emerald-300">Kab. Kediri</span></>
-              )}
-            </h1>
+            {/* Right Column (40% Fibonacci): Device / Regional Summary Mockup */}
+            <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
+              <div className="w-full max-w-md animate-float-gentle">
+                <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
+                  
+                  {/* Top Bar with Kediri Emblem */}
+                  <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src="/images/logo-kediri.png" 
+                        alt="Kabupaten Kediri" 
+                        className="h-8 w-auto object-contain"
+                      />
+                      <div>
+                        <div className="font-black text-xs text-slate-900 leading-tight">
+                          Pusat Data Wilayah
+                        </div>
+                        <div className="text-[10px] text-emerald-600 font-bold">
+                          Kabupaten Kediri
+                        </div>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] border border-emerald-200">
+                      Sistem Aktif
+                    </span>
+                  </div>
 
-            <p className="text-sm sm:text-base text-emerald-100/90 leading-relaxed font-medium">
-              {user ? (
-                'Informasi resmi mengenai sejarah, visi-misi, aparatur pemerintahan, persebaran rukun tetangga (RT/RW), dan potensi unggulan Desa Doko, Kec. Ngasem.'
-              ) : (
-                'Informasi profil desa-desa yang telah terintegrasi dalam sistem administrasi digital mandiri Kabupaten Kediri, mencakup statistik RT, RW, dan populasi warga.'
-              )}
-            </p>
+                  {/* Summary Card Details */}
+                  <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2.5 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-black text-slate-900">Desa Doko (Percontohan)</span>
+                      <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
+                        Kec. Ngasem
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 leading-relaxed">
+                      Kawasan pusat layanan terintegrasi digital dengan 3 Dusun mandiri, 12 RW, dan 36 RT terdata sah.
+                    </p>
+                    <div className="grid grid-cols-3 gap-2 text-center pt-1 text-[11px]">
+                      <div className="bg-white p-2 rounded-xl border border-slate-200/80 font-bold text-slate-800 shadow-2xs">
+                        3 Dusun
+                      </div>
+                      <div className="bg-white p-2 rounded-xl border border-slate-200/80 font-bold text-slate-800 shadow-2xs">
+                        12 RW
+                      </div>
+                      <div className="bg-white p-2 rounded-xl border border-slate-200/80 font-bold text-emerald-700 shadow-2xs">
+                        36 RT
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Trust Badge */}
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Data Kependudukan Realtime</span>
+                    </span>
+                    <span className="font-bold text-slate-700">100% Sah</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Guest Mode View */}
+      {/* Guest Mode View: Floating Bridge Stat Ribbon */}
       {!user && (
         <div className="space-y-12">
           
-          {/* Summary Metric Ribbon */}
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-              <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-emerald-300 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
-                    <Building2 className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="text-2xl sm:text-3xl font-black text-slate-900">5 Desa</div>
-                    <div className="text-xs text-slate-500 font-semibold">Terdaftar di SIDes</div>
-                  </div>
+          {/* Floating Bridge Stat Ribbon (Golden Ratio Divider) */}
+          <section className="-mt-8 sm:-mt-10 relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-[2rem] border border-slate-200/80 shadow-xl shadow-slate-900/5 p-6 sm:p-7">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 text-center">
+                <div className="px-2">
+                  <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">5</div>
+                  <div className="text-xs text-slate-500 font-bold mt-1">Desa Terdaftar</div>
                 </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-emerald-300 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-black">
-                    <Layers className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="text-2xl sm:text-3xl font-black text-slate-900">162 RT / 54 RW</div>
-                    <div className="text-xs text-slate-500 font-semibold">Cakupan Wilayah</div>
-                  </div>
+                <div className="px-2 pt-4 sm:pt-0">
+                  <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">162 / 54</div>
+                  <div className="text-xs text-slate-500 font-bold mt-1">RT / RW Cakupan</div>
                 </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-emerald-300 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-black">
-                    <Users className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="text-2xl sm:text-3xl font-black text-slate-900">13.040+</div>
-                    <div className="text-xs text-slate-500 font-semibold">Total Jiwa Terdata</div>
-                  </div>
+                <div className="px-2 pt-4 sm:pt-0">
+                  <div className="text-2xl sm:text-3xl font-black text-emerald-700 tracking-tight">13.040+</div>
+                  <div className="text-xs text-slate-500 font-bold mt-1">Jiwa Terdata</div>
                 </div>
-              </div>
-
-              <div className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-emerald-300 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center font-black">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <div className="text-2xl sm:text-3xl font-black text-emerald-700">100% Sah</div>
-                    <div className="text-xs text-slate-500 font-semibold">Standar Pemkab Kediri</div>
-                  </div>
+                <div className="px-2 pt-4 sm:pt-0">
+                  <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">100%</div>
+                  <div className="text-xs text-slate-500 font-bold mt-1">Standar Pemkab Kediri</div>
                 </div>
               </div>
             </div>

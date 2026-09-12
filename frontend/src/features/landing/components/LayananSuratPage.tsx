@@ -189,28 +189,137 @@ export const LayananSuratPage: React.FC = () => {
   return (
     <div className="space-y-16 py-6 sm:py-8 page-enter relative overflow-hidden">
       
-      {/* Background Matrix */}
-      <div className="absolute inset-0 bg-[radial-gradient(#059669_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.05] pointer-events-none -z-10" />
+      {/* Clean Ambient Hero Section with SVG Vectors (Seamless) */}
+      <section className="relative pt-4 sm:pt-6 pb-16 sm:pb-20 overflow-hidden">
+        
+        {/* SVG Ambient Concentric Watermark Vectors */}
+        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-emerald-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+          <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="2" strokeDasharray="6 6" />
+          <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.5" />
+          <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" />
+          <circle cx="200" cy="200" r="40" stroke="currentColor" strokeWidth="1" />
+        </svg>
+        <svg className="absolute -left-20 top-1/3 w-[420px] h-[420px] text-teal-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+          <path d="M 0,200 Q 100,70 200,200 T 400,200" stroke="currentColor" strokeWidth="2" fill="none" />
+          <path d="M 0,230 Q 100,100 200,230 T 400,230" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.6" />
+        </svg>
 
-      {/* Header Banner */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl p-8 sm:p-12 bg-gradient-to-r from-[#0b3323] via-[#0f442f] to-[#072418] text-white shadow-xl relative overflow-hidden border border-emerald-800/80">
-          
-          {/* Ambient Glows */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            
+            {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
+            <div className="lg:col-span-7 space-y-4 text-left">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs">
+                <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Standar Pelayanan Prima Digital</span>
+              </div>
 
-          <div className="max-w-3xl space-y-4 relative z-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-800/90 text-emerald-200 text-xs font-extrabold border border-emerald-600/60 shadow-xs">
-              <FileCheck2 className="w-4 h-4 text-emerald-300" />
-              <span>Standar Pelayanan Prima Digital</span>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
+                Katalog Layanan{' '}
+                <span className="relative whitespace-nowrap text-emerald-700 inline-block">
+                  Surat Digital
+                  <svg className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400" viewBox="0 0 100 20" preserveAspectRatio="none">
+                    <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
+                  </svg>
+                </span>
+              </h1>
+
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
+                Daftar lengkap 14 jenis surat keterangan resmi, persyaratan berkas kependudukan, dan panduan pengajuan online tanpa perlu antre fisik di kantor desa.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <Link
+                  to="/login"
+                  className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-700/20 transition-all press-down flex items-center gap-2 hover-glow"
+                >
+                  <span>Ajukan Surat Sekarang</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+                <div className="text-xs text-slate-500 font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 border border-slate-200/80 shadow-2xs">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Legalitas TTD & QR Code Sah</span>
+                </div>
+              </div>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
-              Katalog Layanan Surat Digital
-            </h1>
-            <p className="text-sm sm:text-base text-emerald-100/90 leading-relaxed font-medium">
-              Daftar lengkap surat keterangan, persyaratan berkas, dan panduan pengajuan surat berjenjang di Kabupaten Kediri tanpa perlu antre fisik di kantor desa.
-            </p>
+
+            {/* Right Column (40% Fibonacci): Document Mockup Preview */}
+            <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
+              <div className="w-full max-w-md animate-float-gentle">
+                <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
+                  
+                  {/* Top Bar with Kediri Emblem */}
+                  <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src="/images/logo-kediri.png" 
+                        alt="Kabupaten Kediri" 
+                        className="h-8 w-auto object-contain"
+                      />
+                      <div>
+                        <div className="font-black text-xs text-slate-900 leading-tight">
+                          Dokumen Resmi Dinas
+                        </div>
+                        <div className="text-[10px] text-emerald-600 font-bold">
+                          Kop Surat Pemdes Doko
+                        </div>
+                      </div>
+                    </div>
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] border border-emerald-200">
+                      Gratis Rp 0,-
+                    </span>
+                  </div>
+
+                  {/* Document Preview Snippet */}
+                  <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2.5 text-xs">
+                    <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
+                      <span className="font-black text-slate-800">Surat Keterangan Usaha (SKU)</span>
+                      <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md">
+                        503/042/.../2026
+                      </span>
+                    </div>
+                    <div className="space-y-1 text-[11px] text-slate-500">
+                      <div className="flex justify-between"><span>Pemohon:</span><strong className="text-slate-800">Bambang Utomo</strong></div>
+                      <div className="flex justify-between"><span>Verifikasi RT:</span><span className="text-emerald-700 font-bold">✓ Selesai ACC</span></div>
+                      <div className="flex justify-between"><span>Pengesahan:</span><span className="text-emerald-700 font-bold">✓ Stempel & QR TTD</span></div>
+                    </div>
+                  </div>
+
+                  {/* Instant Guarantee */}
+                  <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+                    <span className="flex items-center gap-1.5 font-medium">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Diproses Rata-rata &lt; 15 Menit</span>
+                    </span>
+                    <span className="font-bold text-slate-700">100% Online</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Floating Bridge Guarantee Ribbon (Golden Ratio Divider) */}
+      <section className="-mt-12 sm:-mt-14 relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-[2rem] border border-slate-200/80 shadow-xl shadow-slate-900/5 p-6 sm:p-7">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 text-center">
+            <div className="px-2">
+              <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">14</div>
+              <div className="text-xs text-slate-500 font-bold mt-1">Jenis Surat Resmi</div>
+            </div>
+            <div className="px-2 pt-4 sm:pt-0">
+              <div className="text-2xl sm:text-3xl font-black text-emerald-700 tracking-tight">Rp 0,-</div>
+              <div className="text-xs text-slate-500 font-bold mt-1">Gratis Tanpa Pungli</div>
+            </div>
+            <div className="px-2 pt-4 sm:pt-0">
+              <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">&lt; 15 Menit</div>
+              <div className="text-xs text-slate-500 font-bold mt-1">Rata-rata Waktu Proses</div>
+            </div>
+            <div className="px-2 pt-4 sm:pt-0">
+              <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">100%</div>
+              <div className="text-xs text-slate-500 font-bold mt-1">Legalitas QR Sah</div>
+            </div>
           </div>
         </div>
       </section>

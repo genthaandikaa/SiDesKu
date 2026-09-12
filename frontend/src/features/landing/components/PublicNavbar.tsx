@@ -46,23 +46,26 @@ export const PublicNavbar: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Mode 1: Pre-Login Navigation Links (Fokus informasi publik & direktori desa)
+  // Mode 1: Pre-Login Navigation Links (Akses publik seluruh fitur unggulan desa)
   const preLoginLinks: NavItem[] = [
     { name: 'Beranda', path: '/' },
-    { name: 'Direktori Desa', path: '/profil' },
+    { name: 'Profil', path: '/profil' },
     { name: 'Layanan Surat', path: '/layanan-surat' },
     { name: 'Lacak Surat', path: '/lacak' },
+    { name: 'APBDes', path: '/transparansi' },
+    { name: 'Bansos', path: '/bansos' },
     { name: 'Warta', path: '/berita' },
   ];
 
   // Mode 2: Post-Login Navigation Links (Fokus operasional warga/petugas desa)
   const postLoginLinks: NavItem[] = [
-    { name: 'Beranda Desa', path: '/' },
-    { name: 'Profil Desa', path: '/profil' },
+    { name: 'Beranda', path: '/' },
+    { name: 'Profil', path: '/profil' },
     { name: 'Layanan Surat', path: '/layanan-surat' },
     { name: 'Lacak Berkas', path: '/lacak' },
     { name: 'APBDes', path: '/transparansi' },
     { name: 'Bansos', path: '/bansos' },
+    { name: 'Warta', path: '/berita' },
     { name: 'Dashboard', path: '/dashboard', isSpecial: true },
   ];
 
@@ -86,7 +89,7 @@ export const PublicNavbar: React.FC = () => {
     <header className={`sticky top-0 z-40 transition-all duration-500 select-none ${
       isScrolled 
         ? 'bg-white/95 backdrop-blur-xl shadow-sm border-b border-emerald-100/60 py-2.5' 
-        : 'bg-gradient-to-b from-[#eaf6f1]/95 via-[#eaf6f1]/80 to-transparent backdrop-blur-xs py-3.5'
+        : 'bg-transparent py-3.5'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
@@ -96,8 +99,8 @@ export const PublicNavbar: React.FC = () => {
             <BrandLogo size="md" />
           </Link>
 
-          {/* Desktop Navigation Links (Floating Glow Pill Container) */}
-          <nav className="hidden lg:flex items-center gap-1 bg-white/90 backdrop-blur-md p-1.5 rounded-full border border-emerald-100/80 shadow-md shadow-emerald-950/5">
+          {/* Desktop Navigation Links (Unboxed, Seamless with Navbar Background, Hover-Lift Animated) */}
+          <nav className="hidden lg:flex items-center gap-1">
             {activeLinks.map((item) => {
               const active = isActive(item.path);
               if (item.isSpecial) {
@@ -105,7 +108,7 @@ export const PublicNavbar: React.FC = () => {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`px-4 py-2 rounded-full text-xs font-black transition-all flex items-center gap-1.5 whitespace-nowrap outline-none focus:outline-none active:scale-95 ${
+                    className={`px-4 py-2 rounded-full text-xs font-black transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap outline-none focus:outline-none hover:-translate-y-0.5 active:scale-95 ${
                       active 
                         ? 'bg-emerald-700 text-white shadow-sm shadow-emerald-700/30' 
                         : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
@@ -121,10 +124,10 @@ export const PublicNavbar: React.FC = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`px-4 py-2 rounded-full text-xs font-extrabold whitespace-nowrap transition-all duration-300 outline-none focus:outline-none active:scale-95 ${
+                  className={`px-3.5 py-2 rounded-full text-xs font-extrabold whitespace-nowrap transition-all duration-300 outline-none focus:outline-none hover:-translate-y-0.5 active:scale-95 border ${
                     active 
-                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 font-black' 
-                      : 'text-slate-600 hover:text-emerald-800 hover:bg-emerald-50/80'
+                      ? 'bg-emerald-700 text-white border-emerald-700 shadow-md shadow-emerald-700/25 font-black' 
+                      : 'text-slate-700 border-transparent hover:text-emerald-900 hover:bg-white/80 hover:border-emerald-100/90 hover:shadow-xs'
                   }`}
                 >
                   <span>{item.name}</span>
