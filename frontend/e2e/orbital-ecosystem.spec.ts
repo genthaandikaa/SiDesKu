@@ -1,7 +1,7 @@
 ﻿import { test, expect } from '@playwright/test';
 import path from 'path';
 
-test('Verify Orbital Ecosystem section, Mobile Preview & Rotating Animations', async ({ page, isMobile }) => {
+test('Verify Seamless Orbital Ecosystem section, Transparent Mobile Preview & Animations', async ({ page, isMobile }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
   // Locate the section
@@ -34,25 +34,19 @@ test('Verify Orbital Ecosystem section, Mobile Preview & Rotating Animations', a
       await expect(page.locator(`text=${title}`).first()).toBeVisible({ timeout: 5000 });
     }
 
-    // Check pause/play toggle button
-    const toggleBtn = page.locator('button:has-text("Jeda Orbit"), button:has-text("Putar Orbit")').first();
-    await expect(toggleBtn).toBeVisible();
+    // Verify Jeda Orbit button is removed as requested
+    const toggleBtn = page.locator('button:has-text("Jeda Orbit"), button:has-text("Putar Orbit")');
+    await expect(toggleBtn).toHaveCount(0);
 
-    // Take screenshot of the Orbital Ecosystem running
+    // Verify SiDesKu Mobile App • Live Hub text is removed as requested
+    const hubText = page.locator('text=SiDesKu Mobile App • Live Hub');
+    await expect(hubText).toHaveCount(0);
+
+    // Take screenshot of the seamless Orbital Ecosystem
     const sectionContainer = page.locator('div.group\\/orbit');
     await sectionContainer.screenshot({
       path: path.resolve('e2e', 'screenshots', `02_Orbital_Ecosystem_${mode}.png`),
     });
-
-    // Click toggle to pause
-    await toggleBtn.click();
-    await page.waitForTimeout(300);
-    await expect(page.locator('text=Putar Orbit')).toBeVisible();
-
-    // Click toggle to resume
-    await toggleBtn.click();
-    await page.waitForTimeout(300);
-    await expect(page.locator('text=Jeda Orbit')).toBeVisible();
   } else {
     const sectionContainer = page.locator('div.group\\/orbit');
     await sectionContainer.screenshot({

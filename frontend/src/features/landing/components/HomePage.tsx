@@ -26,8 +26,6 @@ import {
   QrCode,
   ChevronDown,
   HelpCircle,
-  Play,
-  Pause,
   MessageSquare,
 } from "lucide-react";
 import api from "@/shared/lib/axios";
@@ -41,7 +39,6 @@ export const HomePage: React.FC = () => {
   const [stats, setStats] = useState<any>(null);
   const [beritas, setBeritas] = useState<Berita[]>([]);
   const [pengumumans, setPengumumans] = useState<Pengumuman[]>([]);
-  const [isOrbitSpinning, setIsOrbitSpinning] = useState(true);
 
   // Typewriter animation effect for hero description
   const heroFullText =
@@ -332,10 +329,6 @@ export const HomePage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left Column: Headline & Action */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/80 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs animate-fade-in">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Sistem Informasi & Tata Kelola Digital Desa Doko</span>
-            </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.08]">
               Satu Portal. <br />
@@ -751,7 +744,7 @@ export const HomePage: React.FC = () => {
 
       {/* SmartRT / Photo 4: Unified Orbital Ecosystem Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-        <div className="text-center max-w-3xl mx-auto space-y-3 mb-10 sm:mb-14">
+        <div className="text-center max-w-3xl mx-auto space-y-3 mb-6 sm:mb-10">
           <div className="pill-badge-emerald">
             <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
             <span>ARSITEKTUR DIGITAL TERINTEGRASI</span>
@@ -764,67 +757,32 @@ export const HomePage: React.FC = () => {
           </p>
         </div>
 
-        {/* Showcase Container with Emerald Canvas & Orbit */}
-        <div className="relative overflow-hidden rounded-3xl sm:rounded-[2.5rem] bg-gradient-to-br from-[#00875a] via-[#047857] to-[#065f46] text-white p-6 sm:p-10 lg:p-12 shadow-2xl shadow-emerald-950/20 border border-emerald-500/20 group/orbit">
-          {/* Top Stage Bar */}
-          <div className="flex items-center justify-between relative z-30 pb-4 border-b border-white/10 mb-4 sm:mb-6">
-            <div className="flex items-center gap-2.5">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75" />
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-400" />
-              </span>
-              <span className="text-xs font-bold tracking-wider uppercase text-emerald-100">
-                SiDesKu Mobile App • Live Hub
-              </span>
-            </div>
-
-            {/* Orbit Rotation Toggle Button */}
-            <button
-              onClick={() => setIsOrbitSpinning((prev) => !prev)}
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white backdrop-blur-md transition-all cursor-pointer shadow-sm"
-              title={isOrbitSpinning ? "Klik untuk menjeda putaran orbit" : "Klik untuk memutar orbit kembali"}
-            >
-              {isOrbitSpinning ? (
-                <>
-                  <Pause className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Jeda Orbit</span>
-                </>
-              ) : (
-                <>
-                  <Play className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Putar Orbit</span>
-                </>
-              )}
-            </button>
-          </div>
-
+        {/* Seamless Canvas Container */}
+        <div className="relative overflow-hidden py-2 sm:py-6 group/orbit">
           {/* Desktop Orbital Stage (>= 1024px) */}
-          <div className="hidden lg:flex items-center justify-center relative min-h-[900px] w-full overflow-hidden select-none">
-            {/* Concentric Orbit Rings (4 rings behind phone, matching Photo 4) */}
+          <div className="hidden lg:flex items-center justify-center relative min-h-[920px] w-full overflow-hidden select-none">
+            {/* Concentric Orbit Rings (4 subtle emerald rings) */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-              <div className="w-[390px] h-[390px] rounded-full border border-white/25 absolute" />
-              <div className="w-[580px] h-[580px] rounded-full border border-white/20 absolute" />
-              <div className="w-[760px] h-[760px] rounded-full border border-white/20 absolute" />
-              <div className="w-[940px] h-[940px] rounded-full border border-white/15 absolute" />
-              {/* Radial Center Backlight */}
-              <div className="w-[480px] h-[480px] rounded-full bg-emerald-300/15 blur-3xl absolute" />
+              <div className="w-[390px] h-[390px] rounded-full border border-emerald-500/20 absolute" />
+              <div className="w-[580px] h-[580px] rounded-full border border-emerald-500/15 absolute" />
+              <div className="w-[760px] h-[760px] rounded-full border border-emerald-500/15 absolute" />
+              <div className="w-[940px] h-[940px] rounded-full border border-emerald-500/10 absolute" />
+              {/* Subtle Radial Center Backlight */}
+              <div className="w-[500px] h-[500px] rounded-full bg-emerald-500/10 blur-3xl absolute" />
             </div>
 
-            {/* Center Static Smartphone Mockup (from user upload, sharpened) */}
+            {/* Center Static Smartphone Mockup (Transparent Background) */}
             <div className="relative z-20 flex flex-col items-center justify-center pointer-events-auto">
               <img
                 src="/images/landing/mobile-preview-clean.png"
                 alt="SiDesKu Mobile Preview"
-                className="w-[270px] xl:w-[285px] h-auto object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)] animate-float-gentle select-none pointer-events-none"
+                className="w-[270px] xl:w-[285px] h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)] animate-float-gentle select-none pointer-events-none"
               />
             </div>
 
             {/* Rotating Orbital Track (Nodes circle around the phone) */}
             <div
               className="absolute inset-0 w-full h-full animate-orbit-rotate group-hover/orbit:[animation-play-state:paused] pointer-events-none z-20"
-              style={{
-                animationPlayState: isOrbitSpinning ? "running" : "paused",
-              }}
             >
               {orbitalNodes.map((item) => {
                 const IconComponent = item.icon;
@@ -840,24 +798,19 @@ export const HomePage: React.FC = () => {
                     {/* Counter-rotation ensures text & icon stay 100% upright and readable */}
                     <div
                       className="animate-orbit-counter group-hover/orbit:[animation-play-state:paused]"
-                      style={{
-                        animationPlayState: isOrbitSpinning
-                          ? "running"
-                          : "paused",
-                      }}
                     >
                       <Link
                         to={item.link}
-                        className="group flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 hover:border-white/40 shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-105 cursor-pointer max-w-[270px]"
+                        className="group flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-white/95 hover:bg-white border border-slate-200/90 hover:border-emerald-400 shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer max-w-[275px]"
                       >
-                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center shrink-0 shadow-md text-white group-hover:bg-white group-hover:text-emerald-700 transition-all duration-300">
+                        <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center shrink-0 shadow-2xs text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
                           <IconComponent className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="font-bold text-white text-sm leading-snug group-hover:text-emerald-200 transition-colors drop-shadow-xs whitespace-nowrap">
+                          <h4 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-emerald-700 transition-colors whitespace-nowrap">
                             {item.title}
                           </h4>
-                          <p className="text-white/80 text-[11px] leading-snug mt-0.5">
+                          <p className="text-slate-500 text-[11px] leading-snug mt-0.5">
                             {item.desc}
                           </p>
                         </div>
@@ -873,13 +826,13 @@ export const HomePage: React.FC = () => {
           <div className="block lg:hidden space-y-8 relative z-10 select-none">
             {/* Center Mobile Phone with Ambient Glowing Rings */}
             <div className="relative flex items-center justify-center py-6">
-              <div className="absolute w-64 h-64 rounded-full border border-white/25 pointer-events-none" />
-              <div className="absolute w-80 h-80 rounded-full border border-white/15 pointer-events-none" />
-              <div className="absolute w-48 h-48 rounded-full bg-emerald-300/15 blur-2xl pointer-events-none" />
+              <div className="absolute w-64 h-64 rounded-full border border-emerald-500/20 pointer-events-none" />
+              <div className="absolute w-80 h-80 rounded-full border border-emerald-500/10 pointer-events-none" />
+              <div className="absolute w-48 h-48 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none" />
               <img
                 src="/images/landing/mobile-preview-clean.png"
                 alt="SiDesKu Mobile Preview"
-                className="w-56 sm:w-64 h-auto object-contain drop-shadow-2xl relative z-10 animate-float-gentle"
+                className="w-56 sm:w-64 h-auto object-contain drop-shadow-xl relative z-10 animate-float-gentle"
               />
             </div>
 
@@ -891,16 +844,16 @@ export const HomePage: React.FC = () => {
                   <Link
                     key={item.id}
                     to={item.link}
-                    className="flex items-start gap-3.5 p-4 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all duration-200 active:scale-[0.98]"
+                    className="flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-emerald-400 hover:shadow-md transition-all duration-200 active:scale-[0.98]"
                   >
-                    <div className="w-10 h-10 rounded-full bg-white/20 border border-white/40 flex items-center justify-center shrink-0 text-white">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center shrink-0 text-emerald-600">
                       <IconComponent className="w-5 h-5" />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-bold text-white text-sm">
+                      <h4 className="font-bold text-slate-900 text-sm">
                         {item.title}
                       </h4>
-                      <p className="text-xs text-white/80 leading-relaxed">
+                      <p className="text-xs text-slate-500 leading-relaxed">
                         {item.desc}
                       </p>
                     </div>
