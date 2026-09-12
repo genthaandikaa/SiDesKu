@@ -39,6 +39,63 @@ export const HomePage: React.FC = () => {
   const [beritas, setBeritas] = useState<Berita[]>([]);
   const [pengumumans, setPengumumans] = useState<Pengumuman[]>([]);
 
+  // Typewriter animation effect for hero description
+  const heroFullText =
+    "Platform terpadu di Kabupaten Kediri yang mempermudah pengurusan 14+ jenis surat mandiri, koordinasi berjenjang RT/RW, transparansi APBDes, dan verifikasi dokumen legal berstempel QR resmi.";
+  const [typedHeroText, setTypedHeroText] = useState("");
+  const [isTypingDone, setIsTypingDone] = useState(false);
+
+  useEffect(() => {
+    let charIndex = 0;
+    const typingInterval = setInterval(() => {
+      charIndex++;
+      if (charIndex <= heroFullText.length) {
+        setTypedHeroText(heroFullText.slice(0, charIndex));
+      } else {
+        setIsTypingDone(true);
+        clearInterval(typingInterval);
+      }
+    }, 12);
+
+    return () => clearInterval(typingInterval);
+  }, []);
+
+  // Stats number counting animation starting from 0
+  const [countWarga, setCountWarga] = useState(0);
+  const [countSurat, setCountSurat] = useState(0);
+  const [countSla, setCountSla] = useState(0);
+
+  useEffect(() => {
+    const targetW = stats ? (stats.total_warga ?? 3) : 3;
+    const targetS = stats ? (stats.total_surat_selesai ?? 4) : 4;
+    const targetSl = 15;
+
+    let startTimestamp: number | null = null;
+    const duration = 1200; // ms
+    let animFrame: number;
+
+    const animateCounts = (timestamp: number) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+
+      setCountWarga(Math.round(ease * targetW));
+      setCountSurat(Math.round(ease * targetS));
+      setCountSla(Math.round(ease * targetSl));
+
+      if (progress < 1) {
+        animFrame = requestAnimationFrame(animateCounts);
+      } else {
+        setCountWarga(targetW);
+        setCountSurat(targetS);
+        setCountSla(targetSl);
+      }
+    };
+
+    animFrame = requestAnimationFrame(animateCounts);
+    return () => cancelAnimationFrame(animFrame);
+  }, [stats]);
+
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
@@ -291,7 +348,7 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
             {/* Left Column (60% Fibonacci): Headline & Action */}
-            <div className="lg:col-span-6 space-y-6">
+            <div className="lg:col-span-7 space-y-6">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.08]">
                 Satu Portal. <br />
                 <span className="relative whitespace-nowrap text-emerald-700 inline-block">
@@ -312,11 +369,11 @@ export const HomePage: React.FC = () => {
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl font-medium">
-                Platform terpadu di Kabupaten Kediri yang mempermudah pengurusan
-                14+ jenis surat mandiri, koordinasi berjenjang RT/RW,
-                transparansi APBDes, dan verifikasi dokumen legal berstempel QR
-                resmi.
+              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl font-medium min-h-[4.5rem] sm:min-h-[4rem]">
+                {typedHeroText}
+                {!isTypingDone && (
+                  <span className="inline-block w-0.5 h-5 ml-1 bg-emerald-600 animate-pulse align-middle" />
+                )}
               </p>
 
               {/* Quick Search Surat Bar */}
@@ -428,189 +485,191 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Sleek Simulated Dashboard Card with Floating Badges */}
-            <div className="lg:col-span-6 relative">
-              {/* Floating Pill Accent 1 */}
-              <div className="absolute -top-4 -left-4 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-lg border border-slate-200/80 z-20 hidden sm:flex items-center gap-2 animate-float">
-                <div className="w-6 h-6 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                    SLA Terbit
+            {/* Right Column (40% Fibonacci): Sleek Compact Mockup Card */}
+            <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
+              <div className="w-full max-w-[385px] relative">
+                {/* Floating Pill Accent 1 */}
+                <div className="absolute -top-3 -left-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-slate-200/80 z-20 hidden sm:flex items-center gap-1.5 animate-float">
+                  <div className="w-5 h-5 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">
+                    <CheckCircle2 className="w-3 h-3" />
                   </div>
-                  <div className="text-xs font-black text-emerald-800">
-                    &lt; 15 Menit Sah
+                  <div>
+                    <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider leading-none">
+                      SLA Terbit
+                    </div>
+                    <div className="text-[11px] font-black text-emerald-800 leading-tight">
+                      &lt; 15 Menit Sah
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Floating Pill Accent 2 */}
-              <div className="absolute -bottom-4 -right-4 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-lg border border-slate-200/80 z-20 hidden sm:flex items-center gap-2 animate-float-gentle">
-                <div className="w-6 h-6 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-xs">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                    Legalitas Resmi
+                {/* Floating Pill Accent 2 */}
+                <div className="absolute -bottom-3 -right-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-slate-200/80 z-20 hidden sm:flex items-center gap-1.5 animate-float-gentle">
+                  <div className="w-5 h-5 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-[10px]">
+                    <ShieldCheck className="w-3 h-3" />
                   </div>
-                  <div className="text-xs font-black text-slate-900">
-                    QR Code Sah DPMPD
+                  <div>
+                    <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider leading-none">
+                      Legalitas Resmi
+                    </div>
+                    <div className="text-[11px] font-black text-slate-900 leading-tight">
+                      QR Code Sah DPMPD
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Ambient Backlight Blur */}
-              <div className="absolute -inset-4 bg-gradient-to-tr from-emerald-500/20 via-teal-400/10 to-blue-500/10 rounded-3xl blur-2xl -z-10 pointer-events-none" />
+                {/* Ambient Backlight Blur */}
+                <div className="absolute -inset-3 bg-gradient-to-tr from-emerald-500/15 via-teal-400/10 to-blue-500/10 rounded-3xl blur-xl -z-10 pointer-events-none" />
 
-              <div className="card-elevated-mockup p-6 sm:p-7 space-y-5 relative bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-2xl rounded-3xl hover:border-emerald-300 transition-colors animate-float-gentle">
-                {/* Mockup Header: Official Lambang Kediri + QR Sah & Live Status */}
-                <div className="flex items-center justify-between pb-4 border-b border-slate-100 gap-3">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <img
-                      src="/images/logo-kediri.png"
-                      alt="Lambang Kediri"
-                      className="h-9 w-auto object-contain drop-shadow-xs shrink-0"
-                    />
-                    <div className="min-w-0">
-                      <div className="font-black text-sm text-slate-900 leading-tight truncate">
-                        SIDes Portal Administrasi
+                <div className="card-elevated-mockup p-4 sm:p-5 space-y-3.5 relative bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-xl rounded-3xl hover:border-emerald-300 transition-all animate-float-gentle">
+                  {/* Mockup Header: Official Lambang Kediri + QR Sah & Live Status */}
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100 gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <img
+                        src="/images/logo-kediri.png"
+                        alt="Lambang Kediri"
+                        className="h-8 w-auto object-contain drop-shadow-xs shrink-0"
+                      />
+                      <div className="min-w-0">
+                        <div className="font-black text-xs sm:text-sm text-slate-900 leading-tight truncate">
+                          SIDes Portal Administrasi
+                        </div>
+                        <div className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                          <span className="truncate">
+                            Server Desa Aktif & Terverifikasi
+                          </span>
+                        </div>
                       </div>
-                      <div className="text-[11px] text-emerald-600 font-bold flex items-center gap-1.5 mt-0.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                        <span className="truncate">
-                          Server Desa Aktif & Terverifikasi
+                    </div>
+
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <div className="hidden sm:flex items-center gap-1 bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-black border border-emerald-200/80">
+                        <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                        <span>QR Sah</span>
+                      </div>
+                      <div className="flex items-center gap-1 bg-emerald-600 text-white px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shadow-xs">
+                        <span>Live</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 3 Metrics Mini Cards */}
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="bg-gradient-to-b from-slate-50 to-emerald-50/30 p-2.5 rounded-xl border border-slate-100 hover:border-emerald-300 hover:scale-102 transition-all">
+                      <div className="text-xl font-black text-slate-900 tracking-tight">
+                        {countSurat}
+                      </div>
+                      <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
+                        Surat Selesai
+                      </div>
+                      <div className="mt-0.5 text-[8px] font-bold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded-full inline-block">
+                        ↑ 100% Sah
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-b from-slate-50 to-teal-50/30 p-2.5 rounded-xl border border-slate-100 hover:border-teal-300 hover:scale-102 transition-all">
+                      <div className="text-xl font-black text-emerald-700 tracking-tight">
+                        {countSla}m
+                      </div>
+                      <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
+                        Rata-rata SLA
+                      </div>
+                      <div className="mt-0.5 text-[8px] font-bold text-teal-700 bg-teal-100/80 px-1.5 py-0.5 rounded-full inline-block">
+                        Cepat & Tepat
+                      </div>
+                    </div>
+
+                    <div className="bg-gradient-to-b from-slate-50 to-blue-50/30 p-2.5 rounded-xl border border-slate-100 hover:border-blue-300 hover:scale-102 transition-all">
+                      <div className="text-xl font-black text-blue-600 tracking-tight">
+                        0%
+                      </div>
+                      <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
+                        Biaya (Gratis)
+                      </div>
+                      <div className="mt-0.5 text-[8px] font-bold text-blue-700 bg-blue-100/80 px-1.5 py-0.5 rounded-full inline-block">
+                        Anti-Pungli
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Live Activity Stream */}
+                  <div className="space-y-1.5">
+                    <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                      <span>Aktivitas Berkas Terkini</span>
+                      <Activity className="w-3 h-3 text-emerald-600" />
+                    </div>
+
+                    <div className="space-y-1.5 text-xs">
+                      <div className="flex items-center justify-between p-2 rounded-xl bg-emerald-50/80 border border-emerald-200/70 shadow-2xs hover:bg-emerald-100/70 transition-all cursor-default">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-[11px] shrink-0">
+                            ✓
+                          </div>
+                          <div className="min-w-0">
+                            <div className="font-extrabold text-xs text-slate-900 truncate">
+                              ACC Surat Domisili Usaha
+                            </div>
+                            <div className="text-[10px] text-slate-500 truncate">
+                              Ketua RT 01 • Bpk. Bambang
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-[9px] text-emerald-800 font-bold font-mono bg-white px-1.5 py-0.5 rounded shadow-2xs shrink-0">
+                          Baru saja
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition-all cursor-default">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-6 h-6 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                            QR
+                          </div>
+                          <div className="min-w-0">
+                            <div className="font-extrabold text-xs text-slate-900 truncate">
+                              Penerbitan SKTM Beasiswa
+                            </div>
+                            <div className="text-[10px] text-slate-500 truncate">
+                              Sekdes • No. 470/128/418.67
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-[9px] text-slate-400 font-mono shrink-0">
+                          15m lalu
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition-all cursor-default">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                            WA
+                          </div>
+                          <div className="min-w-0">
+                            <div className="font-extrabold text-xs text-slate-900 truncate">
+                              Broadcast Bansos PKH III
+                            </div>
+                            <div className="text-[10px] text-slate-500 truncate">
+                              Terkirim ke 84 Nomor KPM
+                            </div>
+                          </div>
+                        </div>
+                        <span className="text-[9px] text-slate-400 font-mono shrink-0">
+                          1j lalu
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <div className="hidden sm:flex items-center gap-1.5 bg-emerald-50 text-emerald-800 px-3 py-1 rounded-full text-[11px] font-black border border-emerald-200/80 shadow-2xs">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>QR TTD Sah</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-emerald-600 text-white px-3 py-1 rounded-full text-xs font-extrabold shadow-xs">
-                      <span>Live</span>
-                    </div>
+                  {/* Card Footer Quick Link */}
+                  <div className="pt-0.5">
+                    <Link
+                      to="/lacak"
+                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-700/20 hover:shadow-lg press-down"
+                    >
+                      <Search className="w-3.5 h-3.5" />
+                      <span>Uji Pelacak Surat Publik Demo</span>
+                    </Link>
                   </div>
-                </div>
-
-                {/* 3 Metrics Mini Cards */}
-                <div className="grid grid-cols-3 gap-3 text-center">
-                  <div className="bg-gradient-to-b from-slate-50 to-emerald-50/30 p-3.5 rounded-2xl border border-slate-100 hover:border-emerald-300 hover:scale-102 transition-all">
-                    <div className="text-2xl font-black text-slate-900 tracking-tight">
-                      {stats?.total_surat_selesai || 48}
-                    </div>
-                    <div className="text-[11px] text-slate-500 font-semibold mt-0.5">
-                      Surat Selesai
-                    </div>
-                    <div className="mt-1 text-[9px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full inline-block">
-                      ↑ 100% Sah
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-b from-slate-50 to-teal-50/30 p-3.5 rounded-2xl border border-slate-100 hover:border-teal-300 hover:scale-102 transition-all">
-                    <div className="text-2xl font-black text-emerald-700 tracking-tight">
-                      15m
-                    </div>
-                    <div className="text-[11px] text-slate-500 font-semibold mt-0.5">
-                      Rata-rata SLA
-                    </div>
-                    <div className="mt-1 text-[9px] font-bold text-teal-700 bg-teal-100/80 px-2 py-0.5 rounded-full inline-block">
-                      Cepat & Tepat
-                    </div>
-                  </div>
-
-                  <div className="bg-gradient-to-b from-slate-50 to-blue-50/30 p-3.5 rounded-2xl border border-slate-100 hover:border-blue-300 hover:scale-102 transition-all">
-                    <div className="text-2xl font-black text-blue-600 tracking-tight">
-                      0%
-                    </div>
-                    <div className="text-[11px] text-slate-500 font-semibold mt-0.5">
-                      Biaya (Gratis)
-                    </div>
-                    <div className="mt-1 text-[9px] font-bold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full inline-block">
-                      Anti-Pungli
-                    </div>
-                  </div>
-                </div>
-
-                {/* Live Activity Stream */}
-                <div className="space-y-2.5">
-                  <div className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center justify-between">
-                    <span>Aktivitas Berkas Terkini</span>
-                    <Activity className="w-3.5 h-3.5 text-emerald-600" />
-                  </div>
-
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-center justify-between p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200/70 shadow-2xs hover:bg-emerald-100/70 transition-all hover:translate-x-1 cursor-default">
-                      <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                          ✓
-                        </div>
-                        <div>
-                          <div className="font-extrabold text-slate-900">
-                            ACC Surat Domisili Usaha
-                          </div>
-                          <div className="text-[11px] text-slate-500">
-                            Ketua RT 01 • Bpk. Bambang Utomo
-                          </div>
-                        </div>
-                      </div>
-                      <span className="text-[10px] text-emerald-800 font-bold font-mono bg-white px-2 py-0.5 rounded-md shadow-2xs">
-                        Baru saja
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition-all hover:translate-x-1 cursor-default">
-                      <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                          QR
-                        </div>
-                        <div>
-                          <div className="font-extrabold text-slate-900">
-                            Penerbitan SKTM Beasiswa
-                          </div>
-                          <div className="text-[11px] text-slate-500">
-                            Sekretaris Desa • No. 470/128/418.67
-                          </div>
-                        </div>
-                      </div>
-                      <span className="text-[10px] text-slate-400 font-mono">
-                        15m lalu
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition-all hover:translate-x-1 cursor-default">
-                      <div className="flex items-center gap-3">
-                        <div className="w-7 h-7 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
-                          WA
-                        </div>
-                        <div>
-                          <div className="font-extrabold text-slate-900">
-                            Broadcast Bansos PKH Tahap III
-                          </div>
-                          <div className="text-[11px] text-slate-500">
-                            Terkirim ke 84 Nomor WhatsApp KPM
-                          </div>
-                        </div>
-                      </div>
-                      <span className="text-[10px] text-slate-400 font-mono">
-                        1j lalu
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card Footer Quick Link */}
-                <div className="pt-1">
-                  <Link
-                    to="/lacak"
-                    className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-700/20 hover:shadow-lg hover:shadow-emerald-700/30 press-down"
-                  >
-                    <Search className="w-4 h-4" />
-                    <span>Uji Pelacak Surat Publik Demo</span>
-                  </Link>
                 </div>
               </div>
             </div>
@@ -619,12 +678,12 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* Floating Bridge Statistics Ribbon (Golden Ratio Fibonacci Transition) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 sm:-mt-14 lg:-mt-16 relative z-20">
-        <div className="card-elevated-mockup p-6 sm:p-8 bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl rounded-3xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-12 lg:-mt-14 relative z-20">
+        <div className="card-elevated-mockup p-5 sm:p-7 bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl rounded-3xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
             <div className="space-y-1 pt-3 md:pt-0">
               <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                {stats?.total_warga || 342}+
+                {countWarga}+
               </div>
               <div className="text-xs font-bold text-slate-500">
                 Penduduk Terdata
@@ -636,7 +695,7 @@ export const HomePage: React.FC = () => {
 
             <div className="space-y-1 pt-3 md:pt-0">
               <div className="text-3xl sm:text-4xl font-black text-emerald-600 tracking-tight">
-                {stats?.total_surat_selesai || 48}+
+                {countSurat}+
               </div>
               <div className="text-xs font-bold text-slate-500">
                 Surat Sah Terbit
@@ -648,7 +707,7 @@ export const HomePage: React.FC = () => {
 
             <div className="space-y-1 pt-3 md:pt-0">
               <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                &lt; 15 Mnt
+                &lt; {countSla} Mnt
               </div>
               <div className="text-xs font-bold text-slate-500">
                 Rata-rata SLA

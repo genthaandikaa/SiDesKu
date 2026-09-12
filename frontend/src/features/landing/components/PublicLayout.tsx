@@ -15,7 +15,7 @@ export const PublicLayout: React.FC = () => {
       <div className="fixed bottom-10 left-10 w-[450px] h-[450px] bg-sky-200/20 rounded-full blur-3xl pointer-events-none z-0" />
 
       <PublicNavbar />
-      <main className="flex-1 relative z-10">
+      <main className="flex-1 relative z-10 pt-16 sm:pt-20">
         <Outlet />
       </main>
       <PublicFooter />

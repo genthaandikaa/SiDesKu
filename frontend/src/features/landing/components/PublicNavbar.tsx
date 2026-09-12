@@ -86,10 +86,10 @@ export const PublicNavbar: React.FC = () => {
   const displayName = user?.warga_profile?.nama_lengkap || user?.name || user?.username || 'Warga';
 
   return (
-    <header className={`sticky top-0 z-40 transition-all duration-500 select-none ${
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 select-none bg-white/95 backdrop-blur-md ${
       isScrolled 
-        ? 'bg-white/95 backdrop-blur-xl shadow-sm border-b border-emerald-100/60 py-2.5' 
-        : 'bg-transparent py-3.5'
+        ? 'shadow-sm py-2.5' 
+        : 'shadow-2xs py-3.5'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
