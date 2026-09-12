@@ -451,56 +451,56 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column (40% Fibonacci): Sleek Compact Mockup Card */}
-            <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
-              <div className="w-full max-w-[385px] relative">
+            {/* Right Column: Spacious Hero Mockup Card */}
+            <div className="lg:col-span-5 relative flex justify-center lg:justify-end pt-5 pb-5">
+              <div className="w-full max-w-[450px] sm:max-w-[465px] relative">
                 {/* Floating Pill Accent 1 */}
-                <div className="absolute -top-3 -left-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-slate-200/80 z-20 hidden sm:flex items-center gap-1.5 animate-float">
-                  <div className="w-5 h-5 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[10px]">
-                    <CheckCircle2 className="w-3 h-3" />
+                <div className="absolute -top-3.5 -left-3.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-200/90 z-20 hidden sm:flex items-center gap-2 animate-float">
+                  <div className="w-6 h-6 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
                   <div>
-                    <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider leading-none">
+                    <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none">
                       SLA Terbit
                     </div>
-                    <div className="text-[11px] font-black text-emerald-800 leading-tight">
+                    <div className="text-xs font-black text-emerald-800 leading-tight mt-0.5">
                       &lt; 15 Menit Sah
                     </div>
                   </div>
                 </div>
 
                 {/* Floating Pill Accent 2 */}
-                <div className="absolute -bottom-3 -right-3 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-slate-200/80 z-20 hidden sm:flex items-center gap-1.5 animate-float-gentle">
-                  <div className="w-5 h-5 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-[10px]">
-                    <ShieldCheck className="w-3 h-3" />
+                <div className="absolute -bottom-3.5 -right-3.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-200/90 z-20 hidden sm:flex items-center gap-2 animate-float-gentle">
+                  <div className="w-6 h-6 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-xs">
+                    <ShieldCheck className="w-3.5 h-3.5" />
                   </div>
                   <div>
-                    <div className="text-[8px] text-slate-400 font-bold uppercase tracking-wider leading-none">
+                    <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none">
                       Legalitas Resmi
                     </div>
-                    <div className="text-[11px] font-black text-slate-900 leading-tight">
+                    <div className="text-xs font-black text-slate-900 leading-tight mt-0.5">
                       QR Code Sah DPMPD
                     </div>
                   </div>
                 </div>
 
                 {/* Ambient Backlight Blur */}
-                <div className="absolute -inset-3 bg-gradient-to-tr from-emerald-500/15 via-teal-400/10 to-blue-500/10 rounded-3xl blur-xl -z-10 pointer-events-none" />
+                <div className="absolute -inset-4 bg-gradient-to-tr from-emerald-500/15 via-teal-400/10 to-blue-500/10 rounded-3xl blur-2xl -z-10 pointer-events-none" />
 
-                <div className="card-elevated-mockup p-4 sm:p-5 space-y-3.5 relative bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-xl rounded-3xl hover:border-emerald-300 transition-all animate-float-gentle">
+                <div className="card-elevated-mockup p-5 sm:p-6 space-y-4 relative bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-2xl rounded-[2rem] hover:border-emerald-300 transition-all animate-float-gentle">
                   {/* Mockup Header: Official Lambang Kediri + QR Sah & Live Status */}
-                  <div className="flex items-center justify-between pb-3 border-b border-slate-100 gap-2.5">
-                    <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
                       <img
                         src="/images/logo-kediri.png"
                         alt="Lambang Kediri"
-                        className="h-8 w-auto object-contain drop-shadow-xs shrink-0"
+                        className="h-9 sm:h-10 w-auto object-contain drop-shadow-xs shrink-0"
                       />
                       <div className="min-w-0">
-                        <div className="font-black text-xs sm:text-sm text-slate-900 leading-tight truncate">
+                        <div className="font-black text-sm sm:text-base text-slate-900 leading-snug whitespace-nowrap">
                           SIDes Portal Administrasi
                         </div>
-                        <div className="text-[10px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
+                        <div className="text-[11px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                           <span className="truncate">
                             Server Desa Aktif & Terverifikasi
@@ -510,116 +510,116 @@ export const HomePage: React.FC = () => {
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <div className="hidden sm:flex items-center gap-1 bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-full text-[10px] font-black border border-emerald-200/80">
-                        <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                      <div className="hidden sm:flex items-center gap-1 bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-full text-[11px] font-black border border-emerald-200/80">
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                         <span>QR Sah</span>
                       </div>
-                      <div className="flex items-center gap-1 bg-emerald-600 text-white px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shadow-xs">
+                      <div className="flex items-center gap-1 bg-emerald-600 text-white px-3 py-1 rounded-full text-[11px] font-extrabold shadow-xs">
                         <span>Live</span>
                       </div>
                     </div>
                   </div>
 
                   {/* 3 Metrics Mini Cards */}
-                  <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className="bg-gradient-to-b from-slate-50 to-emerald-50/30 p-2.5 rounded-xl border border-slate-100 hover:border-emerald-300 hover:scale-102 transition-all">
-                      <div className="text-xl font-black text-slate-900 tracking-tight">
+                  <div className="grid grid-cols-3 gap-2.5 text-center">
+                    <div className="bg-gradient-to-b from-slate-50 to-emerald-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-emerald-300 hover:scale-102 transition-all shadow-2xs">
+                      <div className="text-2xl sm:text-[26px] font-black text-slate-900 tracking-tight leading-none">
                         {countSurat}
                       </div>
-                      <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
+                      <div className="text-[11px] text-slate-500 font-bold mt-1.5">
                         Surat Selesai
                       </div>
-                      <div className="mt-0.5 text-[8px] font-bold text-emerald-700 bg-emerald-100/80 px-1.5 py-0.5 rounded-full inline-block">
+                      <div className="mt-1.5 text-[9px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full inline-block">
                         ↑ 100% Sah
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-b from-slate-50 to-teal-50/30 p-2.5 rounded-xl border border-slate-100 hover:border-teal-300 hover:scale-102 transition-all">
-                      <div className="text-xl font-black text-emerald-700 tracking-tight">
+                    <div className="bg-gradient-to-b from-slate-50 to-teal-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-teal-300 hover:scale-102 transition-all shadow-2xs">
+                      <div className="text-2xl sm:text-[26px] font-black text-emerald-700 tracking-tight leading-none">
                         {countSla}m
                       </div>
-                      <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
+                      <div className="text-[11px] text-slate-500 font-bold mt-1.5">
                         Rata-rata SLA
                       </div>
-                      <div className="mt-0.5 text-[8px] font-bold text-teal-700 bg-teal-100/80 px-1.5 py-0.5 rounded-full inline-block">
+                      <div className="mt-1.5 text-[9px] font-bold text-teal-700 bg-teal-100/80 px-2 py-0.5 rounded-full inline-block">
                         Cepat & Tepat
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-b from-slate-50 to-blue-50/30 p-2.5 rounded-xl border border-slate-100 hover:border-blue-300 hover:scale-102 transition-all">
-                      <div className="text-xl font-black text-blue-600 tracking-tight">
+                    <div className="bg-gradient-to-b from-slate-50 to-blue-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-blue-300 hover:scale-102 transition-all shadow-2xs">
+                      <div className="text-2xl sm:text-[26px] font-black text-blue-600 tracking-tight leading-none">
                         0%
                       </div>
-                      <div className="text-[10px] text-slate-500 font-semibold mt-0.5">
+                      <div className="text-[11px] text-slate-500 font-bold mt-1.5">
                         Biaya (Gratis)
                       </div>
-                      <div className="mt-0.5 text-[8px] font-bold text-blue-700 bg-blue-100/80 px-1.5 py-0.5 rounded-full inline-block">
+                      <div className="mt-1.5 text-[9px] font-bold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full inline-block">
                         Anti-Pungli
                       </div>
                     </div>
                   </div>
 
                   {/* Live Activity Stream */}
-                  <div className="space-y-1.5">
-                    <div className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider flex items-center justify-between">
+                  <div className="space-y-2">
+                    <div className="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center justify-between pb-0.5">
                       <span>Aktivitas Berkas Terkini</span>
-                      <Activity className="w-3 h-3 text-emerald-600" />
+                      <Activity className="w-3.5 h-3.5 text-emerald-600" />
                     </div>
 
-                    <div className="space-y-1.5 text-xs">
-                      <div className="flex items-center justify-between p-2 rounded-xl bg-emerald-50/80 border border-emerald-200/70 shadow-2xs hover:bg-emerald-100/70 transition-all cursor-default">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-[11px] shrink-0">
+                    <div className="space-y-2 text-xs">
+                      <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200/70 shadow-2xs hover:bg-emerald-100/70 transition-all cursor-default">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
                             ✓
                           </div>
                           <div className="min-w-0">
-                            <div className="font-extrabold text-xs text-slate-900 truncate">
+                            <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
                               ACC Surat Domisili Usaha
                             </div>
-                            <div className="text-[10px] text-slate-500 truncate">
+                            <div className="text-[11px] text-slate-500 truncate mt-0.5">
                               Ketua RT 01 • Bpk. Bambang
                             </div>
                           </div>
                         </div>
-                        <span className="text-[9px] text-emerald-800 font-bold font-mono bg-white px-1.5 py-0.5 rounded shadow-2xs shrink-0">
+                        <span className="text-[10px] text-emerald-800 font-bold font-mono bg-white px-2 py-1 rounded-md shadow-2xs shrink-0 border border-emerald-100">
                           Baru saja
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition-all cursor-default">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="w-6 h-6 rounded-lg bg-slate-800 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                      <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100/80 transition-all cursor-default">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-2xs">
                             QR
                           </div>
                           <div className="min-w-0">
-                            <div className="font-extrabold text-xs text-slate-900 truncate">
+                            <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
                               Penerbitan SKTM Beasiswa
                             </div>
-                            <div className="text-[10px] text-slate-500 truncate">
+                            <div className="text-[11px] text-slate-500 truncate mt-0.5">
                               Sekdes • No. 470/128/418.67
                             </div>
                           </div>
                         </div>
-                        <span className="text-[9px] text-slate-400 font-mono shrink-0">
+                        <span className="text-[10px] text-slate-500 font-mono shrink-0 bg-white px-2 py-1 rounded-md border border-slate-100">
                           15m lalu
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100 transition-all cursor-default">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                      <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100/80 transition-all cursor-default">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-2xs">
                             WA
                           </div>
                           <div className="min-w-0">
-                            <div className="font-extrabold text-xs text-slate-900 truncate">
+                            <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
                               Broadcast Bansos PKH III
                             </div>
-                            <div className="text-[10px] text-slate-500 truncate">
+                            <div className="text-[11px] text-slate-500 truncate mt-0.5">
                               Terkirim ke 84 Nomor KPM
                             </div>
                           </div>
                         </div>
-                        <span className="text-[9px] text-slate-400 font-mono shrink-0">
+                        <span className="text-[10px] text-slate-500 font-mono shrink-0 bg-white px-2 py-1 rounded-md border border-slate-100">
                           1j lalu
                         </span>
                       </div>
@@ -627,12 +627,12 @@ export const HomePage: React.FC = () => {
                   </div>
 
                   {/* Card Footer Quick Link */}
-                  <div className="pt-0.5">
+                  <div className="pt-1">
                     <Link
                       to="/lacak"
-                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md shadow-emerald-700/20 hover:shadow-lg press-down"
+                      className="w-full py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-700/20 hover:shadow-lg press-down"
                     >
-                      <Search className="w-3.5 h-3.5" />
+                      <Search className="w-4 h-4" />
                       <span>Uji Pelacak Surat Publik Demo</span>
                     </Link>
                   </div>
@@ -1159,177 +1159,14 @@ export const HomePage: React.FC = () => {
                         <span>Opsi 1: Scan QR (Cepat)</span>
                       </div>
 
-                      {/* Real Vector QR Code Mockup */}
-                      <div className="bg-white p-2 rounded-xl shadow-xs border border-slate-200 inline-block">
-                        <svg
-                          viewBox="0 0 100 100"
-                          className="w-20 h-20 mx-auto fill-slate-900"
-                        >
-                          {/* Corner Top-Left */}
-                          <rect
-                            x="5"
-                            y="5"
-                            width="30"
-                            height="30"
-                            rx="4"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="11"
-                            y="11"
-                            width="18"
-                            height="18"
-                            rx="2"
-                            fill="white"
-                          />
-                          <rect
-                            x="16"
-                            y="16"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#008069"
-                          />
-                          {/* Corner Top-Right */}
-                          <rect
-                            x="65"
-                            y="5"
-                            width="30"
-                            height="30"
-                            rx="4"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="71"
-                            y="11"
-                            width="18"
-                            height="18"
-                            rx="2"
-                            fill="white"
-                          />
-                          <rect
-                            x="76"
-                            y="16"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#008069"
-                          />
-                          {/* Corner Bottom-Left */}
-                          <rect
-                            x="5"
-                            y="65"
-                            width="30"
-                            height="30"
-                            rx="4"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="11"
-                            y="71"
-                            width="18"
-                            height="18"
-                            rx="2"
-                            fill="white"
-                          />
-                          <rect
-                            x="16"
-                            y="76"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#008069"
-                          />
-                          {/* Data Matrix Dots */}
-                          <rect
-                            x="42"
-                            y="10"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="42"
-                            y="25"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="10"
-                            y="42"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="25"
-                            y="42"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="42"
-                            y="42"
-                            width="16"
-                            height="16"
-                            rx="2"
-                            fill="#008069"
-                          />
-                          <rect
-                            x="65"
-                            y="42"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="80"
-                            y="42"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="42"
-                            y="65"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="42"
-                            y="80"
-                            width="8"
-                            height="8"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="65"
-                            y="65"
-                            width="12"
-                            height="12"
-                            rx="1"
-                            fill="#0f172a"
-                          />
-                          <rect
-                            x="82"
-                            y="82"
-                            width="10"
-                            height="10"
-                            rx="1"
-                            fill="#008069"
-                          />
-                        </svg>
+                      {/* Real Backend Generated Vector QR Code */}
+                      <div className="bg-white p-2.5 rounded-xl shadow-xs border border-slate-200 inline-block">
+                        <img
+                          src="/api/public/surat/qr?data=PKH2026-A014-3506"
+                          alt="QR Antrean PKH 2026"
+                          className="w-20 h-20 sm:w-24 sm:h-24 mx-auto object-contain"
+                          loading="lazy"
+                        />
                         <div className="text-[9px] font-mono font-bold text-slate-500 mt-1">
                           PKH2026-A014-3506
                         </div>
