@@ -28,11 +28,24 @@ class SekdesSuratController extends Controller
         $surat = SuratRequest::with(['suratType', 'wargaProfile'])->findOrFail($id);
         $user = $request->user();
 
-        $countYear = SuratRequest::whereYear('created_at', date('Y'))->whereNotNull('nomor_surat_resmi')->count() + 1;
-        $paddedNo = str_pad($countYear, 3, '0', STR_PAD_LEFT);
+        // Ambil jenis surat
+        $suratType = $surat->suratType;
         
-        $format = $surat->suratType ? $surat->suratType->format_nomor : '470/{NO}/418.66.04/{TAHUN}';
-        $nomorResmi = str_replace(['{NO}', '{TAHUN}'], [$paddedNo, date('Y')], $format ?: '470/{NO}/418.66.04/{TAHUN}');
+        // Cek apakah nomor manual dikirim dari modal konfirmasi desa
+        if ($request->filled('nomor_surat_resmi')) {
+            $nomorResmi = trim($request->input('nomor_surat_resmi'));
+            if ($suratType) {
+                $suratType->increment('nomor_terakhir');
+            }
+        } elseif ($suratType) {
+            $nextSeq = ($suratType->nomor_terakhir ?? 0) + 1;
+            $nomorResmi = \App\Services\LetterNumberService::generateNumber($suratType, $nextSeq);
+            $suratType->update(['nomor_terakhir' => $nextSeq]);
+        } else {
+            $countYear = SuratRequest::whereYear('created_at', date('Y'))->whereNotNull('nomor_surat_resmi')->count() + 1;
+            $paddedNo = str_pad($countYear, 3, '0', STR_PAD_LEFT);
+            $nomorResmi = "470/{$paddedNo}/418.66.04/" . date('Y');
+        }
 
         $surat->update([
             'nomor_surat_resmi' => $nomorResmi,
@@ -46,18 +59,18 @@ class SekdesSuratController extends Controller
             'actor_user_id' => $user->id,
             'status_stage' => 'Kepala Desa / Sekdes',
             'status_action' => 'Ditandatangani',
-            'catatan' => "Surat resmi diterbitkan dengan nomor {$nomorResmi} dan dilegalisasi stempel QR digital sah Kepala Desa.",
+            'catatan' => "Surat resmi diterbitkan dengan nomor {$nomorResmi} dan disahkan dengan barcode serta tanda tangan digital resmi Kepala Desa Doko.",
         ]);
 
         if ($surat->wargaProfile && $surat->wargaProfile->no_hp_wa) {
-            $namaSurat = $surat->suratType ? $surat->suratType->nama_surat : 'Surat';
+            $namaSurat = $suratType ? $suratType->nama_surat : 'Surat';
             NotifikasiLog::create([
                 'user_id' => $surat->wargaProfile->user_id,
                 'warga_profile_id' => $surat->wargaProfile->id,
                 'nomor_tujuan' => $surat->wargaProfile->no_hp_wa,
                 'jenis_notifikasi' => 'SURAT_READY',
                 'judul' => 'Surat Selesai & Sah',
-                'pesan' => "Halo {$surat->wargaProfile->nama_lengkap}, surat permohonan {$namaSurat} ({$nomorResmi}) telah SELESAI dan disahkan dengan tanda tangan QR resmi. Anda dapat mengunduh dokumen PDF sah di portal SIDes.",
+                'pesan' => "Halo {$surat->wargaProfile->nama_lengkap}, surat permohonan {$namaSurat} ({$nomorResmi}) telah SELESAI dan disahkan dengan barcode & tanda tangan resmi Kepala Desa Doko. Anda dapat mengunduh dokumen sah di portal SIDes.",
                 'status_pengiriman' => 'TERKIRIM',
             ]);
         }

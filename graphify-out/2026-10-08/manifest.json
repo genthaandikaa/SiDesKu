@@ -1679,12 +1679,6 @@
     "ast_hash": "cdd1a3d99b81ba64cb272d22cf84c986",
     "semantic_hash": ""
   },
-  "frontend/test-results/.last-run.json": {
-    "mtime": 1789899877.9431372,
-    "seen": 1789899935.1937406,
-    "ast_hash": "f196824657d8858bc7fa44eecbba38b1",
-    "semantic_hash": ""
-  },
   "frontend/e2e/test-persetujuan-table-layout.spec.ts": {
     "mtime": 1789828973.3513262,
     "seen": 1789829042.5133092,
@@ -1727,16 +1721,28 @@
     "ast_hash": "09520813bffd408767256ddb3fcc6645",
     "semantic_hash": ""
   },
-  "frontend/test-results/test-kk-members-Verify-KK--c48a9-lays-real-members-correctly-Desktop-Chrome/test-finished-1.png": {
-    "mtime": 1789899865.4679513,
-    "seen": 1789899935.1939633,
-    "ast_hash": "5e19962ba2109c7521172256c515776e",
+  ".agents/rules/sidesku_guidelines.md": {
+    "mtime": 1791467878.1088543,
+    "seen": 1791467898.1205506,
+    "ast_hash": "ffd2c6b3d38e3bf8c2d02785b897ef86",
     "semantic_hash": ""
   },
-  "frontend/test-results/test-kk-members-Verify-KK--c48a9-lays-real-members-correctly-Mobile-Chrome/test-finished-1.png": {
-    "mtime": 1789899877.3041039,
-    "seen": 1789899935.1939647,
-    "ast_hash": "da494c7eab9cd135772524c1eeee16d4",
+  "CLAUDE.md": {
+    "mtime": 1789216066.9730299,
+    "seen": 1791467898.120555,
+    "ast_hash": "3f905d1871190f0ae6d57e992ff1f42d",
+    "semantic_hash": ""
+  },
+  "backend/CLAUDE.md": {
+    "mtime": 1789216127.285523,
+    "seen": 1791467898.1205633,
+    "ast_hash": "d3d880735a487b689f927ee6968cb0ed",
+    "semantic_hash": ""
+  },
+  "frontend/CLAUDE.md": {
+    "mtime": 1789216116.3206534,
+    "seen": 1791467898.1205895,
+    "ast_hash": "fd4d959f500b684895c343c215a99428",
     "semantic_hash": ""
   }
 }

@@ -35,9 +35,11 @@ Route::get('/public/apbdes/summary', [ApbdesController::class, 'publicSummary'])
 // Layanan & Tracking Surat Publik
 Route::get('/surat-types', [PublicSuratController::class, 'getTypes']);
 Route::get('/public/surat/track', [PublicSuratController::class, 'trackPublic']);
-Route::get('/public/surat/verify-qr/{hash}', [PublicSuratController::class, 'verifyQr']);
-Route::get('/public/surat/qr/{hash?}', [PublicSuratController::class, 'getQrCodeSvg']);
-
+Route::get('/public/surat/verify-qr/{hash}', [PublicSuratController::class, 'verifyQr'])->where('hash', '.*');
+Route::get('/public/surat/qr/{hash?}', [PublicSuratController::class, 'getQrCodeSvg'])->where('hash', '.*');
+Route::get('/public/surat/barcode/{hash?}', [PublicSuratController::class, 'getBarcodeSvg'])->where('hash', '.*');
+Route::get('/calendar/today', [\App\Http\Controllers\Api\Public\CalendarController::class, 'getToday']);
+Route::get('/public/calendar/today', [\App\Http\Controllers\Api\Public\CalendarController::class, 'getToday']);
 
 // protected routes (auth:sanctum)
 Route::middleware('auth:sanctum')->group(function () {
@@ -196,6 +198,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/surats/{id}/reject', [SekdesSuratController::class, 'reject']);
         Route::get('/bansos', [BansosController::class, 'index']);
         Route::put('/settings/desa', [DesaSettingController::class, 'updateSettings']);
+        
+        // Penomoran & Format Surat Desa
+        Route::get('/surat-types', [\App\Http\Controllers\Api\Sekdes\SuratSettingController::class, 'index']);
+        Route::put('/surat-types/{id}', [\App\Http\Controllers\Api\Sekdes\SuratSettingController::class, 'update']);
+        Route::get('/surat-types/{id}/preview', [\App\Http\Controllers\Api\Sekdes\SuratSettingController::class, 'preview']);
+
+        // Pendaftaran Warga oleh Desa
+        Route::get('/warga', [\App\Http\Controllers\Api\Sekdes\WargaManagementController::class, 'index']);
+        Route::post('/warga', [\App\Http\Controllers\Api\Sekdes\WargaManagementController::class, 'store']);
     });
 
     Route::prefix('bendahara')->group(function () {

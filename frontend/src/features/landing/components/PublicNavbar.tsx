@@ -7,6 +7,7 @@ import {
   LayoutDashboard, 
   Search, 
   LogOut,
+  LogIn,
   ChevronDown
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
@@ -202,17 +203,11 @@ export const PublicNavbar: React.FC = () => {
             ) : (
               <div className="flex items-center gap-2">
                 <Link
-                  to="/register"
-                  className="px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-emerald-800 bg-white/90 hover:bg-emerald-50 border border-slate-200/80 transition-all shadow-2xs whitespace-nowrap outline-none focus:outline-none"
-                >
-                  <span>Register</span>
-                </Link>
-
-                <Link
                   to="/login"
-                  className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs shadow-md shadow-emerald-600/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
                 >
-                  <span>Login</span>
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>Masuk Portal Desa</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -272,20 +267,14 @@ export const PublicNavbar: React.FC = () => {
             </div>
 
             {!user && (
-              <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-2">
-                <Link
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="py-2.5 text-center text-xs font-extrabold rounded-2xl border border-slate-200 text-slate-700 bg-slate-50"
-                >
-                  Daftar
-                </Link>
+              <div className="pt-2 border-t border-slate-100">
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="py-2.5 text-center text-xs font-extrabold rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20"
+                  className="w-full py-2.5 text-center text-xs font-black rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/20 flex items-center justify-center gap-1.5"
                 >
-                  Masuk Portal
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>Masuk Portal Desa</span>
                 </Link>
               </div>
             )}

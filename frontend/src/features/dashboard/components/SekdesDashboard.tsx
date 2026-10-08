@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   FileText, CheckCircle, Clock, XCircle, Printer, Search, 
-  Settings, Megaphone, Loader2, ShieldCheck, QrCode, ArrowRight, Check, Eye
+  Settings, Megaphone, Loader2, ShieldCheck, QrCode, ArrowRight, Check, Eye,
+  Sliders, UserPlus
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import api from '@/shared/lib/axios';
@@ -10,6 +11,8 @@ import { CetakSuratModal } from './CetakSuratModal';
 import { KopSuratSetting } from './KopSuratSetting';
 import { BansosManager } from './BansosManager';
 import { PreviewSuratModal } from './PreviewSuratModal';
+import { PenomoranSuratSetting } from './PenomoranSuratSetting';
+import { PendaftaranWargaDesa } from './PendaftaranWargaDesa';
 import {
   MetricStatCard,
   AreaSplineChart,
@@ -23,7 +26,7 @@ interface SekdesDashboardProps {
 
 export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu = 'beranda' }) => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'antrean' | 'kop' | 'bansos'>('antrean');
+  const [activeTab, setActiveTab] = useState<'antrean' | 'penomoran' | 'warga' | 'kop' | 'bansos'>('antrean');
   const [surats, setSurats] = useState<SuratRequest[]>([]);
   const [desa, setDesa] = useState<DesaSetting | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,6 +40,10 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
       setActiveTab('kop');
     } else if (activeSubmenu === 'bansos_manager') {
       setActiveTab('bansos');
+    } else if (['penomoran_surat', 'format_surat', 'penomoran'].includes(activeSubmenu)) {
+      setActiveTab('penomoran');
+    } else if (['register_warga', 'data_warga', 'warga'].includes(activeSubmenu)) {
+      setActiveTab('warga');
     } else {
       setActiveTab('antrean');
     }
@@ -318,6 +325,24 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
     );
   }
 
+  // Pengaturan Format & Urutan Penomoran Surat Desa (API Kalender)
+  if (['penomoran_surat', 'format_surat'].includes(activeSubmenu)) {
+    return (
+      <div className="space-y-6 animate-fade-in font-sans">
+        <PenomoranSuratSetting />
+      </div>
+    );
+  }
+
+  // Buku Register & Pendaftaran Warga Desa (NIK & Tanggal Lahir)
+  if (['register_warga', 'data_warga'].includes(activeSubmenu)) {
+    return (
+      <div className="space-y-6 animate-fade-in font-sans">
+        <PendaftaranWargaDesa />
+      </div>
+    );
+  }
+
   // Beranda Dashboard Sekdes
   return (
     <div className="space-y-6 page-enter font-sans">
@@ -429,6 +454,34 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
 
                 <button
                   type="button"
+                  onClick={() => setActiveTab('penomoran')}
+                  className="w-full p-3 rounded-2xl bg-teal-50 hover:bg-teal-100/80 border border-teal-200 text-teal-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <Sliders className="w-4 h-4 text-teal-700" />
+                    <span>Format & Urutan No. Surat (API Kalender)</span>
+                  </span>
+                  <span className="text-[10px] font-black text-teal-800 bg-teal-200/60 px-2 py-0.5 rounded-full">
+                    Katalog No.
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('warga')}
+                  className="w-full p-3 rounded-2xl bg-blue-50 hover:bg-blue-100/80 border border-blue-200 text-blue-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <UserPlus className="w-4 h-4 text-blue-700" />
+                    <span>Register Warga Baru (Login NIK & Tgl Lahir)</span>
+                  </span>
+                  <span className="text-[10px] font-black text-blue-800 bg-blue-200/60 px-2 py-0.5 rounded-full">
+                    Buku Warga
+                  </span>
+                </button>
+
+                <button
+                  type="button"
                   onClick={() => setActiveTab('bansos')}
                   className="w-full p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
                 >
@@ -522,6 +575,8 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
       <div className="flex flex-wrap gap-2 animate-fade-up stagger-2">
         {[
           { key: 'antrean' as const, label: `Antrean Surat & QR (${surats.length})`, icon: FileText },
+          { key: 'penomoran' as const, label: 'Format & Urutan No. Surat', icon: Sliders },
+          { key: 'warga' as const, label: 'Buku Register Warga Desa', icon: UserPlus },
           { key: 'kop' as const, label: 'Kop Surat Editor', icon: Settings },
           { key: 'bansos' as const, label: 'Bansos & Broadcast WA', icon: Megaphone },
         ].map((tab) => (
@@ -673,6 +728,8 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           </div>
         )}
 
+        {activeTab === 'penomoran' && <PenomoranSuratSetting />}
+        {activeTab === 'warga' && <PendaftaranWargaDesa />}
         {activeTab === 'kop' && <KopSuratSetting />}
         {activeTab === 'bansos' && <BansosManager />}
       </div>

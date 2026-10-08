@@ -14,6 +14,8 @@ class SuratType extends Model
         'kode_surat',
         'nama_surat',
         'format_nomor',
+        'kode_klasifikasi',
+        'nomor_terakhir',
         'template_body',
         'persyaratan_json',
         'masa_berlaku_hari',
@@ -25,6 +27,7 @@ class SuratType extends Model
         return [
             'persyaratan_json' => 'array',
             'is_active' => 'boolean',
+            'nomor_terakhir' => 'integer',
         ];
     }
 

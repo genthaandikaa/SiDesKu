@@ -538,11 +538,45 @@ export const PreviewSuratModal: React.FC<PreviewSuratModalProps> = ({
                 </div>
 
                 {surat.nomor_surat_resmi && (
-                  <div className="pt-2 flex items-center justify-between text-xs border-t border-slate-100">
-                    <span className="text-slate-500 font-bold">Nomor Surat Resmi Desa:</span>
-                    <span className="font-mono font-black text-emerald-800 text-sm">
-                      {surat.nomor_surat_resmi}
-                    </span>
+                  <div className="pt-3 border-t border-slate-100 space-y-3">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-slate-500 font-bold">Nomor Surat Resmi Desa:</span>
+                      <span className="font-mono font-black text-emerald-800 text-sm bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                        {surat.nomor_surat_resmi}
+                      </span>
+                    </div>
+
+                    {/* Barcode & TTE Lurah Preview */}
+                    <div className="p-3 bg-emerald-50/80 border border-emerald-300 rounded-xl space-y-2 text-xs">
+                      <div className="flex items-center justify-between">
+                        <span className="font-black text-emerald-950 flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
+                          <span>TTE Sah Lurah / Kepala Desa Doko</span>
+                        </span>
+                        <span className="text-[10px] font-bold text-emerald-800 bg-white px-2 py-0.5 rounded-full border border-emerald-200">
+                          UU ITE No. 11/2008
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 bg-white p-2.5 rounded-lg border border-emerald-200">
+                        <div className="w-14 h-14 bg-white p-1 rounded-lg border border-slate-200 shrink-0">
+                          <img
+                            src={`/api/public/surat/qr/${surat.qr_verification_hash || surat.nomor_resi}?v=300`}
+                            alt="QR Verification"
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <img
+                            src={`/api/public/surat/barcode/${encodeURIComponent(surat.nomor_surat_resmi || surat.nomor_resi)}`}
+                            alt="Barcode Lurah"
+                            className="h-6 w-auto max-w-full object-contain"
+                          />
+                          <p className="text-[10px] text-slate-600 truncate">
+                            Penandatangan: <strong>Drs. H. Bambang Prasetyo, M.Si</strong> (Kepala Desa Doko)
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

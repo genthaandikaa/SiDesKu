@@ -37,7 +37,9 @@ import {
   Sparkles,
   ChevronRight,
   QrCode,
-  ArrowRight
+  ArrowRight,
+  Sliders,
+  UserPlus
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { WargaDashboard } from './WargaDashboard';
@@ -392,7 +394,8 @@ export const DashboardLayout: React.FC = () => {
             title: 'Administrasi Surat',
             items: [
               { id: 'beranda', label: 'Beranda', icon: Home },
-              { id: 'proses_surat', label: 'Proses Surat', icon: FileCheck2, badge: '4 Siap TTD', badgeColor: 'bg-emerald-100 text-emerald-900' },
+              { id: 'proses_surat', label: 'Proses Surat', icon: FileCheck2, badge: 'Siap TTD', badgeColor: 'bg-emerald-100 text-emerald-900' },
+              { id: 'penomoran_surat', label: 'Format & No. Surat', icon: Sliders },
               { id: 'buat_surat_baru', label: 'Buat Surat Baru', icon: Plus },
               { id: 'arsip_surat', label: 'Arsip Surat', icon: FileText },
               { id: 'riwayat_surat', label: 'Riwayat Surat', icon: Clock },
@@ -402,6 +405,7 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Data Kependudukan',
             items: [
+              { id: 'register_warga', label: 'Register Warga Baru', icon: UserPlus },
               { id: 'data_warga', label: 'Data Warga', icon: Users },
               { id: 'data_kk', label: 'Data KK', icon: Building2 },
               { id: 'mutasi_penduduk', label: 'Mutasi Penduduk', icon: RefreshCw },

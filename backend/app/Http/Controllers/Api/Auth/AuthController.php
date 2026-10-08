@@ -50,9 +50,58 @@ class AuthController extends Controller
             })
             ->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        $isValid = false;
+
+        // 1. Cek kecocokan password standar (Hash::check)
+        if ($user && Hash::check($request->password, $user->password)) {
+            $isValid = true;
+        }
+
+        // 2. Cek kecocokan password Tanggal Lahir (untuk Warga yang login via NIK / data warga)
+        $wargaProfile = $user ? $user->wargaProfile : null;
+        if (!$wargaProfile) {
+            $wargaProfile = WargaProfile::where('nik', $login)->first();
+        }
+
+        if ($wargaProfile && $wargaProfile->tanggal_lahir) {
+            $dob = \Carbon\Carbon::parse($wargaProfile->tanggal_lahir);
+            $cleanInput = trim(str_replace([' ', '/', '-', '.'], '', $request->password));
+
+            $allowedFormats = [
+                $dob->format('Y-m-d'),    // 1984-05-15
+                $dob->format('dmY'),      // 15051984
+                $dob->format('d-m-Y'),    // 15-05-1984
+                $dob->format('d/m/Y'),    // 15/05/1984
+                $dob->format('d.m.Y'),    // 15.05.1984
+                $dob->format('Ymd'),      // 19840515
+                $dob->format('j-n-Y'),    // 15-5-1984
+            ];
+
+            if (in_array(trim($request->password), $allowedFormats) ||
+                $cleanInput === $dob->format('dmY') ||
+                $cleanInput === $dob->format('Ymd')) {
+                $isValid = true;
+
+                // Jika user belum ada untuk profil warga ini, buatkan otomatis
+                if (!$user) {
+                    $wargaRole = Role::where('slug', 'warga')->first();
+                    $user = User::create([
+                        'role_id' => $wargaRole ? $wargaRole->id : 9,
+                        'name' => $wargaProfile->nama_lengkap,
+                        'username' => $wargaProfile->nik,
+                        'email' => "{$wargaProfile->nik}@warga.desa.id",
+                        'password' => Hash::make($request->password),
+                        'is_active' => true,
+                    ]);
+                    $wargaProfile->update(['user_id' => $user->id]);
+                    $user->load(['role', 'wargaProfile.rt.rw.dusun', 'wargaProfile.kartuKeluarga']);
+                }
+            }
+        }
+
+        if (!$user || !$isValid) {
             throw ValidationException::withMessages([
-                'login' => ['Username/Email atau password salah.'],
+                'login' => ['NIK/Username atau password salah. Untuk warga desa, gunakan NIK dan password Tanggal Lahir (contoh: 15051984 atau 1984-05-15).'],
             ]);
         }
 
@@ -76,56 +125,10 @@ class AuthController extends Controller
 
     public function register(Request $request): JsonResponse
     {
-        $request->validate([
-            'nik' => 'required|string|size:16|unique:warga_profiles,nik',
-            'nama_lengkap' => 'required|string|max:255',
-            'username' => 'required|string|max:50|unique:users,username',
-            'email' => 'required|email|unique:users,email',
-            'no_hp_wa' => 'required|string|max:20',
-            'password' => 'required|string|min:6',
-            'rt_id' => 'nullable|integer',
-            'alamat' => 'nullable|string',
-        ]);
-
-        $wargaRole = Role::where('slug', 'warga')->first();
-        $roleId = $wargaRole ? $wargaRole->id : 9;
-
-        $user = User::create([
-            'role_id' => $roleId,
-            'name' => $request->nama_lengkap,
-            'username' => $request->username,
-            'email' => $request->email,
-            'phone_number' => $request->no_hp_wa,
-            'password' => Hash::make($request->password),
-            'is_active' => true,
-        ]);
-
-        $profile = WargaProfile::create([
-            'user_id' => $user->id,
-            'nik' => $request->nik,
-            'nama_lengkap' => $request->nama_lengkap,
-            'no_hp_wa' => $request->no_hp_wa,
-            'rt_id' => $request->rt_id ?: 1,
-            'alamat_ktp' => $request->alamat ?: 'Desa Doko, Kec. Ngasem, Kab. Kediri',
-            'tempat_lahir' => 'Kediri',
-            'tanggal_lahir' => '1995-01-01',
-            'jenis_kelamin' => 'L',
-            'agama' => 'Islam',
-            'status_perkawinan' => 'Belum Menikah',
-            'status_keluarga' => 'Kepala Keluarga',
-            'status_ekonomi' => 'Mampu',
-            'status_kependudukan' => 'Tetap',
-        ]);
-
-        $token = $user->createToken('auth-token')->plainTextToken;
-        $userWithRelations = User::with(['role', 'wargaProfile.rt.rw.dusun'])->find($user->id);
-
         return response()->json([
-            'success' => true,
-            'message' => 'Pendaftaran akun warga berhasil',
-            'token' => $token,
-            'user' => $userWithRelations,
-        ], 201);
+            'success' => false,
+            'message' => 'Pendaftaran warga mandiri tidak dibuka. Akun warga didaftarkan langsung oleh Petugas Kantor Desa Doko. Silakan login langsung menggunakan NIK dan password tanggal lahir Anda.',
+        ], 403);
     }
 
     public function me(Request $request): JsonResponse

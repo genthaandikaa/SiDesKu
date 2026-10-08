@@ -689,10 +689,10 @@ export const ProfilDesaPage: React.FC = () => {
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                to="/register"
+                to="/layanan-surat"
                 className="px-6 py-3.5 rounded-2xl bg-emerald-800/80 hover:bg-emerald-800 text-white font-extrabold text-xs sm:text-sm border border-white/20 shadow-sm transition-all"
               >
-                <span>Daftar Akun Baru</span>
+                <span>Layanan Surat Mandiri</span>
               </Link>
             </div>
           </div>
