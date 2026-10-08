@@ -223,22 +223,6 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                 </p>
               </div>
 
-              {/* Notice for direct Warga login with NIK & Tanggal Lahir */}
-              <div className="p-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200/90 text-slate-800 space-y-1 shadow-2xs">
-                <div className="flex items-center gap-1.5 font-black text-xs text-emerald-950">
-                  <CreditCard className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                  <span>Petunjuk Login Warga Masyarakat:</span>
-                </div>
-                <div className="text-[11px] text-slate-700 leading-relaxed space-y-0.5">
-                  <p>
-                    • <strong>Username/ID:</strong> Masukkan <strong>NIK KTP</strong> (16 digit) Anda.
-                  </p>
-                  <p>
-                    • <strong>Password:</strong> Masukkan <strong>Tanggal Lahir</strong> (contoh: <code className="bg-white px-1.5 py-0.5 rounded font-mono font-bold text-emerald-900 border border-emerald-200">15051984</code> atau <code className="bg-white px-1.5 py-0.5 rounded font-mono font-bold text-emerald-900 border border-emerald-200">1984-05-15</code>).
-                  </p>
-                </div>
-              </div>
-
               {/* Informative notice if came from /register */}
               {location.pathname === '/register' && (
                 <div className="p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium animate-fade-in flex items-start gap-2">
