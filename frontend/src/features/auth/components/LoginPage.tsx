@@ -254,7 +254,7 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
                 : 'bg-white text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 border border-slate-200/80'
             }`}
           >
-            <span>Daftar Akun</span>
+            <span>Register</span>
           </button>
 
           <button
@@ -266,7 +266,7 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
                 : 'bg-white text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 border border-slate-200/80'
             }`}
           >
-            <span>Portal Masuk</span>
+            <span>Login</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

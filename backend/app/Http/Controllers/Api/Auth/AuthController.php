@@ -171,6 +171,7 @@ class AuthController extends Controller
             'phone_number' => 'nullable|string|max:20',
             'alamat_ktp' => 'nullable|string',
             'pekerjaan' => 'nullable|string|max:100',
+            'foto_ktp' => 'nullable|string',
         ]);
 
         try {
@@ -224,6 +225,36 @@ class AuthController extends Controller
                 }
                 if ($request->filled('pekerjaan')) {
                     $profileData['pekerjaan'] = $request->pekerjaan;
+                }
+                if ($request->has('foto_ktp')) {
+                    $ktpInput = $request->foto_ktp;
+                    if ($ktpInput && str_starts_with($ktpInput, 'data:image')) {
+                        try {
+                            if (preg_match('/^data:image\/(\w+);base64,/', $ktpInput, $type)) {
+                                $imageData = substr($ktpInput, strpos($ktpInput, ',') + 1);
+                                $extension = strtolower($type[1]);
+                                if (!in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+                                    $extension = 'jpg';
+                                }
+                                $decoded = base64_decode($imageData);
+                                if ($decoded !== false) {
+                                    $ktpDir = public_path('uploads/ktp');
+                                    if (!file_exists($ktpDir)) {
+                                        mkdir($ktpDir, 0755, true);
+                                    }
+                                    $fileName = 'ktp_' . $user->id . '_' . time() . '.' . $extension;
+                                    file_put_contents($ktpDir . DIRECTORY_SEPARATOR . $fileName, $decoded);
+                                    $profileData['foto_ktp'] = url('uploads/ktp/' . $fileName);
+                                }
+                            }
+                        } catch (\Exception $e) {
+                            //
+                        }
+                    } elseif (empty($ktpInput)) {
+                        $profileData['foto_ktp'] = null;
+                    } else {
+                        $profileData['foto_ktp'] = $ktpInput;
+                    }
                 }
                 $user->wargaProfile->update($profileData);
             }

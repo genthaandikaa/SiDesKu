@@ -3,7 +3,9 @@ import {
   CheckCircle2, 
   Check, 
   Search,
-  ShieldCheck
+  ShieldCheck,
+  Eye,
+  XCircle
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { SuratRequest } from '@/shared/types';
@@ -14,6 +16,7 @@ import {
   BarActivityChart,
   MiniCalendarWidget,
 } from '@/shared/components/charts';
+import { PreviewSuratModal } from './PreviewSuratModal';
 
 interface RwDashboardProps {
   activeSubmenu?: string;
@@ -22,6 +25,7 @@ interface RwDashboardProps {
 export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beranda' }) => {
   const { user } = useAuth();
   const [surats, setSurats] = useState<SuratRequest[]>([]);
+  const [previewSurat, setPreviewSurat] = useState<SuratRequest | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -47,10 +51,28 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         catatan: 'Pengantar tingkat RW 01 diverifikasi dan diteruskan ke Sekretaris Desa.',
       });
       if (res.data.success) {
+        setPreviewSurat(null);
         fetchRwSurats();
       }
     } catch (err: any) {
       alert('Gagal memverifikasi: ' + (err.response?.data?.message || 'Error'));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleRejectRw = async (id: number, catatan: string) => {
+    setIsProcessing(true);
+    try {
+      const res = await api.post(`/surats/${id}/reject`, {
+        alasan: catatan,
+      });
+      if (res.data.success) {
+        setPreviewSurat(null);
+        fetchRwSurats();
+      }
+    } catch (err: any) {
+      alert('Gagal menolak: ' + (err.response?.data?.message || 'Error'));
     } finally {
       setIsProcessing(false);
     }
@@ -69,7 +91,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
     <div className="space-y-6 page-enter font-sans">
       
       {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
         <MetricStatCard
           title="Menunggu Verifikasi RW"
           value={`${pendingRwSurats.length} Berkas`}
@@ -109,9 +131,9 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
       </div>
 
       {/* Performance Chart & Calendar */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
-        <div className="lg:col-span-8 space-y-5">
+        <div className="xl:col-span-8 space-y-5">
           <AreaSplineChart
             title="Efisiensi Verifikasi Berjenjang RW 01"
             subtitle="Volume Pengantar RT Masuk & Diteruskan ke Balai Desa"
@@ -186,7 +208,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         </div>
 
         {/* Right 4 Cols: Personal Profile Card + Mini Calendar Widget */}
-        <div className="lg:col-span-4 space-y-5">
+        <div className="xl:col-span-4 space-y-5">
           {/* Ketua RW Profile Card */}
           <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
@@ -210,8 +232,8 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   {user?.name?.charAt(0) || 'W'}
                 </div>
               )}
-              <div className="min-w-0">
-                <h4 className="text-sm font-black text-slate-900 leading-tight truncate">
+              <div className="min-w-0 flex-1">
+                <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
                   {user?.name || 'H. Sutarjo'}
                 </h4>
                 <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
@@ -268,16 +290,18 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         </div>
 
         {/* Modern Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+        <div className="overflow-x-auto border border-gray-200/80 rounded-2xl shadow-sm">
+          <table className="w-full text-left text-xs min-w-[720px] sm:min-w-0">
+            <thead className="bg-slate-50/90 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
               <tr>
-                <th className="p-3.5 rounded-l-2xl">Nomor Resi</th>
-                <th className="p-3.5">Nama Pemohon & NIK</th>
-                <th className="p-3.5">Jenis Surat</th>
-                <th className="p-3.5">Keperluan</th>
-                <th className="p-3.5">Status Terkini</th>
-                <th className="p-3.5 text-right rounded-r-2xl">Aksi RW</th>
+                <th className="py-3 px-3 sm:px-3.5">Nomor Resi</th>
+                <th className="py-3 px-3 sm:px-3.5">Nama Pemohon & NIK</th>
+                <th className="py-3 px-3 sm:px-3.5">Jenis Surat</th>
+                <th className="py-3 px-3 sm:px-3.5">Keperluan</th>
+                <th className="py-3 px-3 sm:px-3.5">Status Terkini</th>
+                <th className="py-3 px-3 sm:px-3.5 text-right whitespace-nowrap sticky right-0 bg-slate-50 z-10 shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.06)]">
+                  Aksi Persetujuan
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium">
@@ -289,40 +313,74 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                 </tr>
               ) : (
                 filteredSurats.map((s) => (
-                  <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="p-3.5 font-mono font-bold text-slate-800">{s.nomor_resi}</td>
-                    <td className="p-3.5">
-                      <div className="font-black text-slate-900">{s.warga_profile?.nama_lengkap}</div>
-                      <div className="text-[10px] text-slate-400 font-mono">NIK: {s.warga_profile?.nik}</div>
+                  <tr key={s.id} className="group hover:bg-slate-50 transition-colors">
+                    <td className="py-3 px-3 sm:px-3.5 font-mono font-bold text-slate-800 whitespace-nowrap">{s.nomor_resi}</td>
+                    <td className="py-3 px-3 sm:px-3.5">
+                      <div className="font-bold text-slate-900 text-xs sm:text-sm leading-tight">{s.warga_profile?.nama_lengkap}</div>
+                      <div className="text-[10px] text-slate-400 font-mono mt-0.5">NIK: {s.warga_profile?.nik}</div>
                     </td>
-                    <td className="p-3.5 font-black text-emerald-800">{s.surat_type?.nama_surat}</td>
-                    <td className="p-3.5 text-slate-600 max-w-xs truncate">{s.keperluan}</td>
-                    <td className="p-3.5">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
-                        s.status === 'pending_rw' ? 'bg-amber-100 text-amber-900 border border-amber-200' :
-                        s.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
-                        s.status === 'rejected' ? 'bg-rose-100 text-rose-800' :
-                        'bg-blue-100 text-blue-900'
+                    <td className="py-3 px-3 sm:px-3.5">
+                      <div className="font-bold text-emerald-800 text-xs leading-snug max-w-[160px] line-clamp-2">{s.surat_type?.nama_surat}</div>
+                    </td>
+                    <td className="py-3 px-3 sm:px-3.5 text-slate-600 text-xs max-w-[140px] truncate" title={s.keperluan}>{s.keperluan}</td>
+                    <td className="py-3 px-3 sm:px-3.5 whitespace-nowrap">
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                        ['approved_rt', 'pending_rw'].includes(s.status) ? 'bg-amber-100 text-amber-900 border border-amber-200' :
+                        s.status === 'pending_rt' ? 'bg-blue-50 text-blue-800 border border-blue-200' :
+                        s.status === 'processed_sekdes' ? 'bg-indigo-100 text-indigo-900 border border-indigo-200' :
+                        s.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
+                        s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
+                        'bg-slate-100 text-slate-800'
                       }`}>
-                        {s.status === 'pending_rw' ? 'Perlu ACC RW' :
+                        {['approved_rt', 'pending_rw'].includes(s.status) ? 'Perlu ACC RW' :
                          s.status === 'pending_rt' ? 'Menunggu RT' :
-                         s.status === 'processed_sekdes' ? 'Diproses Sekdes' :
-                         s.status === 'completed' ? 'Diterima & Sah' : 'Ditolak'}
+                         s.status === 'processed_sekdes' ? 'Diproses Desa' :
+                         s.status === 'completed' ? 'Diterima & Sah' :
+                         s.status === 'rejected' ? '✕ Ditolak' : s.status}
                       </span>
                     </td>
-                    <td className="p-3.5 text-right">
-                      {s.status === 'pending_rw' ? (
+                    <td className="py-3 px-3 sm:px-3.5 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-slate-50 z-10 shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.06)] transition-colors">
+                      <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
                         <button
-                          onClick={() => handleApproveRw(s.id)}
-                          disabled={isProcessing}
-                          className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-2xs transition-all press-down flex items-center gap-1.5 ml-auto cursor-pointer"
+                          type="button"
+                          onClick={() => setPreviewSurat(s)}
+                          className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors press-down flex items-center gap-1 cursor-pointer shadow-2xs"
+                          title="Lihat Detail & Foto Berkas Lampiran"
                         >
-                          <Check className="w-3.5 h-3.5" />
-                          <span>ACC & Teruskan</span>
+                          <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Detail</span>
                         </button>
-                      ) : (
-                        <span className="text-slate-400 text-xs italic">Telah Diperiksa</span>
-                      )}
+
+                        {['approved_rt', 'pending_rw'].includes(s.status) ? (
+                          <>
+                            <button
+                              onClick={() => handleApproveRw(s.id)}
+                              disabled={isProcessing}
+                              className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition-all press-down flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                              title="ACC & Teruskan ke Kepala Desa"
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                              <span>ACC</span>
+                            </button>
+                            <button
+                              onClick={() => setPreviewSurat(s)}
+                              className="px-2.5 py-1.5 rounded-xl bg-rose-50 text-rose-700 hover:bg-rose-100 font-bold text-xs border border-rose-200 transition-colors flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                              title="Tolak Permohonan (Buka Detail Berkas)"
+                            >
+                              <XCircle className="w-3.5 h-3.5" />
+                              <span>Tolak</span>
+                            </button>
+                          </>
+                        ) : s.status === 'rejected' ? (
+                          <span className="inline-flex items-center gap-1 text-rose-700 text-xs font-bold bg-rose-50 px-2.5 py-1 rounded-xl border border-rose-200/80 shadow-2xs whitespace-nowrap">
+                            ✕ Ditolak
+                          </span>
+                        ) : (
+                          <span className="text-emerald-700 font-bold text-xs bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200 whitespace-nowrap">
+                            {s.status === 'completed' ? '✓ Sah' : '✓ Telah Disetujui'}
+                          </span>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -332,6 +390,17 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         </div>
       </div>
 
+      {/* Preview & Berkas Modal */}
+      {previewSurat && (
+        <PreviewSuratModal
+          surat={previewSurat}
+          role="rw"
+          onClose={() => setPreviewSurat(null)}
+          onApprove={(id) => handleApproveRw(id)}
+          onReject={(id, catatan) => handleRejectRw(id, catatan)}
+          isProcessing={isProcessing}
+        />
+      )}
     </div>
   );
 };

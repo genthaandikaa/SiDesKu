@@ -28,7 +28,7 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
   const w = surat.warga_profile;
 
   const modalContent = (
-    <div className="fixed inset-0 z-[99999] bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-start print:p-0 print:bg-white print:static font-sans">
+    <div id="surat-print-portal" className="fixed inset-0 z-[999999] bg-slate-950/80 flex flex-col items-center justify-start print:p-0 print:bg-white print:static font-sans">
       
       {/* Full-width Top Header Action Bar (Mobile Responsive) */}
       <header className="w-full bg-slate-900 text-white border-b border-slate-800 shadow-xl px-3 sm:px-8 py-2.5 sm:py-3.5 flex items-center justify-between z-30 shrink-0 print:hidden">
@@ -258,11 +258,11 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
           {showQrZoom && (
             <div 
               onClick={() => setShowQrZoom(false)}
-              className="fixed inset-0 z-[999999] bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in print:hidden"
+              className="fixed inset-0 z-[999999] bg-slate-950/85 flex items-center justify-center p-4 animate-fade-in print:hidden overflow-y-auto select-none"
             >
               <div 
                 onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center space-y-4 shadow-2xl border-2 border-emerald-400 animate-scale-up"
+                className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center space-y-4 shadow-2xl border-2 border-emerald-400 animate-scale-up my-auto"
               >
                 <div className="flex justify-between items-center pb-2 border-b border-slate-100">
                   <div className="text-left">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   FileText, CheckCircle, Clock, XCircle, Printer, Search, 
-  Settings, Megaphone, Loader2, ShieldCheck, QrCode, ArrowRight, Check
+  Settings, Megaphone, Loader2, ShieldCheck, QrCode, ArrowRight, Check, Eye
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import api from '@/shared/lib/axios';
@@ -9,6 +9,7 @@ import { SuratRequest, DesaSetting } from '@/shared/types';
 import { CetakSuratModal } from './CetakSuratModal';
 import { KopSuratSetting } from './KopSuratSetting';
 import { BansosManager } from './BansosManager';
+import { PreviewSuratModal } from './PreviewSuratModal';
 import {
   MetricStatCard,
   AreaSplineChart,
@@ -29,6 +30,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
   const [searchTerm, setSearchTerm] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [printSurat, setPrintSurat] = useState<SuratRequest | null>(null);
+  const [previewSurat, setPreviewSurat] = useState<SuratRequest | null>(null);
 
   useEffect(() => {
     if (['template_surat', 'pengaturan_desa'].includes(activeSubmenu)) {
@@ -64,12 +66,48 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
     setIsProcessing(true);
     try {
       const res = await api.post(`/surats/${id}/process-sekdes`);
-      if (res.data.success) fetchData();
+      if (res.data.success) {
+        setPreviewSurat(null);
+        fetchData();
+      }
     } catch (err: any) {
       alert('Gagal menerbitkan: ' + (err.response?.data?.message || 'Error'));
     } finally {
       setIsProcessing(false);
     }
+  };
+
+  const handleRejectSekdes = async (id: number, catatan: string) => {
+    setIsProcessing(true);
+    try {
+      const res = await api.post(`/surats/${id}/reject`, {
+        alasan: catatan,
+      });
+      if (res.data.success) {
+        setPreviewSurat(null);
+        fetchData();
+      }
+    } catch (err: any) {
+      alert('Gagal menolak: ' + (err.response?.data?.message || 'Error'));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const renderPreviewModal = () => {
+    if (!previewSurat) return null;
+    return (
+      <PreviewSuratModal
+        surat={previewSurat}
+        role="sekdes"
+        onClose={() => setPreviewSurat(null)}
+        onApprove={(id) => handleProcessSekdes(id)}
+        onReject={(id, catatan) => handleRejectSekdes(id, catatan)}
+        onPrint={(s) => setPrintSurat(s)}
+        approveLabel="Terbitkan & Sahkan QR"
+        isProcessing={isProcessing}
+      />
+    );
   };
 
   const filteredSurat = surats.filter(s => 
@@ -78,12 +116,12 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
     s.nomor_resi?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const pendingCount = surats.filter(s => s.status === 'processed_sekdes').length;
+  const pendingCount = surats.filter(s => s.status === 'processed_sekdes' || s.status === 'approved_rt').length;
   const completedCount = surats.filter(s => s.status === 'completed').length;
 
   // Antrean Verifikasi & Legalisasi Surat
   if (['proses_surat', 'verifikasi_surat', 'persetujuan_surat'].includes(activeSubmenu)) {
-    const pendingSuratList = surats.filter(s => s.status === 'processed_sekdes' || s.status === 'pending_rt');
+    const pendingSuratList = surats.filter(s => s.status === 'processed_sekdes' || s.status === 'approved_rt');
     return (
       <div className="space-y-6 animate-fade-in font-sans">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -100,17 +138,19 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           </span>
         </div>
 
-        <div className="card-surface p-6 space-y-4">
-          <div className="overflow-x-auto border border-gray-200 rounded-xl">
-            <table className="w-full text-left text-xs">
+        <div className="card-surface p-4 sm:p-6 space-y-4">
+          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+            <table className="w-full text-left text-xs min-w-[720px] sm:min-w-0">
               <thead className="bg-[#f8faf9] text-gray-600 border-b border-gray-200 font-semibold">
                 <tr>
-                  <th className="p-3">No. Resi</th>
-                  <th className="p-3">Pemohon & NIK</th>
-                  <th className="p-3">Jenis Surat</th>
-                  <th className="p-3">Keperluan</th>
-                  <th className="p-3">Status Verifikasi</th>
-                  <th className="p-3 text-right">Aksi Legalisasi</th>
+                  <th className="py-3 px-3 sm:px-3.5">No. Resi</th>
+                  <th className="py-3 px-3 sm:px-3.5">Pemohon & NIK</th>
+                  <th className="py-3 px-3 sm:px-3.5">Jenis Surat</th>
+                  <th className="py-3 px-3 sm:px-3.5">Keperluan</th>
+                  <th className="py-3 px-3 sm:px-3.5">Status Verifikasi</th>
+                  <th className="py-3 px-3 sm:px-3.5 text-right whitespace-nowrap sticky right-0 bg-[#f8faf9] z-10 shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.06)]">
+                    Aksi Legalisasi
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -122,28 +162,43 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                   </tr>
                 ) : (
                   pendingSuratList.map((s) => (
-                    <tr key={s.id} className="hover:bg-gray-50/80 transition-colors">
-                      <td className="p-3 font-mono font-bold text-gray-700">{s.nomor_resi}</td>
-                      <td className="p-3">
-                        <div className="font-bold text-gray-900">{s.warga_profile?.nama_lengkap}</div>
-                        <div className="text-[11px] text-gray-400 font-mono">NIK: {s.warga_profile?.nik}</div>
+                    <tr key={s.id} className="group hover:bg-gray-50 transition-colors">
+                      <td className="py-3 px-3 sm:px-3.5 font-mono font-bold text-gray-700 whitespace-nowrap">{s.nomor_resi}</td>
+                      <td className="py-3 px-3 sm:px-3.5">
+                        <div className="font-bold text-gray-900 text-xs sm:text-sm leading-tight">{s.warga_profile?.nama_lengkap}</div>
+                        <div className="text-[11px] text-gray-400 font-mono mt-0.5">NIK: {s.warga_profile?.nik}</div>
                       </td>
-                      <td className="p-3 font-medium text-emerald-800">{s.surat_type?.nama_surat}</td>
-                      <td className="p-3 text-gray-600 max-w-xs truncate">{s.keperluan}</td>
-                      <td className="p-3">
+                      <td className="py-3 px-3 sm:px-3.5">
+                        <div className="font-medium text-emerald-800 text-xs leading-snug max-w-[160px] line-clamp-2">{s.surat_type?.nama_surat}</div>
+                      </td>
+                      <td className="py-3 px-3 sm:px-3.5 text-gray-600 text-xs max-w-[140px] truncate" title={s.keperluan}>{s.keperluan}</td>
+                      <td className="py-3 px-3 sm:px-3.5 whitespace-nowrap">
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
                           <Clock size={10} />
                           <span>Siap TTD Kepala Desa</span>
                         </span>
                       </td>
-                      <td className="p-3 text-right">
-                        <button 
-                          onClick={() => handleProcessSekdes(s.id)}
-                          disabled={isProcessing}
-                          className="px-3.5 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 press-down transition-all flex items-center gap-1.5 ml-auto cursor-pointer"
-                        >
-                          <ShieldCheck size={14} /> Terbitkan & Sahkan QR
-                        </button>
+                      <td className="py-3 px-3 sm:px-3.5 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-gray-50 z-10 shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.06)] transition-colors">
+                        <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
+                          <button
+                            type="button"
+                            onClick={() => setPreviewSurat(s)}
+                            className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors press-down flex items-center gap-1 cursor-pointer shadow-2xs"
+                            title="Lihat Detail & Foto Berkas Lampiran"
+                          >
+                            <Eye size={13} className="text-emerald-600" />
+                            <span>Detail</span>
+                          </button>
+                          <button 
+                            onClick={() => handleProcessSekdes(s.id)}
+                            disabled={isProcessing}
+                            className="px-3 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold hover:bg-emerald-700 press-down transition-all flex items-center gap-1 cursor-pointer shadow-xs whitespace-nowrap"
+                            title="Terbitkan & Sahkan Surat dengan QR Code Resmi"
+                          >
+                            <ShieldCheck size={14} />
+                            <span>Sahkan QR</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -160,6 +215,9 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
             onClose={() => setPrintSurat(null)} 
           />
         )}
+
+        {/* Modal Preview & Berkas Surat */}
+        {renderPreviewModal()}
       </div>
     );
   }
@@ -183,17 +241,19 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           </span>
         </div>
 
-        <div className="card-surface p-6 space-y-4">
-          <div className="overflow-x-auto border border-gray-200 rounded-xl">
-            <table className="w-full text-left text-xs">
+        <div className="card-surface p-4 sm:p-6 space-y-4">
+          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+            <table className="w-full text-left text-xs min-w-[720px] sm:min-w-0">
               <thead className="bg-[#f8faf9] text-gray-600 border-b border-gray-200 font-semibold">
                 <tr>
-                  <th className="p-3">No. Surat Resmi</th>
-                  <th className="p-3">No. Resi</th>
-                  <th className="p-3">Pemohon & NIK</th>
-                  <th className="p-3">Jenis Surat</th>
-                  <th className="p-3">Tanggal Terbit</th>
-                  <th className="p-3 text-right">Aksi</th>
+                  <th className="py-3 px-3 sm:px-3.5">No. Surat Resmi</th>
+                  <th className="py-3 px-3 sm:px-3.5">No. Resi</th>
+                  <th className="py-3 px-3 sm:px-3.5">Pemohon & NIK</th>
+                  <th className="py-3 px-3 sm:px-3.5">Jenis Surat</th>
+                  <th className="py-3 px-3 sm:px-3.5">Tanggal Terbit</th>
+                  <th className="py-3 px-3 sm:px-3.5 text-right whitespace-nowrap sticky right-0 bg-[#f8faf9] z-10 shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.06)]">
+                    Aksi
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -205,22 +265,36 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                   </tr>
                 ) : (
                   completedSuratList.map((s) => (
-                    <tr key={s.id} className="hover:bg-gray-50/80 transition-colors">
-                      <td className="p-3 font-mono font-black text-emerald-800">{s.nomor_surat_resmi || '-'}</td>
-                      <td className="p-3 font-mono text-gray-500">{s.nomor_resi}</td>
-                      <td className="p-3">
-                        <div className="font-bold text-gray-900">{s.warga_profile?.nama_lengkap}</div>
-                        <div className="text-[11px] text-gray-400 font-mono">NIK: {s.warga_profile?.nik}</div>
+                    <tr key={s.id} className="group hover:bg-gray-50 transition-colors">
+                      <td className="py-3 px-3 sm:px-3.5 font-mono font-black text-emerald-800 whitespace-nowrap">{s.nomor_surat_resmi || '-'}</td>
+                      <td className="py-3 px-3 sm:px-3.5 font-mono text-gray-500 whitespace-nowrap">{s.nomor_resi}</td>
+                      <td className="py-3 px-3 sm:px-3.5">
+                        <div className="font-bold text-gray-900 text-xs sm:text-sm leading-tight">{s.warga_profile?.nama_lengkap}</div>
+                        <div className="text-[11px] text-gray-400 font-mono mt-0.5">NIK: {s.warga_profile?.nik}</div>
                       </td>
-                      <td className="p-3 font-medium text-slate-800">{s.surat_type?.nama_surat}</td>
-                      <td className="p-3 text-slate-500">{new Date(s.created_at).toLocaleDateString('id-ID')}</td>
-                      <td className="p-3 text-right">
-                        <button 
-                          onClick={() => setPrintSurat(s)}
-                          className="px-3.5 py-1.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 press-down flex items-center gap-1.5 ml-auto cursor-pointer border border-emerald-200"
-                        >
-                          <Printer size={14} /> Cetak PDF
-                        </button>
+                      <td className="py-3 px-3 sm:px-3.5">
+                        <div className="font-medium text-slate-800 text-xs leading-snug max-w-[160px] line-clamp-2">{s.surat_type?.nama_surat}</div>
+                      </td>
+                      <td className="py-3 px-3 sm:px-3.5 text-slate-500 whitespace-nowrap">{new Date(s.created_at).toLocaleDateString('id-ID')}</td>
+                      <td className="py-3 px-3 sm:px-3.5 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-gray-50 z-10 shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.06)] transition-colors">
+                        <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
+                          <button
+                            type="button"
+                            onClick={() => setPreviewSurat(s)}
+                            className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors press-down flex items-center gap-1 cursor-pointer shadow-2xs"
+                            title="Lihat Detail & Foto Berkas Lampiran"
+                          >
+                            <Eye size={13} className="text-emerald-600" />
+                            <span>Detail</span>
+                          </button>
+                          <button 
+                            onClick={() => setPrintSurat(s)}
+                            className="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 press-down flex items-center gap-1 cursor-pointer border border-emerald-200 shadow-2xs whitespace-nowrap"
+                          >
+                            <Printer size={13} />
+                            <span>Cetak PDF</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -237,6 +311,9 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
             onClose={() => setPrintSurat(null)} 
           />
         )}
+
+        {/* Modal Preview & Berkas Surat */}
+        {renderPreviewModal()}
       </div>
     );
   }
@@ -246,7 +323,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
     <div className="space-y-6 page-enter font-sans">
       
       {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
         <MetricStatCard
           title="Siap Diterbitkan & TTD QR"
           value={`${pendingCount} Berkas`}
@@ -286,9 +363,9 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
       </div>
 
       {/* Performance Chart & Calendar */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
-        <div className="lg:col-span-8 space-y-5">
+        <div className="xl:col-span-8 space-y-5">
           <AreaSplineChart
             title="Statistik Pelayanan Persuratan & Digital Signature"
             subtitle="Volume Penerbitan Dokumen Resmi Desa Doko (Jan - Agu)"
@@ -383,7 +460,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
         </div>
 
         {/* Right 4 Cols: Personal Profile Card + Mini Calendar Widget */}
-        <div className="lg:col-span-4 space-y-5">
+        <div className="xl:col-span-4 space-y-5">
           {/* Sekdes Profile Card */}
           <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
@@ -407,8 +484,8 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                   {user?.name?.charAt(0) || 'S'}
                 </div>
               )}
-              <div className="min-w-0">
-                <h4 className="text-sm font-black text-slate-900 leading-tight truncate">
+              <div className="min-w-0 flex-1">
+                <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
                   {user?.name || 'Ahmad Fauzi, S.AP'}
                 </h4>
                 <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
@@ -531,7 +608,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                   </thead>
                   <tbody className="divide-y divide-gray-100">
                     {filteredSurat.map((s, idx) => (
-                      <tr key={s.id} className={`hover:bg-gray-50/80 transition-colors animate-fade-in stagger-${Math.min(idx + 1, 8)}`}>
+                      <tr key={s.id} className={`hover:bg-gray-50 transition-colors animate-fade-in stagger-${Math.min(idx + 1, 8)}`}>
                         <td className="p-3 font-mono font-bold text-gray-700">{s.nomor_resi}</td>
                         <td className="p-3">
                           <div className="font-bold text-gray-900">{s.warga_profile?.nama_lengkap}</div>
@@ -547,19 +624,28 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                         </td>
                         <td className="p-3 whitespace-nowrap">
                           <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap ${
-                            s.status === 'processed_sekdes' ? 'bg-amber-100 text-amber-800 border border-amber-200' :
+                            ['processed_sekdes', 'approved_rt'].includes(s.status) ? 'bg-amber-100 text-amber-800 border border-amber-200' :
                             s.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
                             'bg-gray-100 text-gray-600 border border-gray-200'
                           }`}>
-                            {s.status === 'processed_sekdes' && <Clock size={12} />}
+                            {['processed_sekdes', 'approved_rt'].includes(s.status) && <Clock size={12} />}
                             {s.status === 'completed' && <CheckCircle size={12} />}
-                            {s.status === 'processed_sekdes' ? 'Siap Diterbitkan' :
+                            {['processed_sekdes', 'approved_rt'].includes(s.status) ? 'Siap Diterbitkan' :
                              s.status === 'completed' ? 'Selesai & Sah' : s.status}
                           </span>
                         </td>
                         <td className="p-3 text-right whitespace-nowrap">
-                          <div className="flex justify-end gap-2 whitespace-nowrap">
-                            {s.status === 'processed_sekdes' && (
+                          <div className="flex justify-end items-center gap-1.5 whitespace-nowrap">
+                            <button
+                              type="button"
+                              onClick={() => setPreviewSurat(s)}
+                              className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
+                              title="Lihat Detail & Foto Berkas Lampiran"
+                            >
+                              <Eye size={12} className="text-emerald-600" />
+                              <span>Detail Berkas</span>
+                            </button>
+                            {['processed_sekdes', 'approved_rt'].includes(s.status) && (
                               <button 
                                 onClick={() => handleProcessSekdes(s.id)}
                                 disabled={isProcessing}
@@ -598,6 +684,9 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           onClose={() => setPrintSurat(null)} 
         />
       )}
+
+      {/* Modal Preview & Berkas Surat */}
+      {renderPreviewModal()}
     </div>
   );
 };

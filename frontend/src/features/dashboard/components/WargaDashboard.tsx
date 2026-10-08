@@ -1,33 +1,50 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { 
   Plus, 
   QrCode, 
-  Send,
-  Printer,
-  CheckCircle2,
-  Clock,
-  FileText,
-  AlertCircle,
-  FileCheck2,
-  Download,
-  Search,
-  ShieldCheck,
-  Building2,
-  Calendar,
-  Sparkles,
-  ArrowRight,
-  CreditCard,
-  HeartHandshake,
-  Users,
-  Briefcase,
-  Layers,
-  FileSpreadsheet
+  Send, 
+  Printer, 
+  CheckCircle2, 
+  Clock, 
+  FileText, 
+  AlertCircle, 
+  FileCheck2, 
+  Download, 
+  Search, 
+  ShieldCheck, 
+  Building2, 
+  Calendar, 
+  Sparkles, 
+  ArrowRight, 
+  CreditCard, 
+  HeartHandshake, 
+  Users, 
+  Briefcase, 
+  Layers, 
+  FileSpreadsheet, 
+  Camera, 
+  Upload, 
+  Image as ImageIcon, 
+  Trash2, 
+  Eye, 
+  Paperclip, 
+  X, 
+  ChevronLeft, 
+  ChevronRight,
+  RefreshCw,
+  Edit3,
+  Loader2,
+  Copy,
+  Info
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { useAuth } from '@/shared/context/AuthContext';
 import { SuratRequest, SuratType, BantuanPenerima } from '@/shared/types';
 import { CetakSuratModal } from './CetakSuratModal';
 import { SuratTrackingModal } from './SuratTrackingModal';
+import { CameraUploadModal } from '@/shared/components/CameraUploadModal';
 import {
   DonutGauge,
   AreaSplineChart,
@@ -35,6 +52,46 @@ import {
   MiniCalendarWidget,
   MetricStatCard,
 } from '@/shared/components/charts';
+
+export interface FormLampiranItem {
+  id: string;
+  url: string;
+  nama: string;
+  tipe?: string;
+}
+
+export const parseLampiranDokumen = (val?: string | any[] | null): Array<{ url: string; nama: string }> => {
+  if (!val) return [];
+  if (Array.isArray(val)) {
+    return val.map((item, idx) => 
+      typeof item === 'string' 
+        ? { url: item, nama: `Dokumen ${idx + 1}` } 
+        : { url: item.url || item.file || '', nama: item.nama || `Dokumen ${idx + 1}` }
+    ).filter(d => !!d.url);
+  }
+  if (typeof val === 'string') {
+    const trimmed = val.trim();
+    if (trimmed.startsWith('[') || trimmed.startsWith('{')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) {
+          return parsed.map((item, idx) => 
+            typeof item === 'string' 
+              ? { url: item, nama: `Dokumen ${idx + 1}` } 
+              : { url: item.url || item.file || '', nama: item.nama || `Dokumen ${idx + 1}` }
+          ).filter(d => !!d.url);
+        }
+        if (parsed && typeof parsed === 'object') {
+          return [{ url: parsed.url || parsed.file || '', nama: parsed.nama || 'Dokumen Lampiran' }];
+        }
+      } catch {
+        // fallback
+      }
+    }
+    return [{ url: val, nama: 'Dokumen Lampiran' }];
+  }
+  return [];
+};
 
 interface WargaDashboardProps {
   activeSubmenu?: string;
@@ -46,7 +103,7 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 1,
     kode_surat: 'SKTP',
-    nama_surat: 'Surat Pengantar Pembuatan / Rekam KTP-el',
+    nama_surat: 'Surat Pembuatan / E-KTP',
     format_nomor: '471/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['Foto Kartu Keluarga (KK)', 'Surat Pengantar RT/RW', 'KTP Lama (bila rusak/ganti)'],
     masa_berlaku_hari: 30,
@@ -55,7 +112,7 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 2,
     kode_surat: 'SKKK',
-    nama_surat: 'Surat Pengantar Kartu Keluarga (KK Baru / Perubahan)',
+    nama_surat: 'Surat Kartu Keluarga (KK Baru / Perubahan)',
     format_nomor: '472/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['KK Asli Lama', 'Buku Nikah / Akta Cerai', 'Surat Keterangan Lahir / Pindah'],
     masa_berlaku_hari: 30,
@@ -100,7 +157,7 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 7,
     kode_surat: 'SKL',
-    nama_surat: 'Surat Keterangan Kelahiran / Pengantar Akta Lahir',
+    nama_surat: 'Surat Kelahiran / Akta Lahir',
     format_nomor: '474.1/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['Surat Keterangan Lahir Bidan/RS', 'KTP Ayah & Ibu', 'Buku Nikah Asli', 'KK Asli'],
     masa_berlaku_hari: 60,
@@ -109,7 +166,7 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 8,
     kode_surat: 'SKM',
-    nama_surat: 'Surat Keterangan Kematian / Pengantar Akta Kematian',
+    nama_surat: 'Surat Kematian',
     format_nomor: '474.3/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['Surat Kematian RS / Saksi RT', 'KTP & KK Almarhum', 'KTP Pelapor'],
     masa_berlaku_hari: 60,
@@ -118,7 +175,7 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 9,
     kode_surat: 'SKBM',
-    nama_surat: 'Surat Keterangan Belum Pernah Menikah (Model N1-N4)',
+    nama_surat: 'Surat Belum Pernah Menikah (N1-N4)',
     format_nomor: '474.2/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['KTP Pemohon', 'KK Asli', 'Pernyataan Belum Menikah Bermaterai'],
     masa_berlaku_hari: 30,
@@ -127,7 +184,7 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 10,
     kode_surat: 'SKP',
-    nama_surat: 'Surat Pengantar Pindah Domisili (SKPWNI)',
+    nama_surat: 'Surat Pindah Domisili (SKPWNI)',
     format_nomor: '475/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['KTP & KK Asli', 'Alamat Tujuan Lengkap', 'Surat Bebas Tanggungan RT'],
     masa_berlaku_hari: 30,
@@ -136,7 +193,7 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 11,
     kode_surat: 'SKBN',
-    nama_surat: 'Surat Keterangan Beda Nama (Ijazah / KTP / KK)',
+    nama_surat: 'Surat Beda Nama (Ijazah / KTP / KK)',
     format_nomor: '470/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['KTP & KK Asli', 'Dokumen/Ijazah Beda Nama', 'Surat Pengantar RT'],
     masa_berlaku_hari: 60,
@@ -145,7 +202,7 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 12,
     kode_surat: 'SKPH',
-    nama_surat: 'Surat Keterangan Penghasilan Orang Tua / Wali',
+    nama_surat: 'Surat Penghasilan Orang Tua / Wali',
     format_nomor: '401/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['KTP Orang Tua', 'KK Asli', 'Rincian Penghasilan / Slip Usaha'],
     masa_berlaku_hari: 30,
@@ -163,13 +220,20 @@ const defaultSuratTypes: SuratType[] = [
   {
     id: 14,
     kode_surat: 'SKIK',
-    nama_surat: 'Surat Pengantar Izin Keramaian / Hajatan Warga',
+    nama_surat: 'Surat Izin Keramaian / Hajatan ',
     format_nomor: '300/{NO}/418.66.04/{TAHUN}',
     persyaratan_json: ['KTP Tuan Rumah', 'Surat Persetujuan Tetangga Sekitar', 'Rekomendasi RT/RW'],
     masa_berlaku_hari: 14,
     is_active: true,
   },
 ];
+
+interface ActionToast {
+  id: string;
+  type: 'success' | 'error' | 'info';
+  title: string;
+  message: string;
+}
 
 export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 'beranda', onNavigate }) => {
   const { user } = useAuth();
@@ -179,6 +243,41 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   const [kasSummary, setKasSummary] = useState<any>(null);
   const [desa, setDesa] = useState<any>(null);
   
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+
+  // Detect route parameter /dashboard/ajukan/:id and query ?editSuratId=
+  const ajukanMatch = location.pathname.match(/\/dashboard\/ajukan\/(\d+)/);
+  const routeSuratTypeId = ajukanMatch ? Number(ajukanMatch[1]) : null;
+  const editSuratIdParam = searchParams.get('editSuratId');
+  const editingSurat = editSuratIdParam ? surats.find(s => s.id === Number(editSuratIdParam)) : null;
+
+  // Pagination for catalog cards (6 per page)
+  const [catalogPage, setCatalogPage] = useState<number>(1);
+  const ITEMS_PER_PAGE = 6;
+
+  // Replacing Photo & Delete confirmation state
+  const [replacingPhotoId, setReplacingPhotoId] = useState<string | null>(null);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [suratToDelete, setSuratToDelete] = useState<SuratRequest | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Floating Action Toast Notification
+  const [actionToast, setActionToast] = useState<ActionToast | null>(null);
+  const showToast = (type: 'success' | 'error' | 'info', title: string, message: string) => {
+    setActionToast({ id: String(Date.now()), type, title, message });
+  };
+
+  useEffect(() => {
+    if (actionToast) {
+      const timer = setTimeout(() => {
+        setActionToast(null);
+      }, 4500);
+      return () => clearTimeout(timer);
+    }
+  }, [actionToast]);
+
   // Search and category filters for Ajukan Surat
   const [suratSearch, setSuratSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<'Semua' | 'Kependudukan' | 'Sosial' | 'Keluarga' | 'Usaha' | 'Hukum'>('Semua');
@@ -190,6 +289,64 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   const [keperluan, setKeperluan] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [submitSuccessModal, setSubmitSuccessModal] = useState<{
+    isEdit: boolean;
+    surat: SuratRequest | null;
+  } | null>(null);
+  const [copiedResi, setCopiedResi] = useState(false);
+
+  // Camera & Multi-Document Attachment State
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
+  const [cameraModalTitle, setCameraModalTitle] = useState('Ambil Foto Dokumen / KTP');
+  const [cameraModalInitialMode, setCameraModalInitialMode] = useState<'camera' | 'upload'>('camera');
+  const [lampiranCategory, setLampiranCategory] = useState<string>('Foto KTP');
+  const [lampiranList, setLampiranList] = useState<FormLampiranItem[]>([]);
+  const [previewGallery, setPreviewGallery] = useState<Array<{ url: string; nama: string }>>([]);
+  const [galleryIndex, setGalleryIndex] = useState<number>(0);
+
+  // Lock body scroll and handle ESC key for delete confirm and preview gallery
+  useEffect(() => {
+    if (isDeleteConfirmOpen || previewGallery.length > 0) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          setIsDeleteConfirmOpen(false);
+          setSuratToDelete(null);
+          setPreviewGallery([]);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isDeleteConfirmOpen, previewGallery.length]);
+
+  // Reset catalog pagination on search or category filter change
+  useEffect(() => {
+    setCatalogPage(1);
+  }, [suratSearch, selectedCategory]);
+
+  // Pre-fill form on edit mode or route type change
+  useEffect(() => {
+    if (editingSurat) {
+      setSelectedTypeId(editingSurat.surat_type_id);
+      setKeperluan(editingSurat.keperluan || '');
+      const docs = parseLampiranDokumen(editingSurat.file_lampiran);
+      setLampiranList(docs.map((d, i) => ({
+        id: `existing-${i}-${Date.now()}`,
+        url: d.url,
+        nama: d.nama,
+      })));
+      setSubmitSuccess(false);
+    } else if (routeSuratTypeId) {
+      setSelectedTypeId(routeSuratTypeId);
+      setKeperluan('');
+      setLampiranList([]);
+      setSubmitSuccess(false);
+    }
+  }, [routeSuratTypeId, editingSurat]);
 
   // Print Letter & Tracking Detail Modals
   const [printSurat, setPrintSurat] = useState<SuratRequest | null>(null);
@@ -229,25 +386,105 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     }
   };
 
-  const handleCreateSurat = async (e: React.FormEvent) => {
+  const handleCreateOrUpdateSurat = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedTypeId || !keperluan.trim()) return;
+    if (isSubmitting) return; // Prevent double click / spamming
+
+    const typeId = routeSuratTypeId || selectedTypeId;
+    if (!typeId || !keperluan.trim()) {
+      showToast('error', 'Formulir Belum Lengkap', 'Mohon pilih jenis surat dan isi keperluan pengajuan dengan jelas.');
+      return;
+    }
 
     setIsSubmitting(true);
     try {
-      const res = await api.post('/surats', {
-        surat_type_id: selectedTypeId,
-        keperluan: keperluan.trim(),
-      });
-      if (res.data?.success) {
-        setSubmitSuccess(true);
-        setKeperluan('');
-        fetchWargaData();
+      const payloadLampiran = lampiranList.length > 0
+        ? lampiranList.map(item => ({ url: item.url, nama: item.nama }))
+        : null;
+
+      if (editingSurat) {
+        const res = await api.put(`/surats/${editingSurat.id}`, {
+          surat_type_id: typeId,
+          keperluan: keperluan.trim(),
+          file_lampiran: payloadLampiran,
+        });
+        if (res.data && res.data.success) {
+          setSubmitSuccess(true);
+          setSubmitSuccessModal({
+            isEdit: true,
+            surat: res.data.data || editingSurat,
+          });
+          await fetchWargaData();
+          showToast(
+            'success',
+            'Perubahan Berhasil Disimpan',
+            `Data pengajuan ${res.data.data?.nomor_resi || editingSurat.nomor_resi} berhasil diperbarui.`
+          );
+        } else {
+          showToast('error', 'Gagal Memperbarui Surat', res.data?.message || 'Respons server tidak valid.');
+        }
+      } else {
+        const res = await api.post('/surats', {
+          surat_type_id: typeId,
+          keperluan: keperluan.trim(),
+          file_lampiran: payloadLampiran,
+        });
+        if (res.data && res.data.success) {
+          setSubmitSuccess(true);
+          setSubmitSuccessModal({
+            isEdit: false,
+            surat: res.data.data,
+          });
+          setKeperluan('');
+          setLampiranList([]);
+          await fetchWargaData();
+          showToast(
+            'success',
+            'Permohonan Berhasil Dikirim',
+            `Surat permohonan (${res.data.data?.nomor_resi || ''}) berhasil diajukan dan masuk antrean RT.`
+          );
+        } else {
+          showToast('error', 'Gagal Mengirim Permohonan', res.data?.message || 'Respons server tidak valid.');
+        }
       }
     } catch (err: any) {
-      alert('Gagal mengajukan surat: ' + (err.response?.data?.message || 'Error'));
+      showToast(
+        'error',
+        'Gagal Memproses Surat',
+        err.response?.data?.message || 'Terjadi kesalahan sistem saat memproses permohonan surat.'
+      );
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteSurat = async () => {
+    if (!suratToDelete || isDeleting) return;
+    setIsDeleting(true);
+    const targetNama = suratToDelete.surat_type?.nama_surat || 'Surat Permohonan';
+    const targetResi = suratToDelete.nomor_resi;
+    try {
+      const res = await api.delete(`/surats/${suratToDelete.id}`);
+      if (res.data?.success) {
+        setIsDeleteConfirmOpen(false);
+        setSuratToDelete(null);
+        await fetchWargaData();
+        showToast(
+          'success',
+          'Permohonan Berhasil Dibatalkan',
+          `Pengajuan "${targetNama}" (${targetResi}) telah berhasil dihapus dari antrean verifikasi.`
+        );
+      } else {
+        showToast('error', 'Gagal Membatalkan Permohonan', res.data?.message || 'Gagal membatalkan permohonan surat.');
+      }
+    } catch (err: any) {
+      showToast(
+        'error',
+        'Gagal Membatalkan Permohonan',
+        err.response?.data?.message || 'Terjadi kesalahan sistem saat membatalkan permohonan.'
+      );
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -271,7 +508,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   });
 
   // Filtered lists
-  const pendingSurats = surats.filter(s => ['pending_rt', 'pending_rw', 'processed_sekdes'].includes(s.status));
+  const pendingSurats = surats.filter(s => ['pending_rt', 'approved_rt', 'pending_rw', 'processed_sekdes'].includes(s.status));
   const completedSurats = surats.filter(s => s.status === 'completed');
   const searchedHistory = surats.filter(s => {
     const matchKeyword = s.nomor_resi.toLowerCase().includes(historySearch.toLowerCase()) ||
@@ -281,206 +518,529 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     if (!matchKeyword) return false;
 
     if (historyStatusFilter === 'selesai') return s.status === 'completed';
-    if (historyStatusFilter === 'proses') return ['pending_rt', 'pending_rw', 'processed_sekdes'].includes(s.status);
+    if (historyStatusFilter === 'proses') return ['pending_rt', 'approved_rt', 'pending_rw', 'processed_sekdes'].includes(s.status);
     if (historyStatusFilter === 'ditolak') return s.status === 'rejected';
     return true;
   });
 
-  // Form Pengajuan Surat
-  if (activeSubmenu === 'ajukan_surat') {
-    return (
-      <div className="space-y-8 animate-fade-in font-sans">
-        <div>
-          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Katalog & Form Pengajuan Surat Digital
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Pilih surat yang Anda butuhkan (KTP, KK, SKTM, Domisili, SKU, Akta, dll) dan isi keperluan pengurusan online tanpa perlu antre fisik.
-          </p>
-        </div>
+  // Submenu router renderer
+  const renderSubmenuContent = () => {
+    // Form & Katalog Pengajuan Surat
+    if (activeSubmenu === 'ajukan_surat') {
+      const isFormMode = Boolean(routeSuratTypeId || editingSurat);
+      const currentType = types.find(t => t.id === (editingSurat ? editingSurat.surat_type_id : (routeSuratTypeId || selectedTypeId))) || types[0];
 
-        {submitSuccess && (
-          <div className="p-6 rounded-3xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-2 animate-scale-up">
-            <div className="flex items-center gap-2 font-black text-base">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-              <span>Pengajuan Surat Berhasil Dikirim!</span>
+      if (isFormMode) {
+        return (
+          <div className="max-w-3xl mx-auto space-y-6 animate-fade-in font-sans">
+            {/* Top Navigation */}
+            <div className="flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => {
+                  if (editingSurat) {
+                    navigate('/dashboard/status-surat');
+                  } else {
+                    navigate('/dashboard/ajukan');
+                  }
+                }}
+                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 transition-all cursor-pointer shadow-2xs press-down"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Kembali ke {editingSurat ? 'Status Surat' : 'Katalog Surat'}</span>
+              </button>
+
+              <span className="text-[11px] font-mono text-slate-400">
+                Layanan Surat Online Desa Doko
+              </span>
             </div>
-            <p className="text-xs text-emerald-800 leading-relaxed">
-              Permohonan surat Anda telah otomatis masuk ke antrean verifikasi <strong>Ketua RT 01</strong>. Anda dapat memantau progresnya di menu <strong>Status Surat</strong>.
-            </p>
-            <button
-              onClick={() => setSubmitSuccess(false)}
-              className="mt-2 px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-xs"
-            >
-              Ajukan Surat Lain
-            </button>
-          </div>
-        )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left: Surat Type Cards with Category Tabs & Search */}
-          <div className="lg:col-span-7 space-y-4">
-            
-            {/* Header and Search */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="text-xs font-black text-slate-400 uppercase tracking-wider">
-                  1. Pilih Jenis Surat ({filteredTypes.length} Tersedia)
+            {/* Edit Mode Alert Banner */}
+            {editingSurat && (
+              <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 text-amber-900 flex items-start gap-3.5 shadow-2xs">
+                <div className="w-9 h-9 rounded-2xl bg-amber-200/80 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+                <div className="text-xs space-y-1">
+                  <div className="font-black text-sm text-amber-950">
+                    Mode Edit Pengajuan (No. Resi: {editingSurat.nomor_resi})
+                  </div>
+                  <p className="text-amber-800 leading-relaxed">
+                    Data lama Anda telah otomatis terisi pada formulir ini. Silakan perbaiki data yang salah atau ubah/hapus foto dokumen yang kurang jernih, lalu klik <strong>Simpan Perubahan Surat</strong>.
+                  </p>
                 </div>
               </div>
+            )}
 
-              {/* Search Box */}
-              <div className="relative">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Ketik nama surat: KTP, KK, SKTM, Domisili, Nikah, Pindah, Usaha..."
-                  value={suratSearch}
-                  onChange={(e) => setSuratSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-white rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs"
-                />
-              </div>
-
-              {/* Category Filter Pills */}
-              <div className="flex flex-wrap gap-1.5 text-xs">
-                {[
-                  { id: 'Semua', label: 'Semua (14)' },
-                  { id: 'Kependudukan', label: '🪪 KTP & KK' },
-                  { id: 'Sosial', label: '🤝 SKTM & Bansos' },
-                  { id: 'Keluarga', label: '💍 Nikah & Akta' },
-                  { id: 'Usaha', label: '🏪 Usaha (SKU)' },
-                  { id: 'Hukum', label: '👮 SKCK & Izin' },
-                ].map((c) => (
+            {/* Success Banner */}
+            {submitSuccess && (
+              <div className="p-6 rounded-3xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3 animate-scale-up shadow-xs">
+                <div className="flex items-center gap-2 font-black text-base">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                  <span>{editingSurat ? 'Perubahan Pengajuan Berhasil Disimpan!' : 'Pengajuan Surat Berhasil Dikirim!'}</span>
+                </div>
+                <p className="text-xs text-emerald-800 leading-relaxed">
+                  {editingSurat 
+                    ? 'Data permohonan surat Anda telah berhasil diperbarui dan dialirkan ke antrean verifikasi Ketua RT 01.'
+                    : 'Permohonan surat Anda telah otomatis masuk ke antrean verifikasi Ketua RT 01. Anda dapat memantau progresnya di menu Status Surat.'}
+                </p>
+                <div className="flex flex-wrap gap-2 pt-1">
                   <button
-                    key={c.id}
                     type="button"
-                    onClick={() => setSelectedCategory(c.id as any)}
-                    className={`px-3 py-1.5 rounded-full text-[11px] font-extrabold transition-all press-down ${
-                      selectedCategory === c.id 
-                        ? 'bg-slate-900 text-white shadow-xs' 
-                        : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-                    }`}
+                    onClick={() => navigate('/dashboard/status-surat')}
+                    className="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-xs hover:bg-emerald-800 cursor-pointer"
                   >
-                    {c.label}
+                    Pantau di Status Surat ➔
                   </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Letter Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-h-[560px] overflow-y-auto pr-1">
-              {filteredTypes.length === 0 ? (
-                <div className="col-span-2 p-8 text-center bg-white rounded-3xl border border-slate-200 text-xs text-slate-400">
-                  Tidak ada jenis surat yang cocok dengan kata kunci "{suratSearch}".
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmitSuccess(false);
+                      navigate('/dashboard/ajukan');
+                    }}
+                    className="px-4 py-2 rounded-xl bg-white text-emerald-900 border border-emerald-300 font-bold text-xs shadow-2xs hover:bg-emerald-50 cursor-pointer"
+                  >
+                    Ajukan Surat Lain
+                  </button>
                 </div>
-              ) : (
-                filteredTypes.map((t) => {
-                  const isSelected = selectedTypeId === t.id;
-                  return (
-                    <div
-                      key={t.id}
-                      onClick={() => setSelectedTypeId(t.id)}
-                      className={`p-4 rounded-3xl border cursor-pointer transition-all duration-200 space-y-2.5 flex flex-col justify-between ${
-                        isSelected 
-                          ? 'bg-emerald-50/80 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' 
-                          : 'bg-white border-slate-200/80 shadow-xs hover:border-emerald-300'
-                      }`}
-                    >
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className={`w-8 h-8 rounded-2xl flex items-center justify-center font-bold text-xs ${
-                            isSelected ? 'bg-emerald-600 text-white shadow-xs' : 'bg-emerald-50 text-emerald-700'
-                          }`}>
-                            <FileText className="w-4 h-4" />
-                          </div>
-                          <span className="text-[10px] font-black text-emerald-800 bg-emerald-100/70 px-2 py-0.5 rounded-full">
-                            {t.kode_surat}
-                          </span>
-                        </div>
+              </div>
+            )}
 
-                        <h4 className="font-black text-xs text-slate-900 leading-snug">
-                          {t.nama_surat}
-                        </h4>
+            {/* Surat Type Header Info */}
+            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-emerald-100/70 text-emerald-800 flex items-center justify-center font-black">
+                    <FileText className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-black text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        {currentType.kode_surat}
+                      </span>
+                      <span className="text-xs font-mono text-slate-400">Masa Berlaku: {currentType.masa_berlaku_hari} Hari</span>
+                    </div>
+                    <h2 className="text-base sm:text-lg font-black text-slate-900 mt-0.5">
+                      {currentType.nama_surat}
+                    </h2>
+                  </div>
+                </div>
+              </div>
 
-                        <div className="text-[10px] text-slate-500 font-medium space-y-0.5">
-                          <div className="text-slate-400 font-bold">Syarat:</div>
-                          <p className="line-clamp-2 text-slate-600">
-                            {t.persyaratan_json?.join(' • ') || 'KTP & KK Asli'}
-                          </p>
-                        </div>
+              {/* Requirements summary checklist */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1.5">
+                <div className="font-black text-slate-700 flex items-center gap-1.5">
+                  <span>Persyaratan Berkas Resmi:</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {currentType.persyaratan_json && currentType.persyaratan_json.length > 0 ? (
+                    currentType.persyaratan_json.map((syarat, sIdx) => (
+                      <span key={sIdx} className="px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-[11px] font-medium text-slate-700 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span>{syarat}</span>
+                      </span>
+                    ))
+                  ) : (
+                    <span className="text-slate-500">KTP & Kartu Keluarga</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Submission Form */}
+              <form onSubmit={handleCreateOrUpdateSurat} className="space-y-4 pt-2">
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700">Pemohon (Sesuai Akun Anda):</label>
+                  <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-600">
+                    <div className="font-black text-slate-900">{p?.nama_lengkap || user?.name}</div>
+                    <div className="text-[11px] font-mono text-slate-500 mt-0.5">NIK: {p?.nik || '3506041505840001'}</div>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-slate-700">Keperluan / Keterangan Pengajuan:</label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={keperluan}
+                    onChange={(e) => setKeperluan(e.target.value)}
+                    placeholder="Contoh: Persyaratan pembuatan KTP baru karena rusak/hilang di Kantor Kecamatan Ngasem..."
+                    className="w-full p-3.5 rounded-2xl bg-white border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs"
+                  />
+                </div>
+
+                {/* Mobile-Friendly Lampiran Dokumen Section */}
+                <div className="space-y-3 pt-3 border-t border-slate-100">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                      <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Lampiran Dokumen Identitas & Berkas:</span>
+                    </label>
+                    <span className="text-[10px] text-emerald-800 font-extrabold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                      Opsional / Tidak Wajib
+                    </span>
+                  </div>
+
+                  {/* Category Pill Selector */}
+                  <div className="space-y-1">
+                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                      Pilih Kategori Dokumen yang Mau Ditambahkan:
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        'Foto KTP',
+                        'Kartu Keluarga (KK)',
+                        'Akta / Surat Nikah',
+                        'Surat Pengantar RT',
+                        'Foto Usaha / Lokasi',
+                        'Berkas Pendukung',
+                      ].map((cat) => (
+                        <button
+                          key={cat}
+                          type="button"
+                          onClick={() => setLampiranCategory(cat)}
+                          className={`px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+                            lampiranCategory === cat
+                              ? 'bg-emerald-600 text-white shadow-2xs'
+                              : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
+                          }`}
+                        >
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Compact List of Attached Documents (Mobile Friendly) */}
+                  {lampiranList.length > 0 && (
+                    <div className="space-y-2 pt-1">
+                      <div className="flex items-center justify-between text-[11px] font-black text-slate-700">
+                        <span>Dokumen Terlampir ({lampiranList.length}):</span>
+                        <span className="text-[10px] text-emerald-700 font-medium">Klik foto untuk perbesar pratinjau</span>
                       </div>
 
-                      <div className="pt-2 border-t border-slate-100/80 flex items-center justify-between text-[10px]">
-                        <span className="text-slate-400 font-medium">Masa: {t.masa_berlaku_hari} Hari</span>
-                        <span className={`font-black ${isSelected ? 'text-emerald-700 font-bold' : 'text-slate-500'}`}>
-                          {isSelected ? '✓ Dipilih' : 'Pilih Surat'}
-                        </span>
+                      <div className="space-y-2">
+                        {lampiranList.map((item, idx) => (
+                          <div
+                            key={item.id}
+                            className="p-2.5 rounded-2xl bg-slate-50 border border-slate-200/90 hover:border-emerald-300 flex items-center justify-between gap-3 transition-all animate-scale-up"
+                          >
+                            {/* Thumbnail & Label */}
+                            <div
+                              onClick={() => {
+                                setPreviewGallery(lampiranList.map(l => ({ url: l.url, nama: l.nama })));
+                                setGalleryIndex(idx);
+                              }}
+                              className="flex items-center gap-2.5 min-w-0 cursor-pointer group"
+                              title="Klik untuk melihat foto layar penuh"
+                            >
+                              <div className="relative w-11 h-11 rounded-xl bg-slate-900 overflow-hidden shrink-0 border border-slate-200 shadow-2xs group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
+                                <img
+                                  src={item.url}
+                                  alt={item.nama}
+                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
+                                />
+                                <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                  <Eye className="w-4 h-4 text-white drop-shadow" />
+                                </div>
+                              </div>
+                              <div className="min-w-0">
+                                <div className="text-xs font-black text-slate-900 truncate group-hover:text-emerald-700 transition-colors">
+                                  {item.nama}
+                                </div>
+                                <div className="text-[10px] text-emerald-700 font-medium flex items-center gap-1 mt-0.5">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                  <span>Klik foto untuk preview</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Action Buttons: Ubah Foto & Hapus Foto */}
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setReplacingPhotoId(item.id);
+                                  setCameraModalTitle(`Ganti Foto ${item.nama}`);
+                                  setCameraModalInitialMode('upload');
+                                  setIsCameraModalOpen(true);
+                                }}
+                                className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-amber-700 border border-amber-200 font-bold text-[11px] transition-all flex items-center gap-1 shadow-2xs cursor-pointer press-down"
+                                title="Ganti foto bila buram atau salah pilih"
+                              >
+                                <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
+                                <span className="hidden sm:inline">Ubah Foto</span>
+                                <span className="sm:hidden">Ubah</span>
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setLampiranList(prev => prev.filter(l => l.id !== item.id));
+                                }}
+                                className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 font-bold text-[11px] transition-all flex items-center gap-1 shadow-2xs cursor-pointer press-down"
+                                title="Hapus foto ini"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                <span className="hidden sm:inline">Hapus</span>
+                              </button>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  );
-                })
-              )}
+                  )}
+
+                  {/* Trigger Buttons: Kamera HP or File Upload */}
+                  <div className="grid grid-cols-2 gap-2.5 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setReplacingPhotoId(null);
+                        setCameraModalTitle(`Ambil ${lampiranCategory}`);
+                        setCameraModalInitialMode('camera');
+                        setIsCameraModalOpen(true);
+                      }}
+                      className="p-3 rounded-2xl bg-emerald-50/80 hover:bg-emerald-100/80 border border-emerald-300 text-emerald-900 transition-all flex flex-col items-center justify-center gap-1 text-center cursor-pointer shadow-2xs group press-down"
+                    >
+                      <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
+                        <Camera className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-black">
+                          {lampiranList.length > 0 ? '+ Foto Kamera' : 'Buka Kamera HP'}
+                        </div>
+                        <div className="text-[10px] text-emerald-700">Jepret foto langsung</div>
+                      </div>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setReplacingPhotoId(null);
+                        setCameraModalTitle(`Unggah ${lampiranCategory}`);
+                        setCameraModalInitialMode('upload');
+                        setIsCameraModalOpen(true);
+                      }}
+                      className="p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 transition-all flex flex-col items-center justify-center gap-1 text-center cursor-pointer shadow-2xs group press-down"
+                    >
+                      <div className="w-8 h-8 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
+                        <Upload className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-black">
+                          {lampiranList.length > 0 ? '+ Unggah Berkas' : 'Unggah dari Berkas'}
+                        </div>
+                        <div className="text-[10px] text-slate-500">Galeri foto / file</div>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/60 text-[11px] text-emerald-900 space-y-1">
+                  <div className="font-extrabold flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-emerald-700" />
+                    <span>Jaminan Surat Sah & Bebas Biaya</span>
+                  </div>
+                  <p className="text-slate-600 leading-relaxed">
+                    Surat diterbitkan dengan TTD elektronik & QR stempel sah resmi Pemdes Doko (Rp 0,-).
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 pt-2">
+                  {editingSurat && (
+                    <button
+                      type="button"
+                      onClick={() => navigate('/dashboard/status-surat')}
+                      className="py-3 px-5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition-all cursor-pointer"
+                    >
+                      Batal
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`flex-1 py-3.5 px-4 rounded-2xl text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 ${
+                      isSubmitting 
+                        ? 'bg-emerald-800/80 cursor-not-allowed opacity-80' 
+                        : 'bg-emerald-600 hover:bg-emerald-700 hover-glow cursor-pointer press-down'
+                    }`}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>{editingSurat ? 'Sedang Menyimpan Perubahan...' : 'Sedang Mengirim Permohonan...'}</span>
+                      </>
+                    ) : editingSurat ? (
+                      'Simpan Perubahan Surat'
+                    ) : (
+                      'Kirim Permohonan Surat ➔'
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        );
+      }
+
+      // Catalog Full-Width View with Pagination
+      const totalPages = Math.ceil(filteredTypes.length / ITEMS_PER_PAGE) || 1;
+      const paginatedTypes = filteredTypes.slice((catalogPage - 1) * ITEMS_PER_PAGE, catalogPage * ITEMS_PER_PAGE);
+
+      return (
+        <div className="space-y-6 animate-fade-in font-sans">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                Katalog Layanan Surat Digital
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-500">
+                Pilih jenis surat resmi yang Anda butuhkan (KTP, KK, SKTM, Domisili, SKU, Akta, dll) untuk pengurusan cepat online.
+              </p>
+            </div>
+            <div className="relative w-full md:w-80 shrink-0">
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Cari jenis surat: KTP, KK, SKTM..."
+                value={suratSearch}
+                onChange={(e) => setSuratSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-white rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs"
+              />
             </div>
           </div>
 
-          {/* Right: Submission Form */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="text-xs font-black text-slate-400 uppercase tracking-wider">
-              2. Lengkapi Data & Keperluan
-            </div>
-
-            <form onSubmit={handleCreateSurat} className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700">Surat yang Dipilih:</label>
-                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 font-extrabold text-xs text-emerald-900 flex items-center gap-2">
-                  <FileCheck2 className="w-4 h-4 text-emerald-700 shrink-0" />
-                  <span>{types.find(t => t.id === selectedTypeId)?.nama_surat || 'Pilih jenis surat di sebelah kiri'}</span>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700">Pemohon (Sesuai Akun):</label>
-                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-600">
-                  <div className="font-black text-slate-900">{p?.nama_lengkap || user?.name}</div>
-                  <div className="text-[11px] font-mono text-slate-500 mt-0.5">NIK: {p?.nik || '3506041505840001'}</div>
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700">Keperluan / Keterangan Tambahan:</label>
-                <textarea
-                  required
-                  rows={4}
-                  value={keperluan}
-                  onChange={(e) => setKeperluan(e.target.value)}
-                  placeholder="Contoh: Persyaratan pembuatan KTP baru karena rusak/hilang di Kantor Kecamatan Ngasem..."
-                  className="w-full p-3.5 rounded-2xl bg-white border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs"
-                />
-              </div>
-
-              <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/60 text-[11px] text-emerald-900 space-y-1">
-                <div className="font-extrabold flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                  <span>Jaminan Surat Sah & Bebas Biaya</span>
-                </div>
-                <p className="text-slate-600 leading-relaxed">
-                  Surat diterbitkan dengan TTD elektronik & QR stempel sah resmi Pemdes Doko (Rp 0,-).
-                </p>
-              </div>
-
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap gap-1.5 text-xs">
+            {[
+              { id: 'Semua', label: `Semua (${types.length})` },
+              { id: 'Kependudukan', label: '🪪 KTP & KK' },
+              { id: 'Sosial', label: '🤝 SKTM & Bansos' },
+              { id: 'Keluarga', label: '💍 Nikah & Akta' },
+              { id: 'Usaha', label: '🏪 Usaha (SKU)' },
+              { id: 'Hukum', label: '👮 SKCK & Izin' },
+            ].map((c) => (
               <button
-                type="submit"
-                disabled={isSubmitting || !selectedTypeId}
-                className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition-all press-down disabled:opacity-50 flex items-center justify-center gap-2 hover-glow"
+                key={c.id}
+                type="button"
+                onClick={() => setSelectedCategory(c.id as any)}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold transition-all cursor-pointer press-down ${
+                  selectedCategory === c.id 
+                    ? 'bg-slate-900 text-white shadow-xs' 
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                }`}
               >
-                {isSubmitting ? 'Mengirim Pengajuan...' : 'Kirim Permohonan Surat ➔'}
+                {c.label}
               </button>
-            </form>
+            ))}
           </div>
+
+          {/* Cards Grid: 3 columns on desktop, full-width stretching down */}
+          {paginatedTypes.length === 0 ? (
+            <div className="p-12 text-center bg-white rounded-3xl border border-slate-200 text-xs text-slate-400">
+              Tidak ada jenis surat yang cocok dengan kata kunci "{suratSearch}".
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {paginatedTypes.map((t) => (
+                <div
+                  key={t.id}
+                  className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-2xs hover:border-emerald-400 hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-4 group"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-2xs group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                        <FileText className="w-5 h-5" />
+                      </div>
+                      <span className="text-[10px] font-black text-emerald-800 bg-emerald-100/70 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        {t.kode_surat}
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="font-black text-sm text-slate-900 group-hover:text-emerald-800 transition-colors leading-snug">
+                        {t.nama_surat}
+                      </h3>
+                      <div className="text-[11px] text-slate-500 mt-2 space-y-1">
+                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Syarat Berkas:</div>
+                        <p className="line-clamp-2 text-slate-600 leading-relaxed">
+                          {t.persyaratan_json?.join(' • ') || 'KTP & KK Asli'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-100 space-y-3">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="text-slate-400 font-medium">Masa Berlaku:</span>
+                      <span className="font-extrabold text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md">
+                        {t.masa_berlaku_hari} Hari
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => navigate(`/dashboard/ajukan/${t.id}`)}
+                      className="w-full py-2.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-all shadow-xs press-down flex items-center justify-center gap-2 cursor-pointer group/btn"
+                    >
+                      <span>Pengajuan</span>
+                      <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Desktop & Mobile Clean Pagination */}
+          {totalPages > 1 && (
+            <div className="p-4 bg-white rounded-3xl border border-slate-200/90 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="text-slate-500 font-medium text-center sm:text-left">
+                Menampilkan <span className="font-bold text-slate-800">{(catalogPage - 1) * ITEMS_PER_PAGE + 1}</span> - <span className="font-bold text-slate-800">{Math.min(catalogPage * ITEMS_PER_PAGE, filteredTypes.length)}</span> dari <span className="font-bold text-slate-800">{filteredTypes.length}</span> jenis surat
+              </div>
+
+              <div className="flex items-center justify-center gap-1.5">
+                <button
+                  type="button"
+                  disabled={catalogPage <= 1}
+                  onClick={() => setCatalogPage(p => Math.max(1, p - 1))}
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer flex items-center gap-1"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Sebelumnya</span>
+                </button>
+
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    type="button"
+                    onClick={() => setCatalogPage(pageNum)}
+                    className={`w-8 h-8 rounded-xl font-black text-xs transition-all cursor-pointer ${
+                      catalogPage === pageNum
+                        ? 'bg-emerald-600 text-white shadow-xs'
+                        : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+
+                <button
+                  type="button"
+                  disabled={catalogPage >= totalPages}
+                  onClick={() => setCatalogPage(p => Math.min(totalPages, p + 1))}
+                  className="px-3 py-1.5 rounded-xl border border-slate-200 font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent cursor-pointer flex items-center gap-1"
+                >
+                  <span className="hidden sm:inline">Berikutnya</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      </div>
-    );
-  }
+      );
+    }
 
   // Status Surat Proses
   if (activeSubmenu === 'status_surat') {
@@ -516,7 +1076,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     <p className="text-xs text-slate-600 mt-0.5">Keperluan: {s.keperluan}</p>
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-900 self-start sm:self-auto">
-                    {s.status === 'processed_sekdes' || s.status === 'pending_rw' ? 'Tahap 2: Verifikasi & Legalisasi Kepala Desa' :
+                    {['processed_sekdes', 'approved_rt', 'pending_rw'].includes(s.status) ? 'Tahap 2: Verifikasi & Legalisasi Kepala Desa' :
                      'Tahap 1: Verifikasi Ketua RT 01'}
                   </span>
                 </div>
@@ -531,7 +1091,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   </div>
                   <div className={`p-3 rounded-2xl border font-bold flex items-center justify-center gap-2 ${
                     s.status === 'completed' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' :
-                    ['processed_sekdes', 'pending_rw'].includes(s.status) ? 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse' : 'bg-slate-50 border-slate-200 text-slate-400'
+                    ['processed_sekdes', 'approved_rt', 'pending_rw'].includes(s.status) ? 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse' : 'bg-slate-50 border-slate-200 text-slate-400'
                   }`}>
                     <span>2. Legalisasi Kepala Desa / Sekdes</span>
                     {s.status === 'completed' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
@@ -542,29 +1102,71 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs">
                   <div className="text-slate-600 font-medium">
                     {s.status === 'pending_rt' && '⏳ Berkas telah diajukan dan sedang menunggu verifikasi dari Ketua RT 01.'}
-                    {(s.status === 'processed_sekdes' || s.status === 'pending_rw') && '✅ Verifikasi RT 01 selesai. Saat ini berkas ada di meja Kepala Desa / Sekdes untuk penandatanganan QR sah.'}
+                    {['processed_sekdes', 'approved_rt', 'pending_rw'].includes(s.status) && '✅ Verifikasi RT 01 selesai. Saat ini berkas ada di meja Kepala Desa / Sekdes untuk penandatanganan QR sah.'}
                     {s.status === 'completed' && '🎉 Surat telah selesai diverifikasi & diterbitkan secara resmi oleh Kepala Desa!'}
                   </div>
-                  <button
-                    onClick={() => setSelectedTrackingSurat(s)}
-                    className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                  >
-                    <span>Lacak Alur & Catatan Petugas</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    {parseLampiranDokumen(s.file_lampiran).length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const docs = parseLampiranDokumen(s.file_lampiran);
+                          setPreviewGallery(docs);
+                          setGalleryIndex(0);
+                        }}
+                        className="px-3.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                        title="Lihat Foto Lampiran Dokumen"
+                      >
+                        <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Foto Lampiran ({parseLampiranDokumen(s.file_lampiran).length})</span>
+                      </button>
+                    )}
+
+                    {s.status === 'pending_rt' && (
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            showToast(
+                              'info',
+                              'Mode Edit Pengajuan',
+                              `Membuka formulir perbaikan data untuk ${s.surat_type?.nama_surat || 'surat'} (${s.nomor_resi}).`
+                            );
+                            navigate(`/dashboard/ajukan/${s.surat_type_id}?editSuratId=${s.id}`);
+                          }}
+                          className="px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-extrabold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs press-down"
+                          title="Ubah data pengajuan atau perbaiki foto lampiran"
+                        >
+                          <Edit3 className="w-3.5 h-3.5 text-amber-700" />
+                          <span>Ubah Data</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSuratToDelete(s);
+                            setIsDeleteConfirmOpen(true);
+                          }}
+                          className="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-extrabold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs press-down"
+                          title="Batalkan permohonan surat ini"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Batalkan</span>
+                        </button>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => setSelectedTrackingSurat(s)}
+                      className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    >
+                      <span>Lacak Alur & Catatan Petugas</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-        )}
-
-        {selectedTrackingSurat && (
-          <SuratTrackingModal
-            surat={selectedTrackingSurat}
-            desa={desa}
-            onClose={() => setSelectedTrackingSurat(null)}
-            onPrint={(suratToPrint) => setPrintSurat(suratToPrint)}
-          />
         )}
       </div>
     );
@@ -626,23 +1228,6 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               </div>
             ))}
           </div>
-        )}
-
-        {printSurat && (
-          <CetakSuratModal 
-            surat={printSurat} 
-            desa={desa} 
-            onClose={() => setPrintSurat(null)} 
-          />
-        )}
-
-        {selectedTrackingSurat && (
-          <SuratTrackingModal
-            surat={selectedTrackingSurat}
-            desa={desa}
-            onClose={() => setSelectedTrackingSurat(null)}
-            onPrint={(suratToPrint) => setPrintSurat(suratToPrint)}
-          />
         )}
       </div>
     );
@@ -721,15 +1306,15 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         <div className="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-xs">
           {/* Desktop Table View */}
           <div className="hidden sm:block overflow-x-auto">
-            <table className="w-full text-left text-xs">
+            <table className="w-full min-w-[840px] text-left text-xs">
               <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                 <tr>
-                  <th className="p-4">No. Resi</th>
-                  <th className="p-4">Jenis Surat</th>
-                  <th className="p-4">Keperluan & Catatan Petugas</th>
-                  <th className="p-4">Tanggal</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4 text-right">Aksi & Pelacakan</th>
+                  <th className="p-4 whitespace-nowrap">No. Resi</th>
+                  <th className="p-4 whitespace-nowrap">Jenis Surat</th>
+                  <th className="p-4 min-w-[220px]">Keperluan & Catatan Petugas</th>
+                  <th className="p-4 whitespace-nowrap">Tanggal</th>
+                  <th className="p-4 whitespace-nowrap">Status</th>
+                  <th className="p-4 text-right whitespace-nowrap">Aksi & Pelacakan</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium">
@@ -742,8 +1327,8 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                 ) : (
                   searchedHistory.map((s) => (
                     <tr key={s.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="p-4 font-mono font-bold text-slate-800">{s.nomor_resi}</td>
-                      <td className="p-4 font-bold text-slate-900">{s.surat_type?.nama_surat}</td>
+                      <td className="p-4 font-mono font-bold text-slate-800 whitespace-nowrap">{s.nomor_resi}</td>
+                      <td className="p-4 font-bold text-slate-900 whitespace-nowrap">{s.surat_type?.nama_surat}</td>
                       <td className="p-4 text-slate-600 max-w-sm">
                         <div>{s.keperluan}</div>
                         {s.status === 'rejected' && (
@@ -755,8 +1340,8 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                           </div>
                         )}
                       </td>
-                      <td className="p-4 text-slate-400">{new Date(s.created_at).toLocaleDateString('id-ID')}</td>
-                      <td className="p-4">
+                      <td className="p-4 text-slate-400 whitespace-nowrap">{new Date(s.created_at).toLocaleDateString('id-ID')}</td>
+                      <td className="p-4 whitespace-nowrap">
                         <span className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
                           s.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
                           s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-100 text-amber-800'
@@ -764,38 +1349,55 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                           {s.status === 'completed' ? 'Diterima' : s.status === 'rejected' ? 'Ditolak' : 'Proses'}
                         </span>
                       </td>
-                      <td className="p-4 text-right">
-                        {s.status === 'completed' ? (
-                          <div className="flex items-center justify-end gap-1.5">
+                      <td className="p-4 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {parseLampiranDokumen(s.file_lampiran).length > 0 && (
                             <button
-                              onClick={() => setPrintSurat(s)}
-                              className="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-2xs cursor-pointer"
+                              type="button"
+                              onClick={() => {
+                                const docs = parseLampiranDokumen(s.file_lampiran);
+                                setPreviewGallery(docs);
+                                setGalleryIndex(0);
+                              }}
+                              className="px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
+                              title="Lihat Foto Lampiran Dokumen"
                             >
-                              Cetak
+                              <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                              <span className="hidden md:inline">Lampiran ({parseLampiranDokumen(s.file_lampiran).length})</span>
                             </button>
+                          )}
+                          {s.status === 'completed' ? (
+                            <>
+                              <button
+                                onClick={() => setPrintSurat(s)}
+                                className="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-2xs cursor-pointer"
+                              >
+                                Cetak
+                              </button>
+                              <button
+                                onClick={() => setSelectedTrackingSurat(s)}
+                                className="px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 cursor-pointer"
+                                title="Lacak Riwayat & Catatan"
+                              >
+                                Lacak
+                              </button>
+                            </>
+                          ) : s.status === 'rejected' ? (
                             <button
                               onClick={() => setSelectedTrackingSurat(s)}
-                              className="px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 cursor-pointer"
-                              title="Lacak Riwayat & Catatan"
+                              className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer"
                             >
-                              Lacak
+                              <span>Lihat Alasan Ditolak</span>
                             </button>
-                          </div>
-                        ) : s.status === 'rejected' ? (
-                          <button
-                            onClick={() => setSelectedTrackingSurat(s)}
-                            className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 ml-auto cursor-pointer"
-                          >
-                            <span>Lihat Alasan Ditolak</span>
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => setSelectedTrackingSurat(s)}
-                            className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 ml-auto cursor-pointer"
-                          >
-                            <span>Lacak Catatan RT/RW</span>
-                          </button>
-                        )}
+                          ) : (
+                            <button
+                              onClick={() => setSelectedTrackingSurat(s)}
+                              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer"
+                            >
+                              <span>Lacak Catatan RT/RW</span>
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -840,7 +1442,22 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   <div className="flex items-center justify-between pt-1 text-[11px]">
                     <span className="text-slate-400 font-medium">{new Date(s.created_at).toLocaleDateString('id-ID')}</span>
                     
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                      {parseLampiranDokumen(s.file_lampiran).length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const docs = parseLampiranDokumen(s.file_lampiran);
+                            setPreviewGallery(docs);
+                            setGalleryIndex(0);
+                          }}
+                          className="px-2.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-xs cursor-pointer flex items-center gap-1"
+                          title="Lihat Foto Lampiran"
+                        >
+                          <Paperclip className="w-3 h-3 text-emerald-600" />
+                          <span>Foto ({parseLampiranDokumen(s.file_lampiran).length})</span>
+                        </button>
+                      )}
                       {s.status === 'completed' && (
                         <button
                           onClick={() => setPrintSurat(s)}
@@ -866,23 +1483,6 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             )}
           </div>
         </div>
-
-        {printSurat && (
-          <CetakSuratModal 
-            surat={printSurat} 
-            desa={desa} 
-            onClose={() => setPrintSurat(null)} 
-          />
-        )}
-
-        {selectedTrackingSurat && (
-          <SuratTrackingModal
-            surat={selectedTrackingSurat}
-            desa={desa}
-            onClose={() => setSelectedTrackingSurat(null)}
-            onPrint={(suratToPrint) => setPrintSurat(suratToPrint)}
-          />
-        )}
       </div>
     );
   }
@@ -914,7 +1514,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     <div className="space-y-6 animate-fade-in font-sans">
       
       {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
         <MetricStatCard
           title="Total Surat Diajukan"
           value={`${surats.length} Surat`}
@@ -954,9 +1554,9 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
       </div>
 
       {/* Overview Chart & Calendar */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
-        <div className="lg:col-span-8 space-y-5">
+        <div className="xl:col-span-8 space-y-5">
           <AreaSplineChart
             title="Overview Efisiensi & Volume Surat"
             subtitle="Statistik Layanan Administrasi"
@@ -1032,7 +1632,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         </div>
 
         {/* Right 4 Cols: Personal Profile Card + Mini Calendar Widget */}
-        <div className="lg:col-span-4 space-y-5">
+        <div className="xl:col-span-4 space-y-5">
           {/* Quick Profile / Personal Info Card Matching Reference */}
           <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
@@ -1056,8 +1656,8 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   {p?.nama_lengkap?.charAt(0) || user?.name?.charAt(0) || 'W'}
                 </div>
               )}
-              <div className="min-w-0">
-                <h4 className="text-sm font-black text-slate-900 leading-tight truncate">
+              <div className="min-w-0 flex-1">
+                <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
                   {p?.nama_lengkap || user?.name}
                 </h4>
                 <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
@@ -1174,6 +1774,13 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           </table>
         </div>
       </div>
+    </div>
+  );
+};
+
+  return (
+    <>
+      {renderSubmenuContent()}
 
       {selectedTrackingSurat && (
         <SuratTrackingModal
@@ -1192,6 +1799,345 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         />
       )}
 
-    </div>
+      {/* Reusable Camera & Document Upload Modal */}
+      <CameraUploadModal
+        isOpen={isCameraModalOpen}
+        onClose={() => {
+          setIsCameraModalOpen(false);
+          setReplacingPhotoId(null);
+        }}
+        initialMode={cameraModalInitialMode}
+        onCapture={(base64, fileName) => {
+          if (replacingPhotoId) {
+            setLampiranList(prev => prev.map(item => 
+              item.id === replacingPhotoId ? { ...item, url: base64, nama: fileName || item.nama } : item
+            ));
+            setReplacingPhotoId(null);
+          } else {
+            const newDoc: FormLampiranItem = {
+              id: `doc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+              url: base64,
+              nama: fileName || `${lampiranCategory} #${lampiranList.length + 1}`,
+            };
+            setLampiranList(prev => [...prev, newDoc]);
+          }
+        }}
+        title={cameraModalTitle}
+        description="Posisikan dokumen KTP, KK, atau berkas persyaratan di dalam bingkai kamera agar data NIK dan teks terbaca jelas."
+        guideType="ktp"
+      />
+
+      {/* Success Submission Modal - Portaled, Auto-Centered, Highest Z-Index, No Blur */}
+      {submitSuccessModal && createPortal(
+        <div 
+          className="fixed inset-0 z-[999999] bg-slate-950/75 flex items-center justify-center p-4 animate-fade-in font-sans overflow-y-auto select-none"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSubmitSuccessModal(null);
+            }
+          }}
+        >
+          <div 
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-5 shadow-2xl border border-slate-100 animate-scale-up my-auto max-h-[90vh] overflow-y-auto text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Celebration Icon */}
+            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm ring-8 ring-emerald-50">
+              <CheckCircle2 className="w-9 h-9" />
+            </div>
+
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+                {submitSuccessModal.isEdit ? 'Pembaruan Berhasil' : 'Pengajuan Berhasil Terkirim'}
+              </span>
+              <h3 className="text-xl font-black text-slate-900 pt-1">
+                {submitSuccessModal.isEdit 
+                  ? 'Perubahan Berkas Berhasil Disimpan!' 
+                  : 'Permohonan Surat Siap Diproses!'}
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed max-w-xs mx-auto">
+                {submitSuccessModal.isEdit
+                  ? 'Data revisi surat Anda telah diperbarui dan dialirkan kembali ke antrean verifikasi Ketua RT.'
+                  : 'Permohonan surat Anda telah otomatis masuk ke sistem desa dan tercatat dalam antrean verifikasi Ketua RT 01.'}
+              </p>
+            </div>
+
+            {/* Resi & Letter Details Box */}
+            {submitSuccessModal.surat && (
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left space-y-3">
+                <div>
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Nomor Resi Pelacakan
+                  </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-sm font-mono font-black text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-xl">
+                      {submitSuccessModal.surat.nomor_resi}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText(submitSuccessModal.surat?.nomor_resi || '');
+                        setCopiedResi(true);
+                        setTimeout(() => setCopiedResi(false), 2000);
+                      }}
+                      className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs"
+                    >
+                      {copiedResi ? (
+                        <>
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Tersalin</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Salin Resi</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-200/80 pt-2.5">
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                    Jenis Surat
+                  </div>
+                  <div className="text-xs font-black text-slate-900 mt-0.5">
+                    {submitSuccessModal.surat.surat_type?.nama_surat || 'Surat Permohonan'}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-bold">
+                  <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                  <span>Tahap 1: Menunggu Verifikasi Ketua RT 01</span>
+                </div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="space-y-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitSuccessModal(null);
+                  navigate('/dashboard/status-surat');
+                }}
+                className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer hover-glow press-down"
+              >
+                <span>Pantau di Status Surat</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setSubmitSuccessModal(null);
+                  navigate('/dashboard/ajukan');
+                }}
+                className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-600 font-bold text-xs transition-colors border border-slate-200 cursor-pointer"
+              >
+                Ajukan Surat Lainnya
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Delete / Cancel Confirmation Modal - Portaled, Auto-Centered, Highest Z-Index, No Blur */}
+      {isDeleteConfirmOpen && suratToDelete && createPortal(
+        <div 
+          className="fixed inset-0 z-[999999] bg-slate-950/75 flex items-center justify-center p-4 animate-fade-in font-sans overflow-y-auto select-none"
+          onClick={(e) => {
+            if (e.target === e.currentTarget && !isDeleting) {
+              setIsDeleteConfirmOpen(false);
+              setSuratToDelete(null);
+            }
+          }}
+        >
+          <div 
+            className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl border border-slate-100 animate-scale-up my-auto max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mx-auto shadow-xs">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <div className="text-center space-y-1.5">
+              <h3 className="text-base font-black text-slate-900">Batalkan Permohonan Surat?</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Apakah Anda yakin ingin membatalkan pengajuan <strong>{suratToDelete.surat_type?.nama_surat}</strong> (No. Resi: <span className="font-mono font-bold text-slate-800">{suratToDelete.nomor_resi}</span>)? Permohonan ini akan dihapus permanen dari antrean verifikasi Ketua RT.
+              </p>
+            </div>
+            <div className="flex items-center gap-3 pt-2">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => {
+                  if (isDeleting) return;
+                  setIsDeleteConfirmOpen(false);
+                  setSuratToDelete(null);
+                }}
+                className="flex-1 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Kembali
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleDeleteSurat}
+                className="flex-1 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-black text-xs shadow-md transition-all press-down cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Membatalkan...</span>
+                  </>
+                ) : (
+                  'Ya, Batalkan'
+                )}
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Lightbox Modal for Zooming Document Attachment(s) - Portaled, Auto-Centered, Highest Z-Index, No Blur */}
+      {previewGallery.length > 0 && createPortal(
+        <div 
+          className="fixed inset-0 z-[999999] bg-slate-950/90 flex items-center justify-center p-4 animate-fade-in font-sans overflow-y-auto select-none"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setPreviewGallery([]);
+          }}
+        >
+          <div 
+            className="relative max-w-2xl w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl space-y-3 p-4 flex flex-col my-auto max-h-[92vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between text-white pb-2 border-b border-slate-800 shrink-0">
+              <span className="text-xs font-bold flex items-center gap-2 truncate">
+                <Eye className="w-4 h-4 text-emerald-400 shrink-0" />
+                <span className="truncate">
+                  Pratinjau Dokumen Lampiran: {previewGallery[galleryIndex]?.nama || 'Dokumen'}
+                </span>
+                {previewGallery.length > 1 && (
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono shrink-0">
+                    {galleryIndex + 1} / {previewGallery.length}
+                  </span>
+                )}
+              </span>
+              <button
+                type="button"
+                onClick={() => setPreviewGallery([])}
+                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+                title="Tutup (ESC)"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="relative rounded-2xl overflow-hidden bg-black flex items-center justify-center flex-1 min-h-[280px] max-h-[65vh]">
+              <img
+                src={previewGallery[galleryIndex]?.url}
+                alt={previewGallery[galleryIndex]?.nama || 'Pratinjau Dokumen'}
+                className="w-full h-full object-contain"
+              />
+
+              {previewGallery.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setGalleryIndex(prev => (prev > 0 ? prev - 1 : previewGallery.length - 1))}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white transition-all cursor-pointer shadow-md"
+                    title="Dokumen Sebelumnya"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGalleryIndex(prev => (prev < previewGallery.length - 1 ? prev + 1 : 0))}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white transition-all cursor-pointer shadow-md"
+                    title="Dokumen Selanjutnya"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </>
+              )}
+            </div>
+
+            {/* Thumbnail Strip for Multi-Documents */}
+            {previewGallery.length > 1 && (
+              <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-slate-800 shrink-0">
+                {previewGallery.map((doc, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setGalleryIndex(idx)}
+                    className={`relative w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                      galleryIndex === idx ? 'border-emerald-500 scale-105' : 'border-slate-700 opacity-60 hover:opacity-100'
+                    }`}
+                  >
+                    <img src={doc.url} alt={doc.nama} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Action Toast Notifications - Portaled, Top-Right, Highest Z-Index, Unmistakable Feedback */}
+      {actionToast && createPortal(
+        <div className="fixed top-5 right-5 z-[9999999] max-w-sm sm:max-w-md w-[calc(100vw-2.5rem)] pointer-events-none animate-fade-in font-sans">
+          <div
+            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-2xl border backdrop-blur-md transition-all ${
+              actionToast.type === 'success'
+                ? 'bg-emerald-950/95 border-emerald-500/60 text-white shadow-emerald-950/50'
+                : actionToast.type === 'error'
+                ? 'bg-rose-950/95 border-rose-500/60 text-white shadow-rose-950/50'
+                : 'bg-slate-900/95 border-blue-500/60 text-white shadow-slate-950/50'
+            }`}
+            role="alert"
+          >
+            <div className="shrink-0 mt-0.5">
+              {actionToast.type === 'success' && (
+                <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+              )}
+              {actionToast.type === 'error' && (
+                <div className="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center border border-rose-500/30">
+                  <AlertCircle className="w-5 h-5" />
+                </div>
+              )}
+              {actionToast.type === 'info' && (
+                <div className="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+                  <Info className="w-5 h-5" />
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 min-w-0 pr-1">
+              <h4 className="text-xs font-black tracking-wide flex items-center gap-1.5">
+                <span>{actionToast.title}</span>
+              </h4>
+              <p className="text-[11px] text-slate-300 font-medium leading-relaxed mt-0.5 break-words">
+                {actionToast.message}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setActionToast(null)}
+              className="shrink-0 p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              title="Tutup Notifikasi"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
   );
 };

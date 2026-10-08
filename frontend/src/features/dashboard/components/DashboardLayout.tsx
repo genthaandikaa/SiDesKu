@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { createPortal } from 'react-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Home, 
   FileText, 
@@ -70,11 +71,117 @@ interface NavGroup {
 export const DashboardLayout: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState('beranda');
+  const [activeMenu, setActiveMenu] = useState(() => {
+    try {
+      const path = typeof window !== 'undefined' ? window.location.pathname.replace(/\/$/, '') : '';
+      const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+      const queryTab = searchParams.get('tab') || searchParams.get('menu');
+      if (path.startsWith('/dashboard/ajukan')) return 'ajukan_surat';
+      if (path.startsWith('/dashboard/status-surat') || path.startsWith('/dashboard/status_surat')) return 'status_surat';
+      if (path.startsWith('/dashboard/surat-selesai') || path.startsWith('/dashboard/surat_selesai')) return 'surat_selesai';
+      if (path.startsWith('/dashboard/riwayat-surat') || path.startsWith('/dashboard/riwayat_surat')) return 'riwayat_surat';
+      if (path.startsWith('/dashboard/pengumuman')) return 'pengumuman';
+      if (path.startsWith('/dashboard/agenda')) return 'agenda_desa';
+      if (path.startsWith('/dashboard/keuangan')) return 'keuangan_desa';
+      if (path.startsWith('/dashboard/profil')) return 'profil_saya';
+      if (path.startsWith('/dashboard/notifikasi')) return 'notifikasi';
+      if (queryTab) return queryTab;
+      const saved = localStorage.getItem('sides_active_dashboard_tab');
+      if (saved) return saved;
+    } catch (e) {
+      // ignore
+    }
+    return 'beranda';
+  });
   const [showQrModal, setShowQrModal] = useState(false);
+
+  const handleMenuNavigate = (menuId: string) => {
+    setActiveMenu(menuId);
+    try {
+      localStorage.setItem('sides_active_dashboard_tab', menuId);
+    } catch (e) {
+      // ignore
+    }
+
+    const pathToMenu: Record<string, string> = {
+      beranda: '/dashboard',
+      ajukan_surat: '/dashboard/ajukan',
+      status_surat: '/dashboard/status-surat',
+      surat_selesai: '/dashboard/surat-selesai',
+      riwayat_surat: '/dashboard/riwayat-surat',
+      pengumuman: '/dashboard/pengumuman',
+      buat_pengumuman: '/dashboard/pengumuman',
+      agenda_desa: '/dashboard/agenda',
+      agenda_rt: '/dashboard/agenda',
+      agenda_rw: '/dashboard/agenda',
+      keuangan_desa: '/dashboard/keuangan',
+      profil_saya: '/dashboard/profil',
+      notifikasi: '/dashboard/notifikasi',
+    };
+
+    if (pathToMenu[menuId]) {
+      navigate(pathToMenu[menuId]);
+    } else {
+      navigate(`/dashboard?tab=${menuId}`);
+    }
+
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      setIsSidebarOpen(false);
+    }
+  };
+
+  // Synchronize browser URL & storage with active dashboard menu
+  useEffect(() => {
+    const path = location.pathname.replace(/\/$/, '');
+    const searchParams = new URLSearchParams(location.search);
+    const queryTab = searchParams.get('tab') || searchParams.get('menu');
+
+    let resolvedMenu = 'beranda';
+    if (path.startsWith('/dashboard/ajukan')) {
+      resolvedMenu = 'ajukan_surat';
+    } else if (path.startsWith('/dashboard/status-surat') || path.startsWith('/dashboard/status_surat')) {
+      resolvedMenu = 'status_surat';
+    } else if (path.startsWith('/dashboard/surat-selesai') || path.startsWith('/dashboard/surat_selesai')) {
+      resolvedMenu = 'surat_selesai';
+    } else if (path.startsWith('/dashboard/riwayat-surat') || path.startsWith('/dashboard/riwayat_surat')) {
+      resolvedMenu = 'riwayat_surat';
+    } else if (path.startsWith('/dashboard/pengumuman')) {
+      resolvedMenu = 'pengumuman';
+    } else if (path.startsWith('/dashboard/agenda')) {
+      if (['rt', 'sekretaris_rt', 'bendahara_rt'].includes(roleSlug)) {
+        resolvedMenu = 'agenda_rt';
+      } else if (roleSlug === 'rw') {
+        resolvedMenu = 'agenda_rw';
+      } else {
+        resolvedMenu = 'agenda_desa';
+      }
+    } else if (path.startsWith('/dashboard/keuangan')) {
+      resolvedMenu = 'keuangan_desa';
+    } else if (path.startsWith('/dashboard/profil')) {
+      resolvedMenu = 'profil_saya';
+    } else if (path.startsWith('/dashboard/notifikasi')) {
+      resolvedMenu = 'notifikasi';
+    } else if (queryTab) {
+      resolvedMenu = queryTab;
+    } else if (path === '/dashboard' || path === '') {
+      const saved = localStorage.getItem('sides_active_dashboard_tab');
+      if (saved && saved !== 'beranda') {
+        resolvedMenu = saved;
+        navigate(`/dashboard?tab=${saved}`, { replace: true });
+      }
+    }
+
+    setActiveMenu(resolvedMenu);
+    try {
+      localStorage.setItem('sides_active_dashboard_tab', resolvedMenu);
+    } catch (e) {
+      // ignore
+    }
+  }, [location.pathname, location.search]);
 
   // Interactive Notifications System
   const [notifications, setNotifications] = useState<NotificationItem[]>([
@@ -125,6 +232,21 @@ export const DashboardLayout: React.FC = () => {
 
   const [selectedNotif, setSelectedNotif] = useState<NotificationItem | null>(null);
   const [isNotifDetailOpen, setIsNotifDetailOpen] = useState(false);
+
+  // Lock body scroll and handle ESC key when notification modal is open
+  useEffect(() => {
+    if (isNotifDetailOpen) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setIsNotifDetailOpen(false);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isNotifDetailOpen]);
 
   const handleOpenNotifDetail = (notif: NotificationItem) => {
     setNotifications((prev) =>
@@ -399,7 +521,7 @@ export const DashboardLayout: React.FC = () => {
     if (activeMenu === 'keuangan_desa' || activeMenu === 'realisasi_apbdes' || activeMenu === 'data_keuangan') return <BendaharaDashboard />;
 
     // 3. Primary Role Dashboards
-    if (roleSlug === 'warga') return <WargaDashboard activeSubmenu={activeMenu} onNavigate={(menu) => setActiveMenu(menu)} />;
+    if (roleSlug === 'warga') return <WargaDashboard activeSubmenu={activeMenu} onNavigate={handleMenuNavigate} />;
     if (['rt', 'sekretaris_rt', 'bendahara_rt'].includes(roleSlug)) return <RtDashboard activeSubmenu={activeMenu} />;
     if (roleSlug === 'rw') return <RwDashboard activeSubmenu={activeMenu} />;
     if (roleSlug === 'bendahara_desa') return <BendaharaDashboard activeSubmenu={activeMenu} />;
@@ -448,14 +570,12 @@ export const DashboardLayout: React.FC = () => {
 
               {group.items.map((item) => {
                 const Icon = item.icon;
-                const isActive = activeMenu === item.id;
+                const isActive = activeMenu === item.id || 
+                  (item.id.startsWith('agenda_') && activeMenu.startsWith('agenda_'));
                 return (
                   <button
                     key={item.id}
-                    onClick={() => {
-                      setActiveMenu(item.id);
-                      if (typeof window !== 'undefined' && window.innerWidth < 1024) setIsSidebarOpen(false);
-                    }}
+                    onClick={() => handleMenuNavigate(item.id)}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl font-extrabold text-xs transition-all press-down ${
                       isActive 
                         ? 'bg-emerald-700 text-white shadow-xs' 
@@ -617,7 +737,7 @@ export const DashboardLayout: React.FC = () => {
                   <div className="px-3 pt-2 border-t border-slate-100">
                     <button
                       onClick={() => {
-                        setActiveMenu('notifikasi');
+                        handleMenuNavigate('notifikasi');
                         setIsNotificationsOpen(false);
                       }}
                       className="w-full py-2 text-center text-xs font-black text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors cursor-pointer"
@@ -670,7 +790,7 @@ export const DashboardLayout: React.FC = () => {
 
                   <button
                     onClick={() => {
-                      setActiveMenu('profil_saya');
+                      handleMenuNavigate('profil_saya');
                       setIsProfileOpen(false);
                     }}
                     className="w-full px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center gap-2.5 transition-colors cursor-pointer"
@@ -696,7 +816,7 @@ export const DashboardLayout: React.FC = () => {
         </header>
 
         {/* Dynamic Main Body */}
-        <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-5 lg:p-6 xl:p-8">
           <div className="max-w-7xl mx-auto">
             {renderContent()}
           </div>
@@ -711,10 +831,18 @@ export const DashboardLayout: React.FC = () => {
         />
       )}
 
-      {/* Modal Detail Notifikasi */}
-      {isNotifDetailOpen && selectedNotif && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 animate-fade-in bg-slate-950/80 backdrop-blur-sm font-sans overflow-y-auto">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-scale-up border border-slate-200 flex flex-col my-auto max-h-[90vh]">
+      {/* Modal Detail Notifikasi - Portaled, Auto-Centered, Highest Z-Index, No Blur */}
+      {isNotifDetailOpen && selectedNotif && createPortal(
+        <div 
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-4 sm:p-6 animate-fade-in bg-slate-950/75 font-sans overflow-y-auto select-none"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsNotifDetailOpen(false);
+          }}
+        >
+          <div 
+            className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-scale-up border border-slate-200 flex flex-col my-auto max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
               <div className="flex items-center gap-3">
@@ -793,7 +921,7 @@ export const DashboardLayout: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => {
-                    setActiveMenu(selectedNotif.meta!.targetMenu!);
+                    handleMenuNavigate(selectedNotif.meta!.targetMenu!);
                     setIsNotifDetailOpen(false);
                   }}
                   className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-extrabold shadow-sm transition-all press-down cursor-pointer flex items-center gap-1.5"
@@ -804,7 +932,8 @@ export const DashboardLayout: React.FC = () => {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

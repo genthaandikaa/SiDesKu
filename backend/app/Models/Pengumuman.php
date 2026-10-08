@@ -14,6 +14,10 @@ class Pengumuman extends Model
 
     protected $fillable = [
         'judul',
+        'kategori',
+        'oleh',
+        'status_label',
+        'bantuan_sosial_id',
         'isi',
         'level_target',
         'target_id',
@@ -36,5 +40,10 @@ class Pengumuman extends Model
     public function createdByUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by_user_id');
+    }
+
+    public function bantuanSosial(): BelongsTo
+    {
+        return $this->belongsTo(BantuanSosial::class, 'bantuan_sosial_id');
     }
 }

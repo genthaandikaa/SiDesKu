@@ -44,7 +44,6 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# AI Assistant Instructions & Configs (local only)
-CLAUDE.md
-**/CLAUDE.md
-
+# Testing artifacts
+frontend/test-results/
+frontend/playwright-report/

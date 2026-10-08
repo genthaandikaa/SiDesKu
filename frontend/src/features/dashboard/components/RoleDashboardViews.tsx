@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import api from '@/shared/lib/axios';
 import { 
   FileText, 
   CheckCircle2, 
@@ -29,9 +31,17 @@ import {
   RefreshCw,
   Edit,
   Trash2,
-  Printer
+  Printer,
+  Camera,
+  Upload,
+  X,
+  Paperclip,
+  CreditCard,
+  QrCode,
+  Copy
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
+import { CameraUploadModal } from '@/shared/components/CameraUploadModal';
 
 // Shared views (Pengumuman, Agenda, Profil, Notifikasi)
 
@@ -39,79 +49,158 @@ export const PengumumanView: React.FC<{ canCreate?: boolean }> = ({ canCreate })
   const { user } = useAuth();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState<any | null>(null);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Fetch real announcements & authentic tickets from backend Laravel API
+  const fetchAnnouncements = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get('/pengumumans');
+      if (res.data?.success && Array.isArray(res.data.data)) {
+        setAnnouncements(res.data.data);
+      }
+    } catch (err) {
+      console.error('Gagal memuat pengumuman dari server, mencoba public endpoint:', err);
+      try {
+        const pubRes = await api.get('/public/pengumumans');
+        if (pubRes.data?.success && Array.isArray(pubRes.data.data)) {
+          setAnnouncements(pubRes.data.data);
+        }
+      } catch (pubErr) {
+        console.error('Gagal memuat pengumuman publik:', pubErr);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAnnouncements();
+  }, []);
+
+  // Lock body scroll and listen for ESC key when modal is opened
+  useEffect(() => {
+    if (selectedAnnouncement) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          setSelectedAnnouncement(null);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [selectedAnnouncement]);
+
   const [copiedWaText, setCopiedWaText] = useState(false);
 
-  const [announcements, setAnnouncements] = useState([
-    {
-      id: 1,
-      judul: 'Penyaluran Bantuan Pangan Beras & PKH Tahap III Tahun 2026',
-      kategori: 'Bansos',
-      tanggal: '25 Agustus 2026',
-      oleh: 'Pemerintah Desa Doko',
-      isi: 'Diberitahukan kepada seluruh KPM penerima bansos PKH agar hadir di Pendopo Balai Desa Doko sesuai sesi antrean masing-masing dengan membawa KTP dan KK asli.',
-      status: 'Penting',
-      tiket: {
-        nomorTiket: 'TKT-BNS-20260825-014',
-        nomorAntrean: 'A-014',
-        sesi: 'Sesi 1 (Pagi) • 08.30 - 11.00 WIB',
-        lokasi: 'Pendopo Balai Desa Doko',
-        syarat: 'Bawa KTP Asli & Kartu Keluarga (KK)',
-        qrHash: 'PKH-DOKO-2026-A014-VERIFIED',
-      }
-    },
-    {
-      id: 2,
-      judul: 'Kerja Bakti Lingkungan & Pembersihan Saluran Air Musim Hujan',
-      kategori: 'Lingkungan',
-      tanggal: '22 Agustus 2026',
-      oleh: 'Ketua RW 01',
-      isi: 'Seluruh warga RT 01 dan RT 02 diimbau bergotong royong membersihkan selokan lingkungan demi mencegah genangan air.',
-      status: 'Umum',
-      tiket: {
-        nomorTiket: 'TKT-KB-20260822-088',
-        nomorAntrean: 'RW01-088',
-        sesi: 'Pukul 06.30 WIB - Selesai',
-        lokasi: 'Balai RW 01 & Saluran Air Utama Dusun Krajan',
-        syarat: 'Bawa peralatan kebersihan pribadi (cangkul/sapu)',
-        qrHash: 'KERJABAKTI-RW01-2026-VERIFIED',
-      }
-    },
-    {
-      id: 3,
-      judul: 'Pelayanan Rekam KTP-El Keliling Dispendukcapil di Balai Desa',
-      kategori: 'Layanan',
-      tanggal: '18 Agustus 2026',
-      oleh: 'Sekretariat Desa',
-      isi: 'Bagi warga berusia 17 tahun atau yang belum memiliki KTP elektronik, layanan rekam biometrik dibuka pukul 08.30 - 14.00 WIB.',
-      status: 'Resmi',
-      tiket: {
-        nomorTiket: 'TKT-KTP-20260818-042',
-        nomorAntrean: 'KTP-042',
-        sesi: 'Sesi Bebas • 08.30 - 14.00 WIB',
-        lokasi: 'Ruang Pelayanan Balai Desa Doko',
-        syarat: 'Bawa Fotokopi KK & Akta Kelahiran Asli',
-        qrHash: 'KTPEL-DOKO-2026-042-VERIFIED',
-      }
-    },
-  ]);
+  const generateWhatsAppText = (announcement: any) => {
+    const t = announcement?.tiket;
+    const namaWarga = t?.namaPenerima || user?.warga_profile?.nama_lengkap || user?.name || 'BAMBANG UTOMO';
+    const nik = t?.nik || user?.warga_profile?.nik || '3506041505840001';
+    const alamat = t?.alamat || 'Jl. Kenanga No. 14, RT 01 / RW 01, Dusun Doko Krajan, Desa Doko';
+    const instansi = t?.subInstansi || t?.instansi || announcement.oleh || 'Pemerintah Desa Doko & Perum BULOG';
+
+    const judulLower = (announcement.judul || '').toLowerCase();
+    const isBansos = announcement.kategori === 'Bansos' || t?.isSuratUndanganResmi || judulLower.includes('bansos') || judulLower.includes('bantuan') || judulLower.includes('beras') || judulLower.includes('bulog');
+    const isKerjaBakti = announcement.kategori === 'Lingkungan' || judulLower.includes('kerja bakti') || judulLower.includes('gotong royong');
+    const isKtp = judulLower.includes('ktp');
+    const isPosyandu = judulLower.includes('posyandu');
+
+    if (isBansos) {
+      return (
+        `🌾 Undangan Resmi Penyaluran Bantuan Pangan Beras & PKH :\n\n` +
+        `nama penerima 👤 : *${namaWarga}*\n` +
+        `nik 🆔 : *${nik}*\n` +
+        `alamat 🏠 : *${alamat}*\n` +
+        `agenda acara 🌾 : *${announcement.judul}*\n` +
+        `hari & tanggal 📆 : *${t?.hariTanggal || announcement.tanggal || 'Kamis, 13 Agustus 2026'}*\n` +
+        `waktu ⏰ : *${t?.jam || t?.sesi || '08:30 WIB - Selesai'}*\n` +
+        `lokasi 📍 : *${t?.tempat || t?.lokasi || 'Pendopo Balai Desa Doko'}*\n` +
+        `alokasi bantuan 📦 : *${t?.alokasi || t?.keperluan || '30 Kg Beras CBP (Alokasi Juli - September 2026)'}*\n` +
+        `biaya tebus 💸 : *GRATIS (Rp 0,-)*\n` +
+        `no. urut antrean 🎫 : *${t?.noUrut || 1}*\n` +
+        `kode barcode 🔢 : *${t?.barcode || t?.qrHash || '350606200801340'}*\n` +
+        `no. surat resmi 📄 : *${t?.nomorSurat || 'UND/02/08/26/115002'}*\n\n` +
+        `NB 📌 : *${t?.catatanBatas || 'Harap hadir tepat waktu sesuai jadwal dengan membawa KTP asli/IKD & Kartu Keluarga (KK). Jika setelah 5 hari tidak diambil tanpa keterangan, kuota bantuan akan dialihkan ke penerima pengganti.'}*\n\n` +
+        `Salam hangat dari Pemerintah Desa Doko & Perum BULOG 🌾✨`
+      );
+    }
+
+    if (isKerjaBakti) {
+      return (
+        `🧹 Agenda Gotong Royong & Kerja Bakti Warga Desa Doko :\n\n` +
+        `nama warga 👤 : *${namaWarga}*\n` +
+        `wilayah 🏠 : *RT 01 / RW 01 Dusun Krajan*\n` +
+        `agenda kegiatan 🧹 : *${announcement.judul}*\n` +
+        `hari & tanggal 📆 : *${t?.hariTanggal || announcement.tanggal || 'Minggu, 24 Agustus 2026'}*\n` +
+        `waktu ⏰ : *${t?.jam || '06:30 WIB - Selesai'}*\n` +
+        `lokasi kumpul 📍 : *${t?.tempat || 'Balai RW 01 & Saluran Air Utama'}*\n` +
+        `keperluan 🧤 : *Pembersihan selokan lingkungan & pencegahan genangan air*\n` +
+        `biaya konsumsi 💸 : *Swadaya / Kas RT (Gratis Warga)*\n` +
+        `no. urut partisipasi 🎫 : *${t?.noUrut || 1}*\n\n` +
+        `NB 📌 : *Diharapkan membawa peralatan mandiri seperti cangkul, sabit, dan karung sampah. Mari jaga kebersihan dan keasrian lingkungan kita bersama!* 🌿\n\n` +
+        `Salam hangat dari Pengurus RT 01 & RW 01 Desa Doko 🤝✨`
+      );
+    }
+
+    if (isKtp) {
+      return (
+        `🪪 Jadwal Pelayanan Rekam KTP-El Keliling Dispendukcapil :\n\n` +
+        `nama pemohon 👤 : *${namaWarga}*\n` +
+        `nik 🆔 : *${nik}*\n` +
+        `agenda layanan 🪪 : *${announcement.judul}*\n` +
+        `hari & tanggal 📆 : *${t?.hariTanggal || announcement.tanggal || 'Senin, 17 Agustus 2026'}*\n` +
+        `waktu ⏰ : *${t?.jam || '08:30 - 14:00 WIB'}*\n` +
+        `lokasi 📍 : *${t?.tempat || 'Ruang Pelayanan Balai Desa Doko'}*\n` +
+        `persyaratan berkas 📁 : *Fotokopi KK, Akta Kelahiran & berpakaian rapi berkerah*\n` +
+        `biaya retribusi 💸 : *GRATIS (Rp 0,-)*\n` +
+        `no. urut antrean 🎫 : *${t?.noUrut || 1}*\n` +
+        `kode barcode 🔢 : *${t?.barcode || '350606200800001'}*\n\n` +
+        `NB 📌 : *Layanan jemput bola resmi tanpa calo. Harap hadir tepat waktu sesuai jadwal agar pelayanan berjalan lancar.* ⏱️\n\n` +
+        `Salam hangat dari Dispendukcapil Kab. Kediri & Pemdes Doko 🇮🇩✨`
+      );
+    }
+
+    if (isPosyandu) {
+      return (
+        `👶 Jadwal Layanan Posyandu Balita & Kesehatan Lansia :\n\n` +
+        `nama peserta 👤 : *${namaWarga}*\n` +
+        `kegiatan 👶 : *${announcement.judul}*\n` +
+        `hari & tanggal 📆 : *${t?.hariTanggal || announcement.tanggal || 'Sabtu, 22 Agustus 2026'}*\n` +
+        `waktu ⏰ : *${t?.jam || '08:00 - 11:30 WIB'}*\n` +
+        `lokasi posyandu 📍 : *${t?.tempat || 'Balai RT 01 / Posyandu Cempaka'}*\n` +
+        `layanan medis 🩺 : *Penimbangan balita, imunisasi & cek tensi darah lansia*\n` +
+        `biaya pemeriksaan 💸 : *GRATIS (Rp 0,-)*\n` +
+        `no. urut antrean 🎫 : *${t?.noUrut || 1}*\n\n` +
+        `NB 📌 : *Jangan lupa membawa Buku KIA/KMS balita atau kartu kontrol lansia.* 🌸\n\n` +
+        `Salam hangat dari Tim Penggerak PKK & Bidan Desa Doko 🌸✨`
+      );
+    }
+
+    return (
+      `📢 Pemberitahuan Warta & Pengumuman Resmi Desa Doko :\n\n` +
+      `judul warta 📢 : *${announcement.judul}*\n` +
+      `ditujukan kepada 👤 : *${namaWarga}*\n` +
+      `hari & tanggal 📆 : *${t?.hariTanggal || announcement.tanggal || 'Hari Ini'}*\n` +
+      `waktu ⏰ : *${t?.jam || t?.sesi || 'Waktu Setempat'}*\n` +
+      `lokasi 📍 : *${t?.tempat || t?.lokasi || 'Balai Desa Doko'}*\n` +
+      `keterangan 📝 : *${announcement.isi || t?.keperluan || 'Informasi kegiatan desa'}*\n` +
+      `no. tiket 🎫 : *${t?.noUrut || 1}*\n\n` +
+      `NB 📌 : *${t?.catatanBatas || 'Harap diperhatikan dan dipatuhi demi ketertiban serta kelancaran bersama.'}*\n\n` +
+      `Salam hangat dari ${instansi} 🏛️✨`
+    );
+  };
 
   const handleShareWhatsApp = (announcement: any) => {
-    const t = announcement.tiket;
-    const namaWarga = user?.warga_profile?.nama_lengkap || user?.name || 'Warga Desa Doko';
-    const nik = user?.warga_profile?.nik || '350604xxxxxx';
-
-    const text = `🏛️ *TIKET RESMI PELAYANAN DESA DOKO*\n` +
-      `-------------------------------------\n` +
-      `📌 *Acara:* ${announcement.judul}\n` +
-      `👤 *Nama:* ${namaWarga} (NIK: ${nik})\n` +
-      `🎫 *No. Antrean:* ${t?.nomorAntrean || 'Umum'}\n` +
-      `📅 *Jadwal:* ${announcement.tanggal} (${t?.sesi || 'WIB'})\n` +
-      `📍 *Lokasi:* ${t?.lokasi || 'Balai Desa Doko'}\n` +
-      `📋 *Syarat:* ${t?.syarat || 'KTP / KK Asli'}\n` +
-      `🔑 *Kode Tiket:* ${t?.nomorTiket}\n\n` +
-      `💡 _Tunjukkan pesan ini atau Scan QR Code digital di meja petugas saat hadir di balai desa._`;
-
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    const text = generateWhatsAppText(announcement);
+    const cleanText = text.trim();
+    const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(cleanText)}`;
     window.open(url, '_blank');
   };
 
@@ -123,7 +212,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean }> = ({ canCreate })
             Warta & Pengumuman Desa
           </h2>
           <p className="text-xs sm:text-sm text-slate-500">
-            Kabar resmi, instruksi bupati, jadwal bansos, dan tiket antrean kegiatan warga.
+            Kabar resmi, instruksi bupati, jadwal bansos beras Bulog, dan tiket antrean kegiatan warga.
           </p>
         </div>
 
@@ -138,6 +227,15 @@ export const PengumumanView: React.FC<{ canCreate?: boolean }> = ({ canCreate })
         )}
       </div>
 
+      {/* Loading Skeleton */}
+      {loading && announcements.length === 0 && (
+        <div className="p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs space-y-3">
+          <div className="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-xs font-bold text-slate-500">Memuat data pengumuman & tiket resmi dari database...</p>
+        </div>
+      )}
+
+      {/* Announcements Grid */}
       <div className="grid grid-cols-1 gap-4">
         {announcements.map((a) => (
           <div 
@@ -169,10 +267,10 @@ export const PengumumanView: React.FC<{ canCreate?: boolean }> = ({ canCreate })
             <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <span className="text-[11px] font-mono font-black text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200 shadow-2xs">
-                  🎫 Antrean: {a.tiket.nomorAntrean}
+                  🎫 {a.tiket?.isSuratUndanganResmi ? `No. Urut: ${a.tiket.noUrut || a.tiket.nomorAntrean}` : `Antrean: ${a.tiket?.nomorAntrean}`}
                 </span>
                 <span className="text-[11px] text-slate-500 font-medium hidden sm:inline">
-                  📍 {a.tiket.lokasi}
+                  📍 {a.tiket?.tempat || a.tiket?.lokasi}
                 </span>
               </div>
 
@@ -191,210 +289,382 @@ export const PengumumanView: React.FC<{ canCreate?: boolean }> = ({ canCreate })
         ))}
       </div>
 
-      {/* Modal Detail Warta & Tiket Undangan Resmi (Dual-Mode: QR Digital & Teks Manual) */}
-      {selectedAnnouncement && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 animate-fade-in bg-slate-950/80 backdrop-blur-sm font-sans overflow-y-auto">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden animate-scale-up border border-slate-200 flex flex-col my-auto max-h-[92vh]">
-            
-            {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-xs">
-                  <FileText className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
-                      {selectedAnnouncement.kategori}
-                    </span>
-                    <span className="text-[11px] text-slate-400 font-medium">{selectedAnnouncement.tanggal}</span>
+      {/* Modal Detail Warta & Tiket Undangan Resmi */}
+      {selectedAnnouncement && createPortal(
+        <div 
+          data-interactive-modal="true"
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-3 sm:p-6 animate-fade-in bg-slate-950/75 font-sans overflow-y-auto print:hidden interactive-modal-portal"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedAnnouncement(null);
+          }}
+        >
+          <div 
+            className="relative bg-white rounded-3xl shadow-2xl w-full max-w-3xl overflow-hidden animate-scale-up border border-slate-200 flex flex-col my-auto max-h-[90vh] print:hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Quick Floating Close Button */}
+            <button 
+              onClick={() => setSelectedAnnouncement(null)}
+              className="absolute top-4 right-4 z-30 p-2 text-slate-400 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors cursor-pointer bg-white/90 shadow-2xs border border-slate-200"
+              title="Tutup (ESC)"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Modal Body: ONLY FULL STRUK (NO DUPLICATE HEADERS) */}
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-4">
+              {/* REPLIKA RESMI SURAT UNDANGAN / STRUK RESMI DESA */}
+              <div className="bg-white rounded-2xl border-2 border-dashed border-slate-400 p-5 sm:p-7 shadow-xs space-y-4 font-sans text-slate-900 relative print:border-black">
+                
+                {/* Official Header */}
+                <div className="border-b-2 border-dashed border-slate-300 pb-3 text-center space-y-0.5">
+                  <div className="text-xs sm:text-sm font-black tracking-widest uppercase text-slate-900 leading-tight">
+                    {selectedAnnouncement.tiket?.headerTitle || 'SURAT UNDANGAN RESMI'}
                   </div>
-                  <h3 className="font-black text-sm text-slate-900 leading-tight mt-0.5">Tiket Undangan & Warta Resmi Desa</h3>
-                </div>
-              </div>
-              <button 
-                onClick={() => setSelectedAnnouncement(null)}
-                className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
-                title="Tutup (ESC)"
-              >
-                <XCircle className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-6 overflow-y-auto space-y-6">
-              {/* Announcement Overview */}
-              <div className="space-y-2">
-                <h2 className="text-lg sm:text-xl font-black text-slate-900 leading-snug">
-                  {selectedAnnouncement.judul}
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {selectedAnnouncement.isi}
-                </p>
-              </div>
-
-              {/* TIKET DUAL-MODE RESMI (Auto-Generated 2-in-1 Pass) */}
-              <div className="rounded-3xl border-2 border-emerald-400 bg-gradient-to-b from-[#f7fbf9] to-[#edf7f2] p-5 sm:p-6 space-y-5 relative shadow-md overflow-hidden">
-                {/* Decorative Jagged Ticket Side Cuts */}
-                <div className="absolute -left-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-950/80 hidden sm:block pointer-events-none" />
-                <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-slate-950/80 hidden sm:block pointer-events-none" />
-
-                {/* Ticket Top Header */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-emerald-200/80">
-                  <div className="flex items-center gap-3">
-                    <img 
-                      src="/images/logo-kediri.png" 
-                      alt="Logo Kediri" 
-                      className="w-10 h-10 object-contain shrink-0" 
-                    />
-                    <div>
-                      <div className="text-[10px] font-black text-emerald-800 uppercase tracking-widest leading-none">
-                        Pemerintah Desa Doko • Kab. Kediri
-                      </div>
-                      <div className="font-black text-base text-slate-900 mt-0.5">
-                        TIKET KEHADIRAN & ANTREAN RESMI
-                      </div>
-                    </div>
+                  <div className="text-sm sm:text-base font-black tracking-tight uppercase text-slate-900 leading-tight">
+                    {selectedAnnouncement.tiket?.headerSub1 || selectedAnnouncement.judul}
                   </div>
-
-                  <div className="text-right">
-                    <span className="px-2.5 py-1 rounded-full bg-emerald-700 text-white text-[10px] font-black shadow-2xs">
-                      PAS RESMI SAH
-                    </span>
-                    <div className="text-[10px] font-mono text-emerald-900 font-bold mt-1">
-                      {selectedAnnouncement.tiket.nomorTiket}
-                    </div>
+                  <div className="text-xs sm:text-sm font-black tracking-tight uppercase text-slate-900 leading-tight">
+                    {selectedAnnouncement.tiket?.headerSub2 || 'PEMERINTAH DESA DOKO • KECAMATAN NGASEM'}
                   </div>
                 </div>
 
-                {/* Warga Info Strip */}
-                <div className="bg-white p-3.5 rounded-2xl border border-emerald-200 shadow-2xs flex flex-wrap items-center justify-between gap-2 text-xs">
-                  <div>
-                    <span className="text-slate-400 text-[10px] uppercase font-bold">Nama Pemegang Tiket:</span>
-                    <div className="font-black text-slate-900 text-sm">
-                      {user?.warga_profile?.nama_lengkap || user?.name || 'Bambang Utomo'}
-                    </div>
+                {/* Region Metadata Table 2 Columns */}
+                <div className="grid grid-cols-2 gap-3 text-[11px] sm:text-xs text-slate-800 font-medium border-b border-slate-200 pb-2.5">
+                  <div className="space-y-0.5">
+                    <div className="flex"><span className="w-24 text-slate-500">Provinsi</span><span className="font-bold">: {selectedAnnouncement.tiket?.provinsi || 'JAWA TIMUR'}</span></div>
+                    <div className="flex"><span className="w-24 text-slate-500">Kecamatan</span><span className="font-bold">: {selectedAnnouncement.tiket?.kecamatan || 'Ngasem'}</span></div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold">NIK Terdaftar:</span>
-                    <div className="font-mono font-bold text-slate-700">
-                      {user?.warga_profile?.nik || '3506041505840001'}
+                  <div className="space-y-0.5 sm:pl-4">
+                    <div className="flex"><span className="w-28 text-slate-500">Kabupaten/Kota</span><span className="font-bold">: {selectedAnnouncement.tiket?.kabupaten || 'KAB. KEDIRI'}</span></div>
+                    <div className="flex"><span className="w-28 text-slate-500">Kelurahan/Desa</span><span className="font-bold">: {selectedAnnouncement.tiket?.desa || 'Doko'}</span></div>
+                  </div>
+                </div>
+
+                {/* Letter Date */}
+                <div className="text-right text-[11px] sm:text-xs text-slate-600 font-medium pt-0.5">
+                  {selectedAnnouncement.tiket?.tanggalSurat || `Kab. Kediri, ${selectedAnnouncement.tanggal}`}
+                </div>
+
+                {/* Letter Identification & Recipient Box */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1 border-t border-slate-100">
+                  <div className="space-y-1 pt-1">
+                    <div className="flex"><span className="w-16 text-slate-500">Nomor</span><span className="font-mono font-bold">: {selectedAnnouncement.tiket?.nomorSurat || `UND/${String(selectedAnnouncement.id).padStart(2, '0')}/08/26`}</span></div>
+                    <div className="flex"><span className="w-16 text-slate-500">Perihal</span><span className="font-bold uppercase">: {selectedAnnouncement.tiket?.perihal || 'UNDANGAN'}</span></div>
+                  </div>
+                  <div className="space-y-0.5 sm:text-right bg-slate-50 sm:bg-transparent p-3 sm:p-0 rounded-xl sm:rounded-none border sm:border-none border-slate-200">
+                    <div className="text-slate-500 text-[11px]">Kepada Yth :</div>
+                    <div className="text-sm sm:text-base font-black text-slate-900 uppercase tracking-wide">
+                      {selectedAnnouncement.tiket?.namaPenerima || user?.warga_profile?.nama_lengkap || user?.name || 'BAMBANG UTOMO'}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-600">
+                      NIK: {selectedAnnouncement.tiket?.nikMasked || user?.warga_profile?.nik || '******1505840001'}
+                    </div>
+                    <div className="text-slate-400">-</div>
+                    <div className="text-xs font-bold text-slate-700">
+                      Alamat: {selectedAnnouncement.tiket?.alamat || 'RT 01 / RW 01, Dusun Doko Krajan, Desa Doko'}
                     </div>
                   </div>
                 </div>
 
-                {/* 2 OPSI DALAM 1 TIKET (DUAL-MODE SECTION) */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-stretch">
-                  
-                  {/* OPSI 1: JALUR CEPAT QR DIGITAL (UNTUK YANG TIDAK GAPTEK) */}
-                  <div className="md:col-span-6 bg-white p-4 rounded-2xl border border-emerald-300 shadow-2xs flex flex-col items-center text-center justify-between space-y-3">
-                    <div className="w-full text-left flex items-center justify-between pb-1.5 border-b border-emerald-100">
-                      <span className="text-[10px] font-black text-emerald-800 uppercase">
-                        📱 OPSI 1: JALUR SCAN QR
-                      </span>
-                      <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-                        1 Detik Scan
+                {/* Body Invitation */}
+                <div className="text-xs sm:text-sm space-y-1.5 pt-2 border-t border-slate-200">
+                  <p className="text-slate-700 font-medium">
+                    Mengharapkan kehadiran Bapak/Ibu/Saudara besok pada :
+                  </p>
+                  <div className="pl-2 sm:pl-4 space-y-1 text-xs sm:text-sm text-slate-800">
+                    <div className="flex"><span className="w-28 text-slate-500 shrink-0">Hari/Tanggal</span><span className="font-bold">: {selectedAnnouncement.tiket?.hariTanggal || selectedAnnouncement.tanggal}</span></div>
+                    <div className="flex"><span className="w-28 text-slate-500 shrink-0">Jam</span><span className="font-bold">: {selectedAnnouncement.tiket?.jam || selectedAnnouncement.tiket?.sesi || '08.30 WIB - Selesai'}</span></div>
+                    <div className="flex"><span className="w-28 text-slate-500 shrink-0">Tempat</span><span className="font-bold uppercase">: {selectedAnnouncement.tiket?.tempat || selectedAnnouncement.tiket?.lokasi || 'PENDOPO BALAI DESA DOKO'}</span></div>
+                    <div className="flex items-start">
+                      <span className="w-28 text-slate-500 shrink-0">Keperluan</span>
+                      <span className="font-bold text-emerald-900 leading-snug">
+                        : {selectedAnnouncement.tiket?.keperluan || selectedAnnouncement.isi}
                       </span>
                     </div>
+                  </div>
+                </div>
 
-                    {/* QR Code Canvas generated by Laravel */}
-                    <div className="p-2.5 bg-white rounded-2xl border-2 border-emerald-500 shadow-xs flex flex-col items-center">
-                      <img 
-                        src={`/api/public/surat/qr/${selectedAnnouncement.tiket.qrHash}`}
-                        alt="QR Code Tiket Resmi Laravel"
-                        className="w-28 h-28 object-contain"
+                {/* Persyaratan */}
+                <div className="text-[11px] sm:text-xs space-y-1 pt-2 text-slate-700 bg-slate-50 p-3.5 rounded-2xl border border-slate-200">
+                  <div className="font-extrabold text-slate-900 uppercase tracking-wide">
+                    Persyaratan :
+                  </div>
+                  <ol className="list-decimal pl-4 space-y-0.5 text-slate-700 leading-relaxed">
+                    {selectedAnnouncement.tiket?.persyaratan && selectedAnnouncement.tiket.persyaratan.length > 0 ? (
+                      selectedAnnouncement.tiket.persyaratan.map((syarat: string, sIdx: number) => (
+                        <li key={sIdx}>{syarat.replace(/^[0-9]+\.\s*/, '')}</li>
+                      ))
+                    ) : (
+                      <>
+                        <li>Membawa surat undangan ini</li>
+                        <li>Membawa KTP asli / IKD</li>
+                        <li>Membawa Kartu Keluarga (KK) asli</li>
+                      </>
+                    )}
+                  </ol>
+                </div>
+
+                {/* Catatan Batas */}
+                <div className="text-[11px] text-amber-900 bg-amber-50 p-2.5 rounded-xl border border-amber-200/90 font-medium leading-relaxed">
+                  <p>{selectedAnnouncement.tiket?.catatanBatas || 'Harap hadir tepat waktu sesuai jadwal demi kelancaran kegiatan bersama. Atas kerja sama dan partisipasinya kami ucapkan terima kasih.'}</p>
+                </div>
+
+                {/* Footer: QR Code Barcode + No Urut + Instansi Signature */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-3 border-t-2 border-dashed border-slate-300">
+                  <div className="text-center space-y-1">
+                    <div className="bg-white p-2 rounded-xl border border-slate-300 inline-block shadow-2xs">
+                      <img
+                        src={`/api/public/surat/qr?data=${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`}
+                        alt={`Barcode ${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`}
+                        className="w-24 h-24 sm:w-28 sm:h-28 mx-auto object-contain"
                         onError={(e: any) => {
-                          e.currentTarget.src = `http://127.0.0.1:8000/api/public/surat/qr/${selectedAnnouncement.tiket.qrHash}`;
+                          e.currentTarget.src = `http://127.0.0.1:8000/api/public/surat/qr?data=${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`;
                         }}
                       />
-                      <span className="text-[9px] font-mono text-emerald-800 font-bold mt-1">
-                        {selectedAnnouncement.tiket.qrHash}
-                      </span>
-                    </div>
-
-                    <p className="text-[10px] text-slate-500 leading-tight">
-                      Cukup tunjukkan QR ini di layar HP ke kamera petugas untuk scan verifikasi kilat otomatis.
-                    </p>
-                  </div>
-
-                  {/* OPSI 2: JALUR BEBAS TEKS MANUAL (UNTUK WARGA SEPUH / LANSIA / GAPTEK) */}
-                  <div className="md:col-span-6 bg-white p-4 rounded-2xl border border-amber-300 shadow-2xs flex flex-col justify-between space-y-3">
-                    <div className="flex items-center justify-between pb-1.5 border-b border-amber-100">
-                      <span className="text-[10px] font-black text-amber-900 uppercase">
-                        👵 OPSI 2: JALUR TEKS & KTP
-                      </span>
-                      <span className="text-[9px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded">
-                        Warga Sepuh / Lansia
-                      </span>
-                    </div>
-
-                    <div className="text-center py-2 bg-amber-50/80 rounded-xl border border-amber-200 space-y-0.5">
-                      <div className="text-[10px] text-amber-800 font-extrabold uppercase">NOMOR ANTREAN ANDA</div>
-                      <div className="text-3xl font-black text-amber-950 font-mono tracking-tight">
-                        {selectedAnnouncement.tiket.nomorAntrean}
+                      <div className="text-xs font-mono font-black text-slate-900 tracking-wider mt-1">
+                        {selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}
                       </div>
                     </div>
-
-                    <div className="space-y-1 text-[11px] text-slate-700">
-                      <div>⏰ <strong>Sesi:</strong> {selectedAnnouncement.tiket.sesi}</div>
-                      <div>📍 <strong>Lokasi:</strong> {selectedAnnouncement.tiket.lokasi}</div>
-                      <div>📋 <strong>Syarat:</strong> {selectedAnnouncement.tiket.syarat}</div>
-                    </div>
-
-                    <p className="text-[10px] text-amber-900 font-medium bg-amber-100/60 p-2 rounded-lg leading-tight">
-                      💡 <strong>Bebas tanpa scan:</strong> Cukup perlihatkan nomor antrean ini bersama KTP asli ke petugas balai desa.
-                    </p>
+                    <div className="text-[10px] text-slate-400 font-mono">Kode Barcode Terdaftar Resmi</div>
                   </div>
 
+                  <div className="text-center sm:text-right space-y-1.5">
+                    <div className="text-xs text-slate-600 font-medium">
+                      <div>Hormat Kami,</div>
+                      <div className="font-extrabold text-slate-900 text-sm">
+                        {selectedAnnouncement.tiket?.subInstansi || selectedAnnouncement.tiket?.instansi || selectedAnnouncement.oleh || 'Pemerintah Desa Doko'}
+                      </div>
+                      <div className="text-[11px] text-slate-500 font-semibold mt-0.5">
+                        Penyelenggara Pelayanan & Kegiatan Desa
+                      </div>
+                    </div>
+                    <div className="pt-1.5">
+                      <div className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                        No. Urut
+                      </div>
+                      <div className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-slate-900">
+                        {selectedAnnouncement.tiket?.noUrut || (announcements.findIndex(x => x.id === selectedAnnouncement.id) + 1)}
+                      </div>
+                    </div>
+                  </div>
                 </div>
+
               </div>
             </div>
 
             {/* Modal Footer */}
-            <div className="px-6 py-4 bg-slate-50/80 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 shrink-0">
-              <button
-                type="button"
-                onClick={() => handleShareWhatsApp(selectedAnnouncement)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all press-down cursor-pointer"
-              >
-                <span>📲 Kirim Tiket ke WhatsApp</span>
-              </button>
+            <div className="px-4 sm:px-6 py-3.5 bg-slate-50 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 shrink-0">
+              {/* WhatsApp Sharing Actions */}
+              <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleShareWhatsApp(selectedAnnouncement)}
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all press-down cursor-pointer"
+                >
+                  <span>📲 Kirim WhatsApp</span>
+                </button>
 
-              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const text = generateWhatsAppText(selectedAnnouncement);
+                    navigator.clipboard.writeText(text);
+                    setCopiedWaText(true);
+                    setTimeout(() => setCopiedWaText(false), 2500);
+                  }}
+                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 font-extrabold text-xs transition-colors cursor-pointer border border-slate-300 shadow-2xs"
+                  title="Salin isi teks format WhatsApp"
+                >
+                  {copiedWaText ? (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-emerald-700 font-bold">Tersalin!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Salin Format WA</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Document & Dialog Actions */}
+              <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 font-extrabold text-xs shadow-2xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 font-extrabold text-xs shadow-2xs transition-colors cursor-pointer"
                 >
-                  <Printer className="w-3.5 h-3.5" />
-                  <span>Cetak Tiket</span>
+                  <Printer className="w-3.5 h-3.5 text-slate-600" />
+                  <span>Cetak / Unduh PDF</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setSelectedAnnouncement(null)}
-                  className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-colors cursor-pointer shadow-2xs"
                 >
-                  Tutup
+                  <span>Tutup</span>
                 </button>
               </div>
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Official Print Portal for 1-Page A4 Authentic Surat Undangan / Struk */}
+      {selectedAnnouncement && createPortal(
+        <div id="surat-undangan-print-portal" className="hidden print:block font-sans text-black bg-white w-full">
+          <div className="border-2 border-dashed border-black p-6 space-y-3.5 w-full mx-auto text-black bg-white">
+            {/* Official Header */}
+            <div className="border-b-2 border-slate-700 pb-2.5 text-center space-y-0.5">
+              <div className="text-[13px] font-black tracking-widest uppercase leading-tight">
+                {selectedAnnouncement.tiket?.headerTitle || 'SURAT UNDANGAN RESMI'}
+              </div>
+              <div className="text-[15px] font-black tracking-tight uppercase leading-tight">
+                {selectedAnnouncement.tiket?.headerSub1 || selectedAnnouncement.judul}
+              </div>
+              <div className="text-[13px] font-black tracking-tight uppercase leading-tight">
+                {selectedAnnouncement.tiket?.headerSub2 || 'PEMERINTAH DESA DOKO • KECAMATAN NGASEM'}
+              </div>
+            </div>
+
+            {/* Region Metadata Table 2 Columns */}
+            <div className="grid grid-cols-2 gap-4 text-[12px] font-semibold text-black border-b border-slate-700 pb-2">
+              <div className="space-y-0.5">
+                <div className="flex"><span className="w-24 text-slate-700">Provinsi</span><span>: {selectedAnnouncement.tiket?.provinsi || 'JAWA TIMUR'}</span></div>
+                <div className="flex"><span className="w-24 text-slate-700">Kecamatan</span><span>: {selectedAnnouncement.tiket?.kecamatan || 'Ngasem'}</span></div>
+              </div>
+              <div className="space-y-0.5">
+                <div className="flex"><span className="w-28 text-slate-700">Kabupaten/Kota</span><span>: {selectedAnnouncement.tiket?.kabupaten || 'KAB. KEDIRI'}</span></div>
+                <div className="flex"><span className="w-28 text-slate-700">Kelurahan/Desa</span><span>: {selectedAnnouncement.tiket?.desa || 'Doko'}</span></div>
+              </div>
+            </div>
+
+            {/* Date on Right */}
+            <div className="text-right text-[12px] text-slate-800 font-medium">
+              {selectedAnnouncement.tiket?.tanggalSurat || `Kab. Kediri, ${selectedAnnouncement.tanggal}`}
+            </div>
+
+            {/* Letter Identification & Recipient Box */}
+            <div className="grid grid-cols-2 gap-4 text-[12px] pt-0.5">
+              <div className="space-y-1">
+                <div className="flex"><span className="w-16 text-slate-700">Nomor</span><span className="font-mono font-bold">: {selectedAnnouncement.tiket?.nomorSurat || `UND/${String(selectedAnnouncement.id).padStart(2, '0')}/08/26`}</span></div>
+                <div className="flex"><span className="w-16 text-slate-700">Perihal</span><span className="font-bold uppercase">: {selectedAnnouncement.tiket?.perihal || 'UNDANGAN'}</span></div>
+              </div>
+              <div className="space-y-0.5 text-left">
+                <div className="text-slate-700">Kepada Yth :</div>
+                <div className="text-[14px] font-black text-black uppercase tracking-wide">
+                  {selectedAnnouncement.tiket?.namaPenerima || user?.warga_profile?.nama_lengkap || user?.name || 'BAMBANG UTOMO'}
+                </div>
+                <div className="font-mono text-slate-800 font-bold">
+                  {selectedAnnouncement.tiket?.nikMasked || user?.warga_profile?.nik || '******1505840001'}
+                </div>
+                <div className="text-slate-600">-</div>
+                <div className="font-bold text-slate-900">
+                  {selectedAnnouncement.tiket?.alamat || 'RT 01 / RW 01, Dusun Doko Krajan, Desa Doko'}
+                </div>
+              </div>
+            </div>
+
+            {/* Invitation Body */}
+            <div className="text-[12px] space-y-1 pt-1">
+              <p className="font-medium text-black">
+                Mengharapkan kehadiran Bapak/Ibu/Saudara besok pada :
+              </p>
+              <div className="pl-3 space-y-1 text-black font-medium">
+                <div className="flex"><span className="w-28 text-slate-700 shrink-0">Hari/Tanggal</span><span className="font-bold">: {selectedAnnouncement.tiket?.hariTanggal || selectedAnnouncement.tanggal}</span></div>
+                <div className="flex"><span className="w-28 text-slate-700 shrink-0">Jam</span><span className="font-bold">: {selectedAnnouncement.tiket?.jam || selectedAnnouncement.tiket?.sesi || '08.30 WIB - Selesai'}</span></div>
+                <div className="flex"><span className="w-28 text-slate-700 shrink-0">Tempat</span><span className="font-bold uppercase">: {selectedAnnouncement.tiket?.tempat || selectedAnnouncement.tiket?.lokasi || 'KANTOR BALAI DESA DOKO'}</span></div>
+                <div className="flex items-start">
+                  <span className="w-28 text-slate-700 shrink-0">Keperluan</span>
+                  <span className="leading-snug">
+                    : {selectedAnnouncement.tiket?.keperluan || selectedAnnouncement.isi}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 6 Requirements */}
+            <div className="text-[11px] space-y-1 pt-1 text-black">
+              <div className="font-bold">Persyaratan :</div>
+              <ol className="list-decimal pl-4 space-y-0.5 leading-snug">
+                {selectedAnnouncement.tiket?.persyaratan && selectedAnnouncement.tiket.persyaratan.length > 0 ? (
+                  selectedAnnouncement.tiket.persyaratan.map((syarat: string, sIdx: number) => (
+                    <li key={sIdx}>{syarat.replace(/^[0-9]+\.\s*/, '')}</li>
+                  ))
+                ) : (
+                  <>
+                    <li>Membawa surat undangan ini</li>
+                    <li>Membawa KTP asli / IKD</li>
+                    <li>Membawa Kartu Keluarga (KK) asli</li>
+                  </>
+                )}
+              </ol>
+            </div>
+
+            {/* 5-Day Expiration Note */}
+            <div className="text-[11px] text-slate-900 font-medium leading-relaxed pt-1">
+              <p>{selectedAnnouncement.tiket?.catatanBatas || 'Harap hadir tepat waktu sesuai jadwal demi kelancaran kegiatan bersama. Atas kerja sama dan partisipasinya kami ucapkan terima kasih.'}</p>
+            </div>
+
+            {/* Footer: QR Code Barcode + No Urut + Instansi Signature */}
+            <div className="flex items-center justify-between pt-3 border-t border-slate-300">
+              <div className="text-center">
+                <div className="inline-block p-1 border border-slate-400 bg-white">
+                  <img
+                    src={`/api/public/surat/qr?data=${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`}
+                    alt={`Barcode Bantuan ${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`}
+                    className="w-24 h-24 object-contain mx-auto"
+                    crossOrigin="anonymous"
+                  />
+                  <div className="text-[11px] font-mono font-bold text-black tracking-wider mt-1">
+                    {selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-right space-y-1">
+                <div className="text-[12px] font-medium text-black">
+                  <div>Hormat Kami,</div>
+                  <div className="font-bold">{selectedAnnouncement.tiket?.subInstansi || selectedAnnouncement.tiket?.instansi || selectedAnnouncement.oleh || 'Pemerintah Desa Doko'}</div>
+                  <div className="text-[10px] text-slate-600 italic">Penyelenggara Pelayanan & Kegiatan Desa</div>
+                </div>
+                <div className="pt-2">
+                  <div className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
+                    No. Urut
+                  </div>
+                  <div className="text-4xl font-black font-mono tracking-tight text-black">
+                    {selectedAnnouncement.tiket?.noUrut || (announcements.findIndex(x => x.id === selectedAnnouncement.id) + 1)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );
 };
 
 export const AgendaDesaView: React.FC = () => {
-  const events = [
+  const { user } = useAuth();
+  const roleSlug = user?.role?.slug || 'warga';
+  const isRt = ['rt', 'sekretaris_rt', 'bendahara_rt'].includes(roleSlug);
+  const isRw = roleSlug === 'rw';
+
+  const defaultEvents = [
     {
       id: 1,
-      judul: 'Musyawarah Perencanaan Pembangunan Desa (Musrenbangdes)',
-      waktu: 'Rabu, 27 Agustus 2026 • 09.00 WIB',
-      tempat: 'Pendopo Balai Desa Doko',
-      peserta: 'BPD, LPMD, Tokoh Masyarakat, Ketua RT/RW',
+      judul: isRt ? 'Rembug Warga & Musyawarah RT 01 Krajan' : 'Musyawarah Perencanaan Pembangunan Desa (Musrenbangdes)',
+      waktu: 'Rabu, 27 Agustus 2026 • 19.30 WIB',
+      tempat: isRt ? 'Balai Pertemuan Warga RT 01' : 'Pendopo Balai Desa Doko',
+      peserta: isRt ? 'Seluruh Kepala Keluarga RT 01 Krajan' : 'BPD, LPMD, Tokoh Masyarakat, Ketua RT/RW',
       tipe: 'Pemerintahan',
     },
     {
@@ -407,19 +677,37 @@ export const AgendaDesaView: React.FC = () => {
     },
     {
       id: 3,
-      judul: 'Penyaluran BLT Dana Desa Periode Agustus',
+      judul: isRt ? 'Kerja Bakti Kebersihan Lingkungan & Saluran Air RT 01' : 'Penyaluran BLT Dana Desa Periode Agustus',
+      waktu: isRt ? 'Minggu, 30 Agustus 2026 • 06.30 WIB' : 'Senin, 31 Agustus 2026 • 08.00 WIB',
+      tempat: isRt ? 'Lingkungan Gang Melati & Kenanga RT 01' : 'Ruang Pelayanan Kantor Desa',
+      peserta: isRt ? 'Warga Lingkungan RT 01 Krajan' : 'Warga Penerima Manfaat BLT-DD',
+      tipe: isRt ? 'Lingkungan' : 'Sosial',
+    },
+    {
+      id: 4,
+      judul: 'Penyaluran Bantuan Pangan Beras & PKH Tahap III',
       waktu: 'Senin, 31 Agustus 2026 • 08.00 WIB',
-      tempat: 'Ruang Pelayanan Kantor Desa',
-      peserta: 'Warga Penerima Manfaat BLT-DD',
+      tempat: 'Pendopo Balai Desa Doko',
+      peserta: 'Keluarga Penerima Manfaat (KPM) Terdaftar',
       tipe: 'Sosial',
+    },
+    {
+      id: 5,
+      judul: isRt ? 'Jadwal Ronda & Siskamling Bergilir RT 01' : 'Rapat Koordinasi Pengurus Wilayah RW 01',
+      waktu: 'Setiap Malam • 22.00 - 04.00 WIB',
+      tempat: isRt ? 'Pos Ronda Utama RT 01 Krajan' : 'Balai Warga RW 01',
+      peserta: isRt ? 'Petugas Ronda Bergilir Sesuai Jadwal' : 'Ketua RT 01 s/d RT 06 & Tokoh Masyarakat',
+      tipe: 'Keamanan',
     },
   ];
 
   const getCategoryIcon = (tipe: string) => {
     const t = tipe.toLowerCase();
     if (t.includes('kesehatan') || t.includes('posyandu')) return <HeartPulse className="w-5 h-5 text-emerald-700" />;
-    if (t.includes('pemerintahan') || t.includes('musrenbang')) return <Building2 className="w-5 h-5 text-emerald-700" />;
+    if (t.includes('pemerintahan') || t.includes('musrenbang') || t.includes('rembug')) return <Building2 className="w-5 h-5 text-emerald-700" />;
     if (t.includes('sosial') || t.includes('blt') || t.includes('bansos')) return <HandHeart className="w-5 h-5 text-emerald-700" />;
+    if (t.includes('lingkungan') || t.includes('kerja bakti')) return <Users className="w-5 h-5 text-emerald-700" />;
+    if (t.includes('keamanan') || t.includes('ronda')) return <ShieldCheck className="w-5 h-5 text-emerald-700" />;
     return <Calendar className="w-5 h-5 text-emerald-700" />;
   };
 
@@ -427,15 +715,19 @@ export const AgendaDesaView: React.FC = () => {
     <div className="space-y-6 animate-fade-in font-sans">
       <div>
         <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-          Agenda Kegiatan & Jadwal Rapat
+          {isRt ? 'Agenda Kegiatan & Jadwal Rapat RT 01' : isRw ? 'Agenda Kegiatan & Koordinasi Wilayah RW 01' : 'Agenda Kegiatan & Jadwal Rapat Desa'}
         </h2>
         <p className="text-xs sm:text-sm text-slate-500">
-          Kalender kegiatan musyawarah, pelayanan kesehatan, dan aktivitas sosial warga.
+          {isRt 
+            ? 'Kalender kegiatan musyawarah warga RT 01 Krajan, jadwal posyandu, kerja bakti, siskamling, dan koordinasi tingkat desa.'
+            : isRw
+            ? 'Kalender kegiatan koordinasi antar RT di lingkungan RW 01 Dusun Krajan, rapat teritorial, dan musyawarah desa.'
+            : 'Kalender kegiatan musyawarah, pelayanan kesehatan, dan aktivitas sosial warga.'}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-        {events.map((ev) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+        {defaultEvents.map((ev) => (
           <div
             key={ev.id}
             className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-emerald-300 transition-all hover:shadow-md h-full space-y-4"
@@ -493,6 +785,9 @@ export const ProfileSayaView: React.FC = () => {
   const [alamatKtp, setAlamatKtp] = useState(user?.warga_profile?.alamat_ktp || 'Jl. Kenanga No. 14, RT 01 / RW 01, Dusun Doko Krajan');
   const [pekerjaan, setPekerjaan] = useState(user?.warga_profile?.pekerjaan || 'Pegawai / Wiraswasta');
   const [avatar, setAvatar] = useState(user?.avatar || '');
+  const [fotoKtp, setFotoKtp] = useState(user?.warga_profile?.foto_ktp || '');
+  const [isKtpCameraOpen, setIsKtpCameraOpen] = useState(false);
+  const [zoomKtpImage, setZoomKtpImage] = useState<string | null>(null);
 
   // Profile feedback
   const [isSavingProfile, setIsSavingProfile] = useState(false);
@@ -522,6 +817,7 @@ export const ProfileSayaView: React.FC = () => {
       if (user.warga_profile?.alamat_ktp) setAlamatKtp(user.warga_profile.alamat_ktp);
       if (user.warga_profile?.pekerjaan) setPekerjaan(user.warga_profile.pekerjaan);
       if (user.avatar) setAvatar(user.avatar);
+      if (user.warga_profile?.foto_ktp) setFotoKtp(user.warga_profile.foto_ktp);
     }
   }, [user]);
 
@@ -608,6 +904,7 @@ export const ProfileSayaView: React.FC = () => {
         alamat_ktp: alamatKtp.trim(),
         pekerjaan: pekerjaan.trim(),
         avatar: avatar || null,
+        foto_ktp: fotoKtp || null,
       };
 
       const res = await updateProfile(payload);
@@ -936,6 +1233,103 @@ export const ProfileSayaView: React.FC = () => {
               </div>
             </div>
 
+            {/* Section 3: Verifikasi Fisik e-KTP & Foto Identitas Warga (e-KYC Desa) */}
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">
+                    Verifikasi Fisik e-KTP (e-KYC Desa)
+                  </h4>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    Gunakan kamera HP atau laptop untuk melampirkan foto fisik e-KTP asli demi kemudahan legalisasi otomatis.
+                  </p>
+                </div>
+                <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                  <Camera className="w-3 h-3" />
+                  <span>Kamera & Upload</span>
+                </span>
+              </div>
+
+              {fotoKtp ? (
+                /* Card Preview e-KTP */
+                <div className="p-4 rounded-3xl bg-emerald-50/80 border border-emerald-300 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                      <span>Foto e-KTP Terlampir & Terverifikasi</span>
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-700 bg-white px-2.5 py-0.5 rounded-full border border-emerald-200">
+                      Resmi Desa Doko
+                    </span>
+                  </div>
+
+                  <div className="relative rounded-2xl overflow-hidden border border-emerald-300 bg-slate-950 aspect-16/10 max-h-56 flex items-center justify-center group shadow-xs">
+                    <img
+                      src={fotoKtp}
+                      alt="Foto e-KTP Terverifikasi"
+                      className="w-full h-full object-contain"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setZoomKtpImage(fotoKtp)}
+                        className="px-3.5 py-2 rounded-xl bg-white text-slate-900 text-xs font-black shadow-md hover:bg-slate-100 transition-all flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Eye className="w-4 h-4" />
+                        <span>Lihat Ukuran Asli</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setIsKtpCameraOpen(true)}
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-white hover:bg-emerald-100/70 border border-emerald-300 text-emerald-900 text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                    >
+                      <Camera className="w-4 h-4" />
+                      <span>Foto Ulang via Kamera</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFotoKtp('')}
+                      className="py-2.5 px-3 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-700 text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                      title="Hapus Foto KTP"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* Trigger Buttons to Capture or Upload KTP */
+                <div className="p-5 rounded-3xl border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-slate-50/80 transition-all text-center space-y-3">
+                  <div className="w-12 h-12 rounded-2xl bg-white text-emerald-600 shadow-xs flex items-center justify-center mx-auto">
+                    <CreditCard className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h5 className="text-xs font-black text-slate-800">
+                      Foto Fisik e-KTP Belum Dilampirkan
+                    </h5>
+                    <p className="text-[11px] text-slate-500 mt-0.5">
+                      Ambil foto langsung dengan kamera atau unggah berkas dari galeri perangkat Anda.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setIsKtpCameraOpen(true)}
+                      className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-all flex items-center gap-2 shadow-xs cursor-pointer press-down"
+                    >
+                      <Camera className="w-4 h-4" />
+                      <span>Buka Kamera Sekarang</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Bottom Actions */}
             <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <span className="text-xs text-slate-400">
@@ -1081,6 +1475,56 @@ export const ProfileSayaView: React.FC = () => {
           </form>
         )}
       </div>
+
+      {/* Camera Modal for e-KTP */}
+      <CameraUploadModal
+        isOpen={isKtpCameraOpen}
+        onClose={() => setIsKtpCameraOpen(false)}
+        onCapture={(base64) => {
+          setFotoKtp(base64);
+        }}
+        title="Ambil Foto Fisik e-KTP"
+        description="Posisikan e-KTP Anda di dalam bingkai garis panduan agar 16 digit NIK dan identitas terbaca jelas."
+        guideType="ktp"
+      />
+
+      {/* Lightbox Modal for Zooming KTP - Portaled, Auto-Centered, Highest Z-Index, No Blur */}
+      {zoomKtpImage && createPortal(
+        <div 
+          className="fixed inset-0 z-[999999] bg-slate-950/90 flex items-center justify-center p-4 animate-fade-in font-sans overflow-y-auto select-none"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setZoomKtpImage(null);
+          }}
+        >
+          <div 
+            className="relative max-w-2xl w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl space-y-3 p-4 my-auto max-h-[92vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between text-white pb-2 border-b border-slate-800">
+              <span className="text-xs font-bold flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-emerald-400" />
+                <span>Foto Fisik e-KTP Terverifikasi</span>
+              </span>
+              <button
+                type="button"
+                onClick={() => setZoomKtpImage(null)}
+                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                title="Tutup (ESC)"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="rounded-2xl overflow-hidden bg-black flex items-center justify-center max-h-[70vh]">
+              <img
+                src={zoomKtpImage}
+                alt="Foto e-KTP Zoom"
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };

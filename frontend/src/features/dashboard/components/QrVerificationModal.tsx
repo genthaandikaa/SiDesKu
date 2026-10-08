@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, 
   Search, 
@@ -51,6 +52,22 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
   const [torchOn, setTorchOn] = useState(false);
   const [hasTorch, setHasTorch] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+  // Lock body scroll and handle ESC key
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        stopCamera();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   // Helper to extract clean query/hash from any QR code content (URL, params, or raw hash)
   const extractHashFromQr = (qrRaw: string): string => {
@@ -391,9 +408,20 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
 
   const w = surat?.warga_profile;
 
-  return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 animate-fade-in bg-slate-950/80 backdrop-blur-sm font-sans overflow-y-auto">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden animate-scale-up border border-slate-200 flex flex-col my-auto max-h-[92vh]">
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[999999] flex items-center justify-center p-3 sm:p-6 animate-fade-in bg-slate-950/75 font-sans overflow-y-auto select-none"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          stopCamera();
+          onClose();
+        }
+      }}
+    >
+      <div 
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden animate-scale-up border border-slate-200 flex flex-col my-auto max-h-[92vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Hidden Canvas for QR video frame decoding */}
         <canvas ref={canvasRef} className="hidden" />
@@ -892,6 +920,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

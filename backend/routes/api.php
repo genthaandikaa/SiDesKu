@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\Admin\AdminDesaSettingController;
 use App\Http\Controllers\Api\Admin\WargaController as AdminWargaController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Bendahara\ApbdesController;
+use App\Http\Controllers\Api\PengumumanController;
 use App\Http\Controllers\Api\Public\PublicInfoController;
 use App\Http\Controllers\Api\Public\PublicSuratController;
 use App\Http\Controllers\Api\Rt\KasRtController;
@@ -26,7 +27,7 @@ Route::get('/settings/desa', [DesaSettingController::class, 'getSettings']);
 
 // Informasi Publik Desa
 Route::get('/public/beritas', [PublicInfoController::class, 'getBeritas']);
-Route::get('/public/pengumumans', [PublicInfoController::class, 'getPengumumans']);
+Route::get('/public/pengumumans', [PengumumanController::class, 'index']);
 Route::get('/public/stats', [PublicInfoController::class, 'getVillageStats']);
 Route::get('/public/home', [PublicInfoController::class, 'getPublicHome']);
 Route::get('/public/apbdes/summary', [ApbdesController::class, 'publicSummary']);
@@ -48,6 +49,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::match(['put', 'post'], '/auth/password', [AuthController::class, 'updatePassword']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/notifikasi-logs', [PublicInfoController::class, 'getNotifikasiLogs']);
+    Route::get('/pengumumans', [PengumumanController::class, 'index']);
+    Route::get('/pengumumans/{id}', [PengumumanController::class, 'show']);
+    Route::post('/pengumumans', [PengumumanController::class, 'store']);
 
     // surat digitalisasi & tracking (Api\Warga, Api\Rt, Api\Rw, Api\Sekdes)
     Route::get('/surats', function (Request $request) {
@@ -65,6 +69,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Detail & Pengajuan Surat (Warga)
     Route::post('/surats', [WargaSuratController::class, 'store']);
     Route::get('/surats/{id}', [WargaSuratController::class, 'show']);
+    Route::put('/surats/{id}', [WargaSuratController::class, 'update']);
+    Route::delete('/surats/{id}', [WargaSuratController::class, 'destroy']);
 
     // Verifikasi & Aksi Ketua RT
     Route::middleware('role:rt,sekretaris_rt,admin')->group(function () {
@@ -130,7 +136,13 @@ Route::middleware('auth:sanctum')->group(function () {
         }
         return app(AdminWargaController::class)->index($request);
     });
-    Route::get('/warga/kartu-keluarga', [AdminWargaController::class, 'getKartuKeluargas']);
+    Route::get('/warga/kartu-keluarga', function (Request $request) {
+        $user = $request->user();
+        if ($user->hasRole('rt') || $user->hasRole('sekretaris_rt') || $user->hasRole('bendahara_rt')) {
+            return app(RtWargaController::class)->getKartuKeluargas($request);
+        }
+        return app(AdminWargaController::class)->getKartuKeluargas($request);
+    });
     Route::get('/wilayah', [AdminWargaController::class, 'getWilayah']);
 
     // pengaduan warga (Api\Warga\PengaduanController & Api\Rt\RtPengaduanController)
@@ -154,6 +166,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('warga')->group(function () {
         Route::get('/surats', [WargaSuratController::class, 'index']);
         Route::post('/surats', [WargaSuratController::class, 'store']);
+        Route::put('/surats/{id}', [WargaSuratController::class, 'update']);
+        Route::delete('/surats/{id}', [WargaSuratController::class, 'destroy']);
         Route::get('/pengaduan', [WargaPengaduanController::class, 'index']);
         Route::post('/pengaduan', [WargaPengaduanController::class, 'store']);
     });

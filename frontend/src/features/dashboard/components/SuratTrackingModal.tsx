@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, AlertTriangle, CheckCircle2, Clock, ShieldCheck, 
   User, Printer, ArrowRight
@@ -19,14 +20,19 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
   onReapply,
   onPrint,
 }) => {
-  // Prevent background scrolling
+  // Prevent background scrolling and handle ESC key
   useEffect(() => {
     const orig = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
       document.body.style.overflow = orig;
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [onClose]);
 
   const trackings = surat.trackings || [];
   
@@ -48,9 +54,17 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
   const isRejectedAtRw = isRejected && (rejectTracking?.status_stage?.toLowerCase().includes('rw'));
   const isRejectedAtSekdes = isRejected && (rejectTracking?.status_stage?.toLowerCase().includes('sekretaris') || rejectTracking?.status_stage?.toLowerCase().includes('desa'));
 
-  return (
-    <div className="fixed inset-0 z-[99999] bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 animate-fade-in font-sans overflow-y-auto">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200 animate-scale-up my-auto">
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[999999] bg-slate-950/75 flex items-center justify-center p-3 sm:p-6 animate-fade-in font-sans overflow-y-auto select-none"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div 
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden border border-slate-200 animate-scale-up my-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Modal Header */}
         <div className="px-6 py-4.5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
@@ -239,8 +253,8 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                 </div>
               </div>
 
-              {/* STEP 3: VERIFIKASI KETUA RW 01 (ONLY RENDER IF NOT REJECTED AT RT) */}
-              {!isRejectedAtRt && (
+              {/* STEP 3 (OPTIONAL / LEGACY ONLY): VERIFIKASI KETUA RW 01 JIKA ADA RIWAYAT RW SEBELUMNYA */}
+              {!isRejectedAtRt && (rwTracking || surat.status === 'pending_rw' || isRejectedAtRw) && (
                 <div className="relative flex items-start gap-4">
                   <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold shrink-0 shadow-xs z-10 ${
                     isRejectedAtRw ? 'bg-rose-600 text-white shadow-rose-200' :
@@ -260,7 +274,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                         rwTracking ? 'bg-emerald-100 text-emerald-800' :
                         surat.status === 'pending_rw' ? 'bg-amber-100 text-amber-900' : 'bg-slate-200 text-slate-600'
                       }`}>
-                        Tahap 3: Verifikasi Pengantar RW 01
+                        Tahap Antara: Verifikasi Pengantar RW 01
                       </span>
                       {rwTracking && (
                         <span className="text-[10px] text-slate-400 font-medium">
@@ -294,13 +308,13 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                 </div>
               )}
 
-              {/* STEP 4: PENGESAHAN SEKRETARIS DESA (ONLY RENDER IF NOT REJECTED AT RT AND NOT REJECTED AT RW) */}
+              {/* STEP: PENGESAHAN SEKRETARIS DESA / KEPALA DESA (LANGSUNG DARI RT) */}
               {!isRejectedAtRt && !isRejectedAtRw && (
                 <div className="relative flex items-start gap-4">
                   <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold shrink-0 shadow-xs z-10 ${
                     isRejectedAtSekdes ? 'bg-rose-600 text-white' :
                     isCompleted ? 'bg-emerald-700 text-white' :
-                    surat.status === 'processed_sekdes' ? 'bg-amber-500 text-white animate-pulse' : 'bg-slate-200 text-slate-400'
+                    ['processed_sekdes', 'approved_rt'].includes(surat.status) ? 'bg-amber-500 text-white animate-pulse' : 'bg-slate-200 text-slate-400'
                   }`}>
                     {isRejectedAtSekdes ? <AlertTriangle className="w-5 h-5" /> :
                      isCompleted ? <ShieldCheck className="w-5 h-5" /> : <Clock className="w-5 h-5" />}
@@ -313,9 +327,9 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                       <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${
                         isRejectedAtSekdes ? 'bg-rose-200 text-rose-900' :
                         isCompleted ? 'bg-emerald-100 text-emerald-800' :
-                        surat.status === 'processed_sekdes' ? 'bg-amber-100 text-amber-900' : 'bg-slate-200 text-slate-600'
+                        ['processed_sekdes', 'approved_rt'].includes(surat.status) ? 'bg-amber-100 text-amber-900' : 'bg-slate-200 text-slate-600'
                       }`}>
-                        Tahap 4: Legalisasi Stempel QR & Terbit
+                        {rwTracking ? 'Tahap 4: Legalisasi Stempel QR & Terbit' : 'Tahap 3: Legalisasi Stempel QR & Terbit Kantor Desa'}
                       </span>
                       {surat.nomor_surat_resmi && (
                         <span className="text-[10px] font-mono text-emerald-900 font-bold">
@@ -327,7 +341,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                     <div className="font-extrabold text-xs text-slate-900">
                       {isRejectedAtSekdes ? '❌ Ditolak oleh Balai Desa (Alur Berhenti)' :
                        isCompleted ? '🏛️ Dokumen Resmi Diterbitkan & Sah Ber-QR' :
-                       surat.status === 'processed_sekdes' ? '⏳ Sedang Diproses Legalisasi Sekretaris Desa' : 'Menunggu tahap sebelumnya selesai'}
+                       ['processed_sekdes', 'approved_rt'].includes(surat.status) ? '⏳ Sedang Diproses Legalisasi Sekretaris Desa / Kades' : 'Menunggu tahap RT selesai'}
                     </div>
 
                     {(sekdesTracking?.catatan || isRejectedAtSekdes) && (
@@ -381,6 +395,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

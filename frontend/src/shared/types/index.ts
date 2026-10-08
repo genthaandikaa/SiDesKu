@@ -93,6 +93,7 @@ export interface WargaProfile {
   golongan_darah?: string;
   no_hp_wa?: string;
   alamat_ktp: string;
+  foto_ktp?: string | null;
   status_keluarga: string;
   status_ekonomi: string;
   status_kependudukan: string;
@@ -123,6 +124,12 @@ export interface SuratTracking {
   actor_user?: User;
 }
 
+export interface LampiranDokumen {
+  url: string;
+  nama: string;
+  tipe?: string;
+}
+
 export interface SuratRequest {
   id: number;
   nomor_resi: string;
@@ -132,7 +139,7 @@ export interface SuratRequest {
   status: 'draft' | 'pending_rt' | 'approved_rt' | 'pending_rw' | 'approved_rw' | 'processed_sekdes' | 'completed' | 'rejected';
   keperluan: string;
   form_data_json?: Record<string, any>;
-  file_lampiran?: string;
+  file_lampiran?: string | LampiranDokumen[] | null;
   file_surat_pdf?: string;
   qr_verification_hash: string;
   ttd_sekdes_at?: string;

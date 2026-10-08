@@ -88,7 +88,7 @@ export const PublicNavbar: React.FC = () => {
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 select-none ${
       isScrolled 
-        ? 'bg-white/30 backdrop-blur-md shadow-2xs py-2.5' 
+        ? 'bg-white/90 backdrop-blur-md shadow-sm py-2.5 border-b border-slate-200/60' 
         : 'bg-white py-3.5 shadow-2xs'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -205,14 +205,14 @@ export const PublicNavbar: React.FC = () => {
                   to="/register"
                   className="px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-emerald-800 bg-white/90 hover:bg-emerald-50 border border-slate-200/80 transition-all shadow-2xs whitespace-nowrap outline-none focus:outline-none"
                 >
-                  <span>Daftar Akun</span>
+                  <span>Register</span>
                 </Link>
 
                 <Link
                   to="/login"
                   className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
                 >
-                  <span>Portal Masuk</span>
+                  <span>Login</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

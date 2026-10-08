@@ -323,8 +323,8 @@ export const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-12 sm:space-y-16 page-enter relative overflow-hidden">
-      {/* Hero Section (Clean Normal Layout) */}
+    <div className="page-enter relative w-full overflow-hidden flex flex-col">
+      {/* Hero Section (Clean Full-Width Layout) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-12 sm:pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left Column: Headline & Action */}
@@ -642,63 +642,73 @@ export const HomePage: React.FC = () => {
           </div>
         </section>
 
-      {/* Floating Bridge Statistics Ribbon (Golden Ratio Fibonacci Transition) */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-12 lg:-mt-14 relative z-20">
-        <div className="card-elevated-mockup p-5 sm:p-7 bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-xl rounded-3xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
-            <div className="space-y-1 pt-3 md:pt-0">
-              <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                {countWarga}+
-              </div>
-              <div className="text-xs font-bold text-slate-500">
-                Penduduk Terdata
-              </div>
-              <div className="text-[10px] text-emerald-600 font-semibold">
+      {/* Floating Individual Statistics Cards - Fibonacci Golden Ratio Dimensions & Typography */}
+      <div className="relative z-30 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mb-[52px] sm:-mb-[58px]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+          {/* Komponen 1: Penduduk Terdata */}
+          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none group-hover:scale-105 transition-transform">
+              {countWarga}+
+            </div>
+            <div className="text-xs sm:text-[13px] font-bold text-slate-700">
+              Penduduk Terdata
+            </div>
+            <div>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                 3 Dusun & 36 RT
-              </div>
+              </span>
             </div>
+          </div>
 
-            <div className="space-y-1 pt-3 md:pt-0">
-              <div className="text-3xl sm:text-4xl font-black text-emerald-600 tracking-tight">
-                {countSurat}+
-              </div>
-              <div className="text-xs font-bold text-slate-500">
-                Surat Sah Terbit
-              </div>
-              <div className="text-[10px] text-emerald-600 font-semibold">
+          {/* Komponen 2: Surat Sah Terbit */}
+          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
+            <div className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight leading-none group-hover:scale-105 transition-transform">
+              {countSurat}+
+            </div>
+            <div className="text-xs sm:text-[13px] font-bold text-slate-700">
+              Surat Sah Terbit
+            </div>
+            <div>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                 100% Legal Ber-QR
-              </div>
+              </span>
             </div>
+          </div>
 
-            <div className="space-y-1 pt-3 md:pt-0">
-              <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                &lt; {countSla} Mnt
-              </div>
-              <div className="text-xs font-bold text-slate-500">
-                Rata-rata SLA
-              </div>
-              <div className="text-[10px] text-emerald-600 font-semibold">
+          {/* Komponen 3: Rata-rata SLA */}
+          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none group-hover:scale-105 transition-transform">
+              &lt; {countSla} Mnt
+            </div>
+            <div className="text-xs sm:text-[13px] font-bold text-slate-700">
+              Rata-rata SLA
+            </div>
+            <div>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                 Disposisi Realtime
-              </div>
+              </span>
             </div>
+          </div>
 
-            <div className="space-y-1 pt-3 md:pt-0">
-              <div className="text-3xl sm:text-4xl font-black text-emerald-600 tracking-tight">
-                Rp 0,-
-              </div>
-              <div className="text-xs font-bold text-slate-500">
-                Bebas Biaya (Gratis)
-              </div>
-              <div className="text-[10px] text-emerald-600 font-semibold">
+          {/* Komponen 4: Bebas Biaya (Gratis) */}
+          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
+            <div className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight leading-none group-hover:scale-105 transition-transform">
+              Rp 0,-
+            </div>
+            <div className="text-xs sm:text-[13px] font-bold text-slate-700">
+              Bebas Biaya (Gratis)
+            </div>
+            <div>
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
                 Resmi Anti-Pungli
-              </div>
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Capabilities Conveyor */}
-      <section className="py-8 sm:py-12 overflow-hidden">
+      {/* Capabilities Conveyor (Full-Width White Band) */}
+      <section className="w-full bg-white pt-20 sm:pt-24 pb-14 sm:pb-20 border-y border-slate-200/80 overflow-hidden relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="max-w-3xl space-y-2">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
@@ -711,8 +721,10 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
 
-        {/* U-Shape Conveyor Belt */}
-        <div className="relative w-full overflow-hidden py-8">
+        {/* U-Shape Conveyor Belt with Elegant Fade Edges */}
+        <div className="relative w-full overflow-hidden py-4">
+          <div className="absolute left-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 sm:w-24 bg-gradient-to-l from-white via-white/80 to-transparent pointer-events-none z-10" />
           <div className="animate-marquee gap-6 px-4 items-center">
             {[
               ...capabilitiesList,
@@ -724,7 +736,7 @@ export const HomePage: React.FC = () => {
               return (
                 <div
                   key={`cap-${idx}`}
-                  className={`${uClass} w-[220px] sm:w-[250px] shrink-0 p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer hover:scale-105`}
+                  className={`${uClass} w-[220px] sm:w-[250px] shrink-0 p-6 rounded-3xl bg-slate-50/90 border border-slate-200/90 shadow-xs hover:shadow-xl hover:bg-white hover:border-emerald-300 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer hover:scale-105`}
                 >
                   <div className="w-13 h-13 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-2xs mb-3.5">
                     <Icon className="w-6 h-6 stroke-[1.8]" />
@@ -742,470 +754,510 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* SmartRT / Photo 4: Unified Orbital Ecosystem Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-        <div className="text-center max-w-3xl mx-auto space-y-3 mb-6 sm:mb-10">
-          <div className="pill-badge-emerald">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
-            <span>ARSITEKTUR DIGITAL TERINTEGRASI</span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Ekosistem Pelayanan Desa dalam Satu Alur Digital
-          </h2>
-          <p className="text-sm sm:text-base text-slate-600">
-            Solusi digital menyeluruh yang menghubungkan permohonan warga, koordinasi RT/RW berjenjang, dan transparansi balai desa serba cepat dan akurat.
-          </p>
-        </div>
+      {/* SmartRT / Photo 4: Unified Orbital Ecosystem Section (Full-Width Edge-to-Edge Banner) */}
+      <section className="w-full bg-gradient-to-b from-[#065f46] via-[#047857] to-[#064e3b] text-white py-16 sm:py-24 relative overflow-hidden shadow-2xl">
+        {/* Subtle Ambient Glows & Dot Grid */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-400/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-40" />
+        <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-white/20" />
 
-        {/* Seamless Canvas Container */}
-        <div className="relative overflow-hidden py-2 sm:py-6 group/orbit">
-          {/* Desktop Orbital Stage (>= 1024px) */}
-          <div className="hidden lg:flex items-center justify-center relative min-h-[920px] w-full overflow-hidden select-none">
-            {/* Concentric Orbit Rings (4 subtle emerald rings) */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-              <div className="w-[390px] h-[390px] rounded-full border border-emerald-500/20 absolute" />
-              <div className="w-[580px] h-[580px] rounded-full border border-emerald-500/15 absolute" />
-              <div className="w-[760px] h-[760px] rounded-full border border-emerald-500/15 absolute" />
-              <div className="w-[940px] h-[940px] rounded-full border border-emerald-500/10 absolute" />
-              {/* Subtle Radial Center Backlight */}
-              <div className="w-[500px] h-[500px] rounded-full bg-emerald-500/10 blur-3xl absolute" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Header Row (Directly matching SmartRT Reference in Screenshot 1) */}
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-12">
+            <div className="space-y-2 max-w-3xl">
+              <span className="text-xs sm:text-sm font-bold tracking-widest text-emerald-200 uppercase">
+                ARSITEKTUR DIGITAL TERINTEGRASI
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                Ekosistem Pelayanan Desa dalam Satu Alur Digital
+              </h2>
+              <p className="text-sm sm:text-base text-emerald-100 font-normal leading-relaxed">
+                Solusi digital menyeluruh yang menghubungkan permohonan warga, koordinasi RT/RW berjenjang, dan transparansi balai desa serba cepat dan akurat.
+              </p>
             </div>
-
-            {/* Center Static Smartphone Mockup (Transparent Background) */}
-            <div className="relative z-20 flex flex-col items-center justify-center pointer-events-auto">
-              <img
-                src="/images/landing/mobile-preview-clean.png"
-                alt="SiDesKu Mobile Preview"
-                className="w-[270px] xl:w-[285px] h-auto object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.15)] animate-float-gentle select-none pointer-events-none"
-              />
-            </div>
-
-            {/* Rotating Orbital Track (Nodes circle around the phone) */}
-            <div
-              className="absolute inset-0 w-full h-full animate-orbit-rotate group-hover/orbit:[animation-play-state:paused] pointer-events-none z-20"
+            <Link
+              to="/layanan-surat"
+              className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white hover:text-emerald-200 shrink-0 mb-1 transition-colors group underline underline-offset-4"
             >
-              {orbitalNodes.map((item) => {
-                const IconComponent = item.icon;
-                return (
-                  <div
-                    key={item.id}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
-                    style={{
-                      left: `calc(50% + ${item.x}px)`,
-                      top: `calc(50% + ${item.y}px)`,
-                    }}
-                  >
-                    {/* Counter-rotation ensures text & icon stay 100% upright and readable */}
+              <span>Pelajari Selengkapnya</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {/* Seamless Canvas Container */}
+          <div className="relative overflow-hidden py-2 sm:py-6 group/orbit">
+            {/* Desktop Orbital Stage (>= 1024px) */}
+            <div className="hidden lg:flex items-center justify-center relative min-h-[920px] w-full overflow-hidden select-none">
+              {/* Concentric Orbit Rings in Crisp White Translucent (Matching SmartRT Screenshot 1) */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                <div className="w-[390px] h-[390px] rounded-full border border-white/25 absolute" />
+                <div className="w-[580px] h-[580px] rounded-full border border-white/20 absolute" />
+                <div className="w-[760px] h-[760px] rounded-full border border-white/15 absolute" />
+                <div className="w-[940px] h-[940px] rounded-full border border-white/10 absolute" />
+                {/* Subtle Center Radial Backlight */}
+                <div className="w-[500px] h-[500px] rounded-full bg-emerald-300/15 blur-3xl absolute" />
+              </div>
+
+              {/* Center Static Smartphone Mockup (Drop Shadow on Colored Background) */}
+              <div className="relative z-20 flex flex-col items-center justify-center pointer-events-auto">
+                <img
+                  src="/images/landing/mobile-preview-clean.png"
+                  alt="SiDesKu Mobile Preview"
+                  className="w-[270px] xl:w-[285px] h-auto object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.45)] animate-float-gentle select-none pointer-events-none"
+                />
+              </div>
+
+              {/* Rotating Orbital Track (Nodes circle around the phone) */}
+              <div
+                className="absolute inset-0 w-full h-full animate-orbit-rotate group-hover/orbit:[animation-play-state:paused] pointer-events-none z-20"
+              >
+                {orbitalNodes.map((item) => {
+                  const IconComponent = item.icon;
+                  return (
                     <div
-                      className="animate-orbit-counter group-hover/orbit:[animation-play-state:paused]"
+                      key={item.id}
+                      className="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-auto"
+                      style={{
+                        left: `calc(50% + ${item.x}px)`,
+                        top: `calc(50% + ${item.y}px)`,
+                      }}
                     >
-                      <Link
-                        to={item.link}
-                        className="group flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-white/95 hover:bg-white border border-slate-200/90 hover:border-emerald-400 shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer max-w-[275px]"
+                      {/* Counter-rotation ensures text & icon stay 100% upright and readable */}
+                      <div
+                        className="animate-orbit-counter group-hover/orbit:[animation-play-state:paused]"
                       >
-                        <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center shrink-0 shadow-2xs text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                          <IconComponent className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-emerald-700 transition-colors whitespace-nowrap">
-                            {item.title}
-                          </h4>
-                          <p className="text-slate-500 text-[11px] leading-snug mt-0.5">
-                            {item.desc}
-                          </p>
-                        </div>
-                      </Link>
+                        <Link
+                          to={item.link}
+                          className="group flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-white text-slate-900 border border-white/80 shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer max-w-[275px]"
+                        >
+                          <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center shrink-0 shadow-2xs text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                            <IconComponent className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h4 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-emerald-700 transition-colors whitespace-nowrap">
+                              {item.title}
+                            </h4>
+                            <p className="text-slate-500 text-[11px] leading-snug mt-0.5">
+                              {item.desc}
+                            </p>
+                          </div>
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Mobile & Tablet Responsive View (< 1024px) */}
-          <div className="block lg:hidden space-y-8 relative z-10 select-none">
-            {/* Center Mobile Phone with Ambient Glowing Rings */}
-            <div className="relative flex items-center justify-center py-6">
-              <div className="absolute w-64 h-64 rounded-full border border-emerald-500/20 pointer-events-none" />
-              <div className="absolute w-80 h-80 rounded-full border border-emerald-500/10 pointer-events-none" />
-              <div className="absolute w-48 h-48 rounded-full bg-emerald-500/10 blur-2xl pointer-events-none" />
-              <img
-                src="/images/landing/mobile-preview-clean.png"
-                alt="SiDesKu Mobile Preview"
-                className="w-56 sm:w-64 h-auto object-contain drop-shadow-xl relative z-10 animate-float-gentle"
-              />
-            </div>
-
-            {/* Mobile Feature Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {orbitalNodes.map((item) => {
-                const IconComponent = item.icon;
-                return (
-                  <Link
-                    key={item.id}
-                    to={item.link}
-                    className="flex items-start gap-3.5 p-4 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-emerald-400 hover:shadow-md transition-all duration-200 active:scale-[0.98]"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center shrink-0 text-emerald-600">
-                      <IconComponent className="w-5 h-5" />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="font-bold text-slate-900 text-sm">
-                        {item.title}
-                      </h4>
-                      <p className="text-xs text-slate-500 leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Showcase Section 1 */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Illustration / Card with Overlays */}
-          <div className="lg:col-span-6 relative">
-            <div className="rounded-3xl overflow-hidden shadow-2xl border border-slate-200 bg-white relative">
-              <img
-                src="/images/landing/about_img.webp"
-                alt="Warga Layanan Online"
-                className="w-full h-80 sm:h-96 object-cover"
-              />
-
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent flex flex-col justify-end p-6 text-white">
-                <div className="font-extrabold text-lg">
-                  Pengurusan Surat Keterangan Warga
-                </div>
-                <p className="text-xs text-slate-200">
-                  Terbit tanpa perlu meninggalkan aktivitas pekerjaan harian.
-                </p>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Floating Task Pill 1 */}
-            <div className="absolute -top-4 -left-4 bg-white p-3.5 rounded-2xl shadow-xl border border-slate-100 space-y-1 hidden sm:block animate-float">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">
-                SKTM Siswa Smk
-              </div>
-              <div className="flex items-center gap-1.5 text-xs font-extrabold text-emerald-700">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Disetujui
-                RT 01 & RW 01
-              </div>
-            </div>
-
-            {/* Floating Task Pill 2 */}
-            <div className="absolute -bottom-4 -right-4 bg-white p-3.5 rounded-2xl shadow-xl border border-slate-100 space-y-1 hidden sm:block animate-float-gentle">
-              <div className="text-[10px] text-slate-400 font-bold uppercase">
-                Nomor Surat Resmi
-              </div>
-              <div className="text-xs font-mono font-black text-slate-900">
-                470/084/418.67/2026
-              </div>
-            </div>
-          </div>
-
-          {/* Right Text & Checklist */}
-          <div className="lg:col-span-6 space-y-6">
-            <div className="pill-badge-emerald">
-              <FileText className="w-3.5 h-3.5 text-emerald-600" />
-              <span>LAYANAN SURAT BERJENJANG</span>
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Urus Surat dari Rumah, Selesai Cepat & Tepat Waktu
-            </h2>
-
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-              Tidak ada lagi antrean panjang di loket balai desa atau menunggu
-              Ketua RT pulang kerja. Semua permohonan diverifikasi secara
-              digital melalui ponsel perangkat yang bertugas.
-            </p>
-
-            <div className="space-y-3.5 pt-2">
-              <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
-                </div>
-                <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                  <strong>Pengajuan Bebas Antre:</strong> Pilih jenis surat, isi
-                  keperluan, dan berkas langsung masuk ke antrean Ketua RT.
-                </div>
+            {/* Mobile & Tablet Responsive View (< 1024px) */}
+            <div className="block lg:hidden space-y-8 relative z-10 select-none">
+              {/* Center Mobile Phone with Ambient Glowing Rings */}
+              <div className="relative flex items-center justify-center py-6">
+                <div className="absolute w-64 h-64 rounded-full border border-white/25 pointer-events-none" />
+                <div className="absolute w-80 h-80 rounded-full border border-white/15 pointer-events-none" />
+                <div className="absolute w-48 h-48 rounded-full bg-emerald-300/20 blur-2xl pointer-events-none" />
+                <img
+                  src="/images/landing/mobile-preview-clean.png"
+                  alt="SiDesKu Mobile Preview"
+                  className="w-56 sm:w-64 h-auto object-contain drop-shadow-2xl relative z-10 animate-float-gentle"
+                />
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
-                </div>
-                <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                  <strong>Validasi Bertingkat Otomatis:</strong> Notifikasi ACC
-                  mengalir berjenjang dari RT, RW, hingga penandatanganan
-                  Sekdes.
-                </div>
+              {/* Mobile Feature Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {orbitalNodes.map((item) => {
+                  const IconComponent = item.icon;
+                  return (
+                    <Link
+                      key={item.id}
+                      to={item.link}
+                      className="flex items-start gap-3.5 p-4 rounded-2xl bg-white text-slate-900 border border-white/90 shadow-lg hover:shadow-xl transition-all duration-200 active:scale-[0.98]"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-center shrink-0 text-emerald-600">
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="font-bold text-slate-900 text-sm">
+                          {item.title}
+                        </h4>
+                        <p className="text-xs text-slate-500 leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
-                </div>
-                <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                  <strong>Tanda Tangan & QR Code Sah:</strong> Dilengkapi segel
-                  elektronik yang dapat diverifikasi keasliannya oleh instansi
-                  luar.
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
-                </div>
-                <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                  <strong>Pelayanan 100% Gratis:</strong> Seluruh pengurusan
-                  dokumen tidak dipungut biaya apapun (Rp 0,-).
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <Link
-                to="/layanan-surat"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition-colors shadow-sm press-down"
-              >
-                <span>Lihat 8+ Jenis Surat & Syarat</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Showcase Section 2 */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Left Text */}
-          <div className="lg:col-span-6 space-y-6 order-2 lg:order-1">
-            <div className="pill-badge-emerald">
-              <BellRing className="w-3.5 h-3.5 text-emerald-600" />
-              <span>JARING PENGAMAN SOSIAL</span>
+      {/* Showcase Section 1 (Full-Width Pure White Band) */}
+      <section className="w-full bg-white py-16 sm:py-24 text-slate-900 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Illustration / Card with Overlays */}
+            <div className="lg:col-span-6 relative">
+              {/* Ambient Glow */}
+              <div className="absolute -inset-4 bg-gradient-to-tr from-emerald-500/15 via-teal-400/10 to-blue-500/10 rounded-3xl blur-2xl -z-10 pointer-events-none" />
+
+              <div className="rounded-3xl overflow-hidden shadow-2xl border border-slate-200/90 bg-white relative group">
+                {/* Window Header / Mac-style Titlebar */}
+                <div className="bg-slate-100/90 border-b border-slate-200/80 px-4 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-rose-400" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
+                  </div>
+                  <div className="text-[11px] font-mono font-bold text-slate-500 bg-white px-3 py-0.5 rounded-md border border-slate-200 shadow-2xs">
+                    sidesku.desa.id/admin/persuratan
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Realtime Live</span>
+                  </div>
+                </div>
+
+                {/* Admin Panel Screenshot */}
+                <div className="relative overflow-hidden bg-slate-900/5">
+                  <img
+                    src="/images/landing/admin-dashboard-preview.png"
+                    alt="Portal Administrasi Persuratan SiDesKu"
+                    className="w-full h-auto object-cover object-top hover:scale-[1.02] transition-transform duration-500"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+
+              {/* Floating Task Pill 1 */}
+              <div className="absolute -top-4 -left-4 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-slate-200/90 space-y-1 hidden sm:block animate-float z-10">
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                  SKTM Siswa SMK
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-extrabold text-emerald-700">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Disetujui RT 01 & RW 01</span>
+                </div>
+              </div>
+
+              {/* Floating Task Pill 2 */}
+              <div className="absolute -bottom-4 -right-4 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-slate-200/90 space-y-1 hidden sm:block animate-float-gentle z-10">
+                <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                  Nomor Surat Resmi
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-mono font-black text-slate-900">
+                  <ShieldCheck className="w-4 h-4 text-teal-600 shrink-0" />
+                  <span>470/084/418.67/2026</span>
+                </div>
+              </div>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Distribusi Bantuan Sosial Tepat Sasaran & Tanpa Potongan
-            </h2>
+            {/* Right Text & Checklist */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="pill-badge-emerald">
+                <FileText className="w-3.5 h-3.5 text-emerald-600" />
+                <span>LAYANAN SURAT BERJENJANG</span>
+              </div>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-              Saat bantuan PKH, BLT-DD, atau BPNT siap cair, desa cukup menekan
-              tombol broadcast. Sistem seketika mendistribusikan pesan jadwal
-              dan nomor antrean QR langsung ke nomor WhatsApp warga penerima
-              manfaat.
-            </p>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
+                Urus Surat dari Rumah, Selesai Cepat & Tepat Waktu
+              </h2>
 
-            <div className="space-y-3.5 pt-2">
-              <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+                Tidak ada lagi antrean panjang di loket balai desa atau menunggu
+                Ketua RT pulang kerja. Semua permohonan diverifikasi secara
+                digital melalui ponsel perangkat yang bertugas.
+              </p>
+
+              <div className="space-y-3.5 pt-2">
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                    <Check className="w-3 h-3" />
+                  </div>
+                  <div className="text-xs sm:text-sm text-slate-700 font-medium">
+                    <strong>Pengajuan Bebas Antre:</strong> Pilih jenis surat, isi
+                    keperluan, dan berkas langsung masuk ke antrean Ketua RT.
+                  </div>
                 </div>
-                <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                  <strong>Pemberitahuan Waktu Pasti:</strong> Warga hadir sesuai
-                  jam sesi sehingga tidak terjadi kerumunan di balai desa.
+
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                    <Check className="w-3 h-3" />
+                  </div>
+                  <div className="text-xs sm:text-sm text-slate-700 font-medium">
+                    <strong>Validasi Bertingkat Otomatis:</strong> Notifikasi ACC
+                    mengalir berjenjang dari RT, RW, hingga penandatanganan
+                    Sekdes.
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                    <Check className="w-3 h-3" />
+                  </div>
+                  <div className="text-xs sm:text-sm text-slate-700 font-medium">
+                    <strong>Tanda Tangan & QR Code Sah:</strong> Dilengkapi segel
+                    elektronik yang dapat diverifikasi keasliannya oleh instansi
+                    luar.
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                    <Check className="w-3 h-3" />
+                  </div>
+                  <div className="text-xs sm:text-sm text-slate-700 font-medium">
+                    <strong>Pelayanan 100% Gratis:</strong> Seluruh pengurusan
+                    dokumen tidak dipungut biaya apapun (Rp 0,-).
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
-                </div>
-                <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                  <strong>Barcode Antrean Digital:</strong> Verifikasi penerima
-                  di meja pencairan cepat dengan scan barcode NIK.
-                </div>
+              <div className="pt-2">
+                <Link
+                  to="/layanan-surat"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition-colors shadow-sm press-down"
+                >
+                  <span>Lihat 8+ Jenis Surat & Syarat</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
-
-              <div className="flex items-start gap-3">
-                <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
-                  <Check className="w-3 h-3" />
-                </div>
-                <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                  <strong>Pengecekan NIK Mandiri:</strong> Warga dapat memeriksa
-                  status kepesertaan bansos kapan saja secara transparan.
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <Link
-                to="/bansos"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition-colors shadow-sm press-down"
-              >
-                <span>Cek Status NIK Bansos Anda</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Right Simulated WhatsApp Phone Preview with Authentic Bright WhatsApp Theme & Real QR Code */}
-          <div className="lg:col-span-6 order-1 lg:order-2">
-            <div className="card-elevated-mockup overflow-hidden rounded-3xl border border-slate-200/80 shadow-2xl bg-[#efeae2]">
-              {/* WhatsApp App Header (Authentic Bright Green) */}
-              <div className="bg-[#008069] text-white px-5 py-3.5 flex items-center justify-between shadow-md">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-white p-0.5 shadow-sm shrink-0">
-                    <img
-                      src="/images/logo-kediri.png"
-                      alt="Logo Kediri"
-                      className="w-full h-full object-contain"
-                    />
+      {/* Showcase Section 2 (Full-Width Emerald/Teal Banner Band at 1 Div Distance) */}
+      <section className="w-full bg-gradient-to-b from-[#065f46] via-[#047857] to-[#064e3b] text-white py-16 sm:py-24 relative overflow-hidden shadow-2xl">
+        {/* Subtle Ambient Decorative Accents */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-400/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-30" />
+        <div className="absolute inset-x-0 top-0 h-px bg-white/20" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-white/20" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Text */}
+            <div className="lg:col-span-6 space-y-6 order-2 lg:order-1">
+              <span className="text-xs sm:text-sm font-bold tracking-widest text-emerald-200 uppercase">
+                JARING PENGAMAN SOSIAL
+              </span>
+
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                Distribusi Bantuan Sosial Tepat Sasaran & Tanpa Potongan
+              </h2>
+
+              <p className="text-sm sm:text-base text-emerald-100 leading-relaxed font-normal">
+                Saat bantuan PKH, BLT-DD, atau BPNT siap cair, desa cukup menekan
+                tombol broadcast. Sistem seketika mendistribusikan pesan jadwal
+                dan nomor antrean QR langsung ke nomor WhatsApp warga penerima
+                manfaat.
+              </p>
+
+              <div className="space-y-3.5 pt-2">
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-emerald-400 text-emerald-950 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                    <Check className="w-3 h-3" />
                   </div>
-                  <div>
-                    <div className="font-extrabold text-sm text-white flex items-center gap-1.5 leading-tight">
-                      <span>Pemerintah Desa Doko</span>
-                      <CheckCircle2 className="w-3.5 h-3.5 fill-emerald-300 text-[#008069]" />
-                    </div>
-                    <div className="text-[11px] text-emerald-100/90 font-medium">
-                      WhatsApp Gateway Resmi • Online
-                    </div>
+                  <div className="text-xs sm:text-sm text-emerald-50 font-medium">
+                    <strong className="text-white">Pemberitahuan Waktu Pasti:</strong> Warga hadir sesuai
+                    jam sesi sehingga tidak terjadi kerumunan di balai desa.
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 bg-[#006a57] px-3 py-1 rounded-full text-[11px] font-bold text-emerald-100 border border-emerald-500/30">
-                  <span>Dual Verifikasi</span>
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-emerald-400 text-emerald-950 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                    <Check className="w-3 h-3" />
+                  </div>
+                  <div className="text-xs sm:text-sm text-emerald-50 font-medium">
+                    <strong className="text-white">Barcode Antrean Digital:</strong> Verifikasi penerima
+                    di meja pencairan cepat dengan scan barcode NIK.
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded-full bg-emerald-400 text-emerald-950 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
+                    <Check className="w-3 h-3" />
+                  </div>
+                  <div className="text-xs sm:text-sm text-emerald-50 font-medium">
+                    <strong className="text-white">Pengecekan NIK Mandiri:</strong> Warga dapat memeriksa
+                    status kepesertaan bansos kapan saja secara transparan.
+                  </div>
                 </div>
               </div>
 
-              {/* Chat Canvas (Light Wallpaper + Bubble) */}
-              <div className="p-4 sm:p-6 space-y-3 font-sans">
-                {/* Date Pill */}
-                <div className="flex justify-center">
-                  <span className="bg-white/80 backdrop-blur-xs text-[10px] font-bold text-slate-500 px-3 py-1 rounded-full shadow-2xs uppercase tracking-wider">
-                    Hari Ini • 08.00 WIB
-                  </span>
+              <div className="pt-2">
+                <Link
+                  to="/bansos"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white hover:bg-emerald-50 text-emerald-950 font-extrabold text-sm transition-all shadow-xl press-down"
+                >
+                  <span>Cek Status NIK Bansos Anda</span>
+                  <ArrowRight className="w-4 h-4 text-emerald-800" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Right Simulated WhatsApp Phone Preview with Authentic Bright WhatsApp Theme & Real QR Code */}
+            <div className="lg:col-span-6 order-1 lg:order-2">
+              <div className="card-elevated-mockup overflow-hidden rounded-3xl border border-white/20 shadow-2xl bg-[#efeae2]">
+                {/* WhatsApp App Header (Authentic Bright Green) */}
+                <div className="bg-[#008069] text-white px-5 py-3.5 flex items-center justify-between shadow-md">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white p-0.5 shadow-sm shrink-0">
+                      <img
+                        src="/images/logo-kediri.png"
+                        alt="Logo Kediri"
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-extrabold text-sm text-white flex items-center gap-1.5 leading-tight">
+                        <span>Pemerintah Desa Doko</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 fill-emerald-300 text-[#008069]" />
+                      </div>
+                      <div className="text-[11px] text-emerald-100/90 font-medium">
+                        WhatsApp Gateway Resmi • Online
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 bg-[#006a57] px-3 py-1 rounded-full text-[11px] font-bold text-emerald-100 border border-emerald-500/30">
+                    <span>Dual Verifikasi</span>
+                  </div>
                 </div>
 
-                {/* WhatsApp Chat Bubble */}
-                <div className="bg-white rounded-2xl rounded-tl-xs p-4 sm:p-5 text-slate-800 shadow-md border border-slate-200/70 space-y-3 relative">
-                  {/* Sender Badge */}
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                    <div className="flex items-center gap-2 text-xs font-black text-[#008069]">
-                      <Building2 className="w-4 h-4 text-[#008069]" />
-                      <span>PEMERINTAH DESA DOKO</span>
-                    </div>
-                    <span className="text-[10px] text-slate-400 font-medium">
-                      08.02
+                {/* Chat Canvas (Light Wallpaper + Bubble) */}
+                <div className="p-4 sm:p-6 space-y-3 font-sans">
+                  {/* Date Pill */}
+                  <div className="flex justify-center">
+                    <span className="bg-white/80 backdrop-blur-xs text-[10px] font-bold text-slate-500 px-3 py-1 rounded-full shadow-2xs uppercase tracking-wider">
+                      Hari Ini • 08.00 WIB
                     </span>
                   </div>
 
-                  <div className="text-xs text-slate-700 leading-relaxed space-y-1">
-                    <p>
-                      Yth. Bpk/Ibu{" "}
-                      <strong className="text-slate-900 font-extrabold">
-                        Bambang Utomo
-                      </strong>
-                      ,
-                    </p>
-                    <p>
-                      Bantuan{" "}
-                      <strong className="text-[#008069]">
-                        PKH Tahap III 2026
-                      </strong>{" "}
-                      sebesar{" "}
-                      <strong className="text-slate-900 font-extrabold">
-                        Rp 750.000
-                      </strong>{" "}
-                      telah siap disalurkan.
-                    </p>
-                  </div>
-
-                  {/* Distribution Schedule Card */}
-                  <div className="bg-emerald-50/80 p-3.5 rounded-2xl border border-emerald-200/80 space-y-1.5 text-xs text-slate-700">
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-500">📅 Tanggal:</span>
-                      <strong className="text-slate-900 font-bold">
-                        25 Agustus 2026
-                      </strong>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-500">⏰ Waktu:</span>
-                      <strong className="text-slate-900 font-bold">
-                        08.30 WIB (Sesi 1)
-                      </strong>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-slate-500">📍 Tempat:</span>
-                      <strong className="text-slate-900 font-bold">
-                        Pendopo Balai Desa Doko
-                      </strong>
-                    </div>
-                    <div className="flex items-center justify-between pt-1 border-t border-emerald-200/60">
-                      <span className="text-emerald-800 font-bold">
-                        🎫 No. Antrean:
-                      </span>
-                      <span className="text-base font-black text-[#008069] bg-white px-2.5 py-0.5 rounded-lg shadow-2xs border border-emerald-300">
-                        A-014
+                  {/* WhatsApp Chat Bubble */}
+                  <div className="bg-white rounded-2xl rounded-tl-xs p-4 sm:p-5 text-slate-800 shadow-md border border-slate-200/70 space-y-3 relative">
+                    {/* Sender Badge */}
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                      <div className="flex items-center gap-2 text-xs font-black text-[#008069]">
+                        <Building2 className="w-4 h-4 text-[#008069]" />
+                        <span>PEMERINTAH DESA & PERUM BULOG</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        08.02
                       </span>
                     </div>
-                  </div>
 
-                  {/* Dual Mode Card Inside WhatsApp (Visual QR + Plain Text) */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                    {/* Opsi 1: Visual QR Code */}
-                    <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-2">
-                      <div className="font-extrabold text-[11px] text-[#008069] flex items-center justify-center gap-1">
-                        <QrCode className="w-3.5 h-3.5" />
-                        <span>Opsi 1: Scan QR (Cepat)</span>
-                      </div>
-
-                      {/* Real Backend Generated Vector QR Code */}
-                      <div className="bg-white p-2.5 rounded-xl shadow-xs border border-slate-200 inline-block">
-                        <img
-                          src="/api/public/surat/qr?data=PKH2026-A014-3506"
-                          alt="QR Antrean PKH 2026"
-                          className="w-20 h-20 sm:w-24 sm:h-24 mx-auto object-contain"
-                          loading="lazy"
-                        />
-                        <div className="text-[9px] font-mono font-bold text-slate-500 mt-1">
-                          PKH2026-A014-3506
-                        </div>
-                      </div>
-
-                      <p className="text-[10px] text-slate-500 font-medium leading-tight">
-                        Scan di meja petugas 1 detik selesai.
+                    <div className="text-xs text-slate-700 leading-relaxed space-y-1">
+                      <p className="font-extrabold text-[#008069]">
+                        🌾 Undangan Resmi Penyaluran Bantuan Pangan Beras & PKH :
                       </p>
                     </div>
 
-                    {/* Opsi 2: Tunjukkan Chat (Lansia / Gaptek) */}
-                    <div className="p-3 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-[11px] space-y-2 flex flex-col justify-between">
-                      <div className="space-y-1">
-                        <div className="font-extrabold text-amber-900 flex items-center gap-1.5">
-                          <span>👵 Opsi 2: Tunjukkan Chat</span>
-                        </div>
-                        <p className="text-slate-700 text-[11px] leading-relaxed">
-                          Bagi warga lansia/gaptek,{" "}
-                          <strong>
-                            cukup tunjukkan teks chat ini & KTP fisik asli
-                          </strong>{" "}
-                          ke petugas tanpa perlu repot scan QR.
-                        </p>
+                    {/* Distribution Schedule Card */}
+                    <div className="bg-emerald-50/80 p-3.5 rounded-2xl border border-emerald-200/80 space-y-1.5 text-xs text-slate-700 font-sans">
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">nama penerima 👤 :</span>
+                        <strong className="text-slate-900 font-bold">Yati Handayani</strong>
                       </div>
-                      <div className="p-2 rounded-xl bg-white text-[10px] font-bold text-amber-900 border border-amber-200 shadow-2xs">
-                        Petugas input manual:{" "}
-                        <span className="text-[#008069] font-black">
-                          No. Antrean A-014
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">hari & tanggal 📆 :</span>
+                        <strong className="text-slate-900 font-bold">Selasa, 18 Agustus 2026</strong>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">waktu ⏰ :</span>
+                        <strong className="text-slate-900 font-bold">08:30 WIB - Selesai</strong>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">lokasi 📍 :</span>
+                        <strong className="text-slate-900 font-bold">Kantor Balai Desa Doko</strong>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">alokasi bantuan 📦 :</span>
+                        <strong className="text-slate-900 font-bold">30 Kg Beras (Juli - Sept 2026)</strong>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">biaya tebus 💸 :</span>
+                        <strong className="text-emerald-700 font-bold">GRATIS (Rp 0,-)</strong>
+                      </div>
+                      <div className="flex items-center justify-between pt-1 border-t border-emerald-200/60">
+                        <span className="text-emerald-800 font-bold">
+                          no. urut antrean 🎫 :
+                        </span>
+                        <span className="text-base font-black text-[#008069] bg-white px-2.5 py-0.5 rounded-lg shadow-2xs border border-emerald-300 font-mono">
+                          1340
                         </span>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Verification Guarantee Pill */}
-                  <div className="text-[11px] text-[#008069] font-semibold flex items-center gap-1.5 pt-1 border-t border-slate-100">
-                    <ShieldCheck className="w-4 h-4 text-[#008069]" />
-                    <span>
-                      Layanan ramah dan mudah untuk seluruh kalangan warga desa.
-                    </span>
+                    {/* Dual Mode Card Inside WhatsApp (Visual QR + Plain Text) */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      {/* Opsi 1: Visual QR Code */}
+                      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-center space-y-2">
+                        <div className="font-extrabold text-[11px] text-[#008069] flex items-center justify-center gap-1">
+                          <QrCode className="w-3.5 h-3.5" />
+                          <span>Opsi 1: Scan Barcode Bulog</span>
+                        </div>
+
+                        {/* Real Backend Generated Vector QR Code */}
+                        <div className="bg-white p-2.5 rounded-xl shadow-xs border border-slate-200 inline-block">
+                          <img
+                            src="/api/public/surat/qr?data=350606200801340"
+                            alt="QR Barcode Bantuan Pangan 350606200801340"
+                            className="w-20 h-20 sm:w-24 sm:h-24 mx-auto object-contain"
+                            loading="lazy"
+                          />
+                          <div className="text-[9px] font-mono font-bold text-slate-700 mt-1 tracking-wider">
+                            350606200801340
+                          </div>
+                        </div>
+
+                        <p className="text-[10px] text-slate-500 font-medium leading-tight">
+                          Scan cepat di meja petugas balai desa.
+                        </p>
+                      </div>
+
+                      {/* Opsi 2: Tunjukkan Chat (Lansia / Gaptek) */}
+                      <div className="p-3 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-[11px] space-y-2 flex flex-col justify-between">
+                        <div className="space-y-1">
+                          <div className="font-extrabold text-amber-900 flex items-center gap-1.5">
+                            <span>👵 Opsi 2: Tunjukkan Chat</span>
+                          </div>
+                          <p className="text-slate-700 text-[11px] leading-relaxed">
+                            Bagi warga lansia/ibu rumah tangga,{" "}
+                            <strong>
+                              cukup sebutkan No. Urut 1340 & tunjukkan KTP fisik/IKD asli
+                            </strong>{" "}
+                            ke petugas tanpa perlu cetak kertas.
+                          </p>
+                        </div>
+                        <div className="p-2 rounded-xl bg-white text-[10px] font-bold text-amber-900 border border-amber-200 shadow-2xs">
+                          Petugas input manual:{" "}
+                          <span className="text-[#008069] font-black font-mono">
+                            No. Urut 1340
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Verification Guarantee Pill */}
+                    <div className="text-[11px] text-[#008069] font-semibold flex items-center justify-between pt-1 border-t border-slate-100 flex-wrap gap-2">
+                      <div className="flex items-center gap-1.5">
+                        <ShieldCheck className="w-4 h-4 text-[#008069] shrink-0" />
+                        <span>
+                          Penyaluran Resmi Bapanas & Perum BULOG
+                        </span>
+                      </div>
+                      <Link
+                        to="/bansos"
+                        className="text-[11px] font-bold text-slate-800 hover:text-emerald-700 underline flex items-center gap-1"
+                      >
+                        <span>Cek Undangan Digital</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1214,118 +1266,122 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* SmartRT Interactive FAQ Accordion Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="text-center space-y-3 mb-10">
-          <div className="pill-badge-emerald">
-            <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
-            <span>PERTANYAAN UMUM (FAQ)</span>
+      {/* SmartRT Interactive FAQ Accordion Section (Full-Width Pure White Band) */}
+      <section className="w-full bg-white py-16 sm:py-24 text-slate-900 border-b border-slate-200/80">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-3 mb-10">
+            <span className="text-xs sm:text-sm font-bold tracking-widest text-emerald-600 uppercase">
+              PERTANYAAN UMUM (FAQ)
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-sm text-slate-600 max-w-xl mx-auto">
+              Pertanyaan yang sering diajukan warga seputar pengurusan berkas,
+              legalitas QR, dan tata cara layanan mandiri SiDesKu.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Frequently Asked Questions
-          </h2>
-          <p className="text-sm text-slate-600 max-w-xl mx-auto">
-            Pertanyaan yang sering diajukan warga seputar pengurusan berkas,
-            legalitas QR, dan tata cara layanan mandiri SiDesKu.
-          </p>
-        </div>
 
-        <div className="space-y-3.5">
-          {faqs.map((faq, index) => {
-            const isOpen = activeFaq === index;
-            return (
-              <div
-                key={index}
-                className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-                  isOpen
-                    ? "bg-white border-emerald-300 shadow-md ring-2 ring-emerald-500/10"
-                    : "bg-white/80 border-slate-200/80 hover:border-slate-300"
-                }`}
-              >
-                <button
-                  type="button"
-                  onClick={() => setActiveFaq(isOpen ? null : index)}
-                  className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between text-left gap-4 cursor-pointer select-none"
+          <div className="space-y-3.5">
+            {faqs.map((faq, index) => {
+              const isOpen = activeFaq === index;
+              return (
+                <div
+                  key={index}
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen
+                      ? "bg-white border-emerald-300 shadow-md ring-2 ring-emerald-500/10"
+                      : "bg-white/80 border-slate-200/80 hover:border-slate-300"
+                  }`}
                 >
-                  <span
-                    className={`text-sm sm:text-base font-extrabold ${isOpen ? "text-emerald-800" : "text-slate-800"}`}
+                  <button
+                    type="button"
+                    onClick={() => setActiveFaq(isOpen ? null : index)}
+                    className="w-full px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between text-left gap-4 cursor-pointer select-none"
                   >
-                    {faq.q}
-                  </span>
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
-                      isOpen
-                        ? "bg-emerald-100 text-emerald-700 rotate-180"
-                        : "bg-slate-100 text-slate-500"
-                    }`}
-                  >
-                    <ChevronDown className="w-4 h-4" />
-                  </div>
-                </button>
+                    <span
+                      className={`text-sm sm:text-base font-extrabold ${isOpen ? "text-emerald-800" : "text-slate-800"}`}
+                    >
+                      {faq.q}
+                    </span>
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
+                        isOpen
+                          ? "bg-emerald-100 text-emerald-700 rotate-180"
+                          : "bg-slate-100 text-slate-500"
+                      }`}
+                    >
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
+                  </button>
 
-                {isOpen && (
-                  <div className="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 animate-fade-in">
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                  {isOpen && (
+                    <div className="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 animate-fade-in">
+                      {faq.a}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-8 overflow-hidden">
-        <div className="text-center max-w-2xl mx-auto space-y-3 mb-10 px-4">
-          <div className="pill-badge-emerald">
-            <Star className="w-3 h-3 text-emerald-600 fill-emerald-600" />
-            <span>TESTIMONI MASYARAKAT</span>
+      {/* Testimonials (Full-Width Soft Mint Band) */}
+      <section className="w-full bg-[#f0f9f5] py-16 sm:py-24 border-t border-emerald-100/80 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto space-y-3 mb-10 px-4">
+            <span className="text-xs sm:text-sm font-bold tracking-widest text-emerald-700 uppercase">
+              TESTIMONI MASYARAKAT
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+              Dipercaya Warga & Perangkat Desa
+            </h2>
+            <p className="text-sm sm:text-base text-slate-600">
+              Kesan dan pengalaman nyata masyarakat dalam menggunakan pelayanan
+              digital Desa Doko.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Dipercaya Warga & Perangkat Desa
-          </h2>
-          <p className="text-sm sm:text-base text-slate-600">
-            Kesan dan pengalaman nyata masyarakat dalam menggunakan pelayanan
-            digital Desa Doko.
-          </p>
-        </div>
 
-        {/* Single Clean Infinite Marquee Slider Row */}
-        <div className="relative w-full overflow-hidden py-4">
-          <div className="animate-marquee gap-6 px-4">
-            {[...testimonials, ...testimonials].map((t, idx) => (
-              <div
-                key={`testi-${idx}`}
-                className="w-[340px] sm:w-[420px] shrink-0 card-modern p-6 sm:p-7 flex flex-col justify-between bg-white/95 border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all cursor-pointer rounded-3xl"
-              >
-                <div className="space-y-3">
-                  {/* 5 Stars */}
-                  <div className="flex items-center gap-1 text-amber-400">
-                    {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400" />
-                    ))}
-                  </div>
-
-                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal italic">
-                    "{t.quote}"
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-slate-100 mt-5 flex items-center gap-3">
-                  <img
-                    src={t.avatar}
-                    alt={t.author}
-                    className="w-10 h-10 rounded-full object-cover bg-emerald-100 ring-2 ring-emerald-100"
-                  />
-                  <div>
-                    <div className="font-extrabold text-xs sm:text-sm text-slate-900">
-                      {t.author}
+          {/* Single Clean Infinite Marquee Slider Row */}
+          <div className="relative w-full overflow-hidden py-4">
+            <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-[#f0f9f5] to-transparent pointer-events-none z-10" />
+            <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[#f0f9f5] to-transparent pointer-events-none z-10" />
+            <div className="animate-marquee gap-6 px-4">
+              {[...testimonials, ...testimonials].map((t, idx) => (
+                <div
+                  key={`testi-${idx}`}
+                  className="w-[340px] sm:w-[420px] shrink-0 card-modern p-6 sm:p-7 flex flex-col justify-between bg-white border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all cursor-pointer rounded-3xl"
+                >
+                  <div className="space-y-3">
+                    {/* 5 Stars */}
+                    <div className="flex items-center gap-1 text-amber-400">
+                      {[...Array(t.rating)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-amber-400" />
+                      ))}
                     </div>
-                    <div className="text-[11px] text-slate-500">{t.role}</div>
+
+                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal italic">
+                      "{t.quote}"
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-100 mt-5 flex items-center gap-3">
+                    <img
+                      src={t.avatar}
+                      alt={t.author}
+                      className="w-10 h-10 rounded-full object-cover bg-emerald-100 ring-2 ring-emerald-100"
+                    />
+                    <div>
+                      <div className="font-extrabold text-xs sm:text-sm text-slate-900">
+                        {t.author}
+                      </div>
+                      <div className="text-[11px] text-slate-500">{t.role}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>

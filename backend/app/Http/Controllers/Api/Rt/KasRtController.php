@@ -25,6 +25,15 @@ class KasRtController extends Controller
         $saldo = $totalMasuk - $totalKeluar;
 
         $categories = KasRtCategory::where('rt_id', $rtId)->get();
+        if ($categories->isEmpty()) {
+            KasRtCategory::create(['rt_id' => $rtId, 'nama_kategori' => 'Iuran Sampah & Keamanan Bulanan', 'tipe' => 'Pemasukan']);
+            KasRtCategory::create(['rt_id' => $rtId, 'nama_kategori' => 'Sumbangan & Donasi Kegiatan Warga', 'tipe' => 'Pemasukan']);
+            KasRtCategory::create(['rt_id' => $rtId, 'nama_kategori' => 'Lain-lain (Pemasukan Kas)', 'tipe' => 'Pemasukan']);
+            KasRtCategory::create(['rt_id' => $rtId, 'nama_kategori' => 'Perawatan Fasilitas & Lampu Jalan', 'tipe' => 'Pengeluaran']);
+            KasRtCategory::create(['rt_id' => $rtId, 'nama_kategori' => 'Kebersihan Lingkungan & Kerja Bakti', 'tipe' => 'Pengeluaran']);
+            KasRtCategory::create(['rt_id' => $rtId, 'nama_kategori' => 'Konsumsi & Rapat Warga Lingkungan', 'tipe' => 'Pengeluaran']);
+            $categories = KasRtCategory::where('rt_id', $rtId)->get();
+        }
 
         return response()->json([
             'success' => true,
@@ -66,6 +75,25 @@ class KasRtController extends Controller
     {
         $user = $request->user()->load('wargaProfile');
         $rtId = $request->input('rt_id', $user->wargaProfile ? $user->wargaProfile->rt_id : 1);
+
+        $tipe = in_array($request->input('tipe'), ['Pemasukan', 'Pengeluaran']) ? $request->input('tipe') : 'Pemasukan';
+        $categoryId = $request->input('category_id') ?? $request->input('kas_category_id');
+
+        if (!$categoryId) {
+            $defaultName = $tipe === 'Pengeluaran' ? 'Operasional & Perawatan Fasilitas' : 'Iuran Sampah & Kas Warga';
+            $defaultCat = KasRtCategory::firstOrCreate(
+                ['rt_id' => $rtId, 'nama_kategori' => $defaultName, 'tipe' => $tipe]
+            );
+            $categoryId = $defaultCat->id;
+        }
+
+        $tanggal = $request->input('tanggal_transaksi') ?? $request->input('tanggal') ?? now()->toDateString();
+
+        $request->merge([
+            'category_id' => $categoryId,
+            'tanggal_transaksi' => $tanggal,
+            'tipe' => $tipe,
+        ]);
 
         $validated = $request->validate([
             'category_id' => 'required|exists:kas_rt_categories,id',

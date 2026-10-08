@@ -122,7 +122,19 @@ class BansosController extends Controller
         foreach ($bansos->penerimas as $p) {
             $warga = $p->wargaProfile;
             if ($warga && $warga->no_hp_wa) {
-                $pesan = "Yth. Bpk/Ibu {$warga->nama_lengkap},\n\nBantuan {$bansos->nama_bantuan} ({$bansos->tahap}) sebesar Rp {$nominalFormat} telah SIAP DISALURKAN.\n\n📅 Jadwal: {$bansos->tanggal_penyaluran->format('d/m/Y')}\n⏰ Waktu: {$bansos->waktu_mulai} WIB\n📍 Lokasi: {$bansos->lokasi_penyaluran}\n🎫 No. Antrean: {$p->nomor_antrean}\n\nTunjukkan NIK atau Kode QR ({$p->qr_bantuan_code}) pada aplikasi SIDes saat pengambilan bantuan di balai desa.\n\n- Pemerintah Desa Doko";
+                $pesan = "🌾 Undangan Resmi Penyaluran {$bansos->nama_bantuan} :\n\n" .
+                    "nama penerima 👤 : *{$warga->nama_lengkap}*\n" .
+                    "nik 🆔 : *{$warga->nik}*\n" .
+                    "program bantuan 🌾 : *{$bansos->nama_bantuan} ({$bansos->tahap})*\n" .
+                    "hari & tanggal 📆 : *{$bansos->tanggal_penyaluran->format('d/m/Y')}*\n" .
+                    "waktu ⏰ : *{$bansos->waktu_mulai} WIB*\n" .
+                    "lokasi 📍 : *{$bansos->lokasi_penyaluran}*\n" .
+                    "nominal bantuan 💸 : *Rp {$nominalFormat}*\n" .
+                    "biaya tebus 💸 : *GRATIS (Rp 0,-)*\n" .
+                    "no. urut antrean 🎫 : *{$p->nomor_antrean}*\n" .
+                    "kode barcode 🔢 : *{$p->qr_bantuan_code}*\n\n" .
+                    "NB 📌 : *Tunjukkan NIK asli atau Kode QR ({$p->qr_bantuan_code}) pada aplikasi SIDes saat pengambilan bantuan di balai desa.*\n\n" .
+                    "Salam hangat dari Pemerintah Desa Doko 🌾✨";
 
                 $log = NotifikasiLog::create([
                     'user_id' => $warga->user_id,

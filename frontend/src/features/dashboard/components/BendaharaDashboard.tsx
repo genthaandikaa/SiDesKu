@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Wallet, TrendingUp, TrendingDown, Plus, 
   Trash2, Loader2, DollarSign, ArrowRight, ShieldCheck, FileSpreadsheet
@@ -28,6 +29,21 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
   const [categoryId, setCategoryId] = useState<number | ''>('');
   const [uraian, setUraian] = useState('');
   const [anggaran, setAnggaran] = useState<number | ''>('');
+
+  // Lock body scroll and handle ESC key when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setIsModalOpen(false);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isModalOpen]);
   const [realisasi, setRealisasi] = useState<number | ''>('');
 
   useEffect(() => {
@@ -114,7 +130,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
     <div className="space-y-6 page-enter font-sans">
       
       {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
         <MetricStatCard
           title="Realisasi Pendapatan"
           value={`Rp ${(Number(s?.pendapatan?.realisasi || 675000000) / 1000000).toFixed(0)} Jt`}
@@ -154,9 +170,9 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
       </div>
 
       {/* Financial Chart & Calendar */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-6 items-start">
         {/* Left 8 Cols: Performance Overview Spline Area Chart */}
-        <div className="lg:col-span-8 space-y-5">
+        <div className="xl:col-span-8 space-y-5">
           <AreaSplineChart
             title="Arus Kas Masuk vs Realisasi Belanja APBDes 2026"
             subtitle="Grafik Tren Finansial Bulanan (Jan - Agu)"
@@ -233,7 +249,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
         </div>
 
         {/* Right 4 Cols: Personal Profile Card + Mini Calendar Widget */}
-        <div className="lg:col-span-4 space-y-5">
+        <div className="xl:col-span-4 space-y-5">
           {/* Bendahara Profile Card */}
           <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
@@ -246,7 +262,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             </div>
 
             <div className="flex items-center gap-3.5 pt-1">
-              {user?.avatar ? (
+              {user?.role?.slug === 'bendahara' && user?.avatar ? (
                 <img
                   src={user.avatar}
                   alt={user.name}
@@ -254,15 +270,15 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 />
               ) : (
                 <div className="w-14 h-14 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
-                  {user?.name?.charAt(0) || 'B'}
+                  {user?.role?.slug === 'bendahara' ? (user?.name?.charAt(0) || 'R') : 'R'}
                 </div>
               )}
-              <div className="min-w-0">
-                <h4 className="text-sm font-black text-slate-900 leading-tight truncate">
-                  {user?.name || 'Sri Wahyuni, SE'}
+              <div className="min-w-0 flex-1">
+                <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
+                  {user?.role?.slug === 'bendahara' ? user?.name : 'Ratna Dewi, S.E'}
                 </h4>
                 <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
-                  Bendahara Desa Doko
+                  Kaur Keuangan (Bendahara Desa)
                 </div>
                 <div className="text-[10px] font-mono text-slate-400 truncate">
                   NIPD: 19890715 201502 2 001
@@ -305,15 +321,15 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           <div>
             {/* Desktop Table View */}
             <div className="hidden sm:block overflow-x-auto border border-gray-200 rounded-xl">
-              <table className="w-full text-left text-xs">
+              <table className="w-full min-w-[700px] text-left text-xs">
                 <thead className="bg-[#f8faf9] text-gray-600 border-b border-gray-200 font-semibold">
                   <tr>
-                    <th className="p-3">Pos & Kode</th>
-                    <th className="p-3">Uraian</th>
-                    <th className="p-3 text-right">Anggaran (Rp)</th>
-                    <th className="p-3 text-right">Realisasi (Rp)</th>
-                    <th className="p-3 text-center">%</th>
-                    {canManage && <th className="p-3 text-right">Aksi</th>}
+                    <th className="p-3 whitespace-nowrap">Pos & Kode</th>
+                    <th className="p-3 min-w-[180px]">Uraian</th>
+                    <th className="p-3 text-right whitespace-nowrap">Anggaran (Rp)</th>
+                    <th className="p-3 text-right whitespace-nowrap">Realisasi (Rp)</th>
+                    <th className="p-3 text-center whitespace-nowrap">%</th>
+                    {canManage && <th className="p-3 text-right whitespace-nowrap">Aksi</th>}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -321,18 +337,18 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                     const persen = r.anggaran > 0 ? Math.round((r.realisasi / r.anggaran) * 100) : 0;
                     return (
                       <tr key={r.id} className="hover:bg-gray-50/80 transition-colors">
-                        <td className="p-3">
+                        <td className="p-3 whitespace-nowrap">
                           <div className="font-bold text-gray-900">{r.category?.nama_kategori}</div>
                           <div className="text-[11px] text-gray-400 font-mono">{r.category?.kode_rekening} ({r.category?.jenis})</div>
                         </td>
                         <td className="p-3 text-gray-700 font-medium">{r.uraian}</td>
-                        <td className="p-3 text-right font-mono font-bold text-gray-900">
+                        <td className="p-3 text-right font-mono font-bold text-gray-900 whitespace-nowrap">
                           {Number(r.anggaran).toLocaleString('id-ID')}
                         </td>
-                        <td className="p-3 text-right font-mono font-bold text-emerald-800">
+                        <td className="p-3 text-right font-mono font-bold text-emerald-800 whitespace-nowrap">
                           {Number(r.realisasi).toLocaleString('id-ID')}
                         </td>
-                        <td className="p-3 text-center">
+                        <td className="p-3 text-center whitespace-nowrap">
                           <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold border border-emerald-200">
                             {persen}%
                           </span>
@@ -398,12 +414,26 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
         )}
       </div>
 
-      {isModalOpen && (
-        <div className="modal-backdrop flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl border border-gray-200 max-w-md w-full p-6 space-y-4 shadow-2xl modal-content">
+      {isModalOpen && createPortal(
+        <div 
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 font-sans overflow-y-auto animate-fade-in select-none"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsModalOpen(false);
+          }}
+        >
+          <div 
+            className="relative bg-white rounded-2xl border border-gray-200 max-w-md w-full p-6 space-y-4 shadow-2xl modal-content my-auto max-h-[90vh] overflow-y-auto animate-scale-up"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center pb-2 border-b border-gray-100">
               <h3 className="font-bold text-base text-gray-900">Tambah Pos APBDes</h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 press-down">✕</button>
+              <button 
+                onClick={() => setIsModalOpen(false)} 
+                className="text-gray-400 hover:text-gray-600 press-down cursor-pointer"
+                title="Tutup (ESC)"
+              >
+                ✕
+              </button>
             </div>
 
             <form onSubmit={handleAddRecord} className="space-y-4">
@@ -436,14 +466,15 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 </div>
               </div>
               <div className="flex justify-end gap-2 pt-2">
-                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-xl border text-xs font-bold press-down">Batal</button>
-                <button type="submit" disabled={isSubmitting} className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold press-down">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 rounded-xl border text-xs font-bold press-down cursor-pointer">Batal</button>
+                <button type="submit" disabled={isSubmitting} className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold press-down cursor-pointer">
                   {isSubmitting ? 'Menyimpan...' : 'Simpan'}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

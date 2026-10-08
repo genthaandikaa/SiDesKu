@@ -45,11 +45,17 @@ class WargaSuratController extends Controller
             'surat_type_id' => 'required|exists:surat_types,id',
             'keperluan' => 'required|string|max:500',
             'form_data' => 'nullable|array',
-            'file_lampiran' => 'nullable|string',
+            'file_lampiran' => 'nullable',
+            'file_lampirans' => 'nullable|array',
         ]);
 
         $resiCode = 'REQ-' . date('Ymd') . '-' . strtoupper(Str::random(6));
         $qrHash = hash('sha256', $resiCode . '|' . $user->wargaProfile->nik . '|' . microtime(true));
+
+        $finalFileLampiran = $this->processLampirans(
+            $request->has('file_lampirans') ? $request->file_lampirans : ($validated['file_lampiran'] ?? null),
+            $user->id
+        );
 
         $suratReq = SuratRequest::create([
             'nomor_resi' => $resiCode,
@@ -58,7 +64,7 @@ class WargaSuratController extends Controller
             'status' => 'pending_rt',
             'keperluan' => $validated['keperluan'],
             'form_data_json' => $validated['form_data'] ?? [],
-            'file_lampiran' => $validated['file_lampiran'] ?? null,
+            'file_lampiran' => $finalFileLampiran,
             'qr_verification_hash' => $qrHash,
         ]);
 
@@ -77,6 +83,121 @@ class WargaSuratController extends Controller
         ], 201);
     }
 
+    public function update(Request $request, $id): JsonResponse
+    {
+        $user = $request->user()->load('wargaProfile');
+        if (!$user->wargaProfile) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Profil kependudukan warga Anda belum terdaftar.',
+            ], 422);
+        }
+
+        $surat = SuratRequest::find($id);
+        if (!$surat) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Surat permohonan tidak ditemukan.',
+            ], 404);
+        }
+
+        if ($surat->warga_profile_id !== $user->wargaProfile->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki hak untuk mengubah pengajuan surat ini.',
+            ], 403);
+        }
+
+        if ($surat->status !== 'pending_rt') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengajuan surat sudah diproses oleh RT/Desa dan tidak dapat diubah lagi.',
+            ], 422);
+        }
+
+        $validated = $request->validate([
+            'surat_type_id' => 'sometimes|exists:surat_types,id',
+            'keperluan' => 'required|string|max:500',
+            'form_data' => 'nullable|array',
+            'file_lampiran' => 'nullable',
+            'file_lampirans' => 'nullable|array',
+        ]);
+
+        $updateData = [
+            'keperluan' => $validated['keperluan'],
+        ];
+
+        if (!empty($validated['surat_type_id'])) {
+            $updateData['surat_type_id'] = $validated['surat_type_id'];
+        }
+
+        if (isset($validated['form_data'])) {
+            $updateData['form_data_json'] = $validated['form_data'];
+        }
+
+        if ($request->has('file_lampirans') || $request->has('file_lampiran')) {
+            $lampiranPayload = $request->has('file_lampirans') ? $request->file_lampirans : $request->file_lampiran;
+            $updateData['file_lampiran'] = $this->processLampirans($lampiranPayload, $user->id);
+        }
+
+        $surat->update($updateData);
+
+        SuratTracking::create([
+            'surat_request_id' => $surat->id,
+            'actor_user_id' => $user->id,
+            'status_stage' => 'Warga',
+            'status_action' => 'Revisi',
+            'catatan' => 'Data permohonan surat diperbarui oleh pemohon.',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Perubahan permohonan surat berhasil disimpan.',
+            'data' => $surat->fresh()->load(['suratType', 'wargaProfile', 'trackings']),
+        ]);
+    }
+
+    public function destroy(Request $request, $id): JsonResponse
+    {
+        $user = $request->user()->load('wargaProfile');
+        if (!$user->wargaProfile) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Profil kependudukan warga Anda belum terdaftar.',
+            ], 422);
+        }
+
+        $surat = SuratRequest::find($id);
+        if (!$surat) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Surat permohonan tidak ditemukan.',
+            ], 404);
+        }
+
+        if ($surat->warga_profile_id !== $user->wargaProfile->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki hak untuk membatalkan pengajuan surat ini.',
+            ], 403);
+        }
+
+        if ($surat->status !== 'pending_rt') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengajuan surat sudah diproses dan tidak dapat dibatalkan.',
+            ], 422);
+        }
+
+        $surat->trackings()->delete();
+        $surat->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengajuan surat berhasil dibatalkan dan dihapus.',
+        ]);
+    }
+
     public function show($id): JsonResponse
     {
         $surat = SuratRequest::with(['suratType', 'wargaProfile.rt.rw.dusun', 'wargaProfile.kartuKeluarga', 'trackings.actorUser.role'])->find($id);
@@ -92,5 +213,75 @@ class WargaSuratController extends Controller
             'data' => $surat,
             'desa' => $desa,
         ]);
+    }
+
+    private function saveImageHelper($imageInput, $customName = null, $userId = 1): ?string
+    {
+        if (empty($imageInput)) return null;
+        if (str_starts_with($imageInput, 'data:image')) {
+            try {
+                if (preg_match('/^data:image\/(\w+);base64,/', $imageInput, $type)) {
+                    $imageData = substr($imageInput, strpos($imageInput, ',') + 1);
+                    $extension = strtolower($type[1]);
+                    if (!in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+                        $extension = 'jpg';
+                    }
+                    $decoded = base64_decode($imageData);
+                    if ($decoded !== false) {
+                        $dir = public_path('uploads/lampiran');
+                        if (!file_exists($dir)) {
+                            mkdir($dir, 0755, true);
+                        }
+                        $prefix = $customName ? Str::slug($customName) . '_' : 'lampiran_';
+                        $fileName = $prefix . $userId . '_' . time() . '_' . Str::random(4) . '.' . $extension;
+                        file_put_contents($dir . DIRECTORY_SEPARATOR . $fileName, $decoded);
+                        return url('uploads/lampiran/' . $fileName);
+                    }
+                }
+            } catch (\Exception $e) {
+                return null;
+            }
+        }
+        return $imageInput;
+    }
+
+    private function processLampirans($lampiranInput, $userId): ?string
+    {
+        if (empty($lampiranInput)) return null;
+        $savedLampirans = [];
+
+        $items = [];
+        if (is_array($lampiranInput)) {
+            $items = $lampiranInput;
+        } elseif (is_string($lampiranInput) && str_starts_with(trim($lampiranInput), '[')) {
+            $decoded = json_decode($lampiranInput, true);
+            if (is_array($decoded)) {
+                $items = $decoded;
+            }
+        } elseif (is_string($lampiranInput)) {
+            $items = [$lampiranInput];
+        }
+
+        foreach ($items as $item) {
+            if (is_array($item)) {
+                $url = $this->saveImageHelper($item['url'] ?? $item['file'] ?? '', $item['nama'] ?? null, $userId);
+                if ($url) {
+                    $savedLampirans[] = [
+                        'url' => $url,
+                        'nama' => $item['nama'] ?? 'Dokumen Lampiran',
+                    ];
+                }
+            } elseif (is_string($item)) {
+                $url = $this->saveImageHelper($item, null, $userId);
+                if ($url) {
+                    $savedLampirans[] = [
+                        'url' => $url,
+                        'nama' => 'Dokumen Lampiran',
+                    ];
+                }
+            }
+        }
+
+        return !empty($savedLampirans) ? json_encode($savedLampirans) : null;
     }
 }

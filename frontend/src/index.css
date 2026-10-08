@@ -328,56 +328,108 @@ body {
   border-radius: 0.75rem;
 }
 
-/* Modal animations */
+/* Global Modal Standard: Perfect Center (Atas Bawah Kiri Kanan), Highest Z-Index, No Blur */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 50;
-  background: rgba(15, 23, 42, 0.5);
-  backdrop-filter: blur(6px);
+  z-index: 999999;
+  background: rgba(2, 6, 23, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
   animation: fadeIn 0.2s ease both;
 }
 
 .modal-content {
-  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+  margin: auto;
+  animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Print Styles (A4 Government Format) */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
   html, body {
     background: white !important;
     color: black !important;
     height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
     overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  /* Hide entire page layout, sidebar, navbar, buttons */
-  body * {
-    visibility: hidden;
+  /* When an official document print portal is active, completely remove #root so non-print elements take 0 space */
+  body:has(#surat-undangan-print-portal) #root,
+  body:has(#surat-print-portal) #root,
+  body.printing-bulog-active #root,
+  body.printing-active #root,
+  body:has(#surat-undangan-print-portal) [data-interactive-modal],
+  body:has(#surat-undangan-print-portal) .interactive-modal-portal,
+  [data-interactive-modal],
+  .interactive-modal-portal {
+    display: none !important;
   }
 
-  /* Expose only the official letter print container */
-  #surat-print-area,
-  #surat-print-area * {
+  /* Dedicated Print Portal for Surat Undangan Bulog */
+  #surat-undangan-print-portal {
+    display: block !important;
     visibility: visible !important;
-  }
-
-  #surat-print-area {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
+    position: static !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 15mm 20mm !important;
+    padding: 0 !important;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #surat-undangan-print-portal * {
+    visibility: visible !important;
+  }
+
+  /* Surat Undangan inside modal portal */
+  #surat-print-portal {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Expose only the official letter print container */
+  #surat-print-area {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 5mm 10mm !important;
     border: none !important;
     box-shadow: none !important;
     background: white !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
-  @page {
-    size: A4 portrait;
-    margin: 0;
+  #surat-print-area * {
+    visibility: visible !important;
   }
 }
 
