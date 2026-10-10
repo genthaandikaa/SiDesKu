@@ -527,25 +527,9 @@ export const BeritaPage: React.FC = () => {
               })}
             </div>
 
-            {/* Right Actions: Single View Mode Icon Toggle & Reset Button */}
-            <div className="flex items-center gap-2 ml-auto flex-shrink-0">
-              {/* Single Icon Toggle: Grid <-> List (Logo berganti saat diklik) */}
-              <button
-                type="button"
-                onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}
-                className="w-9 h-9 rounded-2xl bg-slate-50 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200/90 hover:border-emerald-300 transition-all cursor-pointer shadow-2xs flex items-center justify-center group focus:outline-none focus:ring-4 focus:ring-emerald-500/10"
-                title={viewMode === 'grid' ? 'Tampilan Grid (Klik untuk beralih ke List)' : 'Tampilan List (Klik untuk beralih ke Grid)'}
-                aria-label="Ganti mode tampilan"
-              >
-                {viewMode === 'grid' ? (
-                  <LayoutGrid className="w-4 h-4 text-emerald-700 group-hover:scale-110 transition-transform duration-200" />
-                ) : (
-                  <List className="w-4 h-4 text-emerald-700 group-hover:scale-110 transition-transform duration-200" />
-                )}
-              </button>
-
-              {/* Active Filter Indicator & Reset Button */}
-              {(selectedKategori !== 'Semua' || searchQuery || sortBy !== 'terbaru') && (
+            {/* Right Actions: Reset Button (only shown when filters active) */}
+            {(selectedKategori !== 'Semua' || searchQuery || sortBy !== 'terbaru') && (
+              <div className="flex items-center gap-2 ml-auto flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => {
@@ -558,8 +542,8 @@ export const BeritaPage: React.FC = () => {
                   <X className="w-3 h-3" />
                   <span>Reset Filter</span>
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
 
         </div>
@@ -589,27 +573,44 @@ export const BeritaPage: React.FC = () => {
                 Urutan: <span className="text-slate-700 font-bold">{sortBy === 'terpopuler' ? 'Paling Populer' : sortBy === 'terlama' ? 'Terlama' : 'Terkini'}</span>
               </div>
 
-              {/* Single Icon Toggle: Grid <-> List (Logo berganti saat diklik) */}
-              <button
-                type="button"
-                onClick={() => setViewMode(prev => prev === 'grid' ? 'list' : 'grid')}
-                className="w-8 h-8 rounded-xl bg-slate-100/90 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200/80 hover:border-emerald-300 transition-all cursor-pointer shadow-2xs flex items-center justify-center group"
-                title={viewMode === 'grid' ? 'Tampilan Grid (Klik untuk beralih ke List)' : 'Tampilan List (Klik untuk beralih ke Grid)'}
-                aria-label="Ganti mode tampilan"
-              >
-                {viewMode === 'grid' ? (
-                  <LayoutGrid className="w-3.5 h-3.5 text-emerald-700 group-hover:scale-110 transition-transform duration-200" />
-                ) : (
-                  <List className="w-3.5 h-3.5 text-emerald-700 group-hover:scale-110 transition-transform duration-200" />
-                )}
-              </button>
+              {/* Segmented View Mode Toggle: Grid vs List */}
+              <div className="flex items-center p-0.5 bg-slate-100 rounded-xl border border-slate-200/80 shadow-2xs">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('grid')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    viewMode === 'grid'
+                      ? 'bg-white text-emerald-800 shadow-2xs'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                  title="Tampilan Grid Kartu"
+                  aria-label="Tampilan Grid Kartu"
+                >
+                  <LayoutGrid className="w-3.5 h-3.5 text-emerald-700" />
+                  <span className="hidden xs:inline text-[11px]">Grid</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('list')}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                    viewMode === 'list'
+                      ? 'bg-white text-emerald-800 shadow-2xs'
+                      : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                  title="Tampilan List Warta"
+                  aria-label="Tampilan List Warta"
+                >
+                  <List className="w-3.5 h-3.5 text-emerald-700" />
+                  <span className="hidden xs:inline text-[11px]">List</span>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Conditional Layout: List View vs Grid Kartu */}
           {viewMode === 'list' ? (
             filteredBeritas.length > 0 ? (
-              <div className="max-w-4xl mx-auto divide-y divide-slate-100 space-y-5">
+              <div className="max-w-4xl mx-auto divide-y divide-slate-100">
                 {filteredBeritas.map((b, idx) => {
                   const thumb = idx % 3 === 0 ? '/images/event.jpg' : idx % 3 === 1 ? '/images/kursus.jpg' : '/images/landing/about_img.webp';
                   const relativeTimes = ['12 menit lalu', '50 menit lalu', '53 menit lalu', '2 jam lalu', '5 jam lalu', '1 hari lalu'];
@@ -620,10 +621,10 @@ export const BeritaPage: React.FC = () => {
                     <article
                       key={b.id}
                       onClick={() => setSelectedBerita(b)}
-                      className="group flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-5 first:pt-0 cursor-pointer transition-all hover:bg-slate-50/70 p-2 sm:p-3 rounded-2xl"
+                      className="group flex flex-row items-start gap-3.5 sm:gap-6 py-4 sm:py-5 cursor-pointer transition-all hover:bg-slate-50/80 p-2 sm:p-3 rounded-2xl"
                     >
-                      {/* Left Thumbnail: Clean rounded-2xl image matching reference screenshot */}
-                      <div className="w-full sm:w-60 md:w-72 aspect-[16/10] sm:h-36 rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0 shadow-xs group-hover:shadow-md transition-all">
+                      {/* Left Thumbnail: Compact square on mobile, wide on desktop */}
+                      <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-60 md:w-72 sm:h-36 rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0 shadow-2xs group-hover:shadow-md transition-all relative">
                         <img
                           src={thumb}
                           alt={b.judul}
@@ -633,31 +634,46 @@ export const BeritaPage: React.FC = () => {
 
                       {/* Right Content */}
                       <div className="flex-1 flex flex-col justify-between self-stretch py-0.5 min-w-0">
-                        <div className="space-y-1.5">
-                          {/* Top Badge: Rekomendasi or Category */}
-                          <div>
-                            <span className={`inline-block px-2.5 py-0.5 rounded-md font-bold text-xs tracking-wide ${
+                        <div className="space-y-1 sm:space-y-1.5">
+                          {/* Top Badge: Rekomendasi or Category & Relative Time */}
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`inline-block px-2 sm:px-2.5 py-0.5 rounded-md font-bold text-[10px] sm:text-xs tracking-wide ${
                               isRekomendasi 
                                 ? 'bg-sky-50 text-sky-700' 
                                 : 'bg-emerald-50 text-emerald-700'
                             }`}>
                               {isRekomendasi ? 'Rekomendasi' : b.kategori}
                             </span>
+                            <span className="text-[10px] sm:text-xs text-slate-400 font-medium">
+                              {relTime}
+                            </span>
                           </div>
 
                           {/* Title: 2 lines clamp, crisp bold font */}
-                          <h3 className="font-bold text-base sm:text-lg text-slate-900 group-hover:text-emerald-700 transition-colors leading-snug line-clamp-2">
+                          <h3 className="font-bold text-xs xs:text-sm sm:text-lg text-slate-900 group-hover:text-emerald-700 transition-colors leading-snug line-clamp-2">
                             {b.judul}
                           </h3>
+
+                          {/* Desktop Excerpt */}
+                          {b.ringkasan && (
+                            <p className="hidden md:line-clamp-2 text-xs text-slate-500 leading-relaxed pt-0.5">
+                              {b.ringkasan}
+                            </p>
+                          )}
                         </div>
 
-                        {/* Bottom Meta: Category & Relative time */}
-                        <div className="pt-3 text-xs text-slate-500 font-medium flex flex-col space-y-0.5">
-                          <span className="font-semibold text-slate-700">
-                            {b.kategori}
-                          </span>
-                          <span className="text-slate-400">
-                            {relTime}
+                        {/* Bottom Meta: Category & Published Date */}
+                        <div className="pt-2 sm:pt-3 text-[10px] sm:text-xs text-slate-500 font-medium flex items-center justify-between">
+                          <div className="flex items-center gap-2 text-slate-400">
+                            <span className="font-semibold text-slate-700">
+                              {b.kategori}
+                            </span>
+                            <span>•</span>
+                            <span>{new Date(b.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                          </div>
+                          <span className="hidden sm:flex items-center gap-1 text-slate-400">
+                            <Eye className="w-3.5 h-3.5 text-slate-400" />
+                            {b.view_count || 120} views
                           </span>
                         </div>
                       </div>

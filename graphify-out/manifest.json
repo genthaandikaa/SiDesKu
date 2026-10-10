@@ -630,9 +630,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/BeritaPage.tsx": {
-    "mtime": 1789819982.2659898,
-    "seen": 1789820814.821059,
-    "ast_hash": "b890c5170eaf6f94029b67760616c001",
+    "mtime": 1791637620.0794928,
+    "seen": 1791637778.6226923,
+    "ast_hash": "a23654a31f1e9cd519eb49e2aeb55329",
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/HomePage.tsx": {
