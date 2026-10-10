@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import L from 'leaflet';
 import { 
   Layers, 
   MapPin, 
   Navigation, 
   RotateCcw, 
-  Eye, 
   Building2, 
   Home, 
   ShieldCheck, 
-  Sparkles,
-  Maximize2,
-  Minimize2
+  Maximize2, 
+  Minimize2,
+  Filter,
+  Hand
 } from 'lucide-react';
 
 export interface MapFacilityItem {
@@ -48,7 +48,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
   const markersGroupRef = useRef<L.LayerGroup | null>(null);
   const boundaryLayerRef = useRef<L.Polygon | null>(null);
 
-  const [activeLayer, setActiveLayer] = useState<'satellite' | 'streets' | 'voyager'>('streets');
+  const [activeLayer, setActiveLayer] = useState<'streets' | 'satellite' | 'voyager'>('streets');
   const [filterMode, setFilterMode] = useState<'all' | 'facilities' | 'houses'>('all');
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -71,9 +71,9 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
   };
 
   const tileAttributions = {
-    streets: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> kontributor',
-    satellite: '&copy; Esri &mdash; Sumber: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, dan Komunitas GIS',
-    voyager: '&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap',
+    streets: '&copy; OpenStreetMap kontributor',
+    satellite: '&copy; Esri &mdash; Sumber: Esri, USGS, Maxar GIS',
+    voyager: '&copy; CARTO &copy; OpenStreetMap',
   };
 
   const currentTileLayerRef = useRef<L.TileLayer | null>(null);
@@ -135,7 +135,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
     };
   }, []);
 
-  // Handle Layer switching (Streets vs Satellite vs Voyager)
+  // Handle Layer switching
   useEffect(() => {
     if (!mapInstanceRef.current) return;
 
@@ -150,7 +150,6 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
 
     currentTileLayerRef.current = newTile;
 
-    // Adjust boundary stroke color for satellite visibility
     if (boundaryLayerRef.current) {
       boundaryLayerRef.current.setStyle({
         color: activeLayer === 'satellite' ? '#34d399' : '#10b981',
@@ -161,10 +160,9 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
   }, [activeLayer]);
 
   // Combine Facilities + Dynamic Citizen Houses from wargas
-  const allMapItems = React.useMemo<MapFacilityItem[]>(() => {
+  const allMapItems = useMemo<MapFacilityItem[]>(() => {
     const list: MapFacilityItem[] = [...facilities];
 
-    // Add citizen houses based on wargas if not already included
     if (wargas && wargas.length > 0) {
       const houseCoords = [
         { lat: -7.81788, lng: 112.04212, blok: 'Blok Melati (No. 14)' },
@@ -213,13 +211,11 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
       const isSelected = selectedPinId === item.id;
       const isHouse = item.isHouse;
 
-      // Custom HTML Marker Icon
       const customIcon = L.divIcon({
         className: 'custom-div-icon',
         html: `
           <div class="relative group cursor-pointer transition-transform duration-300 ${isSelected ? 'scale-125 z-50' : 'hover:scale-110'}">
-            <!-- Pin Outer Circle with Pulse if selected -->
-            <div class="w-9 h-9 rounded-2xl flex items-center justify-center text-sm shadow-md border-2 ${
+            <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl flex items-center justify-center text-xs sm:text-sm shadow-md border-2 ${
               isSelected 
                 ? 'bg-emerald-600 border-white text-white ring-4 ring-emerald-400/50' 
                 : isHouse
@@ -229,16 +225,14 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
               <span>${item.icon}</span>
             </div>
             
-            <!-- Pin Indicator Triangle -->
             <div class="w-2 h-2 mx-auto -mt-1 rotate-45 border-r border-b ${
               isSelected 
                 ? 'bg-emerald-600 border-white' 
                 : 'bg-white border-emerald-600'
             }"></div>
 
-            <!-- Mini Label Badge -->
-            <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-slate-900/90 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow-xs pointer-events-none opacity-90 group-hover:opacity-100">
-              ${item.nama.length > 18 ? item.nama.substring(0, 16) + '...' : item.nama}
+            <div class="absolute -bottom-5 sm:-bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-slate-900/90 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow-xs pointer-events-none opacity-90 group-hover:opacity-100">
+              ${item.nama.length > 16 ? item.nama.substring(0, 14) + '...' : item.nama}
             </div>
           </div>
         `,
@@ -249,10 +243,9 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
 
       const marker = L.marker([item.lat, item.lng], { icon: customIcon });
 
-      // Interactive Popup
       const popupHtml = `
-        <div class="font-sans p-1 space-y-2 min-w-[200px] text-left">
-          <div class="flex items-center gap-2 border-b border-slate-100 pb-1.5">
+        <div class="font-sans p-1 space-y-1.5 min-w-[190px] sm:min-w-[210px] text-left">
+          <div class="flex items-center gap-2 border-b border-slate-100 pb-1">
             <span class="text-base">${item.icon}</span>
             <div>
               <div class="font-black text-xs text-slate-900 leading-tight">${item.nama}</div>
@@ -265,13 +258,12 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
           <div class="text-[10px] bg-slate-50 p-1.5 rounded-lg text-slate-700 border border-slate-100 space-y-0.5 font-medium">
             <div>📍 <strong>Lokasi:</strong> ${item.blok}</div>
             <div>👤 <strong>PIC:</strong> ${item.pic}</div>
-            <div>⏰ <strong>Jadwal:</strong> ${item.jam}</div>
           </div>
           <button 
             id="popup-btn-${item.id}"
-            class="w-full mt-1.5 py-1.5 px-3 rounded-lg bg-emerald-600 text-white font-extrabold text-[11px] hover:bg-emerald-700 transition-colors shadow-2xs cursor-pointer flex items-center justify-center gap-1"
+            class="w-full mt-1 py-1.5 px-3 rounded-lg bg-emerald-600 text-white font-black text-[11px] hover:bg-emerald-700 transition-colors shadow-2xs cursor-pointer flex items-center justify-center gap-1"
           >
-            <span>Buka Rincian Lengkap</span>
+            <span>Pilih & Buka Rincian</span>
           </button>
         </div>
       `;
@@ -301,7 +293,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
     const target = allMapItems.find((m) => m.id === selectedPinId);
     if (target) {
       mapInstanceRef.current.flyTo([target.lat, target.lng], 18, {
-        duration: 1.2,
+        duration: 1.0,
       });
     }
   }, [selectedPinId, allMapItems]);
@@ -312,115 +304,149 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
   };
 
   return (
-    <div className={`relative w-full rounded-3xl border border-slate-200/90 shadow-2xs overflow-hidden transition-all bg-slate-900 ${
-      isFullscreen ? 'fixed inset-4 z-[99999] h-[calc(100vh-2rem)]' : 'aspect-[16/10] sm:aspect-[16/9] min-h-[420px]'
-    }`}>
-      {/* Top Floating Control Bar */}
-      <div className="absolute top-3.5 inset-x-3.5 z-[1000] flex flex-wrap items-center justify-between gap-2 pointer-events-none">
-        {/* Layer Selector (Left) */}
-        <div className="flex items-center gap-1 bg-white/95 backdrop-blur-md p-1 rounded-2xl shadow-md border border-slate-200/80 pointer-events-auto">
+    <div className="space-y-3 font-sans">
+      {/* Top Filter Chips Bar (Optimized for Mobile Touch Scrolling) */}
+      <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-2 sm:p-2.5 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full sm:w-auto">
+          <span className="text-xs font-black text-slate-700 mr-1 hidden sm:flex items-center gap-1 shrink-0">
+            <Filter className="w-3.5 h-3.5 text-emerald-700" />
+            <span>Tampilkan:</span>
+          </span>
+
           <button
             type="button"
-            onClick={() => setActiveLayer('streets')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              activeLayer === 'streets' 
-                ? 'bg-emerald-700 text-white shadow-xs' 
-                : 'text-slate-600 hover:bg-slate-100'
+            onClick={() => setFilterMode('all')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer ${
+              filterMode === 'all'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
             }`}
-            title="Peta Jalan Terstruktur (OpenStreetMap)"
           >
-            <Navigation className="w-3.5 h-3.5" />
-            <span>Peta Jalan</span>
+            Semua ({allMapItems.length})
           </button>
 
           <button
             type="button"
-            onClick={() => setActiveLayer('satellite')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              activeLayer === 'satellite' 
-                ? 'bg-emerald-700 text-white shadow-xs' 
-                : 'text-slate-600 hover:bg-slate-100'
+            onClick={() => setFilterMode('facilities')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 shrink-0 cursor-pointer ${
+              filterMode === 'facilities'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
             }`}
-            title="Citra Satelit Asli Udara (Esri World Imagery)"
           >
-            <Layers className="w-3.5 h-3.5" />
-            <span>Foto Satelit</span>
+            <Building2 className="w-3 h-3 text-blue-600" />
+            <span>Fasum ({facilities.length})</span>
           </button>
 
           <button
             type="button"
-            onClick={() => setActiveLayer('voyager')}
-            className={`hidden sm:flex px-3 py-1.5 rounded-xl text-xs font-bold transition-all items-center gap-1.5 cursor-pointer ${
-              activeLayer === 'voyager' 
-                ? 'bg-emerald-700 text-white shadow-xs' 
-                : 'text-slate-600 hover:bg-slate-100'
+            onClick={() => setFilterMode('houses')}
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all flex items-center gap-1 shrink-0 cursor-pointer ${
+              filterMode === 'houses'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
             }`}
-            title="Peta Bersih Minimalis (CartoDB)"
           >
-            <Building2 className="w-3.5 h-3.5" />
-            <span>Minimalis</span>
+            <Home className="w-3 h-3 text-emerald-600" />
+            <span>Hunian Warga ({allMapItems.filter(i => i.isHouse).length})</span>
           </button>
         </div>
 
-        {/* Filter & Reset Controls (Right) */}
-        <div className="flex items-center gap-2 pointer-events-auto">
-          {/* Filter Chips */}
-          <div className="hidden md:flex items-center gap-1 bg-white/95 backdrop-blur-md p-1 rounded-2xl shadow-md border border-slate-200/80 text-xs font-bold">
-            <button
-              onClick={() => setFilterMode('all')}
-              className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer ${
-                filterMode === 'all' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              Semua
-            </button>
-            <button
-              onClick={() => setFilterMode('facilities')}
-              className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer ${
-                filterMode === 'facilities' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              Fasum (6)
-            </button>
-            <button
-              onClick={() => setFilterMode('houses')}
-              className={`px-2.5 py-1 rounded-xl transition-all cursor-pointer ${
-                filterMode === 'houses' ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100'
-              }`}
-            >
-              Hunian Warga
-            </button>
-          </div>
-
-          {/* Reset Center Button */}
-          <button
-            type="button"
-            onClick={handleResetView}
-            className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
-            title="Pusatkan Kembali ke RT 01 Krajan"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
-
-          {/* Fullscreen Toggle */}
-          <button
-            type="button"
-            onClick={() => setIsFullscreen(!isFullscreen)}
-            className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
-            title={isFullscreen ? 'Kecilkan Peta' : 'Layar Penuh Peta'}
-          >
-            {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
-          </button>
+        <div className="hidden lg:flex items-center gap-2 text-xs font-bold text-slate-500 shrink-0">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Wilayah Aktif RT 01 Dusun Krajan</span>
         </div>
       </div>
 
-      {/* Real Map Canvas Container */}
-      <div ref={mapContainerRef} className="w-full h-full z-0 font-sans" />
+      {/* Main Map Container */}
+      <div className={`relative w-full rounded-3xl border border-slate-200/90 shadow-2xs overflow-hidden transition-all bg-slate-900 ${
+        isFullscreen ? 'fixed inset-3 z-[99999] h-[calc(100vh-1.5rem)]' : 'aspect-[4/3] sm:aspect-[16/9] min-h-[350px] sm:min-h-[440px]'
+      }`}>
+        {/* Floating Controls Bar */}
+        <div className="absolute top-2.5 sm:top-3.5 inset-x-2.5 sm:inset-x-3.5 z-[1000] flex items-center justify-between gap-1.5 pointer-events-none">
+          {/* Tile Selector */}
+          <div className="flex items-center gap-1 bg-white/95 backdrop-blur-md p-1 rounded-2xl shadow-md border border-slate-200/80 pointer-events-auto">
+            <button
+              type="button"
+              onClick={() => setActiveLayer('streets')}
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                activeLayer === 'streets' 
+                  ? 'bg-emerald-700 text-white shadow-xs' 
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+              title="Peta Jalan Terstruktur"
+            >
+              <Navigation className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span>Jalan</span>
+            </button>
 
-      {/* Bottom Floating Legend / Coordinates Badge */}
-      <div className="absolute bottom-3 left-3 z-[1000] hidden sm:flex items-center gap-2 bg-slate-900/85 backdrop-blur-md text-white text-[11px] font-mono px-3 py-1.5 rounded-xl shadow-md border border-white/10 pointer-events-none">
-        <MapPin className="w-3.5 h-3.5 text-emerald-400" />
-        <span>7°49'05"S 112°02'33"E • Dusun Krajan, Desa Doko</span>
+            <button
+              type="button"
+              onClick={() => setActiveLayer('satellite')}
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                activeLayer === 'satellite' 
+                  ? 'bg-emerald-700 text-white shadow-xs' 
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+              title="Foto Satelit Asli"
+            >
+              <Layers className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span>Satelit</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveLayer('voyager')}
+              className={`hidden md:flex px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all items-center gap-1 cursor-pointer ${
+                activeLayer === 'voyager' 
+                  ? 'bg-emerald-700 text-white shadow-xs' 
+                  : 'text-slate-600 hover:bg-slate-100'
+              }`}
+              title="Peta Bersih Minimalis"
+            >
+              <Building2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span>Minimalis</span>
+            </button>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-1.5 pointer-events-auto">
+            <button
+              type="button"
+              onClick={handleResetView}
+              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
+              title="Pusatkan Kembali ke RT 01 Krajan"
+            >
+              <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
+              title={isFullscreen ? 'Kecilkan Peta' : 'Layar Penuh Peta'}
+            >
+              {isFullscreen ? <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Real Leaflet Canvas */}
+        <div ref={mapContainerRef} className="w-full h-full z-0 font-sans" />
+
+        {/* Bottom Coordinates & Mobile Touch Guide */}
+        <div className="absolute bottom-2.5 left-2.5 z-[1000] flex items-center gap-2 pointer-events-none">
+          <div className="hidden sm:flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-mono px-2.5 sm:px-3 py-1.5 rounded-xl shadow-md border border-white/10">
+            <MapPin className="w-3 h-3 text-emerald-400" />
+            <span>7°49'05"S 112°02'33"E • RT 01 Dusun Krajan</span>
+          </div>
+
+          {/* Mobile gesture helper badge */}
+          <div className="flex sm:hidden items-center gap-1 bg-slate-900/85 backdrop-blur-md text-white text-[9px] font-medium px-2 py-1 rounded-lg border border-white/10">
+            <Hand className="w-2.5 h-2.5 text-emerald-400" />
+            <span>Gunakan 2 jari untuk geser peta</span>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -418,6 +418,7 @@ export const DashboardLayout: React.FC = () => {
               { id: 'data_warga', label: 'Data Warga', icon: Users },
               { id: 'data_kk', label: 'Data KK', icon: Building2 },
               { id: 'mutasi_penduduk', label: 'Mutasi Penduduk', icon: RefreshCw },
+              { id: 'peta_desa', label: 'Peta Wilayah Desa', icon: MapPin },
             ],
           },
           {

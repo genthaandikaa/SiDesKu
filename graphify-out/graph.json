@@ -56,17 +56,30 @@
       "source_location": "L9"
     },
     {
-      "id": "frontend_src_features_dashboard_components_previewsuratmodal_previewsuratmodalprops",
-      "label": "PreviewSuratModalProps",
+      "id": "frontend_src_features_dashboard_components_desaterritorymap_desarwdata",
+      "label": "DesaRwData",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
-      "norm_label": "previewsuratmodalprops",
-      "source_file": "frontend/src/features/dashboard/components/PreviewSuratModal.tsx",
-      "source_location": "L33"
+      "norm_label": "desarwdata",
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L20"
+    },
+    {
+      "id": "frontend_src_features_dashboard_components_desaterritorymap_desaterritorymapprops",
+      "label": "DesaTerritoryMapProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 114,
+      "community_name": "RwDashboard.tsx",
+      "file_type": "code",
+      "norm_label": "desaterritorymapprops",
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L46"
     },
     {
       "id": "frontend_src_features_dashboard_components_realrtmap_mapfacilityitem",
@@ -75,7 +88,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "mapfacilityitem",
       "source_file": "frontend/src/features/dashboard/components/RealRtMap.tsx",
@@ -88,7 +101,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "realrtmapprops",
       "source_file": "frontend/src/features/dashboard/components/RealRtMap.tsx",
@@ -101,7 +114,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "rtdashboardprops",
       "source_file": "frontend/src/features/dashboard/components/RtDashboard.tsx",
@@ -114,24 +127,89 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "rwdashboardprops",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L48"
+      "source_location": "L49"
     },
     {
-      "id": "backend_app_models_kasrtcategory_kasrtcategory",
-      "label": "KasRtCategory",
+      "id": "frontend_src_features_dashboard_components_rwterritorymap_rtboundarydata",
+      "label": "RtBoundaryData",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 114,
+      "community_name": "RwDashboard.tsx",
+      "file_type": "code",
+      "norm_label": "rtboundarydata",
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L22"
+    },
+    {
+      "id": "frontend_src_features_dashboard_components_rwterritorymap_rwterritorymapprops",
+      "label": "RwTerritoryMapProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 114,
+      "community_name": "RwDashboard.tsx",
+      "file_type": "code",
+      "norm_label": "rwterritorymapprops",
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L38"
+    },
+    {
+      "id": "backend_app_http_controllers_api_public_calendarcontroller_calendarcontroller",
+      "label": "CalendarController",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 118,
-      "community_name": "KasRtCategory",
+      "community_name": "Controller",
       "file_type": "code",
-      "norm_label": "kasrtcategory",
-      "source_file": "backend/app/Models/KasRtCategory.php",
+      "norm_label": "calendarcontroller",
+      "source_file": "backend/app/Http/Controllers/Api/Public/CalendarController.php",
       "source_location": "L10"
+    },
+    {
+      "id": "backend_app_http_controllers_api_sekdes_wargamanagementcontroller_wargamanagementcontroller",
+      "label": "WargaManagementController",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": "wargamanagementcontroller",
+      "source_file": "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php",
+      "source_location": "L16"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_pengaduancontroller_pengaduancontroller",
+      "label": "PengaduanController",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": "pengaduancontroller",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/PengaduanController.php",
+      "source_location": "L10"
+    },
+    {
+      "id": "backend_app_http_controllers_controller_controller",
+      "label": "Controller",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": "controller",
+      "source_file": "backend/app/Http/Controllers/Controller.php",
+      "source_location": "L5"
     },
     {
       "id": "backend_app_http_controllers_api_public_publicsuratcontroller_publicsuratcontroller",
@@ -145,19 +223,6 @@
       "norm_label": "publicsuratcontroller",
       "source_file": "backend/app/Http/Controllers/Api/Public/PublicSuratController.php",
       "source_location": "L13"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller",
-      "label": "RtSuratController",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": "rtsuratcontroller",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
-      "source_location": "L12"
     },
     {
       "id": "backend_app_http_controllers_api_rw_rwsuratcontroller_rwsuratcontroller",
@@ -186,32 +251,6 @@
       "source_location": "L12"
     },
     {
-      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller",
-      "label": "WargaSuratController",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": "wargasuratcontroller",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
-      "source_location": "L13"
-    },
-    {
-      "id": "backend_app_models_notifikasilog_notifikasilog",
-      "label": "NotifikasiLog",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": "notifikasilog",
-      "source_file": "backend/app/Models/NotifikasiLog.php",
-      "source_location": "L9"
-    },
-    {
       "id": "backend_app_models_suratrequest_suratrequest",
       "label": "SuratRequest",
       "_callable": true,
@@ -225,19 +264,6 @@
       "source_location": "L10"
     },
     {
-      "id": "backend_app_models_surattracking_surattracking",
-      "label": "SuratTracking",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": "surattracking",
-      "source_file": "backend/app/Models/SuratTracking.php",
-      "source_location": "L9"
-    },
-    {
       "id": "backend_app_http_controllers_api_auth_authcontroller_authcontroller",
       "label": "AuthController",
       "_callable": true,
@@ -249,32 +275,6 @@
       "norm_label": "authcontroller",
       "source_file": "backend/app/Http/Controllers/Api/Auth/AuthController.php",
       "source_location": "L15"
-    },
-    {
-      "id": "backend_app_http_controllers_api_public_calendarcontroller_calendarcontroller",
-      "label": "CalendarController",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": "calendarcontroller",
-      "source_file": "backend/app/Http/Controllers/Api/Public/CalendarController.php",
-      "source_location": "L10"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_kasrtcontroller_kasrtcontroller",
-      "label": "KasRtController",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": "kasrtcontroller",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
-      "source_location": "L11"
     },
     {
       "id": "backend_app_http_controllers_api_rt_rtpengaduancontroller_rtpengaduancontroller",
@@ -303,6 +303,32 @@
       "source_location": "L13"
     },
     {
+      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller",
+      "label": "WargaSuratController",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": "wargasuratcontroller",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
+      "source_location": "L13"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller",
+      "label": "RtSuratController",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": "rtsuratcontroller",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
+      "source_location": "L12"
+    },
+    {
       "id": "backend_app_models_rt_rt",
       "label": "Rt",
       "_callable": true,
@@ -314,6 +340,32 @@
       "norm_label": "rt",
       "source_file": "backend/app/Models/Rt.php",
       "source_location": "L10"
+    },
+    {
+      "id": "backend_app_models_rw_rw",
+      "label": "Rw",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 124,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
+      "file_type": "code",
+      "norm_label": "rw",
+      "source_file": "backend/app/Models/Rw.php",
+      "source_location": "L10"
+    },
+    {
+      "id": "frontend_src_shared_components_brandlogo_brandlogoprops",
+      "label": "BrandLogoProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 136,
+      "community_name": "BrandLogo.tsx",
+      "file_type": "code",
+      "norm_label": "brandlogoprops",
+      "source_file": "frontend/src/shared/components/BrandLogo.tsx",
+      "source_location": "L4"
     },
     {
       "id": "frontend_src_shared_components_charts_areasplinechart_areasplinechartprops",
@@ -446,17 +498,17 @@
       "source_location": "L27"
     },
     {
-      "id": "frontend_src_features_dashboard_components_cetaksuratmodal_cetaksuratmodalprops",
-      "label": "CetakSuratModalProps",
+      "id": "frontend_src_features_dashboard_components_previewsuratmodal_previewsuratmodalprops",
+      "label": "PreviewSuratModalProps",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 17,
       "community_name": "WargaDashboard.tsx",
       "file_type": "code",
-      "norm_label": "cetaksuratmodalprops",
-      "source_file": "frontend/src/features/dashboard/components/CetakSuratModal.tsx",
-      "source_location": "L6"
+      "norm_label": "previewsuratmodalprops",
+      "source_file": "frontend/src/features/dashboard/components/PreviewSuratModal.tsx",
+      "source_location": "L33"
     },
     {
       "id": "frontend_src_features_dashboard_components_surattrackingmodal_surattrackingmodalprops",
@@ -511,19 +563,6 @@
       "source_location": "L98"
     },
     {
-      "id": "frontend_src_shared_components_camerauploadmodal_camerauploadmodalprops",
-      "label": "CameraUploadModalProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "WargaDashboard.tsx",
-      "file_type": "code",
-      "norm_label": "camerauploadmodalprops",
-      "source_file": "frontend/src/shared/components/CameraUploadModal.tsx",
-      "source_location": "L18"
-    },
-    {
       "id": "backend_app_http_controllers_api_pengumumancontroller_pengumumancontroller",
       "label": "PengumumanController",
       "_callable": true,
@@ -537,19 +576,6 @@
       "source_location": "L14"
     },
     {
-      "id": "backend_app_http_controllers_api_sekdes_wargamanagementcontroller_wargamanagementcontroller",
-      "label": "WargaManagementController",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "wargamanagementcontroller",
-      "source_file": "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php",
-      "source_location": "L16"
-    },
-    {
       "id": "backend_app_models_pengumuman_pengumuman",
       "label": "Pengumuman",
       "_callable": true,
@@ -560,19 +586,6 @@
       "file_type": "code",
       "norm_label": "pengumuman",
       "source_file": "backend/app/Models/Pengumuman.php",
-      "source_location": "L9"
-    },
-    {
-      "id": "backend_app_models_role_role",
-      "label": "Role",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "role",
-      "source_file": "backend/app/Models/Role.php",
       "source_location": "L9"
     },
     {
@@ -589,32 +602,6 @@
       "source_location": "L10"
     },
     {
-      "id": "backend_database_seeders_bansospengumumanseeder_bansospengumumanseeder",
-      "label": "BansosPengumumanSeeder",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "bansospengumumanseeder",
-      "source_file": "backend/database/seeders/BansosPengumumanSeeder.php",
-      "source_location": "L12"
-    },
-    {
-      "id": "backend_database_seeders_databaseseeder_databaseseeder",
-      "label": "DatabaseSeeder",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "databaseseeder",
-      "source_file": "backend/database/seeders/DatabaseSeeder.php",
-      "source_location": "L31"
-    },
-    {
       "id": "backend_app_models_activitylog_activitylog",
       "label": "ActivityLog",
       "_callable": true,
@@ -625,19 +612,6 @@
       "file_type": "code",
       "norm_label": "activitylog",
       "source_file": "backend/app/Models/ActivityLog.php",
-      "source_location": "L9"
-    },
-    {
-      "id": "backend_app_models_apbdescategory_apbdescategory",
-      "label": "ApbdesCategory",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "apbdescategory",
-      "source_file": "backend/app/Models/ApbdesCategory.php",
       "source_location": "L9"
     },
     {
@@ -667,17 +641,69 @@
       "source_location": "L9"
     },
     {
-      "id": "backend_app_models_bantuanpenerima_bantuanpenerima",
-      "label": "BantuanPenerima",
+      "id": "backend_app_models_notifikasilog_notifikasilog",
+      "label": "NotifikasiLog",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
+      "file_type": "code",
+      "norm_label": "notifikasilog",
+      "source_file": "backend/app/Models/NotifikasiLog.php",
+      "source_location": "L9"
+    },
+    {
+      "id": "backend_app_models_role_role",
+      "label": "Role",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
+      "file_type": "code",
+      "norm_label": "role",
+      "source_file": "backend/app/Models/Role.php",
+      "source_location": "L9"
+    },
+    {
+      "id": "backend_app_models_surattracking_surattracking",
+      "label": "SuratTracking",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
+      "file_type": "code",
+      "norm_label": "surattracking",
+      "source_file": "backend/app/Models/SuratTracking.php",
+      "source_location": "L9"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_kasrtcontroller_kasrtcontroller",
+      "label": "KasRtController",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 26,
       "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "file_type": "code",
-      "norm_label": "bantuanpenerima",
-      "source_file": "backend/app/Models/BantuanPenerima.php",
-      "source_location": "L9"
+      "norm_label": "kasrtcontroller",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
+      "source_location": "L11"
+    },
+    {
+      "id": "backend_app_models_kasrtcategory_kasrtcategory",
+      "label": "KasRtCategory",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": "kasrtcategory",
+      "source_file": "backend/app/Models/KasRtCategory.php",
+      "source_location": "L10"
     },
     {
       "id": "backend_app_models_kasrttransaction_kasrttransaction",
@@ -690,6 +716,19 @@
       "file_type": "code",
       "norm_label": "kasrttransaction",
       "source_file": "backend/app/Models/KasRtTransaction.php",
+      "source_location": "L9"
+    },
+    {
+      "id": "backend_app_models_pengaduanwarga_pengaduanwarga",
+      "label": "PengaduanWarga",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": "pengaduanwarga",
+      "source_file": "backend/app/Models/PengaduanWarga.php",
       "source_location": "L9"
     },
     {
@@ -706,26 +745,13 @@
       "source_location": "L7"
     },
     {
-      "id": "backend_app_http_controllers_api_admin_wargacontroller_wargacontroller",
-      "label": "WargaController",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": "wargacontroller",
-      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
-      "source_location": "L13"
-    },
-    {
       "id": "backend_app_http_controllers_api_rt_rtwargacontroller_rtwargacontroller",
       "label": "RtWargaController",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": "rtwargacontroller",
       "source_file": "backend/app/Http/Controllers/Api/Rt/RtWargaController.php",
@@ -738,7 +764,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": "rwwargacontroller",
       "source_file": "backend/app/Http/Controllers/Api/Rw/RwWargaController.php",
@@ -751,24 +777,11 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": "wargadokumencontroller",
       "source_file": "backend/app/Http/Controllers/Api/Warga/WargaDokumenController.php",
       "source_location": "L12"
-    },
-    {
-      "id": "backend_app_http_controllers_controller_controller",
-      "label": "Controller",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": "controller",
-      "source_file": "backend/app/Http/Controllers/Controller.php",
-      "source_location": "L5"
     },
     {
       "id": "backend_app_models_kartukeluarga_kartukeluarga",
@@ -777,23 +790,10 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": "kartukeluarga",
       "source_file": "backend/app/Models/KartuKeluarga.php",
-      "source_location": "L10"
-    },
-    {
-      "id": "backend_app_models_rw_rw",
-      "label": "Rw",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": "rw",
-      "source_file": "backend/app/Models/Rw.php",
       "source_location": "L10"
     },
     {
@@ -829,37 +829,24 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": "apbdescontroller",
       "source_file": "backend/app/Http/Controllers/Api/Bendahara/ApbdesController.php",
       "source_location": "L11"
     },
     {
-      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller",
-      "label": "PublicInfoController",
+      "id": "backend_app_models_apbdescategory_apbdescategory",
+      "label": "ApbdesCategory",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
-      "norm_label": "publicinfocontroller",
-      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
-      "source_location": "L15"
-    },
-    {
-      "id": "backend_app_http_controllers_api_warga_pengaduancontroller_pengaduancontroller",
-      "label": "PengaduanController",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "file_type": "code",
-      "norm_label": "pengaduancontroller",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/PengaduanController.php",
-      "source_location": "L10"
+      "norm_label": "apbdescategory",
+      "source_file": "backend/app/Models/ApbdesCategory.php",
+      "source_location": "L9"
     },
     {
       "id": "backend_app_models_apbdesrecord_apbdesrecord",
@@ -868,7 +855,7 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": "apbdesrecord",
       "source_file": "backend/app/Models/ApbdesRecord.php",
@@ -886,6 +873,19 @@
       "norm_label": "authcontexttype",
       "source_file": "frontend/src/shared/context/AuthContext.tsx",
       "source_location": "L5"
+    },
+    {
+      "id": "frontend_src_features_dashboard_components_cetaksuratmodal_cetaksuratmodalprops",
+      "label": "CetakSuratModalProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "lucide-react",
+      "file_type": "code",
+      "norm_label": "cetaksuratmodalprops",
+      "source_file": "frontend/src/features/dashboard/components/CetakSuratModal.tsx",
+      "source_location": "L6"
     },
     {
       "id": "frontend_src_features_dashboard_components_pendaftaranwargadesa_wargaitem",
@@ -937,7 +937,7 @@
       "file_type": "code",
       "norm_label": "sekdesdashboardprops",
       "source_file": "frontend/src/features/dashboard/components/SekdesDashboard.tsx",
-      "source_location": "L23"
+      "source_location": "L24"
     },
     {
       "id": "backend_tests_unit_exampletest_exampletest",
@@ -1031,30 +1031,56 @@
       "source_location": "L16"
     },
     {
-      "id": "frontend_src_shared_components_brandlogo_brandlogoprops",
-      "label": "BrandLogoProps",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "react",
-      "file_type": "code",
-      "norm_label": "brandlogoprops",
-      "source_file": "frontend/src/shared/components/BrandLogo.tsx",
-      "source_location": "L4"
-    },
-    {
-      "id": "backend_app_models_pengaduanwarga_pengaduanwarga",
-      "label": "PengaduanWarga",
+      "id": "backend_app_models_bantuanpenerima_bantuanpenerima",
+      "label": "BantuanPenerima",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "PengaduanWarga",
+      "community_name": ".run",
       "file_type": "code",
-      "norm_label": "pengaduanwarga",
-      "source_file": "backend/app/Models/PengaduanWarga.php",
+      "norm_label": "bantuanpenerima",
+      "source_file": "backend/app/Models/BantuanPenerima.php",
       "source_location": "L9"
+    },
+    {
+      "id": "backend_app_models_bantuansosial_bantuansosial",
+      "label": "BantuanSosial",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": "bantuansosial",
+      "source_file": "backend/app/Models/BantuanSosial.php",
+      "source_location": "L10"
+    },
+    {
+      "id": "backend_database_seeders_bansospengumumanseeder_bansospengumumanseeder",
+      "label": "BansosPengumumanSeeder",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": "bansospengumumanseeder",
+      "source_file": "backend/database/seeders/BansosPengumumanSeeder.php",
+      "source_location": "L12"
+    },
+    {
+      "id": "backend_database_seeders_databaseseeder_databaseseeder",
+      "label": "DatabaseSeeder",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": "databaseseeder",
+      "source_file": "backend/database/seeders/DatabaseSeeder.php",
+      "source_location": "L31"
     },
     {
       "id": "frontend_src_features_dashboard_components_bendaharadashboard_bendaharadashboardprops",
@@ -1109,17 +1135,56 @@
       "source_location": "L1532"
     },
     {
+      "id": "frontend_src_shared_components_camerauploadmodal_camerauploadmodalprops",
+      "label": "CameraUploadModalProps",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "DashboardLayout.tsx",
+      "file_type": "code",
+      "norm_label": "camerauploadmodalprops",
+      "source_file": "frontend/src/shared/components/CameraUploadModal.tsx",
+      "source_location": "L18"
+    },
+    {
       "id": "backend_app_http_controllers_api_admin_bansoscontroller_bansoscontroller",
       "label": "BansosController",
       "_callable": true,
       "_callable_class": true,
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
       "norm_label": "bansoscontroller",
       "source_file": "backend/app/Http/Controllers/Api/Admin/BansosController.php",
       "source_location": "L7"
+    },
+    {
+      "id": "backend_app_http_controllers_api_admin_wargacontroller_wargacontroller",
+      "label": "WargaController",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": "wargacontroller",
+      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
+      "source_location": "L13"
+    },
+    {
+      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller",
+      "label": "PublicInfoController",
+      "_callable": true,
+      "_callable_class": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": "publicinfocontroller",
+      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
+      "source_location": "L15"
     },
     {
       "id": "backend_app_http_controllers_api_sekdes_bansoscontroller_bansoscontroller",
@@ -1128,24 +1193,11 @@
       "_callable_class": true,
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
       "norm_label": "bansoscontroller",
       "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
       "source_location": "L14"
-    },
-    {
-      "id": "backend_app_models_bantuansosial_bantuansosial",
-      "label": "BantuanSosial",
-      "_callable": true,
-      "_callable_class": true,
-      "_origin": "ast",
-      "community": 70,
-      "community_name": "BantuanSosial",
-      "file_type": "code",
-      "norm_label": "bantuansosial",
-      "source_file": "backend/app/Models/BantuanSosial.php",
-      "source_location": "L10"
     },
     {
       "id": "frontend_src_shared_types_index_apbdescategory",
@@ -1890,16 +1942,16 @@
       "source_location": "L14"
     },
     {
-      "id": "frontend_src_features_dashboard_components_previewsuratmodal_previewsuratmodal",
-      "label": "PreviewSuratModal()",
+      "id": "frontend_src_features_dashboard_components_desaterritorymap_desaterritorymap",
+      "label": "DesaTerritoryMap()",
       "_callable": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
-      "norm_label": "previewsuratmodal()",
-      "source_file": "frontend/src/features/dashboard/components/PreviewSuratModal.tsx",
-      "source_location": "L44"
+      "norm_label": "desaterritorymap()",
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L50"
     },
     {
       "id": "frontend_src_features_dashboard_components_realrtmap_realrtmap",
@@ -1907,7 +1959,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "realrtmap()",
       "source_file": "frontend/src/features/dashboard/components/RealRtMap.tsx",
@@ -1919,59 +1971,83 @@
       "_callable": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "rtdashboard()",
       "source_file": "frontend/src/features/dashboard/components/RtDashboard.tsx",
       "source_location": "L49"
     },
     {
-      "id": "frontend_src_features_dashboard_components_wargadashboard_parselampirandokumen",
-      "label": "parseLampiranDokumen()",
+      "id": "frontend_src_features_dashboard_components_rwterritorymap_rwterritorymap",
+      "label": "RwTerritoryMap()",
       "_callable": true,
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
-      "norm_label": "parselampirandokumen()",
-      "source_file": "frontend/src/features/dashboard/components/WargaDashboard.tsx",
-      "source_location": "L65"
+      "norm_label": "rwterritorymap()",
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L45"
     },
     {
-      "id": "frontend_src_features_dashboard_components_wargadashboard_wargadashboard",
-      "label": "WargaDashboard()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 114,
-      "community_name": "RtDashboard.tsx",
-      "file_type": "code",
-      "norm_label": "wargadashboard()",
-      "source_file": "frontend/src/features/dashboard/components/WargaDashboard.tsx",
-      "source_location": "L240"
-    },
-    {
-      "id": "backend_app_models_kasrtcategory_kasrtcategory_rt",
-      "label": ".rt()",
+      "id": "backend_app_http_controllers_api_public_calendarcontroller_calendarcontroller_gettoday",
+      "label": ".getToday()",
       "_callable": true,
       "_origin": "ast",
       "community": 118,
-      "community_name": "KasRtCategory",
+      "community_name": "Controller",
       "file_type": "code",
-      "norm_label": ".rt()",
-      "source_file": "backend/app/Models/KasRtCategory.php",
-      "source_location": "L20"
+      "norm_label": ".gettoday()",
+      "source_file": "backend/app/Http/Controllers/Api/Public/CalendarController.php",
+      "source_location": "L15"
     },
     {
-      "id": "backend_app_models_kasrtcategory_kasrtcategory_transactions",
-      "label": ".transactions()",
+      "id": "backend_app_http_controllers_api_sekdes_wargamanagementcontroller_wargamanagementcontroller_index",
+      "label": ".index()",
       "_callable": true,
       "_origin": "ast",
       "community": 118,
-      "community_name": "KasRtCategory",
+      "community_name": "Controller",
       "file_type": "code",
-      "norm_label": ".transactions()",
-      "source_file": "backend/app/Models/KasRtCategory.php",
-      "source_location": "L25"
+      "norm_label": ".index()",
+      "source_file": "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php",
+      "source_location": "L21"
+    },
+    {
+      "id": "backend_app_http_controllers_api_sekdes_wargamanagementcontroller_wargamanagementcontroller_store",
+      "label": ".store()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": ".store()",
+      "source_file": "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php",
+      "source_location": "L50"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_pengaduancontroller_pengaduancontroller_index",
+      "label": ".index()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": ".index()",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/PengaduanController.php",
+      "source_location": "L12"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_pengaduancontroller_pengaduancontroller_store",
+      "label": ".store()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": ".store()",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/PengaduanController.php",
+      "source_location": "L31"
     },
     {
       "id": "backend_app_http_controllers_api_public_publicsuratcontroller_publicsuratcontroller_getbarcodesvg",
@@ -2034,54 +2110,6 @@
       "source_location": "L45"
     },
     {
-      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller_approvert",
-      "label": ".approveRt()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".approvert()",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
-      "source_location": "L32"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller_handleaction",
-      "label": ".handleAction()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".handleaction()",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
-      "source_location": "L102"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller_index",
-      "label": ".index()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".index()",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
-      "source_location": "L14"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller_reject",
-      "label": ".reject()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".reject()",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
-      "source_location": "L70"
-    },
-    {
       "id": "backend_app_http_controllers_api_rw_rwsuratcontroller_rwsuratcontroller_approverw",
       "label": ".approveRw()",
       "_callable": true,
@@ -2130,18 +2158,6 @@
       "source_location": "L17"
     },
     {
-      "id": "backend_app_http_controllers_api_sekdes_bansoscontroller_bansoscontroller_publishandbroadcast",
-      "label": ".publishAndBroadcast()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".publishandbroadcast()",
-      "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
-      "source_location": "L106"
-    },
-    {
       "id": "backend_app_http_controllers_api_sekdes_sekdessuratcontroller_sekdessuratcontroller_index",
       "label": ".index()",
       "_callable": true,
@@ -2178,90 +2194,6 @@
       "source_location": "L85"
     },
     {
-      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_destroy",
-      "label": ".destroy()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".destroy()",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
-      "source_location": "L161"
-    },
-    {
-      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_index",
-      "label": ".index()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".index()",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
-      "source_location": "L15"
-    },
-    {
-      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_processlampirans",
-      "label": ".processLampirans()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".processlampirans()",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
-      "source_location": "L249"
-    },
-    {
-      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_saveimagehelper",
-      "label": ".saveImageHelper()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".saveimagehelper()",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
-      "source_location": "L219"
-    },
-    {
-      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_store",
-      "label": ".store()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".store()",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
-      "source_location": "L34"
-    },
-    {
-      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_update",
-      "label": ".update()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".update()",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
-      "source_location": "L87"
-    },
-    {
-      "id": "backend_app_models_notifikasilog_notifikasilog_casts",
-      "label": ".casts()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 119,
-      "community_name": "SuratRequest",
-      "file_type": "code",
-      "norm_label": ".casts()",
-      "source_file": "backend/app/Models/NotifikasiLog.php",
-      "source_location": "L24"
-    },
-    {
       "id": "backend_app_models_suratrequest_suratrequest_casts",
       "label": ".casts()",
       "_callable": true,
@@ -2272,6 +2204,18 @@
       "norm_label": ".casts()",
       "source_file": "backend/app/Models/SuratRequest.php",
       "source_location": "L30"
+    },
+    {
+      "id": "backend_app_models_suratrequest_suratrequest_wargaprofile",
+      "label": ".wargaProfile()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 119,
+      "community_name": "SuratRequest",
+      "file_type": "code",
+      "norm_label": ".wargaprofile()",
+      "source_file": "backend/app/Models/SuratRequest.php",
+      "source_location": "L39"
     },
     {
       "id": "backend_app_http_controllers_api_auth_authcontroller_authcontroller_login",
@@ -2358,54 +2302,6 @@
       "source_location": "L145"
     },
     {
-      "id": "backend_app_http_controllers_api_public_calendarcontroller_calendarcontroller_gettoday",
-      "label": ".getToday()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": ".gettoday()",
-      "source_file": "backend/app/Http/Controllers/Api/Public/CalendarController.php",
-      "source_location": "L15"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_kasrtcontroller_kasrtcontroller_index",
-      "label": ".index()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": ".index()",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
-      "source_location": "L13"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_kasrtcontroller_kasrtcontroller_store",
-      "label": ".store()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": ".store()",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
-      "source_location": "L74"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_kasrtcontroller_kasrtcontroller_storecategory",
-      "label": ".storeCategory()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": ".storecategory()",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
-      "source_location": "L51"
-    },
-    {
       "id": "backend_app_http_controllers_api_rt_rtpengaduancontroller_rtpengaduancontroller_index",
       "label": ".index()",
       "_callable": true,
@@ -2454,16 +2350,136 @@
       "source_location": "L39"
     },
     {
-      "id": "backend_app_models_bantuansosial_bantuansosial_penerimas",
-      "label": ".penerimas()",
+      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_destroy",
+      "label": ".destroy()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": ".destroy()",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
+      "source_location": "L161"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_index",
+      "label": ".index()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": ".index()",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
+      "source_location": "L15"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_processlampirans",
+      "label": ".processLampirans()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": ".processlampirans()",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
+      "source_location": "L249"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_saveimagehelper",
+      "label": ".saveImageHelper()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": ".saveimagehelper()",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
+      "source_location": "L219"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_store",
+      "label": ".store()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": ".store()",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
+      "source_location": "L34"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller_wargasuratcontroller_update",
+      "label": ".update()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": ".update()",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
+      "source_location": "L87"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller_approvert",
+      "label": ".approveRt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": ".approvert()",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
+      "source_location": "L32"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller_handleaction",
+      "label": ".handleAction()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": ".handleaction()",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
+      "source_location": "L102"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller_index",
+      "label": ".index()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": ".index()",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
+      "source_location": "L14"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller_rtsuratcontroller_reject",
+      "label": ".reject()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": ".reject()",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
+      "source_location": "L70"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rw_rwwargacontroller_rwwargacontroller_getrts",
+      "label": ".getRts()",
       "_callable": true,
       "_origin": "ast",
       "community": 124,
       "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
       "file_type": "code",
-      "norm_label": ".penerimas()",
-      "source_file": "backend/app/Models/BantuanSosial.php",
-      "source_location": "L41"
+      "norm_label": ".getrts()",
+      "source_file": "backend/app/Http/Controllers/Api/Rw/RwWargaController.php",
+      "source_location": "L99"
     },
     {
       "id": "backend_app_models_dusun_dusun_rws",
@@ -2476,30 +2492,6 @@
       "norm_label": ".rws()",
       "source_file": "backend/app/Models/Dusun.php",
       "source_location": "L19"
-    },
-    {
-      "id": "backend_app_models_kartukeluarga_kartukeluarga_anggotakeluarga",
-      "label": ".anggotaKeluarga()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 124,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
-      "file_type": "code",
-      "norm_label": ".anggotakeluarga()",
-      "source_file": "backend/app/Models/KartuKeluarga.php",
-      "source_location": "L28"
-    },
-    {
-      "id": "backend_app_models_kartukeluarga_kartukeluarga_bantuanpenerimas",
-      "label": ".bantuanPenerimas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 124,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
-      "file_type": "code",
-      "norm_label": ".bantuanpenerimas()",
-      "source_file": "backend/app/Models/KartuKeluarga.php",
-      "source_location": "L33"
     },
     {
       "id": "backend_app_models_role_role_users",
@@ -2610,6 +2602,30 @@
       "source_location": "L47"
     },
     {
+      "id": "backend_app_models_rw_rw_dusun",
+      "label": ".dusun()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 124,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
+      "file_type": "code",
+      "norm_label": ".dusun()",
+      "source_file": "backend/app/Models/Rw.php",
+      "source_location": "L20"
+    },
+    {
+      "id": "backend_app_models_rw_rw_ketuarwuser",
+      "label": ".ketuaRwUser()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 124,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
+      "file_type": "code",
+      "norm_label": ".ketuarwuser()",
+      "source_file": "backend/app/Models/Rw.php",
+      "source_location": "L25"
+    },
+    {
       "id": "backend_app_models_rw_rw_rts",
       "label": ".rts()",
       "_callable": true,
@@ -2634,40 +2650,16 @@
       "source_location": "L49"
     },
     {
-      "id": "backend_app_models_wargaprofile_wargaprofile_bantuanpenerimas",
-      "label": ".bantuanPenerimas()",
+      "id": "frontend_src_shared_components_brandlogo_brandlogo",
+      "label": "BrandLogo()",
       "_callable": true,
       "_origin": "ast",
-      "community": 124,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
+      "community": 136,
+      "community_name": "BrandLogo.tsx",
       "file_type": "code",
-      "norm_label": ".bantuanpenerimas()",
-      "source_file": "backend/app/Models/WargaProfile.php",
-      "source_location": "L68"
-    },
-    {
-      "id": "backend_app_models_wargaprofile_wargaprofile_pengaduans",
-      "label": ".pengaduans()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 124,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
-      "file_type": "code",
-      "norm_label": ".pengaduans()",
-      "source_file": "backend/app/Models/WargaProfile.php",
-      "source_location": "L73"
-    },
-    {
-      "id": "backend_app_models_wargaprofile_wargaprofile_suratrequests",
-      "label": ".suratRequests()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 124,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
-      "file_type": "code",
-      "norm_label": ".suratrequests()",
-      "source_file": "backend/app/Models/WargaProfile.php",
-      "source_location": "L63"
+      "norm_label": "brandlogo()",
+      "source_file": "frontend/src/shared/components/BrandLogo.tsx",
+      "source_location": "L13"
     },
     {
       "id": "frontend_src_shared_components_charts_areasplinechart_areasplinechart",
@@ -2742,16 +2734,16 @@
       "source_location": "L60"
     },
     {
-      "id": "frontend_src_features_dashboard_components_cetaksuratmodal_cetaksuratmodal",
-      "label": "CetakSuratModal()",
+      "id": "frontend_src_features_dashboard_components_previewsuratmodal_previewsuratmodal",
+      "label": "PreviewSuratModal()",
       "_callable": true,
       "_origin": "ast",
       "community": 17,
       "community_name": "WargaDashboard.tsx",
       "file_type": "code",
-      "norm_label": "cetaksuratmodal()",
-      "source_file": "frontend/src/features/dashboard/components/CetakSuratModal.tsx",
-      "source_location": "L12"
+      "norm_label": "previewsuratmodal()",
+      "source_file": "frontend/src/features/dashboard/components/PreviewSuratModal.tsx",
+      "source_location": "L44"
     },
     {
       "id": "frontend_src_features_dashboard_components_surattrackingmodal_surattrackingmodal",
@@ -2766,28 +2758,28 @@
       "source_location": "L17"
     },
     {
-      "id": "frontend_src_features_landing_components_bansospage_bansospage",
-      "label": "BansosPage()",
+      "id": "frontend_src_features_dashboard_components_wargadashboard_parselampirandokumen",
+      "label": "parseLampiranDokumen()",
       "_callable": true,
       "_origin": "ast",
       "community": 17,
       "community_name": "WargaDashboard.tsx",
       "file_type": "code",
-      "norm_label": "bansospage()",
-      "source_file": "frontend/src/features/landing/components/BansosPage.tsx",
-      "source_location": "L20"
+      "norm_label": "parselampirandokumen()",
+      "source_file": "frontend/src/features/dashboard/components/WargaDashboard.tsx",
+      "source_location": "L65"
     },
     {
-      "id": "frontend_src_shared_components_camerauploadmodal_camerauploadmodal",
-      "label": "CameraUploadModal()",
+      "id": "frontend_src_features_dashboard_components_wargadashboard_wargadashboard",
+      "label": "WargaDashboard()",
       "_callable": true,
       "_origin": "ast",
       "community": 17,
       "community_name": "WargaDashboard.tsx",
       "file_type": "code",
-      "norm_label": "camerauploadmodal()",
-      "source_file": "frontend/src/shared/components/CameraUploadModal.tsx",
-      "source_location": "L28"
+      "norm_label": "wargadashboard()",
+      "source_file": "frontend/src/features/dashboard/components/WargaDashboard.tsx",
+      "source_location": "L240"
     },
     {
       "id": "backend_app_http_controllers_api_pengumumancontroller_pengumumancontroller_formatpengumuman",
@@ -2838,28 +2830,16 @@
       "source_location": "L68"
     },
     {
-      "id": "backend_app_http_controllers_api_sekdes_wargamanagementcontroller_wargamanagementcontroller_index",
-      "label": ".index()",
+      "id": "backend_app_models_pengumuman_pengumuman_bantuansosial",
+      "label": ".bantuanSosial()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
       "community_name": "WargaProfile",
       "file_type": "code",
-      "norm_label": ".index()",
-      "source_file": "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php",
-      "source_location": "L21"
-    },
-    {
-      "id": "backend_app_http_controllers_api_sekdes_wargamanagementcontroller_wargamanagementcontroller_store",
-      "label": ".store()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": ".store()",
-      "source_file": "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php",
-      "source_location": "L50"
+      "norm_label": ".bantuansosial()",
+      "source_file": "backend/app/Models/Pengumuman.php",
+      "source_location": "L45"
     },
     {
       "id": "backend_app_models_pengumuman_pengumuman_casts",
@@ -2874,6 +2854,30 @@
       "source_location": "L31"
     },
     {
+      "id": "backend_app_models_pengumuman_pengumuman_createdbyuser",
+      "label": ".createdByUser()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "WargaProfile",
+      "file_type": "code",
+      "norm_label": ".createdbyuser()",
+      "source_file": "backend/app/Models/Pengumuman.php",
+      "source_location": "L40"
+    },
+    {
+      "id": "backend_app_models_wargaprofile_wargaprofile_bantuanpenerimas",
+      "label": ".bantuanPenerimas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "WargaProfile",
+      "file_type": "code",
+      "norm_label": ".bantuanpenerimas()",
+      "source_file": "backend/app/Models/WargaProfile.php",
+      "source_location": "L68"
+    },
+    {
       "id": "backend_app_models_wargaprofile_wargaprofile_casts",
       "label": ".casts()",
       "_callable": true,
@@ -2886,40 +2890,76 @@
       "source_location": "L40"
     },
     {
-      "id": "backend_database_seeders_bansospengumumanseeder_bansospengumumanseeder_run",
-      "label": ".run()",
+      "id": "backend_app_models_wargaprofile_wargaprofile_kartukeluarga",
+      "label": ".kartuKeluarga()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
       "community_name": "WargaProfile",
       "file_type": "code",
-      "norm_label": ".run()",
-      "source_file": "backend/database/seeders/BansosPengumumanSeeder.php",
-      "source_location": "L14"
+      "norm_label": ".kartukeluarga()",
+      "source_file": "backend/app/Models/WargaProfile.php",
+      "source_location": "L53"
     },
     {
-      "id": "backend_database_seeders_databaseseeder_databaseseeder_run",
-      "label": ".run()",
+      "id": "backend_app_models_wargaprofile_wargaprofile_pengaduans",
+      "label": ".pengaduans()",
       "_callable": true,
       "_origin": "ast",
       "community": 18,
       "community_name": "WargaProfile",
       "file_type": "code",
-      "norm_label": ".run()",
-      "source_file": "backend/database/seeders/DatabaseSeeder.php",
-      "source_location": "L36"
+      "norm_label": ".pengaduans()",
+      "source_file": "backend/app/Models/WargaProfile.php",
+      "source_location": "L73"
     },
     {
-      "id": "backend_app_models_apbdescategory_apbdescategory_records",
-      "label": ".records()",
+      "id": "backend_app_models_wargaprofile_wargaprofile_rt",
+      "label": ".rt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "WargaProfile",
+      "file_type": "code",
+      "norm_label": ".rt()",
+      "source_file": "backend/app/Models/WargaProfile.php",
+      "source_location": "L58"
+    },
+    {
+      "id": "backend_app_models_wargaprofile_wargaprofile_suratrequests",
+      "label": ".suratRequests()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "WargaProfile",
+      "file_type": "code",
+      "norm_label": ".suratrequests()",
+      "source_file": "backend/app/Models/WargaProfile.php",
+      "source_location": "L63"
+    },
+    {
+      "id": "backend_app_models_wargaprofile_wargaprofile_user",
+      "label": ".user()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 18,
+      "community_name": "WargaProfile",
+      "file_type": "code",
+      "norm_label": ".user()",
+      "source_file": "backend/app/Models/WargaProfile.php",
+      "source_location": "L48"
+    },
+    {
+      "id": "backend_app_models_activitylog_activitylog_user",
+      "label": ".user()",
       "_callable": true,
       "_origin": "ast",
       "community": 2,
       "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
       "file_type": "code",
-      "norm_label": ".records()",
-      "source_file": "backend/app/Models/ApbdesCategory.php",
-      "source_location": "L19"
+      "norm_label": ".user()",
+      "source_file": "backend/app/Models/ActivityLog.php",
+      "source_location": "L23"
     },
     {
       "id": "backend_app_models_berita_berita_author",
@@ -2946,115 +2986,103 @@
       "source_location": "L28"
     },
     {
-      "id": "backend_app_models_activitylog_activitylog_user",
-      "label": ".user()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".user()",
-      "source_file": "backend/app/Models/ActivityLog.php",
-      "source_location": "L23"
-    },
-    {
-      "id": "backend_app_models_apbdesrecord_apbdesrecord_category",
-      "label": ".category()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".category()",
-      "source_file": "backend/app/Models/ApbdesRecord.php",
-      "source_location": "L33"
-    },
-    {
-      "id": "backend_app_models_apbdesrecord_apbdesrecord_createdbyuser",
-      "label": ".createdByUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".createdbyuser()",
-      "source_file": "backend/app/Models/ApbdesRecord.php",
-      "source_location": "L38"
-    },
-    {
-      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_bantuansosial",
-      "label": ".bantuanSosial()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".bantuansosial()",
-      "source_file": "backend/app/Models/BantuanPenerima.php",
-      "source_location": "L34"
-    },
-    {
-      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_casts",
+      "id": "backend_app_models_notifikasilog_notifikasilog_casts",
       "label": ".casts()",
       "_callable": true,
       "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
       "file_type": "code",
       "norm_label": ".casts()",
-      "source_file": "backend/app/Models/BantuanPenerima.php",
-      "source_location": "L27"
+      "source_file": "backend/app/Models/NotifikasiLog.php",
+      "source_location": "L24"
     },
     {
-      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_kartukeluarga",
-      "label": ".kartuKeluarga()",
+      "id": "backend_app_models_notifikasilog_notifikasilog_user",
+      "label": ".user()",
       "_callable": true,
       "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
       "file_type": "code",
-      "norm_label": ".kartukeluarga()",
-      "source_file": "backend/app/Models/BantuanPenerima.php",
-      "source_location": "L44"
+      "norm_label": ".user()",
+      "source_file": "backend/app/Models/NotifikasiLog.php",
+      "source_location": "L31"
     },
     {
-      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_petugasuser",
-      "label": ".petugasUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".petugasuser()",
-      "source_file": "backend/app/Models/BantuanPenerima.php",
-      "source_location": "L49"
-    },
-    {
-      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_wargaprofile",
+      "id": "backend_app_models_notifikasilog_notifikasilog_wargaprofile",
       "label": ".wargaProfile()",
       "_callable": true,
       "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
       "file_type": "code",
       "norm_label": ".wargaprofile()",
-      "source_file": "backend/app/Models/BantuanPenerima.php",
-      "source_location": "L39"
+      "source_file": "backend/app/Models/NotifikasiLog.php",
+      "source_location": "L36"
     },
     {
-      "id": "backend_app_models_bantuansosial_bantuansosial_createdbyuser",
-      "label": ".createdByUser()",
+      "id": "backend_app_models_surattracking_surattracking_actoruser",
+      "label": ".actorUser()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
+      "file_type": "code",
+      "norm_label": ".actoruser()",
+      "source_file": "backend/app/Models/SuratTracking.php",
+      "source_location": "L26"
+    },
+    {
+      "id": "backend_app_models_surattracking_surattracking_suratrequest",
+      "label": ".suratRequest()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
+      "file_type": "code",
+      "norm_label": ".suratrequest()",
+      "source_file": "backend/app/Models/SuratTracking.php",
+      "source_location": "L21"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_kasrtcontroller_kasrtcontroller_index",
+      "label": ".index()",
       "_callable": true,
       "_origin": "ast",
       "community": 26,
       "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "file_type": "code",
-      "norm_label": ".createdbyuser()",
-      "source_file": "backend/app/Models/BantuanSosial.php",
-      "source_location": "L46"
+      "norm_label": ".index()",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
+      "source_location": "L13"
     },
     {
-      "id": "backend_app_models_kartukeluarga_kartukeluarga_rt",
+      "id": "backend_app_http_controllers_api_rt_kasrtcontroller_kasrtcontroller_store",
+      "label": ".store()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": ".store()",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
+      "source_location": "L74"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_kasrtcontroller_kasrtcontroller_storecategory",
+      "label": ".storeCategory()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": ".storecategory()",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
+      "source_location": "L51"
+    },
+    {
+      "id": "backend_app_models_kasrtcategory_kasrtcategory_rt",
       "label": ".rt()",
       "_callable": true,
       "_origin": "ast",
@@ -3062,8 +3090,20 @@
       "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "file_type": "code",
       "norm_label": ".rt()",
-      "source_file": "backend/app/Models/KartuKeluarga.php",
-      "source_location": "L23"
+      "source_file": "backend/app/Models/KasRtCategory.php",
+      "source_location": "L20"
+    },
+    {
+      "id": "backend_app_models_kasrtcategory_kasrtcategory_transactions",
+      "label": ".transactions()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": ".transactions()",
+      "source_file": "backend/app/Models/KasRtCategory.php",
+      "source_location": "L25"
     },
     {
       "id": "backend_app_models_kasrttransaction_kasrttransaction_casts",
@@ -3126,19 +3166,43 @@
       "source_location": "L43"
     },
     {
-      "id": "backend_app_models_notifikasilog_notifikasilog_user",
-      "label": ".user()",
+      "id": "backend_app_models_pengaduanwarga_pengaduanwarga_casts",
+      "label": ".casts()",
       "_callable": true,
       "_origin": "ast",
       "community": 26,
       "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "file_type": "code",
-      "norm_label": ".user()",
-      "source_file": "backend/app/Models/NotifikasiLog.php",
-      "source_location": "L31"
+      "norm_label": ".casts()",
+      "source_file": "backend/app/Models/PengaduanWarga.php",
+      "source_location": "L28"
     },
     {
-      "id": "backend_app_models_notifikasilog_notifikasilog_wargaprofile",
+      "id": "backend_app_models_pengaduanwarga_pengaduanwarga_ditanggapibyuser",
+      "label": ".ditanggapiByUser()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": ".ditanggapibyuser()",
+      "source_file": "backend/app/Models/PengaduanWarga.php",
+      "source_location": "L45"
+    },
+    {
+      "id": "backend_app_models_pengaduanwarga_pengaduanwarga_rt",
+      "label": ".rt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": ".rt()",
+      "source_file": "backend/app/Models/PengaduanWarga.php",
+      "source_location": "L40"
+    },
+    {
+      "id": "backend_app_models_pengaduanwarga_pengaduanwarga_wargaprofile",
       "label": ".wargaProfile()",
       "_callable": true,
       "_origin": "ast",
@@ -3146,56 +3210,8 @@
       "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "file_type": "code",
       "norm_label": ".wargaprofile()",
-      "source_file": "backend/app/Models/NotifikasiLog.php",
-      "source_location": "L36"
-    },
-    {
-      "id": "backend_app_models_pengumuman_pengumuman_bantuansosial",
-      "label": ".bantuanSosial()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".bantuansosial()",
-      "source_file": "backend/app/Models/Pengumuman.php",
-      "source_location": "L45"
-    },
-    {
-      "id": "backend_app_models_pengumuman_pengumuman_createdbyuser",
-      "label": ".createdByUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".createdbyuser()",
-      "source_file": "backend/app/Models/Pengumuman.php",
-      "source_location": "L40"
-    },
-    {
-      "id": "backend_app_models_rw_rw_dusun",
-      "label": ".dusun()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".dusun()",
-      "source_file": "backend/app/Models/Rw.php",
-      "source_location": "L20"
-    },
-    {
-      "id": "backend_app_models_rw_rw_ketuarwuser",
-      "label": ".ketuaRwUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".ketuarwuser()",
-      "source_file": "backend/app/Models/Rw.php",
-      "source_location": "L25"
+      "source_file": "backend/app/Models/PengaduanWarga.php",
+      "source_location": "L35"
     },
     {
       "id": "backend_app_models_suratrequest_suratrequest_surattype",
@@ -3208,78 +3224,6 @@
       "norm_label": ".surattype()",
       "source_file": "backend/app/Models/SuratRequest.php",
       "source_location": "L44"
-    },
-    {
-      "id": "backend_app_models_suratrequest_suratrequest_wargaprofile",
-      "label": ".wargaProfile()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".wargaprofile()",
-      "source_file": "backend/app/Models/SuratRequest.php",
-      "source_location": "L39"
-    },
-    {
-      "id": "backend_app_models_surattracking_surattracking_actoruser",
-      "label": ".actorUser()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".actoruser()",
-      "source_file": "backend/app/Models/SuratTracking.php",
-      "source_location": "L26"
-    },
-    {
-      "id": "backend_app_models_surattracking_surattracking_suratrequest",
-      "label": ".suratRequest()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".suratrequest()",
-      "source_file": "backend/app/Models/SuratTracking.php",
-      "source_location": "L21"
-    },
-    {
-      "id": "backend_app_models_wargaprofile_wargaprofile_kartukeluarga",
-      "label": ".kartuKeluarga()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".kartukeluarga()",
-      "source_file": "backend/app/Models/WargaProfile.php",
-      "source_location": "L53"
-    },
-    {
-      "id": "backend_app_models_wargaprofile_wargaprofile_rt",
-      "label": ".rt()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".rt()",
-      "source_file": "backend/app/Models/WargaProfile.php",
-      "source_location": "L58"
-    },
-    {
-      "id": "backend_app_models_wargaprofile_wargaprofile_user",
-      "label": ".user()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 26,
-      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
-      "file_type": "code",
-      "norm_label": ".user()",
-      "source_file": "backend/app/Models/WargaProfile.php",
-      "source_location": "L48"
     },
     {
       "id": "backend_app_providers_appserviceprovider_appserviceprovider_boot",
@@ -3306,48 +3250,12 @@
       "source_location": "L12"
     },
     {
-      "id": "backend_app_http_controllers_api_admin_wargacontroller_wargacontroller_getkartukeluargas",
-      "label": ".getKartuKeluargas()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": ".getkartukeluargas()",
-      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
-      "source_location": "L39"
-    },
-    {
-      "id": "backend_app_http_controllers_api_admin_wargacontroller_wargacontroller_getwilayah",
-      "label": ".getWilayah()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": ".getwilayah()",
-      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
-      "source_location": "L45"
-    },
-    {
-      "id": "backend_app_http_controllers_api_admin_wargacontroller_wargacontroller_index",
-      "label": ".index()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": ".index()",
-      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
-      "source_location": "L15"
-    },
-    {
       "id": "backend_app_http_controllers_api_rt_rtwargacontroller_rtwargacontroller_getkartukeluargas",
       "label": ".getKartuKeluargas()",
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".getkartukeluargas()",
       "source_file": "backend/app/Http/Controllers/Api/Rt/RtWargaController.php",
@@ -3359,7 +3267,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".getwilayah()",
       "source_file": "backend/app/Http/Controllers/Api/Rt/RtWargaController.php",
@@ -3371,7 +3279,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".index()",
       "source_file": "backend/app/Http/Controllers/Api/Rt/RtWargaController.php",
@@ -3383,23 +3291,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".getkartukeluargas()",
       "source_file": "backend/app/Http/Controllers/Api/Rw/RwWargaController.php",
       "source_location": "L65"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rw_rwwargacontroller_rwwargacontroller_getrts",
-      "label": ".getRts()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": ".getrts()",
-      "source_file": "backend/app/Http/Controllers/Api/Rw/RwWargaController.php",
-      "source_location": "L99"
     },
     {
       "id": "backend_app_http_controllers_api_rw_rwwargacontroller_rwwargacontroller_index",
@@ -3407,7 +3303,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".index()",
       "source_file": "backend/app/Http/Controllers/Api/Rw/RwWargaController.php",
@@ -3419,7 +3315,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".resolverwid()",
       "source_file": "backend/app/Http/Controllers/Api/Rw/RwWargaController.php",
@@ -3431,7 +3327,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".destroy()",
       "source_file": "backend/app/Http/Controllers/Api/Warga/WargaDokumenController.php",
@@ -3443,7 +3339,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".index()",
       "source_file": "backend/app/Http/Controllers/Api/Warga/WargaDokumenController.php",
@@ -3455,7 +3351,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".saveimagefile()",
       "source_file": "backend/app/Http/Controllers/Api/Warga/WargaDokumenController.php",
@@ -3467,11 +3363,47 @@
       "_callable": true,
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": ".store()",
       "source_file": "backend/app/Http/Controllers/Api/Warga/WargaDokumenController.php",
       "source_location": "L72"
+    },
+    {
+      "id": "backend_app_models_kartukeluarga_kartukeluarga_anggotakeluarga",
+      "label": ".anggotaKeluarga()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "KartuKeluarga",
+      "file_type": "code",
+      "norm_label": ".anggotakeluarga()",
+      "source_file": "backend/app/Models/KartuKeluarga.php",
+      "source_location": "L28"
+    },
+    {
+      "id": "backend_app_models_kartukeluarga_kartukeluarga_bantuanpenerimas",
+      "label": ".bantuanPenerimas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "KartuKeluarga",
+      "file_type": "code",
+      "norm_label": ".bantuanpenerimas()",
+      "source_file": "backend/app/Models/KartuKeluarga.php",
+      "source_location": "L33"
+    },
+    {
+      "id": "backend_app_models_kartukeluarga_kartukeluarga_rt",
+      "label": ".rt()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 3,
+      "community_name": "KartuKeluarga",
+      "file_type": "code",
+      "norm_label": ".rt()",
+      "source_file": "backend/app/Models/KartuKeluarga.php",
+      "source_location": "L23"
     },
     {
       "id": "backend_tests_feature_exampletest_exampletest_test_the_application_returns_a_successful_response",
@@ -3491,7 +3423,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": ".destroy()",
       "source_file": "backend/app/Http/Controllers/Api/Bendahara/ApbdesController.php",
@@ -3503,7 +3435,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": ".getcategories()",
       "source_file": "backend/app/Http/Controllers/Api/Bendahara/ApbdesController.php",
@@ -3515,7 +3447,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": ".publicsummary()",
       "source_file": "backend/app/Http/Controllers/Api/Bendahara/ApbdesController.php",
@@ -3527,7 +3459,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": ".store()",
       "source_file": "backend/app/Http/Controllers/Api/Bendahara/ApbdesController.php",
@@ -3539,95 +3471,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": ".update()",
       "source_file": "backend/app/Http/Controllers/Api/Bendahara/ApbdesController.php",
       "source_location": "L96"
     },
     {
-      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getberitas",
-      "label": ".getBeritas()",
+      "id": "backend_app_models_apbdescategory_apbdescategory_records",
+      "label": ".records()",
       "_callable": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
-      "norm_label": ".getberitas()",
-      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
-      "source_location": "L17"
-    },
-    {
-      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getnotifikasilogs",
-      "label": ".getNotifikasiLogs()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "file_type": "code",
-      "norm_label": ".getnotifikasilogs()",
-      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
-      "source_location": "L60"
-    },
-    {
-      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getpengumumans",
-      "label": ".getPengumumans()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "file_type": "code",
-      "norm_label": ".getpengumumans()",
-      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
-      "source_location": "L28"
-    },
-    {
-      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getpublichome",
-      "label": ".getPublicHome()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "file_type": "code",
-      "norm_label": ".getpublichome()",
-      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
-      "source_location": "L74"
-    },
-    {
-      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getvillagestats",
-      "label": ".getVillageStats()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "file_type": "code",
-      "norm_label": ".getvillagestats()",
-      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
-      "source_location": "L38"
-    },
-    {
-      "id": "backend_app_http_controllers_api_warga_pengaduancontroller_pengaduancontroller_index",
-      "label": ".index()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "file_type": "code",
-      "norm_label": ".index()",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/PengaduanController.php",
-      "source_location": "L12"
-    },
-    {
-      "id": "backend_app_http_controllers_api_warga_pengaduancontroller_pengaduancontroller_store",
-      "label": ".store()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
-      "file_type": "code",
-      "norm_label": ".store()",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/PengaduanController.php",
-      "source_location": "L31"
+      "norm_label": ".records()",
+      "source_file": "backend/app/Models/ApbdesCategory.php",
+      "source_location": "L19"
     },
     {
       "id": "backend_app_models_apbdesrecord_apbdesrecord_casts",
@@ -3635,11 +3495,35 @@
       "_callable": true,
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": ".casts()",
       "source_file": "backend/app/Models/ApbdesRecord.php",
       "source_location": "L24"
+    },
+    {
+      "id": "backend_app_models_apbdesrecord_apbdesrecord_category",
+      "label": ".category()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "ApbdesRecord",
+      "file_type": "code",
+      "norm_label": ".category()",
+      "source_file": "backend/app/Models/ApbdesRecord.php",
+      "source_location": "L33"
+    },
+    {
+      "id": "backend_app_models_apbdesrecord_apbdesrecord_createdbyuser",
+      "label": ".createdByUser()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 38,
+      "community_name": "ApbdesRecord",
+      "file_type": "code",
+      "norm_label": ".createdbyuser()",
+      "source_file": "backend/app/Models/ApbdesRecord.php",
+      "source_location": "L38"
     },
     {
       "id": "frontend_src_shared_context_authcontext_authprovider",
@@ -3676,6 +3560,18 @@
       "norm_label": "bansosmanager()",
       "source_file": "frontend/src/features/dashboard/components/BansosManager.tsx",
       "source_location": "L18"
+    },
+    {
+      "id": "frontend_src_features_dashboard_components_cetaksuratmodal_cetaksuratmodal",
+      "label": "CetakSuratModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "lucide-react",
+      "file_type": "code",
+      "norm_label": "cetaksuratmodal()",
+      "source_file": "frontend/src/features/dashboard/components/CetakSuratModal.tsx",
+      "source_location": "L12"
     },
     {
       "id": "frontend_src_features_dashboard_components_kopsuratsetting_kopsuratsetting",
@@ -3723,7 +3619,7 @@
       "file_type": "code",
       "norm_label": "sekdesdashboard()",
       "source_file": "frontend/src/features/dashboard/components/SekdesDashboard.tsx",
-      "source_location": "L27"
+      "source_location": "L28"
     },
     {
       "id": "frontend_src_features_landing_components_transparansiapbdespage_transparansiapbdespage",
@@ -3819,7 +3715,7 @@
       "file_type": "code",
       "norm_label": "rwdashboard()",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L52"
+      "source_location": "L53"
     },
     {
       "id": "frontend_src_features_dashboard_components_rwdashboard_rwdashboard_renderdaftarrtgrid",
@@ -3831,7 +3727,7 @@
       "file_type": "code",
       "norm_label": "renderdaftarrtgrid()",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1096"
+      "source_location": "L1107"
     },
     {
       "id": "frontend_src_features_dashboard_components_rwdashboard_rwdashboard_renderdatakkgrid",
@@ -3843,7 +3739,7 @@
       "file_type": "code",
       "norm_label": "renderdatakkgrid()",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1296"
+      "source_location": "L1307"
     },
     {
       "id": "frontend_src_features_dashboard_components_rwdashboard_rwdashboard_renderdatawargatable",
@@ -3855,7 +3751,7 @@
       "file_type": "code",
       "norm_label": "renderdatawargatable()",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1202"
+      "source_location": "L1213"
     },
     {
       "id": "frontend_src_features_dashboard_components_rwdashboard_rwdashboard_renderkassection",
@@ -3867,7 +3763,7 @@
       "file_type": "code",
       "norm_label": "renderkassection()",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1352"
+      "source_location": "L1363"
     },
     {
       "id": "frontend_src_features_dashboard_components_rwdashboard_rwdashboard_rendermodals",
@@ -3879,7 +3775,7 @@
       "file_type": "code",
       "norm_label": "rendermodals()",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1474"
+      "source_location": "L1485"
     },
     {
       "id": "frontend_src_features_dashboard_components_rwdashboard_rwdashboard_renderrekapstatistiksection",
@@ -3891,7 +3787,7 @@
       "file_type": "code",
       "norm_label": "renderrekapstatistiksection()",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1429"
+      "source_location": "L1440"
     },
     {
       "id": "frontend_src_features_dashboard_components_rwdashboard_rwdashboard_rendersurattablecomponent",
@@ -3903,7 +3799,7 @@
       "file_type": "code",
       "norm_label": "rendersurattablecomponent()",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L917"
+      "source_location": "L928"
     },
     {
       "id": "backend_app_http_controllers_api_admin_desasettingcontroller_desasettingcontroller_getsettings",
@@ -4110,64 +4006,136 @@
       "source_location": "L22"
     },
     {
-      "id": "frontend_src_shared_components_brandlogo_brandlogo",
-      "label": "BrandLogo()",
+      "id": "backend_app_http_controllers_api_sekdes_bansoscontroller_bansoscontroller_show",
+      "label": ".show()",
       "_callable": true,
       "_origin": "ast",
-      "community": 6,
-      "community_name": "react",
+      "community": 63,
+      "community_name": ".run",
       "file_type": "code",
-      "norm_label": "brandlogo()",
-      "source_file": "frontend/src/shared/components/BrandLogo.tsx",
-      "source_location": "L13"
+      "norm_label": ".show()",
+      "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
+      "source_location": "L31"
     },
     {
-      "id": "backend_app_models_pengaduanwarga_pengaduanwarga_casts",
+      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_bantuansosial",
+      "label": ".bantuanSosial()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": ".bantuansosial()",
+      "source_file": "backend/app/Models/BantuanPenerima.php",
+      "source_location": "L34"
+    },
+    {
+      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_casts",
       "label": ".casts()",
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "PengaduanWarga",
+      "community_name": ".run",
       "file_type": "code",
       "norm_label": ".casts()",
-      "source_file": "backend/app/Models/PengaduanWarga.php",
-      "source_location": "L28"
+      "source_file": "backend/app/Models/BantuanPenerima.php",
+      "source_location": "L27"
     },
     {
-      "id": "backend_app_models_pengaduanwarga_pengaduanwarga_ditanggapibyuser",
-      "label": ".ditanggapiByUser()",
+      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_kartukeluarga",
+      "label": ".kartuKeluarga()",
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "PengaduanWarga",
+      "community_name": ".run",
       "file_type": "code",
-      "norm_label": ".ditanggapibyuser()",
-      "source_file": "backend/app/Models/PengaduanWarga.php",
-      "source_location": "L45"
+      "norm_label": ".kartukeluarga()",
+      "source_file": "backend/app/Models/BantuanPenerima.php",
+      "source_location": "L44"
     },
     {
-      "id": "backend_app_models_pengaduanwarga_pengaduanwarga_rt",
-      "label": ".rt()",
+      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_petugasuser",
+      "label": ".petugasUser()",
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "PengaduanWarga",
+      "community_name": ".run",
       "file_type": "code",
-      "norm_label": ".rt()",
-      "source_file": "backend/app/Models/PengaduanWarga.php",
-      "source_location": "L40"
+      "norm_label": ".petugasuser()",
+      "source_file": "backend/app/Models/BantuanPenerima.php",
+      "source_location": "L49"
     },
     {
-      "id": "backend_app_models_pengaduanwarga_pengaduanwarga_wargaprofile",
+      "id": "backend_app_models_bantuanpenerima_bantuanpenerima_wargaprofile",
       "label": ".wargaProfile()",
       "_callable": true,
       "_origin": "ast",
       "community": 63,
-      "community_name": "PengaduanWarga",
+      "community_name": ".run",
       "file_type": "code",
       "norm_label": ".wargaprofile()",
-      "source_file": "backend/app/Models/PengaduanWarga.php",
-      "source_location": "L35"
+      "source_file": "backend/app/Models/BantuanPenerima.php",
+      "source_location": "L39"
+    },
+    {
+      "id": "backend_app_models_bantuansosial_bantuansosial_casts",
+      "label": ".casts()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": ".casts()",
+      "source_file": "backend/app/Models/BantuanSosial.php",
+      "source_location": "L32"
+    },
+    {
+      "id": "backend_app_models_bantuansosial_bantuansosial_createdbyuser",
+      "label": ".createdByUser()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": ".createdbyuser()",
+      "source_file": "backend/app/Models/BantuanSosial.php",
+      "source_location": "L46"
+    },
+    {
+      "id": "backend_app_models_bantuansosial_bantuansosial_penerimas",
+      "label": ".penerimas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": ".penerimas()",
+      "source_file": "backend/app/Models/BantuanSosial.php",
+      "source_location": "L41"
+    },
+    {
+      "id": "backend_database_seeders_bansospengumumanseeder_bansospengumumanseeder_run",
+      "label": ".run()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": ".run()",
+      "source_file": "backend/database/seeders/BansosPengumumanSeeder.php",
+      "source_location": "L14"
+    },
+    {
+      "id": "backend_database_seeders_databaseseeder_databaseseeder_run",
+      "label": ".run()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": ".run()",
+      "source_file": "backend/database/seeders/DatabaseSeeder.php",
+      "source_location": "L36"
     },
     {
       "id": "frontend_src_features_dashboard_components_bendaharadashboard_bendaharadashboard",
@@ -4254,12 +4222,132 @@
       "source_location": "L776"
     },
     {
+      "id": "frontend_src_features_landing_components_bansospage_bansospage",
+      "label": "BansosPage()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "DashboardLayout.tsx",
+      "file_type": "code",
+      "norm_label": "bansospage()",
+      "source_file": "frontend/src/features/landing/components/BansosPage.tsx",
+      "source_location": "L20"
+    },
+    {
+      "id": "frontend_src_shared_components_camerauploadmodal_camerauploadmodal",
+      "label": "CameraUploadModal()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "DashboardLayout.tsx",
+      "file_type": "code",
+      "norm_label": "camerauploadmodal()",
+      "source_file": "frontend/src/shared/components/CameraUploadModal.tsx",
+      "source_location": "L28"
+    },
+    {
+      "id": "backend_app_http_controllers_api_admin_wargacontroller_wargacontroller_getkartukeluargas",
+      "label": ".getKartuKeluargas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": ".getkartukeluargas()",
+      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
+      "source_location": "L39"
+    },
+    {
+      "id": "backend_app_http_controllers_api_admin_wargacontroller_wargacontroller_getwilayah",
+      "label": ".getWilayah()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": ".getwilayah()",
+      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
+      "source_location": "L45"
+    },
+    {
+      "id": "backend_app_http_controllers_api_admin_wargacontroller_wargacontroller_index",
+      "label": ".index()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": ".index()",
+      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
+      "source_location": "L15"
+    },
+    {
+      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getberitas",
+      "label": ".getBeritas()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": ".getberitas()",
+      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
+      "source_location": "L17"
+    },
+    {
+      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getnotifikasilogs",
+      "label": ".getNotifikasiLogs()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": ".getnotifikasilogs()",
+      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
+      "source_location": "L60"
+    },
+    {
+      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getpengumumans",
+      "label": ".getPengumumans()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": ".getpengumumans()",
+      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
+      "source_location": "L28"
+    },
+    {
+      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getpublichome",
+      "label": ".getPublicHome()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": ".getpublichome()",
+      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
+      "source_location": "L74"
+    },
+    {
+      "id": "backend_app_http_controllers_api_public_publicinfocontroller_publicinfocontroller_getvillagestats",
+      "label": ".getVillageStats()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": ".getvillagestats()",
+      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
+      "source_location": "L38"
+    },
+    {
       "id": "backend_app_http_controllers_api_sekdes_bansoscontroller_bansoscontroller_addpenerima",
       "label": ".addPenerima()",
       "_callable": true,
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
       "norm_label": ".addpenerima()",
       "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
@@ -4271,23 +4359,23 @@
       "_callable": true,
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
       "norm_label": ".index()",
       "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
       "source_location": "L16"
     },
     {
-      "id": "backend_app_http_controllers_api_sekdes_bansoscontroller_bansoscontroller_show",
-      "label": ".show()",
+      "id": "backend_app_http_controllers_api_sekdes_bansoscontroller_bansoscontroller_publishandbroadcast",
+      "label": ".publishAndBroadcast()",
       "_callable": true,
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
-      "norm_label": ".show()",
+      "norm_label": ".publishandbroadcast()",
       "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
-      "source_location": "L31"
+      "source_location": "L106"
     },
     {
       "id": "backend_app_http_controllers_api_sekdes_bansoscontroller_bansoscontroller_store",
@@ -4295,7 +4383,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
       "norm_label": ".store()",
       "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
@@ -4307,23 +4395,11 @@
       "_callable": true,
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
       "norm_label": ".verifydisalurkan()",
       "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
       "source_location": "L160"
-    },
-    {
-      "id": "backend_app_models_bantuansosial_bantuansosial_casts",
-      "label": ".casts()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 70,
-      "community_name": "BantuanSosial",
-      "file_type": "code",
-      "norm_label": ".casts()",
-      "source_file": "backend/app/Models/BantuanSosial.php",
-      "source_location": "L32"
     },
     {
       "id": "frontend_src_features_landing_components_beritapage_beritapage",
@@ -4688,17 +4764,6 @@
       "norm_label": "jsqr",
       "source_file": "frontend/package.json",
       "source_location": "L24"
-    },
-    {
-      "id": "ref_leaflet",
-      "label": "leaflet",
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "frontend/package.json",
-      "file_type": "concept",
-      "norm_label": "leaflet",
-      "source_file": "frontend/package.json",
-      "source_location": "L25"
     },
     {
       "id": "ref_oxlint",
@@ -5639,14 +5704,14 @@
       "source_location": "L6"
     },
     {
-      "id": "frontend_src_features_dashboard_components_previewsuratmodal",
-      "label": "PreviewSuratModal.tsx",
+      "id": "frontend_src_features_dashboard_components_desaterritorymap",
+      "label": "DesaTerritoryMap.tsx",
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
-      "norm_label": "previewsuratmodal.tsx",
-      "source_file": "frontend/src/features/dashboard/components/PreviewSuratModal.tsx",
+      "norm_label": "desaterritorymap.tsx",
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
       "source_location": "L1"
     },
     {
@@ -5654,7 +5719,7 @@
       "label": "RealRtMap.tsx",
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "realrtmap.tsx",
       "source_file": "frontend/src/features/dashboard/components/RealRtMap.tsx",
@@ -5665,7 +5730,7 @@
       "label": "RtDashboard.tsx",
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "rtdashboard.tsx",
       "source_file": "frontend/src/features/dashboard/components/RtDashboard.tsx",
@@ -5676,11 +5741,33 @@
       "label": "RwDashboard.tsx",
       "_origin": "ast",
       "community": 114,
-      "community_name": "RtDashboard.tsx",
+      "community_name": "RwDashboard.tsx",
       "file_type": "code",
       "norm_label": "rwdashboard.tsx",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
       "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_features_dashboard_components_rwterritorymap",
+      "label": "RwTerritoryMap.tsx",
+      "_origin": "ast",
+      "community": 114,
+      "community_name": "RwDashboard.tsx",
+      "file_type": "code",
+      "norm_label": "rwterritorymap.tsx",
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "ref_leaflet",
+      "label": "leaflet",
+      "_origin": "ast",
+      "community": 114,
+      "community_name": "RwDashboard.tsx",
+      "file_type": "concept",
+      "norm_label": "leaflet",
+      "source_file": "frontend/package.json",
+      "source_location": "L25"
     },
     {
       "id": "frontend_src_shared_lib_axios",
@@ -6254,15 +6341,59 @@
       "source_location": "L40"
     },
     {
-      "id": "backend_app_models_kasrtcategory",
-      "label": "KasRtCategory.php",
+      "id": "backend_app_http_controllers_api_public_calendarcontroller",
+      "label": "CalendarController.php",
       "_origin": "ast",
       "community": 118,
-      "community_name": "KasRtCategory",
+      "community_name": "Controller",
       "file_type": "code",
-      "norm_label": "kasrtcategory.php",
-      "source_file": "backend/app/Models/KasRtCategory.php",
+      "norm_label": "calendarcontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Public/CalendarController.php",
       "source_location": "L1"
+    },
+    {
+      "id": "backend_app_http_controllers_api_sekdes_wargamanagementcontroller",
+      "label": "WargaManagementController.php",
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": "wargamanagementcontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_pengaduancontroller",
+      "label": "PengaduanController.php",
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": "pengaduancontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/PengaduanController.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_http_controllers_controller",
+      "label": "Controller.php",
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": "controller.php",
+      "source_file": "backend/app/Http/Controllers/Controller.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "illuminate_support_facades_db",
+      "label": "Illuminate\\Support\\Facades\\DB",
+      "_origin": "ast",
+      "community": 118,
+      "community_name": "Controller",
+      "file_type": "code",
+      "norm_label": "illuminate\\support\\facades\\db",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "backend_app_http_controllers_api_public_publicsuratcontroller",
@@ -6276,14 +6407,14 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller",
-      "label": "RtSuratController.php",
+      "id": "backend_app_http_controllers_api_rw_rwsuratcontroller",
+      "label": "RwSuratController.php",
       "_origin": "ast",
       "community": 119,
       "community_name": "SuratRequest",
       "file_type": "code",
-      "norm_label": "rtsuratcontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
+      "norm_label": "rwsuratcontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Rw/RwSuratController.php",
       "source_location": "L1"
     },
     {
@@ -6309,36 +6440,14 @@
       "source_location": ""
     },
     {
-      "id": "app_http_controllers_api_admin_admindesasettingcontroller",
-      "label": "App\\Http\\Controllers\\Api\\Admin\\AdminDesaSettingController",
+      "id": "backend_app_http_controllers_api_auth_authcontroller",
+      "label": "AuthController.php",
       "_origin": "ast",
       "community": 12,
       "community_name": "Illuminate\\Http\\Request",
       "file_type": "code",
-      "norm_label": "app\\http\\controllers\\api\\admin\\admindesasettingcontroller",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "backend_app_http_controllers_api_public_calendarcontroller",
-      "label": "CalendarController.php",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": "calendarcontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Public/CalendarController.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rt_kasrtcontroller",
-      "label": "KasRtController.php",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": "kasrtcontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
+      "norm_label": "authcontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Auth/AuthController.php",
       "source_location": "L1"
     },
     {
@@ -6353,28 +6462,6 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_routes_api",
-      "label": "api.php",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": "api.php",
-      "source_file": "backend/routes/api.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_routes_web",
-      "label": "web.php",
-      "_origin": "ast",
-      "community": 12,
-      "community_name": "Illuminate\\Http\\Request",
-      "file_type": "code",
-      "norm_label": "web.php",
-      "source_file": "backend/routes/web.php",
-      "source_location": "L1"
-    },
-    {
       "id": "illuminate_http_request",
       "label": "Illuminate\\Http\\Request",
       "_origin": "ast",
@@ -6386,13 +6473,24 @@
       "source_location": ""
     },
     {
-      "id": "illuminate_support_facades_route",
-      "label": "Illuminate\\Support\\Facades\\Route",
+      "id": "illuminate_validation_rule",
+      "label": "Illuminate\\Validation\\Rule",
       "_origin": "ast",
       "community": 12,
       "community_name": "Illuminate\\Http\\Request",
       "file_type": "code",
-      "norm_label": "illuminate\\support\\facades\\route",
+      "norm_label": "illuminate\\validation\\rule",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "illuminate_validation_validationexception",
+      "label": "Illuminate\\Validation\\ValidationException",
+      "_origin": "ast",
+      "community": 12,
+      "community_name": "Illuminate\\Http\\Request",
+      "file_type": "code",
+      "norm_label": "illuminate\\validation\\validationexception",
       "source_file": "",
       "source_location": ""
     },
@@ -6419,6 +6517,17 @@
       "source_location": ""
     },
     {
+      "id": "illuminate_support_facades_hash",
+      "label": "Illuminate\\Support\\Facades\\Hash",
+      "_origin": "ast",
+      "community": 120,
+      "community_name": "UserFactory.php",
+      "file_type": "code",
+      "norm_label": "illuminate\\support\\facades\\hash",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "static",
       "label": "static",
       "_origin": "ast",
@@ -6426,6 +6535,72 @@
       "community_name": "UserFactory.php",
       "file_type": "code",
       "norm_label": "static",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller",
+      "label": "WargaSuratController.php",
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": "wargasuratcontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_config_cache",
+      "label": "cache.php",
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": "cache.php",
+      "source_file": "backend/config/cache.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_config_database",
+      "label": "database.php",
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": "database.php",
+      "source_file": "backend/config/database.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_config_session",
+      "label": "session.php",
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": "session.php",
+      "source_file": "backend/config/session.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "illuminate_support_str",
+      "label": "Illuminate\\Support\\Str",
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": "illuminate\\support\\str",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "pdo_mysql",
+      "label": "Pdo\\Mysql",
+      "_origin": "ast",
+      "community": 121,
+      "community_name": "WargaSuratController",
+      "file_type": "code",
+      "norm_label": "pdo\\mysql",
       "source_file": "",
       "source_location": ""
     },
@@ -6646,6 +6821,50 @@
       "source_location": "L1"
     },
     {
+      "id": "app_http_controllers_api_admin_admindesasettingcontroller",
+      "label": "App\\Http\\Controllers\\Api\\Admin\\AdminDesaSettingController",
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": "app\\http\\controllers\\api\\admin\\admindesasettingcontroller",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
+      "id": "backend_routes_api",
+      "label": "api.php",
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": "api.php",
+      "source_file": "backend/routes/api.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_routes_web",
+      "label": "web.php",
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": "web.php",
+      "source_file": "backend/routes/web.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "illuminate_support_facades_route",
+      "label": "Illuminate\\Support\\Facades\\Route",
+      "_origin": "ast",
+      "community": 123,
+      "community_name": "api.php",
+      "file_type": "code",
+      "norm_label": "illuminate\\support\\facades\\route",
+      "source_file": "",
+      "source_location": ""
+    },
+    {
       "id": "backend_app_models_rt",
       "label": "Rt.php",
       "_origin": "ast",
@@ -6654,6 +6873,39 @@
       "file_type": "code",
       "norm_label": "rt.php",
       "source_file": "backend/app/Models/Rt.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_models_rw",
+      "label": "Rw.php",
+      "_origin": "ast",
+      "community": 124,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
+      "file_type": "code",
+      "norm_label": "rw.php",
+      "source_file": "backend/app/Models/Rw.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_models_suratrequest",
+      "label": "SuratRequest.php",
+      "_origin": "ast",
+      "community": 124,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
+      "file_type": "code",
+      "norm_label": "suratrequest.php",
+      "source_file": "backend/app/Models/SuratRequest.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_models_surattype",
+      "label": "SuratType.php",
+      "_origin": "ast",
+      "community": 124,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\HasMany",
+      "file_type": "code",
+      "norm_label": "surattype.php",
+      "source_file": "backend/app/Models/SuratType.php",
       "source_location": "L1"
     },
     {
@@ -7598,6 +7850,17 @@
       "source_location": "L288"
     },
     {
+      "id": "frontend_src_shared_components_brandlogo",
+      "label": "BrandLogo.tsx",
+      "_origin": "ast",
+      "community": 136,
+      "community_name": "BrandLogo.tsx",
+      "file_type": "code",
+      "norm_label": "brandlogo.tsx",
+      "source_file": "frontend/src/shared/components/BrandLogo.tsx",
+      "source_location": "L1"
+    },
+    {
       "id": "frontend_src_shared_components_charts_areasplinechart",
       "label": "AreaSplineChart.tsx",
       "_origin": "ast",
@@ -7972,14 +8235,14 @@
       "source_location": "L1"
     },
     {
-      "id": "frontend_src_features_dashboard_components_cetaksuratmodal",
-      "label": "CetakSuratModal.tsx",
+      "id": "frontend_src_features_dashboard_components_previewsuratmodal",
+      "label": "PreviewSuratModal.tsx",
       "_origin": "ast",
       "community": 17,
       "community_name": "WargaDashboard.tsx",
       "file_type": "code",
-      "norm_label": "cetaksuratmodal.tsx",
-      "source_file": "frontend/src/features/dashboard/components/CetakSuratModal.tsx",
+      "norm_label": "previewsuratmodal.tsx",
+      "source_file": "frontend/src/features/dashboard/components/PreviewSuratModal.tsx",
       "source_location": "L1"
     },
     {
@@ -8016,50 +8279,6 @@
       "source_location": "L104"
     },
     {
-      "id": "frontend_src_features_landing_components_bansospage",
-      "label": "BansosPage.tsx",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "WargaDashboard.tsx",
-      "file_type": "code",
-      "norm_label": "bansospage.tsx",
-      "source_file": "frontend/src/features/landing/components/BansosPage.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "frontend_src_shared_components_camerauploadmodal",
-      "label": "CameraUploadModal.tsx",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "WargaDashboard.tsx",
-      "file_type": "code",
-      "norm_label": "camerauploadmodal.tsx",
-      "source_file": "frontend/src/shared/components/CameraUploadModal.tsx",
-      "source_location": "L1"
-    },
-    {
-      "id": "ref_react_dom",
-      "label": "react-dom",
-      "_origin": "ast",
-      "community": 17,
-      "community_name": "WargaDashboard.tsx",
-      "file_type": "concept",
-      "norm_label": "react-dom",
-      "source_file": "frontend/package.json",
-      "source_location": "L28"
-    },
-    {
-      "id": "backend_app_http_controllers_api_auth_authcontroller",
-      "label": "AuthController.php",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "authcontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Auth/AuthController.php",
-      "source_location": "L1"
-    },
-    {
       "id": "backend_app_http_controllers_api_pengumumancontroller",
       "label": "PengumumanController.php",
       "_origin": "ast",
@@ -8071,103 +8290,26 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_app_http_controllers_api_public_publicinfocontroller",
-      "label": "PublicInfoController.php",
+      "id": "backend_app_models_pengumuman",
+      "label": "Pengumuman.php",
       "_origin": "ast",
       "community": 18,
       "community_name": "WargaProfile",
       "file_type": "code",
-      "norm_label": "publicinfocontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
+      "norm_label": "pengumuman.php",
+      "source_file": "backend/app/Models/Pengumuman.php",
       "source_location": "L1"
     },
     {
-      "id": "backend_app_http_controllers_api_sekdes_wargamanagementcontroller",
-      "label": "WargaManagementController.php",
+      "id": "backend_app_models_wargaprofile",
+      "label": "WargaProfile.php",
       "_origin": "ast",
       "community": 18,
       "community_name": "WargaProfile",
       "file_type": "code",
-      "norm_label": "wargamanagementcontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php",
+      "norm_label": "wargaprofile.php",
+      "source_file": "backend/app/Models/WargaProfile.php",
       "source_location": "L1"
-    },
-    {
-      "id": "backend_database_seeders_bansospengumumanseeder",
-      "label": "BansosPengumumanSeeder.php",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "bansospengumumanseeder.php",
-      "source_file": "backend/database/seeders/BansosPengumumanSeeder.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_database_seeders_databaseseeder",
-      "label": "DatabaseSeeder.php",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "databaseseeder.php",
-      "source_file": "backend/database/seeders/DatabaseSeeder.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "illuminate_database_seeder",
-      "label": "Illuminate\\Database\\Seeder",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "illuminate\\database\\seeder",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "illuminate_support_facades_db",
-      "label": "Illuminate\\Support\\Facades\\DB",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "illuminate\\support\\facades\\db",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "illuminate_support_facades_hash",
-      "label": "Illuminate\\Support\\Facades\\Hash",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "illuminate\\support\\facades\\hash",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "illuminate_validation_rule",
-      "label": "Illuminate\\Validation\\Rule",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "illuminate\\validation\\rule",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "illuminate_validation_validationexception",
-      "label": "Illuminate\\Validation\\ValidationException",
-      "_origin": "ast",
-      "community": 18,
-      "community_name": "WargaProfile",
-      "file_type": "code",
-      "norm_label": "illuminate\\validation\\validationexception",
-      "source_file": "",
-      "source_location": ""
     },
     {
       "id": "frontend_package_devdependencies",
@@ -8280,6 +8422,28 @@
       "source_location": "L40"
     },
     {
+      "id": "backend_app_http_controllers_api_public_publicinfocontroller",
+      "label": "PublicInfoController.php",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
+      "file_type": "code",
+      "norm_label": "publicinfocontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Public/PublicInfoController.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_http_controllers_api_rt_rtsuratcontroller",
+      "label": "RtSuratController.php",
+      "_origin": "ast",
+      "community": 2,
+      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
+      "file_type": "code",
+      "norm_label": "rtsuratcontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/RtSuratController.php",
+      "source_location": "L1"
+    },
+    {
       "id": "backend_app_models_activitylog",
       "label": "ActivityLog.php",
       "_origin": "ast",
@@ -8288,39 +8452,6 @@
       "file_type": "code",
       "norm_label": "activitylog.php",
       "source_file": "backend/app/Models/ActivityLog.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_models_apbdescategory",
-      "label": "ApbdesCategory.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "apbdescategory.php",
-      "source_file": "backend/app/Models/ApbdesCategory.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_models_apbdesrecord",
-      "label": "ApbdesRecord.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "apbdesrecord.php",
-      "source_file": "backend/app/Models/ApbdesRecord.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_models_bantuansosial",
-      "label": "BantuanSosial.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "bantuansosial.php",
-      "source_file": "backend/app/Models/BantuanSosial.php",
       "source_location": "L1"
     },
     {
@@ -8335,17 +8466,6 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_app_models_desasetting",
-      "label": "DesaSetting.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "desasetting.php",
-      "source_file": "backend/app/Models/DesaSetting.php",
-      "source_location": "L1"
-    },
-    {
       "id": "backend_app_models_dusun",
       "label": "Dusun.php",
       "_origin": "ast",
@@ -8354,17 +8474,6 @@
       "file_type": "code",
       "norm_label": "dusun.php",
       "source_file": "backend/app/Models/Dusun.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_models_kartukeluarga",
-      "label": "KartuKeluarga.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "kartukeluarga.php",
-      "source_file": "backend/app/Models/KartuKeluarga.php",
       "source_location": "L1"
     },
     {
@@ -8379,17 +8488,6 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_app_models_pengumuman",
-      "label": "Pengumuman.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "pengumuman.php",
-      "source_file": "backend/app/Models/Pengumuman.php",
-      "source_location": "L1"
-    },
-    {
       "id": "backend_app_models_role",
       "label": "Role.php",
       "_origin": "ast",
@@ -8398,28 +8496,6 @@
       "file_type": "code",
       "norm_label": "role.php",
       "source_file": "backend/app/Models/Role.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_models_rw",
-      "label": "Rw.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "rw.php",
-      "source_file": "backend/app/Models/Rw.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_models_suratrequest",
-      "label": "SuratRequest.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "suratrequest.php",
-      "source_file": "backend/app/Models/SuratRequest.php",
       "source_location": "L1"
     },
     {
@@ -8434,25 +8510,14 @@
       "source_location": "L1"
     },
     {
-      "id": "backend_app_models_surattype",
-      "label": "SuratType.php",
+      "id": "backend_database_seeders_databaseseeder",
+      "label": "DatabaseSeeder.php",
       "_origin": "ast",
       "community": 2,
       "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
       "file_type": "code",
-      "norm_label": "surattype.php",
-      "source_file": "backend/app/Models/SuratType.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_models_wargaprofile",
-      "label": "WargaProfile.php",
-      "_origin": "ast",
-      "community": 2,
-      "community_name": "Illuminate\\Database\\Eloquent\\Factories\\HasFactory",
-      "file_type": "code",
-      "norm_label": "wargaprofile.php",
-      "source_file": "backend/app/Models/WargaProfile.php",
+      "norm_label": "databaseseeder.php",
+      "source_file": "backend/database/seeders/DatabaseSeeder.php",
       "source_location": "L1"
     },
     {
@@ -9659,14 +9724,25 @@
       "source_location": "L35"
     },
     {
-      "id": "backend_app_models_bantuanpenerima",
-      "label": "BantuanPenerima.php",
+      "id": "backend_app_http_controllers_api_rt_kasrtcontroller",
+      "label": "KasRtController.php",
       "_origin": "ast",
       "community": 26,
       "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
       "file_type": "code",
-      "norm_label": "bantuanpenerima.php",
-      "source_file": "backend/app/Models/BantuanPenerima.php",
+      "norm_label": "kasrtcontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Rt/KasRtController.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_models_kasrtcategory",
+      "label": "KasRtCategory.php",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": "kasrtcategory.php",
+      "source_file": "backend/app/Models/KasRtCategory.php",
       "source_location": "L1"
     },
     {
@@ -9678,6 +9754,17 @@
       "file_type": "code",
       "norm_label": "kasrttransaction.php",
       "source_file": "backend/app/Models/KasRtTransaction.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_models_pengaduanwarga",
+      "label": "PengaduanWarga.php",
+      "_origin": "ast",
+      "community": 26,
+      "community_name": "Illuminate\\Database\\Eloquent\\Relations\\BelongsTo",
+      "file_type": "code",
+      "norm_label": "pengaduanwarga.php",
+      "source_file": "backend/app/Models/PengaduanWarga.php",
       "source_location": "L1"
     },
     {
@@ -10215,36 +10302,14 @@
       "source_location": "L6"
     },
     {
-      "id": "backend_app_http_controllers_api_admin_wargacontroller",
-      "label": "WargaController.php",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": "wargacontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
-      "source_location": "L1"
-    },
-    {
       "id": "backend_app_http_controllers_api_rt_rtwargacontroller",
       "label": "RtWargaController.php",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": "rtwargacontroller.php",
       "source_file": "backend/app/Http/Controllers/Api/Rt/RtWargaController.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_app_http_controllers_api_rw_rwsuratcontroller",
-      "label": "RwSuratController.php",
-      "_origin": "ast",
-      "community": 3,
-      "community_name": "Controller",
-      "file_type": "code",
-      "norm_label": "rwsuratcontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Rw/RwSuratController.php",
       "source_location": "L1"
     },
     {
@@ -10252,7 +10317,7 @@
       "label": "RwWargaController.php",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": "rwwargacontroller.php",
       "source_file": "backend/app/Http/Controllers/Api/Rw/RwWargaController.php",
@@ -10263,21 +10328,21 @@
       "label": "WargaDokumenController.php",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
       "norm_label": "wargadokumencontroller.php",
       "source_file": "backend/app/Http/Controllers/Api/Warga/WargaDokumenController.php",
       "source_location": "L1"
     },
     {
-      "id": "backend_app_http_controllers_controller",
-      "label": "Controller.php",
+      "id": "backend_app_models_kartukeluarga",
+      "label": "KartuKeluarga.php",
       "_origin": "ast",
       "community": 3,
-      "community_name": "Controller",
+      "community_name": "KartuKeluarga",
       "file_type": "code",
-      "norm_label": "controller.php",
-      "source_file": "backend/app/Http/Controllers/Controller.php",
+      "norm_label": "kartukeluarga.php",
+      "source_file": "backend/app/Models/KartuKeluarga.php",
       "source_location": "L1"
     },
     {
@@ -11404,33 +11469,33 @@
       "label": "ApbdesController.php",
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
       "norm_label": "apbdescontroller.php",
       "source_file": "backend/app/Http/Controllers/Api/Bendahara/ApbdesController.php",
       "source_location": "L1"
     },
     {
-      "id": "backend_app_http_controllers_api_warga_pengaduancontroller",
-      "label": "PengaduanController.php",
+      "id": "backend_app_models_apbdescategory",
+      "label": "ApbdesCategory.php",
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
-      "norm_label": "pengaduancontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/PengaduanController.php",
+      "norm_label": "apbdescategory.php",
+      "source_file": "backend/app/Models/ApbdesCategory.php",
       "source_location": "L1"
     },
     {
-      "id": "illuminate_http_jsonresponse",
-      "label": "Illuminate\\Http\\JsonResponse",
+      "id": "backend_app_models_apbdesrecord",
+      "label": "ApbdesRecord.php",
       "_origin": "ast",
       "community": 38,
-      "community_name": "Illuminate\\Http\\JsonResponse",
+      "community_name": "ApbdesRecord",
       "file_type": "code",
-      "norm_label": "illuminate\\http\\jsonresponse",
-      "source_file": "",
-      "source_location": ""
+      "norm_label": "apbdesrecord.php",
+      "source_file": "backend/app/Models/ApbdesRecord.php",
+      "source_location": "L1"
     },
     {
       "id": "frontend_src_shared_context_authcontext",
@@ -11463,6 +11528,17 @@
       "file_type": "code",
       "norm_label": "bansosmanager.tsx",
       "source_file": "frontend/src/features/dashboard/components/BansosManager.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_features_dashboard_components_cetaksuratmodal",
+      "label": "CetakSuratModal.tsx",
+      "_origin": "ast",
+      "community": 4,
+      "community_name": "lucide-react",
+      "file_type": "code",
+      "norm_label": "cetaksuratmodal.tsx",
+      "source_file": "frontend/src/features/dashboard/components/CetakSuratModal.tsx",
       "source_location": "L1"
     },
     {
@@ -11804,6 +11880,17 @@
       "file_type": "code",
       "norm_label": "sekdes/desasettingcontroller.php",
       "source_file": "backend/app/Http/Controllers/Api/Sekdes/DesaSettingController.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_models_desasetting",
+      "label": "DesaSetting.php",
+      "_origin": "ast",
+      "community": 5,
+      "community_name": "DesaSetting",
+      "file_type": "code",
+      "norm_label": "desasetting.php",
+      "source_file": "backend/app/Models/DesaSetting.php",
       "source_location": "L1"
     },
     {
@@ -13086,17 +13173,6 @@
       "source_location": "L1"
     },
     {
-      "id": "frontend_src_shared_components_brandlogo",
-      "label": "BrandLogo.tsx",
-      "_origin": "ast",
-      "community": 6,
-      "community_name": "react",
-      "file_type": "code",
-      "norm_label": "brandlogo.tsx",
-      "source_file": "frontend/src/shared/components/BrandLogo.tsx",
-      "source_location": "L1"
-    },
-    {
       "id": "ref_react",
       "label": "react",
       "_origin": "ast",
@@ -13755,15 +13831,48 @@
       "source_location": "L6"
     },
     {
-      "id": "backend_app_models_pengaduanwarga",
-      "label": "PengaduanWarga.php",
+      "id": "backend_app_models_bantuanpenerima",
+      "label": "BantuanPenerima.php",
       "_origin": "ast",
       "community": 63,
-      "community_name": "PengaduanWarga",
+      "community_name": ".run",
       "file_type": "code",
-      "norm_label": "pengaduanwarga.php",
-      "source_file": "backend/app/Models/PengaduanWarga.php",
+      "norm_label": "bantuanpenerima.php",
+      "source_file": "backend/app/Models/BantuanPenerima.php",
       "source_location": "L1"
+    },
+    {
+      "id": "backend_app_models_bantuansosial",
+      "label": "BantuanSosial.php",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": "bantuansosial.php",
+      "source_file": "backend/app/Models/BantuanSosial.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_database_seeders_bansospengumumanseeder",
+      "label": "BansosPengumumanSeeder.php",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": "bansospengumumanseeder.php",
+      "source_file": "backend/database/seeders/BansosPengumumanSeeder.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "illuminate_database_seeder",
+      "label": "Illuminate\\Database\\Seeder",
+      "_origin": "ast",
+      "community": 63,
+      "community_name": ".run",
+      "file_type": "code",
+      "norm_label": "illuminate\\database\\seeder",
+      "source_file": "",
+      "source_location": ""
     },
     {
       "id": "prd_sidesku",
@@ -14878,14 +14987,58 @@
       "source_location": "L1"
     },
     {
+      "id": "frontend_src_features_landing_components_bansospage",
+      "label": "BansosPage.tsx",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "DashboardLayout.tsx",
+      "file_type": "code",
+      "norm_label": "bansospage.tsx",
+      "source_file": "frontend/src/features/landing/components/BansosPage.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "frontend_src_shared_components_camerauploadmodal",
+      "label": "CameraUploadModal.tsx",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "DashboardLayout.tsx",
+      "file_type": "code",
+      "norm_label": "camerauploadmodal.tsx",
+      "source_file": "frontend/src/shared/components/CameraUploadModal.tsx",
+      "source_location": "L1"
+    },
+    {
+      "id": "ref_react_dom",
+      "label": "react-dom",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "DashboardLayout.tsx",
+      "file_type": "concept",
+      "norm_label": "react-dom",
+      "source_file": "frontend/package.json",
+      "source_location": "L28"
+    },
+    {
       "id": "backend_app_http_controllers_api_admin_bansoscontroller",
       "label": "Admin/BansosController.php",
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
       "norm_label": "admin/bansoscontroller.php",
       "source_file": "backend/app/Http/Controllers/Api/Admin/BansosController.php",
+      "source_location": "L1"
+    },
+    {
+      "id": "backend_app_http_controllers_api_admin_wargacontroller",
+      "label": "WargaController.php",
+      "_origin": "ast",
+      "community": 70,
+      "community_name": "Illuminate\\Http\\JsonResponse",
+      "file_type": "code",
+      "norm_label": "wargacontroller.php",
+      "source_file": "backend/app/Http/Controllers/Api/Admin/WargaController.php",
       "source_location": "L1"
     },
     {
@@ -14893,75 +15046,20 @@
       "label": "Sekdes/BansosController.php",
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
       "norm_label": "sekdes/bansoscontroller.php",
       "source_file": "backend/app/Http/Controllers/Api/Sekdes/BansosController.php",
       "source_location": "L1"
     },
     {
-      "id": "backend_app_http_controllers_api_warga_wargasuratcontroller",
-      "label": "WargaSuratController.php",
+      "id": "illuminate_http_jsonresponse",
+      "label": "Illuminate\\Http\\JsonResponse",
       "_origin": "ast",
       "community": 70,
-      "community_name": "BantuanSosial",
+      "community_name": "Illuminate\\Http\\JsonResponse",
       "file_type": "code",
-      "norm_label": "wargasuratcontroller.php",
-      "source_file": "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_config_cache",
-      "label": "cache.php",
-      "_origin": "ast",
-      "community": 70,
-      "community_name": "BantuanSosial",
-      "file_type": "code",
-      "norm_label": "cache.php",
-      "source_file": "backend/config/cache.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_config_database",
-      "label": "database.php",
-      "_origin": "ast",
-      "community": 70,
-      "community_name": "BantuanSosial",
-      "file_type": "code",
-      "norm_label": "database.php",
-      "source_file": "backend/config/database.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "backend_config_session",
-      "label": "session.php",
-      "_origin": "ast",
-      "community": 70,
-      "community_name": "BantuanSosial",
-      "file_type": "code",
-      "norm_label": "session.php",
-      "source_file": "backend/config/session.php",
-      "source_location": "L1"
-    },
-    {
-      "id": "illuminate_support_str",
-      "label": "Illuminate\\Support\\Str",
-      "_origin": "ast",
-      "community": 70,
-      "community_name": "BantuanSosial",
-      "file_type": "code",
-      "norm_label": "illuminate\\support\\str",
-      "source_file": "",
-      "source_location": ""
-    },
-    {
-      "id": "pdo_mysql",
-      "label": "Pdo\\Mysql",
-      "_origin": "ast",
-      "community": 70,
-      "community_name": "BantuanSosial",
-      "file_type": "code",
-      "norm_label": "pdo\\mysql",
+      "norm_label": "illuminate\\http\\jsonresponse",
       "source_file": "",
       "source_location": ""
     },
@@ -19762,7 +19860,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1096",
+      "source_location": "L1107",
       "weight": 1.0
     },
     {
@@ -19774,7 +19872,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1202",
+      "source_location": "L1213",
       "weight": 1.0
     },
     {
@@ -19786,7 +19884,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1296",
+      "source_location": "L1307",
       "weight": 1.0
     },
     {
@@ -19798,7 +19896,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1352",
+      "source_location": "L1363",
       "weight": 1.0
     },
     {
@@ -19810,7 +19908,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1429",
+      "source_location": "L1440",
       "weight": 1.0
     },
     {
@@ -19822,7 +19920,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L1474",
+      "source_location": "L1485",
       "weight": 1.0
     },
     {
@@ -19834,7 +19932,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L917",
+      "source_location": "L928",
       "weight": 1.0
     },
     {
@@ -24639,7 +24737,7 @@
     },
     {
       "source": "frontend_src_features_dashboard_components_rwdashboard",
-      "target": "frontend_src_features_dashboard_components_realrtmap_mapfacilityitem",
+      "target": "frontend_src_features_dashboard_components_rwterritorymap_rwterritorymap",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -24651,14 +24749,14 @@
     },
     {
       "source": "frontend_src_features_dashboard_components_rwdashboard",
-      "target": "frontend_src_features_dashboard_components_realrtmap_realrtmap",
+      "target": "frontend_src_features_dashboard_components_realrtmap_mapfacilityitem",
       "relation": "imports",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L46",
+      "source_location": "L47",
       "weight": 1.0
     },
     {
@@ -24731,6 +24829,18 @@
       "context": "import",
       "source_file": "frontend/src/features/dashboard/components/SekdesDashboard.tsx",
       "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_sekdesdashboard",
+      "target": "frontend_src_features_dashboard_components_desaterritorymap_desaterritorymap",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/SekdesDashboard.tsx",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -25466,6 +25576,42 @@
       "weight": 1.0
     },
     {
+      "source": "frontend_src_features_dashboard_components_desaterritorymap",
+      "target": "ref_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_desaterritorymap",
+      "target": "ref_leaflet",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_desaterritorymap",
+      "target": "ref_lucide_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_src_features_dashboard_components_kopsuratsetting",
       "target": "ref_react",
       "relation": "imports_from",
@@ -25815,7 +25961,7 @@
     },
     {
       "source": "frontend_src_features_dashboard_components_rwdashboard",
-      "target": "frontend_src_features_dashboard_components_realrtmap",
+      "target": "frontend_src_features_dashboard_components_rwterritorymap",
       "relation": "imports_from",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -25823,6 +25969,54 @@
       "context": "import",
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
       "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_rwdashboard",
+      "target": "frontend_src_features_dashboard_components_realrtmap",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
+      "source_location": "L47",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_rwterritorymap",
+      "target": "ref_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_rwterritorymap",
+      "target": "ref_leaflet",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_rwterritorymap",
+      "target": "ref_lucide_react",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -25907,6 +26101,18 @@
       "context": "import",
       "source_file": "frontend/src/features/dashboard/components/SekdesDashboard.tsx",
       "source_location": "L15",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_sekdesdashboard",
+      "target": "frontend_src_features_dashboard_components_desaterritorymap",
+      "relation": "imports_from",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "frontend/src/features/dashboard/components/SekdesDashboard.tsx",
+      "source_location": "L16",
       "weight": 1.0
     },
     {
@@ -38169,6 +38375,39 @@
       "weight": 1.0
     },
     {
+      "source": "frontend_src_features_dashboard_components_desaterritorymap",
+      "target": "frontend_src_features_dashboard_components_desaterritorymap_desarwdata",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L20",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_desaterritorymap",
+      "target": "frontend_src_features_dashboard_components_desaterritorymap_desaterritorymapprops",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L46",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_desaterritorymap",
+      "target": "frontend_src_features_dashboard_components_desaterritorymap_desaterritorymap",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/features/dashboard/components/DesaTerritoryMap.tsx",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
       "source": "frontend_src_features_dashboard_components_kopsuratsetting",
       "target": "frontend_src_features_dashboard_components_kopsuratsetting_kopsuratsetting",
       "relation": "contains",
@@ -38396,7 +38635,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L48",
+      "source_location": "L49",
       "weight": 1.0
     },
     {
@@ -38407,7 +38646,40 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/features/dashboard/components/RwDashboard.tsx",
-      "source_location": "L52",
+      "source_location": "L53",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_rwterritorymap",
+      "target": "frontend_src_features_dashboard_components_rwterritorymap_rtboundarydata",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_rwterritorymap",
+      "target": "frontend_src_features_dashboard_components_rwterritorymap_rwterritorymapprops",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "frontend_src_features_dashboard_components_rwterritorymap",
+      "target": "frontend_src_features_dashboard_components_rwterritorymap_rwterritorymap",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "frontend/src/features/dashboard/components/RwTerritoryMap.tsx",
+      "source_location": "L45",
       "weight": 1.0
     },
     {
@@ -38418,7 +38690,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/features/dashboard/components/SekdesDashboard.tsx",
-      "source_location": "L23",
+      "source_location": "L24",
       "weight": 1.0
     },
     {
@@ -38429,7 +38701,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "frontend/src/features/dashboard/components/SekdesDashboard.tsx",
-      "source_location": "L27",
+      "source_location": "L28",
       "weight": 1.0
     },
     {
@@ -43505,5 +43777,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "c028519aad91926e540bded8a06717feb9784b44"
+  "built_at_commit": "31e15589e33d130f03063e416babf7e2f3652ecc"
 }

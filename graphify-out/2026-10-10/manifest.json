@@ -66,16 +66,16 @@
     "semantic_hash": "3a741f3159439da9a0e80395b058400c"
   },
   "backend/app/Http/Controllers/Api/Rw/RwSuratController.php": {
-    "mtime": 1788540423.6200888,
-    "seen": 1789215602.8042095,
-    "ast_hash": "5e460622d170a3347a301a2fbc3054f2",
-    "semantic_hash": "5e460622d170a3347a301a2fbc3054f2"
+    "mtime": 1791640403.2728906,
+    "seen": 1791640854.1933815,
+    "ast_hash": "592d9d0df57224093b0254864402c2f7",
+    "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/Rw/RwWargaController.php": {
-    "mtime": 1788540423.6210916,
-    "seen": 1789215602.8042107,
-    "ast_hash": "dda57808cd07129b83a5b731472586b9",
-    "semantic_hash": "dda57808cd07129b83a5b731472586b9"
+    "mtime": 1791640391.6114779,
+    "seen": 1791640854.1933842,
+    "ast_hash": "8d690d03ddd68d9be74304cf1a931160",
+    "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/Sekdes/BansosController.php": {
     "mtime": 1789826181.6002347,
@@ -450,9 +450,9 @@
     "semantic_hash": "1a03818ea91deb4f3989c6c994e5867c"
   },
   "backend/routes/api.php": {
-    "mtime": 1791474007.7953098,
-    "seen": 1791633534.1636202,
-    "ast_hash": "8cc815bb86aa0ed19bcd60315141f1d2",
+    "mtime": 1791640488.5678577,
+    "seen": 1791640854.1935291,
+    "ast_hash": "650f69832a47ff1f2a3935112307a241",
     "semantic_hash": ""
   },
   "backend/routes/console.php": {
@@ -570,9 +570,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/DashboardLayout.tsx": {
-    "mtime": 1791638621.8677282,
-    "seen": 1791639176.9423828,
-    "ast_hash": "146acda5ebb7c804a18b992343b23c70",
+    "mtime": 1791640555.480628,
+    "seen": 1791640854.1936202,
+    "ast_hash": "d986aa0d67565ce89beb71628f94767e",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/KopSuratSetting.tsx": {
@@ -600,9 +600,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/RwDashboard.tsx": {
-    "mtime": 1789897349.9121425,
-    "seen": 1789897725.3828344,
-    "ast_hash": "aa1aced5f39805dd63594c1baab2187e",
+    "mtime": 1791640697.8559036,
+    "seen": 1791640854.1936364,
+    "ast_hash": "fd050d2ae8a289283550189b578bc7ff",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/SekdesDashboard.tsx": {

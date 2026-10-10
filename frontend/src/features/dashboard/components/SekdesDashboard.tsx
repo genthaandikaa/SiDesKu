@@ -13,6 +13,7 @@ import { BansosManager } from './BansosManager';
 import { PreviewSuratModal } from './PreviewSuratModal';
 import { PenomoranSuratSetting } from './PenomoranSuratSetting';
 import { PendaftaranWargaDesa } from './PendaftaranWargaDesa';
+import { DesaTerritoryMap } from './DesaTerritoryMap';
 import {
   MetricStatCard,
   AreaSplineChart,
@@ -412,6 +413,40 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
     return (
       <div className="space-y-6 animate-fade-in font-sans">
         <PendaftaranWargaDesa />
+      </div>
+    );
+  }
+
+  // Peta Geospasial Wilayah Desa Doko (Hierarki RW -> RT -> Fasum/Warga)
+  if (['peta_desa', 'peta_wilayah', 'peta'].includes(activeSubmenu)) {
+    return (
+      <div className="space-y-6 page-enter font-sans">
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+              <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
+                Sistem Informasi Geografis Desa (GIS)
+              </span>
+            </div>
+            <h2 className="text-xl font-black text-slate-900 mt-1">Peta Wilayah Terpadu Desa Doko</h2>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Pemetaan teritorial berjenjang tingkat Desa: pembagian blok RW, kotak-kotak teritorial RT binaan, dan fasilitas umum desa.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-3.5 py-1.5 rounded-2xl bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-200 shadow-2xs">
+              📍 Desa Doko, Kec. Ngasem
+            </span>
+            <span className="px-3.5 py-1.5 rounded-2xl bg-slate-900 text-white font-extrabold text-xs shadow-2xs">
+              3 RW • 13 RT Terdata
+            </span>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-4 shadow-2xs overflow-hidden">
+          <DesaTerritoryMap />
+        </div>
       </div>
     );
   }

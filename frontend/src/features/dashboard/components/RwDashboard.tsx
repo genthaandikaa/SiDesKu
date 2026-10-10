@@ -43,7 +43,8 @@ import {
   DonutGauge,
 } from '@/shared/components/charts';
 import { PreviewSuratModal } from './PreviewSuratModal';
-import { RealRtMap, MapFacilityItem } from './RealRtMap';
+import { RwTerritoryMap } from './RwTerritoryMap';
+import { MapFacilityItem } from './RealRtMap';
 
 interface RwDashboardProps {
   activeSubmenu?: string;
@@ -546,26 +547,36 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
       <div className="space-y-6 page-enter font-sans">
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
-              Geospasial & Pemetaan Wilayah
-            </span>
-            <h2 className="text-xl font-black text-slate-900 mt-1">Peta Wilayah Lingkungan RW 01</h2>
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+              <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
+                Geospasial Koordinasi RW
+              </span>
+            </div>
+            <h2 className="text-xl font-black text-slate-900 mt-1">Peta Wilayah Lingkungan RW 01 (6 Kotak RT)</h2>
             <p className="text-xs text-slate-500 mt-0.5">
-              Denah batas teritorial RW 01, persebaran pos kamling, balai pertemuan, dan fasilitas warga Dusun Krajan.
+              Peta geospasial terbagi dalam kotak-kotak teritorial per RT binaan (RT 01 s/d RT 06), batas wilayah, serta fasilitas umum RW.
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3.5 py-1.5 rounded-2xl bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-200">
-              Dusun Doko Krajan
+            <span className="px-3.5 py-1.5 rounded-2xl bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-200 shadow-2xs">
+              📍 Dusun Doko Krajan (RW 01)
+            </span>
+            <span className="px-3.5 py-1.5 rounded-2xl bg-slate-900 text-white font-extrabold text-xs shadow-2xs">
+              6 Kotak Wilayah RT
             </span>
           </div>
         </div>
 
         <div className="bg-white rounded-3xl border border-slate-200/90 p-4 shadow-2xs overflow-hidden">
-          <RealRtMap
-            facilities={facilityPins}
-            onSelectPin={() => {}}
+          <RwTerritoryMap
+            rtsData={rtsData}
             wargas={wargas}
+            facilities={facilityPins}
+            onSelectRt={(rtNomor) => {
+              setSelectedRtFilter(rtNomor);
+              setActiveTab('warga');
+            }}
           />
         </div>
       </div>

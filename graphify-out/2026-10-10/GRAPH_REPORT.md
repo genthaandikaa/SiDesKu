@@ -1,28 +1,28 @@
 # Graph Report - lomba  (2026-10-10)
 
 ## Corpus Check
-- 190 files · ~1,024,346 words
+- 190 files · ~1,029,972 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1500 nodes · 2210 edges · 134 communities (114 shown, 11 thin omitted)
+- 1511 nodes · 2242 edges · 134 communities (112 shown, 13 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e2d78ba6`
+- Built from commit: `c028519a`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- PengumumanController.php
+- SuratType
 - Illuminate\Database\Migrations\Migration
 - Illuminate\Database\Eloquent\Factories\HasFactory
-- Illuminate\Http\JsonResponse
-- DashboardLayout.tsx
 - Controller
-- react
 - lucide-react
+- DesaSetting
+- react
+- DashboardLayout.tsx
 - types/index.ts
 - compilerOptions
 - frontend/package.json
@@ -53,14 +53,14 @@
 - psr-4
 - logging.php
 - sanctum.php
-- ApbdesRecord
+- Illuminate\Http\JsonResponse
 - AuthContext.tsx
 - ExampleTest
 - autoload-dev
 - extra
 - console.php
 - User
-- DatabaseSeeder.php
+- RwDashboard
 - tsconfig.json
 - README.md
 - Appendix B - Canonical Sources (read these before reinventing)
@@ -69,7 +69,7 @@
 - Agent Skill: Principal UI/UX Architect & Motion Choreographer (Awwwards-Tier)
 - CORE DIRECTIVE: AWWWARDS-LEVEL IMAGE ART DIRECTION
 - SKILL: Industrial Brutalism & Tactical Telemetry UI
-- Pengumuman
+- PengaduanWarga
 - 📋 SiDesKu — Product Requirements Document (PRD)
 - 7. Gap Analysis & Kekurangan Backend
 - Design System: Taste Standard
@@ -101,7 +101,7 @@
 - 4. HERO MINIMALISM RULES
 - 29. ANTI-AI-SLOP RULES
 - 5. IMAGE COUNT & PAGE SLICING
-- api.php
+- BeritaPage.tsx
 - 0. BRIEF INFERENCE (Read the Room Before Anything Else)
 - 12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)
 - 5. CONTEXT-AWARE PROACTIVITY
@@ -124,9 +124,9 @@
 - axios.ts
 - SOP Backend Development - SiDesKu
 - @vitejs/plugin-react
+- KasRtCategory
 - SuratRequest
-- Illuminate\Support\Str
-- BrandLogo.tsx
+- UserFactory.php
 - SiDesKu - Sistem Informasi Desa Doko
 - Illuminate\Database\Eloquent\Relations\HasMany
 - SOP Frontend Development - SiDesKu
@@ -150,14 +150,14 @@
 6. `WargaProfile` - 34 edges
 7. `lucide-react` - 33 edges
 8. `@playwright/test` - 23 edges
-9. `User` - 22 edges
-10. `CORE DIRECTIVE: AWWWARDS-LEVEL IMAGE ART DIRECTION` - 22 edges
+9. `KartuKeluarga` - 22 edges
+10. `User` - 22 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `BansosController` --inherits--> `BansosController`  [EXTRACTED]
   backend/app/Http/Controllers/Api/Admin/BansosController.php → backend/app/Http/Controllers/Api/Sekdes/BansosController.php
-- `WargaController` --inherits--> `Controller`  [EXTRACTED]
-  backend/app/Http/Controllers/Api/Admin/WargaController.php → backend/app/Http/Controllers/Controller.php
+- `DesaSettingController` --inherits--> `Controller`  [EXTRACTED]
+  backend/app/Http/Controllers/Api/Admin/DesaSettingController.php → backend/app/Http/Controllers/Controller.php
 - `AuthController` --inherits--> `Controller`  [EXTRACTED]
   backend/app/Http/Controllers/Api/Auth/AuthController.php → backend/app/Http/Controllers/Controller.php
 - `ApbdesController` --inherits--> `Controller`  [EXTRACTED]
@@ -168,39 +168,39 @@
 ## Import Cycles
 - None detected.
 
-## Communities (134 total, 11 thin omitted)
+## Communities (134 total, 13 thin omitted)
 
-### Community 0 - "PengumumanController.php"
-Cohesion: 0.20
-Nodes (5): CalendarController, SuratSettingController, LetterNumberService, Carbon, Carbon\Carbon
+### Community 0 - "SuratType"
+Cohesion: 0.26
+Nodes (5): SuratSettingController, SuratType, LetterNumberService, Carbon, Carbon\Carbon
 
 ### Community 1 - "Illuminate\Database\Migrations\Migration"
 Cohesion: 0.07
 Nodes (3): Illuminate\Database\Migrations\Migration, Illuminate\Database\Schema\Blueprint, Illuminate\Support\Facades\Schema
 
 ### Community 2 - "Illuminate\Database\Eloquent\Factories\HasFactory"
-Cohesion: 0.14
-Nodes (7): ActivityLog, KasRtCategory, NotifikasiLog, Role, SuratType, Illuminate\Database\Eloquent\Factories\HasFactory, Illuminate\Database\Eloquent\Model
-
-### Community 3 - "Illuminate\Http\JsonResponse"
 Cohesion: 0.16
-Nodes (6): WargaController, PublicInfoController, RtWargaController, WargaDokumenController, KartuKeluarga, Illuminate\Http\JsonResponse
+Nodes (6): ActivityLog, ApbdesCategory, Berita, Dusun, Illuminate\Database\Eloquent\Factories\HasFactory, Illuminate\Database\Eloquent\Model
 
-### Community 4 - "DashboardLayout.tsx"
+### Community 3 - "Controller"
 Cohesion: 0.14
-Nodes (15): BansosManager(), NavGroup, KopSuratSetting(), PendaftaranWargaDesa(), WargaItem, CalendarData, PenomoranSuratSetting(), SuratTypeSetting (+7 more)
+Nodes (7): WargaController, RtWargaController, RwWargaController, WargaDokumenController, Controller, KartuKeluarga, Rw
 
-### Community 5 - "Controller"
+### Community 4 - "lucide-react"
 Cohesion: 0.18
-Nodes (5): DesaSettingController, DesaSettingController, PengaduanController, Controller, DesaSetting
+Nodes (10): BansosManager(), KopSuratSetting(), PendaftaranWargaDesa(), WargaItem, CalendarData, PenomoranSuratSetting(), SuratTypeSetting, SekdesDashboard() (+2 more)
+
+### Community 5 - "DesaSetting"
+Cohesion: 0.29
+Nodes (3): DesaSettingController, DesaSettingController, DesaSetting
 
 ### Community 6 - "react"
-Cohesion: 0.13
-Nodes (8): App(), AuthPageProps, LoginPage(), PublicFooter(), NavItem, PublicNavbar(), react, react-router-dom
+Cohesion: 0.10
+Nodes (9): App(), AuthPageProps, LoginPage(), PublicFooter(), NavItem, PublicNavbar(), BrandLogoProps, react (+1 more)
 
-### Community 7 - "lucide-react"
-Cohesion: 0.11
-Nodes (11): BendaharaDashboard(), BendaharaDashboardProps, QrVerificationModal(), QrVerificationModalProps, categoryConfigs, defaultBeritas, sortConfigs, CameraUploadModalProps (+3 more)
+### Community 7 - "DashboardLayout.tsx"
+Cohesion: 0.20
+Nodes (10): BendaharaDashboard(), BendaharaDashboardProps, NavGroup, QrVerificationModal(), QrVerificationModalProps, AgendaDesaView(), NotificationItem, NotifikasiView() (+2 more)
 
 ### Community 8 - "types/index.ts"
 Cohesion: 0.09
@@ -211,16 +211,16 @@ Cohesion: 0.10
 Nodes (20): compilerOptions, allowArbitraryExtensions, allowImportingTsExtensions, erasableSyntaxOnly, jsx, lib, module, moduleDetection (+12 more)
 
 ### Community 10 - "frontend/package.json"
-Cohesion: 0.11
-Nodes (18): tailwindcss, @tailwindcss/vite, vite, name, private, type, version, clsx (+10 more)
+Cohesion: 0.10
+Nodes (20): tailwindcss, @tailwindcss/vite, vite, name, private, type, version, clsx (+12 more)
 
 ### Community 11 - "compilerOptions"
 Cohesion: 0.12
 Nodes (16): compilerOptions, allowImportingTsExtensions, erasableSyntaxOnly, lib, module, moduleDetection, noEmit, noFallthroughCasesInSwitch (+8 more)
 
 ### Community 12 - "Illuminate\Http\Request"
-Cohesion: 0.21
-Nodes (4): AuthController, KasRtController, RtPengaduanController, Illuminate\Http\Request
+Cohesion: 0.14
+Nodes (7): App\Http\Controllers\Api\Admin\AdminDesaSettingController, AuthController, CalendarController, KasRtController, RtPengaduanController, Illuminate\Http\Request, Illuminate\Support\Facades\Route
 
 ### Community 13 - "backend/package.json"
 Cohesion: 0.09
@@ -239,12 +239,12 @@ Cohesion: 0.18
 Nodes (11): scripts, build, dev, lint, preview, test:e2e, test:e2e:headed, test:security (+3 more)
 
 ### Community 17 - "WargaDashboard.tsx"
-Cohesion: 0.15
+Cohesion: 0.12
 Nodes (13): BerkasKependudukanView(), BerkasKependudukanViewProps, DokumenKependudukanData, CetakSuratModal(), CetakSuratModalProps, SuratTrackingModal(), SuratTrackingModalProps, ActionToast (+5 more)
 
 ### Community 18 - "WargaProfile"
-Cohesion: 0.15
-Nodes (8): PengumumanController, RwWargaController, WargaManagementController, WargaProfile, Illuminate\Support\Facades\DB, Illuminate\Support\Facades\Hash, Illuminate\Validation\Rule, Illuminate\Validation\ValidationException
+Cohesion: 0.14
+Nodes (12): PengumumanController, WargaManagementController, Pengumuman, Role, WargaProfile, BansosPengumumanSeeder, DatabaseSeeder, Illuminate\Database\Seeder (+4 more)
 
 ### Community 19 - "devDependencies"
 Cohesion: 0.20
@@ -275,8 +275,8 @@ Cohesion: 0.08
 Nodes (4): routesToTest, screenshotsDir, screenshotsDir, @playwright/test
 
 ### Community 26 - "Illuminate\Database\Eloquent\Relations\BelongsTo"
-Cohesion: 0.10
-Nodes (4): BantuanPenerima, KasRtTransaction, PengaduanWarga, Illuminate\Database\Eloquent\Relations\BelongsTo
+Cohesion: 0.08
+Nodes (3): BantuanPenerima, KasRtTransaction, Illuminate\Database\Eloquent\Relations\BelongsTo
 
 ### Community 28 - "require"
 Cohesion: 0.33
@@ -318,9 +318,9 @@ Nodes (4): Monolog\Handler\NullHandler, Monolog\Handler\StreamHandler, Monolog\H
 Cohesion: 0.40
 Nodes (4): Illuminate\Cookie\Middleware\EncryptCookies, Illuminate\Foundation\Http\Middleware\ValidateCsrfToken, Laravel\Sanctum\Http\Middleware\AuthenticateSession, Laravel\Sanctum\Sanctum
 
-### Community 38 - "ApbdesRecord"
-Cohesion: 0.19
-Nodes (3): ApbdesController, ApbdesCategory, ApbdesRecord
+### Community 38 - "Illuminate\Http\JsonResponse"
+Cohesion: 0.18
+Nodes (5): ApbdesController, PublicInfoController, PengaduanController, ApbdesRecord, Illuminate\Http\JsonResponse
 
 ### Community 41 - "autoload-dev"
 Cohesion: 0.67
@@ -333,10 +333,6 @@ Nodes (3): extra, laravel, dont-discover
 ### Community 44 - "User"
 Cohesion: 0.23
 Nodes (5): User, Illuminate\Database\Eloquent\Relations\HasOne, Illuminate\Foundation\Auth\User, Illuminate\Notifications\Notifiable, Laravel\Sanctum\HasApiTokens
-
-### Community 45 - "DatabaseSeeder.php"
-Cohesion: 0.16
-Nodes (4): Berita, Dusun, Rw, DatabaseSeeder
 
 ### Community 56 - "README.md"
 Cohesion: 0.07
@@ -366,10 +362,6 @@ Nodes (16): 10. SECTION RHYTHM RULE, 12. DENSITY & SPACING DISCIPLINE, 14. IMAGE
 Cohesion: 0.12
 Nodes (16): 1. Skill Meta, 2.1 Swiss Industrial Print, 2.2 Tactical Telemetry & CRT Terminal, 2. Visual Archetypes, 3.1 Macro-Typography (Structural Headers), 3.2 Micro-Typography (Data & Telemetry), 3.3 Textural Contrast (Artistic Disruption), 3. Typographic Architecture (+8 more)
 
-### Community 63 - "Pengumuman"
-Cohesion: 0.28
-Nodes (3): Pengumuman, BansosPengumumanSeeder, Illuminate\Database\Seeder
-
 ### Community 64 - "📋 SiDesKu — Product Requirements Document (PRD)"
 Cohesion: 0.12
 Nodes (15): 1. Ringkasan Eksekutif, 2.1 Kondisi Backend — Yang Sudah Ada ✅, 2.2 Kondisi Frontend — Komponen yang Ada ✅, 2. Analisis Kondisi Saat Ini (As-Is), 4.1 Role Definitions, 4.2 Matriks Akses Lengkap, 4. Matriks Role & Hak Akses, 5. Arsitektur Sistem (+7 more)
@@ -395,8 +387,8 @@ Cohesion: 0.14
 Nodes (13): 10. Perbaiki / Tandai Status Fitur di PRD, 11. Refactor Kode, 12. Tambah Middleware / Keamanan, 1. Buat Fitur Baru - Frontend, 2. Buat Fitur Baru - Backend, 3. Perbaiki UI / Layout, 4. Fix Bug - Frontend, 5. Fix Bug - Backend (+5 more)
 
 ### Community 70 - "BantuanSosial"
-Cohesion: 0.21
-Nodes (3): BansosController, BansosController, BantuanSosial
+Cohesion: 0.15
+Nodes (5): BansosController, BansosController, BantuanSosial, Illuminate\Support\Str, Pdo\Mysql
 
 ### Community 71 - "4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)"
 Cohesion: 0.17
@@ -494,9 +486,9 @@ Nodes (6): 29. ANTI-AI-SLOP RULES, Content slop, Density slop, Layout slop, Typo
 Cohesion: 0.33
 Nodes (6): 5. IMAGE COUNT & PAGE SLICING, Continuity Rule, Counting rule, Format, Section size variety, THIS IS THE PRIMARY OUTPUT RULE
 
-### Community 95 - "api.php"
-Cohesion: 0.25
-Nodes (3): App\Http\Controllers\Api\Admin\AdminDesaSettingController, WargaSuratController, Illuminate\Support\Facades\Route
+### Community 95 - "BeritaPage.tsx"
+Cohesion: 0.40
+Nodes (3): categoryConfigs, defaultBeritas, sortConfigs
 
 ### Community 96 - "0. BRIEF INFERENCE (Read the Room Before Anything Else)"
 Cohesion: 0.40
@@ -563,20 +555,20 @@ Cohesion: 0.50
 Nodes (3): Expanding the Oxlint configuration, React Compiler, React + TypeScript + Vite
 
 ### Community 114 - "RtDashboard.tsx"
-Cohesion: 0.19
-Nodes (10): PreviewSuratModal(), PreviewSuratModalProps, MapFacilityItem, RealRtMap(), RealRtMapProps, RtDashboard(), RtDashboardProps, RwDashboard() (+2 more)
+Cohesion: 0.23
+Nodes (10): PreviewSuratModal(), PreviewSuratModalProps, MapFacilityItem, RealRtMap(), RealRtMapProps, RtDashboard(), RtDashboardProps, RwDashboardProps (+2 more)
 
 ### Community 116 - "SOP Backend Development - SiDesKu"
 Cohesion: 0.05
 Nodes (42): 10. Ringkasan & Diagram Flow, 11. Instruksi Khusus untuk AI Agent, 1. Stack & Teknologi, 2. Arsitektur Project Backend, 3. Rule 1 - Form Request Validation, 4. Rule 2 - PHPDoc pada Setiap Method, 5. Rule 3 - Try-Catch Wajib, 6. Rule 4 - ResponseHelper (+34 more)
 
 ### Community 119 - "SuratRequest"
-Cohesion: 0.14
-Nodes (7): PublicSuratController, RtSuratController, RwSuratController, SekdesSuratController, SuratRequest, SuratTracking, SimpleSoftwareIO\QrCode\Facades\QrCode
+Cohesion: 0.11
+Nodes (9): PublicSuratController, RtSuratController, RwSuratController, SekdesSuratController, WargaSuratController, NotifikasiLog, SuratRequest, SuratTracking (+1 more)
 
-### Community 120 - "Illuminate\Support\Str"
-Cohesion: 0.22
-Nodes (5): UserFactory, Illuminate\Database\Eloquent\Factories\Factory, Illuminate\Support\Str, Pdo\Mysql, static
+### Community 120 - "UserFactory.php"
+Cohesion: 0.47
+Nodes (3): UserFactory, Illuminate\Database\Eloquent\Factories\Factory, static
 
 ### Community 122 - "SiDesKu - Sistem Informasi Desa Doko"
 Cohesion: 0.11
@@ -628,23 +620,23 @@ Nodes (3): 8. Standar Penulisan Kode, Penamaan, Yang Dilarang
 
 ## Knowledge Gaps
 - **836 isolated node(s):** `$schema`, `name`, `type`, `description`, `keywords` (+831 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 978 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 985 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `react` connect `react` to `DashboardLayout.tsx`, `lucide-react`, `AuthContext.tsx`, `frontend/package.json`, `MetricStatCard.tsx`, `WargaDashboard.tsx`, `RtDashboard.tsx`, `BrandLogo.tsx`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
+- **Why does `react` connect `react` to `lucide-react`, `DashboardLayout.tsx`, `AuthContext.tsx`, `frontend/package.json`, `MetricStatCard.tsx`, `WargaDashboard.tsx`, `RtDashboard.tsx`, `BeritaPage.tsx`?**
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **Why does `@playwright/test` connect `@playwright/test` to `frontend/package.json`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
-- **Why does `lucide-react` connect `lucide-react` to `DashboardLayout.tsx`, `react`, `frontend/package.json`, `MetricStatCard.tsx`, `WargaDashboard.tsx`, `RtDashboard.tsx`?**
+- **Why does `lucide-react` connect `lucide-react` to `react`, `DashboardLayout.tsx`, `frontend/package.json`, `MetricStatCard.tsx`, `WargaDashboard.tsx`, `RtDashboard.tsx`, `BeritaPage.tsx`?**
   _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `$schema`, `name`, `type` to the rest of the system?**
   _836 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Illuminate\Database\Migrations\Migration` be split into smaller, more focused modules?**
   _Cohesion score 0.06648936170212766 - nodes in this community are weakly interconnected._
-- **Should `Illuminate\Database\Eloquent\Factories\HasFactory` be split into smaller, more focused modules?**
-  _Cohesion score 0.14492753623188406 - nodes in this community are weakly interconnected._
-- **Should `DashboardLayout.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.1422924901185771 - nodes in this community are weakly interconnected._
+- **Should `Controller` be split into smaller, more focused modules?**
+  _Cohesion score 0.13675213675213677 - nodes in this community are weakly interconnected._
+- **Should `react` be split into smaller, more focused modules?**
+  _Cohesion score 0.10344827586206896 - nodes in this community are weakly interconnected._

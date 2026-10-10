@@ -1788,120 +1788,138 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           </div>
         </div>
 
-        {/* Visual Map / Denah Canvas (Left) & Facility Details (Right) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Interactive Real GIS Map (8 Cols) */}
-          <div className="lg:col-span-8 bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-emerald-600" />
-                <div>
-                  <h3 className="font-black text-slate-900 text-sm sm:text-base">Denah Tata Ruang Wilayah RT 01 Krajan</h3>
-                  <p className="text-[11px] text-slate-500">GIS Interaktif Terverifikasi • Koordinat Asli Dusun Krajan, Desa Doko</p>
-                </div>
+        {/* Full-width Map Card (disamakan seperti UI di RW) */}
+        <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+            <div className="flex items-center gap-2.5">
+              <div className="p-2 rounded-2xl bg-emerald-50 text-emerald-700">
+                <MapPin className="w-5 h-5" />
               </div>
-              <div className="flex items-center gap-2 text-[11px] font-bold">
-                <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                  ● Satelit Esri & OSM
-                </span>
-                <span className="inline-flex items-center gap-1 text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
-                  ★ 6 Fasum + Hunian Warga
-                </span>
+              <div>
+                <h3 className="font-black text-slate-900 text-sm sm:text-base">
+                  Denah Tata Ruang Wilayah RT 01 Krajan
+                </h3>
+                <p className="text-xs text-slate-500">
+                  GIS Interaktif Terverifikasi • Koordinat Asli Dusun Krajan, Desa Doko
+                </p>
               </div>
             </div>
-
-            {/* Real GIS Leaflet Map with switchable layers, pins & polygon */}
-            <RealRtMap
-              facilities={facilityPins}
-              selectedPinId={activePin.id}
-              onSelectPin={(item) => setSelectedPetaPin(item)}
-              wargas={wargas}
-            />
-
-            <div className="text-[11px] text-slate-500 font-medium flex flex-wrap items-center justify-between gap-2 pt-1">
-              <span>💡 Klik pin fasilitas atau hunian warga pada peta untuk membuka rincian lengkapnya.</span>
-              <span className="font-bold text-emerald-700">Sistem Geospasial WGS84 Real-Time</span>
+            <div className="flex items-center gap-2 text-xs font-bold">
+              <span className="inline-flex items-center gap-1.5 text-emerald-800 bg-emerald-50 px-3 py-1 rounded-2xl border border-emerald-200">
+                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+                Satelit Esri & OSM
+              </span>
+              <span className="inline-flex items-center gap-1.5 text-blue-800 bg-blue-50 px-3 py-1 rounded-2xl border border-blue-200">
+                6 Fasum + Hunian Warga
+              </span>
             </div>
           </div>
 
-          {/* Right Sidebar: Selected Facility Card & Batas Wilayah (4 Cols) */}
-          <div className="lg:col-span-4 space-y-4">
-            {/* Selected Facility Card */}
-            <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3.5">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                  {activePin.isHouse ? 'Rincian Hunian Warga' : 'Rincian Fasilitas Terpilih'}
-                </span>
-                <span className="text-xl">{activePin.icon}</span>
+          {/* Real GIS Leaflet Map with switchable layers, pins & polygon */}
+          <RealRtMap
+            facilities={facilityPins}
+            selectedPinId={activePin.id}
+            onSelectPin={(item) => setSelectedPetaPin(item)}
+            wargas={wargas}
+          />
+        </div>
+
+        {/* Selected Facility / House Card (Full Width responsive layout) */}
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-2xs transition-all">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
+            <div className="flex items-start gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-2xl shadow-xs shrink-0">
+                {activePin.icon}
               </div>
-
-              <div>
-                <h4 className="text-base font-black text-slate-900 leading-tight">{activePin.nama}</h4>
-                <div className="text-xs font-bold text-emerald-700 mt-0.5">{activePin.tipe}</div>
-              </div>
-
-              <p className="text-xs text-slate-600 leading-relaxed">{activePin.desc}</p>
-
-              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5 text-xs text-slate-700">
-                <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-slate-400 font-bold">Lokasi:</span>
-                  <span className="font-bold text-slate-800">{activePin.blok}</span>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+                    {activePin.isHouse ? 'Hunian Warga Terdata' : 'Fasilitas Lingkungan RT'}
+                  </span>
+                  <span className="text-xs text-slate-400 font-bold">• {activePin.blok}</span>
                 </div>
-                <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-slate-400 font-bold">Penanggung Jawab:</span>
-                  <span className="font-bold text-slate-800">{activePin.pic}</span>
-                </div>
-                <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-slate-400 font-bold">Jadwal / Waktu:</span>
-                  <span className="font-bold text-slate-800">{activePin.jam}</span>
-                </div>
-                {activePin.lat && activePin.lng && (
-                  <div className="flex justify-between items-center text-[11px]">
-                    <span className="text-slate-400 font-bold">Koordinat GPS:</span>
-                    <span className="font-mono font-bold text-emerald-700">
-                      {activePin.lat.toFixed(5)}, {activePin.lng.toFixed(5)}
-                    </span>
-                  </div>
-                )}
-                <div className="flex justify-between items-center text-[11px]">
-                  <span className="text-slate-400 font-bold">Status:</span>
-                  <span className="font-black text-emerald-700">{activePin.status}</span>
-                </div>
+                <h4 className="text-lg font-black text-slate-900 leading-tight">{activePin.nama}</h4>
+                <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">{activePin.desc}</p>
               </div>
             </div>
 
-            {/* Batas Administrasi Wilayah RT 01 */}
-            <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
-              <div className="flex items-center gap-2">
-                <Compass className="w-4 h-4 text-emerald-600" />
-                <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">
-                  Batas Administrasi 4 Arah
-                </h4>
+            {/* Quick Metrics / Meta & Actions */}
+            <div className="flex flex-wrap items-center gap-2.5 w-full lg:w-auto">
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-2.5 px-3.5 text-left grow sm:grow-0">
+                <div className="text-[10px] font-bold uppercase text-slate-400">Penanggung Jawab</div>
+                <div className="text-xs font-black text-slate-900 truncate max-w-[140px]">{activePin.pic}</div>
               </div>
 
-              <div className="space-y-2 text-xs">
-                <div className="flex items-start gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="font-black text-emerald-700 w-12 shrink-0">UTARA</span>
-                  <span className="text-slate-600">RT 02 Dusun Krajan / Saluran Irigasi</span>
-                </div>
-                <div className="flex items-start gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="font-black text-emerald-700 w-12 shrink-0">SELATAN</span>
-                  <span className="text-slate-600">Jalan Raya Ngasem - Doko</span>
-                </div>
-                <div className="flex items-start gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="font-black text-emerald-700 w-12 shrink-0">TIMUR</span>
-                  <span className="text-slate-600">Persawahan Kas Desa Doko</span>
-                </div>
-                <div className="flex items-start gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="font-black text-emerald-700 w-12 shrink-0">BARAT</span>
-                  <span className="text-slate-600">RT 03 Dusun Krajan (Gang Cempaka)</span>
-                </div>
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-2.5 px-3.5 text-left grow sm:grow-0">
+                <div className="text-[10px] font-bold uppercase text-slate-400">Waktu / Jadwal</div>
+                <div className="text-xs font-black text-slate-900 truncate max-w-[150px]">{activePin.jam}</div>
               </div>
+
+              <div className="bg-slate-50 border border-slate-100 rounded-2xl p-2.5 px-3.5 text-left grow sm:grow-0">
+                <div className="text-[10px] font-bold uppercase text-slate-400">Status Sarana</div>
+                <div className="text-xs font-black text-emerald-700">{activePin.status}</div>
+              </div>
+
+              {activePin.jam && activePin.jam.includes('WhatsApp:') ? (
+                <a
+                  href={`https://wa.me/${activePin.jam.replace(/[^0-9]/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto p-2.5 px-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer press-down"
+                >
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Hubungi WhatsApp</span>
+                </a>
+              ) : null}
             </div>
           </div>
         </div>
 
-        {/* Fasilitas & Inventaris Lingkungan Table */}
+        {/* Batas Administrasi Wilayah RT 01 (4 Cards Horizontal Grid) */}
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 px-1">
+            <Compass className="w-4 h-4 text-emerald-600" />
+            <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">
+              Batas Administrasi 4 Arah RT 01 Krajan
+            </h4>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+              <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                UTARA
+              </span>
+              <div className="text-xs font-bold text-slate-900 mt-1">RT 02 Dusun Krajan</div>
+              <div className="text-[11px] text-slate-500">Saluran Irigasi Persawahan</div>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+              <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                SELATAN
+              </span>
+              <div className="text-xs font-bold text-slate-900 mt-1">Jalan Raya Ngasem - Doko</div>
+              <div className="text-[11px] text-slate-500">Akses Utama Transportasi</div>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+              <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                TIMUR
+              </span>
+              <div className="text-xs font-bold text-slate-900 mt-1">Persawahan Kas Desa</div>
+              <div className="text-[11px] text-slate-500">Lahan Produktif Pertanian</div>
+            </div>
+
+            <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+              <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+                BARAT
+              </span>
+              <div className="text-xs font-bold text-slate-900 mt-1">RT 03 Dusun Krajan</div>
+              <div className="text-[11px] text-slate-500">Gang Cempaka Pemukiman</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Fasilitas & Inventaris Lingkungan (Desktop Table + Mobile Cards) */}
         <div className="card-surface p-4 sm:p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="font-black text-slate-900 text-sm sm:text-base">
@@ -1910,16 +1928,17 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             <span className="text-xs text-slate-400 font-bold">6 Sarana Tercatat</span>
           </div>
 
-          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
-            <table className="w-full text-left text-xs min-w-[700px] sm:min-w-0">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+            <table className="w-full text-left text-xs">
               <thead className="bg-gray-50/90 text-gray-600 border-b border-gray-200 font-bold uppercase text-[11px] tracking-wider">
                 <tr>
-                  <th className="py-3 px-3 sm:px-4">Nama Fasilitas</th>
-                  <th className="py-3 px-3 sm:px-4">Bidang</th>
-                  <th className="py-3 px-3 sm:px-4">Lokasi Blok</th>
-                  <th className="py-3 px-3 sm:px-4">Penanggung Jawab (PIC)</th>
-                  <th className="py-3 px-3 sm:px-4">Jadwal Operasional</th>
-                  <th className="py-3 px-3 sm:px-4 text-right">Kondisi</th>
+                  <th className="py-3 px-4">Nama Fasilitas</th>
+                  <th className="py-3 px-4">Bidang</th>
+                  <th className="py-3 px-4">Lokasi Blok</th>
+                  <th className="py-3 px-4">Penanggung Jawab (PIC)</th>
+                  <th className="py-3 px-4">Jadwal Operasional</th>
+                  <th className="py-3 px-4 text-right">Kondisi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 bg-white">
@@ -1934,7 +1953,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       }`}
                       title="Klik untuk pusatkan peta ke fasilitas ini"
                     >
-                      <td className="py-3 px-3 sm:px-4">
+                      <td className="py-3 px-4">
                         <div className="flex items-center gap-2 font-bold text-slate-900">
                           <span className="text-base">{f.icon}</span>
                           <span>{f.nama}</span>
@@ -1945,11 +1964,11 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           )}
                         </div>
                       </td>
-                      <td className="py-3 px-3 sm:px-4 text-slate-600">{f.tipe}</td>
-                      <td className="py-3 px-3 sm:px-4 text-slate-600">{f.blok}</td>
-                      <td className="py-3 px-3 sm:px-4 font-medium text-slate-800">{f.pic}</td>
-                      <td className="py-3 px-3 sm:px-4 font-mono text-slate-600">{f.jam}</td>
-                      <td className="py-3 px-3 sm:px-4 text-right">
+                      <td className="py-3 px-4 text-slate-600">{f.tipe}</td>
+                      <td className="py-3 px-4 text-slate-600">{f.blok}</td>
+                      <td className="py-3 px-4 font-medium text-slate-800">{f.pic}</td>
+                      <td className="py-3 px-4 font-mono text-slate-600">{f.jam}</td>
+                      <td className="py-3 px-4 text-right">
                         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
                           <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                           <span>Terawat & Aktif</span>
@@ -1960,6 +1979,42 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 })}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Card List View (No Horizontal Scrollbar, Thumb Friendly!) */}
+          <div className="grid grid-cols-1 gap-2.5 md:hidden">
+            {facilityPins.map((f) => {
+              const isSelected = activePin.id === f.id;
+              return (
+                <div
+                  key={f.id}
+                  onClick={() => {
+                    setSelectedPetaPin(f);
+                    window.scrollTo({ top: 380, behavior: 'smooth' });
+                  }}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                    isSelected
+                      ? 'bg-emerald-50/90 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20'
+                      : 'bg-white border-slate-200 hover:border-slate-300'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl p-2 rounded-xl bg-slate-50 border border-slate-100">{f.icon}</span>
+                    <div>
+                      <div className="font-black text-xs text-slate-900">{f.nama}</div>
+                      <div className="text-[11px] text-emerald-700 font-semibold">{f.tipe}</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">PIC: {f.pic} • {f.blok}</div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="p-2 px-3 rounded-xl bg-slate-900 text-white font-bold text-[10px] shrink-0"
+                  >
+                    Lihat
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
