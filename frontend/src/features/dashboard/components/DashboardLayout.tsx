@@ -541,37 +541,38 @@ export const DashboardLayout: React.FC = () => {
   const displayName = user?.warga_profile?.nama_lengkap || user?.name || user?.username || 'Pengguna';
 
   return (
-    <div className="min-h-screen bg-[#f4f8f5] flex overflow-hidden text-[#0f241d] font-sans">
+    <div className="min-h-screen bg-[#f4f8f5] flex text-[#0f241d] font-sans relative">
       {/* Mobile Backdrop */}
-      {isSidebarOpen && typeof window !== 'undefined' && window.innerWidth < 1024 && (
+      {isSidebarOpen && (
         <div 
-          className="fixed inset-0 bg-[#0f241d]/40 z-40 backdrop-blur-sm animate-fade-in"
+          className="fixed inset-0 bg-[#0f241d]/40 z-40 lg:hidden backdrop-blur-sm animate-fade-in"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
-      {/* Modern Sidebar with Role-Specific Tree */}
+      {/* Modern Sidebar with Role-Specific Tree - Fixed on Desktop */}
       <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-72 
-        bg-white backdrop-blur-md border-r border-[#e2ebe4] 
+        fixed top-0 bottom-0 left-0 z-40 w-72 h-screen max-h-screen
+        bg-white border-r border-[#e2ebe4] 
         flex flex-col transition-transform duration-300 ease-in-out
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        ${isSidebarOpen ? 'translate-x-0 z-50' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Header Branding */}
-        <div className="h-20 flex items-center px-6 border-b border-[#e8efe9] justify-between">
+        {/* Header Branding (h-16 matches topbar perfectly) */}
+        <div className="h-16 flex items-center px-6 border-b border-[#e8efe9] justify-between shrink-0">
           <Link to="/" className="hover:opacity-95 transition-opacity">
             <BrandLogo size="md" />
           </Link>
           <button
             onClick={() => setIsSidebarOpen(false)}
-            className="lg:hidden p-1.5 text-gray-400 hover:text-gray-600 rounded-lg"
+            className="lg:hidden p-1.5 text-gray-400 hover:text-gray-600 rounded-lg cursor-pointer"
+            aria-label="Tutup Sidebar"
           >
             <X size={20} />
           </button>
         </div>
 
         {/* Grouped Navigation items */}
-        <div className="flex-1 overflow-y-auto py-4 px-4 space-y-6">
+        <div className="flex-1 overflow-y-auto py-4 px-3.5 space-y-5 min-h-0">
           {navGroups.map((group, gIdx) => (
             <div key={gIdx} className="space-y-1">
               <div className="px-3 mb-2 text-[10px] font-extrabold text-slate-400 uppercase tracking-widest">
@@ -632,7 +633,7 @@ export const DashboardLayout: React.FC = () => {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-4 space-y-2 border-t border-[#e8efe9]">
+        <div className="p-4 space-y-2 border-t border-[#e8efe9] shrink-0 bg-white">
           <Link
             to="/"
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-emerald-900 bg-emerald-50 hover:bg-emerald-100 font-extrabold text-xs transition-colors border border-emerald-200 shadow-2xs"
@@ -651,10 +652,10 @@ export const DashboardLayout: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-        {/* Topbar */}
-        <header className="h-16 bg-white border-b border-[#e2ebe4] flex items-center justify-between px-4 lg:px-8 z-30 shrink-0 shadow-2xs">
+      {/* Main Content Area - Left padded on desktop for fixed sidebar, top padded for fixed header */}
+      <main className="flex-1 w-full min-w-0 lg:pl-72 pt-16 min-h-screen flex flex-col bg-[#f4f8f5]">
+        {/* Fixed Topbar Header */}
+        <header className="fixed top-0 right-0 left-0 lg:left-72 z-30 h-16 bg-white/95 backdrop-blur-md border-b border-[#e2ebe4] flex items-center justify-between px-4 lg:px-8 shadow-2xs">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsSidebarOpen(true)}
@@ -826,7 +827,7 @@ export const DashboardLayout: React.FC = () => {
         </header>
 
         {/* Dynamic Main Body */}
-        <div className="flex-1 overflow-y-auto p-4 sm:p-5 lg:p-6 xl:p-8">
+        <div className="flex-1 p-4 sm:p-5 lg:p-6 xl:p-8">
           <div className="max-w-7xl mx-auto">
             {renderContent()}
           </div>

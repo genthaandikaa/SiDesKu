@@ -570,9 +570,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/DashboardLayout.tsx": {
-    "mtime": 1791633253.5880947,
-    "seen": 1791633534.16372,
-    "ast_hash": "4c8d2e7cdb9edade83c3a859ffcf8e72",
+    "mtime": 1791638621.8677282,
+    "seen": 1791639176.9423828,
+    "ast_hash": "146acda5ebb7c804a18b992343b23c70",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/KopSuratSetting.tsx": {
