@@ -146,7 +146,8 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
         </div>
 
         <div className="card-surface p-4 sm:p-6 space-y-4">
-          <div className="overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto border border-gray-200 rounded-2xl shadow-sm">
             <table className="w-full text-left text-xs min-w-[720px] sm:min-w-0">
               <thead className="bg-[#f8faf9] text-gray-600 border-b border-gray-200 font-semibold">
                 <tr>
@@ -212,6 +213,78 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                 )}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Clean Card View - No Horizontal Scrolling Needed */}
+          <div className="md:hidden space-y-3">
+            {pendingSuratList.length === 0 ? (
+              <div className="p-8 text-center text-gray-400 bg-white border border-gray-200 rounded-2xl text-xs">
+                Tidak ada antrean surat yang perlu ditandatangani saat ini.
+              </div>
+            ) : (
+              pendingSuratList.map((s) => (
+                <div 
+                  key={s.id} 
+                  className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3 animate-fade-in"
+                >
+                  <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
+                    <div className="min-w-0">
+                      <span className="text-[10px] font-bold uppercase text-slate-400 block">Resi:</span>
+                      <span className="font-mono font-black text-xs text-slate-900 truncate block">
+                        {s.nomor_resi}
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200 shrink-0">
+                      <Clock size={11} className="text-amber-700" />
+                      <span>Siap TTD Lurah</span>
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div>
+                      <h4 className="font-black text-sm text-slate-900 leading-tight">
+                        {s.warga_profile?.nama_lengkap}
+                      </h4>
+                      <span className="text-[11px] font-mono text-slate-500">
+                        NIK: {s.warga_profile?.nik}
+                      </span>
+                    </div>
+
+                    <div className="font-bold text-xs text-emerald-900">
+                      {s.surat_type?.nama_surat}
+                    </div>
+
+                    {s.keperluan && (
+                      <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600">
+                        <span className="text-[10px] font-extrabold uppercase text-slate-400 block mb-0.5">
+                          Keperluan:
+                        </span>
+                        <p className="line-clamp-2 leading-relaxed">{s.keperluan}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewSurat(s)}
+                      className="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs press-down"
+                    >
+                      <Eye size={13} className="text-emerald-600" />
+                      <span>Detail & Berkas</span>
+                    </button>
+                    <button 
+                      onClick={() => handleProcessSekdes(s.id)}
+                      disabled={isProcessing}
+                      className="flex-1 py-2 px-3 bg-emerald-600 text-white rounded-xl text-xs font-extrabold hover:bg-emerald-700 press-down transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
+                    >
+                      <ShieldCheck size={14} />
+                      <span>Sahkan QR</span>
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
