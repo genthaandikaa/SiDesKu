@@ -170,36 +170,36 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
       )}
 
       {/* Header Banner: Solusi Cukup Sekali Upload */}
-      <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-r from-emerald-850 via-emerald-800 to-teal-800 text-white shadow-xl relative overflow-hidden">
-        <div className="relative z-10 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-emerald-100 text-[11px] font-extrabold backdrop-blur-xs">
-            <ShieldCheck className="w-4 h-4 text-emerald-300" />
+      <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white border border-emerald-800/90 shadow-md relative overflow-hidden">
+        <div className="relative z-10 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-900/90 border border-emerald-700/70 text-emerald-300 text-[11px] font-black">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Master Berkas Kependudukan Terpadu</span>
           </div>
 
-          <div className="max-w-2xl space-y-1.5">
+          <div className="max-w-2xl space-y-2">
             <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
               Cukup Upload Sekali, Otomatis untuk Semua Surat Desa
             </h2>
             <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-normal">
-              Foto KTP, Kartu Keluarga, dan berkas identitas Anda tersimpan aman di database arsip Desa Doko. Setiap kali Anda mengajukan surat apapun (SKTM, Domisili, SKU, dll.), sistem <strong>otomatis melampirkan berkas resmi Anda</strong> tanpa perlu repot upload berulang kali.
+              Foto KTP, Kartu Keluarga, dan berkas identitas Anda tersimpan aman di database arsip Desa Doko. Setiap kali Anda mengajukan surat apapun (SKTM, Domisili, SKU, dll.), sistem <strong className="text-white font-extrabold">otomatis melampirkan berkas resmi Anda</strong> tanpa perlu repot upload berulang kali.
             </p>
           </div>
 
           {/* Quick stats & verification badge */}
           <div className="pt-2 flex flex-wrap items-center gap-3">
-            <div className="px-3.5 py-1.5 rounded-xl bg-white/10 text-white font-mono text-xs flex items-center gap-2">
-              <span className="text-emerald-300 font-bold">NIK:</span>
+            <div className="px-3.5 py-1.5 rounded-xl bg-emerald-950/80 border border-emerald-700/60 text-white font-mono text-xs flex items-center gap-2 shadow-2xs">
+              <span className="text-emerald-400 font-bold">NIK:</span>
               <span className="font-extrabold">{data?.warga.nik}</span>
             </div>
             {data?.warga.no_kk && (
-              <div className="px-3.5 py-1.5 rounded-xl bg-white/10 text-white font-mono text-xs flex items-center gap-2">
-                <span className="text-emerald-300 font-bold">No. KK:</span>
+              <div className="px-3.5 py-1.5 rounded-xl bg-emerald-950/80 border border-emerald-700/60 text-white font-mono text-xs flex items-center gap-2 shadow-2xs">
+                <span className="text-emerald-400 font-bold">No. KK:</span>
                 <span className="font-extrabold">{data.warga.no_kk}</span>
               </div>
             )}
-            <div className="px-3.5 py-1.5 rounded-xl bg-emerald-500/30 text-emerald-100 text-xs font-bold flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+            <div className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>{stats?.total_terunggah || 0} Berkas Tersimpan</span>
             </div>
             <button
@@ -211,16 +211,13 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
                   navigate('/dashboard/ajukan');
                 }
               }}
-              className="ml-auto inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-emerald-950 font-black text-xs hover:bg-emerald-50 transition-all shadow-md cursor-pointer press-down"
+              className="ml-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-950 font-black text-xs hover:bg-emerald-50 transition-all shadow-md cursor-pointer press-down"
             >
               <span>Ajukan Surat Langsung</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-4 h-4 text-emerald-900" />
             </button>
           </div>
         </div>
-
-        {/* Decorative background glow */}
-        <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
       </div>
 
       {/* Grid of Master Documents */}
