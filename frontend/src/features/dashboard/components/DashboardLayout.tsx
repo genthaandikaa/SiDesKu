@@ -378,8 +378,11 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Koordinasi Wilayah',
             items: [
-              { id: 'daftar_rt', label: 'Daftar RT', icon: Building2 },
+              { id: 'daftar_rt', label: 'Daftar RT', icon: Layers },
               { id: 'data_warga_rw', label: 'Data Warga RW', icon: Users },
+              { id: 'data_keluarga_rw', label: 'Data Keluarga (KK)', icon: Building2 },
+              { id: 'peta_wilayah_rw', label: 'Peta Wilayah RW', icon: MapPin },
+              { id: 'kas_rw', label: 'Kas & Iuran RW', icon: DollarSign },
               { id: 'rekap_statistik', label: 'Rekap Statistik', icon: TrendingUp },
             ],
           },

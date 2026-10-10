@@ -18,9 +18,9 @@
     "semantic_hash": "d63a3414d5c01f34b78baeef9957b663"
   },
   "backend/app/Http/Controllers/Api/Auth/AuthController.php": {
-    "mtime": 1791471238.2481322,
-    "seen": 1791472820.8923144,
-    "ast_hash": "c34af7466eb6ac515816ae0b1806f08a",
+    "mtime": 1791473054.7958705,
+    "seen": 1791633534.1634254,
+    "ast_hash": "ddbaa24154bdd89762421e95a2e14d02",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/Bendahara/ApbdesController.php": {
@@ -36,9 +36,9 @@
     "semantic_hash": "f4b299b021dc90708c87eee17e267bef"
   },
   "backend/app/Http/Controllers/Api/Public/PublicSuratController.php": {
-    "mtime": 1791471287.0298133,
-    "seen": 1791472820.892326,
-    "ast_hash": "32f8730faf65ccc01d1d6851264e0bff",
+    "mtime": 1791473054.7968721,
+    "seen": 1791633534.1634378,
+    "ast_hash": "edc1d2b5ff9ec4aeb1ed6d5c2216d320",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/Rt/KasRtController.php": {
@@ -90,9 +90,9 @@
     "semantic_hash": "5368b89f58e4ca80a5f870de8880ef93"
   },
   "backend/app/Http/Controllers/Api/Sekdes/SekdesSuratController.php": {
-    "mtime": 1791471155.27801,
-    "seen": 1791472820.8923411,
-    "ast_hash": "c3c10259839e2e0a241dd4da21ffc6bb",
+    "mtime": 1791473054.7980103,
+    "seen": 1791633534.1634555,
+    "ast_hash": "a84e13b1e22d227eeebcf57705b2ef20",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/Warga/PengaduanController.php": {
@@ -102,9 +102,9 @@
     "semantic_hash": "d8e48fbba56542e45a52c01235ca3fea"
   },
   "backend/app/Http/Controllers/Api/Warga/WargaSuratController.php": {
-    "mtime": 1789825215.249551,
-    "seen": 1789825307.961254,
-    "ast_hash": "5cf62a7b0f8192ac5a1b9c73d165183b",
+    "mtime": 1791473989.2640328,
+    "seen": 1791633534.163481,
+    "ast_hash": "3216c1535e185ff4e18b3befa9ecfef3",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Controller.php": {
@@ -228,8 +228,8 @@
     "semantic_hash": "98bd5578b3d53742893a943129a272de"
   },
   "backend/app/Models/SuratType.php": {
-    "mtime": 1791471027.96981,
-    "seen": 1791472820.892385,
+    "mtime": 1791473054.8000202,
+    "seen": 1791633534.1635242,
     "ast_hash": "99dac9d1daa53509564784c55f1e76df",
     "semantic_hash": ""
   },
@@ -240,10 +240,10 @@
     "semantic_hash": "c7a0593e75e36047cc4f7b1326cd9fc7"
   },
   "backend/app/Models/WargaProfile.php": {
-    "mtime": 1787011144.8417637,
-    "seen": 1789215602.8042462,
-    "ast_hash": "7d11bbb4cf0d03b80335a21fa9cd3965",
-    "semantic_hash": "7d11bbb4cf0d03b80335a21fa9cd3965"
+    "mtime": 1791473907.7267158,
+    "seen": 1791633534.1635275,
+    "ast_hash": "94fa17b7a9f39e181eb6b8191a65728a",
+    "semantic_hash": ""
   },
   "backend/app/Providers/AppServiceProvider.php": {
     "mtime": 1788447008.8426654,
@@ -450,9 +450,9 @@
     "semantic_hash": "1a03818ea91deb4f3989c6c994e5867c"
   },
   "backend/routes/api.php": {
-    "mtime": 1791472724.1429553,
-    "seen": 1791472820.892451,
-    "ast_hash": "c08d9488251bb9a77971c2f4a31da0e9",
+    "mtime": 1791474007.7953098,
+    "seen": 1791633534.1636202,
+    "ast_hash": "8cc815bb86aa0ed19bcd60315141f1d2",
     "semantic_hash": ""
   },
   "backend/routes/console.php": {
@@ -540,9 +540,9 @@
     "semantic_hash": "67364f3d767636ae90fdb94edad4b05d"
   },
   "frontend/src/features/auth/components/LoginPage.tsx": {
-    "mtime": 1791471639.1956758,
-    "seen": 1791472820.8925202,
-    "ast_hash": "3b37de203dfd68b4ea0419444146dc27",
+    "mtime": 1791473348.6709306,
+    "seen": 1791633534.163705,
+    "ast_hash": "1fdee533e398879c95e01a06d9724a76",
     "semantic_hash": ""
   },
   "frontend/src/features/auth/components/RegisterPage.tsx": {
@@ -564,15 +564,15 @@
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/CetakSuratModal.tsx": {
-    "mtime": 1791472750.9273853,
-    "seen": 1791472820.8925261,
-    "ast_hash": "e7e34d3d064d3cc8007b0532f77c51e8",
+    "mtime": 1791473054.8062818,
+    "seen": 1791633534.163718,
+    "ast_hash": "f246491db0a37c02d705ad8213f4a774",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/DashboardLayout.tsx": {
-    "mtime": 1791472162.5961635,
-    "seen": 1791472820.8925273,
-    "ast_hash": "f899a186ea0478f5512617d25a332a9b",
+    "mtime": 1791638621.8677282,
+    "seen": 1791639176.9423828,
+    "ast_hash": "146acda5ebb7c804a18b992343b23c70",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/KopSuratSetting.tsx": {
@@ -594,9 +594,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/RtDashboard.tsx": {
-    "mtime": 1791465592.330022,
-    "seen": 1791466376.370085,
-    "ast_hash": "858bfe3f6aa372cfe477e6527fd86e21",
+    "mtime": 1791636856.431214,
+    "seen": 1791636988.8664243,
+    "ast_hash": "b95aa7d12f813791d903dc476a495484",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/RwDashboard.tsx": {
@@ -606,9 +606,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/SekdesDashboard.tsx": {
-    "mtime": 1791472137.86739,
-    "seen": 1791472820.8925424,
-    "ast_hash": "e6ed86ea651abb5bb53834c430457a70",
+    "mtime": 1791636892.8212914,
+    "seen": 1791636988.8664293,
+    "ast_hash": "89a3e4dcdbee902faa34c7504b98954c",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/SuratTrackingModal.tsx": {
@@ -618,9 +618,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/WargaDashboard.tsx": {
-    "mtime": 1791465697.5602086,
-    "seen": 1791466376.370091,
-    "ast_hash": "a3f397e74a232223202b86eab957d0fe",
+    "mtime": 1791633361.6085358,
+    "seen": 1791633534.1637497,
+    "ast_hash": "9ca0b1e42fe481b789f437ae1ae9fbac",
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/BansosPage.tsx": {
@@ -630,9 +630,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/BeritaPage.tsx": {
-    "mtime": 1789819982.2659898,
-    "seen": 1789820814.821059,
-    "ast_hash": "b890c5170eaf6f94029b67760616c001",
+    "mtime": 1791637620.0794928,
+    "seen": 1791637778.6226923,
+    "ast_hash": "a23654a31f1e9cd519eb49e2aeb55329",
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/HomePage.tsx": {
@@ -654,9 +654,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/ProfilDesaPage.tsx": {
-    "mtime": 1791471427.3530989,
-    "seen": 1791472820.8925538,
-    "ast_hash": "c8a0ad97df45072d20abe089052a1003",
+    "mtime": 1791473054.814787,
+    "seen": 1791633534.1637647,
+    "ast_hash": "e332a62da413cc3c797df56a332a9ee4",
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/PublicFooter.tsx": {
@@ -672,9 +672,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/PublicNavbar.tsx": {
-    "mtime": 1791471595.1356814,
-    "seen": 1791472820.8925579,
-    "ast_hash": "5e166994018630959195723776d01bb0",
+    "mtime": 1791473054.8159194,
+    "seen": 1791633534.163772,
+    "ast_hash": "2b80b45148d76b7ffa3b68dfc4ee692d",
     "semantic_hash": ""
   },
   "frontend/src/features/landing/components/TransparansiApbdesPage.tsx": {
@@ -1674,9 +1674,9 @@
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/PreviewSuratModal.tsx": {
-    "mtime": 1791472759.3398037,
-    "seen": 1791472820.8925333,
-    "ast_hash": "659d55a8034efca4c527933a98d7f135",
+    "mtime": 1791473054.8120112,
+    "seen": 1791633534.1637294,
+    "ast_hash": "0115277693e070c8195b6d12622ee791",
     "semantic_hash": ""
   },
   "frontend/e2e/test-persetujuan-table-layout.spec.ts": {
@@ -1746,57 +1746,87 @@
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/Public/CalendarController.php": {
-    "mtime": 1791471125.3212452,
-    "seen": 1791472820.8923223,
+    "mtime": 1791473054.7968721,
+    "seen": 1791633534.163434,
     "ast_hash": "b9f6248ba7d5fe6e7130db7ec18178c0",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/Sekdes/SuratSettingController.php": {
-    "mtime": 1791471135.804835,
-    "seen": 1791472820.8923428,
+    "mtime": 1791473054.7990115,
+    "seen": 1791633534.1634576,
     "ast_hash": "adc4ccba93b7950dc39af1537cc7e361",
     "semantic_hash": ""
   },
   "backend/app/Http/Controllers/Api/Sekdes/WargaManagementController.php": {
-    "mtime": 1791471174.1784062,
-    "seen": 1791472820.8923442,
+    "mtime": 1791473054.7990115,
+    "seen": 1791633534.1634598,
     "ast_hash": "ffc120cc1416dcb781a4ec92db69017e",
     "semantic_hash": ""
   },
   "backend/app/Services/LetterNumberService.php": {
-    "mtime": 1791471121.0713913,
-    "seen": 1791472820.892391,
+    "mtime": 1791473054.8010166,
+    "seen": 1791633534.1635318,
     "ast_hash": "a6f9b2fdc2179148a8c64334dbae84a7",
     "semantic_hash": ""
   },
   "backend/database/migrations/2026_10_08_144944_add_nomor_terakhir_and_kode_klasifikasi_to_surat_types_table.php": {
-    "mtime": 1791470998.9067702,
-    "seen": 1791472820.8924398,
+    "mtime": 1791473054.802016,
+    "seen": 1791633534.163595,
     "ast_hash": "311c66fe289cec4324b845ea78a20a4d",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/PendaftaranWargaDesa.tsx": {
-    "mtime": 1791472211.4603179,
-    "seen": 1791472820.8925304,
-    "ast_hash": "55a5e88b27257925d45ab973fa92329b",
+    "mtime": 1791473054.8087351,
+    "seen": 1791633534.163725,
+    "ast_hash": "31aaec3d7c674ccba26b7ff88d50e677",
     "semantic_hash": ""
   },
   "frontend/src/features/dashboard/components/PenomoranSuratSetting.tsx": {
-    "mtime": 1791472205.7253923,
-    "seen": 1791472820.8925316,
-    "ast_hash": "3ebaaa76fb39883760192cf45aae1f7a",
+    "mtime": 1791473054.8098378,
+    "seen": 1791633534.1637268,
+    "ast_hash": "d3dd02548c4944d78429a94506f575e8",
     "semantic_hash": ""
   },
-  "scratch/init_surat_types_sequence.php": {
-    "mtime": 1791471038.9841056,
-    "seen": 1791472820.8925855,
-    "ast_hash": "588de8d030f1cfb28a66040f0d93f749",
+  "backend/app/Http/Controllers/Api/Warga/WargaDokumenController.php": {
+    "mtime": 1791473933.4417112,
+    "seen": 1791633534.1634636,
+    "ast_hash": "d29d3d86c76fbbe91b998df4b9f3ddd3",
     "semantic_hash": ""
   },
-  "scratch/test_revisi_guru_backend.php": {
-    "mtime": 1791471380.6133962,
-    "seen": 1791472820.8925867,
-    "ast_hash": "2e6bf0f6ac5c069201b86c3293606a06",
+  "backend/database/migrations/2026_10_08_153500_add_dokumen_kependudukan_to_warga_profiles_table.php": {
+    "mtime": 1791473878.418957,
+    "seen": 1791633534.1635973,
+    "ast_hash": "c1a1689df08a77a9d1f77326d1831703",
+    "semantic_hash": ""
+  },
+  "frontend/src/features/dashboard/components/BerkasKependudukanView.tsx": {
+    "mtime": 1791633703.0798104,
+    "seen": 1791633977.4892108,
+    "ast_hash": "b613d5774229b040e27611f25c7922c2",
+    "semantic_hash": ""
+  },
+  "backend/public/uploads/warga_dokumen/9/kk_1791474034_pS0t.png": {
+    "mtime": 1791474034.2587752,
+    "seen": 1791633534.1639402,
+    "ast_hash": "2cd8bde463f5d82aae0f0cec061d6b8f",
+    "semantic_hash": ""
+  },
+  "backend/public/uploads/warga_dokumen/9/kk_1791633454_bQtM.png": {
+    "mtime": 1791633454.5072198,
+    "seen": 1791633534.1639416,
+    "ast_hash": "f829b914fc47cfc9c0747c119c27cf1b",
+    "semantic_hash": ""
+  },
+  "backend/public/uploads/warga_dokumen/9/ktp_1791474034_lCWc.png": {
+    "mtime": 1791474034.118255,
+    "seen": 1791633534.163943,
+    "ast_hash": "2cd8bde463f5d82aae0f0cec061d6b8f",
+    "semantic_hash": ""
+  },
+  "backend/public/uploads/warga_dokumen/9/ktp_1791633454_pCfS.png": {
+    "mtime": 1791633454.3988335,
+    "seen": 1791633534.1639447,
+    "ast_hash": "f829b914fc47cfc9c0747c119c27cf1b",
     "semantic_hash": ""
   }
 }

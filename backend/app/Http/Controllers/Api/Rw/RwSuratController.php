@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Rw;
 
 use App\Http\Controllers\Controller;
+use App\Models\Rw;
 use App\Models\SuratRequest;
 use App\Models\SuratTracking;
 use Illuminate\Http\JsonResponse;
@@ -10,21 +11,40 @@ use Illuminate\Http\Request;
 
 class RwSuratController extends Controller
 {
+    /**
+     * Resolve RW ID for authenticated user
+     */
+    protected function resolveRwId($user): int
+    {
+        $rw = Rw::where('ketua_rw_user_id', $user->id)->first() ?? ($user->wargaProfile?->rt?->rw ?? Rw::first());
+        return $rw ? $rw->id : 1;
+    }
+
     public function index(Request $request): JsonResponse
     {
-        $user = $request->user()->load('wargaProfile.rt');
-        $rwId = $user->wargaProfile && $user->wargaProfile->rt ? $user->wargaProfile->rt->rw_id : 1;
+        $user = $request->user();
+        $rwId = $this->resolveRwId($user);
 
-        $surats = SuratRequest::with(['suratType', 'wargaProfile.rt.rw', 'trackings.actorUser.role'])
+        $query = SuratRequest::with(['suratType', 'wargaProfile.rt.rw', 'trackings.actorUser.role'])
             ->whereHas('wargaProfile.rt', function ($q) use ($rwId) {
                 $q->where('rw_id', $rwId);
-            })
-            ->whereIn('status', ['approved_rt', 'pending_rw', 'approved_rw', 'processed_sekdes', 'completed', 'rejected'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+            });
+
+        if ($request->has('rt_id') && $request->query('rt_id') !== 'all') {
+            $query->whereHas('wargaProfile', function ($q) use ($request) {
+                $q->where('rt_id', $request->query('rt_id'));
+            });
+        }
+
+        if ($request->has('status') && $request->query('status') !== 'all') {
+            $query->where('status', $request->query('status'));
+        }
+
+        $surats = $query->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'success' => true,
+            'rw_id' => $rwId,
             'data' => $surats,
         ]);
     }

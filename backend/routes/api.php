@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\Rt\RtPengaduanController;
 use App\Http\Controllers\Api\Rt\RtSuratController;
 use App\Http\Controllers\Api\Rt\RtWargaController;
 use App\Http\Controllers\Api\Rw\RwSuratController;
+use App\Http\Controllers\Api\Rw\RwWargaController;
 use App\Http\Controllers\Api\Sekdes\BansosController;
 use App\Http\Controllers\Api\Sekdes\DesaSettingController;
 use App\Http\Controllers\Api\Sekdes\SekdesSuratController;
@@ -108,7 +109,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // kas dan keuangan RT (Api\Rt\KasRtController)
     Route::get('/kas-rt', [KasRtController::class, 'index']);
-    Route::middleware('role:rt,bendahara_rt,admin')->group(function () {
+    Route::middleware('role:rt,bendahara_rt,rw,admin')->group(function () {
         Route::post('/kas-rt/categories', [KasRtController::class, 'storeCategory']);
         Route::post('/kas-rt/transactions', [KasRtController::class, 'store']);
         Route::post('/kas-rt/transaction', [KasRtController::class, 'store']); // alias
@@ -135,11 +136,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // pengaturan desa & settings (Api\Admin\DesaSettingController)
     Route::middleware('role:admin,sekdes,kades')->put('/settings/desa', [DesaSettingController::class, 'updateSettings']);
 
-    // data warga & kartu keluarga (Api\Admin\WargaController)
+    // data warga & kartu keluarga (Api\Admin\WargaController, Api\Rt\RtWargaController, Api\Rw\RwWargaController)
     Route::get('/warga', function (Request $request) {
         $user = $request->user();
         if ($user->hasRole('rt') || $user->hasRole('sekretaris_rt')) {
             return app(RtWargaController::class)->index($request);
+        } elseif ($user->hasRole('rw')) {
+            return app(RwWargaController::class)->index($request);
         }
         return app(AdminWargaController::class)->index($request);
     });
@@ -147,6 +150,8 @@ Route::middleware('auth:sanctum')->group(function () {
         $user = $request->user();
         if ($user->hasRole('rt') || $user->hasRole('sekretaris_rt') || $user->hasRole('bendahara_rt')) {
             return app(RtWargaController::class)->getKartuKeluargas($request);
+        } elseif ($user->hasRole('rw')) {
+            return app(RwWargaController::class)->getKartuKeluargas($request);
         }
         return app(AdminWargaController::class)->getKartuKeluargas($request);
     });
@@ -195,6 +200,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/surats', [RwSuratController::class, 'index']);
         Route::post('/surats/{id}/approve', [RwSuratController::class, 'approveRw']);
         Route::post('/surats/{id}/reject', [RwSuratController::class, 'reject']);
+        Route::get('/warga', [RwWargaController::class, 'index']);
+        Route::get('/kartu-keluarga', [RwWargaController::class, 'getKartuKeluargas']);
+        Route::get('/rts', [RwWargaController::class, 'getRts']);
+        Route::get('/kas', [KasRtController::class, 'index']);
+        Route::post('/kas/transaksi', [KasRtController::class, 'store']);
     });
 
     Route::prefix('sekdes')->group(function () {
