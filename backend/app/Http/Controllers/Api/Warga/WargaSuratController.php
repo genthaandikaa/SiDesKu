@@ -54,7 +54,8 @@ class WargaSuratController extends Controller
 
         $finalFileLampiran = $this->processLampirans(
             $request->has('file_lampirans') ? $request->file_lampirans : ($validated['file_lampiran'] ?? null),
-            $user->id
+            $user->id,
+            $user->wargaProfile
         );
 
         $suratReq = SuratRequest::create([
@@ -137,7 +138,7 @@ class WargaSuratController extends Controller
 
         if ($request->has('file_lampirans') || $request->has('file_lampiran')) {
             $lampiranPayload = $request->has('file_lampirans') ? $request->file_lampirans : $request->file_lampiran;
-            $updateData['file_lampiran'] = $this->processLampirans($lampiranPayload, $user->id);
+            $updateData['file_lampiran'] = $this->processLampirans($lampiranPayload, $user->id, $user->wargaProfile);
         }
 
         $surat->update($updateData);
@@ -245,9 +246,8 @@ class WargaSuratController extends Controller
         return $imageInput;
     }
 
-    private function processLampirans($lampiranInput, $userId): ?string
+    private function processLampirans($lampiranInput, $userId, $wargaProfile = null): ?string
     {
-        if (empty($lampiranInput)) return null;
         $savedLampirans = [];
 
         $items = [];
@@ -258,7 +258,7 @@ class WargaSuratController extends Controller
             if (is_array($decoded)) {
                 $items = $decoded;
             }
-        } elseif (is_string($lampiranInput)) {
+        } elseif (is_string($lampiranInput) && !empty($lampiranInput)) {
             $items = [$lampiranInput];
         }
 
@@ -277,6 +277,44 @@ class WargaSuratController extends Controller
                     $savedLampirans[] = [
                         'url' => $url,
                         'nama' => 'Dokumen Lampiran',
+                    ];
+                }
+            }
+        }
+
+        // Auto-attach master documents from village registry if wargaProfile is provided
+        if ($wargaProfile) {
+            $hasKtp = collect($savedLampirans)->contains(function ($l) {
+                return str_contains(strtolower($l['nama']), 'ktp');
+            });
+
+            if (!$hasKtp && !empty($wargaProfile->foto_ktp)) {
+                $savedLampirans[] = [
+                    'url' => $wargaProfile->foto_ktp,
+                    'nama' => 'Foto KTP Pemohon (Database Desa)',
+                ];
+            }
+
+            $hasKk = collect($savedLampirans)->contains(function ($l) {
+                return str_contains(strtolower($l['nama']), 'kk') || str_contains(strtolower($l['nama']), 'keluarga');
+            });
+
+            $fotoKk = $wargaProfile->foto_kk ?? $wargaProfile->kartuKeluarga?->foto_kk;
+            if (!$hasKk && !empty($fotoKk)) {
+                $savedLampirans[] = [
+                    'url' => $fotoKk,
+                    'nama' => 'Kartu Keluarga (Database Desa)',
+                ];
+            }
+
+            if (!empty($wargaProfile->foto_akta_lahir)) {
+                $hasAkta = collect($savedLampirans)->contains(function ($l) {
+                    return str_contains(strtolower($l['nama']), 'akta');
+                });
+                if (!$hasAkta) {
+                    $savedLampirans[] = [
+                        'url' => $wargaProfile->foto_akta_lahir,
+                        'nama' => 'Akta Kelahiran (Database Desa)',
                     ];
                 }
             }

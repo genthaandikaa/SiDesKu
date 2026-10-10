@@ -39,7 +39,8 @@ import {
   QrCode,
   ArrowRight,
   Sliders,
-  UserPlus
+  UserPlus,
+  FolderCheck
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { WargaDashboard } from './WargaDashboard';
@@ -83,6 +84,7 @@ export const DashboardLayout: React.FC = () => {
       const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
       const queryTab = searchParams.get('tab') || searchParams.get('menu');
       if (path.startsWith('/dashboard/ajukan')) return 'ajukan_surat';
+      if (path.startsWith('/dashboard/berkas')) return 'berkas_kependudukan';
       if (path.startsWith('/dashboard/status-surat') || path.startsWith('/dashboard/status_surat')) return 'status_surat';
       if (path.startsWith('/dashboard/surat-selesai') || path.startsWith('/dashboard/surat_selesai')) return 'surat_selesai';
       if (path.startsWith('/dashboard/riwayat-surat') || path.startsWith('/dashboard/riwayat_surat')) return 'riwayat_surat';
@@ -112,6 +114,7 @@ export const DashboardLayout: React.FC = () => {
     const pathToMenu: Record<string, string> = {
       beranda: '/dashboard',
       ajukan_surat: '/dashboard/ajukan',
+      berkas_kependudukan: '/dashboard/berkas',
       status_surat: '/dashboard/status-surat',
       surat_selesai: '/dashboard/surat-selesai',
       riwayat_surat: '/dashboard/riwayat-surat',
@@ -145,6 +148,8 @@ export const DashboardLayout: React.FC = () => {
     let resolvedMenu = 'beranda';
     if (path.startsWith('/dashboard/ajukan')) {
       resolvedMenu = 'ajukan_surat';
+    } else if (path.startsWith('/dashboard/berkas')) {
+      resolvedMenu = 'berkas_kependudukan';
     } else if (path.startsWith('/dashboard/status-surat') || path.startsWith('/dashboard/status_surat')) {
       resolvedMenu = 'status_surat';
     } else if (path.startsWith('/dashboard/surat-selesai') || path.startsWith('/dashboard/surat_selesai')) {
@@ -304,6 +309,7 @@ export const DashboardLayout: React.FC = () => {
             items: [
               { id: 'beranda', label: 'Beranda', icon: Home },
               { id: 'ajukan_surat', label: 'Ajukan Surat', icon: Plus, badge: 'Baru', badgeColor: 'bg-emerald-100 text-emerald-800' },
+              { id: 'berkas_kependudukan', label: 'Berkas Kependudukan', icon: FolderCheck, badge: 'Master', badgeColor: 'bg-emerald-100 text-emerald-900' },
               { id: 'status_surat', label: 'Status Surat', icon: Clock },
               { id: 'surat_selesai', label: 'Surat Selesai', icon: Download },
               { id: 'riwayat_surat', label: 'Riwayat Surat', icon: FileText },

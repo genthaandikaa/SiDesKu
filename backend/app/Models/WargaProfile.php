@@ -28,6 +28,10 @@ class WargaProfile extends Model
         'no_hp_wa',
         'alamat_ktp',
         'foto_ktp',
+        'foto_kk',
+        'foto_akta_lahir',
+        'foto_buku_nikah',
+        'dokumen_kependudukan_json',
         'status_keluarga',
         'status_ekonomi',
         'status_kependudukan',
@@ -37,6 +41,7 @@ class WargaProfile extends Model
     {
         return [
             'tanggal_lahir' => 'date',
+            'dokumen_kependudukan_json' => 'array',
         ];
     }
 

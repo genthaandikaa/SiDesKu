@@ -74,6 +74,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/surats/{id}', [WargaSuratController::class, 'update']);
     Route::delete('/surats/{id}', [WargaSuratController::class, 'destroy']);
 
+    // Master Dokumen Kependudukan Warga (Upload Sekali Tersimpan Permanen di Database Desa)
+    Route::get('/warga/dokumen', [\App\Http\Controllers\Api\Warga\WargaDokumenController::class, 'index']);
+    Route::post('/warga/dokumen', [\App\Http\Controllers\Api\Warga\WargaDokumenController::class, 'store']);
+    Route::delete('/warga/dokumen/{tipe}', [\App\Http\Controllers\Api\Warga\WargaDokumenController::class, 'destroy']);
+
     // Verifikasi & Aksi Ketua RT
     Route::middleware('role:rt,sekretaris_rt,admin')->group(function () {
         Route::post('/surats/{id}/approve-rt', [RtSuratController::class, 'approveRt']);

@@ -37,7 +37,8 @@ import {
   Edit3,
   Loader2,
   Copy,
-  Info
+  Info,
+  FolderCheck
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { useAuth } from '@/shared/context/AuthContext';
@@ -45,6 +46,7 @@ import { SuratRequest, SuratType, BantuanPenerima } from '@/shared/types';
 import { CetakSuratModal } from './CetakSuratModal';
 import { SuratTrackingModal } from './SuratTrackingModal';
 import { CameraUploadModal } from '@/shared/components/CameraUploadModal';
+import { BerkasKependudukanView } from './BerkasKependudukanView';
 import {
   DonutGauge,
   AreaSplineChart,
@@ -242,6 +244,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   const [bansos, setBansos] = useState<BantuanPenerima[]>([]);
   const [kasSummary, setKasSummary] = useState<any>(null);
   const [desa, setDesa] = useState<any>(null);
+  const [masterDokumen, setMasterDokumen] = useState<any>(null);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -366,12 +369,13 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
 
   const fetchWargaData = async () => {
     try {
-      const [suratRes, typesRes, bansosRes, kasRes, desaRes] = await Promise.all([
+      const [suratRes, typesRes, bansosRes, kasRes, desaRes, dokRes] = await Promise.all([
         api.get('/surats'),
         api.get('/surat-types'),
         api.get('/bansos'),
         api.get('/kas-rt'),
         api.get('/settings/desa'),
+        api.get('/warga/dokumen').catch(() => ({ data: { success: false } })),
       ]);
 
       if (suratRes.data?.success && suratRes.data.data) setSurats(suratRes.data.data);
@@ -381,6 +385,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
       if (bansosRes.data?.success && bansosRes.data.data) setBansos(bansosRes.data.data);
       if (kasRes.data?.success) setKasSummary(kasRes.data);
       if (desaRes.data?.success && desaRes.data.data) setDesa(desaRes.data.data);
+      if (dokRes.data?.success && dokRes.data.data) setMasterDokumen(dokRes.data.data);
     } catch {
       //
     }
@@ -525,6 +530,21 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
 
   // Submenu router renderer
   const renderSubmenuContent = () => {
+    // Berkas Kependudukan (Master Berkas Sekali Upload)
+    if (activeSubmenu === 'berkas_kependudukan' || activeSubmenu === 'berkas') {
+      return (
+        <BerkasKependudukanView
+          onApplySurat={() => {
+            if (onNavigate) {
+              onNavigate('ajukan_surat');
+            } else {
+              navigate('/dashboard/ajukan');
+            }
+          }}
+        />
+      );
+    }
+
     // Form & Katalog Pengajuan Surat
     if (activeSubmenu === 'ajukan_surat') {
       const isFormMode = Boolean(routeSuratTypeId || editingSurat);
@@ -668,15 +688,117 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   />
                 </div>
 
+                {/* Master Dokumen Kependudukan Auto-Attach Banner */}
+                <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/90 space-y-3 shadow-2xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs shrink-0">
+                        <FolderCheck className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-xs font-black text-emerald-950">
+                            Master Berkas Otomatis dari Database Desa
+                          </h4>
+                          <span className="text-[10px] font-black bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full">
+                            Auto-Attach
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-emerald-700 mt-0.5">
+                          Dokumen identitas pokok (KTP & KK) otomatis dilampirkan dari arsip desa Anda tanpa perlu upload berulang kali.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onNavigate) {
+                          onNavigate('berkas_kependudukan');
+                        } else {
+                          navigate('/dashboard/berkas');
+                        }
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-emerald-100/70 border border-emerald-300 text-[11px] font-extrabold text-emerald-800 transition-all cursor-pointer shadow-2xs shrink-0 self-start sm:self-auto"
+                    >
+                      <span>Kelola Master Berkas</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Chips Status Master Dokumen */}
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-emerald-200/60">
+                    {(() => {
+                      const hasKtp = Boolean(masterDokumen?.stats?.has_ktp ?? masterDokumen?.dokumen?.foto_ktp);
+                      const hasKk = Boolean(masterDokumen?.stats?.has_kk ?? masterDokumen?.dokumen?.foto_kk);
+                      const hasAkta = Boolean(masterDokumen?.stats?.has_akta ?? masterDokumen?.dokumen?.foto_akta_lahir);
+                      const hasNikah = Boolean(masterDokumen?.stats?.has_nikah ?? masterDokumen?.dokumen?.foto_buku_nikah);
+
+                      return (
+                        <>
+                          <div className={`px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 ${
+                            hasKtp 
+                              ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' 
+                              : 'bg-amber-50 text-amber-900 border border-amber-300'
+                          }`}>
+                            {hasKtp ? (
+                              <>
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                                <span>KTP Terlampir Otomatis (Master)</span>
+                              </>
+                            ) : (
+                              <>
+                                <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                                <span>KTP Belum Tersimpan di Master Desa</span>
+                              </>
+                            )}
+                          </div>
+
+                          <div className={`px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 ${
+                            hasKk 
+                              ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' 
+                              : 'bg-amber-50 text-amber-900 border border-amber-300'
+                          }`}>
+                            {hasKk ? (
+                              <>
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                                <span>KK Terlampir Otomatis (Master)</span>
+                              </>
+                            ) : (
+                              <>
+                                <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                                <span>KK Belum Tersimpan di Master Desa</span>
+                              </>
+                            )}
+                          </div>
+
+                          {hasAkta && (
+                            <div className="px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 bg-emerald-100 text-emerald-900 border border-emerald-300">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                              <span>Akta Lahir Terlampir (Master)</span>
+                            </div>
+                          )}
+
+                          {hasNikah && (
+                            <div className="px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 bg-emerald-100 text-emerald-900 border border-emerald-300">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
+                              <span>Buku Nikah Terlampir (Master)</span>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </div>
+                </div>
+
                 {/* Mobile-Friendly Lampiran Dokumen Section */}
                 <div className="space-y-3 pt-3 border-t border-slate-100">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
                       <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Lampiran Dokumen Identitas & Berkas:</span>
+                      <span>Lampiran Tambahan / Dokumen Khusus (Opsional):</span>
                     </label>
-                    <span className="text-[10px] text-emerald-800 font-extrabold bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                      Opsional / Tidak Wajib
+                    <span className="text-[10px] text-slate-600 font-extrabold bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
+                      Hanya jika diperlukan
                     </span>
                   </div>
 
@@ -1624,6 +1746,20 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   </span>
                   <span className="text-[10px] font-black text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full">
                     {completedSurats.length} Sah
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onNavigate ? onNavigate('berkas_kependudukan') : null}
+                  className="w-full p-3 rounded-2xl bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200/80 text-indigo-950 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <FolderCheck className="w-4 h-4 text-indigo-600" />
+                    <span>Master Berkas KTP & KK (Upload Sekali)</span>
+                  </span>
+                  <span className="text-[10px] font-black text-indigo-700 bg-indigo-200/70 px-2 py-0.5 rounded-full">
+                    {masterDokumen?.persentase_kelengkapan ?? 0}% Siap
                   </span>
                 </button>
               </div>
