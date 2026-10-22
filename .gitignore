@@ -53,3 +53,8 @@ scratch/
 revisi/
 backend/public/uploads/lampiran/*
 !backend/public/uploads/lampiran/.gitkeep
+
+# AI tools & Knowledge Graph
+graphify-out/
+.agents/
+.agent-memory/
