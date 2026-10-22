@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToDesa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DesaSetting extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToDesa;
 
     protected $fillable = [
+        'desa_id',
         'nama_desa',
         'kode_desa',
         'kecamatan',
@@ -32,5 +34,18 @@ class DesaSetting extends Model
         'nip_sekdes',
         'ttd_kades_image',
         'stempel_desa_image',
+        'ttd_kades_url',
+        'ttd_sekdes_url',
+        'ttd_bendahara_url',
+        'nama_bendahara',
+        'nip_bendahara',
+        'visi',
+        'misi',
+        'struktur_organisasi_json',
+        'territory_geojson',
+    ];
+
+    protected $casts = [
+        'struktur_organisasi_json' => 'array',
     ];
 }

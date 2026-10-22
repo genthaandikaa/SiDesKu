@@ -13,7 +13,6 @@ import {
   Smartphone,
   ChevronRight,
   Clock,
-  Sparkles,
   Award,
   Star,
   Check,
@@ -30,19 +29,20 @@ import {
 } from "lucide-react";
 import api from "@/shared/lib/axios";
 import { DesaSetting, Berita, Pengumuman } from "@/shared/types";
+import { VillageStats } from "../types";
 import { useAuth } from "@/shared/context/AuthContext";
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [desa, setDesa] = useState<DesaSetting | null>(null);
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<VillageStats | null>(null);
   const [beritas, setBeritas] = useState<Berita[]>([]);
   const [pengumumans, setPengumumans] = useState<Pengumuman[]>([]);
 
   // Typewriter animation effect for hero description
   const heroFullText =
-    "Platform terpadu di Kabupaten Kediri yang mempermudah pengurusan 14+ jenis surat mandiri, koordinasi berjenjang RT/RW, transparansi APBDes, dan verifikasi dokumen legal berstempel QR resmi.";
+    "Layanan surat mandiri warga, transparansi APBDes, dan verifikasi dokumen resmi ber-QR Code.";
   const [typedHeroText, setTypedHeroText] = useState("");
   const [isTypingDone, setIsTypingDone] = useState(false);
 
@@ -65,11 +65,15 @@ export const HomePage: React.FC = () => {
   const [countWarga, setCountWarga] = useState(0);
   const [countSurat, setCountSurat] = useState(0);
   const [countSla, setCountSla] = useState(0);
+  const [countDusun, setCountDusun] = useState(0);
+  const [countRt, setCountRt] = useState(0);
 
   useEffect(() => {
-    const targetW = stats ? (stats.total_warga ?? 3) : 3;
-    const targetS = stats ? (stats.total_surat_selesai ?? 4) : 4;
+    const targetW = stats?.total_warga ?? stats?.penduduk_total ?? 2;
+    const targetS = stats?.total_surat_selesai ?? stats?.surat_selesai ?? 14;
     const targetSl = 15;
+    const targetD = stats?.total_dusun ?? 2;
+    const targetR = stats?.total_rt ?? 2;
 
     let startTimestamp: number | null = null;
     const duration = 1200; // ms
@@ -83,6 +87,8 @@ export const HomePage: React.FC = () => {
       setCountWarga(Math.round(ease * targetW));
       setCountSurat(Math.round(ease * targetS));
       setCountSla(Math.round(ease * targetSl));
+      setCountDusun(Math.round(ease * targetD));
+      setCountRt(Math.round(ease * targetR));
 
       if (progress < 1) {
         animFrame = requestAnimationFrame(animateCounts);
@@ -90,6 +96,8 @@ export const HomePage: React.FC = () => {
         setCountWarga(targetW);
         setCountSurat(targetS);
         setCountSla(targetSl);
+        setCountDusun(targetD);
+        setCountRt(targetR);
       }
     };
 
@@ -124,8 +132,8 @@ export const HomePage: React.FC = () => {
   const orbitalNodes = [
     {
       id: "surat",
-      title: "Layanan Surat Mandiri",
-      desc: "Pengajuan 14+ jenis surat online 24/7 dari rumah tanpa antre fisik.",
+      title: "Layanan Surat",
+      desc: "Pengajuan surat mandiri 24/7.",
       icon: FileText,
       link: "/layanan-surat",
       x: -168,
@@ -133,8 +141,8 @@ export const HomePage: React.FC = () => {
     },
     {
       id: "validasi",
-      title: "Validasi Berjenjang RT/RW",
-      desc: "Disposisi satu klik ke ponsel Ketua RT & RW secara berurutan.",
+      title: "Persetujuan Langsung",
+      desc: "Disposisi RT ke Kepala Desa.",
       icon: Users,
       link: "/login",
       x: 168,
@@ -142,8 +150,8 @@ export const HomePage: React.FC = () => {
     },
     {
       id: "legalitas",
-      title: "Legalitas QR Code & TTE",
-      desc: "Stempel QR & TTE sah resmi berstandar DPMPD Jawa Timur.",
+      title: "Legalitas QR Code",
+      desc: "Stempel digital resmi desa.",
       icon: ShieldCheck,
       link: "/lacak-surat",
       x: 375,
@@ -151,8 +159,8 @@ export const HomePage: React.FC = () => {
     },
     {
       id: "bansos",
-      title: "Otomasi Bansos & WA",
-      desc: "Jadwal & barcode antrean PKH/BLT otomatis ke WhatsApp warga.",
+      title: "Bantuan Sosial",
+      desc: "Jadwal dan antrean bansos.",
       icon: Zap,
       link: "/bansos",
       x: 300,
@@ -161,7 +169,7 @@ export const HomePage: React.FC = () => {
     {
       id: "apbdes",
       title: "Transparansi APBDes",
-      desc: "Publikasi realisasi anggaran belanja desa terbuka & akuntabel.",
+      desc: "Publikasi anggaran desa.",
       icon: TrendingUp,
       link: "/apbdes",
       x: 0,
@@ -169,8 +177,8 @@ export const HomePage: React.FC = () => {
     },
     {
       id: "aduan",
-      title: "Pengaduan & Aspirasi",
-      desc: "Sampaikan keluhan warga langsung dan pantau tindak lanjutnya.",
+      title: "Aspirasi Warga",
+      desc: "Kanal pengaduan warga.",
       icon: MessageSquare,
       link: "/layanan-surat",
       x: -300,
@@ -178,8 +186,8 @@ export const HomePage: React.FC = () => {
     },
     {
       id: "pelacak",
-      title: "Pelacak Resi Realtime",
-      desc: "Pantau posisi berkas dari RT, RW, hingga Sekdes secara transparan.",
+      title: "Pelacak Berkas",
+      desc: "Lacak status surat realtime.",
       icon: Search,
       link: "/lacak-surat",
       x: -375,
@@ -187,27 +195,26 @@ export const HomePage: React.FC = () => {
     },
   ];
 
-
   const capabilitiesList = [
     {
-      title: "Surat Online 24/7",
-      desc: "Pengajuan mandiri dari rumah tanpa perlu antre di balai desa.",
+      title: "Surat Online",
+      desc: "Pengajuan mandiri dari rumah tanpa antre ke balai desa.",
       icon: FileText,
     },
     {
       title: "Legalitas QR Sah",
-      desc: "Tanda tangan elektronik bersertifikat standar DPMPD.",
+      desc: "Tanda tangan elektronik standar DPMPD.",
       icon: ShieldCheck,
     },
     {
       title: "Pelacak Realtime",
-      desc: "Pantau posisi disposisi dan tahapan berkas secara transparan.",
+      desc: "Pantau posisi dan tahapan berkas secara transparan.",
       icon: Search,
     },
     {
       title: "Otomasi Cepat",
-      desc: "Penerbitan surat instan dengan SLA rata-rata < 15 menit.",
-      icon: Sparkles,
+      desc: "Penerbitan surat dengan rata-rata < 15 menit.",
+      icon: Zap,
     },
     {
       title: "APBDes Terbuka",
@@ -216,7 +223,7 @@ export const HomePage: React.FC = () => {
     },
     {
       title: "Integrasi Bansos",
-      desc: "Cek NIK penerima PKH/BLT dan verifikasi antrean dual-mode.",
+      desc: "Cek NIK penerima Bansos dan verifikasi antrean.",
       icon: Users,
     },
   ];
@@ -329,318 +336,316 @@ export const HomePage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* Left Column: Headline & Action */}
           <div className="lg:col-span-7 space-y-6">
-
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.08]">
-              Satu Portal. <br />
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-950 tracking-tight leading-[1.08]">
               <span className="text-emerald-700">Semua Layanan Desa.</span>
-            </h1>
+            </h2>
 
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl font-medium min-h-[4.5rem] sm:min-h-[4rem]">
-                {typedHeroText}
-                {!isTypingDone && (
-                  <span className="inline-block w-0.5 h-5 ml-1 bg-emerald-600 animate-pulse align-middle" />
-                )}
-              </p>
+            <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl font-medium min-h-[4.5rem] sm:min-h-[4rem]">
+              {typedHeroText}
+              {!isTypingDone && (
+                <span className="inline-block w-0.5 h-5 ml-1 bg-emerald-600 animate-pulse align-middle" />
+              )}
+            </p>
 
-              {/* Quick Search Surat Bar */}
-              <div className="relative max-w-xl">
-                <div className="relative flex items-center">
-                  <Search className="absolute left-4 w-4 h-4 text-emerald-600 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={heroSearchQuery}
-                    onChange={(e) => setHeroSearchQuery(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && heroSearchQuery.trim()) {
-                        navigate(
-                          `/layanan-surat?search=${encodeURIComponent(heroSearchQuery.trim())}`,
-                        );
-                      }
-                    }}
-                    placeholder="Cari jenis surat keterangan (SKTM, Domisili, Usaha, SKCK)..."
-                    className="w-full pl-11 pr-32 py-3.5 bg-white/95 rounded-2xl border border-emerald-200 text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-md shadow-emerald-950/5"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
+            {/* Quick Search Surat Bar */}
+            <div className="relative max-w-xl">
+              <div className="relative flex items-center">
+                <Search className="absolute left-4 w-4 h-4 text-emerald-600 pointer-events-none" />
+                <input
+                  type="text"
+                  value={heroSearchQuery}
+                  onChange={(e) => setHeroSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && heroSearchQuery.trim()) {
                       navigate(
-                        heroSearchQuery.trim()
-                          ? `/layanan-surat?search=${encodeURIComponent(heroSearchQuery.trim())}`
-                          : "/layanan-surat",
+                        `/layanan-surat?search=${encodeURIComponent(heroSearchQuery.trim())}`,
                       );
-                    }}
-                    className="absolute right-2 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all cursor-pointer press-down"
+                    }
+                  }}
+                  placeholder="Cari jenis surat keterangan (SKTM, Domisili, Usaha, SKCK)..."
+                  className="w-full pl-11 pr-32 py-3.5 bg-white/95 rounded-2xl border border-emerald-200 text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-md shadow-emerald-950/5"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    navigate(
+                      heroSearchQuery.trim()
+                        ? `/layanan-surat?search=${encodeURIComponent(heroSearchQuery.trim())}`
+                        : "/layanan-surat",
+                    );
+                  }}
+                  className="absolute right-2 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all cursor-pointer press-down"
+                >
+                  Cari Surat
+                </button>
+              </div>
+
+              {/* Quick Suggestion Chips */}
+              <div className="flex flex-wrap items-center gap-1.5 pt-2.5">
+                <span className="text-[11px] text-slate-400 font-semibold">
+                  Populer:
+                </span>
+                {quickLetters.map((ql) => (
+                  <Link
+                    key={ql.code}
+                    to={`/layanan-surat?search=${encodeURIComponent(ql.code)}`}
+                    className="px-2.5 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-[11px] border border-emerald-200/60 transition-all"
                   >
-                    Cari Surat
-                  </button>
-                </div>
-
-                {/* Quick Suggestion Chips */}
-                <div className="flex flex-wrap items-center gap-1.5 pt-2.5">
-                  <span className="text-[11px] text-slate-400 font-semibold">
-                    Populer:
-                  </span>
-                  {quickLetters.map((ql) => (
-                    <Link
-                      key={ql.code}
-                      to={`/layanan-surat?search=${encodeURIComponent(ql.code)}`}
-                      className="px-2.5 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-[11px] border border-emerald-200/60 transition-all"
-                    >
-                      {ql.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3.5 pt-1">
-                <Link
-                  to="/layanan-surat"
-                  className="px-7 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm shadow-md shadow-emerald-700/20 transition-all press-down flex items-center gap-2 hover-glow"
-                >
-                  <span>Ajukan Surat Sekarang</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-
-                <Link
-                  to="/lacak"
-                  className="px-7 py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-extrabold text-sm border border-slate-200 shadow-xs hover:border-slate-300 transition-all press-down flex items-center gap-2"
-                >
-                  <Search className="w-4 h-4 text-slate-400" />
-                  <span>Lacak Berkas Resi</span>
-                </Link>
-              </div>
-
-              {/* Social Trust Proof (Avatar Stack + Stars) */}
-              <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-slate-100">
-                <div className="flex -space-x-2.5 overflow-hidden">
-                  <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover bg-emerald-100 shadow-xs"
-                    src="/images/user.png"
-                    alt="Warga 1"
-                  />
-                  <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover bg-emerald-100 shadow-xs"
-                    src="/images/landing/person1.png"
-                    alt="Warga 2"
-                  />
-                  <img
-                    className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover bg-emerald-100 shadow-xs"
-                    src="/images/landing/Author.png"
-                    alt="Warga 3"
-                  />
-                  <div className="inline-flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-white bg-emerald-700 text-white font-extrabold text-xs shadow-xs">
-                    +1.2k
-                  </div>
-                </div>
-                <div className="text-xs">
-                  <div className="flex items-center gap-1 text-amber-400 mb-0.5">
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <Star className="w-3.5 h-3.5 fill-amber-400" />
-                    <span className="text-slate-800 font-extrabold text-xs ml-1">
-                      5.0 / 5.0
-                    </span>
-                  </div>
-                  <div className="text-slate-500 font-medium">
-                    Dipercaya 1.200+ Warga di 3 Dusun & 36 RT
-                  </div>
-                </div>
+                    {ql.name}
+                  </Link>
+                ))}
               </div>
             </div>
 
-            {/* Right Column: Spacious Hero Mockup Card */}
-            <div className="lg:col-span-5 relative flex justify-center lg:justify-end pt-5 pb-5">
-              <div className="w-full max-w-[450px] sm:max-w-[465px] relative">
-                {/* Floating Pill Accent 1 */}
-                <div className="absolute -top-3.5 -left-3.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-200/90 z-20 hidden sm:flex items-center gap-2 animate-float">
-                  <div className="w-6 h-6 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                  </div>
-                  <div>
-                    <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none">
-                      SLA Terbit
-                    </div>
-                    <div className="text-xs font-black text-emerald-800 leading-tight mt-0.5">
-                      &lt; 15 Menit Sah
-                    </div>
-                  </div>
+            {/* Action Buttons */}
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
+              <Link
+                to="/layanan-surat"
+                className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-700/20 transition-all press-down flex items-center gap-2 hover-glow"
+              >
+                <span>Ajukan surat</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              <Link
+                to="/lacak"
+                className="px-6 py-3 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-extrabold text-xs sm:text-sm border border-slate-200 shadow-xs hover:border-slate-300 transition-all press-down flex items-center gap-2"
+              >
+                <Search className="w-4 h-4 text-slate-400" />
+                <span>Lacak berkas</span>
+              </Link>
+            </div>
+
+            {/* Social Trust Proof (Avatar Stack + Stars) */}
+            <div className="flex flex-wrap items-center gap-4 pt-4 border-t border-slate-100">
+              <div className="flex -space-x-2.5 overflow-hidden">
+                <img
+                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover bg-emerald-100 shadow-xs"
+                  src="/images/user.png"
+                  alt="Warga 1"
+                />
+                <img
+                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover bg-emerald-100 shadow-xs"
+                  src="/images/landing/person1.png"
+                  alt="Warga 2"
+                />
+                <img
+                  className="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover bg-emerald-100 shadow-xs"
+                  src="/images/landing/Author.png"
+                  alt="Warga 3"
+                />
+                <div className="inline-flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-white bg-emerald-700 text-white font-extrabold text-xs shadow-xs">
+                  +1.2k
                 </div>
-
-                {/* Floating Pill Accent 2 */}
-                <div className="absolute -bottom-3.5 -right-3.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-200/90 z-20 hidden sm:flex items-center gap-2 animate-float-gentle">
-                  <div className="w-6 h-6 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-xs">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                  </div>
-                  <div>
-                    <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none">
-                      Legalitas Resmi
-                    </div>
-                    <div className="text-xs font-black text-slate-900 leading-tight mt-0.5">
-                      QR Code Sah DPMPD
-                    </div>
-                  </div>
+              </div>
+              <div className="text-xs">
+                <div className="flex items-center gap-1 text-amber-400 mb-0.5">
+                  <Star className="w-3.5 h-3.5 fill-amber-400" />
+                  <Star className="w-3.5 h-3.5 fill-amber-400" />
+                  <Star className="w-3.5 h-3.5 fill-amber-400" />
+                  <Star className="w-3.5 h-3.5 fill-amber-400" />
+                  <Star className="w-3.5 h-3.5 fill-amber-400" />
+                  <span className="text-slate-800 font-extrabold text-xs ml-1">
+                    5.0 / 5.0
+                  </span>
                 </div>
-
-                {/* Ambient Backlight Blur */}
-                <div className="absolute -inset-4 bg-gradient-to-tr from-emerald-500/15 via-teal-400/10 to-blue-500/10 rounded-3xl blur-2xl -z-10 pointer-events-none" />
-
-                <div className="card-elevated-mockup p-5 sm:p-6 space-y-4 relative bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-2xl rounded-[2rem] hover:border-emerald-300 transition-all animate-float-gentle">
-                  {/* Mockup Header: Official Lambang Kediri + QR Sah & Live Status */}
-                  <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 gap-3">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <img
-                        src="/images/logo-kediri.png"
-                        alt="Lambang Kediri"
-                        className="h-9 sm:h-10 w-auto object-contain drop-shadow-xs shrink-0"
-                      />
-                      <div className="min-w-0">
-                        <div className="font-black text-sm sm:text-base text-slate-900 leading-snug whitespace-nowrap">
-                          SIDes Portal Administrasi
-                        </div>
-                        <div className="text-[11px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                          <span className="truncate">
-                            Server Desa Aktif & Terverifikasi
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <div className="hidden sm:flex items-center gap-1 bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-full text-[11px] font-black border border-emerald-200/80">
-                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>QR Sah</span>
-                      </div>
-                      <div className="flex items-center gap-1 bg-emerald-600 text-white px-3 py-1 rounded-full text-[11px] font-extrabold shadow-xs">
-                        <span>Live</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 3 Metrics Mini Cards */}
-                  <div className="grid grid-cols-3 gap-2.5 text-center">
-                    <div className="bg-gradient-to-b from-slate-50 to-emerald-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-emerald-300 hover:scale-102 transition-all shadow-2xs">
-                      <div className="text-2xl sm:text-[26px] font-black text-slate-900 tracking-tight leading-none">
-                        {countSurat}
-                      </div>
-                      <div className="text-[11px] text-slate-500 font-bold mt-1.5">
-                        Surat Selesai
-                      </div>
-                      <div className="mt-1.5 text-[9px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full inline-block">
-                        ↑ 100% Sah
-                      </div>
-                    </div>
-
-                    <div className="bg-gradient-to-b from-slate-50 to-teal-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-teal-300 hover:scale-102 transition-all shadow-2xs">
-                      <div className="text-2xl sm:text-[26px] font-black text-emerald-700 tracking-tight leading-none">
-                        {countSla}m
-                      </div>
-                      <div className="text-[11px] text-slate-500 font-bold mt-1.5">
-                        Rata-rata SLA
-                      </div>
-                      <div className="mt-1.5 text-[9px] font-bold text-teal-700 bg-teal-100/80 px-2 py-0.5 rounded-full inline-block">
-                        Cepat & Tepat
-                      </div>
-                    </div>
-
-                    <div className="bg-gradient-to-b from-slate-50 to-blue-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-blue-300 hover:scale-102 transition-all shadow-2xs">
-                      <div className="text-2xl sm:text-[26px] font-black text-blue-600 tracking-tight leading-none">
-                        0%
-                      </div>
-                      <div className="text-[11px] text-slate-500 font-bold mt-1.5">
-                        Biaya (Gratis)
-                      </div>
-                      <div className="mt-1.5 text-[9px] font-bold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full inline-block">
-                        Anti-Pungli
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Live Activity Stream */}
-                  <div className="space-y-2">
-                    <div className="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center justify-between pb-0.5">
-                      <span>Aktivitas Berkas Terkini</span>
-                      <Activity className="w-3.5 h-3.5 text-emerald-600" />
-                    </div>
-
-                    <div className="space-y-2 text-xs">
-                      <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200/70 shadow-2xs hover:bg-emerald-100/70 transition-all cursor-default">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
-                            ✓
-                          </div>
-                          <div className="min-w-0">
-                            <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
-                              ACC Surat Domisili Usaha
-                            </div>
-                            <div className="text-[11px] text-slate-500 truncate mt-0.5">
-                              Ketua RT 01 • Bpk. Bambang
-                            </div>
-                          </div>
-                        </div>
-                        <span className="text-[10px] text-emerald-800 font-bold font-mono bg-white px-2 py-1 rounded-md shadow-2xs shrink-0 border border-emerald-100">
-                          Baru saja
-                        </span>
-                      </div>
-
-                      <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100/80 transition-all cursor-default">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-2xs">
-                            QR
-                          </div>
-                          <div className="min-w-0">
-                            <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
-                              Penerbitan SKTM Beasiswa
-                            </div>
-                            <div className="text-[11px] text-slate-500 truncate mt-0.5">
-                              Sekdes • No. 470/128/418.67
-                            </div>
-                          </div>
-                        </div>
-                        <span className="text-[10px] text-slate-500 font-mono shrink-0 bg-white px-2 py-1 rounded-md border border-slate-100">
-                          15m lalu
-                        </span>
-                      </div>
-
-                      <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100/80 transition-all cursor-default">
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-2xs">
-                            WA
-                          </div>
-                          <div className="min-w-0">
-                            <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
-                              Broadcast Bansos PKH III
-                            </div>
-                            <div className="text-[11px] text-slate-500 truncate mt-0.5">
-                              Terkirim ke 84 Nomor KPM
-                            </div>
-                          </div>
-                        </div>
-                        <span className="text-[10px] text-slate-500 font-mono shrink-0 bg-white px-2 py-1 rounded-md border border-slate-100">
-                          1j lalu
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Card Footer Quick Link */}
-                  <div className="pt-1">
-                    <Link
-                      to="/lacak"
-                      className="w-full py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-700/20 hover:shadow-lg press-down"
-                    >
-                      <Search className="w-4 h-4" />
-                      <span>Uji Pelacak Surat Publik Demo</span>
-                    </Link>
-                  </div>
+                <div className="text-slate-500 font-medium">
+                  Dipercaya 1.200+ Warga di 3 Dusun & 36 RT
                 </div>
               </div>
             </div>
           </div>
-        </section>
+
+          {/* Right Column: Spacious Hero Mockup Card */}
+          <div className="lg:col-span-5 relative flex justify-center lg:justify-end pt-5 pb-5">
+            <div className="w-full max-w-[450px] sm:max-w-[465px] relative">
+              {/* Floating Pill Accent 1 */}
+              <div className="absolute -top-3.5 -left-3.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-200/90 z-20 hidden sm:flex items-center gap-2 animate-float">
+                <div className="w-6 h-6 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                </div>
+                <div>
+                  <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none">
+                    SLA Terbit
+                  </div>
+                  <div className="text-xs font-black text-emerald-800 leading-tight mt-0.5">
+                    &lt; 15 Menit Sah
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Pill Accent 2 */}
+              <div className="absolute -bottom-3.5 -right-3.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-xl border border-slate-200/90 z-20 hidden sm:flex items-center gap-2 animate-float-gentle">
+                <div className="w-6 h-6 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-xs">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                </div>
+                <div>
+                  <div className="text-[9px] text-slate-400 font-bold uppercase tracking-wider leading-none">
+                    Legalitas Resmi
+                  </div>
+                  <div className="text-xs font-black text-slate-900 leading-tight mt-0.5">
+                    QR Code Sah DPMPD
+                  </div>
+                </div>
+              </div>
+
+              {/* Ambient Backlight Blur */}
+              <div className="absolute -inset-4 bg-gradient-to-tr from-emerald-500/15 via-teal-400/10 to-blue-500/10 rounded-3xl blur-2xl -z-10 pointer-events-none" />
+
+              <div className="card-elevated-mockup p-5 sm:p-6 space-y-4 relative bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-2xl rounded-[2rem] hover:border-emerald-300 transition-all animate-float-gentle">
+                {/* Mockup Header: Official Lambang Kediri + QR Sah & Live Status */}
+                <div className="flex items-center justify-between pb-3.5 border-b border-slate-100 gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <img
+                      src="/images/logo-kediri.png"
+                      alt="Lambang Kediri"
+                      className="h-9 sm:h-10 w-auto object-contain drop-shadow-xs shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <div className="font-black text-sm sm:text-base text-slate-900 leading-snug whitespace-nowrap">
+                        SIDes Portal Administrasi
+                      </div>
+                      <div className="text-[11px] text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                        <span className="truncate">
+                          Server Desa Aktif & Terverifikasi
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="hidden sm:flex items-center gap-1 bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-full text-[11px] font-black border border-emerald-200/80">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>QR Sah</span>
+                    </div>
+                    <div className="flex items-center gap-1 bg-emerald-600 text-white px-3 py-1 rounded-full text-[11px] font-extrabold shadow-xs">
+                      <span>Live</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3 Metrics Mini Cards */}
+                <div className="grid grid-cols-3 gap-2.5 text-center">
+                  <div className="bg-gradient-to-b from-slate-50 to-emerald-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-emerald-300 hover:scale-102 transition-all shadow-2xs">
+                    <div className="text-2xl sm:text-[26px] font-black text-slate-900 tracking-tight leading-none">
+                      {countSurat}
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-bold mt-1.5">
+                      Surat Selesai
+                    </div>
+                    <div className="mt-1.5 text-[9px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full inline-block">
+                      100% Sah
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-b from-slate-50 to-teal-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-teal-300 hover:scale-102 transition-all shadow-2xs">
+                    <div className="text-2xl sm:text-[26px] font-black text-emerald-700 tracking-tight leading-none">
+                      {countSla}m
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-bold mt-1.5">
+                      Rata-rata SLA
+                    </div>
+                    <div className="mt-1.5 text-[9px] font-bold text-teal-700 bg-teal-100/80 px-2 py-0.5 rounded-full inline-block">
+                      Cepat & Tepat
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-b from-slate-50 to-blue-50/30 p-3 sm:p-3.5 rounded-2xl border border-slate-100 hover:border-blue-300 hover:scale-102 transition-all shadow-2xs">
+                    <div className="text-2xl sm:text-[26px] font-black text-blue-600 tracking-tight leading-none">
+                      0%
+                    </div>
+                    <div className="text-[11px] text-slate-500 font-bold mt-1.5">
+                      Biaya (Gratis)
+                    </div>
+                    <div className="mt-1.5 text-[9px] font-bold text-blue-700 bg-blue-100/80 px-2 py-0.5 rounded-full inline-block">
+                      Anti-Pungli
+                    </div>
+                  </div>
+                </div>
+
+                {/* Live Activity Stream */}
+                <div className="space-y-2">
+                  <div className="text-xs font-extrabold text-slate-400 uppercase tracking-wider flex items-center justify-between pb-0.5">
+                    <span>Aktivitas Berkas Terkini</span>
+                    <Activity className="w-3.5 h-3.5 text-emerald-600" />
+                  </div>
+
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-emerald-50/80 border border-emerald-200/70 shadow-2xs hover:bg-emerald-100/70 transition-all cursor-default">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs">
+                          <Check className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
+                            ACC Surat Domisili Usaha
+                          </div>
+                          <div className="text-[11px] text-slate-500 truncate mt-0.5">
+                            Ketua RT 01 • Bpk. Bambang
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-emerald-800 font-bold font-mono bg-white px-2 py-1 rounded-md shadow-2xs shrink-0 border border-emerald-100">
+                        Baru saja
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100/80 transition-all cursor-default">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-slate-800 text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-2xs">
+                          QR
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
+                            Penerbitan SKTM Beasiswa
+                          </div>
+                          <div className="text-[11px] text-slate-500 truncate mt-0.5">
+                            Sekdes • No. 470/128/418.67
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-500 font-mono shrink-0 bg-white px-2 py-1 rounded-md border border-slate-100">
+                        15m lalu
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-slate-100/80 transition-all cursor-default">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-2xs">
+                          WA
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-extrabold text-xs sm:text-[13px] text-slate-900 truncate">
+                            Broadcast Bansos PKH III
+                          </div>
+                          <div className="text-[11px] text-slate-500 truncate mt-0.5">
+                            Terkirim ke 84 Nomor KPM
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-[10px] text-slate-500 font-mono shrink-0 bg-white px-2 py-1 rounded-md border border-slate-100">
+                        1j lalu
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card Footer Quick Link */}
+                <div className="pt-1">
+                  <Link
+                    to="/lacak"
+                    className="w-full py-3 sm:py-3.5 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 hover:from-emerald-700 hover:to-teal-800 text-white font-extrabold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-700/20 hover:shadow-lg press-down"
+                  >
+                    <Search className="w-4 h-4" />
+                    <span>Lacak status surat</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Floating Individual Statistics Cards - Fibonacci Golden Ratio Dimensions & Typography */}
       <div className="relative z-30 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mb-[52px] sm:-mb-[58px]">
@@ -655,7 +660,7 @@ export const HomePage: React.FC = () => {
             </div>
             <div>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
-                3 Dusun & 36 RT
+                {countDusun} Dusun • {countRt} RT
               </span>
             </div>
           </div>
@@ -711,12 +716,11 @@ export const HomePage: React.FC = () => {
       <section className="w-full bg-white pt-20 sm:pt-24 pb-14 sm:pb-20 border-y border-slate-200/80 overflow-hidden relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
           <div className="max-w-3xl space-y-2">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              Semua yang Anda butuhkan untuk layanan desa digital & mandiri
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Layanan Unggulan Desa
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Infrastruktur terintegrasi dari pengajuan online, pelacakan
-              dokumen, hingga transparansi dana desa.
+              Layanan surat mandiri, pelacakan status berkas, dan dokumen sah ber-QR Code.
             </p>
           </div>
         </div>
@@ -731,7 +735,7 @@ export const HomePage: React.FC = () => {
               ...capabilitiesList,
               ...capabilitiesList,
             ].map((cap, idx) => {
-              const Icon = cap.icon;
+              const Icon = cap.icon || Zap;
               const uClass = `animate-u-${(idx % 6) + 1}`;
               return (
                 <div
@@ -739,7 +743,7 @@ export const HomePage: React.FC = () => {
                   className={`${uClass} w-[220px] sm:w-[250px] shrink-0 p-6 rounded-3xl bg-slate-50/90 border border-slate-200/90 shadow-xs hover:shadow-xl hover:bg-white hover:border-emerald-300 transition-all duration-300 flex flex-col items-center text-center group cursor-pointer hover:scale-105`}
                 >
                   <div className="w-13 h-13 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 shadow-2xs mb-3.5">
-                    <Icon className="w-6 h-6 stroke-[1.8]" />
+                    {Icon && <Icon className="w-6 h-6 stroke-[1.8]" />}
                   </div>
                   <h3 className="font-extrabold text-sm text-slate-900 leading-snug group-hover:text-emerald-700 transition-colors">
                     {cap.title}
@@ -769,12 +773,6 @@ export const HomePage: React.FC = () => {
               <span className="text-xs sm:text-sm font-bold tracking-widest text-emerald-200 uppercase">
                 ARSITEKTUR DIGITAL TERINTEGRASI
               </span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                Ekosistem Pelayanan Desa dalam Satu Alur Digital
-              </h2>
-              <p className="text-sm sm:text-base text-emerald-100 font-normal leading-relaxed">
-                Solusi digital menyeluruh yang menghubungkan permohonan warga, koordinasi RT/RW berjenjang, dan transparansi balai desa serba cepat dan akurat.
-              </p>
             </div>
             <Link
               to="/layanan-surat"
@@ -809,9 +807,7 @@ export const HomePage: React.FC = () => {
               </div>
 
               {/* Rotating Orbital Track (Nodes circle around the phone) */}
-              <div
-                className="absolute inset-0 w-full h-full animate-orbit-rotate group-hover/orbit:[animation-play-state:paused] pointer-events-none z-20"
-              >
+              <div className="absolute inset-0 w-full h-full animate-orbit-rotate group-hover/orbit:[animation-play-state:paused] pointer-events-none z-20">
                 {orbitalNodes.map((item) => {
                   const IconComponent = item.icon;
                   return (
@@ -824,9 +820,7 @@ export const HomePage: React.FC = () => {
                       }}
                     >
                       {/* Counter-rotation ensures text & icon stay 100% upright and readable */}
-                      <div
-                        className="animate-orbit-counter group-hover/orbit:[animation-play-state:paused]"
-                      >
+                      <div className="animate-orbit-counter group-hover/orbit:[animation-play-state:paused]">
                         <Link
                           to={item.link}
                           className="group flex items-center gap-3.5 px-4 py-3 rounded-2xl bg-white text-slate-900 border border-white/80 shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer max-w-[275px]"
@@ -955,30 +949,22 @@ export const HomePage: React.FC = () => {
             </div>
 
             {/* Right Text & Checklist */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="pill-badge-emerald">
-                <FileText className="w-3.5 h-3.5 text-emerald-600" />
-                <span>LAYANAN SURAT BERJENJANG</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                Urus Surat dari Rumah, Selesai Cepat & Tepat Waktu
+            <div className="lg:col-span-6 space-y-5">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Pengurusan Surat Mandiri & Cepat
               </h2>
 
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-                Tidak ada lagi antrean panjang di loket balai desa atau menunggu
-                Ketua RT pulang kerja. Semua permohonan diverifikasi secara
-                digital melalui ponsel perangkat yang bertugas.
+              <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                Permohonan surat diproses digital dari ponsel tanpa perlu antre fisik di kantor desa.
               </p>
 
-              <div className="space-y-3.5 pt-2">
+              <div className="space-y-3 pt-1">
                 <div className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                    <strong>Pengajuan Bebas Antre:</strong> Pilih jenis surat, isi
-                    keperluan, dan berkas langsung masuk ke antrean Ketua RT.
+                  <div className="text-xs sm:text-sm text-slate-700">
+                    <strong>Bebas antre:</strong> Ajukan surat online dan pantau status berkas secara realtime.
                   </div>
                 </div>
 
@@ -986,10 +972,8 @@ export const HomePage: React.FC = () => {
                   <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                    <strong>Validasi Bertingkat Otomatis:</strong> Notifikasi ACC
-                    mengalir berjenjang dari RT, RW, hingga penandatanganan
-                    Sekdes.
+                  <div className="text-xs sm:text-sm text-slate-700">
+                    <strong>Alur langsung RT ke Kades:</strong> Persetujuan cepat tanpa birokrasi berbelit.
                   </div>
                 </div>
 
@@ -997,10 +981,8 @@ export const HomePage: React.FC = () => {
                   <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                    <strong>Tanda Tangan & QR Code Sah:</strong> Dilengkapi segel
-                    elektronik yang dapat diverifikasi keasliannya oleh instansi
-                    luar.
+                  <div className="text-xs sm:text-sm text-slate-700">
+                    <strong>Legalitas QR sah:</strong> Dokumen resmi berstempel dan tanda tangan elektronik.
                   </div>
                 </div>
 
@@ -1008,9 +990,8 @@ export const HomePage: React.FC = () => {
                   <div className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <div className="text-xs sm:text-sm text-slate-700 font-medium">
-                    <strong>Pelayanan 100% Gratis:</strong> Seluruh pengurusan
-                    dokumen tidak dipungut biaya apapun (Rp 0,-).
+                  <div className="text-xs sm:text-sm text-slate-700">
+                    <strong>Bebas biaya:</strong> Seluruh pengurusan dokumen 100% gratis (Rp 0).
                   </div>
                 </div>
               </div>
@@ -1018,9 +999,9 @@ export const HomePage: React.FC = () => {
               <div className="pt-2">
                 <Link
                   to="/layanan-surat"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition-colors shadow-sm press-down"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition-colors shadow-sm press-down"
                 >
-                  <span>Lihat 8+ Jenis Surat & Syarat</span>
+                  <span>Katalog surat & syarat</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -1040,30 +1021,22 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Text */}
-            <div className="lg:col-span-6 space-y-6 order-2 lg:order-1">
-              <span className="text-xs sm:text-sm font-bold tracking-widest text-emerald-200 uppercase">
-                JARING PENGAMAN SOSIAL
-              </span>
-
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
-                Distribusi Bantuan Sosial Tepat Sasaran & Tanpa Potongan
+            <div className="lg:col-span-6 space-y-5 order-2 lg:order-1">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight">
+                Distribusi Bantuan Sosial Tepat Sasaran
               </h2>
 
-              <p className="text-sm sm:text-base text-emerald-100 leading-relaxed font-normal">
-                Saat bantuan PKH, BLT-DD, atau BPNT siap cair, desa cukup menekan
-                tombol broadcast. Sistem seketika mendistribusikan pesan jadwal
-                dan nomor antrean QR langsung ke nomor WhatsApp warga penerima
-                manfaat.
+              <p className="text-sm text-emerald-100 leading-relaxed font-normal">
+                Pemberitahuan jadwal pencairan dan barcode antrean dikirim langsung ke WhatsApp warga penerima manfaat.
               </p>
 
-              <div className="space-y-3.5 pt-2">
+              <div className="space-y-3 pt-1">
                 <div className="flex items-start gap-3">
                   <div className="w-5 h-5 rounded-full bg-emerald-400 text-emerald-950 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <div className="text-xs sm:text-sm text-emerald-50 font-medium">
-                    <strong className="text-white">Pemberitahuan Waktu Pasti:</strong> Warga hadir sesuai
-                    jam sesi sehingga tidak terjadi kerumunan di balai desa.
+                  <div className="text-xs sm:text-sm text-emerald-50">
+                    <strong className="text-white">Jadwal berjenjang:</strong> Warga hadir sesuai sesi untuk menghindari antrean.
                   </div>
                 </div>
 
@@ -1071,9 +1044,8 @@ export const HomePage: React.FC = () => {
                   <div className="w-5 h-5 rounded-full bg-emerald-400 text-emerald-950 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <div className="text-xs sm:text-sm text-emerald-50 font-medium">
-                    <strong className="text-white">Barcode Antrean Digital:</strong> Verifikasi penerima
-                    di meja pencairan cepat dengan scan barcode NIK.
+                  <div className="text-xs sm:text-sm text-emerald-50">
+                    <strong className="text-white">Barcode antrean digital:</strong> Verifikasi cepat di meja pencairan.
                   </div>
                 </div>
 
@@ -1081,9 +1053,8 @@ export const HomePage: React.FC = () => {
                   <div className="w-5 h-5 rounded-full bg-emerald-400 text-emerald-950 flex items-center justify-center text-xs font-black shrink-0 mt-0.5">
                     <Check className="w-3 h-3" />
                   </div>
-                  <div className="text-xs sm:text-sm text-emerald-50 font-medium">
-                    <strong className="text-white">Pengecekan NIK Mandiri:</strong> Warga dapat memeriksa
-                    status kepesertaan bansos kapan saja secara transparan.
+                  <div className="text-xs sm:text-sm text-emerald-50">
+                    <strong className="text-white">Cek mandiri:</strong> Periksa status kepesertaan bansos kapan saja.
                   </div>
                 </div>
               </div>
@@ -1091,9 +1062,9 @@ export const HomePage: React.FC = () => {
               <div className="pt-2">
                 <Link
                   to="/bansos"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white hover:bg-emerald-50 text-emerald-950 font-extrabold text-sm transition-all shadow-xl press-down"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white hover:bg-emerald-50 text-emerald-950 font-extrabold text-xs sm:text-sm transition-all shadow-xl press-down"
                 >
-                  <span>Cek Status NIK Bansos Anda</span>
+                  <span>Cek kepesertaan bansos</span>
                   <ArrowRight className="w-4 h-4 text-emerald-800" />
                 </Link>
               </div>
@@ -1152,39 +1123,58 @@ export const HomePage: React.FC = () => {
 
                     <div className="text-xs text-slate-700 leading-relaxed space-y-1">
                       <p className="font-extrabold text-[#008069]">
-                        🌾 Undangan Resmi Penyaluran Bantuan Pangan Beras & PKH :
+                        Undangan Resmi Penyaluran Bantuan Pangan Beras & PKH
+                        :
                       </p>
                     </div>
 
                     {/* Distribution Schedule Card */}
                     <div className="bg-emerald-50/80 p-3.5 rounded-2xl border border-emerald-200/80 space-y-1.5 text-xs text-slate-700 font-sans">
                       <div className="flex items-center justify-between">
-                        <span className="text-slate-600">nama penerima 👤 :</span>
-                        <strong className="text-slate-900 font-bold">Yati Handayani</strong>
+                        <span className="text-slate-600">
+                          Nama Penerima :
+                        </span>
+                        <strong className="text-slate-900 font-bold">
+                          Supriyanto
+                        </strong>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-slate-600">hari & tanggal 📆 :</span>
-                        <strong className="text-slate-900 font-bold">Selasa, 18 Agustus 2026</strong>
+                        <span className="text-slate-600">
+                          Hari & Tanggal :
+                        </span>
+                        <strong className="text-slate-900 font-bold">
+                          Selasa, 18 Agustus 2026
+                        </strong>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-slate-600">waktu ⏰ :</span>
-                        <strong className="text-slate-900 font-bold">08:30 WIB - Selesai</strong>
+                        <strong className="text-slate-900 font-bold">
+                          08:30 WIB - Selesai
+                        </strong>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-slate-600">lokasi 📍 :</span>
-                        <strong className="text-slate-900 font-bold">Kantor Balai Desa Doko</strong>
+                        <span className="text-slate-600">Lokasi :</span>
+                        <strong className="text-slate-900 font-bold">
+                          Kantor Balai Desa Doko
+                        </strong>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-slate-600">alokasi bantuan 📦 :</span>
-                        <strong className="text-slate-900 font-bold">30 Kg Beras (Juli - Sept 2026)</strong>
+                        <span className="text-slate-600">
+                          Alokasi Bantuan :
+                        </span>
+                        <strong className="text-slate-900 font-bold">
+                          30 Kg Beras (Juli - Sept 2026)
+                        </strong>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-slate-600">biaya tebus 💸 :</span>
-                        <strong className="text-emerald-700 font-bold">GRATIS (Rp 0,-)</strong>
+                        <span className="text-slate-600">Biaya Tebus :</span>
+                        <strong className="text-emerald-700 font-bold">
+                          GRATIS (Rp 0,-)
+                        </strong>
                       </div>
                       <div className="flex items-center justify-between pt-1 border-t border-emerald-200/60">
                         <span className="text-emerald-800 font-bold">
-                          no. urut antrean 🎫 :
+                          No. Urut Antrean :
                         </span>
                         <span className="text-base font-black text-[#008069] bg-white px-2.5 py-0.5 rounded-lg shadow-2xs border border-emerald-300 font-mono">
                           1340
@@ -1223,12 +1213,13 @@ export const HomePage: React.FC = () => {
                       <div className="p-3 rounded-2xl bg-amber-50/90 border border-amber-200/90 text-[11px] space-y-2 flex flex-col justify-between">
                         <div className="space-y-1">
                           <div className="font-extrabold text-amber-900 flex items-center gap-1.5">
-                            <span>👵 Opsi 2: Tunjukkan Chat</span>
+                            <span>Opsi 2: Tunjukkan Chat</span>
                           </div>
                           <p className="text-slate-700 text-[11px] leading-relaxed">
                             Bagi warga lansia/ibu rumah tangga,{" "}
                             <strong>
-                              cukup sebutkan No. Urut 1340 & tunjukkan KTP fisik/IKD asli
+                              cukup sebutkan No. Urut 1340 & tunjukkan KTP
+                              fisik/IKD asli
                             </strong>{" "}
                             ke petugas tanpa perlu cetak kertas.
                           </p>
@@ -1246,9 +1237,7 @@ export const HomePage: React.FC = () => {
                     <div className="text-[11px] text-[#008069] font-semibold flex items-center justify-between pt-1 border-t border-slate-100 flex-wrap gap-2">
                       <div className="flex items-center gap-1.5">
                         <ShieldCheck className="w-4 h-4 text-[#008069] shrink-0" />
-                        <span>
-                          Penyaluran Resmi Bapanas & Perum BULOG
-                        </span>
+                        <span>Penyaluran Resmi Bapanas & Perum BULOG</span>
                       </div>
                       <Link
                         to="/bansos"

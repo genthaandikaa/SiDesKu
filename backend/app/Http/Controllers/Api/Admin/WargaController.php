@@ -16,11 +16,11 @@ class WargaController extends Controller
     {
         $query = WargaProfile::with(['kartuKeluarga', 'rt.rw.dusun', 'user']);
 
-        if ($request->has('rt_id')) {
+        if ($request->filled('rt_id')) {
             $query->where('rt_id', $request->query('rt_id'));
         }
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $s = $request->query('search');
             $query->where(function ($q) use ($s) {
                 $q->where('nama_lengkap', 'like', "%{$s}%")
@@ -28,11 +28,39 @@ class WargaController extends Controller
             });
         }
 
-        $wargas = $query->orderBy('nama_lengkap')->get();
+        $query->orderBy('nama_lengkap');
+
+        // Parameter per_page validation & clamping [1, 100]
+        $perPage = (int) $request->query('per_page', 10);
+        $perPage = max(1, min($perPage, 100));
+
+        if ($request->boolean('all')) {
+            $wargas = $query->limit(200)->get();
+            return response()->json([
+                'success' => true,
+                'data' => $wargas,
+                'pagination' => [
+                    'current_page' => 1,
+                    'per_page' => $wargas->count(),
+                    'total' => $wargas->count(),
+                    'last_page' => 1,
+                    'has_more' => false,
+                ],
+            ]);
+        }
+
+        $paginator = $query->paginate($perPage);
 
         return response()->json([
             'success' => true,
-            'data' => $wargas,
+            'data' => $paginator->items(),
+            'pagination' => [
+                'current_page' => $paginator->currentPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+                'last_page' => $paginator->lastPage(),
+                'has_more' => $paginator->hasMorePages(),
+            ],
         ]);
     }
 

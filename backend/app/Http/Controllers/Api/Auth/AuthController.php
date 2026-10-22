@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\WargaProfile;
+use App\Services\FileUploadSecurityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -40,7 +41,7 @@ class AuthController extends Controller
 
         $searchTerms = array_unique(array_filter([$login, $aliases[strtolower($login)] ?? null]));
         
-        $user = User::with(['role', 'wargaProfile.rt.rw.dusun', 'wargaProfile.kartuKeluarga'])
+        $user = User::with(['role', 'desa', 'wargaProfile.rt.rw.dusun', 'wargaProfile.kartuKeluarga'])
             ->where(function ($q) use ($searchTerms) {
                 $q->whereIn('email', $searchTerms)
                   ->orWhereIn('username', $searchTerms)
@@ -87,6 +88,7 @@ class AuthController extends Controller
                     $wargaRole = Role::where('slug', 'warga')->first();
                     $user = User::create([
                         'role_id' => $wargaRole ? $wargaRole->id : 9,
+                        'desa_id' => $wargaProfile->desa_id ?? 1,
                         'name' => $wargaProfile->nama_lengkap,
                         'username' => $wargaProfile->nik,
                         'email' => "{$wargaProfile->nik}@warga.desa.id",
@@ -94,7 +96,7 @@ class AuthController extends Controller
                         'is_active' => true,
                     ]);
                     $wargaProfile->update(['user_id' => $user->id]);
-                    $user->load(['role', 'wargaProfile.rt.rw.dusun', 'wargaProfile.kartuKeluarga']);
+                    $user->load(['role', 'desa', 'wargaProfile.rt.rw.dusun', 'wargaProfile.kartuKeluarga']);
                 }
             }
         }
@@ -119,7 +121,7 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Login berhasil',
             'token' => $token,
-            'user' => $user,
+            'user' => $user->loadMissing('desa'),
         ]);
     }
 
@@ -127,13 +129,13 @@ class AuthController extends Controller
     {
         return response()->json([
             'success' => false,
-            'message' => 'Pendaftaran warga mandiri tidak dibuka. Akun warga didaftarkan langsung oleh Petugas Kantor Desa Doko. Silakan login langsung menggunakan NIK dan password tanggal lahir Anda.',
+            'message' => 'Pendaftaran warga mandiri tidak dibuka. Akun warga didaftarkan langsung oleh Petugas Kantor Desa. Silakan login langsung menggunakan NIK dan password tanggal lahir Anda.',
         ], 403);
     }
 
     public function me(Request $request): JsonResponse
     {
-        $user = User::with(['role', 'wargaProfile.rt.rw.dusun', 'wargaProfile.kartuKeluarga'])
+        $user = User::with(['role', 'desa', 'wargaProfile.rt.rw.dusun', 'wargaProfile.kartuKeluarga'])
             ->find($request->user()->id);
 
         return response()->json([
@@ -187,27 +189,22 @@ class AuthController extends Controller
 
             if ($request->has('avatar')) {
                 $avatarInput = $request->avatar;
-                if ($avatarInput && str_starts_with($avatarInput, 'data:image')) {
-                    try {
-                        if (preg_match('/^data:image\/(\w+);base64,/', $avatarInput, $type)) {
-                            $imageData = substr($avatarInput, strpos($avatarInput, ',') + 1);
-                            $extension = strtolower($type[1]);
-                            if (!in_array($extension, ['jpg', 'jpeg', 'gif', 'png', 'webp'])) {
-                                $extension = 'png';
-                            }
-                            $decoded = base64_decode($imageData);
-                            if ($decoded !== false) {
-                                $avatarDir = public_path('uploads/avatars');
-                                if (!file_exists($avatarDir)) {
-                                    mkdir($avatarDir, 0755, true);
-                                }
-                                $fileName = 'avatar_' . $user->id . '_' . time() . '.' . $extension;
-                                file_put_contents($avatarDir . DIRECTORY_SEPARATOR . $fileName, $decoded);
-                                $userData['avatar'] = url('uploads/avatars/' . $fileName);
-                            }
-                        }
-                    } catch (\Exception $e) {
-                        $userData['avatar'] = null;
+                if ($avatarInput && (str_starts_with($avatarInput, 'data:') || !filter_var($avatarInput, FILTER_VALIDATE_URL))) {
+                    $result = FileUploadSecurityService::processBase64Upload(
+                        $avatarInput,
+                        ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                        FileUploadSecurityService::MAX_AVATAR_SIZE,
+                        'avatars',
+                        'avatar_' . $user->id
+                    );
+                    if (!$result['success'] && !str_starts_with($avatarInput, 'http')) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Upload avatar gagal: ' . $result['message'],
+                        ], 422);
+                    }
+                    if ($result['success']) {
+                        $userData['avatar'] = $result['url'];
                     }
                 } elseif (empty($avatarInput)) {
                     $userData['avatar'] = null;
@@ -231,27 +228,22 @@ class AuthController extends Controller
                 }
                 if ($request->has('foto_ktp')) {
                     $ktpInput = $request->foto_ktp;
-                    if ($ktpInput && str_starts_with($ktpInput, 'data:image')) {
-                        try {
-                            if (preg_match('/^data:image\/(\w+);base64,/', $ktpInput, $type)) {
-                                $imageData = substr($ktpInput, strpos($ktpInput, ',') + 1);
-                                $extension = strtolower($type[1]);
-                                if (!in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-                                    $extension = 'jpg';
-                                }
-                                $decoded = base64_decode($imageData);
-                                if ($decoded !== false) {
-                                    $ktpDir = public_path('uploads/ktp');
-                                    if (!file_exists($ktpDir)) {
-                                        mkdir($ktpDir, 0755, true);
-                                    }
-                                    $fileName = 'ktp_' . $user->id . '_' . time() . '.' . $extension;
-                                    file_put_contents($ktpDir . DIRECTORY_SEPARATOR . $fileName, $decoded);
-                                    $profileData['foto_ktp'] = url('uploads/ktp/' . $fileName);
-                                }
-                            }
-                        } catch (\Exception $e) {
-                            //
+                    if ($ktpInput && (str_starts_with($ktpInput, 'data:') || !filter_var($ktpInput, FILTER_VALIDATE_URL))) {
+                        $result = FileUploadSecurityService::processBase64Upload(
+                            $ktpInput,
+                            ['image/jpeg', 'image/png', 'image/webp'],
+                            FileUploadSecurityService::MAX_DOCUMENT_SIZE,
+                            'ktp',
+                            'ktp_' . $user->id
+                        );
+                        if (!$result['success'] && !str_starts_with($ktpInput, 'http')) {
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'Upload foto KTP gagal: ' . $result['message'],
+                            ], 422);
+                        }
+                        if ($result['success']) {
+                            $profileData['foto_ktp'] = $result['url'];
                         }
                     } elseif (empty($ktpInput)) {
                         $profileData['foto_ktp'] = null;

@@ -7,7 +7,6 @@ import {
   Eye, 
   ChevronRight, 
   ChevronDown,
-  Sparkles, 
   BellRing, 
   ShieldCheck, 
   CheckCircle2, 
@@ -29,6 +28,7 @@ import {
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { Berita, Pengumuman } from '@/shared/types';
+import { Pagination } from '@/shared/components/Pagination';
 
 const defaultBeritas: Berita[] = [
   {
@@ -37,7 +37,7 @@ const defaultBeritas: Berita[] = [
     slug: 'desa-doko-luncurkan-sistem-pelayanan-publik-digital-sides',
     kategori: 'Pemerintahan',
     ringkasan: 'Sebagai upaya meningkatkan efisiensi dan transparansi, Pemerintah Desa Doko resmi mengadopsi platform digital desa terintegrasi dari tingkat RT hingga Kantor Desa.',
-    konten: 'Pemerintah Desa Doko, Kecamatan Ngasem, Kabupaten Kediri melakukan inovasi pelayanan birokrasi masyarakat berbasis digital. Melalui platform SIDes (Sistem Informasi Desa Terpadu), warga tidak lagi perlu bolak-balik fisik membawa berkas kertas. Seluruh pengajuan surat pengantar dari RT, RW, hingga penerbitan stempel QR resmi Sekdes dapat diproses secara online dan sah diakui oleh dinas serta kepolisian.',
+    konten: 'Pemerintah Desa Doko, Kecamatan Ngasem, Kabupaten Kediri melakukan inovasi pelayanan birokrasi masyarakat berbasis digital. Melalui platform SiDesKu, warga tidak lagi perlu membawa berkas fisik. Seluruh permohonan surat dari persetujuan RT hingga legalisasi Kepala Desa diproses secara online dan sah diakui.',
     view_count: 342,
     is_published: true,
     published_at: '2026-08-15T08:00:00.000000Z',
@@ -109,7 +109,7 @@ const categoryConfigs = [
 ];
 
 const sortConfigs = [
-  { id: 'terbaru', label: 'Terbaru (Terkini)', desc: 'Publikasi warta paling anyar', icon: Sparkles, color: 'text-emerald-600' },
+  { id: 'terbaru', label: 'Terbaru (Terkini)', desc: 'Publikasi warta paling anyar', icon: ArrowUpDown, color: 'text-emerald-600' },
   { id: 'terpopuler', label: 'Paling Banyak Dibaca', desc: 'Artikel paling diminati warga', icon: TrendingUp, color: 'text-amber-600' },
   { id: 'terlama', label: 'Terlama (Arsip)', desc: 'Arsip publikasi terdahulu', icon: Clock, color: 'text-slate-500' },
 ];
@@ -122,6 +122,11 @@ export const BeritaPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBerita, setSelectedBerita] = useState<Berita | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedKategori, searchQuery, sortBy]);
 
   // Custom Dropdown Popover States & Click Outside
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
@@ -190,23 +195,44 @@ export const BeritaPage: React.FC = () => {
     fetchBerita();
   }, []);
 
-  const filteredBeritas = beritas
+  const formatBeritaDate = (dateStr?: string | null): string => {
+    if (!dateStr) return 'Terkini';
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return 'Terkini';
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+    } catch {
+      return 'Terkini';
+    }
+  };
+
+  const filteredBeritas = (beritas || [])
     .filter((b) => {
-      const matchCat = selectedKategori === 'Semua' || b.kategori?.toLowerCase() === selectedKategori.toLowerCase();
-      const matchSearch = b.judul.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (b.ringkasan || b.konten || '').toLowerCase().includes(searchQuery.toLowerCase());
+      if (!b) return false;
+      const cat = b.kategori || 'Pemerintahan';
+      const judul = b.judul || '';
+      const ringkasan = b.ringkasan || '';
+      const konten = b.konten || '';
+      const matchCat = selectedKategori === 'Semua' || cat.toLowerCase() === selectedKategori.toLowerCase();
+      const matchSearch = judul.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          (ringkasan || konten).toLowerCase().includes(searchQuery.toLowerCase());
       return matchCat && matchSearch;
     })
     .sort((a, b) => {
       if (sortBy === 'terpopuler') {
-        return (b.view_count || 0) - (a.view_count || 0);
+        return (b?.view_count || 0) - (a?.view_count || 0);
       }
+      const timeA = a?.published_at ? new Date(a.published_at).getTime() : 0;
+      const timeB = b?.published_at ? new Date(b.published_at).getTime() : 0;
       if (sortBy === 'terlama') {
-        return new Date(a.published_at).getTime() - new Date(b.published_at).getTime();
+        return (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB);
       }
       // default: terbaru
-      return new Date(b.published_at).getTime() - new Date(a.published_at).getTime();
+      return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
     });
+
+  const pageSize = 6;
+  const paginatedBeritas = filteredBeritas.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800">
@@ -227,13 +253,8 @@ export const BeritaPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
-          {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
-          <div className="lg:col-span-7 space-y-4 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs">
-              <Newspaper className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Kanal Resmi Jurnalisme & Warta Desa</span>
-            </div>
-
+          {/* Left Column (60% Fibonacci): Title and Description */}
+          <div className="lg:col-span-7 space-y-3 text-left">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
               Warta &{' '}
               <span className="relative whitespace-nowrap text-emerald-700 inline-block">
@@ -245,19 +266,8 @@ export const BeritaPage: React.FC = () => {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
-              Kanal berita resmi, agenda pembangunan desa, laporan pertanggungjawaban, serta pengumuman penting bagi seluruh masyarakat di Kabupaten Kediri.
+              Kabar terkini, agenda pembangunan, dan pengumuman resmi Desa Doko.
             </p>
-
-            <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-500 font-medium">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <strong className="text-slate-800">Liputan Terkini</strong> desa & RT/RW
-              </span>
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <strong className="text-slate-800">Berita Terverifikasi</strong> Pemdes
-              </span>
-            </div>
           </div>
 
           {/* Right Column (40% Fibonacci): Featured News Card Preview */}
@@ -437,9 +447,15 @@ export const BeritaPage: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center gap-2 min-w-0">
-                  <activeSort.icon className={`w-3.5 h-3.5 flex-shrink-0 ${activeSort.color}`} />
+                  {activeSort?.icon ? (
+                    React.createElement(activeSort.icon as any, {
+                      className: `w-3.5 h-3.5 flex-shrink-0 ${activeSort.color}`
+                    })
+                  ) : (
+                    <ArrowUpDown className={`w-3.5 h-3.5 flex-shrink-0 ${activeSort?.color || 'text-emerald-600'}`} />
+                  )}
                   <span className="text-xs font-bold truncate">
-                    {activeSort.label}
+                    {activeSort?.label}
                   </span>
                 </div>
                 <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 flex-shrink-0 ml-1 ${isSortOpen ? 'rotate-180 text-emerald-600' : ''}`} />
@@ -454,7 +470,7 @@ export const BeritaPage: React.FC = () => {
                   <div className="space-y-1">
                     {sortConfigs.map((item) => {
                       const isSelected = sortBy === item.id;
-                      const Icon = item.icon;
+                      const Icon = item.icon as any;
                       return (
                         <button
                           key={item.id}
@@ -471,7 +487,11 @@ export const BeritaPage: React.FC = () => {
                         >
                           <div className="flex items-start gap-2.5">
                             <div className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center mt-0.5 flex-shrink-0">
-                              <Icon className={`w-3.5 h-3.5 ${item.color}`} />
+                              {Icon ? (
+                                <Icon className={`w-3.5 h-3.5 ${item.color}`} />
+                              ) : (
+                                <ArrowUpDown className={`w-3.5 h-3.5 ${item.color}`} />
+                              )}
                             </div>
                             <div>
                               <div className={`text-xs ${isSelected ? 'font-black text-emerald-950' : 'font-bold text-slate-800'}`}>
@@ -556,7 +576,6 @@ export const BeritaPage: React.FC = () => {
           {/* Active Filter Results Counter & Single Mode Icon Toggle */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3 text-xs text-slate-500 font-medium">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-emerald-600" />
               <span>
                 Menampilkan <strong className="text-slate-900 font-black">{filteredBeritas.length}</strong> warta{' '}
                 {selectedKategori !== 'Semua' && (
@@ -611,7 +630,7 @@ export const BeritaPage: React.FC = () => {
           {viewMode === 'list' ? (
             filteredBeritas.length > 0 ? (
               <div className="max-w-4xl mx-auto divide-y divide-slate-100">
-                {filteredBeritas.map((b, idx) => {
+                {paginatedBeritas.map((b, idx) => {
                   const thumb = idx % 3 === 0 ? '/images/event.jpg' : idx % 3 === 1 ? '/images/kursus.jpg' : '/images/landing/about_img.webp';
                   const relativeTimes = ['12 menit lalu', '50 menit lalu', '53 menit lalu', '2 jam lalu', '5 jam lalu', '1 hari lalu'];
                   const relTime = relativeTimes[idx % relativeTimes.length];
@@ -669,7 +688,7 @@ export const BeritaPage: React.FC = () => {
                               {b.kategori}
                             </span>
                             <span>•</span>
-                            <span>{new Date(b.published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                            <span>{formatBeritaDate(b.published_at)}</span>
                           </div>
                           <span className="hidden sm:flex items-center gap-1 text-slate-400">
                             <Eye className="w-3.5 h-3.5 text-slate-400" />
@@ -693,8 +712,8 @@ export const BeritaPage: React.FC = () => {
           ) : (
             /* Grid View */
             <>
-              {/* Featured Headline Article (Only when on 'Semua' without search query) */}
-              {selectedKategori === 'Semua' && !searchQuery && filteredBeritas.length > 0 && (
+              {/* Featured Headline Article (Only when on 'Semua' without search query and on first page) */}
+              {selectedKategori === 'Semua' && !searchQuery && filteredBeritas.length > 0 && currentPage === 1 && (
                 <div className="bg-slate-50/80 rounded-3xl overflow-hidden border border-slate-200/80 shadow-md hover:border-emerald-300 transition-all grid grid-cols-1 lg:grid-cols-12 gap-0 group">
                   <div className="lg:col-span-7 relative h-64 sm:h-80 lg:h-full overflow-hidden bg-slate-900">
                     <img
@@ -703,7 +722,7 @@ export const BeritaPage: React.FC = () => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute top-4 left-4 bg-emerald-600 text-white text-[11px] font-black uppercase px-3.5 py-1 rounded-full shadow-md">
-                      ⭐ Berita Utama Terkini
+                      Berita Utama Terkini
                     </div>
                   </div>
 
@@ -714,7 +733,7 @@ export const BeritaPage: React.FC = () => {
                           {filteredBeritas[0].kategori}
                         </span>
                         <span>•</span>
-                        <span>{new Date(filteredBeritas[0].published_at).toLocaleDateString('id-ID', { dateStyle: 'long' })}</span>
+                        <span>{formatBeritaDate(filteredBeritas[0].published_at)}</span>
                       </div>
 
                       <h2 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors leading-tight">
@@ -731,7 +750,7 @@ export const BeritaPage: React.FC = () => {
                         onClick={() => setSelectedBerita(filteredBeritas[0])}
                         className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-emerald-700 text-white font-extrabold text-xs transition-all shadow-xs press-down flex items-center gap-2 cursor-pointer"
                       >
-                        <span>Baca Artikel Utama</span>
+                        <span>Baca selengkapnya</span>
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -742,7 +761,7 @@ export const BeritaPage: React.FC = () => {
               {/* Berita Cards Grid */}
               {filteredBeritas.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredBeritas.map((b, idx) => {
+                  {paginatedBeritas.map((b, idx) => {
                     const thumb = idx % 3 === 0 ? '/images/event.jpg' : idx % 3 === 1 ? '/images/kursus.jpg' : '/images/landing/about_img.webp';
                     return (
                       <div key={b.id} className="bg-slate-50/60 hover:bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:border-emerald-300 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
@@ -761,7 +780,7 @@ export const BeritaPage: React.FC = () => {
                           <div className="flex items-center justify-between text-[11px] text-slate-400">
                             <span className="flex items-center gap-1">
                               <Calendar className="w-3.5 h-3.5 text-emerald-600" />
-                              {new Date(b.published_at).toLocaleDateString('id-ID', { dateStyle: 'medium' })}
+                              {formatBeritaDate(b.published_at)}
                             </span>
                             <span className="flex items-center gap-1">
                               <Eye className="w-3.5 h-3.5 text-slate-400" />
@@ -782,7 +801,7 @@ export const BeritaPage: React.FC = () => {
                             onClick={() => setSelectedBerita(b)}
                             className="w-full py-2.5 rounded-2xl bg-white hover:bg-emerald-50 text-emerald-800 text-xs font-black transition-colors flex items-center justify-center gap-1 border border-slate-200/80 cursor-pointer shadow-2xs"
                           >
-                            Baca Berita Lengkap <ChevronRight className="w-3.5 h-3.5" />
+                            Baca selengkapnya <ChevronRight className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </div>
@@ -790,11 +809,11 @@ export const BeritaPage: React.FC = () => {
                   })}
                 </div>
               ) : (
-                <div className="bg-slate-50 rounded-3xl border border-slate-200 p-12 text-center text-xs text-slate-400 space-y-3 max-w-md mx-auto">
+                <div className="bg-slate-50 rounded-3xl border border-slate-200 p-10 text-center text-xs text-slate-400 space-y-3 max-w-md mx-auto">
                   <Newspaper className="w-10 h-10 mx-auto text-slate-300" />
-                  <div className="font-bold text-sm text-slate-700">Tidak ada warta yang sesuai</div>
+                  <div className="font-bold text-sm text-slate-700">Tidak ada warta</div>
                   <p className="text-xs text-slate-500">
-                    Tidak ditemukan berita dengan kategori atau kata kunci tersebut. Silakan ubah filter atau tekan tombol reset.
+                    Tidak ditemukan berita untuk filter yang dipilih.
                   </p>
                   <button
                     type="button"
@@ -803,15 +822,24 @@ export const BeritaPage: React.FC = () => {
                       setSearchQuery('');
                       setSortBy('terbaru');
                     }}
-                    className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-xs hover:bg-emerald-700 transition-colors"
+                    className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-xs hover:bg-emerald-700 transition-colors cursor-pointer"
                   >
-                    Tampilkan Semua Warta
+                    Reset filter
                   </button>
                 </div>
               )}
             </>
           )}
 
+          {/* Pagination */}
+          <Pagination
+            currentPage={currentPage}
+            totalItems={filteredBeritas.length}
+            pageSize={pageSize}
+            onPageChange={setCurrentPage}
+            itemLabel="warta desa"
+            className="pt-6"
+          />
         </div>
       </section>
 
@@ -877,9 +905,9 @@ export const BeritaPage: React.FC = () => {
                       Agustus 2026
                     </span>
                   </div>
-                  <h4 className="font-extrabold text-base text-white">Sosialisasi Pelayanan Digital Mandiri SIDes</h4>
+                  <h4 className="font-extrabold text-base text-white">Sosialisasi Pelayanan Digital Mandiri SiDesKu</h4>
                   <p className="text-xs text-emerald-100/85 leading-relaxed">
-                    Bimtek verifikasi berkas surat online bagi seluruh ketua RT dan RW di Balai Pertemuan Desa Doko guna percepatan SLA pelayanan warga.
+                    Bimtek verifikasi permohonan surat online bagi seluruh ketua RT di Balai Desa Doko guna percepatan pelayanan warga.
                   </p>
                 </div>
               </>
@@ -919,9 +947,9 @@ export const BeritaPage: React.FC = () => {
               </h2>
 
               <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 border-b border-slate-100 pb-3">
-                <span>📅 {new Date(selectedBerita.published_at).toLocaleDateString('id-ID', { dateStyle: 'long' })}</span>
-                <span>👁 {selectedBerita.view_count || 120} pembaca</span>
-                <span>✍ Humas Pemdes Doko</span>
+                <span>{formatBeritaDate(selectedBerita.published_at)}</span>
+                <span>{selectedBerita.view_count || 120} pembaca</span>
+                <span>Humas Pemdes Doko</span>
               </div>
 
               <div className="h-64 rounded-2xl overflow-hidden bg-slate-100">
@@ -942,7 +970,7 @@ export const BeritaPage: React.FC = () => {
                 onClick={() => setSelectedBerita(null)}
                 className="px-6 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs transition-colors cursor-pointer shadow-xs"
               >
-                Tutup Berita
+                Tutup
               </button>
             </div>
           </div>

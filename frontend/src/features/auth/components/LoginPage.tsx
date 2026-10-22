@@ -14,12 +14,14 @@ import {
   Phone,
   CreditCard,
   Building2,
-  Sparkles,
   Star,
-  ArrowRight
+  ArrowRight,
+  ArrowLeft,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { BrandLogo } from '@/shared/components/BrandLogo';
+import { GuestSupportChatModal } from '@/features/chat/components/GuestSupportChatModal';
 
 interface AuthPageProps {
   initialMode?: 'login' | 'register';
@@ -34,6 +36,7 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
   const [loginInput, setLoginInput] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSupportChat, setShowSupportChat] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -51,7 +54,43 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
     try {
       const success = await login(loginInput.trim(), loginPassword);
       if (success) {
-        navigate('/dashboard');
+        const searchParams = new URLSearchParams(location.search);
+        const rawReturnUrl = searchParams.get('returnUrl');
+        let targetUrl = '/dashboard';
+
+        if (rawReturnUrl && typeof rawReturnUrl === 'string') {
+          const trimmed = rawReturnUrl.trim();
+          let isSafe =
+            trimmed.startsWith('/') &&
+            !trimmed.startsWith('//') &&
+            !trimmed.startsWith('/\\') &&
+            !trimmed.includes('\\') &&
+            !trimmed.includes('://') &&
+            !trimmed.includes('\0');
+
+          if (isSafe) {
+            try {
+              const decoded = decodeURIComponent(trimmed);
+              if (
+                !decoded.startsWith('/') ||
+                decoded.startsWith('//') ||
+                decoded.startsWith('/\\') ||
+                decoded.includes('\\') ||
+                decoded.includes('://')
+              ) {
+                isSafe = false;
+              }
+            } catch {
+              isSafe = false;
+            }
+          }
+
+          if (isSafe) {
+            targetUrl = trimmed;
+          }
+        }
+
+        navigate(targetUrl, { replace: true });
       } else {
         setError('Kredensial tidak cocok. Periksa kembali NIK dan password (tanggal lahir) Anda.');
       }
@@ -65,10 +104,26 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
     }
   };
 
-  const handleQuickFill = (u: string) => {
+  const handleQuickLogin = async (u: string, p: string) => {
     setLoginInput(u);
-    setLoginPassword('password123');
+    setLoginPassword(p);
     setError('');
+    setLoading(true);
+    try {
+      const success = await login(u, p);
+      if (success) {
+        navigate('/dashboard', { replace: true });
+      } else {
+        setError('Login gagal untuk akun demo.');
+      }
+    } catch (err: any) {
+      const backendMsg = err.response?.data?.errors?.login?.[0] ||
+        err.response?.data?.message ||
+        'Gagal login. Pastikan server backend terhubung atau kredensial benar.';
+      setError(backendMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -166,7 +221,8 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
             to="/"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-emerald-800 bg-white hover:bg-emerald-50 border border-slate-200/80 transition-all shadow-2xs whitespace-nowrap outline-none"
           >
-            <span>← Kembali ke Beranda</span>
+            <ArrowLeft size={13} />
+            <span>Kembali ke Beranda</span>
           </Link>
         </div>
       </header>
@@ -209,26 +265,19 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
               
               {/* Header Title & Information */}
               <div className="space-y-1 border-b border-slate-100 pb-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  <span className="text-[10px] font-black uppercase text-emerald-800 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                    Sistem Pelayanan Terpadu
-                  </span>
-                </div>
-                <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                  Masuk Portal Desa
-                </h2>
-                <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
-                  Masuk untuk mengajukan surat, memantau berkas, atau mengakses panel tata kelola desa.
+                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                  Masuk ke Akun
+                </h1>
+                <p className="text-xs text-slate-500">
+                  Gunakan NIK atau username terdaftar Anda.
                 </p>
               </div>
 
               {/* Informative notice if came from /register */}
               {location.pathname === '/register' && (
                 <div className="p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium animate-fade-in flex items-start gap-2">
-                  <div className="w-4 h-4 rounded-full bg-amber-200 text-amber-800 flex items-center justify-center text-[10px] font-black shrink-0 mt-0.5">ℹ️</div>
                   <div className="text-[11px] leading-snug">
-                    <strong>Pendaftaran Akun Warga Terpusat:</strong> Seluruh warga Desa Doko didaftarkan langsung oleh Kantor Desa di Buku Register Kependudukan. Anda tidak perlu mendaftar mandiri—silakan langsung login di bawah ini.
+                    <strong>Pendaftaran Warga Terpusat:</strong> Akun warga didaftarkan langsung oleh kantor desa. Silakan masuk dengan NIK dan tanggal lahir.
                   </div>
                 </div>
               )}
@@ -245,8 +294,8 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
               <form onSubmit={handleLoginSubmit} className="space-y-3 pt-1">
                 {/* Email / Username / NIK Pill */}
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block pl-1">
-                    NIK KTP (16 Digit) / Username Petugas:
+                  <label className="text-[11px] font-bold text-slate-700 block pl-1">
+                    NIK atau Username
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -258,7 +307,7 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                       type="text"
                       value={loginInput}
                       onChange={(e) => setLoginInput(e.target.value)}
-                      placeholder="Contoh: 3506041505840001 atau kades"
+                      placeholder="NIK 16 digit atau username"
                       className="w-full pl-11 pr-4 py-2.5 sm:py-3 bg-slate-50/90 rounded-full border border-slate-200 text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-inner font-mono"
                       required
                     />
@@ -267,8 +316,8 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
 
                 {/* Password / Tanggal Lahir Pill */}
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block pl-1">
-                    Password (Tanggal Lahir untuk Warga):
+                  <label className="text-[11px] font-bold text-slate-700 block pl-1">
+                    Password
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -280,7 +329,7 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                       type={showLoginPassword ? 'text' : 'password'}
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
-                      placeholder="Contoh: 15051984 atau ••••••••"
+                      placeholder="Password atau tanggal lahir (DDMMYYYY)"
                       className="w-full pl-11 pr-11 py-2.5 sm:py-3 bg-slate-50/90 rounded-full border border-slate-200 text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-inner font-mono"
                       required
                     />
@@ -296,17 +345,28 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
 
                 {/* Forgot Password & Submit Button Row */}
                 <div className="flex items-center justify-between pt-1">
-                  <Link
-                    to="/lacak"
-                    className="text-[11px] font-medium text-slate-400 hover:text-emerald-700 transition-colors"
-                  >
-                    🔍 Lacak Berkas Tanpa Login
-                  </Link>
+                  <div className="flex items-center gap-3">
+                    <Link
+                      to="/lacak"
+                      className="text-[11px] font-medium text-slate-400 hover:text-emerald-700 transition-colors"
+                    >
+                      Lacak berkas
+                    </Link>
+                    <span className="text-slate-300">•</span>
+                    <button
+                      type="button"
+                      onClick={() => setShowSupportChat(true)}
+                      className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Bantuan / Lupa Akun</span>
+                    </button>
+                  </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="px-7 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs shadow-md shadow-emerald-600/25 transition-all press-down flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed hover-glow"
+                    className="px-7 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all press-down flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed hover-glow"
                   >
                     {loading ? (
                       <>
@@ -315,47 +375,66 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                       </>
                     ) : (
                       <>
-                        <span>Masuk Portal</span>
+                        <span>Masuk</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </>
                     )}
                   </button>
                 </div>
 
+
                 {/* Quick 1-Click Demo Accounts Switcher */}
-                <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                  <div className="flex items-center justify-between text-[9px] font-black uppercase text-slate-400 tracking-wider">
-                    <span>Akses Cepat Pengujian:</span>
-                    <span className="text-emerald-700 font-bold">1-Klik Otomatis</span>
+                <div className="pt-2 border-t border-slate-100 space-y-2">                    
+                  {/* Petugas Desa */}
+                  <div className="space-y-1">
+                    <p className="text-[9px] font-semibold text-slate-400 pl-0.5">Petugas Desa</p>
+                    <div className="flex flex-wrap gap-1">
+                      {[
+                        { label: 'Warga', user: '3506041505840001', pass: '15051984' },
+                        { label: 'Ketua RT', user: 'rt01', pass: 'password123' },
+                        { label: 'Ketua RW', user: 'rw01', pass: 'password123' },
+                        { label: 'Sekdes', user: 'sekdes', pass: 'password123' },
+                        { label: 'Bendahara', user: 'bendahara_desa', pass: 'password123' },
+                        { label: 'Kades', user: 'kades', pass: 'password123' },
+                      ].map((acc) => (
+                        <button
+                          key={acc.user}
+                          type="button"
+                          disabled={loading}
+                          onClick={() => handleQuickLogin(acc.user, acc.pass)}
+                          className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] border border-slate-200/70 transition-all cursor-pointer press-down shadow-2xs disabled:opacity-50"
+                        >
+                          {acc.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-1">
-                    {[
-                      { label: 'Warga (NIK)', user: '3506041505840001', pass: '15051984' },
-                      { label: 'Ketua RT', user: 'rt01', pass: 'password123' },
-                      { label: 'Ketua RW', user: 'rw01', pass: 'password123' },
-                      { label: 'Sekdes', user: 'sekdes', pass: 'password123' },
-                      { label: 'Bendahara', user: 'bendahara_desa', pass: 'password123' },
-                      { label: 'Kepala Desa', user: 'kades', pass: 'password123' },
-                    ].map((acc) => (
-                      <button
-                        key={acc.user}
-                        type="button"
-                        onClick={() => {
-                          setLoginInput(acc.user);
-                          setLoginPassword(acc.pass);
-                          setError('');
-                        }}
-                        className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 font-bold text-[10px] border border-slate-200/70 transition-all cursor-pointer press-down shadow-2xs"
-                      >
-                        {acc.label}
-                      </button>
-                    ))}
+                  {/* Admin Platform */}
+                  <div className="space-y-1">
+                    <p className="text-[9px] font-semibold text-slate-400 pl-0.5">Admin</p>
+                    <div className="flex flex-wrap gap-1">
+                      {[
+                        { label: 'Admin Desa', user: 'admin', pass: 'password123'},
+                        { label: 'Super Admin', user: 'superadmin', pass: 'password123'},
+                      ].map((acc) => (
+                        <button
+                          key={acc.user}
+                          type="button"
+                          disabled={loading}
+                          onClick={() => handleQuickLogin(acc.user, acc.pass)}
+                          className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] border border-slate-200/70 transition-all cursor-pointer press-down shadow-2xs disabled:opacity-50"
+                        >
+                          {acc.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
+
                 <div className="text-[10px] text-center text-slate-400 pt-1">
-                  Belum terdaftar? Pendaftaran kependudukan dilayani terpusat oleh Petugas Balai Desa Doko.
+                  Belum memiliki akun? Hubungi kantor desa.
                 </div>
               </form>
 
@@ -455,6 +534,12 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
           <Link to="/lacak" className="hover:text-emerald-700">Bantuan</Link>
         </div>
       </footer>
+      
+      {/* Modal Bantuan Tamu (Lupa Akun / Bantuan Desa) */}
+      <GuestSupportChatModal
+        isOpen={showSupportChat}
+        onClose={() => setShowSupportChat(false)}
+      />
 
     </div>
   );

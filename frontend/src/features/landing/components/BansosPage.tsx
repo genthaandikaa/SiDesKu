@@ -14,7 +14,6 @@ import {
   ArrowRight,
   Download,
   Building2,
-  Sparkles
 } from 'lucide-react';
 
 export const BansosPage: React.FC = () => {
@@ -249,14 +248,11 @@ export const BansosPage: React.FC = () => {
       <div className="relative z-30 max-w-4xl mx-auto px-4 sm:px-6 w-full -mb-[48px] sm:-mb-[54px]">
         <div className="bg-white/95 backdrop-blur-xl rounded-[2rem] border border-slate-200/90 p-6 sm:p-7 space-y-4 shadow-xl shadow-slate-900/10">
           <div className="text-center space-y-1">
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 uppercase tracking-widest">
-              <Search className="w-3.5 h-3.5" /> Pengecekan Mandiri
-            </div>
             <h2 className="text-xl font-black text-slate-900">
-              Cek Status Kepesertaan Bansos Anda
+              Cek Kepesertaan Bansos
             </h2>
             <p className="text-xs text-slate-500">
-              Masukkan 16 digit Nomor Induk Kependudukan (NIK) Kepala Keluarga atau Pemohon
+              Masukkan 16 digit NIK kepala keluarga atau pemohon.
             </p>
           </div>
 
@@ -265,24 +261,24 @@ export const BansosPage: React.FC = () => {
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder="Contoh: 3506064303760001"
+                placeholder="Masukkan 16 digit NIK"
                 value={nikSearch}
                 onChange={(e) => setNikSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all font-mono text-slate-800"
+                className="w-full pl-10 pr-4 py-3 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all font-mono text-slate-800"
               />
             </div>
             <button
               type="submit"
               disabled={isSearching}
-              className="px-7 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all press-down disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+              className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all press-down disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
             >
-              {isSearching ? 'Memeriksa...' : 'Cek Status NIK'}
+              {isSearching ? 'Memeriksa...' : 'Cek NIK'}
             </button>
           </form>
 
           {/* Quick NIK helper */}
           <div className="text-center text-xs text-slate-500 space-y-2 pt-1 border-t border-slate-100">
-            <div>Pilih Contoh NIK Penerima Bantuan Aktif:</div>
+            <div>Contoh NIK:</div>
             <div className="flex flex-wrap items-center justify-center gap-2">
               <button
                 type="button"
@@ -291,7 +287,7 @@ export const BansosPage: React.FC = () => {
                 }}
                 className="px-3.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-mono text-[11px] font-bold transition-all cursor-pointer shadow-2xs flex items-center gap-1.5"
               >
-                <span>🌾 3506064303760001</span>
+                <span>3506064303760001</span>
                 <span className="text-emerald-700 font-semibold">(Ibu Yati Handayani - Beras Bulog 30 Kg)</span>
               </button>
               <button
@@ -301,7 +297,7 @@ export const BansosPage: React.FC = () => {
                 }}
                 className="px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 font-mono text-[11px] font-medium transition-all cursor-pointer shadow-2xs flex items-center gap-1.5"
               >
-                <span>🏛️ 3506041505840001</span>
+                <span>3506041505840001</span>
                 <span className="text-slate-600">(Bpk. Bambang Utomo - PKH)</span>
               </button>
             </div>
@@ -444,7 +440,7 @@ export const BansosPage: React.FC = () => {
                         className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-black text-white text-xs font-bold transition-all shadow-sm flex items-center gap-2 press-down cursor-pointer"
                       >
                         <Printer className="w-4 h-4" />
-                        <span>Cetak / Unduh Undangan (PDF)</span>
+                        <span>Cetak / Unduh Undangan</span>
                       </button>
                     </div>
                   </div>
@@ -588,7 +584,7 @@ export const BansosPage: React.FC = () => {
 
                 <div className="p-5 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 space-y-2 shadow-xl">
                   <div className="font-extrabold text-white flex items-center gap-1.5">
-                    <span>👵 2. Jalur Teks Chat & KTP (Warga Sepuh)</span>
+                    <span>2. Jalur Teks Chat & KTP (Warga Sepuh)</span>
                   </div>
                   <p className="text-emerald-100/80 text-[11px] leading-relaxed">
                     Bagi warga lansia/gaptek, cukup perlihatkan isi teks chat berisi Nomor Antrean & KTP fisik asli ke petugas.
@@ -635,25 +631,25 @@ export const BansosPage: React.FC = () => {
 
                 <div className="bg-white rounded-2xl rounded-tl-xs p-4 text-slate-800 shadow-sm border border-slate-200/80 space-y-2.5">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-1.5 text-[#008069] font-black text-xs">
-                    <span>🏛️ PEMERINTAH DESA & PERUM BULOG</span>
+                    <span>PEMERINTAH DESA & PERUM BULOG</span>
                     <span className="text-[10px] text-slate-400 font-medium font-mono">08.02</span>
                   </div>
 
                   <div className="text-xs text-slate-700 leading-relaxed space-y-1">
                     <p className="font-extrabold text-[#008069]">
-                      🌾 Undangan Resmi Penyaluran Bantuan Pangan Beras & PKH :
+                      Undangan Resmi Penyaluran Bantuan Pangan Beras & PKH :
                     </p>
                   </div>
 
                   <div className="bg-emerald-50/80 p-3.5 rounded-2xl border border-emerald-200/80 space-y-1.5 text-xs text-slate-700 font-sans">
-                    <div className="flex justify-between"><span>nama penerima 👤 :</span> <strong className="text-slate-900 font-bold">Yati Handayani</strong></div>
-                    <div className="flex justify-between"><span>hari & tanggal 📆 :</span> <strong className="text-slate-900 font-bold">Selasa, 18 Agustus 2026</strong></div>
+                    <div className="flex justify-between"><span>Nama Penerima :</span> <strong className="text-slate-900 font-bold">Yati Handayani</strong></div>
+                    <div className="flex justify-between"><span>Hari & Tanggal :</span> <strong className="text-slate-900 font-bold">Selasa, 18 Agustus 2026</strong></div>
                     <div className="flex justify-between"><span>waktu ⏰ :</span> <strong className="text-slate-900 font-bold">08:30 WIB - Selesai</strong></div>
-                    <div className="flex justify-between"><span>lokasi 📍 :</span> <strong className="text-slate-900 font-bold">Kantor Balai Desa Doko</strong></div>
-                    <div className="flex justify-between"><span>alokasi bantuan 📦 :</span> <strong className="text-slate-900 font-bold">30 Kg Beras (Juli - Sept 2026)</strong></div>
-                    <div className="flex justify-between"><span>biaya tebus 💸 :</span> <strong className="text-emerald-700 font-bold">GRATIS (Rp 0,-)</strong></div>
+                    <div className="flex justify-between"><span>Lokasi :</span> <strong className="text-slate-900 font-bold">Kantor Balai Desa Doko</strong></div>
+                    <div className="flex justify-between"><span>Alokasi Bantuan :</span> <strong className="text-slate-900 font-bold">30 Kg Beras (Juli - Sept 2026)</strong></div>
+                    <div className="flex justify-between"><span>Biaya Tebus :</span> <strong className="text-emerald-700 font-bold">GRATIS (Rp 0,-)</strong></div>
                     <div className="flex justify-between pt-1 border-t border-emerald-200/60 items-center">
-                      <span className="text-emerald-800 font-bold">no. urut antrean 🎫 :</span>
+                      <span className="text-emerald-800 font-bold">No. Urut Antrean :</span>
                       <span className="text-base font-black text-[#008069] bg-white px-2.5 py-0.5 rounded-lg shadow-2xs border border-emerald-300 font-mono">
                         1340
                       </span>
@@ -661,7 +657,7 @@ export const BansosPage: React.FC = () => {
                   </div>
 
                   <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-center text-[10px] text-slate-500 font-medium">
-                    💡 Bebas pilih: scan Barcode <strong>350606200801340</strong> atau tunjukkan No. Urut <strong>1340</strong> & KTP asli ke petugas balai desa.
+                    Bebas pilih: scan Barcode <strong>350606200801340</strong> atau tunjukkan No. Urut <strong>1340</strong> & KTP asli ke petugas balai desa.
                   </div>
                 </div>
               </div>
@@ -781,7 +777,7 @@ export const BansosPage: React.FC = () => {
                   <div>Hormat Kami,</div>
                   <div className="font-bold">Perum BULOG</div>
                   <div className="flex items-center justify-end gap-1 text-[13px] font-black text-slate-800 italic mt-0.5">
-                    <span>🌾 bulog</span>
+                    <span>Bulog</span>
                     <span className="text-[9px] not-italic font-normal text-slate-600">mengantarkan kebaikan</span>
                   </div>
                 </div>

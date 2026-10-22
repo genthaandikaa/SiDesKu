@@ -114,7 +114,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
       }).addTo(map);
 
       boundary.bindTooltip(
-        '<div class="font-sans font-bold text-xs text-emerald-900">📍 Batas Teritorial Wilayah RT 01 Krajan (Desa Doko)</div>',
+        '<div class="font-sans font-bold text-xs text-emerald-900">Batas Teritorial Wilayah RT 01 Krajan (Desa Doko)</div>',
         { sticky: true, className: 'custom-leaflet-tooltip' }
       );
 
@@ -182,7 +182,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
           pic: `${w.nama_lengkap} (NIK: ${w.nik})`,
           status: w.status_ekonomi || 'Warga Tetap',
           jam: w.no_hp_wa ? `WhatsApp: ${w.no_hp_wa}` : 'Domisili Terverifikasi',
-          icon: '🏠',
+          icon: 'home',
           lat: coord.lat + (idx * 0.00008),
           lng: coord.lng + (idx * 0.00007),
           bg: 'bg-emerald-50 border-emerald-200 text-emerald-800',
@@ -256,8 +256,8 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
             ${item.desc}
           </div>
           <div class="text-[10px] bg-slate-50 p-1.5 rounded-lg text-slate-700 border border-slate-100 space-y-0.5 font-medium">
-            <div>📍 <strong>Lokasi:</strong> ${item.blok}</div>
-            <div>👤 <strong>PIC:</strong> ${item.pic}</div>
+            <div><strong>Lokasi:</strong> ${item.blok}</div>
+            <div><strong>PIC:</strong> ${item.pic}</div>
           </div>
           <button 
             id="popup-btn-${item.id}"

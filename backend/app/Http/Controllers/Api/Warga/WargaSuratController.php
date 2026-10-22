@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\DesaSetting;
 use App\Models\SuratRequest;
 use App\Models\SuratTracking;
+use App\Services\FileUploadSecurityService;
+use App\Services\IdempotencyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -49,39 +51,59 @@ class WargaSuratController extends Controller
             'file_lampirans' => 'nullable|array',
         ]);
 
-        $resiCode = 'REQ-' . date('Ymd') . '-' . strtoupper(Str::random(6));
-        $qrHash = hash('sha256', $resiCode . '|' . $user->wargaProfile->nik . '|' . microtime(true));
+        $suratType = \App\Models\SuratType::withoutGlobalScope('tenant')->find($validated['surat_type_id']);
+        if (!$suratType || ($suratType->desa_id && (int) $suratType->desa_id !== (int) $user->desa_id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Jenis surat yang dipilih tidak terdaftar pada desa Anda.',
+            ], 422);
+        }
 
-        $finalFileLampiran = $this->processLampirans(
-            $request->has('file_lampirans') ? $request->file_lampirans : ($validated['file_lampiran'] ?? null),
-            $user->id,
-            $user->wargaProfile
+        $idempotencyKey = IdempotencyService::extractKey($request);
+
+        return IdempotencyService::run(
+            $user,
+            'POST /api/surats',
+            $idempotencyKey,
+            $request->all(),
+            function () use ($validated, $user, $request) {
+                $resiCode = 'REQ-' . date('Ymd') . '-' . strtoupper(Str::random(6));
+                $qrHash = hash('sha256', $resiCode . '|' . $user->wargaProfile->nik . '|' . microtime(true));
+
+                $finalFileLampiran = $this->processLampirans(
+                    $request->has('file_lampirans') ? $request->file_lampirans : ($validated['file_lampiran'] ?? null),
+                    $user->id,
+                    $user->wargaProfile
+                );
+
+                $suratReq = SuratRequest::create([
+                    'desa_id' => $user->desa_id ?? $user->wargaProfile->desa_id,
+                    'nomor_resi' => $resiCode,
+                    'warga_profile_id' => $user->wargaProfile->id,
+                    'surat_type_id' => $validated['surat_type_id'],
+                    'status' => 'pending_rt',
+                    'keperluan' => $validated['keperluan'],
+                    'form_data_json' => $validated['form_data'] ?? [],
+                    'file_lampiran' => $finalFileLampiran,
+                    'qr_verification_hash' => $qrHash,
+                ]);
+
+                SuratTracking::create([
+                    'desa_id' => $user->desa_id ?? $user->wargaProfile->desa_id,
+                    'surat_request_id' => $suratReq->id,
+                    'actor_user_id' => $user->id,
+                    'status_stage' => 'Warga',
+                    'status_action' => 'Diajukan',
+                    'catatan' => 'Permohonan surat berhasil dibuat secara online oleh pemohon.',
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Permohonan surat berhasil diajukan.',
+                    'data' => $suratReq->load(['suratType', 'wargaProfile', 'trackings']),
+                ], 201);
+            }
         );
-
-        $suratReq = SuratRequest::create([
-            'nomor_resi' => $resiCode,
-            'warga_profile_id' => $user->wargaProfile->id,
-            'surat_type_id' => $validated['surat_type_id'],
-            'status' => 'pending_rt',
-            'keperluan' => $validated['keperluan'],
-            'form_data_json' => $validated['form_data'] ?? [],
-            'file_lampiran' => $finalFileLampiran,
-            'qr_verification_hash' => $qrHash,
-        ]);
-
-        SuratTracking::create([
-            'surat_request_id' => $suratReq->id,
-            'actor_user_id' => $user->id,
-            'status_stage' => 'Warga',
-            'status_action' => 'Diajukan',
-            'catatan' => 'Permohonan surat berhasil dibuat secara online oleh pemohon.',
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Permohonan surat berhasil diajukan.',
-            'data' => $suratReq->load(['suratType', 'wargaProfile', 'trackings']),
-        ], 201);
     }
 
     public function update(Request $request, $id): JsonResponse
@@ -219,31 +241,20 @@ class WargaSuratController extends Controller
     private function saveImageHelper($imageInput, $customName = null, $userId = 1): ?string
     {
         if (empty($imageInput)) return null;
-        if (str_starts_with($imageInput, 'data:image')) {
-            try {
-                if (preg_match('/^data:image\/(\w+);base64,/', $imageInput, $type)) {
-                    $imageData = substr($imageInput, strpos($imageInput, ',') + 1);
-                    $extension = strtolower($type[1]);
-                    if (!in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-                        $extension = 'jpg';
-                    }
-                    $decoded = base64_decode($imageData);
-                    if ($decoded !== false) {
-                        $dir = public_path('uploads/lampiran');
-                        if (!file_exists($dir)) {
-                            mkdir($dir, 0755, true);
-                        }
-                        $prefix = $customName ? Str::slug($customName) . '_' : 'lampiran_';
-                        $fileName = $prefix . $userId . '_' . time() . '_' . Str::random(4) . '.' . $extension;
-                        file_put_contents($dir . DIRECTORY_SEPARATOR . $fileName, $decoded);
-                        return url('uploads/lampiran/' . $fileName);
-                    }
-                }
-            } catch (\Exception $e) {
-                return null;
-            }
+
+        $result = FileUploadSecurityService::processBase64Upload(
+            $imageInput,
+            ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'],
+            FileUploadSecurityService::MAX_DOCUMENT_SIZE,
+            'lampiran',
+            $customName ? Str::slug($customName) : 'lampiran_' . $userId
+        );
+
+        if (! $result['success']) {
+            return null;
         }
-        return $imageInput;
+
+        return $result['url'];
     }
 
     private function processLampirans($lampiranInput, $userId, $wargaProfile = null): ?string

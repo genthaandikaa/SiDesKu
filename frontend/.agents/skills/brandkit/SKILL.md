@@ -151,7 +151,6 @@ Avoid:
 - copied famous marks
 - overcomplicated symbols
 - clipart-style icons
-- meaningless sparkles
 - inconsistent logo variants
 
 The logo should feel like it came from research and reduction.

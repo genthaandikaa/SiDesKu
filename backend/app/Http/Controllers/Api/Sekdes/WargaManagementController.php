@@ -16,17 +16,21 @@ use Illuminate\Support\Facades\Hash;
 class WargaManagementController extends Controller
 {
     /**
-     * Get registered warga list with pagination and search.
+     * Get registered warga list with pagination, search, and filtering.
      */
     public function index(Request $request): JsonResponse
     {
-        $query = WargaProfile::with(['user', 'rt.rw.dusun', 'kartuKeluarga']);
+        $query = WargaProfile::with(['user', 'rt.rw.dusun', 'kartuKeluarga.anggotaKeluarga']);
 
         if ($request->filled('search')) {
             $s = trim($request->query('search'));
             $query->where(function ($q) use ($s) {
                 $q->where('nama_lengkap', 'like', "%{$s}%")
-                  ->orWhere('nik', 'like', "%{$s}%");
+                  ->orWhere('nik', 'like', "%{$s}%")
+                  ->orWhereHas('kartuKeluarga', function ($k) use ($s) {
+                      $k->where('no_kk', 'like', "%{$s}%")
+                        ->orWhere('nama_kepala_keluarga', 'like', "%{$s}%");
+                  });
             });
         }
 
@@ -34,11 +38,39 @@ class WargaManagementController extends Controller
             $query->where('rt_id', $request->query('rt_id'));
         }
 
+        if ($request->filled('rw_id')) {
+            $rwId = $request->query('rw_id');
+            $query->whereHas('rt', function ($q) use ($rwId) {
+                $q->where('rw_id', $rwId);
+            });
+        }
+
+        if ($request->filled('kk_id')) {
+            $query->where('kk_id', $request->query('kk_id'));
+        }
+
+        if ($request->filled('status_keluarga')) {
+            $query->where('status_keluarga', $request->query('status_keluarga'));
+        }
+
         $wargas = $query->orderBy('created_at', 'desc')->get();
 
         return response()->json([
             'success' => true,
             'data' => $wargas,
+        ]);
+    }
+
+    /**
+     * Get detailed data of a single registered citizen.
+     */
+    public function show($id): JsonResponse
+    {
+        $warga = WargaProfile::with(['user', 'rt.rw.dusun', 'kartuKeluarga.anggotaKeluarga'])->findOrFail($id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $warga,
         ]);
     }
 
@@ -78,7 +110,10 @@ class WargaManagementController extends Controller
             'rt_id.required' => 'RT domisili wajib dipilih.',
         ]);
 
-        return DB::transaction(function () use ($request) {
+        $currentUser = $request->user();
+        \App\Services\TenantSecurityService::validateRt($currentUser, (int) $request->input('rt_id'));
+
+        return DB::transaction(function () use ($request, $currentUser) {
             $nik = trim($request->input('nik'));
             $namaLengkap = trim($request->input('nama_lengkap'));
             $tanggalLahirRaw = $request->input('tanggal_lahir');
@@ -88,12 +123,20 @@ class WargaManagementController extends Controller
             $kkId = null;
             if ($request->filled('no_kk')) {
                 $noKk = trim($request->input('no_kk'));
+                $namaKepala = trim($request->input('nama_kepala_keluarga') ?? '');
+                if (empty($namaKepala)) {
+                    $namaKepala = $namaLengkap;
+                }
+
                 $kk = KartuKeluarga::firstOrCreate(
-                    ['no_kk' => $noKk],
                     [
-                        'nama_kepala_keluarga' => $request->input('nama_kepala_keluarga', $namaLengkap),
+                        'desa_id' => $currentUser->desa_id,
+                        'no_kk' => $noKk,
+                    ],
+                    [
+                        'nama_kepala_keluarga' => $namaKepala,
                         'rt_id' => $request->input('rt_id'),
-                        'alamat_lengkap' => $request->input('alamat_ktp'),
+                        'alamat_lengkap' => $request->input('alamat_ktp') ?: 'Desa ' . ($currentUser->desa->nama_desa ?? ''),
                         'no_telp_rumah' => $request->input('no_hp_wa'),
                     ]
                 );
@@ -110,6 +153,7 @@ class WargaManagementController extends Controller
 
             // Buat User Akun Sistem
             $user = User::create([
+                'desa_id' => $currentUser->desa_id,
                 'role_id' => $roleId,
                 'name' => $namaLengkap,
                 'username' => $nik,
@@ -121,6 +165,7 @@ class WargaManagementController extends Controller
 
             // Buat WargaProfile
             $wargaProfile = WargaProfile::create([
+                'desa_id' => $currentUser->desa_id,
                 'user_id' => $user->id,
                 'kk_id' => $kkId,
                 'rt_id' => $request->input('rt_id'),
@@ -129,16 +174,16 @@ class WargaManagementController extends Controller
                 'tempat_lahir' => $request->input('tempat_lahir'),
                 'tanggal_lahir' => $dob->format('Y-m-d'),
                 'jenis_kelamin' => $request->input('jenis_kelamin'),
-                'agama' => $request->input('agama', 'Islam'),
-                'status_perkawinan' => $request->input('status_perkawinan', 'Kawin'),
-                'pekerjaan' => $request->input('pekerjaan', 'Buruh / Petani / Wiraswasta'),
-                'pendidikan_terakhir' => $request->input('pendidikan_terakhir', 'SMA/Sederajat'),
-                'golongan_darah' => $request->input('golongan_darah', '-'),
+                'agama' => $request->input('agama') ?: 'Islam',
+                'status_perkawinan' => $request->input('status_perkawinan') ?: 'Kawin',
+                'pekerjaan' => $request->input('pekerjaan') ?: 'Buruh / Petani / Wiraswasta',
+                'pendidikan_terakhir' => $request->input('pendidikan_terakhir') ?: 'SMA/Sederajat',
+                'golongan_darah' => $request->input('golongan_darah') ?: '-',
                 'no_hp_wa' => $request->input('no_hp_wa'),
                 'alamat_ktp' => $request->input('alamat_ktp'),
-                'status_keluarga' => $request->input('status_keluarga', 'Kepala Keluarga'),
-                'status_ekonomi' => $request->input('status_ekonomi', 'Mampu'),
-                'status_kependudukan' => $request->input('status_kependudukan', 'Tetap'),
+                'status_keluarga' => $request->input('status_keluarga') ?: 'Kepala Keluarga',
+                'status_ekonomi' => $request->input('status_ekonomi') ?: 'Menengah',
+                'status_kependudukan' => $request->input('status_kependudukan') ?: 'Tetap',
             ]);
 
             return response()->json([

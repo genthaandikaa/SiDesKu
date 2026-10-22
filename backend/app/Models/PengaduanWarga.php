@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToDesa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PengaduanWarga extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToDesa;
 
     protected $table = 'pengaduan_wargas';
 
     protected $fillable = [
+        'desa_id',
         'warga_profile_id',
         'rt_id',
         'kategori',
@@ -20,7 +22,9 @@ class PengaduanWarga extends Model
         'deskripsi',
         'foto_lampiran',
         'status',
+        'disposisi_ke',
         'tanggapan',
+        'riwayat_tanggapan',
         'ditanggapi_by_user_id',
         'ditanggapi_at',
     ];
@@ -29,6 +33,7 @@ class PengaduanWarga extends Model
     {
         return [
             'ditanggapi_at' => 'datetime',
+            'riwayat_tanggapan' => 'array',
         ];
     }
 

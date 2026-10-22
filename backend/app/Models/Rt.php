@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToDesa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Rt extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToDesa;
 
     protected $fillable = [
+        'desa_id',
         'rw_id',
         'nomor_rt',
         'ketua_rt_user_id',

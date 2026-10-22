@@ -8,7 +8,6 @@ import {
   X, 
   RefreshCw, 
   CheckCircle2, 
-  Sparkles,
   Sliders,
   Layers
 } from 'lucide-react';
@@ -23,6 +22,7 @@ interface SuratTypeSetting {
   nomor_terakhir: number;
   nomor_berikutnya: number;
   preview_nomor: string;
+  persyaratan_json?: string[];
   masa_berlaku_hari: number;
   is_active: boolean;
 }
@@ -44,9 +44,12 @@ export const PenomoranSuratSetting: React.FC = () => {
   const [calendar, setCalendar] = useState<CalendarData | null>(null);
   const [loading, setLoading] = useState(true);
   const [editingType, setEditingType] = useState<SuratTypeSetting | null>(null);
+  const [formNamaSurat, setFormNamaSurat] = useState('');
   const [formFormat, setFormFormat] = useState('');
   const [formKlasifikasi, setFormKlasifikasi] = useState('');
   const [formNomorTerakhir, setFormNomorTerakhir] = useState<number>(0);
+  const [formPersyaratan, setFormPersyaratan] = useState<string[]>([]);
+  const [newSyaratInput, setNewSyaratInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -73,10 +76,26 @@ export const PenomoranSuratSetting: React.FC = () => {
 
   const handleEdit = (st: SuratTypeSetting) => {
     setEditingType(st);
+    setFormNamaSurat(st.nama_surat);
     setFormFormat(st.format_nomor);
     setFormKlasifikasi(st.kode_klasifikasi);
     setFormNomorTerakhir(st.nomor_terakhir);
+    setFormPersyaratan(Array.isArray(st.persyaratan_json) ? [...st.persyaratan_json] : ['Foto KTP Pemohon', 'Foto Kartu Keluarga']);
+    setNewSyaratInput('');
     setMessage(null);
+  };
+
+  const handleAddSyarat = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+    if (!newSyaratInput.trim()) return;
+    if (!formPersyaratan.includes(newSyaratInput.trim())) {
+      setFormPersyaratan([...formPersyaratan, newSyaratInput.trim()]);
+    }
+    setNewSyaratInput('');
+  };
+
+  const handleRemoveSyarat = (idxToRemove: number) => {
+    setFormPersyaratan(formPersyaratan.filter((_, idx) => idx !== idxToRemove));
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -86,13 +105,15 @@ export const PenomoranSuratSetting: React.FC = () => {
     try {
       setIsSaving(true);
       const res = await api.put(`/sekdes/surat-types/${editingType.id}`, {
-        format_nomor: formFormat,
-        kode_klasifikasi: formKlasifikasi,
+        nama_surat: formNamaSurat.trim(),
+        format_nomor: formFormat.trim(),
+        kode_klasifikasi: formKlasifikasi.trim(),
         nomor_terakhir: formNomorTerakhir,
+        persyaratan_json: formPersyaratan,
       });
 
       if (res.data.success) {
-        setMessage({ type: 'success', text: res.data.message || 'Format nomor surat berhasil diperbarui.' });
+        setMessage({ type: 'success', text: res.data.message || 'Format dan persyaratan surat berhasil diperbarui.' });
         setEditingType(null);
         fetchSettings();
       }
@@ -126,14 +147,14 @@ export const PenomoranSuratSetting: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-              Modul Penomoran Resmi Desa
+              Modul Penomoran & Persyaratan Surat Desa
             </span>
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
-            Pengaturan Format & Urutan Nomor Surat
+            Pengaturan Format, Urutan & Persyaratan Surat
           </h2>
           <p className="text-xs sm:text-sm text-slate-500">
-            Setiap jenis surat (SKTM, KTP, KK, Domisili, dll.) memiliki format kode klasifikasi dan nomor urut tersendiri yang diatur oleh kantor desa.
+            Setiap jenis surat (SKTM, KTP, KK, Domisili, dll.) memiliki format klasifikasi nomor urut dan persyaratan dokumen yang dapat diatur secara dinamis oleh kantor desa tanpa hardcode.
           </p>
         </div>
 
@@ -164,40 +185,38 @@ export const PenomoranSuratSetting: React.FC = () => {
         </div>
       )}
 
-      {/* Calendar API Integration Ribbon */}
-      <div className="card-surface p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-emerald-950 to-slate-900 text-white shadow-md relative overflow-hidden">
-        <div className="absolute right-0 top-0 bottom-0 w-64 bg-emerald-500/10 blur-2xl pointer-events-none" />
-        
+      {/* Calendar API Integration Ribbon - Clean White & Emerald */}
+      <div className="p-5 sm:p-6 rounded-2xl bg-white text-slate-900 shadow-2xs border border-slate-200/80 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center text-emerald-400 shrink-0">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
               <Calendar className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-300 bg-emerald-900/60 px-2 py-0.5 rounded border border-emerald-700/50">
+                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
                   API Kalender Resmi Terhubung
                 </span>
-                <span className="text-[10px] text-emerald-400 font-mono">Real-time Auto Sync</span>
+                <span className="text-[10px] text-slate-500 font-mono font-bold">Real-time Auto Sync</span>
               </div>
-              <h3 className="text-base sm:text-lg font-black text-white mt-0.5">
-                {calendar ? `${calendar.hari}, ${calendar.formatted}` : 'Memuat Kalender...'}
+              <h3 className="text-base sm:text-lg font-black text-slate-900 mt-1">
+                {calendar ? `${calendar.hari}, ${calendar.formatted}` : 'Memuat Kalender Desa...'}
               </h3>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-white/10 text-xs">
-            <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
-              <span className="text-[9px] uppercase text-emerald-300 font-bold block">Bulan Romawi</span>
-              <span className="font-mono font-black text-white text-sm">{calendar?.bulan_romawi || 'X'}</span>
+          <div className="flex flex-wrap items-center gap-2.5 pt-2 md:pt-0 border-t md:border-t-0 border-slate-100 text-xs">
+            <div className="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-center shadow-2xs">
+              <span className="text-[9px] uppercase text-slate-500 font-extrabold block tracking-wider">Bulan Romawi</span>
+              <span className="font-mono font-black text-slate-900 text-base mt-0.5 block">{calendar?.bulan_romawi || 'X'}</span>
             </div>
-            <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
-              <span className="text-[9px] uppercase text-emerald-300 font-bold block">Tahun Kalender</span>
-              <span className="font-mono font-black text-white text-sm">{calendar?.tahun || '2026'}</span>
+            <div className="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-center shadow-2xs">
+              <span className="text-[9px] uppercase text-slate-500 font-extrabold block tracking-wider">Tahun Kalender</span>
+              <span className="font-mono font-black text-slate-900 text-base mt-0.5 block">{calendar?.tahun || '2026'}</span>
             </div>
-            <div className="px-3 py-1.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
-              <span className="text-[9px] uppercase text-emerald-300 font-bold block">Tanggal Padded</span>
-              <span className="font-mono font-black text-white text-sm">{calendar?.tanggal || '08'}</span>
+            <div className="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-center shadow-2xs">
+              <span className="text-[9px] uppercase text-slate-500 font-extrabold block tracking-wider">Tanggal Padded</span>
+              <span className="font-mono font-black text-slate-900 text-base mt-0.5 block">{calendar?.tanggal || '12'}</span>
             </div>
           </div>
         </div>
@@ -208,10 +227,10 @@ export const PenomoranSuratSetting: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
-              Master Format & Urutan per Jenis Surat Desa
+              Master Format, Urutan & Persyaratan Surat Desa
             </h3>
             <p className="text-xs text-slate-500">
-              Klik tombol &ldquo;Edit Format&rdquo; untuk mengubah template penomoran atau mengatur ulang nomor urut surat.
+              Klik &ldquo;Edit Format & Syarat&rdquo; untuk mengubah nomor, format penomoran, atau daftar berkas persyaratan warga.
             </p>
           </div>
           <span className="text-xs font-black text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
@@ -244,10 +263,25 @@ export const PenomoranSuratSetting: React.FC = () => {
                   </p>
                 </div>
 
+                {/* Requirements Pills */}
+                <div className="space-y-1">
+                  <span className="text-[9px] font-bold uppercase text-slate-400">Persyaratan Dokumen:</span>
+                  <div className="flex flex-wrap gap-1">
+                    {st.persyaratan_json && st.persyaratan_json.length > 0 ? (
+                      st.persyaratan_json.map((syarat, sIdx) => (
+                        <span key={sIdx} className="text-[10px] bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md font-medium border border-slate-200">
+                          {syarat}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-[10px] text-slate-400 italic">KTP & KK Asli</span>
+                    )}
+                  </div>
+                </div>
+
                 {/* Preview Box */}
                 <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/90 space-y-1">
                   <span className="text-[9px] font-black uppercase text-emerald-800 tracking-wider flex items-center gap-1">
-                    <Sparkles className="w-3 h-3 text-emerald-600" />
                     <span>Preview Terbitan Berikutnya:</span>
                   </span>
                   <div className="font-mono font-black text-xs text-slate-900 break-all bg-white p-1.5 rounded-lg border border-slate-200">
@@ -282,23 +316,23 @@ export const PenomoranSuratSetting: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal Edit Format & Urutan */}
+      {/* Modal Edit Format, Nama & Persyaratan Surat */}
       {editingType && (
         <div 
           onClick={() => setEditingType(null)}
-          className="fixed inset-0 z-[999999] bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-fade-in font-sans"
         >
           <div 
             onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-3xl p-6 sm:p-7 max-w-lg w-full space-y-5 shadow-2xl border border-slate-200 animate-scale-up"
+            className="bg-white rounded-3xl p-6 sm:p-7 max-w-lg w-full space-y-4 shadow-2xl border border-slate-200 animate-scale-up max-h-[92vh] overflow-y-auto"
           >
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                   {editingType.kode_surat}
                 </span>
                 <h3 className="text-base font-black text-slate-900 mt-1">
-                  Atur Penomoran: {editingType.nama_surat}
+                  Atur Penomoran & Persyaratan: {editingType.kode_surat}
                 </h3>
               </div>
               <button 
@@ -311,10 +345,88 @@ export const PenomoranSuratSetting: React.FC = () => {
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
               
+              {/* Nama Surat */}
+              <div className="space-y-1">
+                <label className="font-bold text-slate-700 uppercase tracking-wide block">
+                  Nama Resmi Jenis Surat:
+                </label>
+                <input
+                  type="text"
+                  value={formNamaSurat}
+                  onChange={(e) => setFormNamaSurat(e.target.value)}
+                  placeholder="Contoh: Surat Keterangan Domisili Warga"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  required
+                />
+              </div>
+
+              {/* Dynamic Requirements Editor for Citizens */}
+              <div className="space-y-2 p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-slate-800 uppercase tracking-wide block">
+                    Persyaratan Berkas Warga (Dinamis):
+                  </label>
+                  <span className="text-[10px] text-emerald-800 font-bold bg-emerald-100 px-2 py-0.5 rounded-full">
+                    {formPersyaratan.length} Syarat
+                  </span>
+                </div>
+                <p className="text-[10px] text-slate-500">
+                  Daftar dokumen yang harus disiapkan warga saat mengajukan jenis surat ini di portal mandiri.
+                </p>
+
+                {/* Tag Pills */}
+                <div className="flex flex-wrap gap-1.5 min-h-[32px] p-2 bg-white rounded-xl border border-slate-200">
+                  {formPersyaratan.length === 0 ? (
+                    <span className="text-[11px] text-slate-400 italic">Belum ada persyaratan khusus.</span>
+                  ) : (
+                    formPersyaratan.map((syarat, sIdx) => (
+                      <span 
+                        key={sIdx} 
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-900 text-[11px] font-semibold border border-emerald-200"
+                      >
+                        <span>{syarat}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSyarat(sIdx)}
+                          className="hover:text-rose-700 text-slate-400 p-0.5 rounded cursor-pointer"
+                          title="Hapus Syarat"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </span>
+                    ))
+                  )}
+                </div>
+
+                {/* Add requirement input */}
+                <div className="flex items-center gap-2 pt-1">
+                  <input
+                    type="text"
+                    value={newSyaratInput}
+                    onChange={(e) => setNewSyaratInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddSyarat(e);
+                      }
+                    }}
+                    placeholder="Ketik nama berkas (contoh: Pas Foto 4x6)..."
+                    className="flex-1 px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddSyarat}
+                    className="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 cursor-pointer transition-colors shadow-2xs"
+                  >
+                    + Tambah
+                  </button>
+                </div>
+              </div>
+
               {/* Kode Klasifikasi */}
               <div className="space-y-1">
                 <label className="font-bold text-slate-700 uppercase tracking-wide block">
-                  Kode Klasifikasi Surat (Contoh: 401 untuk SKTM, 471 untuk KTP):
+                  Kode Klasifikasi Arsip:
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -350,7 +462,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                   />
                 </div>
                 <div className="flex flex-wrap gap-1 pt-1 text-[10px] text-slate-500 font-mono">
-                  <span>Token tersedia:</span>
+                  <span>Token:</span>
                   <code className="bg-slate-100 px-1 py-0.5 rounded text-emerald-800 font-bold">&#123;NO&#125;</code>
                   <code className="bg-slate-100 px-1 py-0.5 rounded text-emerald-800 font-bold">&#123;KLASIFIKASI&#125;</code>
                   <code className="bg-slate-100 px-1 py-0.5 rounded text-emerald-800 font-bold">&#123;BULAN_ROMAWI&#125;</code>
@@ -362,7 +474,7 @@ export const PenomoranSuratSetting: React.FC = () => {
               {/* Urutan Nomor Terakhir */}
               <div className="space-y-1">
                 <label className="font-bold text-slate-700 uppercase tracking-wide block">
-                  Nomor Urut Terakhir yang Terbit (Counter Desa):
+                  Nomor Urut Terakhir Terbit (Counter Desa):
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">

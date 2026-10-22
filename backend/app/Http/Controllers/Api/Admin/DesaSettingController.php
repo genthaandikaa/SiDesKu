@@ -34,6 +34,11 @@ class DesaSettingController extends Controller
             'telepon' => 'nullable|string|max:30',
             'email' => 'nullable|email|max:100',
             'alamat_kantor' => 'nullable|string',
+            'nama_bendahara' => 'nullable|string|max:150',
+            'nip_bendahara' => 'nullable|string|max:50',
+            'ttd_kades_url' => 'nullable|string',
+            'ttd_sekdes_url' => 'nullable|string',
+            'ttd_bendahara_url' => 'nullable|string',
         ]);
 
         $setting->update($validated);

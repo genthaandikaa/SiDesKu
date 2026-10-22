@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Warga;
 use App\Http\Controllers\Controller;
 use App\Models\KartuKeluarga;
 use App\Models\WargaProfile;
+use App\Services\FileUploadSecurityService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -30,11 +31,16 @@ class WargaDokumenController extends Controller
         $fotoKk = $profile->foto_kk ?? $profile->kartuKeluarga?->foto_kk;
 
         $dokumenList = [
-            'foto_ktp' => $profile->foto_ktp,
-            'foto_kk' => $fotoKk,
-            'foto_akta_lahir' => $profile->foto_akta_lahir,
-            'foto_buku_nikah' => $profile->foto_buku_nikah,
-            'dokumen_tambahan' => $profile->dokumen_kependudukan_json ?? [],
+            'foto_ktp' => self::signDocumentUrl($profile->foto_ktp, $user->id),
+            'foto_kk' => self::signDocumentUrl($fotoKk, $user->id),
+            'foto_akta_lahir' => self::signDocumentUrl($profile->foto_akta_lahir, $user->id),
+            'foto_buku_nikah' => self::signDocumentUrl($profile->foto_buku_nikah, $user->id),
+            'dokumen_tambahan' => array_map(function ($d) use ($user) {
+                if (isset($d['url'])) {
+                    $d['url'] = self::signDocumentUrl($d['url'], $user->id);
+                }
+                return $d;
+            }, $profile->dokumen_kependudukan_json ?? []),
         ];
 
         $terisi = 0;
@@ -88,14 +94,27 @@ class WargaDokumenController extends Controller
             'catatan' => 'nullable|string|max:255',
         ]);
 
-        $url = $this->saveImageFile($validated['file_data'], $validated['tipe'], $user->id);
+        $imageOnlyTypes = ['ktp', 'kk'];
+        $allowedMimes = in_array($validated['tipe'], $imageOnlyTypes)
+            ? ['image/jpeg', 'image/png', 'image/webp']
+            : ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
 
-        if (!$url) {
+        $uploadResult = FileUploadSecurityService::processBase64Upload(
+            $validated['file_data'],
+            $allowedMimes,
+            FileUploadSecurityService::MAX_DOCUMENT_SIZE,
+            'warga_dokumen/' . $user->id,
+            $validated['tipe']
+        );
+
+        if (! $uploadResult['success']) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memproses file dokumen. Pastikan format gambar JPG, PNG, atau WebP valid.',
+                'message' => $uploadResult['message'] ?? 'Gagal memproses file dokumen.',
             ], 422);
         }
+
+        $url = $uploadResult['url'];
 
         $now = now()->toDateTimeString();
 
@@ -143,7 +162,7 @@ class WargaDokumenController extends Controller
             'message' => 'Berkas ' . strtoupper($validated['tipe']) . ' berhasil disimpan ke database desa.',
             'data' => [
                 'tipe' => $validated['tipe'],
-                'url' => $url,
+                'url' => self::signDocumentUrl($url, $user->id),
             ],
         ]);
     }
@@ -203,41 +222,257 @@ class WargaDokumenController extends Controller
     }
 
     /**
-     * Helper to save base64 image to public storage directory.
+     * Helper to save base64 document/image to public storage directory.
      */
     private function saveImageFile(string $input, string $prefix, int $userId): ?string
     {
-        if (empty($input)) return null;
+        $allowedMimes = in_array($prefix, ['ktp', 'kk'])
+            ? ['image/jpeg', 'image/png', 'image/webp']
+            : ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
 
-        // If it's already a hosted URL, return as is
-        if (str_starts_with($input, 'http://') || str_starts_with($input, 'https://') || str_starts_with($input, '/uploads/')) {
-            return $input;
+        $result = FileUploadSecurityService::processBase64Upload(
+            $input,
+            $allowedMimes,
+            FileUploadSecurityService::MAX_DOCUMENT_SIZE,
+            'warga_dokumen/' . $userId,
+            $prefix,
+            true
+        );
+
+        return $result['success'] ? $result['url'] : null;
+    }
+
+    /**
+     * Helper untuk menghasilkan Temporary Signed URL berkas privat dengan masa berlaku 30 menit.
+     */
+    public static function signDocumentUrl(?string $urlOrPath, ?int $userId, int $minutes = 30): ?string
+    {
+        if (empty($urlOrPath)) {
+            return null;
         }
 
-        if (str_starts_with($input, 'data:image')) {
-            try {
-                if (preg_match('/^data:image\/(\w+);base64,/', $input, $type)) {
-                    $imageData = substr($input, strpos($input, ',') + 1);
-                    $extension = strtolower($type[1]);
-                    if (!in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-                        $extension = 'jpg';
-                    }
-                    $decoded = base64_decode($imageData);
-                    if ($decoded !== false) {
-                        $dir = public_path('uploads/warga_dokumen/' . $userId);
-                        if (!file_exists($dir)) {
-                            mkdir($dir, 0755, true);
-                        }
-                        $fileName = $prefix . '_' . time() . '_' . Str::random(4) . '.' . $extension;
-                        file_put_contents($dir . DIRECTORY_SEPARATOR . $fileName, $decoded);
-                        return url('uploads/warga_dokumen/' . $userId . '/' . $fileName);
-                    }
+        $trimmed = trim($urlOrPath);
+
+        // Data URI atau Blob URL adalah lokal di browser
+        if (str_starts_with($trimmed, 'data:') || str_starts_with($trimmed, 'blob:')) {
+            return $trimmed;
+        }
+
+        // Jika URL sudah memiliki signature aktif dan parameter expires, pertahankan
+        if (str_contains($trimmed, 'signature=') && str_contains($trimmed, 'expires=')) {
+            return $trimmed;
+        }
+
+        $extractedUserId = $userId;
+        $extractedFilename = null;
+
+        if (preg_match('#(?:/api)?/warga/dokumen/file/(\d+)/([^?\#]+)#', $trimmed, $matches)) {
+            $extractedUserId = (int) $matches[1];
+            $extractedFilename = basename($matches[2]);
+        } elseif (preg_match('#warga_dokumen/(\d+)/([^?\#]+)#', $trimmed, $matches)) {
+            $extractedUserId = (int) $matches[1];
+            $extractedFilename = basename($matches[2]);
+        } elseif ($userId) {
+            $extractedFilename = basename($trimmed);
+        }
+
+        if ($extractedUserId && $extractedFilename) {
+            return \Illuminate\Support\Facades\URL::temporarySignedRoute(
+                'api.warga.dokumen.file',
+                now()->addMinutes($minutes),
+                ['userId' => $extractedUserId, 'filename' => $extractedFilename]
+            );
+        }
+
+        return $trimmed;
+    }
+
+    /**
+     * Endpoint untuk mendapatkan Temporary Signed URL bagi pemohon yang sah.
+     */
+    public function getSignedUrl(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        $targetUserId = (int) ($request->query('user_id') ?: $user->id);
+        $filename = $request->query('filename') ?: basename((string) $request->query('url'));
+
+        if (!$filename) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Parameter filename atau url dokumen wajib disertakan.',
+            ], 422);
+        }
+
+        $targetUser = \App\Models\User::withoutGlobalScope('tenant')->find($targetUserId);
+        if (!$targetUser) {
+            return response()->json(['success' => false, 'message' => 'User target tidak ditemukan.'], 404);
+        }
+
+        // Multi-tenant check: Akses lintas desa ditolak mutlak (kecuali super_admin)
+        if (!$user->hasRole('super_admin') && (int) $user->desa_id !== (int) $targetUser->desa_id) {
+            return response()->json(['success' => false, 'message' => 'Akses ditolak lintas desa.'], 403);
+        }
+
+        $isOwner = ((int) $user->id === $targetUserId);
+        $isAdmin = $user->hasRole('admin') || $user->hasRole('admin_desa');
+        $isDesa = $user->hasRole('kades') || $user->hasRole('sekdes');
+        $isRt = $user->hasRole('rt');
+        $isRw = $user->hasRole('rw');
+
+        if (!$isOwner && !$isAdmin && !$isDesa) {
+            $targetProfile = WargaProfile::where('user_id', $targetUserId)->first();
+            if (!$targetProfile) {
+                return response()->json(['success' => false, 'message' => 'Profil kependudukan tidak ditemukan.'], 404);
+            }
+
+            if ($isRt) {
+                $authorizedRtId = $user->getAuthorizedRtId();
+                if (!$authorizedRtId || (int) $targetProfile->rt_id !== (int) $authorizedRtId) {
+                    return response()->json(['success' => false, 'message' => 'Akses ditolak di luar RT Anda.'], 403);
                 }
-            } catch (\Exception $e) {
-                return null;
+            } elseif ($isRw) {
+                $authorizedRwId = $user->getAuthorizedRwId();
+                if (!$authorizedRwId || (int) $targetProfile->rw_id !== (int) $authorizedRwId) {
+                    return response()->json(['success' => false, 'message' => 'Akses ditolak di luar RW Anda.'], 403);
+                }
+            } else {
+                return response()->json(['success' => false, 'message' => 'Akses ditolak untuk dokumen warga lain.'], 403);
             }
         }
 
-        return null;
+        $signedUrl = \Illuminate\Support\Facades\URL::temporarySignedRoute(
+            'api.warga.dokumen.file',
+            now()->addMinutes(30),
+            ['userId' => $targetUserId, 'filename' => basename($filename)]
+        );
+
+        return response()->json([
+            'success' => true,
+            'signed_url' => $signedUrl,
+            'expires_at' => now()->addMinutes(30)->toIso8601String(),
+        ]);
+    }
+
+    /**
+     * Layanan penyajian berkas privat kependudukan secara berotentikasi & berotorisasi.
+     * Menggunakan validasi Bearer Token sah ATAU Temporary HMAC Signed URL yang valid.
+     * Pengiriman raw Personal Access Token via query string (?token=) telah DIHAPUS demi keamanan PDP.
+     */
+    public function serveFile(Request $request, int|string $userId, string $filename)
+    {
+        $targetUserId = (int) $userId;
+        $safeFilename = basename($filename);
+
+        // 1. Validasi Autentikasi: Harus memiliki Bearer Token yang sah ATAU Signed URL yang valid
+        $user = null;
+
+        if ($request->bearerToken()) {
+            $token = \Laravel\Sanctum\PersonalAccessToken::findToken($request->bearerToken());
+            if ($token && $token->tokenable) {
+                $user = $token->tokenable;
+            }
+        } elseif ($request->user()) {
+            $user = $request->user();
+        }
+
+        if (!$user) {
+            // Periksa apakah request memiliki URL Signature yang sah & belum kedaluwarsa
+            if (!$request->hasValidSignature()) {
+                if ($request->has('signature')) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Tanda tangan digital dokumen tidak sah atau telah kedaluwarsa.',
+                    ], 403);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthenticated: Akses ke dokumen kependudukan memerlukan login yang sah atau tanda tangan digital (Signed URL).',
+                ], 401);
+            }
+        }
+
+        // 2. Verifikasi Keberadaan Target User
+        $targetUser = \App\Models\User::withoutGlobalScope('tenant')->find($targetUserId);
+        if (!$targetUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'User pemilik berkas tidak ditemukan.',
+            ], 404);
+        }
+
+        // 3. Jika akses via Bearer token (pengguna login), evaluasi multi-tenant & hak akses teritorial
+        if ($user) {
+            // Multi-tenant check: Akses lintas desa ditolak mutlak (kecuali super_admin)
+            if (!$user->hasRole('super_admin') && (int) $user->desa_id !== (int) $targetUser->desa_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Akses ditolak: Anda tidak memiliki wewenang mengakses dokumen warga dari desa lain.',
+                ], 403);
+            }
+
+            $isOwner = ((int) $user->id === $targetUserId);
+            $isAdmin = $user->hasRole('admin') || $user->hasRole('admin_desa');
+            $isDesa = $user->hasRole('kades') || $user->hasRole('sekdes');
+            $isRt = $user->hasRole('rt');
+            $isRw = $user->hasRole('rw');
+
+            // Evaluasi otorisasi teritorial dan hak akses
+            if (!$isOwner && !$isAdmin && !$isDesa) {
+                $targetProfile = WargaProfile::where('user_id', $targetUserId)->first();
+                if (!$targetProfile) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Profil kependudukan pemilik berkas tidak ditemukan.',
+                    ], 404);
+                }
+
+                if ($isRt) {
+                    $authorizedRtId = $user->getAuthorizedRtId();
+                    if (!$authorizedRtId || (int) $targetProfile->rt_id !== (int) $authorizedRtId) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Akses ditolak: Anda tidak memiliki wewenang mengakses dokumen warga di luar wilayah RT Anda.',
+                        ], 403);
+                    }
+                } elseif ($isRw) {
+                    $authorizedRwId = $user->getAuthorizedRwId();
+                    if (!$authorizedRwId || (int) $targetProfile->rw_id !== (int) $authorizedRwId) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Akses ditolak: Anda tidak memiliki wewenang mengakses dokumen warga di luar wilayah RW Anda.',
+                        ], 403);
+                    }
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Akses ditolak: Anda tidak berwenang mengakses dokumen privat milik warga lain.',
+                    ], 403);
+                }
+            }
+        }
+
+        // 4. File existence & serving (Sanitasi nama berkas untuk mencegah Path Traversal)
+        $privatePath = storage_path('app/private/warga_dokumen/' . $targetUserId . '/' . $safeFilename);
+        $legacyPath = public_path('uploads/warga_dokumen/' . $targetUserId . '/' . $safeFilename);
+        $rootUploadsPath = public_path('uploads/' . $safeFilename);
+
+        $targetPath = file_exists($privatePath) ? $privatePath : (file_exists($legacyPath) ? $legacyPath : (file_exists($rootUploadsPath) ? $rootUploadsPath : null));
+
+        if (!$targetPath || !file_exists($targetPath)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Berkas dokumen tidak ditemukan di server.',
+            ], 404);
+        }
+
+        $mime = mime_content_type($targetPath) ?: 'application/octet-stream';
+
+        return response()->file($targetPath, [
+            'Content-Type' => $mime,
+            'Content-Disposition' => 'inline; filename="' . $safeFilename . '"',
+            'Cache-Control' => 'private, no-cache, no-store, must-revalidate',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 }

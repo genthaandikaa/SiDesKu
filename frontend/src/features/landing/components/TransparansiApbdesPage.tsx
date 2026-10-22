@@ -10,14 +10,15 @@ import {
   CheckCircle2,
   Calendar,
   Layers,
-  Sparkles
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { ApbdesRecord } from '@/shared/types';
+import { Pagination } from '@/shared/components/Pagination';
 
 export const TransparansiApbdesPage: React.FC = () => {
   const [apbdesData, setApbdesData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchApbdes = async () => {
@@ -37,6 +38,7 @@ export const TransparansiApbdesPage: React.FC = () => {
 
   const s = apbdesData?.summary;
   const records: ApbdesRecord[] = apbdesData?.records || [];
+  const paginatedRecords = records.slice((currentPage - 1) * 10, currentPage * 10);
 
   return (
     <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800">
@@ -57,13 +59,8 @@ export const TransparansiApbdesPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
-          {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
-          <div className="lg:col-span-7 space-y-4 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs">
-              <BarChart3 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Akuntabilitas & Transparansi Keuangan Desa</span>
-            </div>
-
+          {/* Left Column (60% Fibonacci): Title and Description */}
+          <div className="lg:col-span-7 space-y-3 text-left">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
               Transparansi{' '}
               <span className="relative whitespace-nowrap text-emerald-700 inline-block">
@@ -75,19 +72,8 @@ export const TransparansiApbdesPage: React.FC = () => {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
-              Laporan terbuka Anggaran Pendapatan dan Belanja Desa (APBDes) di Kabupaten Kediri. Publikasi rincian anggaran pendapatan dan belanja desa demi tata kelola yang bersih dan akuntabel.
+              Laporan Anggaran Pendapatan dan Belanja Desa (APBDes) yang akuntabel dan transparan.
             </p>
-
-            <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-500 font-medium">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <strong className="text-slate-800">Siskeudes Terintegrasi</strong> resmi
-              </span>
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <strong className="text-slate-800">100% Audit Terbuka</strong> warga
-              </span>
-            </div>
           </div>
 
           {/* Right Column (40% Fibonacci): Financial Gauge Mockup */}
@@ -229,11 +215,8 @@ export const TransparansiApbdesPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/80 uppercase tracking-widest mb-1">
-                Detail Realisasi
-              </div>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                Rincian Pos Anggaran Desa Doko Tahun {apbdesData?.tahun || 2026}
+                Rincian Pos APBDes {apbdesData?.tahun || 2026}
               </h2>
             </div>
             <div className="inline-flex items-center gap-1.5 text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 font-semibold shadow-2xs">
@@ -256,7 +239,7 @@ export const TransparansiApbdesPage: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {records.length > 0 ? (
-                  records.map((r) => {
+                  paginatedRecords.map((r) => {
                     const persen = r.anggaran > 0 ? Math.round((r.realisasi / r.anggaran) * 100) : 0;
                     return (
                       <tr key={r.id} className="hover:bg-slate-50/80 transition-colors">
@@ -295,6 +278,14 @@ export const TransparansiApbdesPage: React.FC = () => {
               </tbody>
             </table>
           </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalItems={records.length}
+            pageSize={10}
+            onPageChange={setCurrentPage}
+            itemLabel="pos anggaran"
+          />
         </div>
       </section>
 
@@ -306,15 +297,11 @@ export const TransparansiApbdesPage: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-emerald-200 text-xs font-black border border-white/20">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
-              <span>PRIORITAS PENGGUNAAN DANA DESA</span>
-            </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
-              5 Pilar Fokus Pembangunan Desa Doko 2026
+              5 Pilar Pembangunan Desa Doko
             </h2>
             <p className="text-xs sm:text-sm text-emerald-100/90 font-medium">
-              Alokasi strategis untuk pemerataan sarana publik, ketahanan pangan, pengentasan stunting, dan digitalisasi.
+              Alokasi strategis sarana publik, ketahanan pangan, kesehatan, dan digitalisasi.
             </p>
           </div>
 

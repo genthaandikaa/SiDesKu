@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToDesa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WargaProfile extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToDesa;
 
     protected $fillable = [
+        'desa_id',
         'user_id',
         'kk_id',
         'rt_id',
@@ -70,7 +72,7 @@ class WargaProfile extends Model
         return $this->hasMany(BantuanPenerima::class);
     }
 
-    public function pengaduans(): HasMany
+    public function pengaduanWargas(): HasMany
     {
         return $this->hasMany(PengaduanWarga::class);
     }

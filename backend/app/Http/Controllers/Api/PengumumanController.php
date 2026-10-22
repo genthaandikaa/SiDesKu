@@ -17,6 +17,7 @@ class PengumumanController extends Controller
     {
         $user = $request->user();
         $wargaProfile = null;
+        $isOfficer = $user && ($user->hasRole('sekdes') || $user->hasRole('kades') || $user->hasRole('admin'));
 
         if ($user) {
             $wargaProfile = WargaProfile::where('user_id', $user->id)
@@ -24,30 +25,63 @@ class PengumumanController extends Controller
                 ->first();
 
             // Fallback for demo if logged in as admin/sekdes/warga without profile
-            if (!$wargaProfile) {
-                $wargaProfile = WargaProfile::with(['rt.rw.dusun', 'kartuKeluarga'])->find(1);
+            if (!$wargaProfile && $user->desa_id) {
+                $wargaProfile = WargaProfile::where('desa_id', $user->desa_id)
+                    ->with(['rt.rw.dusun', 'kartuKeluarga'])
+                    ->first();
             }
         }
 
-        $pengumumans = Pengumuman::with(['bantuanSosial', 'createdByUser'])
-            ->where('is_active', true)
-            ->orderByRaw('CASE WHEN bantuan_sosial_id IS NOT NULL THEN 0 ELSE 1 END, id DESC')
-            ->get();
+        $query = Pengumuman::with(['bantuanSosial', 'createdByUser', 'approvedByKadesUser'])
+            ->orderByRaw('CASE WHEN bantuan_sosial_id IS NOT NULL THEN 0 ELSE 1 END, id DESC');
+
+        $isPublicEndpoint = $request->is('api/public/*') || $request->is('public/*');
+
+        if ($isPublicEndpoint) {
+            $desaId = (int) ($request->query('desa_id') ?? 1);
+            $query->where('desa_id', $desaId);
+        }
+
+        if (!$isOfficer || $isPublicEndpoint) {
+            // Warga dan publik hanya bisa melihat pengumuman yang sah & berstatus published
+            $query->where('is_active', true)
+                ->where(function ($q) {
+                    $q->where('status', 'published')->orWhereNull('status');
+                });
+        } elseif ($request->has('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        $pengumumans = $query->get();
 
         $formatted = [];
         foreach ($pengumumans as $index => $p) {
             $formatted[] = $this->formatPengumuman($p, $wargaProfile, $user, $index);
         }
 
+        $stats = null;
+        if ($isOfficer) {
+            $stats = [
+                'pending_approval' => Pengumuman::where('status', 'pending_approval')->count(),
+                'approved' => Pengumuman::where('status', 'approved')->count(),
+                'published' => Pengumuman::where('status', 'published')->count(),
+                'rejected' => Pengumuman::where('status', 'rejected')->count(),
+                'draft' => Pengumuman::where('status', 'draft')->count(),
+                'total' => Pengumuman::count(),
+            ];
+        }
+
         return response()->json([
             'success' => true,
             'data' => $formatted,
+            'stats' => $stats,
         ]);
     }
 
     public function show(Request $request, $id): JsonResponse
     {
         $user = $request->user();
+        $isOfficer = $user && ($user->hasRole('sekdes') || $user->hasRole('kades') || $user->hasRole('admin'));
         $wargaProfile = null;
 
         if ($user) {
@@ -56,7 +90,15 @@ class PengumumanController extends Controller
                 ->first() ?? WargaProfile::with(['rt.rw.dusun', 'kartuKeluarga'])->find(1);
         }
 
-        $p = Pengumuman::with(['bantuanSosial', 'createdByUser'])->findOrFail($id);
+        $p = Pengumuman::with(['bantuanSosial', 'createdByUser', 'approvedByKadesUser'])->findOrFail($id);
+
+        if (!$isOfficer && (!$p->is_active || ($p->status !== 'published' && $p->status !== null))) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengumuman ini belum disetujui atau dipublikasikan.',
+            ], 403);
+        }
+
         $formatted = $this->formatPengumuman($p, $wargaProfile, $user, 0);
 
         return response()->json([
@@ -67,6 +109,14 @@ class PengumumanController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+        $user = $request->user();
+        if (!$user || (!$user->hasRole('sekdes') && !$user->hasRole('admin'))) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hanya Sekretaris Desa yang berwenang membuat dan mengajukan draf pengumuman.',
+            ], 403);
+        }
+
         $validated = $request->validate([
             'judul' => 'required|string|max:200',
             'kategori' => 'required|string|max:50',
@@ -75,18 +125,64 @@ class PengumumanController extends Controller
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'nullable|date',
             'bantuan_sosial_id' => 'nullable|exists:bantuan_sosials,id',
+            'is_draft' => 'nullable|boolean',
         ]);
 
-        $validated['created_by_user_id'] = $request->user()->id;
-        $validated['is_active'] = true;
+        $isDraft = $request->boolean('is_draft', false);
+        $status = $isDraft ? 'draft' : 'pending_approval';
+
+        $validated['created_by_user_id'] = $user->id;
+        $validated['status'] = $status;
+        $validated['is_active'] = false; // Harus disetujui Kades sebelum aktif/publikasi
 
         $pengumuman = Pengumuman::create($validated);
 
         return response()->json([
             'success' => true,
-            'message' => 'Pengumuman berhasil dipublikasikan.',
+            'message' => $isDraft 
+                ? 'Draf pengumuman berhasil disimpan.' 
+                : 'Pengumuman berhasil diajukan untuk persetujuan Kepala Desa.',
             'data' => $pengumuman,
         ], 201);
+    }
+
+    public function update(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+        if (!$user || (!$user->hasRole('sekdes') && !$user->hasRole('admin'))) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hanya Sekretaris Desa yang berwenang memperbarui draf pengumuman.',
+            ], 403);
+        }
+
+        $pengumuman = Pengumuman::findOrFail($id);
+
+        $validated = $request->validate([
+            'judul' => 'sometimes|required|string|max:200',
+            'kategori' => 'sometimes|required|string|max:50',
+            'isi' => 'sometimes|required|string',
+            'level_target' => 'nullable|string|in:Semua,Dusun,RW,RT',
+            'tanggal_mulai' => 'sometimes|required|date',
+            'tanggal_selesai' => 'nullable|date',
+            'bantuan_sosial_id' => 'nullable|exists:bantuan_sosials,id',
+            'is_draft' => 'nullable|boolean',
+        ]);
+
+        $isDraft = $request->boolean('is_draft', false);
+        $validated['status'] = $isDraft ? 'draft' : 'pending_approval';
+        $validated['is_active'] = false; // Perubahan draf memerlukan persetujuan ulang
+        $validated['catatan_penolakan_kades'] = null;
+
+        $pengumuman->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => $isDraft 
+                ? 'Draf pengumuman berhasil diperbarui.' 
+                : 'Perubahan pengumuman berhasil diajukan ulang untuk persetujuan Kepala Desa.',
+            'data' => $pengumuman,
+        ]);
     }
 
     private function formatPengumuman($p, $wargaProfile, $user, $index = 0)
@@ -102,6 +198,8 @@ class PengumumanController extends Controller
             'oleh' => $p->oleh ?? 'Pemerintah Desa Doko',
             'isi' => $p->isi,
             'status' => $p->status_label ?? 'Penting',
+            'workflow_status' => $p->status ?? ($p->is_active ? 'published' : 'pending_approval'),
+            'is_active' => (bool) $p->is_active,
             'bantuan_sosial_id' => $p->bantuan_sosial_id,
         ];
 

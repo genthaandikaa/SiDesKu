@@ -15,10 +15,15 @@ class RwWargaController extends Controller
     /**
      * Resolve RW ID for authenticated user
      */
-    protected function resolveRwId($user): int
+    protected function resolveRwId($user): ?int
     {
-        $rw = Rw::where('ketua_rw_user_id', $user->id)->first() ?? ($user->wargaProfile?->rt?->rw ?? Rw::first());
-        return $rw ? $rw->id : 1;
+        if ($user->hasRole('admin') || $user->hasRole('sekdes') || $user->hasRole('kades')) {
+            $reqRw = request()->query('rw_id');
+            if ($reqRw) return (int) $reqRw;
+            return Rw::value('id');
+        }
+
+        return $user->getAuthorizedRwId();
     }
 
     /**
@@ -28,6 +33,12 @@ class RwWargaController extends Controller
     {
         $user = $request->user();
         $rwId = $this->resolveRwId($user);
+        if (!$rwId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akses ditolak. Pengguna tidak terdaftar dalam wilayah RW yang sah.',
+            ], 403);
+        }
 
         $query = WargaProfile::with(['kartuKeluarga', 'rt.rw.dusun', 'user'])
             ->whereHas('rt', function ($q) use ($rwId) {
@@ -66,6 +77,12 @@ class RwWargaController extends Controller
     {
         $user = $request->user();
         $rwId = $this->resolveRwId($user);
+        if (!$rwId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akses ditolak. Pengguna tidak terdaftar dalam wilayah RW yang sah.',
+            ], 403);
+        }
 
         $query = KartuKeluarga::with(['rt.rw.dusun', 'anggotaKeluarga'])
             ->whereHas('rt', function ($q) use ($rwId) {
@@ -99,8 +116,15 @@ class RwWargaController extends Controller
     public function getRts(Request $request): JsonResponse
     {
         $user = $request->user();
-        $rw = Rw::where('ketua_rw_user_id', $user->id)->first() ?? ($user->wargaProfile?->rt?->rw ?? Rw::first());
-        $rwId = $rw ? $rw->id : 1;
+        $rwId = $this->resolveRwId($user);
+        if (!$rwId) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Akses ditolak. Pengguna tidak terdaftar dalam wilayah RW yang sah.',
+            ], 403);
+        }
+
+        $rw = Rw::find($rwId);
 
         $rts = Rt::with(['ketuaRtUser', 'wargaProfiles', 'kartuKeluargas'])
             ->where('rw_id', $rwId)

@@ -12,39 +12,79 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class PublicSuratController extends Controller
 {
-    public function getTypes(): JsonResponse
+    public function getTypes(Request $request): JsonResponse
     {
-        $types = SuratType::where('is_active', true)->get();
+        $user = $request->user('sanctum');
+        $desaId = $user && $user->desa_id ? (int) $user->desa_id : (int) ($request->query('desa_id') ?? 1);
+        $types = SuratType::withoutGlobalScope('tenant')
+            ->where('desa_id', $desaId)
+            ->where('is_active', true)
+            ->orderBy('id')
+            ->get();
         return response()->json(['success' => true, 'data' => $types]);
     }
 
     public function trackPublic(Request $request): JsonResponse
     {
-        $keyword = $request->query('keyword');
+        $keyword = trim((string) $request->query('keyword', ''));
 
-        $query = SuratRequest::with(['suratType', 'wargaProfile.rt.rw.dusun', 'trackings.actorUser.role']);
-
-        if ($keyword) {
-            $query->where('nomor_resi', $keyword)
-                ->orWhere('qr_verification_hash', $keyword)
-                ->orWhere('nomor_surat_resmi', $keyword)
-                ->orWhereHas('wargaProfile', function ($q) use ($keyword) {
-                    $q->where('nik', $keyword)
-                      ->orWhere('nama_lengkap', 'like', "%{$keyword}%");
-                });
+        if (empty($keyword)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Nomor resi atau kode pelacakan valid wajib diisi.',
+            ], 422);
         }
 
-        $surats = $query->orderBy('created_at', 'desc')->take(10)->get();
+        // Exact match on official tracking identifiers only (anti-harvesting / anti-PII disclosure)
+        $query = SuratRequest::with(['suratType', 'wargaProfile', 'trackings'])
+            ->where(function ($q) use ($keyword) {
+                $q->where('nomor_resi', $keyword)
+                  ->orWhere('qr_verification_hash', $keyword)
+                  ->orWhere('nomor_surat_resmi', $keyword);
+            });
+
+        $surats = $query->orderBy('created_at', 'desc')->take(5)->get();
+
+        $mapped = $surats->map(function ($surat) {
+            return [
+                'id' => $surat->id,
+                'nomor_resi' => $surat->nomor_resi,
+                'nomor_surat_resmi' => $surat->nomor_surat_resmi,
+                'status' => $surat->status,
+                'keperluan' => $surat->keperluan,
+                'qr_verification_hash' => $surat->qr_verification_hash,
+                'created_at' => $surat->created_at,
+                'updated_at' => $surat->updated_at,
+                'surat_type' => $surat->suratType ? [
+                    'id' => $surat->suratType->id,
+                    'nama_surat' => $surat->suratType->nama_surat,
+                    'kode_surat' => $surat->suratType->kode_surat,
+                ] : null,
+                'warga_profile' => $surat->wargaProfile ? [
+                    'nama_lengkap' => $this->maskName($surat->wargaProfile->nama_lengkap),
+                ] : null,
+                'trackings' => $surat->trackings->map(function ($t) {
+                    return [
+                        'id' => $t->id,
+                        'status_stage' => $t->status_stage,
+                        'status_action' => $t->status_action,
+                        'catatan' => $t->catatan,
+                        'created_at' => $t->created_at,
+                    ];
+                }),
+            ];
+        });
 
         return response()->json([
             'success' => true,
-            'data' => $surats,
+            'data' => $mapped,
         ]);
     }
 
     public function verifyQr($hash): JsonResponse
     {
-        $surat = SuratRequest::with(['suratType', 'wargaProfile.rt.rw.dusun', 'trackings.actorUser.role'])
+        $surat = SuratRequest::withoutGlobalScope('tenant')
+            ->with(['suratType', 'wargaProfile.rt.rw.dusun', 'trackings.actorUser.role'])
             ->where('qr_verification_hash', $hash)
             ->orWhere('nomor_resi', $hash)
             ->first();
@@ -57,22 +97,96 @@ class PublicSuratController extends Controller
             ], 404);
         }
 
-        $desa = DesaSetting::first();
+        $desa = DesaSetting::withoutGlobalScope('tenant')->where('desa_id', $surat->desa_id)->first()
+            ?? DesaSetting::first();
+
+        // Safe DTO: Mask PII (NIK & Name) and strictly omit documents/photos/phone
+        $safeSurat = [
+            'id' => $surat->id,
+            'nomor_resi' => $surat->nomor_resi,
+            'nomor_surat_resmi' => $surat->nomor_surat_resmi,
+            'status' => $surat->status,
+            'keperluan' => $surat->keperluan,
+            'qr_verification_hash' => $surat->qr_verification_hash,
+            'created_at' => $surat->created_at,
+            'surat_type' => $surat->suratType ? [
+                'id' => $surat->suratType->id,
+                'nama_surat' => $surat->suratType->nama_surat,
+                'kode_surat' => $surat->suratType->kode_surat,
+            ] : null,
+            'warga_profile' => $surat->wargaProfile ? [
+                'nama_lengkap' => $this->maskName($surat->wargaProfile->nama_lengkap),
+                'nik' => $this->maskNik($surat->wargaProfile->nik),
+                'rt' => $surat->wargaProfile->rt ? [
+                    'nomor_rt' => $surat->wargaProfile->rt->nomor_rt,
+                    'rw' => $surat->wargaProfile->rt->rw ? [
+                        'nomor_rw' => $surat->wargaProfile->rt->rw->nomor_rw,
+                        'dusun' => $surat->wargaProfile->rt->rw->dusun ? [
+                            'nama_dusun' => $surat->wargaProfile->rt->rw->dusun->nama_dusun,
+                        ] : null,
+                    ] : null,
+                ] : null,
+            ] : null,
+        ];
+
+        $isCompleted = ($surat->status === 'completed');
+        $message = match ($surat->status) {
+            'completed' => 'Dokumen Asli dan Terdaftar Resmi di Buku Register Desa',
+            'rejected' => 'Dokumen Tidak Sah: Permohonan surat ini telah ditolak oleh Pemerintah Desa.',
+            default => 'Dokumen Belum Sah: Permohonan surat masih dalam proses (' . $surat->status . ') dan belum diterbitkan resmi oleh Balai Desa.',
+        };
+
+        $statusTte = match ($surat->status) {
+            'completed' => 'TERTANDA SECARA ELEKTRONIK SAH',
+            'rejected' => 'DITOLAK / TIDAK BERLAKU',
+            default => 'DALAM PROSES / BELUM TERBIT',
+        };
 
         return response()->json([
             'success' => true,
-            'valid' => true,
-            'message' => 'Dokumen Asli dan Terdaftar Resmi di Buku Register Desa',
-            'data' => $surat,
+            'valid' => $isCompleted,
+            'status_surat' => $surat->status,
+            'message' => $message,
+            'data' => $safeSurat,
             'desa' => $desa,
             'legalitas' => [
                 'penandatangan' => ($desa ? $desa->nama_kades : 'Drs. H. Bambang Prasetyo, M.Si') . ' (Kepala Desa Doko / Lurah)',
                 'nip' => $desa ? $desa->nip_kades : '19680514 199403 1 004',
-                'payung_hukum' => 'Sah secara hukum berdasarkan UU ITE No. 11/2008 Pasal 5 Ayat 1 dan Permendagri No. 2/2019 tentang Tata Naskah Dinas Desa.',
-                'keterangan' => 'Dokumen bertanda tangan Barcode & QR Code ini berkekuatan hukum penuh dan diakui sah tanpa cap stempel basah.',
-                'status_tte' => 'TERTANDA SECARA ELEKTRONIK SAH',
+                'payung_hukum' => 'Sah secara administrasi desa berdasarkan verifikasi registrasi digital SiDesKu dan Permendagri No. 2/2019 tentang Tata Naskah Dinas Desa.',
+                'keterangan' => 'Dokumen bertanda tangan Barcode & QR Code ini terdaftar resmi dalam arsip persuratan digital Pemerintah Desa.',
+                'status_tte' => $statusTte,
             ],
         ]);
+    }
+
+    private function maskName(?string $name): string
+    {
+        if (!$name) {
+            return 'Warga';
+        }
+        $words = preg_split('/\s+/', trim($name));
+        $maskedWords = [];
+        foreach ($words as $word) {
+            $len = mb_strlen($word);
+            if ($len <= 2) {
+                $maskedWords[] = mb_substr($word, 0, 1) . '*';
+            } else {
+                $maskedWords[] = mb_substr($word, 0, 1) . str_repeat('*', min(4, $len - 2)) . mb_substr($word, -1, 1);
+            }
+        }
+        return implode(' ', $maskedWords);
+    }
+
+    private function maskNik(?string $nik): string
+    {
+        if (!$nik) {
+            return '****************';
+        }
+        $len = strlen($nik);
+        if ($len <= 6) {
+            return str_repeat('*', $len);
+        }
+        return substr($nik, 0, 4) . str_repeat('*', max(4, $len - 8)) . substr($nik, -4);
     }
 
     public function getBarcodeSvg(Request $request, $hash = null)
@@ -113,11 +227,12 @@ class PublicSuratController extends Controller
         }
         $totalWidth = $currentX + 10;
         $textX = $totalWidth / 2;
+        $safeCodeText = htmlspecialchars(strip_tags((string) $codeText), ENT_XML1 | ENT_QUOTES, 'UTF-8');
 
         $svg = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"{$totalWidth}\" height=\"68\" viewBox=\"0 0 {$totalWidth} 68\">
             <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\" rx=\"6\" />
             {$rects}
-            <text x=\"{$textX}\" y=\"61\" font-family=\"monospace\" font-size=\"9\" font-weight=\"bold\" fill=\"#334155\" text-anchor=\"middle\" letter-spacing=\"1\">{$codeText}</text>
+            <text x=\"{$textX}\" y=\"61\" font-family=\"monospace\" font-size=\"9\" font-weight=\"bold\" fill=\"#334155\" text-anchor=\"middle\" letter-spacing=\"1\">{$safeCodeText}</text>
         </svg>";
 
         return response($svg)

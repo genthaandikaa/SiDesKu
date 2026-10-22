@@ -175,25 +175,21 @@ export const PreviewSuratModal: React.FC<PreviewSuratModalProps> = ({
   const canApprove =
     !!onApprove &&
     ((role === 'rt' && surat.status === 'pending_rt') ||
-      (role === 'rw' && surat.status === 'pending_rw') ||
-      (['sekdes', 'kades', 'admin'].includes(role) &&
-        (surat.status === 'processed_sekdes' || surat.status === 'approved_rt' || surat.status === 'pending_rw' || surat.status === 'pending_rt')));
+      (['kades', 'admin'].includes(role) && surat.status !== 'completed' && surat.status !== 'rejected'));
 
   const canReject =
     !!onReject &&
     surat.status !== 'completed' &&
     surat.status !== 'rejected' &&
+    role !== 'rw' &&
+    role !== 'sekdes' &&
     ((role === 'rt' && surat.status === 'pending_rt') ||
-      (role === 'rw' && ['pending_rw', 'approved_rt'].includes(surat.status)) ||
-      (['sekdes', 'kades', 'admin'].includes(role) &&
-        ['processed_sekdes', 'pending_rw', 'approved_rt', 'pending_rt'].includes(surat.status)));
+      (['kades', 'admin'].includes(role)));
 
   const defaultApproveText =
     role === 'rt'
-      ? 'ACC & Teruskan ke Kantor Desa'
-      : role === 'rw'
-      ? 'ACC & Teruskan ke Kantor Desa'
-      : 'Terbitkan & Sahkan QR';
+      ? 'ACC & Teruskan ke Kepala Desa'
+      : 'Sahkan & Terbitkan Surat (TTD QR)';
 
   const finalApproveLabel = approveLabel || defaultApproveText;
 
@@ -207,12 +203,13 @@ export const PreviewSuratModal: React.FC<PreviewSuratModalProps> = ({
             <span>Menunggu ACC RT 01</span>
           </span>
         );
+      case 'pending_kades':
       case 'approved_rt':
       case 'processed_sekdes':
         return (
           <span className="px-3 py-1 rounded-full text-xs font-black bg-indigo-100 text-indigo-900 border border-indigo-300 flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-indigo-700" />
-            <span>Diteruskan ke Desa • Siap TTD QR</span>
+            <span>Disetujui RT • Menunggu Kades</span>
           </span>
         );
       case 'pending_rw':
@@ -308,16 +305,16 @@ export const PreviewSuratModal: React.FC<PreviewSuratModalProps> = ({
           transition: modalTransition,
         }}
         onClick={(e) => e.stopPropagation()}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
       >
-        {/* Handle bar for mobile bottom sheet - tap area to also close */}
+        {/* Handle bar for mobile bottom sheet - drag down or tap to close */}
         <div
-          className="sm:hidden flex justify-center pt-2.5 pb-1.5 shrink-0 cursor-grab active:cursor-grabbing"
+          className="sm:hidden flex flex-col items-center justify-center pt-3 pb-2 shrink-0 cursor-grab active:cursor-grabbing touch-none"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           onClick={() => closeWithAnimation()}
         >
-          <div className="w-10 h-1 rounded-full bg-slate-300 hover:bg-slate-400 transition-colors" />
+          <div className="w-12 h-1.5 rounded-full bg-slate-300 hover:bg-slate-400 transition-colors" />
         </div>
 
         {/* Modal Header - Compact */}
@@ -356,11 +353,11 @@ export const PreviewSuratModal: React.FC<PreviewSuratModalProps> = ({
             </p>
           </div>
 
-          {/* X close button - hidden on mobile (use swipe) */}
+          {/* X close button - accessible on mobile & desktop */}
           <button
             type="button"
             onClick={closeWithAnimation}
-            className="hidden sm:flex self-start text-slate-400 hover:text-slate-700 p-2 rounded-2xl hover:bg-slate-100 transition-colors cursor-pointer"
+            className="flex self-start text-slate-400 hover:text-slate-700 p-2 rounded-2xl hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
             title="Tutup Modal (ESC)"
           >
             <X className="w-5 h-5" />
@@ -422,7 +419,7 @@ export const PreviewSuratModal: React.FC<PreviewSuratModalProps> = ({
         </div>
 
         {/* Scrollable Modal Content */}
-        <div className="flex-1 overflow-y-auto py-4 px-5 sm:px-7 space-y-5 text-slate-800">
+        <div className="flex-1 overflow-y-auto overscroll-contain py-4 px-5 sm:px-7 space-y-5 text-slate-800">
           {/* TAB 1: Detail & Warga Profile */}
           {activeTab === 'detail' && (
             <div className="space-y-5 animate-fade-in">
@@ -448,7 +445,7 @@ export const PreviewSuratModal: React.FC<PreviewSuratModalProps> = ({
               <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/90 space-y-3.5">
                 <div className="flex items-stretch justify-between gap-2">
                   <span className="text-[10px] font-black uppercase text-emerald-800 bg-emerald-100 px-3 py-2 rounded-xl tracking-wider flex items-center whitespace-nowrap">
-                    📋 Profil Pemohon
+                    Profil Pemohon
                   </span>
                   {surat.warga_profile?.no_hp_wa && (
                     <a
@@ -671,7 +668,7 @@ export const PreviewSuratModal: React.FC<PreviewSuratModalProps> = ({
                           {isPdf ? (
                             <div className="p-6 text-center space-y-2 text-white">
                               <FileText className="w-12 h-12 text-rose-400 mx-auto" />
-                              <span className="text-xs font-bold block">Dokumen Format PDF</span>
+                              <span className="text-xs font-bold block">Dokumen Format </span>
                             </div>
                           ) : (
                             <img

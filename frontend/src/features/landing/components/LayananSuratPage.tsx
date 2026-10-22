@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { 
+  X,
   FileText, 
   CheckCircle2, 
   Clock, 
@@ -13,7 +14,6 @@ import {
   ChevronDown, 
   ChevronUp, 
   FileCheck2, 
-  Sparkles,
   Search,
   Zap,
   Tag,
@@ -195,11 +195,11 @@ export const LayananSuratPage: React.FC = () => {
     },
     {
       q: 'Berapa lama surat saya selesai dan bisa dicetak?',
-      a: 'Rata-rata 10 hingga 30 menit setelah diajukan. Begitu Ketua RT dan Ketua RW menekan tombol ACC di ponsel mereka, Sekdes dapat langsung menerbitkan nomor surat dan tanda tangan QR yang sah.',
+      a: 'Rata-rata 10 hingga 30 menit. Setelah Ketua RT menyetujui, Kepala Desa langsung mengesahkan dokumen dengan tanda tangan QR resmi.',
     },
     {
       q: 'Apakah dokumen yang diunduh dari SIDes sah di instansi luar?',
-      a: 'Sangat sah. Setiap surat dilengkapi Nomor Registrasi Resmi Pemdes Doko dan QR Code Keaslian Dokumen yang dapat dipindai oleh bank, sekolah, polsek, maupun Dispendukcapil.',
+      a: 'Sangat sah. Setiap surat dilengkapi nomor registrasi resmi dan QR Code yang dapat diverifikasi oleh instansi eksternal.',
     },
   ];
 
@@ -224,11 +224,6 @@ export const LayananSuratPage: React.FC = () => {
           
           {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
           <div className="lg:col-span-7 space-y-4 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs">
-              <FileCheck2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Standar Pelayanan Prima Digital</span>
-            </div>
-
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
               Katalog Layanan{' '}
               <span className="relative whitespace-nowrap text-emerald-700 inline-block">
@@ -239,22 +234,18 @@ export const LayananSuratPage: React.FC = () => {
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
-              Daftar lengkap 14 jenis surat keterangan resmi, persyaratan berkas kependudukan, dan panduan pengajuan online tanpa perlu antre fisik di kantor desa.
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-xl">
+              Daftar surat keterangan resmi desa beserta persyaratan berkas untuk pengajuan online.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-1">
+            <div className="pt-1">
               <Link
                 to="/login"
-                className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-700/20 transition-all press-down flex items-center gap-2 hover-glow"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-700/20 transition-all press-down hover-glow"
               >
-                <span>Ajukan Surat Sekarang</span>
+                <span>Ajukan surat</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
-              <div className="text-xs text-slate-500 font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 border border-slate-200/80 shadow-2xs">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>Legalitas TTD & QR Code Sah</span>
-              </div>
             </div>
           </div>
 
@@ -295,8 +286,8 @@ export const LayananSuratPage: React.FC = () => {
                   </div>
                   <div className="space-y-1 text-[11px] text-slate-500">
                     <div className="flex justify-between"><span>Pemohon:</span><strong className="text-slate-800">Bambang Utomo</strong></div>
-                    <div className="flex justify-between"><span>Verifikasi RT:</span><span className="text-emerald-700 font-bold">✓ Selesai ACC</span></div>
-                    <div className="flex justify-between"><span>Pengesahan:</span><span className="text-emerald-700 font-bold">✓ Stempel & QR TTD</span></div>
+                    <div className="flex justify-between"><span>Verifikasi RT:</span><span className="text-emerald-700 font-bold">Selesai ACC</span></div>
+                    <div className="flex justify-between"><span>Pengesahan:</span><span className="text-emerald-700 font-bold">Stempel & QR TTD</span></div>
                   </div>
                 </div>
 
@@ -508,7 +499,6 @@ export const LayananSuratPage: React.FC = () => {
 
             <div className="bg-white/10 backdrop-blur-md border border-white/15 p-6 rounded-3xl space-y-3 hover:bg-white/15 transition-all">
               <div className="w-12 h-12 rounded-2xl bg-emerald-500/30 text-white flex items-center justify-center border border-white/20">
-                <Sparkles className="w-6 h-6 text-emerald-200" />
               </div>
               <h3 className="font-extrabold text-lg text-white">Resmi Rp 0,- Tanpa Pungli</h3>
               <p className="text-xs text-emerald-100/80 leading-relaxed">
@@ -587,7 +577,7 @@ export const LayananSuratPage: React.FC = () => {
                     onClick={() => setSelectedSurat(s)}
                     className="text-xs font-bold text-slate-600 hover:text-emerald-700 hover:underline cursor-pointer"
                   >
-                    Syarat Berkas →
+                    Syarat Berkas
                   </button>
                   <button
                     type="button"
@@ -700,7 +690,7 @@ export const LayananSuratPage: React.FC = () => {
                 className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
                 title="Tutup (ESC)"
               >
-                ✕
+                <X className="w-5 h-5" />
               </button>
             </div>
 

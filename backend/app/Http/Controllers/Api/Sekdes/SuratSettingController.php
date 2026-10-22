@@ -26,6 +26,7 @@ class SuratSettingController extends Controller
                 'nomor_terakhir' => (int)($st->nomor_terakhir ?? 0),
                 'nomor_berikutnya' => (int)($st->nomor_terakhir ?? 0) + 1,
                 'preview_nomor' => $preview,
+                'persyaratan_json' => is_array($st->persyaratan_json) ? $st->persyaratan_json : (json_decode($st->persyaratan_json, true) ?: []),
                 'masa_berlaku_hari' => $st->masa_berlaku_hari,
                 'is_active' => (bool)$st->is_active,
             ];
@@ -49,21 +50,39 @@ class SuratSettingController extends Controller
             'format_nomor' => 'required|string|max:150',
             'kode_klasifikasi' => 'nullable|string|max:50',
             'nomor_terakhir' => 'required|integer|min:0',
+            'nama_surat' => 'nullable|string|max:150',
+            'persyaratan_json' => 'nullable',
         ]);
 
         $suratType = SuratType::findOrFail($id);
 
-        $suratType->update([
+        $updateData = [
             'format_nomor' => trim($request->input('format_nomor')),
             'kode_klasifikasi' => trim($request->input('kode_klasifikasi', $suratType->kode_klasifikasi ?: '470')),
             'nomor_terakhir' => (int)$request->input('nomor_terakhir'),
-        ]);
+        ];
+
+        if ($request->filled('nama_surat')) {
+            $updateData['nama_surat'] = trim($request->input('nama_surat'));
+        }
+
+        if ($request->has('persyaratan_json')) {
+            $syarat = $request->input('persyaratan_json');
+            if (is_string($syarat)) {
+                $decoded = json_decode($syarat, true);
+                $updateData['persyaratan_json'] = is_array($decoded) ? $decoded : array_filter(array_map('trim', explode("\n", $syarat)));
+            } elseif (is_array($syarat)) {
+                $updateData['persyaratan_json'] = array_values(array_filter($syarat));
+            }
+        }
+
+        $suratType->update($updateData);
 
         $preview = LetterNumberService::generateNumber($suratType);
 
         return response()->json([
             'success' => true,
-            'message' => "Format penomoran surat {$suratType->kode_surat} berhasil diperbarui.",
+            'message' => "Format dan persyaratan surat {$suratType->kode_surat} berhasil diperbarui.",
             'data' => [
                 'id' => $suratType->id,
                 'kode_surat' => $suratType->kode_surat,
@@ -73,6 +92,7 @@ class SuratSettingController extends Controller
                 'nomor_terakhir' => (int)$suratType->nomor_terakhir,
                 'nomor_berikutnya' => (int)$suratType->nomor_terakhir + 1,
                 'preview_nomor' => $preview,
+                'persyaratan_json' => $suratType->persyaratan_json ?: [],
             ],
         ]);
     }

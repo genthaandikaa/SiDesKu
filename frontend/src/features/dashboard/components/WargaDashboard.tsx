@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { 
@@ -16,7 +16,6 @@ import {
   ShieldCheck, 
   Building2, 
   Calendar, 
-  Sparkles, 
   ArrowRight, 
   CreditCard, 
   HeartHandshake, 
@@ -38,7 +37,11 @@ import {
   Loader2,
   Copy,
   Info,
-  FolderCheck
+  FolderCheck,
+  Wallet,
+  AlertTriangle,
+  HeartPulse,
+  HandHeart
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { useAuth } from '@/shared/context/AuthContext';
@@ -46,7 +49,11 @@ import { SuratRequest, SuratType, BantuanPenerima } from '@/shared/types';
 import { CetakSuratModal } from './CetakSuratModal';
 import { SuratTrackingModal } from './SuratTrackingModal';
 import { CameraUploadModal } from '@/shared/components/CameraUploadModal';
+import { UserAvatar } from '@/shared/components/UserAvatar';
 import { BerkasKependudukanView } from './BerkasKependudukanView';
+import { getSafeMediaUrl } from '@/shared/utils/mediaUrl';
+import { AspirasiPengaduanWargaView } from './AspirasiPengaduanWargaView';
+import { Pagination } from '@/shared/components/Pagination';
 import {
   DonutGauge,
   AreaSplineChart,
@@ -67,8 +74,8 @@ export const parseLampiranDokumen = (val?: string | any[] | null): Array<{ url: 
   if (Array.isArray(val)) {
     return val.map((item, idx) => 
       typeof item === 'string' 
-        ? { url: item, nama: `Dokumen ${idx + 1}` } 
-        : { url: item.url || item.file || '', nama: item.nama || `Dokumen ${idx + 1}` }
+        ? { url: getSafeMediaUrl(item), nama: `Dokumen ${idx + 1}` } 
+        : { url: getSafeMediaUrl(item.url || item.file || ''), nama: item.nama || `Dokumen ${idx + 1}` }
     ).filter(d => !!d.url);
   }
   if (typeof val === 'string') {
@@ -79,18 +86,18 @@ export const parseLampiranDokumen = (val?: string | any[] | null): Array<{ url: 
         if (Array.isArray(parsed)) {
           return parsed.map((item, idx) => 
             typeof item === 'string' 
-              ? { url: item, nama: `Dokumen ${idx + 1}` } 
-              : { url: item.url || item.file || '', nama: item.nama || `Dokumen ${idx + 1}` }
+              ? { url: getSafeMediaUrl(item), nama: `Dokumen ${idx + 1}` } 
+              : { url: getSafeMediaUrl(item.url || item.file || ''), nama: item.nama || `Dokumen ${idx + 1}` }
           ).filter(d => !!d.url);
         }
         if (parsed && typeof parsed === 'object') {
-          return [{ url: parsed.url || parsed.file || '', nama: parsed.nama || 'Dokumen Lampiran' }];
+          return [{ url: getSafeMediaUrl(parsed.url || parsed.file || ''), nama: parsed.nama || 'Dokumen Lampiran' }];
         }
       } catch {
         // fallback
       }
     }
-    return [{ url: val, nama: 'Dokumen Lampiran' }];
+    return [{ url: getSafeMediaUrl(val), nama: 'Dokumen Lampiran' }];
   }
   return [];
 };
@@ -245,6 +252,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   const [kasSummary, setKasSummary] = useState<any>(null);
   const [desa, setDesa] = useState<any>(null);
   const [masterDokumen, setMasterDokumen] = useState<any>(null);
+  const [wargaAgendas, setWargaAgendas] = useState<any[]>([]);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -285,7 +293,12 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   const [suratSearch, setSuratSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<'Semua' | 'Kependudukan' | 'Sosial' | 'Keluarga' | 'Usaha' | 'Hukum'>('Semua');
   const [historySearch, setHistorySearch] = useState('');
-  const [historyStatusFilter, setHistoryStatusFilter] = useState<'semua' | 'selesai' | 'proses' | 'ditolak'>('semua');
+  const [historyStatusFilter, setHistoryStatusFilter] = useState<'semua' | 'selesai' | 'proses' | 'ditolak' | 'arsip'>('arsip');
+  const [historyPage, setHistoryPage] = useState(1);
+
+  useEffect(() => {
+    setHistoryPage(1);
+  }, [historySearch, historyStatusFilter]);
 
   // Form State for Ajukan Surat
   const [selectedTypeId, setSelectedTypeId] = useState<number>(1);
@@ -306,6 +319,92 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   const [lampiranList, setLampiranList] = useState<FormLampiranItem[]>([]);
   const [previewGallery, setPreviewGallery] = useState<Array<{ url: string; nama: string }>>([]);
   const [galleryIndex, setGalleryIndex] = useState<number>(0);
+  const fileUploadInputRef = useRef<HTMLInputElement | null>(null);
+  const cameraDirectInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Helper to attach or update photos in lampiranList
+  const attachPhoto = (base64: string, fileName?: string) => {
+    if (replacingPhotoId) {
+      setLampiranList(prev => prev.map(item => 
+        item.id === replacingPhotoId ? { ...item, url: base64, nama: fileName || item.nama } : item
+      ));
+      setReplacingPhotoId(null);
+      showToast('success', 'Foto Diperbarui', 'Foto lampiran berhasil diganti.');
+    } else {
+      const newDoc: FormLampiranItem = {
+        id: `doc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+        url: base64,
+        nama: fileName || `Foto Dokumen #${lampiranList.length + 1}`,
+      };
+      setLampiranList(prev => [...prev, newDoc]);
+      showToast('success', 'Foto Terlampir', `${newDoc.nama} berhasil ditambahkan.`);
+    }
+  };
+
+  // Direct Gallery / File Upload Handler (Opens phone gallery directly without modal)
+  const handleDirectFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+    if (file.size > MAX_FILE_SIZE) {
+      showToast('error', 'Ukuran Berkas Terlalu Besar', 'Maksimal ukuran foto adalah 5 MB.');
+      e.target.value = '';
+      return;
+    }
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    if (file.type && !allowedTypes.includes(file.type.toLowerCase())) {
+      showToast('error', 'Format Tidak Didukung', 'Mohon gunakan format gambar JPG, PNG, atau WebP.');
+      e.target.value = '';
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (!result) return;
+
+      const img = new Image();
+      img.src = result;
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas');
+          const maxDim = 1280;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            const compressed = canvas.toDataURL('image/jpeg', 0.78);
+            attachPhoto(compressed, file.name);
+          } else {
+            attachPhoto(result, file.name);
+          }
+        } catch {
+          attachPhoto(result, file.name);
+        }
+      };
+      img.onerror = () => {
+        attachPhoto(result, file.name);
+      };
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
 
   // Lock body scroll and handle ESC key for delete confirm and preview gallery
   useEffect(() => {
@@ -369,13 +468,14 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
 
   const fetchWargaData = async () => {
     try {
-      const [suratRes, typesRes, bansosRes, kasRes, desaRes, dokRes] = await Promise.all([
+      const [suratRes, typesRes, bansosRes, kasRes, desaRes, dokRes, agendaRes] = await Promise.all([
         api.get('/surats'),
         api.get('/surat-types'),
         api.get('/bansos'),
         api.get('/kas-rt'),
         api.get('/settings/desa'),
         api.get('/warga/dokumen').catch(() => ({ data: { success: false } })),
+        api.get('/agendas').catch(() => api.get('/public/agendas')).catch(() => ({ data: { data: [] } })),
       ]);
 
       if (suratRes.data?.success && suratRes.data.data) setSurats(suratRes.data.data);
@@ -386,6 +486,13 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
       if (kasRes.data?.success) setKasSummary(kasRes.data);
       if (desaRes.data?.success && desaRes.data.data) setDesa(desaRes.data.data);
       if (dokRes.data?.success && dokRes.data.data) setMasterDokumen(dokRes.data.data);
+      if (agendaRes.data?.data && Array.isArray(agendaRes.data.data)) {
+        const filtered = agendaRes.data.data.filter((ag: any) => {
+          const p = (ag.peserta || '').trim();
+          return p !== 'RT' && p !== 'RW' && p !== 'RT & RW';
+        });
+        setWargaAgendas(filtered);
+      }
     } catch {
       //
     }
@@ -429,10 +536,13 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           showToast('error', 'Gagal Memperbarui Surat', res.data?.message || 'Respons server tidak valid.');
         }
       } else {
+        const idempotencyKey = `warga_req_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
         const res = await api.post('/surats', {
           surat_type_id: typeId,
           keperluan: keperluan.trim(),
           file_lampiran: payloadLampiran,
+        }, {
+          headers: { 'X-Idempotency-Key': idempotencyKey }
         });
         if (res.data && res.data.success) {
           setSubmitSuccess(true);
@@ -493,6 +603,22 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     }
   };
 
+  const handleReapplySurat = (suratTypeId: number, oldKeperluan: string) => {
+    setSelectedTrackingSurat(null);
+    setSelectedTypeId(suratTypeId);
+    setKeperluan(oldKeperluan || '');
+    setLampiranList([]);
+    if (onNavigate) {
+      onNavigate('ajukan_surat');
+    }
+    navigate(`/dashboard/ajukan/${suratTypeId}`);
+    showToast(
+      'info',
+      'Pengajuan Ulang Surat',
+      'Data keperluan sebelumnya telah dimuat. Silakan periksa kembali berkas persyaratan dan ajukan permohonan baru.'
+    );
+  };
+
   const p = user?.warga_profile;
 
   // Filter letter types by search and category
@@ -513,8 +639,9 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
   });
 
   // Filtered lists
-  const pendingSurats = surats.filter(s => ['pending_rt', 'approved_rt', 'pending_rw', 'processed_sekdes'].includes(s.status));
+  const pendingSurats = surats.filter(s => ['pending_rt', 'approved_rt', 'pending_rw', 'processed_sekdes', 'pending_kades'].includes(s.status));
   const completedSurats = surats.filter(s => s.status === 'completed');
+  const rejectedSurats = surats.filter(s => ['rejected', 'rejected_rt', 'rejected_kades'].includes(s.status));
   const searchedHistory = surats.filter(s => {
     const matchKeyword = s.nomor_resi.toLowerCase().includes(historySearch.toLowerCase()) ||
       s.surat_type?.nama_surat.toLowerCase().includes(historySearch.toLowerCase()) ||
@@ -523,10 +650,13 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     if (!matchKeyword) return false;
 
     if (historyStatusFilter === 'selesai') return s.status === 'completed';
-    if (historyStatusFilter === 'proses') return ['pending_rt', 'approved_rt', 'pending_rw', 'processed_sekdes'].includes(s.status);
-    if (historyStatusFilter === 'ditolak') return s.status === 'rejected';
+    if (historyStatusFilter === 'proses') return ['pending_rt', 'approved_rt', 'pending_rw', 'processed_sekdes', 'pending_kades'].includes(s.status);
+    if (historyStatusFilter === 'ditolak') return ['rejected', 'rejected_rt', 'rejected_kades'].includes(s.status);
+    if (historyStatusFilter === 'arsip') return ['completed', 'rejected', 'rejected_rt', 'rejected_kades'].includes(s.status);
     return true;
   });
+
+  const paginatedHistory = searchedHistory.slice((historyPage - 1) * 8, historyPage * 8);
 
   // Submenu router renderer
   const renderSubmenuContent = () => {
@@ -545,6 +675,11 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
       );
     }
 
+    // Aspirasi & Pengaduan Warga
+    if (['aspirasi_warga', 'aspirasi', 'pengaduan'].includes(activeSubmenu)) {
+      return <AspirasiPengaduanWargaView />;
+    }
+
     // Form & Katalog Pengajuan Surat
     if (activeSubmenu === 'ajukan_surat') {
       const isFormMode = Boolean(routeSuratTypeId || editingSurat);
@@ -554,7 +689,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         return (
           <div className="max-w-3xl mx-auto space-y-6 animate-fade-in font-sans">
             {/* Top Navigation */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={() => {
@@ -564,28 +699,24 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     navigate('/dashboard/ajukan');
                   }
                 }}
-                className="inline-flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 transition-all cursor-pointer shadow-2xs press-down"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-xs font-bold text-slate-700 transition-all cursor-pointer shadow-2xs press-down"
               >
-                <ChevronLeft className="w-4 h-4" />
-                <span>Kembali ke {editingSurat ? 'Status Surat' : 'Katalog Surat'}</span>
+                <ChevronLeft className="w-4 h-4 text-slate-500" />
+                <span>Kembali ke Pilihan Surat</span>
               </button>
-
-              <span className="text-[11px] font-mono text-slate-400">
-                Layanan Surat Online Desa Doko
-              </span>
             </div>
 
-            {/* Edit Mode Alert Banner */}
+            {/* Edit Mode Alert Banner (Clean White) */}
             {editingSurat && (
-              <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 text-amber-900 flex items-start gap-3.5 shadow-2xs">
-                <div className="w-9 h-9 rounded-2xl bg-amber-200/80 text-amber-800 flex items-center justify-center shrink-0 mt-0.5">
+              <div className="p-4 sm:p-5 rounded-3xl bg-white border border-amber-200/90 text-slate-800 flex items-start gap-3.5 shadow-2xs">
+                <div className="w-9 h-9 rounded-2xl bg-amber-50 text-amber-700 border border-amber-200/60 flex items-center justify-center shrink-0 mt-0.5">
                   <AlertCircle className="w-5 h-5" />
                 </div>
                 <div className="text-xs space-y-1">
-                  <div className="font-black text-sm text-amber-950">
+                  <div className="font-bold text-sm text-slate-900">
                     Mode Edit Pengajuan (No. Resi: {editingSurat.nomor_resi})
                   </div>
-                  <p className="text-amber-800 leading-relaxed">
+                  <p className="text-slate-600 leading-relaxed">
                     Data lama Anda telah otomatis terisi pada formulir ini. Silakan perbaiki data yang salah atau ubah/hapus foto dokumen yang kurang jernih, lalu klik <strong>Simpan Perubahan Surat</strong>.
                   </p>
                 </div>
@@ -610,7 +741,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     onClick={() => navigate('/dashboard/status-surat')}
                     className="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-xs hover:bg-emerald-800 cursor-pointer"
                   >
-                    Pantau di Status Surat ➔
+                    Pantau di Status Surat
                   </button>
                   <button
                     type="button"
@@ -688,210 +819,92 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   />
                 </div>
 
-                {/* Master Dokumen Kependudukan Auto-Attach Banner */}
-                <div className="p-4 rounded-2xl bg-emerald-50/80 border border-emerald-200/90 space-y-3 shadow-2xs">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs shrink-0">
-                        <FolderCheck className="w-4 h-4" />
+                {/* Status Arsip Kependudukan Desa (Otomatis & Tenang) */}
+                {(() => {
+                  const hasKtp = Boolean(masterDokumen?.stats?.has_ktp ?? masterDokumen?.dokumen?.foto_ktp);
+                  const hasKk = Boolean(masterDokumen?.stats?.has_kk ?? masterDokumen?.dokumen?.foto_kk);
+                  if (hasKtp || hasKk) {
+                    return (
+                      <div className="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-[11px] text-emerald-900 flex items-center gap-2.5 shadow-2xs">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span className="font-medium">
+                          Identitas <strong className="font-bold">{[hasKtp && 'KTP', hasKk && 'Kartu Keluarga'].filter(Boolean).join(' & ')}</strong> Anda telah terhubung otomatis dari arsip kependudukan desa.
+                        </span>
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-xs font-black text-emerald-950">
-                            Master Berkas Otomatis dari Database Desa
-                          </h4>
-                          <span className="text-[10px] font-black bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full">
-                            Auto-Attach
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-emerald-700 mt-0.5">
-                          Dokumen identitas pokok (KTP & KK) otomatis dilampirkan dari arsip desa Anda tanpa perlu upload berulang kali.
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (onNavigate) {
-                          onNavigate('berkas_kependudukan');
-                        } else {
-                          navigate('/dashboard/berkas');
-                        }
-                      }}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-emerald-100/70 border border-emerald-300 text-[11px] font-extrabold text-emerald-800 transition-all cursor-pointer shadow-2xs shrink-0 self-start sm:self-auto"
-                    >
-                      <span>Kelola Master Berkas</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                    );
+                  }
+                  return null;
+                })()}
 
-                  {/* Chips Status Master Dokumen */}
-                  <div className="flex flex-wrap gap-2 pt-2 border-t border-emerald-200/60">
-                    {(() => {
-                      const hasKtp = Boolean(masterDokumen?.stats?.has_ktp ?? masterDokumen?.dokumen?.foto_ktp);
-                      const hasKk = Boolean(masterDokumen?.stats?.has_kk ?? masterDokumen?.dokumen?.foto_kk);
-                      const hasAkta = Boolean(masterDokumen?.stats?.has_akta ?? masterDokumen?.dokumen?.foto_akta_lahir);
-                      const hasNikah = Boolean(masterDokumen?.stats?.has_nikah ?? masterDokumen?.dokumen?.foto_buku_nikah);
-
-                      return (
-                        <>
-                          <div className={`px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 ${
-                            hasKtp 
-                              ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' 
-                              : 'bg-amber-50 text-amber-900 border border-amber-300'
-                          }`}>
-                            {hasKtp ? (
-                              <>
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-                                <span>KTP Terlampir Otomatis (Master)</span>
-                              </>
-                            ) : (
-                              <>
-                                <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
-                                <span>KTP Belum Tersimpan di Master Desa</span>
-                              </>
-                            )}
-                          </div>
-
-                          <div className={`px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 ${
-                            hasKk 
-                              ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' 
-                              : 'bg-amber-50 text-amber-900 border border-amber-300'
-                          }`}>
-                            {hasKk ? (
-                              <>
-                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-                                <span>KK Terlampir Otomatis (Master)</span>
-                              </>
-                            ) : (
-                              <>
-                                <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
-                                <span>KK Belum Tersimpan di Master Desa</span>
-                              </>
-                            )}
-                          </div>
-
-                          {hasAkta && (
-                            <div className="px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 bg-emerald-100 text-emerald-900 border border-emerald-300">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-                              <span>Akta Lahir Terlampir (Master)</span>
-                            </div>
-                          )}
-
-                          {hasNikah && (
-                            <div className="px-2.5 py-1 rounded-xl text-[11px] font-bold flex items-center gap-1.5 bg-emerald-100 text-emerald-900 border border-emerald-300">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-                              <span>Buku Nikah Terlampir (Master)</span>
-                            </div>
-                          )}
-                        </>
-                      );
-                    })()}
-                  </div>
-                </div>
-
-                {/* Mobile-Friendly Lampiran Dokumen Section */}
-                <div className="space-y-3 pt-3 border-t border-slate-100">
+                {/* Bagian Lampiran Dokumen Bersih & Ramah Pemula */}
+                <div className="space-y-3 pt-2 border-t border-slate-100">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                      <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>Lampiran Tambahan / Dokumen Khusus (Opsional):</span>
-                    </label>
-                    <span className="text-[10px] text-slate-600 font-extrabold bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
-                      Hanya jika diperlukan
+                    <div>
+                      <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Foto / Lampiran Dokumen</span>
+                      </label>
+                    </div>
+                    <span className="text-[10px] text-slate-500 font-bold bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 shrink-0">
+                      Opsional
                     </span>
                   </div>
 
-                  {/* Category Pill Selector */}
-                  <div className="space-y-1">
-                    <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                      Pilih Kategori Dokumen yang Mau Ditambahkan:
-                    </div>
-                    <div className="flex flex-wrap gap-1.5">
-                      {[
-                        'Foto KTP',
-                        'Kartu Keluarga (KK)',
-                        'Akta / Surat Nikah',
-                        'Surat Pengantar RT',
-                        'Foto Usaha / Lokasi',
-                        'Berkas Pendukung',
-                      ].map((cat) => (
-                        <button
-                          key={cat}
-                          type="button"
-                          onClick={() => setLampiranCategory(cat)}
-                          className={`px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
-                            lampiranCategory === cat
-                              ? 'bg-emerald-600 text-white shadow-2xs'
-                              : 'bg-slate-100 hover:bg-slate-200 text-slate-600'
-                          }`}
-                        >
-                          {cat}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Compact List of Attached Documents (Mobile Friendly) */}
+                  {/* Daftar Foto Terlampir */}
                   {lampiranList.length > 0 && (
                     <div className="space-y-2 pt-1">
-                      <div className="flex items-center justify-between text-[11px] font-black text-slate-700">
+                      <div className="flex items-center justify-between text-[11px] font-bold text-slate-700">
                         <span>Dokumen Terlampir ({lampiranList.length}):</span>
-                        <span className="text-[10px] text-emerald-700 font-medium">Klik foto untuk perbesar pratinjau</span>
+                        <span className="text-[10px] text-slate-400">Ketuk foto untuk melihat pratinjau</span>
                       </div>
 
                       <div className="space-y-2">
                         {lampiranList.map((item, idx) => (
                           <div
                             key={item.id}
-                            className="p-2.5 rounded-2xl bg-slate-50 border border-slate-200/90 hover:border-emerald-300 flex items-center justify-between gap-3 transition-all animate-scale-up"
+                            className="p-2.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-emerald-300 flex items-center justify-between gap-3 transition-all"
                           >
-                            {/* Thumbnail & Label */}
                             <div
                               onClick={() => {
                                 setPreviewGallery(lampiranList.map(l => ({ url: l.url, nama: l.nama })));
                                 setGalleryIndex(idx);
                               }}
                               className="flex items-center gap-2.5 min-w-0 cursor-pointer group"
-                              title="Klik untuk melihat foto layar penuh"
+                              title="Ketuk untuk melihat foto ukuran penuh"
                             >
                               <div className="relative w-11 h-11 rounded-xl bg-slate-900 overflow-hidden shrink-0 border border-slate-200 shadow-2xs group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
                                 <img
                                   src={item.url}
                                   alt={item.nama}
-                                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-200"
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                                 />
-                                <div className="absolute inset-0 bg-black/35 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                                  <Eye className="w-4 h-4 text-white drop-shadow" />
+                                <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                  <Eye className="w-3.5 h-3.5 text-white drop-shadow" />
                                 </div>
                               </div>
                               <div className="min-w-0">
-                                <div className="text-xs font-black text-slate-900 truncate group-hover:text-emerald-700 transition-colors">
+                                <div className="text-xs font-bold text-slate-900 truncate group-hover:text-emerald-700 transition-colors">
                                   {item.nama}
                                 </div>
-                                <div className="text-[10px] text-emerald-700 font-medium flex items-center gap-1 mt-0.5">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                  <span>Klik foto untuk preview</span>
+                                <div className="text-[10px] text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
+                                  <CheckCircle2 className="w-3 h-3" />
+                                  <span>Siap dilampirkan</span>
                                 </div>
                               </div>
                             </div>
 
-                            {/* Action Buttons: Ubah Foto & Hapus Foto */}
                             <div className="flex items-center gap-1.5 shrink-0">
                               <button
                                 type="button"
                                 onClick={() => {
                                   setReplacingPhotoId(item.id);
-                                  setCameraModalTitle(`Ganti Foto ${item.nama}`);
-                                  setCameraModalInitialMode('upload');
-                                  setIsCameraModalOpen(true);
+                                  fileUploadInputRef.current?.click();
                                 }}
-                                className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-amber-50 text-amber-700 border border-amber-200 font-bold text-[11px] transition-all flex items-center gap-1 shadow-2xs cursor-pointer press-down"
-                                title="Ganti foto bila buram atau salah pilih"
+                                className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-[11px] transition-all flex items-center gap-1 shadow-2xs cursor-pointer press-down"
+                                title="Ganti foto ini"
                               >
-                                <RefreshCw className="w-3.5 h-3.5 text-amber-600" />
-                                <span className="hidden sm:inline">Ubah Foto</span>
-                                <span className="sm:hidden">Ubah</span>
+                                <RefreshCw className="w-3 h-3 text-slate-500" />
+                                <span className="hidden sm:inline">Ganti</span>
                               </button>
 
                               <button
@@ -899,7 +912,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                                 onClick={() => {
                                   setLampiranList(prev => prev.filter(l => l.id !== item.id));
                                 }}
-                                className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 font-bold text-[11px] transition-all flex items-center gap-1 shadow-2xs cursor-pointer press-down"
+                                className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 font-bold text-[11px] transition-all flex items-center gap-1 shadow-2xs cursor-pointer press-down"
                                 title="Hapus foto ini"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -912,26 +925,24 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     </div>
                   )}
 
-                  {/* Trigger Buttons: Kamera HP or File Upload */}
+                  {/* Dua Tombol Aksi Bersih: Galeri & Kamera HP */}
                   <div className="grid grid-cols-2 gap-2.5 pt-1">
                     <button
                       type="button"
                       onClick={() => {
                         setReplacingPhotoId(null);
-                        setCameraModalTitle(`Ambil ${lampiranCategory}`);
-                        setCameraModalInitialMode('camera');
-                        setIsCameraModalOpen(true);
+                        fileUploadInputRef.current?.click();
                       }}
-                      className="p-3 rounded-2xl bg-emerald-50/80 hover:bg-emerald-100/80 border border-emerald-300 text-emerald-900 transition-all flex flex-col items-center justify-center gap-1 text-center cursor-pointer shadow-2xs group press-down"
+                      className="p-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 transition-all flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer shadow-2xs group press-down"
                     >
-                      <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-                        <Camera className="w-4 h-4" />
+                      <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center group-hover:border-emerald-500 group-hover:text-emerald-700 transition-colors">
+                        <Upload className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-xs font-black">
-                          {lampiranList.length > 0 ? '+ Foto Kamera' : 'Buka Kamera HP'}
+                        <div className="text-xs font-black text-slate-900">
+                          {lampiranList.length > 0 ? '+ Tambah dari Galeri' : 'Pilih dari Galeri'}
                         </div>
-                        <div className="text-[10px] text-emerald-700">Jepret foto langsung</div>
+                        <div className="text-[10px] text-slate-500 font-medium">Buka file / galeri HP</div>
                       </div>
                     </button>
 
@@ -939,65 +950,87 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       type="button"
                       onClick={() => {
                         setReplacingPhotoId(null);
-                        setCameraModalTitle(`Unggah ${lampiranCategory}`);
-                        setCameraModalInitialMode('upload');
-                        setIsCameraModalOpen(true);
+                        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                        if (isMobile && cameraDirectInputRef.current) {
+                          cameraDirectInputRef.current.click();
+                        } else {
+                          setCameraModalTitle('Ambil Foto Dokumen');
+                          setCameraModalInitialMode('camera');
+                          setIsCameraModalOpen(true);
+                        }
                       }}
-                      className="p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 transition-all flex flex-col items-center justify-center gap-1 text-center cursor-pointer shadow-2xs group press-down"
+                      className="p-3.5 rounded-2xl bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 text-emerald-950 transition-all flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer shadow-2xs group press-down"
                     >
-                      <div className="w-8 h-8 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center shadow-xs group-hover:scale-110 transition-transform">
-                        <Upload className="w-4 h-4" />
+                      <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                        <Camera className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-xs font-black">
-                          {lampiranList.length > 0 ? '+ Unggah Berkas' : 'Unggah dari Berkas'}
+                        <div className="text-xs font-black text-emerald-950">
+                          {lampiranList.length > 0 ? '+ Jepret Kamera' : 'Buka Kamera HP'}
                         </div>
-                        <div className="text-[10px] text-slate-500">Galeri foto / file</div>
+                        <div className="text-[10px] text-emerald-700 font-medium">Foto berkas langsung</div>
                       </div>
                     </button>
+
+                    {/* Native file picker */}
+                    <input
+                      ref={fileUploadInputRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/jpg,image/*"
+                      onChange={handleDirectFileUpload}
+                      className="hidden"
+                    />
+
+                    {/* Native camera capture */}
+                    <input
+                      ref={cameraDirectInputRef}
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={handleDirectFileUpload}
+                      className="hidden"
+                    />
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/60 text-[11px] text-emerald-900 space-y-1">
-                  <div className="font-extrabold flex items-center gap-1.5">
-                    <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                    <span>Jaminan Surat Sah & Bebas Biaya</span>
-                  </div>
-                  <p className="text-slate-600 leading-relaxed">
-                    Surat diterbitkan dengan TTD elektronik & QR stempel sah resmi Pemdes Doko (Rp 0,-).
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-3 pt-2">
-                  {editingSurat && (
-                    <button
-                      type="button"
-                      onClick={() => navigate('/dashboard/status-surat')}
-                      className="py-3 px-5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition-all cursor-pointer"
-                    >
-                      Batal
-                    </button>
-                  )}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`flex-1 py-3.5 px-4 rounded-2xl text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 ${
-                      isSubmitting 
-                        ? 'bg-emerald-800/80 cursor-not-allowed opacity-80' 
-                        : 'bg-emerald-600 hover:bg-emerald-700 hover-glow cursor-pointer press-down'
-                    }`}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>{editingSurat ? 'Sedang Menyimpan Perubahan...' : 'Sedang Mengirim Permohonan...'}</span>
-                      </>
-                    ) : editingSurat ? (
-                      'Simpan Perubahan Surat'
-                    ) : (
-                      'Kirim Permohonan Surat ➔'
+                {/* Tombol Aksi Submit Form */}
+                <div className="space-y-2.5 pt-2">
+                  <div className="flex items-center gap-3">
+                    {editingSurat && (
+                      <button
+                        type="button"
+                        onClick={() => navigate('/dashboard/status-surat')}
+                        className="py-3.5 px-5 rounded-2xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition-all cursor-pointer shadow-2xs"
+                      >
+                        Batal
+                      </button>
                     )}
-                  </button>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`flex-1 py-3.5 px-5 rounded-2xl text-white font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 ${
+                        isSubmitting 
+                          ? 'bg-emerald-800/80 cursor-not-allowed opacity-80' 
+                          : 'bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] cursor-pointer'
+                      }`}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>{editingSurat ? 'Menyimpan...' : 'Mengajukan...'}</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>{editingSurat ? 'Simpan perubahan' : 'Ajukan surat'}</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="text-[11px] text-slate-500 font-medium text-center flex items-center justify-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>Layanan resmi Pemerintah Desa Doko • Gratis tanpa pungutan biaya</span>
+                  </div>
                 </div>
               </form>
             </div>
@@ -1037,11 +1070,11 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           <div className="flex flex-wrap gap-1.5 text-xs">
             {[
               { id: 'Semua', label: `Semua (${types.length})` },
-              { id: 'Kependudukan', label: '🪪 KTP & KK' },
-              { id: 'Sosial', label: '🤝 SKTM & Bansos' },
-              { id: 'Keluarga', label: '💍 Nikah & Akta' },
-              { id: 'Usaha', label: '🏪 Usaha (SKU)' },
-              { id: 'Hukum', label: '👮 SKCK & Izin' },
+              { id: 'Kependudukan', label: 'KTP & KK' },
+              { id: 'Sosial', label: 'SKTM & Bansos' },
+              { id: 'Keluarga', label: 'Nikah & Akta' },
+              { id: 'Usaha', label: 'Usaha (SKU)' },
+              { id: 'Hukum', label: 'SKCK & Izin' },
             ].map((c) => (
               <button
                 key={c.id}
@@ -1170,10 +1203,10 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
       <div className="space-y-6 animate-fade-in font-sans">
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Pemantauan Status Surat yang Sedang Diproses
+            Status Surat
           </h2>
           <p className="text-xs sm:text-sm text-slate-500">
-            Lacak tahapan persetujuan pengantar dari RT 01, RW 01, hingga penerbitan di Balai Desa beserta catatan petugas.
+            Pantau progres persetujuan RT hingga penerbitan oleh Kepala Desa.
           </p>
         </div>
 
@@ -1182,112 +1215,197 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-sm text-slate-900">Tidak Ada Surat yang Sedang Berjalan</h3>
+            <h3 className="font-extrabold text-sm text-slate-900">Belum ada pengajuan aktif</h3>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Semua surat yang pernah Anda ajukan telah selesai diproses atau belum ada pengajuan baru.
+              Semua surat telah selesai diproses atau belum ada pengajuan baru.
             </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {pendingSurats.map((s) => (
-              <div key={s.id} className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-                  <div>
-                    <div className="text-[11px] font-mono text-slate-400">Resi: {s.nomor_resi}</div>
-                    <h3 className="text-base font-black text-slate-900">{s.surat_type?.nama_surat}</h3>
-                    <p className="text-xs text-slate-600 mt-0.5">Keperluan: {s.keperluan}</p>
-                  </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-900 self-start sm:self-auto">
-                    {['processed_sekdes', 'approved_rt', 'pending_rw'].includes(s.status) ? 'Tahap 2: Verifikasi & Legalisasi Kepala Desa' :
-                     'Tahap 1: Verifikasi Ketua RT 01'}
-                  </span>
-                </div>
+            {pendingSurats.map((s) => {
+              const isRTStepDone = s.status !== 'pending_rt';
+              const isDesaStepActive = ['processed_sekdes', 'approved_rt', 'pending_rw', 'pending_kades'].includes(s.status);
+              const isDone = s.status === 'completed';
+              const lampiranDocs = parseLampiranDokumen(s.file_lampiran);
 
-                {/* Progress Steps Ribbon */}
-                <div className="grid grid-cols-2 gap-3 text-center text-xs pt-1">
-                  <div className={`p-3 rounded-2xl border font-bold flex items-center justify-center gap-2 ${
-                    s.status !== 'pending_rt' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse'
-                  }`}>
-                    <span>1. Verifikasi Ketua RT 01</span>
-                    {s.status !== 'pending_rt' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
-                  </div>
-                  <div className={`p-3 rounded-2xl border font-bold flex items-center justify-center gap-2 ${
-                    s.status === 'completed' ? 'bg-emerald-50 border-emerald-300 text-emerald-800' :
-                    ['processed_sekdes', 'approved_rt', 'pending_rw'].includes(s.status) ? 'bg-amber-50 border-amber-300 text-amber-900 animate-pulse' : 'bg-slate-50 border-slate-200 text-slate-400'
-                  }`}>
-                    <span>2. Legalisasi Kepala Desa / Sekdes</span>
-                    {s.status === 'completed' && <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />}
-                  </div>
-                </div>
+              return (
+                <div key={s.id} className="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4">
+                  {/* Card Header: Resi, Judul & Status Badge */}
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2.5 pb-3.5 border-b border-slate-100">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-mono font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
+                          {s.nomor_resi}
+                        </span>
+                        <span className="text-[11px] text-slate-400">
+                          {s.created_at ? new Date(s.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-black text-slate-900 leading-snug">
+                        {s.surat_type?.nama_surat}
+                      </h3>
+                      <p className="text-xs text-slate-600 line-clamp-2">
+                        Keperluan: {s.keperluan}
+                      </p>
+                    </div>
 
-                {/* Live Tracking Actions & Notes Strip */}
-                <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 text-xs">
-                  <div className="text-slate-600 font-medium">
-                    {s.status === 'pending_rt' && '⏳ Berkas telah diajukan dan sedang menunggu verifikasi dari Ketua RT 01.'}
-                    {['processed_sekdes', 'approved_rt', 'pending_rw'].includes(s.status) && '✅ Verifikasi RT 01 selesai. Saat ini berkas ada di meja Kepala Desa / Sekdes untuk penandatanganan QR sah.'}
-                    {s.status === 'completed' && '🎉 Surat telah selesai diverifikasi & diterbitkan secara resmi oleh Kepala Desa!'}
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold self-start sm:self-auto shrink-0 ${
+                      isRTStepDone 
+                        ? 'bg-blue-50 text-blue-800 border border-blue-200' 
+                        : 'bg-amber-50 text-amber-900 border border-amber-200'
+                    }`}>
+                      {isRTStepDone ? 'Tahap 2: Menunggu Balai Desa' : 'Tahap 1: Menunggu Ketua RT'}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {parseLampiranDokumen(s.file_lampiran).length > 0 && (
+
+                  {/* Sleek Horizontal Stepper (Direct RT -> Desa) */}
+                  <div className="pt-1 pb-1 px-3 sm:px-6">
+                    <div className="relative flex items-center justify-between">
+                      {/* Connecting Line */}
+                      <div className="absolute left-8 right-8 top-4 h-1 bg-slate-100 -z-0 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full transition-all duration-500 rounded-full ${
+                            isRTStepDone ? 'w-full bg-emerald-500' : 'w-0'
+                          }`}
+                        />
+                      </div>
+
+                      {/* Step 1: Ketua RT */}
+                      <div className="relative z-10 flex flex-col items-center text-center">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-all shadow-2xs ${
+                          isRTStepDone
+                            ? 'bg-emerald-600 text-white shadow-emerald-200'
+                            : 'bg-amber-500 text-white ring-4 ring-amber-100'
+                        }`}>
+                          {isRTStepDone ? <CheckCircle2 className="w-4 h-4" /> : '1'}
+                        </div>
+                        <span className={`text-[11px] font-bold mt-1.5 ${isRTStepDone ? 'text-emerald-800' : 'text-slate-900'}`}>
+                          Ketua RT 01
+                        </span>
+                        <span className="text-[10px] text-slate-600 font-medium">
+                          {isRTStepDone ? 'Disetujui' : 'Menunggu ACC'}
+                        </span>
+                      </div>
+
+                      {/* Step 2: Kantor / Balai Desa */}
+                      <div className="relative z-10 flex flex-col items-center text-center">
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-all shadow-2xs ${
+                          isDone
+                            ? 'bg-emerald-600 text-white'
+                            : isDesaStepActive
+                            ? 'bg-blue-600 text-white ring-4 ring-blue-100'
+                            : 'bg-slate-200 text-slate-500'
+                        }`}>
+                          {isDone ? <CheckCircle2 className="w-4 h-4" /> : '2'}
+                        </div>
+                        <span className={`text-[11px] font-bold mt-1.5 ${
+                          isDone 
+                            ? 'text-emerald-800' 
+                            : isDesaStepActive 
+                            ? 'text-blue-900' 
+                            : 'text-slate-600'
+                        }`}>
+                          Balai Desa
+                        </span>
+                        <span className="text-[10px] text-slate-600 font-medium">
+                          {isDone 
+                            ? 'Sah & TTD QR' 
+                            : isDesaStepActive 
+                            ? 'Proses TTD QR' 
+                            : 'Menunggu RT'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Keterangan Status Kontekstual Tenang */}
+                  <div className={`p-3 rounded-2xl text-xs font-medium flex items-center gap-2.5 ${
+                    s.status === 'pending_rt' 
+                      ? 'bg-amber-50/70 border border-amber-200/80 text-amber-950'
+                      : isDesaStepActive
+                      ? 'bg-blue-50/70 border border-blue-200/80 text-blue-950'
+                      : 'bg-emerald-50/70 border border-emerald-200/80 text-emerald-950'
+                  }`}>
+                    <div className="shrink-0">
+                      {s.status === 'pending_rt' && <Clock className="w-4 h-4 text-amber-600" />}
+                      {isDesaStepActive && <FileCheck2 className="w-4 h-4 text-blue-600" />}
+                      {isDone && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+                    </div>
+                    <div className="leading-relaxed">
+                      {s.status === 'pending_rt' && 'Berkas telah terkirim dan sedang menunggu persetujuan digital dari Ketua RT 01.'}
+                      {isDesaStepActive && 'Ketua RT 01 telah menyetujui. Berkas kini sedang dalam proses penandatanganan QR resmi di Balai Desa.'}
+                      {isDone && 'Surat resmi telah selesai disahkan dan siap diunduh di menu Surat Selesai.'}
+                    </div>
+                  </div>
+
+                  {/* Action Buttons: Lampiran, Edit/Batal, dan Lacak Detail */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-2 border-t border-slate-100">
+                    <div>
+                      {lampiranDocs.length > 0 ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPreviewGallery(lampiranDocs);
+                            setGalleryIndex(0);
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition-all cursor-pointer shadow-2xs"
+                          title="Lihat foto dokumen terlampir"
+                        >
+                          <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>{lampiranDocs.length} Foto Lampiran</span>
+                        </button>
+                      ) : (
+                        <span className="text-[11px] text-slate-600">Tanpa lampiran tambahan</span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-2 justify-end flex-wrap">
+                      {s.status === 'pending_rt' && (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              showToast(
+                                'info',
+                                'Mode Edit Pengajuan',
+                                `Membuka formulir perbaikan data untuk ${s.surat_type?.nama_surat || 'surat'} (${s.nomor_resi}).`
+                              );
+                              navigate(`/dashboard/ajukan/${s.surat_type_id}?editSuratId=${s.id}`);
+                            }}
+                            className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition-all flex items-center gap-1 shadow-2xs cursor-pointer press-down"
+                            title="Ubah data pengajuan atau perbaiki foto lampiran"
+                          >
+                            <Edit3 className="w-3.5 h-3.5 text-slate-600" />
+                            <span>Ubah</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSuratToDelete(s);
+                              setIsDeleteConfirmOpen(true);
+                            }}
+                            className="px-3 py-1.5 rounded-xl bg-white hover:bg-rose-50 text-rose-600 border border-rose-200 font-bold text-xs transition-all flex items-center gap-1 shadow-2xs cursor-pointer press-down"
+                            title="Batalkan permohonan surat ini"
+                          >
+                            <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                            <span>Batalkan</span>
+                          </button>
+                        </>
+                      )}
+
                       <button
                         type="button"
-                        onClick={() => {
-                          const docs = parseLampiranDokumen(s.file_lampiran);
-                          setPreviewGallery(docs);
-                          setGalleryIndex(0);
-                        }}
-                        className="px-3.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-extrabold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                        title="Lihat Foto Lampiran Dokumen"
+                        onClick={() => setSelectedTrackingSurat(s)}
+                        className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
                       >
-                        <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>Foto Lampiran ({parseLampiranDokumen(s.file_lampiran).length})</span>
+                        <span>Lacak</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </button>
-                    )}
-
-                    {s.status === 'pending_rt' && (
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            showToast(
-                              'info',
-                              'Mode Edit Pengajuan',
-                              `Membuka formulir perbaikan data untuk ${s.surat_type?.nama_surat || 'surat'} (${s.nomor_resi}).`
-                            );
-                            navigate(`/dashboard/ajukan/${s.surat_type_id}?editSuratId=${s.id}`);
-                          }}
-                          className="px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-extrabold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs press-down"
-                          title="Ubah data pengajuan atau perbaiki foto lampiran"
-                        >
-                          <Edit3 className="w-3.5 h-3.5 text-amber-700" />
-                          <span>Ubah Data</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSuratToDelete(s);
-                            setIsDeleteConfirmOpen(true);
-                          }}
-                          className="px-3.5 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-extrabold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs press-down"
-                          title="Batalkan permohonan surat ini"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                          <span>Batalkan</span>
-                        </button>
-                      </div>
-                    )}
-
-                    <button
-                      onClick={() => setSelectedTrackingSurat(s)}
-                      className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                    >
-                      <span>Lacak Alur & Catatan Petugas</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
@@ -1300,10 +1418,10 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
       <div className="space-y-6 animate-fade-in font-sans">
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-            Surat Selesai & Dokumen Sah
+            Surat Selesai
           </h2>
           <p className="text-xs sm:text-sm text-slate-500">
-            Daftar surat resmi yang telah terbit lengkap dengan tanda tangan elektronik dan stempel QR Code.
+            Dokumen resmi yang telah disahkan dan siap dicetak.
           </p>
         </div>
 
@@ -1312,9 +1430,9 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             <div className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 flex items-center justify-center font-bold mx-auto">
               <Download className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-sm text-slate-900">Belum Ada Surat Selesai</h3>
+            <h3 className="font-extrabold text-sm text-slate-900">Belum ada surat selesai</h3>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Surat yang sudah disahkan oleh Sekretaris Desa akan tampil di halaman ini dan dapat langsung diunduh PDF.
+              Surat yang sudah disahkan Kepala Desa akan muncul di sini.
             </p>
           </div>
         ) : (
@@ -1324,9 +1442,9 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
                     <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black">
-                      RESMI TERBIT
+                      TERBIT
                     </span>
-                    <span className="text-xs font-mono text-slate-500">No. Surat: {s.nomor_surat_resmi || s.nomor_resi}</span>
+                    <span className="text-xs font-mono text-slate-500">No: {s.nomor_surat_resmi || s.nomor_resi}</span>
                   </div>
                   <h3 className="text-base font-black text-slate-900">{s.surat_type?.nama_surat}</h3>
                   <p className="text-xs text-slate-600">Keperluan: {s.keperluan}</p>
@@ -1337,14 +1455,14 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     onClick={() => setSelectedTrackingSurat(s)}
                     className="px-3.5 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition-all cursor-pointer"
                   >
-                    Lihat Alur
+                    Lacak
                   </button>
                   <button
                     onClick={() => setPrintSurat(s)}
                     className="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition-all press-down flex items-center gap-2 cursor-pointer"
                   >
                     <Printer className="w-4 h-4" />
-                    <span>Cetak / Unduh PDF</span>
+                    <span>Cetak</span>
                   </button>
                 </div>
               </div>
@@ -1362,10 +1480,10 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-              Riwayat Seluruh Pengajuan Surat
+              Riwayat Surat
             </h2>
             <p className="text-xs sm:text-sm text-slate-500">
-              Arsip lengkap surat yang sudah selesai, dalam proses verifikasi RT & Kepala Desa, serta riwayat penolakan.
+              Riwayat status seluruh permohonan surat warga.
             </p>
           </div>
 
@@ -1385,12 +1503,12 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         <div className="flex flex-wrap gap-2 pt-1">
           <button
             type="button"
-            onClick={() => setHistoryStatusFilter('semua')}
+            onClick={() => setHistoryStatusFilter('arsip')}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
-              historyStatusFilter === 'semua' ? 'bg-slate-900 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+              historyStatusFilter === 'arsip' ? 'bg-slate-900 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
             }`}
           >
-            Semua Riwayat ({surats.length})
+            Arsip ({completedSurats.length + rejectedSurats.length})
           </button>
 
           <button
@@ -1401,17 +1519,18 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Surat Selesai & Sah ({completedSurats.length})</span>
+            <span>Selesai ({completedSurats.length})</span>
           </button>
 
           <button
             type="button"
             onClick={() => setHistoryStatusFilter('proses')}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
               historyStatusFilter === 'proses' ? 'bg-amber-500 text-white shadow-xs' : 'bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100/80'
             }`}
           >
-            Dalam Proses ({pendingSurats.length})
+            <Clock className="w-3.5 h-3.5" />
+            <span>Diproses ({pendingSurats.length})</span>
           </button>
 
           <button
@@ -1421,22 +1540,32 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               historyStatusFilter === 'ditolak' ? 'bg-rose-600 text-white shadow-xs' : 'bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100/80'
             }`}
           >
-            Ditolak ({surats.filter(s => s.status === 'rejected').length})
+            Ditolak ({rejectedSurats.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setHistoryStatusFilter('semua')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
+              historyStatusFilter === 'semua' ? 'bg-slate-900 text-white shadow-xs' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+            }`}
+          >
+            Semua ({surats.length})
           </button>
         </div>
 
         <div className="bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-xs">
-          {/* Desktop Table View */}
-          <div className="hidden sm:block overflow-x-auto">
-            <table className="w-full min-w-[840px] text-left text-xs">
+          {/* Desktop Table View (Fit 100% tanpa garis geser) */}
+          <div className="hidden sm:block">
+            <table className="w-full text-left text-xs table-auto">
               <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
                 <tr>
-                  <th className="p-4 whitespace-nowrap">No. Resi</th>
-                  <th className="p-4 whitespace-nowrap">Jenis Surat</th>
-                  <th className="p-4 min-w-[220px]">Keperluan & Catatan Petugas</th>
-                  <th className="p-4 whitespace-nowrap">Tanggal</th>
-                  <th className="p-4 whitespace-nowrap">Status</th>
-                  <th className="p-4 text-right whitespace-nowrap">Aksi & Pelacakan</th>
+                  <th className="px-3.5 py-3.5 whitespace-nowrap w-28">No. Resi</th>
+                  <th className="px-3.5 py-3.5 whitespace-nowrap w-44">Jenis Surat</th>
+                  <th className="px-3.5 py-3.5">Keperluan & Catatan</th>
+                  <th className="px-3.5 py-3.5 whitespace-nowrap w-24">Tanggal</th>
+                  <th className="px-3.5 py-3.5 whitespace-nowrap w-28">Status</th>
+                  <th className="px-3.5 py-3.5 text-right whitespace-nowrap w-36">Aksi Surat</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium">
@@ -1447,82 +1576,87 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     </td>
                   </tr>
                 ) : (
-                  searchedHistory.map((s) => (
-                    <tr key={s.id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="p-4 font-mono font-bold text-slate-800 whitespace-nowrap">{s.nomor_resi}</td>
-                      <td className="p-4 font-bold text-slate-900 whitespace-nowrap">{s.surat_type?.nama_surat}</td>
-                      <td className="p-4 text-slate-600 max-w-sm">
-                        <div>{s.keperluan}</div>
-                        {s.status === 'rejected' && (
-                          <div className="mt-1.5 p-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-[11px] font-bold flex items-start gap-1.5 shadow-2xs">
-                            <span className="shrink-0">⚠️</span>
-                            <span>
-                              Alasan Penolakan: <em>"{s.catatan_penolakan || 'Berkas persyaratan belum lengkap / tidak sesuai'}"</em>
-                            </span>
-                          </div>
-                        )}
-                      </td>
-                      <td className="p-4 text-slate-400 whitespace-nowrap">{new Date(s.created_at).toLocaleDateString('id-ID')}</td>
-                      <td className="p-4 whitespace-nowrap">
-                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
-                          s.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
-                          s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-100 text-amber-800'
-                        }`}>
-                          {s.status === 'completed' ? 'Diterima' : s.status === 'rejected' ? 'Ditolak' : 'Proses'}
-                        </span>
-                      </td>
-                      <td className="p-4 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {parseLampiranDokumen(s.file_lampiran).length > 0 && (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const docs = parseLampiranDokumen(s.file_lampiran);
-                                setPreviewGallery(docs);
-                                setGalleryIndex(0);
-                              }}
-                              className="px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
-                              title="Lihat Foto Lampiran Dokumen"
-                            >
-                              <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
-                              <span className="hidden md:inline">Lampiran ({parseLampiranDokumen(s.file_lampiran).length})</span>
-                            </button>
+                  paginatedHistory.map((s) => {
+                    const isCompleted = s.status === 'completed';
+                    const isRejected = ['rejected', 'rejected_rt', 'rejected_kades'].includes(s.status);
+                    const lampiranDocs = parseLampiranDokumen(s.file_lampiran);
+
+                    return (
+                      <tr key={s.id} className="hover:bg-slate-50/60 transition-colors">
+                        <td className="px-3.5 py-3.5 font-mono font-bold text-slate-800 text-[11px] whitespace-nowrap">{s.nomor_resi}</td>
+                        <td className="px-3.5 py-3.5 font-bold text-slate-900">{s.surat_type?.nama_surat}</td>
+                        <td className="px-3.5 py-3.5 text-slate-600">
+                          <div className="line-clamp-2">{s.keperluan}</div>
+                          {isRejected && (
+                            <div className="mt-1 p-1.5 rounded-lg bg-rose-50 border border-rose-200 text-rose-900 text-[10px] font-bold flex items-start gap-1 shadow-2xs">
+                              <AlertCircle className="w-4 h-4 text-amber-500 shrink-0" />
+                              <span className="line-clamp-2">
+                                Alasan Tolak: <em>"{s.catatan_penolakan || s.catatan_penolakan_kades || 'Berkas persyaratan belum lengkap / tidak sesuai'}"</em>
+                              </span>
+                            </div>
                           )}
-                          {s.status === 'completed' ? (
-                            <>
+                        </td>
+                        <td className="px-3.5 py-3.5 text-slate-400 text-[11px] whitespace-nowrap">{new Date(s.created_at).toLocaleDateString('id-ID')}</td>
+                        <td className="px-3.5 py-3.5 whitespace-nowrap">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
+                            isCompleted ? 'bg-emerald-100 text-emerald-800' :
+                            isRejected ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-100 text-amber-900'
+                          }`}>
+                            {isCompleted ? 'Diterima & Sah' : isRejected ? 'Ditolak' : 'Sedang Diproses'}
+                          </span>
+                        </td>
+                        <td className="px-3.5 py-3.5 text-right whitespace-nowrap">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {lampiranDocs.length > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setPreviewGallery(lampiranDocs);
+                                  setGalleryIndex(0);
+                                }}
+                                className="p-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition-colors flex items-center gap-1 cursor-pointer shadow-2xs"
+                                title={`Lihat ${lampiranDocs.length} Foto Lampiran`}
+                              >
+                                <Paperclip className="w-3.5 h-3.5 text-slate-500" />
+                              </button>
+                            )}
+
+                            {/* Kondisi 1: Ketika sudah disahkan -> HANYA CETAK PDF */}
+                            {isCompleted ? (
                               <button
                                 onClick={() => setPrintSurat(s)}
-                                className="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-2xs cursor-pointer"
+                                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer press-down"
+                                title="Cetak atau Unduh Dokumen Sah PDF"
                               >
-                                Cetak
+                                <Printer className="w-3.5 h-3.5" />
+                                <span>Cetak</span>
                               </button>
+                            ) : isRejected ? (
+                              /* Kondisi 2: Ketika ditolak -> LIHAT ALASAN TOLAK & PENGAJUAN ULANG */
                               <button
                                 onClick={() => setSelectedTrackingSurat(s)}
-                                className="px-2.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 cursor-pointer"
-                                title="Lacak Riwayat & Catatan"
+                                className="px-2.5 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer press-down"
+                                title="Lihat alasan ditolak dan ajukan ulang surat di modal ini"
                               >
-                                Lacak
+                                <AlertCircle className="w-3.5 h-3.5" />
+                                <span>Alasan & Ulang</span>
                               </button>
-                            </>
-                          ) : s.status === 'rejected' ? (
-                            <button
-                              onClick={() => setSelectedTrackingSurat(s)}
-                              className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer"
-                            >
-                              <span>Lihat Alasan Ditolak</span>
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => setSelectedTrackingSurat(s)}
-                              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer"
-                            >
-                              <span>Lacak Catatan RT/RW</span>
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                            ) : (
+                              /* Kondisi 3: Ketika belum disahkan -> BISA DILACAK SURAT */
+                              <button
+                                onClick={() => setSelectedTrackingSurat(s)}
+                                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer press-down"
+                                title="Lacak posisi alur verifikasi berkas"
+                              >
+                                <Clock className="w-3.5 h-3.5 text-amber-400" />
+                                <span>Lacak</span>
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -1535,75 +1669,100 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                 Tidak ada riwayat pengajuan surat yang cocok.
               </div>
             ) : (
-              searchedHistory.map((s) => (
-                <div key={s.id} className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="text-[10px] font-mono text-slate-400">Resi: {s.nomor_resi}</div>
-                      <h4 className="text-xs font-black text-slate-900 mt-0.5">{s.surat_type?.nama_surat}</h4>
-                    </div>
-                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black shrink-0 ${
-                      s.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
-                      s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-100 text-amber-800'
-                    }`}>
-                      {s.status === 'completed' ? 'Diterima' : s.status === 'rejected' ? 'Ditolak' : 'Proses'}
-                    </span>
-                  </div>
+              paginatedHistory.map((s) => {
+                const isCompleted = s.status === 'completed';
+                const isRejected = ['rejected', 'rejected_rt', 'rejected_kades'].includes(s.status);
+                const lampiranDocs = parseLampiranDokumen(s.file_lampiran);
 
-                  <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 space-y-1">
-                    <div className="text-[10px] text-slate-400 font-bold">Keperluan:</div>
-                    <p>{s.keperluan}</p>
-
-                    {s.status === 'rejected' && (
-                      <div className="mt-2 p-2 rounded-xl bg-rose-100/80 border border-rose-200 text-rose-950 text-[11px] font-bold">
-                        ⚠️ Alasan Penolakan: "{s.catatan_penolakan || 'Berkas persyaratan belum sesuai'}"
+                return (
+                  <div key={s.id} className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="text-[10px] font-mono text-slate-400">Resi: {s.nomor_resi}</div>
+                        <h4 className="text-xs font-black text-slate-900 mt-0.5">{s.surat_type?.nama_surat}</h4>
                       </div>
-                    )}
-                  </div>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black shrink-0 ${
+                        isCompleted ? 'bg-emerald-100 text-emerald-800' :
+                        isRejected ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-100 text-amber-900'
+                      }`}>
+                        {isCompleted ? 'Diterima & Sah' : isRejected ? 'Ditolak' : 'Sedang Diproses'}
+                      </span>
+                    </div>
 
-                  <div className="flex items-center justify-between pt-1 text-[11px]">
-                    <span className="text-slate-400 font-medium">{new Date(s.created_at).toLocaleDateString('id-ID')}</span>
-                    
-                    <div className="flex items-center gap-1.5 flex-wrap justify-end">
-                      {parseLampiranDokumen(s.file_lampiran).length > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const docs = parseLampiranDokumen(s.file_lampiran);
-                            setPreviewGallery(docs);
-                            setGalleryIndex(0);
-                          }}
-                          className="px-2.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-xs cursor-pointer flex items-center gap-1"
-                          title="Lihat Foto Lampiran"
-                        >
-                          <Paperclip className="w-3 h-3 text-emerald-600" />
-                          <span>Foto ({parseLampiranDokumen(s.file_lampiran).length})</span>
-                        </button>
-                      )}
-                      {s.status === 'completed' && (
-                        <button
-                          onClick={() => setPrintSurat(s)}
-                          className="px-3 py-1.5 rounded-xl bg-emerald-600 text-white font-extrabold text-xs shadow-xs cursor-pointer"
-                        >
-                          Cetak PDF
-                        </button>
-                      )}
+                    <div className="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 space-y-1">
+                      <div className="text-[10px] text-slate-400 font-bold">Keperluan:</div>
+                      <p>{s.keperluan}</p>
 
-                      <button
-                        onClick={() => setSelectedTrackingSurat(s)}
-                        className={`px-3 py-1.5 rounded-xl font-extrabold text-xs shadow-xs transition-colors cursor-pointer ${
-                          s.status === 'rejected' ? 'bg-rose-600 text-white hover:bg-rose-700' :
-                          'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                        }`}
-                      >
-                        {s.status === 'rejected' ? 'Alasan Penolakan' : 'Lacak Alur'}
-                      </button>
+                      {isRejected && (
+                        <div className="mt-2 p-2 rounded-xl bg-rose-100/80 border border-rose-200 text-rose-950 text-[11px] font-bold">
+                          Alasan Penolakan: "{s.catatan_penolakan || 'Berkas persyaratan belum sesuai'}"
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1 text-[11px]">
+                      <span className="text-slate-400 font-medium">{new Date(s.created_at).toLocaleDateString('id-ID')}</span>
+                      
+                      <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                        {lampiranDocs.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setPreviewGallery(lampiranDocs);
+                              setGalleryIndex(0);
+                            }}
+                            className="px-2.5 py-1.5 rounded-xl bg-slate-50 text-slate-700 border border-slate-200 font-bold text-xs cursor-pointer flex items-center gap-1"
+                            title="Lihat Foto Lampiran"
+                          >
+                            <Paperclip className="w-3 h-3 text-slate-500" />
+                            <span>Foto ({lampiranDocs.length})</span>
+                          </button>
+                        )}
+
+                        {/* Kondisi 1: Sudah Disahkan -> HANYA CETAK PDF */}
+                        {isCompleted ? (
+                          <button
+                            onClick={() => setPrintSurat(s)}
+                            className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer press-down"
+                          >
+                            <Printer className="w-3 h-3" />
+                            <span>Cetak / Unduh</span>
+                          </button>
+                        ) : isRejected ? (
+                          /* Kondisi 2: Ditolak -> LIHAT ALASAN TOLAK & PENGAJUAN ULANG */
+                          <button
+                            onClick={() => setSelectedTrackingSurat(s)}
+                            className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer press-down"
+                          >
+                            <AlertCircle className="w-3 h-3" />
+                            <span>Alasan Tolak & Ajukan Ulang</span>
+                          </button>
+                        ) : (
+                          /* Kondisi 3: Belum Disahkan -> LACAK SURAT */
+                          <button
+                            onClick={() => setSelectedTrackingSurat(s)}
+                            className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer press-down"
+                          >
+                            <Clock className="w-3 h-3 text-amber-400" />
+                            <span>Lacak Surat</span>
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
+
+          <Pagination
+            currentPage={historyPage}
+            totalItems={searchedHistory.length}
+            pageSize={8}
+            onPageChange={setHistoryPage}
+            itemLabel="pengajuan surat"
+            className="p-4"
+          />
         </div>
       </div>
     );
@@ -1631,285 +1790,644 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
     { label: 'Min', value: 6 },
   ];
 
-  // Beranda Dashboard Warga
+  // Beranda Dashboard Warga (Pemisahan Tegas Mobile-First vs Desktop Asli)
   return (
-    <div className="space-y-6 animate-fade-in font-sans">
+    <div className="animate-fade-in font-sans">
       
-      {/* Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
-        <MetricStatCard
-          title="Total Surat Diajukan"
-          value={`${surats.length} Surat`}
-          subvalue="/ Kuota Bebas"
-          percentage={100}
-          color="emerald"
-          trend="+18.5% vs bulan lalu"
-          isPositiveTrend={true}
-        />
-        <MetricStatCard
-          title="Surat Diterima & Sah"
-          value={`${completedSurats.length} Selesai`}
-          subvalue="Siap Unduh PDF"
-          percentage={surats.length > 0 ? Math.round((completedSurats.length / surats.length) * 100) : 100}
-          color="teal"
-          trend="100% Sah & Ber-QR"
-          isPositiveTrend={true}
-        />
-        <MetricStatCard
-          title="Antrean Disposisi RT/RW"
-          value={`${pendingSurats.length} Berkas`}
-          subvalue="Sedang Diperiksa"
-          percentage={pendingSurats.length > 0 ? 65 : 100}
-          color="amber"
-          trend="SLA Rata-rata < 15 Menit"
-          isPositiveTrend={true}
-        />
-        <MetricStatCard
-          title="Status Bansos & PKH"
-          value="KPM Aktif"
-          subvalue="Tahap III 2026"
-          percentage={95}
-          color="sky"
-          trend="Nomor Antrean: A-014"
-          isPositiveTrend={true}
-        />
-      </div>
-
-      {/* Overview Chart & Calendar */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-6 items-start">
-        {/* Left 8 Cols: Performance Overview Spline Area Chart */}
-        <div className="xl:col-span-8 space-y-5">
-          <AreaSplineChart
-            title="Overview Efisiensi & Volume Surat"
-            subtitle="Statistik Layanan Administrasi"
-            data={performanceData}
-            highlightValue="96.75%"
-            highlightLabel="Kecepatan Penerbitan & Kepuasan Warga"
-            trendText="+12.8% vs bulan lalu"
-          />
-
-          {/* Sub-grid under Chart: Weekly Bar Activity (6 Col) + Quick Actions (6 Col) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <BarActivityChart
-              title="Aktivitas Jam Layanan"
-              subtitle="Statistik Mingguan"
-              data={weeklyActivityData}
-              mainValue="34.30 Jam"
-              mainLabel="Waktu Pelayanan Aktif Minggu Ini"
-            />
-
-            {/* Quick Action & Document Hub Card */}
-            <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
-              <div>
-                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
-                  Aksi Mandiri
-                </span>
-                <h4 className="text-sm font-black text-slate-900 mt-1">Layanan Pintas Warga</h4>
-                <p className="text-xs text-slate-500 mt-0.5">Akses cepat pembuatan surat dan pengecekan bansos.</p>
-              </div>
-
-              <div className="space-y-2">
-                <button
-                  type="button"
-                  onClick={() => onNavigate ? onNavigate('ajukan_surat') : null}
-                  className="w-full p-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all press-down flex items-center justify-between cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <Plus className="w-4 h-4" />
-                    <span>Ajukan Surat Baru (12 Jenis)</span>
-                  </span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate ? onNavigate('status_surat') : null}
-                  className="w-full p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <Search className="w-4 h-4 text-slate-400" />
-                    <span>Lacak Posisi Berkas ({pendingSurats.length})</span>
-                  </span>
-                  <span className="text-[10px] font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
-                    {pendingSurats.length} Proses
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate ? onNavigate('surat_selesai') : null}
-                  className="w-full p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 text-emerald-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <Download className="w-4 h-4 text-emerald-700" />
-                    <span>Unduh & Cetak PDF Resmi</span>
-                  </span>
-                  <span className="text-[10px] font-black text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full">
-                    {completedSurats.length} Sah
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigate ? onNavigate('berkas_kependudukan') : null}
-                  className="w-full p-3 rounded-2xl bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200/80 text-indigo-950 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
-                >
-                  <span className="flex items-center gap-2">
-                    <FolderCheck className="w-4 h-4 text-indigo-600" />
-                    <span>Master Berkas KTP & KK (Upload Sekali)</span>
-                  </span>
-                  <span className="text-[10px] font-black text-indigo-700 bg-indigo-200/70 px-2 py-0.5 rounded-full">
-                    {masterDokumen?.persentase_kelengkapan ?? 0}% Siap
-                  </span>
-                </button>
+      {/* ========================================================================= */}
+      {/* 1. TAMPILAN KHUSUS MOBILE (block sm:hidden)                               */}
+      {/* Mobile-First, Ramah Warga Awam, Bebas Kebingungan, Tombol Pas Jempol      */}
+      {/* ========================================================================= */}
+      <div className="block sm:hidden space-y-4">
+        {/* 1. Sapaan Ramah & Identitas Warga (At The Top) */}
+        <div className="p-4 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <UserAvatar
+                src={user?.avatar}
+                name={p?.nama_lengkap || user?.name}
+                className="w-12 h-12 rounded-2xl object-cover border-2 border-emerald-500 shadow-xs shrink-0"
+                fallbackClassName="w-12 h-12 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-lg shadow-xs shrink-0"
+              />
+              <div className="min-w-0">
+                <span className="text-[11px] text-slate-400 font-medium block">Selamat datang,</span>
+                <h2 className="text-sm font-black text-slate-900 truncate">
+                  {p?.nama_lengkap || user?.name || 'Warga Desa Doko'}
+                </h2>
+                <div className="text-[11px] font-semibold text-emerald-700 flex items-center gap-1.5 flex-wrap mt-0.5">
+                  <span>RT 01 / RW 01 • Desa Doko</span>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Right 4 Cols: Personal Profile Card + Mini Calendar Widget */}
-        <div className="xl:col-span-4 space-y-5">
-          {/* Quick Profile / Personal Info Card Matching Reference */}
-          <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
-                Identitas Akun
+            <div className="shrink-0 flex flex-col items-end gap-1">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
+                ● Warga Sah
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
-                ● Aktif / Terverifikasi
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3.5 pt-1">
-              {user?.avatar ? (
-                <img
-                  src={user.avatar}
-                  alt={p?.nama_lengkap || user?.name}
-                  className="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-400 shadow-xs shrink-0"
-                />
-              ) : (
-                <div className="w-14 h-14 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
-                  {p?.nama_lengkap?.charAt(0) || user?.name?.charAt(0) || 'W'}
-                </div>
-              )}
-              <div className="min-w-0 flex-1">
-                <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
-                  {p?.nama_lengkap || user?.name}
-                </h4>
-                <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
-                  Warga Penduduk Tetap
-                </div>
-                <div className="text-[10px] font-mono text-slate-400 truncate">
-                  NIK: {p?.nik || '3506041505840001'}
-                </div>
-              </div>
-            </div>
-
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5 text-xs text-slate-600">
-              <div className="flex justify-between items-center text-[11px]">
-                <span className="text-slate-400 font-bold">Wilayah Domisili:</span>
-                <span className="font-extrabold text-slate-900">RT 01 / RW 01</span>
-              </div>
-              <div className="flex justify-between items-center text-[11px]">
-                <span className="text-slate-400 font-bold">Nomor KK:</span>
-                <span className="font-mono text-slate-800">{p?.kartu_keluarga?.no_kk || '3506040101150001'}</span>
-              </div>
-              <div className="flex justify-between items-center text-[11px]">
-                <span className="text-slate-400 font-bold">Status Iuran Kas RT:</span>
-                <span className="text-emerald-700 font-black">Lunas (Agustus)</span>
-              </div>
             </div>
           </div>
 
-          {/* Mini Calendar & Agenda Widget */}
-          <MiniCalendarWidget title="Jadwal & Agenda Desa" />
-        </div>
-      </div>
-
-      {/* Recent Documents Table */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
-              Aktivitas Dokumen Terbaru
+          <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+            <span className="font-mono text-[10px] text-slate-400">
+              NIK: {p?.nik || '3506041505840001'}
             </span>
-            <h3 className="text-base font-black text-slate-900 mt-1">Daftar Permohonan & Surat Sah</h3>
+            <span className="text-emerald-700 font-bold text-[10px]">
+              Iuran RT: Lunas (Agustus)
+            </span>
           </div>
+        </div>
 
-          <div className="flex items-center gap-2">
+        {/* 2. Tombol Utama & Layanan Pintas Warga (Dekat Jempol) */}
+        <div className="space-y-2.5">
+          {/* Tombol Utama Pengajuan Surat */}
+          <button
+            type="button"
+            onClick={() => onNavigate ? onNavigate('ajukan_surat') : null}
+            className="w-full p-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs shadow-xs transition-all flex items-center justify-between cursor-pointer group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center font-bold shrink-0">
+                <Plus className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-left">
+                <div className="font-black text-xs leading-tight">Ajukan Surat Baru</div>
+                <div className="text-[11px] text-emerald-100/90 font-normal mt-0.5">14 jenis surat siap diproses</div>
+              </div>
+            </div>
+            <ArrowRight className="w-4 h-4 text-emerald-200 group-hover:translate-x-1 transition-transform shrink-0" />
+          </button>
+
+          {/* 4 Icon Pintas Cepat (Grid 2x2 di Mobile) */}
+          <div className="grid grid-cols-2 gap-2.5">
+            {/* Pintasan 1: Lacak Surat */}
             <button
               type="button"
-              onClick={() => onNavigate ? onNavigate('riwayat_surat') : null}
-              className="text-xs font-black text-emerald-700 hover:text-emerald-900 underline flex items-center gap-1 cursor-pointer"
+              onClick={() => onNavigate ? onNavigate('status_surat') : null}
+              className="p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-amber-300 hover:bg-amber-50/40 shadow-2xs transition-all text-left space-y-1.5 cursor-pointer group"
             >
-              <span>Lihat Seluruh Arsip ({surats.length})</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
+                  <Clock className="w-4 h-4" />
+                </div>
+                {pendingSurats.length > 0 && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800 border border-amber-200">
+                    {pendingSurats.length}
+                  </span>
+                )}
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900 group-hover:text-amber-900 leading-tight">Lacak Berkas</div>
+                <div className="text-[10px] text-slate-400 mt-0.5">Status verifikasi surat</div>
+              </div>
+            </button>
+
+            {/* Pintasan 2: Surat Sah */}
+            <button
+              type="button"
+              onClick={() => onNavigate ? onNavigate('surat_selesai') : null}
+              className="p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-300 hover:bg-emerald-50/40 shadow-2xs transition-all text-left space-y-1.5 cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                  <FileCheck2 className="w-4 h-4" />
+                </div>
+                {completedSurats.length > 0 && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    {completedSurats.length}
+                  </span>
+                )}
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900 group-hover:text-emerald-900 leading-tight">Surat Sah</div>
+                <div className="text-[10px] text-slate-400 mt-0.5">Dokumen berstempel QR</div>
+              </div>
+            </button>
+
+            {/* Pintasan 3: Master Berkas */}
+            <button
+              type="button"
+              onClick={() => onNavigate ? onNavigate('berkas_kependudukan') : null}
+              className="p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:bg-indigo-50/40 shadow-2xs transition-all text-left space-y-1.5 cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-800 flex items-center justify-center">
+                  <FolderCheck className="w-4 h-4" />
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-100 text-indigo-800 border border-indigo-200">
+                  {masterDokumen?.persentase_kelengkapan ?? 100}%
+                </span>
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900 group-hover:text-indigo-900 leading-tight">Dokumen Warga</div>
+                <div className="text-[10px] text-slate-400 mt-0.5">Berkas KTP & KK</div>
+              </div>
+            </button>
+
+            {/* Pintasan 4: Keuangan Desa */}
+            <button
+              type="button"
+              onClick={() => onNavigate ? onNavigate('keuangan_desa') : null}
+              className="p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-teal-300 hover:bg-teal-50/40 shadow-2xs transition-all text-left space-y-1.5 cursor-pointer group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="w-8 h-8 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center">
+                  <Wallet className="w-4 h-4" />
+                </div>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-teal-100 text-teal-800 border border-teal-200">
+                  APBDes
+                </span>
+              </div>
+              <div>
+                <div className="text-xs font-black text-slate-900 group-hover:text-teal-900 leading-tight">APBDes</div>
+                <div className="text-[10px] text-slate-400 mt-0.5">Transparansi anggaran</div>
+              </div>
             </button>
           </div>
         </div>
 
-        {/* Modern Table with Rounded Rows */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-              <tr>
-                <th className="p-3.5 rounded-l-2xl">Nomor Resi</th>
-                <th className="p-3.5">Jenis Surat</th>
-                <th className="p-3.5">Keperluan</th>
-                <th className="p-3.5">Tanggal</th>
-                <th className="p-3.5">Status</th>
-                <th className="p-3.5 text-right rounded-r-2xl">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-medium">
-              {surats.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="p-8 text-center text-slate-400">
-                    Belum ada pengajuan surat. Klik "Ajukan Surat Baru" untuk memulai permohonan.
-                  </td>
-                </tr>
-              ) : (
-                surats.slice(0, 5).map((s) => (
-                  <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="p-3.5 font-mono font-bold text-slate-800">{s.nomor_resi}</td>
-                    <td className="p-3.5 font-black text-slate-900">{s.surat_type?.nama_surat}</td>
-                    <td className="p-3.5 text-slate-600 max-w-xs truncate">{s.keperluan}</td>
-                    <td className="p-3.5 text-slate-400 font-mono">
-                      {new Date(s.created_at).toLocaleDateString('id-ID')}
-                    </td>
-                    <td className="p-3.5">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
-                        s.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
-                        s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
-                        'bg-amber-100 text-amber-900'
-                      }`}>
-                        {s.status === 'completed' ? 'Diterima' : s.status === 'rejected' ? 'Ditolak' : 'Proses'}
+        {/* 3. Ringkasan Status Cepat (2x2 Grid) */}
+        <div className="grid grid-cols-2 gap-2.5">
+          <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">Total Pengajuan</span>
+            <div className="text-base font-black text-slate-900">{surats.length} Surat</div>
+            <div className="text-[10px] text-emerald-700 font-semibold truncate">
+              ● Kuota Bebas Layanan
+            </div>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">Sedang Diproses</span>
+            <div className="text-base font-black text-amber-700">{pendingSurats.length} Berkas</div>
+            <div className="text-[10px] text-amber-800 font-semibold truncate">
+              {pendingSurats.length > 0 ? 'Verifikasi RT/Desa' : 'Tidak ada antrean'}
+            </div>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">Surat Sah & Terbit</span>
+            <div className="text-base font-black text-emerald-800">{completedSurats.length} Selesai</div>
+            <div className="text-[10px] text-emerald-700 font-semibold truncate">
+              100% Sah & Berstempel QR
+            </div>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
+            <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">Bantuan Sosial</span>
+            <div className="text-base font-black text-sky-800">KPM Aktif</div>
+            <div className="text-[10px] text-sky-700 font-semibold truncate">
+              PKH Tahap III 2026
+            </div>
+          </div>
+        </div>
+
+        {/* 4. Aktivitas Dokumen Terbaru (Mobile Card List Pas Jempol) */}
+        <div className="p-4 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
+          <div className="flex items-center justify-between gap-2">
+            <div>
+              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+                Aktivitas Dokumen
+              </span>
+              <h3 className="text-xs font-black text-slate-900 mt-1">Daftar Permohonan Surat</h3>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => onNavigate ? onNavigate('riwayat_surat') : null}
+              className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1 cursor-pointer shrink-0"
+            >
+              <span>Semua ({surats.length})</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <div className="space-y-2.5">
+            {surats.length === 0 ? (
+              <div className="text-center py-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-xs text-slate-400">
+                Belum ada pengajuan surat.
+              </div>
+            ) : (
+              surats.slice(0, 4).map((s) => {
+                const isCompleted = s.status === 'completed';
+                const isRejected = ['rejected', 'rejected_rt', 'rejected_kades'].includes(s.status);
+                const statusLabel = isCompleted ? 'Sah & Ber-QR' : isRejected ? 'Perlu Diperbaiki' : 'Sedang Diproses';
+                const statusClass = isCompleted 
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+                  : isRejected 
+                  ? 'bg-rose-50 text-rose-800 border-rose-200' 
+                  : 'bg-amber-50 text-amber-900 border-amber-200';
+
+                return (
+                  <div key={s.id} className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/80 space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-[10px] font-bold text-slate-500">{s.nomor_resi}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${statusClass}`}>
+                        {statusLabel}
                       </span>
-                    </td>
-                    <td className="p-3.5 text-right">
-                      {s.status === 'completed' ? (
+                    </div>
+
+                    <div>
+                      <h4 className="text-xs font-black text-slate-900 leading-snug">
+                        {s.surat_type?.nama_surat || 'Surat Permohonan'}
+                      </h4>
+                      <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1 italic">
+                        "{s.keperluan}"
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between gap-2">
+                      <span className="text-[10px] text-slate-400 font-medium">
+                        {new Date(s.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                      </span>
+
+                      {isCompleted ? (
                         <button
+                          type="button"
                           onClick={() => setPrintSurat(s)}
-                          className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-2xs transition-all cursor-pointer"
+                          className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center gap-1 shadow-2xs cursor-pointer"
                         >
-                          Cetak PDF
+                          <Printer className="w-3.5 h-3.5" />
+                          <span>Cetak</span>
+                        </button>
+                      ) : isRejected ? (
+                        <button
+                          type="button"
+                          onClick={() => setSelectedTrackingSurat(s)}
+                          className="px-3 py-1.5 rounded-xl bg-rose-700 hover:bg-rose-800 text-white font-bold text-xs flex items-center gap-1 shadow-2xs cursor-pointer"
+                        >
+                          <AlertTriangle className="w-3.5 h-3.5" />
+                          <span>Lihat alasan</span>
                         </button>
                       ) : (
                         <button
+                          type="button"
                           onClick={() => setSelectedTrackingSurat(s)}
-                          className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                          className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center gap-1 shadow-2xs cursor-pointer"
                         >
-                          Lacak
+                          <Clock className="w-3.5 h-3.5" />
+                          <span>Lacak</span>
                         </button>
                       )}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {/* 5. Agenda & Informasi Desa Mendatang (Mobile List) */}
+        <div className="p-4 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-2.5">
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+                Informasi Desa
+              </span>
+              <h3 className="text-xs font-black text-slate-900 mt-1">Agenda Desa Doko</h3>
+            </div>
+            {onNavigate && (
+              <button
+                type="button"
+                onClick={() => onNavigate('agenda_desa')}
+                className="text-[11px] font-bold text-emerald-700 hover:underline cursor-pointer"
+              >
+                Lihat Semua
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            {(wargaAgendas.length > 0 ? wargaAgendas.slice(0, 3) : [
+              { id: 1, judul: 'Posyandu Balita & Lansia', waktu: '08.30 WIB', tempat: 'Poskesdes Dusun Doko', tipe: 'Kesehatan' },
+              { id: 2, judul: 'Penyaluran Bansos PKH', waktu: '09.00 WIB', tempat: 'Balai Desa Doko', tipe: 'Sosial' }
+            ]).map((ag: any) => (
+              <div key={ag.id} className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1 text-xs">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-slate-900 flex items-center gap-1.5 truncate">
+                    <Calendar className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span className="truncate">{ag.judul}</span>
+                  </span>
+                  <span className="text-[9px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md shrink-0">
+                    {ag.tipe}
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500">{ag.waktu} • {ag.tempat}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+
+      {/* ========================================================================= */}
+      {/* 2. TAMPILAN KHUSUS DESKTOP & TABLET (hidden sm:block)                     */}
+      {/* Tampilan Desktop Asli: 4 Stat Cards, 12-Col Grid, Area Spline, Bar Chart,  */}
+      {/* Quick Action Hub, Identitas Akun Samping, Kalender Widget & Tabel Lengkap  */}
+      {/* ========================================================================= */}
+      <div className="hidden sm:block space-y-6">
+        
+        {/* 4 Top Modular Stat Metric Cards */}
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
+          <MetricStatCard
+            title="Total Surat Diajukan"
+            value={`${surats.length} Surat`}
+            subvalue="/ Kuota Bebas"
+            percentage={100}
+            color="emerald"
+            trend="+18.5% vs bulan lalu"
+            isPositiveTrend={true}
+          />
+          <MetricStatCard
+            title="Surat Diterima & Sah"
+            value={`${completedSurats.length} Selesai`}
+            subvalue="Siap Unduh PDF"
+            percentage={surats.length > 0 ? Math.round((completedSurats.length / surats.length) * 100) : 100}
+            color="teal"
+            trend="100% Sah & Ber-QR"
+            isPositiveTrend={true}
+          />
+          <MetricStatCard
+            title="Antrean Surat RT"
+            value={`${pendingSurats.length} Berkas`}
+            subvalue="Sedang Diperiksa"
+            percentage={pendingSurats.length > 0 ? 65 : 100}
+            color="amber"
+            trend="SLA Rata-rata < 15 Menit"
+            isPositiveTrend={true}
+          />
+          <MetricStatCard
+            title="Status Bansos & PKH"
+            value="KPM Aktif"
+            subvalue="Tahap III 2026"
+            percentage={95}
+            color="sky"
+            trend="Nomor Antrean: A-014"
+            isPositiveTrend={true}
+          />
+        </div>
+
+        {/* 12-Column Overview Layout: Chart + Actions (Left 8) & Profile + Calendar (Right 4) */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-6 items-start">
+          {/* Left 8 Cols: Performance Spline Chart + Sub-grid (Bar Chart + Quick Actions) */}
+          <div className="xl:col-span-8 space-y-5">
+            <AreaSplineChart
+              title="Overview Efisiensi & Volume Surat"
+              subtitle="Statistik Layanan Administrasi Desa"
+              data={performanceData}
+              highlightValue="96.75%"
+              highlightLabel="Kecepatan Penerbitan & Kepuasan Warga"
+              trendText="+12.8% vs bulan lalu"
+            />
+
+            {/* Sub-grid under Chart: Weekly Bar Activity (6 Col) + Quick Actions (6 Col) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <BarActivityChart
+                title="Aktivitas Jam Layanan"
+                subtitle="Statistik Mingguan"
+                data={weeklyActivityData}
+                mainValue="34.30 Jam"
+                mainLabel="Waktu Pelayanan Aktif Minggu Ini"
+              />
+
+              {/* Quick Action & Document Hub Card */}
+              <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
+                <div>
+                  <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+                    Aksi Mandiri
+                  </span>
+                  <h4 className="text-sm font-black text-slate-900 mt-1">Layanan Pintas</h4>
+                  <p className="text-xs text-slate-500 mt-0.5">Akses cepat layanan surat dan kependudukan.</p>
+                </div>
+
+                <div className="space-y-2">
+                  <button
+                    type="button"
+                    onClick={() => onNavigate ? onNavigate('ajukan_surat') : null}
+                    className="w-full p-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all press-down flex items-center justify-between cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Plus className="w-4 h-4" />
+                      <span>Ajukan surat</span>
+                    </span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onNavigate ? onNavigate('status_surat') : null}
+                    className="w-full p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Search className="w-4 h-4 text-slate-400" />
+                      <span>Lacak berkas</span>
+                    </span>
+                    <span className="text-[10px] font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
+                      {pendingSurats.length} Proses
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onNavigate ? onNavigate('surat_selesai') : null}
+                    className="w-full p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 text-emerald-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <Download className="w-4 h-4 text-emerald-700" />
+                      <span>Unduh surat sah</span>
+                    </span>
+                    <span className="text-[10px] font-black text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full">
+                      {completedSurats.length} Sah
+                    </span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => onNavigate ? onNavigate('berkas_kependudukan') : null}
+                    className="w-full p-3 rounded-2xl bg-indigo-50/80 hover:bg-indigo-100/80 border border-indigo-200/80 text-indigo-950 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                  >
+                    <span className="flex items-center gap-2">
+                      <FolderCheck className="w-4 h-4 text-indigo-600" />
+                      <span>Dokumen kependudukan</span>
+                    </span>
+                    <span className="text-[10px] font-black text-indigo-700 bg-indigo-200/70 px-2 py-0.5 rounded-full">
+                      {masterDokumen?.persentase_kelengkapan ?? 100}% Siap
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right 4 Cols: Personal Profile Card + Mini Calendar Widget */}
+          <div className="xl:col-span-4 space-y-5">
+            {/* Quick Profile / Personal Info Card Matching Reference */}
+            <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+                  Identitas Akun
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  ● Aktif / Terverifikasi
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3.5 pt-1">
+                <UserAvatar
+                  src={user?.avatar}
+                  name={p?.nama_lengkap || user?.name}
+                  className="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-400 shadow-xs shrink-0"
+                  fallbackClassName="w-14 h-14 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
+                />
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
+                    {p?.nama_lengkap || user?.name}
+                  </h4>
+                  <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
+                    Warga Penduduk Tetap
+                  </div>
+                  <div className="text-[10px] font-mono text-slate-400 truncate">
+                    NIK: {p?.nik || '3506041505840001'}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5 text-xs text-slate-600">
+                <div className="flex justify-between items-center text-[11px]">
+                  <span className="text-slate-400 font-bold">Wilayah Domisili:</span>
+                  <span className="font-extrabold text-slate-900">RT 01 / RW 01</span>
+                </div>
+                <div className="flex justify-between items-center text-[11px]">
+                  <span className="text-slate-400 font-bold">Nomor KK:</span>
+                  <span className="font-mono text-slate-800">{p?.kartu_keluarga?.no_kk || '3506040101150001'}</span>
+                </div>
+                <div className="flex justify-between items-center text-[11px]">
+                  <span className="text-slate-400 font-bold">Status Iuran Kas RT:</span>
+                  <span className="text-emerald-700 font-black">Lunas (Agustus)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Mini Calendar & Agenda Widget */}
+            <MiniCalendarWidget 
+              title="Jadwal & Agenda Desa" 
+              agendas={wargaAgendas.length > 0 ? wargaAgendas.map((a: any) => {
+                let dayNum = 20;
+                if (a.tanggal) {
+                  const parts = a.tanggal.split('-');
+                  if (parts.length === 3) dayNum = parseInt(parts[2], 10) || 20;
+                }
+                return {
+                  id: String(a.id),
+                  title: a.judul,
+                  date: dayNum,
+                  time: a.waktu,
+                  category: a.tipe,
+                  location: a.tempat,
+                  color: a.is_custom ? 'emerald' : 'sky',
+                };
+              }) : undefined}
+            />
+          </div>
+        </div>
+
+        {/* Recent Documents Table (Full Desktop Experience) */}
+        <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+                Aktivitas Dokumen Terbaru
+              </span>
+              <h3 className="text-base font-black text-slate-900 mt-1">Daftar Permohonan & Surat Sah</h3>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => onNavigate ? onNavigate('riwayat_surat') : null}
+                className="text-xs font-black text-emerald-700 hover:text-emerald-900 underline flex items-center gap-1 cursor-pointer"
+              >
+                <span>Lihat Seluruh Arsip ({surats.length})</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                <tr>
+                  <th className="p-3.5 rounded-l-2xl">Nomor Resi</th>
+                  <th className="p-3.5">Jenis Surat</th>
+                  <th className="p-3.5">Keperluan</th>
+                  <th className="p-3.5">Tanggal</th>
+                  <th className="p-3.5">Status</th>
+                  <th className="p-3.5 text-right rounded-r-2xl">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-medium">
+                {surats.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="p-8 text-center text-slate-400">
+                      Belum ada pengajuan surat. Klik "Ajukan Surat Baru" untuk memulai permohonan.
+                    </td>
+                  </tr>
+                ) : (
+                  surats.slice(0, 5).map((s) => {
+                    const isCompleted = s.status === 'completed';
+                    const isRejected = ['rejected', 'rejected_rt', 'rejected_kades'].includes(s.status);
+                    return (
+                      <tr key={s.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="p-3.5 font-mono font-bold text-slate-800">{s.nomor_resi}</td>
+                        <td className="p-3.5 font-black text-slate-900">{s.surat_type?.nama_surat}</td>
+                        <td className="p-3.5 text-slate-600 max-w-xs truncate">{s.keperluan}</td>
+                        <td className="p-3.5 text-slate-400 font-mono">
+                          {new Date(s.created_at).toLocaleDateString('id-ID')}
+                        </td>
+                        <td className="p-3.5">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
+                            isCompleted ? 'bg-emerald-100 text-emerald-800' :
+                            isRejected ? 'bg-rose-100 text-rose-800 border border-rose-200' :
+                            'bg-amber-100 text-amber-900'
+                          }`}>
+                            {isCompleted ? 'Diterima' : isRejected ? 'Ditolak' : 'Proses'}
+                          </span>
+                        </td>
+                        <td className="p-3.5 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            {isCompleted ? (
+                              <button
+                                onClick={() => setPrintSurat(s)}
+                                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-2xs transition-all cursor-pointer flex items-center gap-1"
+                              >
+                                <Printer className="w-3.5 h-3.5" />
+                                <span>Cetak PDF</span>
+                              </button>
+                            ) : isRejected ? (
+                              <button
+                                onClick={() => setSelectedTrackingSurat(s)}
+                                className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                              >
+                                Alasan Tolak
+                              </button>
+                            ) : (
+                              <button
+                                onClick={() => setSelectedTrackingSurat(s)}
+                                className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                              >
+                                Lacak
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   );
 };
@@ -1924,6 +2442,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           desa={desa}
           onClose={() => setSelectedTrackingSurat(null)}
           onPrint={(suratToPrint) => setPrintSurat(suratToPrint)}
+          onReapply={handleReapplySurat}
         />
       )}
 
@@ -1942,21 +2461,9 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           setIsCameraModalOpen(false);
           setReplacingPhotoId(null);
         }}
-        initialMode={cameraModalInitialMode}
+        initialMode="camera"
         onCapture={(base64, fileName) => {
-          if (replacingPhotoId) {
-            setLampiranList(prev => prev.map(item => 
-              item.id === replacingPhotoId ? { ...item, url: base64, nama: fileName || item.nama } : item
-            ));
-            setReplacingPhotoId(null);
-          } else {
-            const newDoc: FormLampiranItem = {
-              id: `doc_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
-              url: base64,
-              nama: fileName || `${lampiranCategory} #${lampiranList.length + 1}`,
-            };
-            setLampiranList(prev => [...prev, newDoc]);
-          }
+          attachPhoto(base64, fileName);
         }}
         title={cameraModalTitle}
         description="Posisikan dokumen KTP, KK, atau berkas persyaratan di dalam bingkai kamera agar data NIK dan teks terbaca jelas."
@@ -2146,17 +2653,19 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           }}
         >
           <div 
-            className="relative max-w-2xl w-full bg-slate-900 rounded-3xl overflow-hidden border border-slate-800 shadow-2xl space-y-3 p-4 flex flex-col my-auto max-h-[92vh]"
+            className="relative max-w-2xl w-full bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-2xl space-y-3 p-4 flex flex-col my-auto max-h-[92vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between text-white pb-2 border-b border-slate-800 shrink-0">
-              <span className="text-xs font-bold flex items-center gap-2 truncate">
-                <Eye className="w-4 h-4 text-emerald-400 shrink-0" />
+            <div className="flex items-center justify-between text-slate-900 pb-3 border-b border-slate-100 shrink-0">
+              <span className="text-xs font-bold flex items-center gap-2 truncate text-slate-800">
+                <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center shrink-0">
+                  <Eye className="w-4 h-4" />
+                </div>
                 <span className="truncate">
                   Pratinjau Dokumen Lampiran: {previewGallery[galleryIndex]?.nama || 'Dokumen'}
                 </span>
                 {previewGallery.length > 1 && (
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono shrink-0">
+                  <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80 text-[10px] font-mono shrink-0">
                     {galleryIndex + 1} / {previewGallery.length}
                   </span>
                 )}
@@ -2164,14 +2673,14 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               <button
                 type="button"
                 onClick={() => setPreviewGallery([])}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
                 title="Tutup (ESC)"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="relative rounded-2xl overflow-hidden bg-black flex items-center justify-center flex-1 min-h-[280px] max-h-[65vh]">
+            <div className="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 flex items-center justify-center flex-1 min-h-[280px] max-h-[65vh]">
               <img
                 src={previewGallery[galleryIndex]?.url}
                 alt={previewGallery[galleryIndex]?.nama || 'Pratinjau Dokumen'}
@@ -2183,7 +2692,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   <button
                     type="button"
                     onClick={() => setGalleryIndex(prev => (prev > 0 ? prev - 1 : previewGallery.length - 1))}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white transition-all cursor-pointer shadow-md"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 hover:bg-white text-slate-800 transition-all cursor-pointer shadow-md border border-slate-200"
                     title="Dokumen Sebelumnya"
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -2191,7 +2700,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   <button
                     type="button"
                     onClick={() => setGalleryIndex(prev => (prev < previewGallery.length - 1 ? prev + 1 : 0))}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white transition-all cursor-pointer shadow-md"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/90 hover:bg-white text-slate-800 transition-all cursor-pointer shadow-md border border-slate-200"
                     title="Dokumen Selanjutnya"
                   >
                     <ChevronRight className="w-5 h-5" />
@@ -2202,14 +2711,14 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
 
             {/* Thumbnail Strip for Multi-Documents */}
             {previewGallery.length > 1 && (
-              <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-slate-800 shrink-0">
+              <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-slate-100 shrink-0">
                 {previewGallery.map((doc, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => setGalleryIndex(idx)}
                     className={`relative w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                      galleryIndex === idx ? 'border-emerald-500 scale-105' : 'border-slate-700 opacity-60 hover:opacity-100'
+                      galleryIndex === idx ? 'border-emerald-500 scale-105' : 'border-slate-200 opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={doc.url} alt={doc.nama} className="w-full h-full object-cover" />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Printer, ShieldCheck, CheckCircle2, FileText, Download } from 'lucide-react';
+import { X, Printer, ShieldCheck, CheckCircle2, FileText, Download, ZoomIn } from 'lucide-react';
 import { SuratRequest, DesaSetting } from '@/shared/types';
 
 interface CetakSuratModalProps {
@@ -31,19 +31,19 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
     <div id="surat-print-portal" className="fixed inset-0 z-[999999] bg-slate-950/80 flex flex-col items-center justify-start print:p-0 print:bg-white print:static font-sans">
       
       {/* Full-width Top Header Action Bar (Mobile Responsive) */}
-      <header className="w-full bg-slate-900 text-white border-b border-slate-800 shadow-xl px-3 sm:px-8 py-2.5 sm:py-3.5 flex items-center justify-between z-30 shrink-0 print:hidden">
+      <header className="w-full bg-white text-slate-900 border-b border-slate-200 shadow-xs px-3 sm:px-8 py-2.5 sm:py-3.5 flex items-center justify-between z-30 shrink-0 print:hidden">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 pr-2">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black shrink-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center font-bold shrink-0">
             <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0 truncate">
-            <div className="text-xs sm:text-sm font-black tracking-wide text-slate-100 flex items-center gap-1.5 truncate">
+            <div className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 flex items-center gap-1.5 truncate">
               <span className="truncate">Pratinjau Surat Resmi</span>
-              <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-extrabold shrink-0">
+              <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/80 text-[10px] font-semibold shrink-0">
                 A4 (100%)
               </span>
             </div>
-            <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono truncate">
+            <div className="text-[10px] sm:text-[11px] text-slate-500 font-mono truncate">
               {surat.nomor_resi}
             </div>
           </div>
@@ -52,15 +52,15 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow-md transition-all press-down hover-glow cursor-pointer whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap"
           >
             <Printer className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> 
-            <span className="hidden sm:inline">Cetak / Unduh PDF</span>
-            <span className="sm:hidden">Cetak PDF</span>
+            <span className="hidden sm:inline">Cetak / Unduh </span>
+            <span className="sm:hidden">Cetak Surat</span>
           </button>
           <button
             onClick={onClose}
-            className="p-1.5 sm:p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 sm:p-2 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer"
             title="Tutup Pratinjau (ESC)"
           >
             <X className="w-5 h-5" />
@@ -69,18 +69,18 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
       </header>
 
       {/* Scrollable Container with centered A4 Paper */}
-      <main className="flex-1 w-full overflow-y-auto flex justify-center py-4 sm:py-10 px-2 sm:px-3 print:p-0 print:overflow-visible">
+      <main className="flex-1 w-full overflow-y-auto overflow-x-hidden flex justify-center py-3 sm:py-10 px-2 sm:px-6 print:p-0 print:overflow-visible">
         
-        {/* Official A4 Paper Sheet (Realistic Proportions & Fluid Mobile Padding) */}
+        {/* Official A4 Paper Sheet (Realistic Proportions & Fluid Mobile-Fit) */}
         <div 
           id="surat-print-area" 
-          className="w-full max-w-[794px] bg-white rounded-sm shadow-2xl border border-slate-300 p-5 sm:p-14 space-y-4 sm:space-y-6 text-slate-900 leading-relaxed my-auto print:shadow-none print:border-none print:max-w-full print:p-0 print:my-0"
+          className="w-full max-w-[794px] min-w-0 bg-white rounded-xl sm:rounded-sm shadow-2xl border border-slate-300 p-3.5 xs:p-5 sm:p-14 space-y-3.5 sm:space-y-6 text-slate-900 leading-relaxed my-auto print:shadow-none print:border-none print:max-w-full print:p-0 print:my-0 print:rounded-none box-border"
         >
           
           {/* Dynamic Kop Surat Header with Perfectly Centered Text */}
-          <div className="relative flex items-center justify-between pb-1 sm:pb-2">
+          <div className="relative flex items-center justify-between pb-1 sm:pb-2 gap-1.5 sm:gap-4">
             {/* Left: Official Logo Kediri */}
-            <div className="w-16 h-20 sm:w-24 sm:h-28 flex items-center justify-center shrink-0">
+            <div className="w-12 h-16 xs:w-16 xs:h-20 sm:w-24 sm:h-28 flex items-center justify-center shrink-0">
               <img 
                 src="/images/logo-kediri.png" 
                 alt="Lambang Kabupaten Kediri" 
@@ -93,23 +93,23 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
             </div>
 
             {/* Center: Kop Typography */}
-            <div className="flex-1 text-center space-y-0.5 font-sans px-2">
-              <div className="text-[10px] sm:text-sm font-black tracking-wider sm:tracking-widest text-slate-800 uppercase">
+            <div className="flex-1 text-center space-y-0.5 font-sans px-1 sm:px-2 min-w-0">
+              <div className="text-[9px] xs:text-[11px] sm:text-sm font-black tracking-wide sm:tracking-widest text-slate-800 uppercase leading-tight">
                 {desa?.kop_atas || 'PEMERINTAH KABUPATEN KEDIRI'}
               </div>
-              <div className="text-sm sm:text-xl font-black tracking-tight text-slate-950 uppercase leading-tight">
+              <div className="text-xs xs:text-sm sm:text-xl font-black tracking-tight text-slate-950 uppercase leading-tight">
                 "{desa?.kop_tengah || 'KECAMATAN NGASEM'}"
               </div>
-              <div className="text-xs sm:text-lg font-black text-slate-900 uppercase">
+              <div className="text-[11px] xs:text-xs sm:text-lg font-black text-slate-900 uppercase leading-tight">
                 {desa?.kop_bawah || 'KANTOR KEPALA DESA DOKO'}
               </div>
-              <div className="text-[9px] sm:text-xs text-slate-600 font-serif leading-tight pt-0.5">
+              <div className="text-[8px] xs:text-[9px] sm:text-xs text-slate-600 font-serif leading-tight pt-0.5 break-words">
                 {desa?.kop_footer || 'Jl. Raya Doko No. 12 Kec. Ngasem Kab. Kediri 64182, Telp. (0354) 681234, Email: pemdes.doko@kedirikab.go.id'}
               </div>
             </div>
 
             {/* Right: Invisible balancer for exact geometric centering */}
-            <div className="w-16 h-20 sm:w-24 sm:h-28 shrink-0 hidden sm:block pointer-events-none" aria-hidden="true"></div>
+            <div className="w-12 h-16 xs:w-16 xs:h-20 sm:w-24 sm:h-28 shrink-0 hidden xs:block pointer-events-none" aria-hidden="true"></div>
           </div>
 
           {/* Double Separator Line (Official Government Standard) */}
@@ -120,61 +120,61 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
 
           {/* Title & Official Letter Number */}
           <div className="text-center space-y-0.5 sm:space-y-1 font-sans pt-1">
-            <div className="text-xs sm:text-base font-black uppercase underline tracking-wide text-slate-950">
+            <div className="text-xs xs:text-sm sm:text-base font-black uppercase underline tracking-wide text-slate-950 break-words">
               {surat.surat_type?.nama_surat || 'SURAT KETERANGAN RESMI'}
             </div>
-            <div className="text-[10px] sm:text-xs font-mono font-bold text-slate-700">
+            <div className="text-[10px] sm:text-xs font-mono font-bold text-slate-700 break-words">
               Nomor: {surat.nomor_surat_resmi || '401/042/418.66.04/2026'}
             </div>
           </div>
 
           {/* Body Content */}
-          <div className="text-[11px] sm:text-sm font-serif space-y-3 sm:space-y-4 text-justify leading-relaxed">
+          <div className="text-[11px] xs:text-xs sm:text-sm font-serif space-y-3 sm:space-y-4 text-justify leading-relaxed break-words">
             <p>
               Yang bertanda tangan di bawah ini Kepala Desa Doko, Kecamatan Ngasem, Kabupaten Kediri, dengan ini menerangkan bahwa:
             </p>
 
-            <table className="w-full text-[11px] sm:text-sm space-y-1 ml-1 sm:ml-4 font-sans">
+            <table className="w-full text-[11px] xs:text-xs sm:text-sm space-y-1 ml-0 sm:ml-4 font-sans">
               <tbody>
                 <tr>
-                  <td className="w-32 sm:w-40 py-0.5 sm:py-1 font-semibold text-slate-700">Nama Lengkap</td>
-                  <td className="w-3 sm:w-4">:</td>
-                  <td className="font-black uppercase text-slate-900">{w?.nama_lengkap}</td>
+                  <td className="w-24 xs:w-32 sm:w-40 py-0.5 sm:py-1 font-semibold text-slate-700 whitespace-nowrap align-top">Nama Lengkap</td>
+                  <td className="w-2.5 sm:w-4 align-top">:</td>
+                  <td className="font-black uppercase text-slate-900 break-words">{w?.nama_lengkap}</td>
                 </tr>
                 <tr>
-                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700">NIK</td>
-                  <td>:</td>
-                  <td className="font-mono font-bold text-slate-900">{w?.nik}</td>
+                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700 whitespace-nowrap align-top">NIK</td>
+                  <td className="align-top">:</td>
+                  <td className="font-mono font-bold text-slate-900 break-words">{w?.nik}</td>
                 </tr>
                 <tr>
-                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700">No. Kartu Keluarga</td>
-                  <td>:</td>
-                  <td className="font-mono text-slate-800">{w?.kartu_keluarga?.no_kk || '3506040101150001'}</td>
+                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700 whitespace-nowrap align-top">No. KK</td>
+                  <td className="align-top">:</td>
+                  <td className="font-mono text-slate-800 break-words">{w?.kartu_keluarga?.no_kk || '3506040101150001'}</td>
                 </tr>
                 <tr>
-                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700">Tempat, Tgl Lahir</td>
-                  <td>:</td>
-                  <td>{w?.tempat_lahir || 'Kediri'}, {w?.tanggal_lahir ? new Date(w.tanggal_lahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '15 Mei 1984'}</td>
+                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700 whitespace-nowrap align-top">Tempat, Tgl Lahir</td>
+                  <td className="align-top">:</td>
+                  <td className="break-words">{w?.tempat_lahir || 'Kediri'}, {w?.tanggal_lahir ? new Date(w.tanggal_lahir).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '15 Mei 1984'}</td>
                 </tr>
                 <tr>
-                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700">Jenis Kelamin</td>
-                  <td>:</td>
+                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700 whitespace-nowrap align-top">Jenis Kelamin</td>
+                  <td className="align-top">:</td>
                   <td>{w?.jenis_kelamin === 'L' ? 'Laki-laki' : 'Perempuan'}</td>
                 </tr>
                 <tr>
-                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700">Agama</td>
-                  <td>:</td>
+                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700 whitespace-nowrap align-top">Agama</td>
+                  <td className="align-top">:</td>
                   <td>{w?.agama || 'Islam'}</td>
                 </tr>
                 <tr>
-                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700">Pekerjaan</td>
-                  <td>:</td>
-                  <td>{w?.pekerjaan || 'Buruh Harian Lepas / Petani'}</td>
+                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700 whitespace-nowrap align-top">Pekerjaan</td>
+                  <td className="align-top">:</td>
+                  <td className="break-words">{w?.pekerjaan || 'Buruh Harian Lepas / Petani'}</td>
                 </tr>
                 <tr>
-                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700">Alamat Domisili</td>
-                  <td>:</td>
-                  <td>{w?.alamat_ktp || 'Jl. Kenanga No. 14, RT 01 / RW 01 Dusun Doko Krajan, Desa Doko'}</td>
+                  <td className="py-0.5 sm:py-1 font-semibold text-slate-700 whitespace-nowrap align-top">Alamat Domisili</td>
+                  <td className="align-top">:</td>
+                  <td className="break-words">{w?.alamat_ktp || 'Jl. Kenanga No. 14, RT 01 / RW 01 Dusun Doko Krajan, Desa Doko'}</td>
                 </tr>
               </tbody>
             </table>
@@ -193,27 +193,16 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
           </div>
 
           {/* Signature & Digital Barcode / QR Legal Stamp Block */}
-          <div className="pt-4 sm:pt-6 space-y-4 font-sans">
-            
-            {/* Payung Hukum Banner */}
-            <div className="p-3 bg-slate-50 border border-slate-300 rounded-xl text-[9px] sm:text-[10px] text-slate-700 leading-relaxed">
-              <div className="flex items-center gap-1.5 font-black text-slate-900 uppercase tracking-tight pb-0.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                <span>PAYUNG HUKUM & KEABSAHAN DOKUMEN ELEKTRONIK:</span>
-              </div>
-              <p>
-                Berdasarkan <strong>Pasal 5 Ayat (1) UU No. 11 Tahun 2008 tentang ITE</strong> dan <strong>Permendagri No. 2 Tahun 2019 tentang Tata Naskah Dinas</strong>, dokumen elektronik ini sah demi hukum. Barcode dan QR Code resmi di bawah ini memuat <strong>tanda tangan digital tersertifikasi Kepala Desa Doko (Lurah)</strong> dan berkekuatan hukum penuh tanpa memerlukan tanda tangan basah serta stempel manual.
-              </p>
-            </div>
+          <div className="pt-3 sm:pt-6 space-y-4 font-sans">
 
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end gap-4 sm:gap-6">
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-end gap-3 sm:gap-6">
               
               {/* Dual Barcode & QR Stamp */}
-              <div className="p-3 bg-emerald-50/90 border-2 border-emerald-400 rounded-2xl flex items-center gap-3 w-full sm:w-auto sm:max-w-[420px] shadow-xs">
+              <div className="p-2.5 xs:p-3 bg-emerald-50/90 border-2 border-emerald-400 rounded-2xl flex items-center gap-2.5 xs:gap-3 w-full sm:w-auto sm:max-w-[420px] shadow-xs">
                 {/* 2D QR Code */}
                 <div 
                   onClick={() => setShowQrZoom(true)}
-                  className="w-28 h-28 sm:w-32 sm:h-32 bg-white p-1.5 rounded-2xl border-2 border-emerald-400 shrink-0 shadow-sm flex flex-col items-center justify-center overflow-hidden cursor-pointer group relative transition-transform hover:scale-105"
+                  className="w-20 h-20 xs:w-24 xs:h-24 sm:w-32 sm:h-32 bg-white p-1 sm:p-1.5 rounded-xl sm:rounded-2xl border-2 border-emerald-400 shrink-0 shadow-sm flex flex-col items-center justify-center overflow-hidden cursor-pointer group relative transition-transform hover:scale-105"
                   title="Klik untuk memperbesar QR Code agar mudah di-scan"
                 >
                   <img 
@@ -221,16 +210,17 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
                     alt="QR Validasi Sah Desa Doko" 
                     className="w-full h-full object-contain filter contrast-125"
                   />
-                  <div className="absolute inset-0 bg-emerald-950/40 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-black text-center p-1 rounded-2xl">
-                    🔍 Perbesar
+                  <div className="absolute inset-0 bg-emerald-950/40 backdrop-blur-[1px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[9px] font-black text-center p-1 rounded-xl gap-1">
+                    <ZoomIn className="w-3.5 h-3.5" />
+                    <span>Perbesar</span>
                   </div>
                 </div>
 
                 {/* 1D Barcode & Verification Info */}
-                <div className="space-y-1.5 text-[9px] sm:text-[10px] min-w-0 flex-1">
-                  <div className="flex items-center gap-1 font-black text-emerald-950 uppercase tracking-tight">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                    <span>TTE LURAH / KADES</span>
+                <div className="space-y-1 sm:space-y-1.5 text-[9px] sm:text-[10px] min-w-0 flex-1">
+                  <div className="flex items-center gap-1 font-black text-emerald-950 uppercase tracking-tight text-[8px] xs:text-[10px]">
+                    <ShieldCheck className="w-3 h-3 xs:w-3.5 xs:h-3.5 text-emerald-600 shrink-0" />
+                    <span className="truncate">TTE LURAH / KADES</span>
                   </div>
 
                   {/* 1D Vector Barcode */}
@@ -238,32 +228,33 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
                     <img 
                       src={`/api/public/surat/barcode/${encodeURIComponent(surat.nomor_surat_resmi || surat.nomor_resi)}`} 
                       alt="Barcode Tanda Tangan Lurah" 
-                      className="w-full h-9 object-contain"
+                      className="w-full h-7 xs:h-8 sm:h-9 object-contain"
                     />
                   </div>
 
-                  <div className="font-mono text-[9px] text-emerald-900 truncate font-black">
+                  <div className="font-mono text-[8px] xs:text-[9px] text-emerald-900 truncate font-black">
                     Hash: {surat.qr_verification_hash?.substring(0, 18) || surat.nomor_resi}
                   </div>
                   <button
                     type="button"
                     onClick={() => setShowQrZoom(true)}
-                    className="text-[9px] font-black text-emerald-700 hover:text-emerald-900 underline flex items-center gap-1 cursor-pointer print:hidden"
+                    className="text-[8px] xs:text-[9px] font-black text-emerald-700 hover:text-emerald-900 underline flex items-center gap-1 cursor-pointer print:hidden"
                   >
-                    <span>🔍 Perbesar QR Scanner</span>
+                    <ZoomIn className="w-2.5 h-2.5" />
+                    <span>Perbesar QR Scanner</span>
                   </button>
                 </div>
               </div>
 
               {/* Official Signer Box: Kepala Desa / Lurah */}
-              <div className="text-center space-y-1 text-[11px] sm:text-xs w-full sm:w-auto">
+              <div className="text-center space-y-1 text-[10px] xs:text-[11px] sm:text-xs w-full sm:w-auto">
                 <div className="text-slate-700">
                   Doko, {new Date(surat.ttd_kades_at || surat.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </div>
                 <div className="font-black text-slate-900 uppercase">
                   KEPALA DESA DOKO
                 </div>
-                <div className="text-slate-500 text-[10px] sm:text-[11px]">
+                <div className="text-slate-500 text-[9px] sm:text-[11px]">
                   (Lurah Pemerintahan Desa)
                 </div>
                 
@@ -271,7 +262,7 @@ export const CetakSuratModal: React.FC<CetakSuratModalProps> = ({ surat, desa, o
                 <div className="py-1 flex flex-col items-center justify-center gap-1">
                   <div className="px-3.5 py-1.5 rounded-2xl border-2 border-emerald-700 bg-emerald-50 text-emerald-900 flex items-center gap-1.5 font-black text-[9px] sm:text-[10px] shadow-2xs">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                    <span>TERTANDA ELEKTRONIK (BARCODE/QR)</span>
+                    <span>TERTANDA TANGAN ELEKTRONIK</span>
                   </div>
                 </div>
 

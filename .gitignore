@@ -48,3 +48,8 @@ pnpm-debug.log*
 frontend/test-results/
 frontend/playwright-report/
 scratch/
+
+# Local revision notes & test uploads
+revisi/
+backend/public/uploads/lampiran/*
+!backend/public/uploads/lampiran/.gitkeep

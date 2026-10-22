@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   FolderCheck, 
   CreditCard, 
@@ -15,13 +16,14 @@ import {
   Plus, 
   X, 
   ExternalLink,
-  Sparkles,
   ArrowRight,
   Loader2,
-  Lock
+  Lock,
+  ImageOff
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { CameraUploadModal } from '@/shared/components/CameraUploadModal';
+import { getSafeMediaUrl } from '@/shared/utils/mediaUrl';
 import { useNavigate } from 'react-router-dom';
 
 interface DokumenKependudukanData {
@@ -57,6 +59,60 @@ export interface BerkasKependudukanViewProps {
   onApplySurat?: () => void;
 }
 
+const DocumentImagePreview: React.FC<{
+  url: string;
+  title?: string;
+  onPreview: (safeUrl: string) => void;
+}> = ({ url, title, onPreview }) => {
+  const [hasError, setHasError] = useState(false);
+  const safeUrl = getSafeMediaUrl(url);
+
+  useEffect(() => {
+    setHasError(false);
+  }, [url]);
+
+  if (hasError) {
+    return (
+      <div className="w-full h-full p-4 bg-slate-50 flex flex-col items-center justify-center text-center space-y-1.5 border border-slate-200">
+        <div className="w-8 h-8 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center shadow-2xs">
+          <ImageOff className="w-4 h-4" />
+        </div>
+        <p className="text-[11px] font-bold text-slate-700">Berkas Tersimpan</p>
+        <p className="text-[10px] text-slate-400">Tersimpan aman di arsip database desa</p>
+        <button
+          type="button"
+          onClick={() => onPreview(safeUrl)}
+          className="mt-1 px-3 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 text-[11px] font-bold border border-slate-200 shadow-2xs flex items-center gap-1 cursor-pointer"
+        >
+          <Eye className="w-3.5 h-3.5 text-emerald-600" />
+          <span>Buka Berkas</span>
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full h-full">
+      <img
+        src={safeUrl}
+        alt={title || 'Dokumen'}
+        className="w-full h-full object-cover"
+        onError={() => setHasError(true)}
+        loading="lazy"
+      />
+      <button
+        type="button"
+        onClick={() => onPreview(safeUrl)}
+        className="absolute bottom-2.5 right-2.5 px-3 py-1.5 rounded-xl bg-white/95 hover:bg-white text-slate-800 text-[11px] font-extrabold border border-slate-200/90 shadow-sm flex items-center gap-1.5 cursor-pointer backdrop-blur-xs transition-all hover:scale-105 active:scale-95"
+        title="Perbesar Tampilan Dokumen"
+      >
+        <Eye className="w-3.5 h-3.5 text-emerald-700" />
+        <span>Perbesar</span>
+      </button>
+    </div>
+  );
+};
+
 export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ onApplySurat }) => {
   const navigate = useNavigate();
   const [data, setData] = useState<DokumenKependudukanData | null>(null);
@@ -73,8 +129,68 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
   // Lightbox preview state
   const [previewDoc, setPreviewDoc] = useState<{ url: string; title: string } | null>(null);
 
+  // Lock body scroll and listen for ESC key when preview modal is open
+  useEffect(() => {
+    if (previewDoc) {
+      const orig = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setPreviewDoc(null);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = orig;
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [previewDoc]);
+
   // Toast feedback
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const isPdfDoc = (url?: string | null) => {
+    if (!url) return false;
+    return url.toLowerCase().includes('.pdf');
+  };
+
+  const renderThumbnail = (url?: string | null, title?: string, placeholder?: React.ReactNode) => {
+    if (!url) return placeholder;
+    const safeUrl = getSafeMediaUrl(url);
+
+    if (isPdfDoc(url)) {
+      return (
+        <div className="w-full h-full p-4 bg-slate-50 rounded-xl flex flex-col items-center justify-center text-center space-y-2 border border-slate-200">
+          <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center shadow-xs">
+            <FileText className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-[10px] font-black uppercase text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+              Format Dokumen
+            </span>
+            <p className="text-[11px] font-bold text-slate-700 mt-1 truncate max-w-[180px]">
+              Tersimpan di Database Desa
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setPreviewDoc({ url: safeUrl, title: title || 'Dokumen' })}
+            className="px-3 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-800 text-[11px] font-extrabold border border-slate-200 shadow-2xs flex items-center gap-1 cursor-pointer"
+          >
+            <Eye className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Lihat Berkas</span>
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <DocumentImagePreview
+        url={safeUrl}
+        title={title}
+        onPreview={(targetUrl) => setPreviewDoc({ url: targetUrl, title: title || 'Dokumen' })}
+      />
+    );
+  };
 
   const fetchDokumen = async () => {
     try {
@@ -162,44 +278,45 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
     <div className="space-y-6 page-enter font-sans max-w-6xl mx-auto">
       
       {/* Toast Notification */}
-      {toastMessage && (
+      {toastMessage && createPortal(
         <div className="fixed top-5 right-5 z-[9999999] bg-emerald-950/90 text-white px-4 py-3 rounded-2xl shadow-xl border border-emerald-400/40 backdrop-blur-md flex items-center gap-2 text-xs font-bold animate-fade-in">
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {/* Header Banner: Solusi Cukup Sekali Upload */}
-      <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-r from-emerald-950 via-emerald-900 to-teal-950 text-white border border-emerald-800/90 shadow-md relative overflow-hidden">
-        <div className="relative z-10 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-900/90 border border-emerald-700/70 text-emerald-300 text-[11px] font-black">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+      {/* Header Banner: Solusi Cukup Sekali Upload (Clean White & Emerald Accent) */}
+      <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-2xs space-y-4">
+        <div className="space-y-3">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-800 text-[11px] font-black">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
             <span>Master Berkas Kependudukan Terpadu</span>
           </div>
 
-          <div className="max-w-2xl space-y-2">
-            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+          <div className="max-w-2xl space-y-1.5">
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
               Cukup Upload Sekali, Otomatis untuk Semua Surat Desa
             </h2>
-            <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed font-normal">
-              Foto KTP, Kartu Keluarga, dan berkas identitas Anda tersimpan aman di database arsip Desa Doko. Setiap kali Anda mengajukan surat apapun (SKTM, Domisili, SKU, dll.), sistem <strong className="text-white font-extrabold">otomatis melampirkan berkas resmi Anda</strong> tanpa perlu repot upload berulang kali.
+            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
+              Foto KTP, Kartu Keluarga, dan berkas identitas Anda tersimpan aman di database arsip Desa Doko. Setiap kali Anda mengajukan surat apapun (SKTM, Domisili, SKU, dll.), sistem <strong className="text-slate-800 font-extrabold">otomatis melampirkan berkas resmi Anda</strong> tanpa perlu repot upload berulang kali.
             </p>
           </div>
 
           {/* Quick stats & verification badge */}
           <div className="pt-2 flex flex-wrap items-center gap-3">
-            <div className="px-3.5 py-1.5 rounded-xl bg-emerald-950/80 border border-emerald-700/60 text-white font-mono text-xs flex items-center gap-2 shadow-2xs">
-              <span className="text-emerald-400 font-bold">NIK:</span>
-              <span className="font-extrabold">{data?.warga.nik}</span>
+            <div className="px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-mono text-xs flex items-center gap-2 shadow-2xs">
+              <span className="text-emerald-700 font-bold">NIK:</span>
+              <span className="font-extrabold text-slate-900">{data?.warga.nik}</span>
             </div>
             {data?.warga.no_kk && (
-              <div className="px-3.5 py-1.5 rounded-xl bg-emerald-950/80 border border-emerald-700/60 text-white font-mono text-xs flex items-center gap-2 shadow-2xs">
-                <span className="text-emerald-400 font-bold">No. KK:</span>
-                <span className="font-extrabold">{data.warga.no_kk}</span>
+              <div className="px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-mono text-xs flex items-center gap-2 shadow-2xs">
+                <span className="text-emerald-700 font-bold">No. KK:</span>
+                <span className="font-extrabold text-slate-900">{data.warga.no_kk}</span>
               </div>
             )}
-            <div className="px-3.5 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <div className="px-3.5 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               <span>{stats?.total_terunggah || 0} Berkas Tersimpan</span>
             </div>
             <button
@@ -211,10 +328,10 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
                   navigate('/dashboard/ajukan');
                 }
               }}
-              className="ml-auto inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-emerald-950 font-black text-xs hover:bg-emerald-50 transition-all shadow-md cursor-pointer press-down"
+              className="ml-auto inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-all shadow-xs cursor-pointer press-down"
             >
               <span>Ajukan Surat Langsung</span>
-              <ArrowRight className="w-4 h-4 text-emerald-900" />
+              <ArrowRight className="w-4 h-4 text-white" />
             </button>
           </div>
         </div>
@@ -261,25 +378,9 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
 
               {/* Photo Preview or Placeholder */}
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 aspect-[16/10] flex items-center justify-center">
-                {doc?.foto_ktp ? (
-                  <>
-                    <img 
-                      src={doc.foto_ktp} 
-                      alt="Foto KTP" 
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[1px]">
-                      <button
-                        type="button"
-                        onClick={() => setPreviewDoc({ url: doc.foto_ktp!, title: 'KTP Elektronik' })}
-                        className="p-2 rounded-xl bg-white text-slate-900 text-xs font-bold flex items-center gap-1 shadow-md hover:bg-slate-100 cursor-pointer"
-                      >
-                        <Eye className="w-3.5 h-3.5 text-emerald-700" />
-                        <span>Perbesar</span>
-                      </button>
-                    </div>
-                  </>
-                ) : (
+                {renderThumbnail(
+                  doc?.foto_ktp,
+                  'KTP Elektronik',
                   <div className="text-center p-6 space-y-2">
                     <CreditCard className="w-10 h-10 text-slate-300 mx-auto" />
                     <p className="text-xs text-slate-500 font-medium">Foto KTP belum diunggah</p>
@@ -338,25 +439,9 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
 
               {/* Photo Preview or Placeholder */}
               <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 aspect-[16/10] flex items-center justify-center">
-                {doc?.foto_kk ? (
-                  <>
-                    <img 
-                      src={doc.foto_kk} 
-                      alt="Foto Kartu Keluarga" 
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center gap-2 backdrop-blur-[1px]">
-                      <button
-                        type="button"
-                        onClick={() => setPreviewDoc({ url: doc.foto_kk!, title: 'Kartu Keluarga' })}
-                        className="p-2 rounded-xl bg-white text-slate-900 text-xs font-bold flex items-center gap-1 shadow-md hover:bg-slate-100 cursor-pointer"
-                      >
-                        <Eye className="w-3.5 h-3.5 text-emerald-700" />
-                        <span>Perbesar</span>
-                      </button>
-                    </div>
-                  </>
-                ) : (
+                {renderThumbnail(
+                  doc?.foto_kk,
+                  'Kartu Keluarga',
                   <div className="text-center p-6 space-y-2">
                     <Users className="w-10 h-10 text-slate-300 mx-auto" />
                     <p className="text-xs text-slate-500 font-medium">Foto KK belum diunggah</p>
@@ -420,9 +505,9 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
                 </span>
               </div>
               <div className="h-32 rounded-xl bg-slate-50 border border-slate-200 overflow-hidden flex items-center justify-center">
-                {doc?.foto_akta_lahir ? (
-                  <img src={doc.foto_akta_lahir} alt="Akta" className="w-full h-full object-cover" />
-                ) : (
+                {renderThumbnail(
+                  doc?.foto_akta_lahir,
+                  'Akta Kelahiran',
                   <span className="text-[11px] text-slate-400">Belum diunggah</span>
                 )}
               </div>
@@ -451,9 +536,9 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
                 </span>
               </div>
               <div className="h-32 rounded-xl bg-slate-50 border border-slate-200 overflow-hidden flex items-center justify-center">
-                {doc?.foto_buku_nikah ? (
-                  <img src={doc.foto_buku_nikah} alt="Buku Nikah" className="w-full h-full object-cover" />
-                ) : (
+                {renderThumbnail(
+                  doc?.foto_buku_nikah,
+                  'Buku Nikah',
                   <span className="text-[11px] text-slate-400">Belum diunggah</span>
                 )}
               </div>
@@ -491,30 +576,45 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
               Dokumen Tambahan Tersimpan ({doc.dokumen_tambahan.length}):
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {doc.dokumen_tambahan.map((item) => (
-                <div key={item.id} className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
-                  <div 
-                    onClick={() => setPreviewDoc({ url: item.url, title: item.nama })}
-                    className="flex items-center gap-2.5 min-w-0 cursor-pointer group flex-1"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-slate-900 overflow-hidden shrink-0 border border-slate-200">
-                      <img src={item.url} alt={item.nama} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+              {doc.dokumen_tambahan.map((item) => {
+                const isPdf = item.nama?.toLowerCase().endsWith('.pdf') || item.url?.toLowerCase().endsWith('.pdf');
+                return (
+                  <div key={item.id} className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-all flex items-center justify-between gap-2">
+                    <div 
+                      onClick={() => setPreviewDoc({ url: item.url, title: item.nama })}
+                      className="flex items-center gap-2.5 min-w-0 cursor-pointer group flex-1"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 overflow-hidden shrink-0 border border-emerald-100 flex items-center justify-center">
+                        {isPdf ? (
+                          <FileText className="w-5 h-5 text-emerald-700" />
+                        ) : (
+                          <img 
+                            src={item.url} 
+                            alt={item.nama} 
+                            loading="lazy"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform" 
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = 'none';
+                            }}
+                          />
+                        )}
+                      </div>
+                      <div className="min-w-0 truncate">
+                        <div className="text-xs font-bold text-slate-900 truncate group-hover:text-emerald-700">{item.nama}</div>
+                        <div className="text-[10px] text-slate-400">Klik untuk melihat</div>
+                      </div>
                     </div>
-                    <div className="min-w-0 truncate">
-                      <div className="text-xs font-bold text-slate-900 truncate group-hover:text-emerald-700">{item.nama}</div>
-                      <div className="text-[10px] text-slate-400">Klik untuk melihat</div>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteDokumen(item.id, item.nama)}
+                      className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer shrink-0"
+                      title="Hapus Dokumen"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteDokumen(item.id, item.nama)}
-                    className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer shrink-0"
-                    title="Hapus Dokumen"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -536,33 +636,58 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
         />
       )}
 
-      {/* Lightbox Fullscreen Preview Modal */}
-      {previewDoc && (
+      {/* Lightbox / Document Preview Modal - Mounted to body via createPortal, perfectly centered on screen */}
+      {previewDoc && createPortal(
         <div 
-          className="fixed inset-0 z-[9999999] bg-slate-950/90 flex items-center justify-center p-4 animate-fade-in font-sans"
+          className="fixed inset-0 z-[9999999] bg-slate-950/80 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6 overflow-y-auto animate-fade-in font-sans"
           onClick={() => setPreviewDoc(null)}
         >
           <div 
-            className="bg-slate-900 rounded-3xl p-4 max-w-2xl w-full max-h-[90vh] flex flex-col space-y-3 border border-slate-800 shadow-2xl"
+            className="bg-white rounded-3xl p-5 sm:p-6 max-w-3xl w-full max-h-[90vh] flex flex-col space-y-4 border border-slate-200 shadow-2xl animate-scale-up my-auto"
             onClick={e => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between text-white pb-2 border-b border-slate-800">
-              <span className="text-xs font-black flex items-center gap-2">
-                <Eye className="w-4 h-4 text-emerald-400" />
-                <span>{previewDoc.title}</span>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
+              <span className="text-sm font-black text-slate-900 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-emerald-600" />
+                <span>Pratinjau Dokumen: {previewDoc.title}</span>
               </span>
-              <button 
-                onClick={() => setPreviewDoc(null)}
-                className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-2">
+                <a
+                  href={previewDoc.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Buka di Tab Baru</span>
+                </a>
+                <button 
+                  onClick={() => setPreviewDoc(null)}
+                  className="p-1.5 text-slate-400 hover:text-slate-700 rounded-xl hover:bg-slate-100 cursor-pointer"
+                  title="Tutup (ESC)"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
-            <div className="flex-1 overflow-hidden rounded-2xl bg-black flex items-center justify-center min-h-[300px]">
-              <img src={previewDoc.url} alt={previewDoc.title} className="w-full h-full object-contain max-h-[70vh]" />
+            <div className="flex-1 overflow-auto rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center min-h-[350px]">
+              {isPdfDoc(previewDoc.url) ? (
+                <iframe 
+                  src={previewDoc.url} 
+                  title={previewDoc.title} 
+                  className="w-full h-[65vh] rounded-2xl border-0"
+                />
+              ) : (
+                <img 
+                  src={previewDoc.url} 
+                  alt={previewDoc.title} 
+                  className="w-full h-full object-contain max-h-[70vh] rounded-xl" 
+                />
+              )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

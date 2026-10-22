@@ -14,7 +14,6 @@ import {
   ChevronRight,
   Search,
   CheckCircle2,
-  Sparkles,
   ArrowRight,
   LogIn
 } from 'lucide-react';
@@ -167,13 +166,8 @@ export const ProfilDesaPage: React.FC = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
           
-          {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
-          <div className="lg:col-span-7 space-y-4 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs">
-              <Compass className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Portal Direktori & Profil Wilayah Terpadu</span>
-            </div>
-
+          {/* Left Column (60% Fibonacci): Title and Description */}
+          <div className="lg:col-span-7 space-y-3 text-left">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
               Profil Wilayah &{' '}
               <span className="relative whitespace-nowrap text-emerald-700 inline-block">
@@ -185,7 +179,7 @@ export const ProfilDesaPage: React.FC = () => {
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
-              Informasi profil resmi mengenai sejarah, visi-misi, aparatur pemerintahan desa, sebaran rukun warga (RT/RW), dan potensi unggulan wilayah Kabupaten Kediri.
+              Informasi profil wilayah, aparatur desa, dan sebaran kependudukan.
             </p>
 
             <div className="flex flex-wrap items-center gap-3 pt-1">
@@ -193,13 +187,9 @@ export const ProfilDesaPage: React.FC = () => {
                 href="#direktori-desa"
                 className="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-700/20 transition-all press-down flex items-center gap-2 hover-glow"
               >
-                <span>Jelajahi Wilayah Terdaftar</span>
+                <span>Lihat wilayah</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </a>
-              <div className="text-xs text-slate-500 font-semibold flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/80 border border-slate-200/80 shadow-2xs">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <span>Standar DPMPD Pemkab Kediri</span>
-              </div>
             </div>
           </div>
 
@@ -340,14 +330,11 @@ export const ProfilDesaPage: React.FC = () => {
           {/* Header & Search Bar */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/80 uppercase tracking-widest mb-1.5">
-                Wilayah Terintegrasi
-              </div>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                Daftar Desa Terdaftar di Kab. Kediri
+                Desa Terdaftar di Kab. Kediri
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500">
-                Pilih atau cari desa Anda untuk melihat ringkasan data kependudukan dan struktur wilayah.
+              <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                Pilih desa untuk melihat data kependudukan dan wilayah.
               </p>
             </div>
 
@@ -427,7 +414,7 @@ export const ProfilDesaPage: React.FC = () => {
                     className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center gap-2 transition-colors shadow-xs press-down"
                   >
                     <LogIn className="w-3.5 h-3.5" />
-                    <span>Masuk Portal Layanan {v.nama}</span>
+                    <span>Masuk ke {v.nama}</span>
                   </Link>
                 </div>
 
@@ -447,15 +434,11 @@ export const ProfilDesaPage: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-emerald-200 text-xs font-black border border-white/20">
-              <Target className="w-3.5 h-3.5 text-emerald-300" />
-              <span>ARAH KEBIJAKAN PEMERINTAH DESA</span>
-            </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
-              Visi & Misi Pembangunan Desa Doko
+              Visi & Misi Desa Doko
             </h2>
             <p className="text-xs sm:text-sm text-emerald-100/90 font-medium">
-              Landasan strategis periode 2021 - 2027 menuju desa mandiri, transparan, dan terdepan dalam pelayanan digital.
+              Arah kebijakan strategis pembangunan desa periode 2021–2027.
             </p>
           </div>
 
@@ -497,30 +480,43 @@ export const ProfilDesaPage: React.FC = () => {
               </div>
 
               <ul className="space-y-4 text-xs sm:text-sm text-emerald-50/95 font-medium pt-2">
-                <li className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
-                  <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
-                    1
-                  </span>
-                  <span>Meningkatkan profesionalisme aparatur pemerintah desa dengan digitalisasi tata kelola administrasi dan persuratan realtime.</span>
-                </li>
-                <li className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
-                  <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
-                    2
-                  </span>
-                  <span>Membangun sarana dan prasarana infrastruktur jalan, irigasi pertanian tersier, serta drainase lingkungan yang merata.</span>
-                </li>
-                <li className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
-                  <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
-                    3
-                  </span>
-                  <span>Mengembangkan perekonomian kerakyatan berbasis potensi pertanian organik, UMKM kerajinan, dan pemberdayaan BUMDes.</span>
-                </li>
-                <li className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
-                  <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
-                    4
-                  </span>
-                  <span>Mewujudkan transparansi pengelolaan keuangan APBDes secara terbuka dan akuntabel kepada seluruh warga.</span>
-                </li>
+                {typeof desaSetting?.misi === 'string' && desaSetting.misi.trim().length > 0 ? (
+                  desaSetting.misi.split('\n').filter((l: string) => l.trim().length > 0).map((line: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
+                      <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
+                        {idx + 1}
+                      </span>
+                      <span>{line.replace(/^\d+[\.\)]\s*/, '')}</span>
+                    </li>
+                  ))
+                ) : (
+                  <>
+                    <li className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
+                      <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
+                        1
+                      </span>
+                      <span>Meningkatkan profesionalisme aparatur pemerintah desa dengan digitalisasi tata kelola administrasi dan persuratan realtime.</span>
+                    </li>
+                    <li className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
+                      <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
+                        2
+                      </span>
+                      <span>Membangun sarana dan prasarana infrastruktur jalan, irigasi pertanian tersier, serta drainase lingkungan yang merata.</span>
+                    </li>
+                    <li className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
+                      <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
+                        3
+                      </span>
+                      <span>Mengembangkan perekonomian kerakyatan berbasis potensi pertanian organik, UMKM kerajinan, dan pemberdayaan BUMDes.</span>
+                    </li>
+                    <li className="flex items-start gap-3.5 bg-white/5 p-3 rounded-2xl border border-white/10">
+                      <span className="w-6 h-6 rounded-xl bg-white text-emerald-800 flex items-center justify-center text-xs font-black shrink-0 mt-0.5 shadow-sm">
+                        4
+                      </span>
+                      <span>Mewujudkan transparansi pengelolaan keuangan APBDes secara terbuka dan akuntabel kepada seluruh warga.</span>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           </div>
@@ -533,15 +529,12 @@ export const ProfilDesaPage: React.FC = () => {
           
           {/* Aparatur Desa Section */}
           <div className="space-y-8">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/80 uppercase tracking-widest">
-                Struktur Pemerintah Desa
-              </div>
+            <div className="text-center max-w-2xl mx-auto space-y-1.5">
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                Aparatur & Perangkat Desa Doko
+                Aparatur Desa Doko
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600">
-                Pelayan masyarakat yang bertugas menjalankan roda birokrasi, persuratan, dan pembangunan di Desa.
+              <p className="text-xs sm:text-sm text-slate-500">
+                Perangkat pemerintah yang melayani masyarakat Desa Doko.
               </p>
             </div>
 

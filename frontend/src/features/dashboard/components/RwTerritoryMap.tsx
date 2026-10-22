@@ -16,7 +16,6 @@ import {
   Grid,
   ShieldCheck,
   ChevronRight,
-  Sparkles
 } from 'lucide-react';
 
 export interface RtBoundaryData {
@@ -219,7 +218,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       id: 'balai_rw_01',
       nama: 'Balai Pertemuan & Pos Koordinasi RW 01',
       tipe: 'Pusat Koordinasi Wilayah',
-      icon: '🏛️',
+      icon: 'landmark',
       lat: -7.81820,
       lng: 112.04280,
       desc: 'Pusat musyawarah warga, rapat koordinasi 6 RT, dan pos pelayanan administrasi RW 01.'
@@ -228,7 +227,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       id: 'pos_kamling_induk',
       nama: 'Pos Kamling Induk RW 01',
       tipe: 'Keamanan Lingkungan (Siskamling)',
-      icon: '🛡️',
+      icon: 'shield',
       lat: -7.81980,
       lng: 112.04150,
       desc: 'Pos ronda induk pantauan keamanan 24 jam dengan sambungan HT antar pos kamling RT.'
@@ -246,7 +245,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       id: 'musholla_al_mabrur',
       nama: 'Musholla Al Mabrur',
       tipe: 'Fasilitas Keagamaan',
-      icon: '🕌',
+      icon: 'mosque',
       lat: -7.81990,
       lng: 112.04410,
       desc: 'Pusat kegiatan ibadah jamaah dan pengajian warga RW 01 Krajan.'
@@ -286,7 +285,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       }).addTo(map);
 
       outerBoundary.bindTooltip(
-        '<div class="font-sans font-black text-xs text-emerald-950">📍 Batas Teritorial Wilayah RW 01 Dusun Krajan (6 RT)</div>',
+        '<div class="font-sans font-black text-xs text-emerald-950">Batas Teritorial Wilayah RW 01 Dusun Krajan (6 RT)</div>',
         { sticky: true, className: 'custom-leaflet-tooltip' }
       );
       rwBoundaryRef.current = outerBoundary;
@@ -376,8 +375,8 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
         `
         <div class="font-sans text-xs space-y-0.5">
           <div class="font-black text-slate-900">${rt.nama}</div>
-          <div class="text-[11px] text-slate-600">👤 Ketua: <strong>${rt.ketua}</strong></div>
-          <div class="text-[10px] text-emerald-800 font-bold">📊 ${rt.kkCount} KK • ${rt.wargaCount} Jiwa</div>
+          <div class="text-[11px] text-slate-600">Ketua: <strong>${rt.ketua}</strong></div>
+          <div class="text-[10px] text-emerald-800 font-bold">${rt.kkCount} KK • ${rt.wargaCount} Jiwa</div>
         </div>
         `,
         { sticky: true, className: 'custom-leaflet-tooltip' }
@@ -437,7 +436,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
         html: `
           <div class="relative group cursor-pointer transition-transform duration-300 hover:scale-115">
             <div class="w-8 h-8 rounded-xl bg-white shadow-md border-2 border-emerald-600 flex items-center justify-center text-sm">
-              <span>${fac.icon || '📍'}</span>
+              <span>•</span>
             </div>
             <div class="w-2 h-2 mx-auto -mt-1 rotate-45 bg-white border-r border-b border-emerald-600"></div>
             <div class="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap bg-emerald-950/90 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs pointer-events-none opacity-90">
@@ -454,7 +453,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       marker.bindPopup(`
         <div class="p-1 space-y-1.5 min-w-[190px] font-sans text-left">
           <div class="flex items-center gap-2 border-b border-slate-100 pb-1">
-            <span class="text-base">${fac.icon || '📍'}</span>
+            <span class="text-xs font-bold">•</span>
             <div>
               <div class="font-black text-xs text-slate-900">${fac.nama}</div>
               <div class="text-[10px] text-emerald-700 font-bold">${fac.tipe}</div>
@@ -493,7 +492,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
 
       marker.bindTooltip(`
         <div class="font-sans text-[11px] space-y-0.5">
-          <div class="font-bold text-slate-900">🏠 ${w.nama_lengkap}</div>
+          <div class="font-bold text-slate-900">${w.nama_lengkap}</div>
           <div class="text-[10px] text-slate-600">RT ${targetRt.nomorRt} • NIK: ${w.nik}</div>
         </div>
       `, { sticky: true });
@@ -683,7 +682,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
           </div>
 
           <div className="flex sm:hidden items-center gap-1 bg-slate-900/85 backdrop-blur-md text-white text-[9px] font-medium px-2 py-1 rounded-lg border border-white/10">
-            <span>👆 Geser 2 jari untuk zoom/geser</span>
+            <span>Gunakan 2 jari untuk navigasi</span>
           </div>
         </div>
       </div>
@@ -757,7 +756,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
           <div className="flex items-center gap-2">
             <Info className="w-4 h-4 text-emerald-700 shrink-0" />
             <span>
-              💡 <strong>Panduan RW:</strong> Peta wilayah RW 01 terbagi menjadi <strong>6 kotak blok RT</strong>. Klik pada salah satu kotak RT di peta untuk melihat profil batas wilayah, data kontak Ketua RT, dan statistik warganya.
+              <strong>Panduan RW:</strong> Peta wilayah RW 01 terbagi menjadi <strong>6 kotak blok RT</strong>. Klik pada salah satu kotak RT di peta untuk melihat profil batas wilayah, data kontak Ketua RT, dan statistik warganya.
             </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">

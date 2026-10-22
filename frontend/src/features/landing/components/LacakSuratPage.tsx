@@ -14,7 +14,6 @@ import {
   ChevronRight,
   Copy,
   Check,
-  Sparkles,
   Lock,
   ArrowRight
 } from 'lucide-react';
@@ -51,7 +50,7 @@ export const LacakSuratPage: React.FC = () => {
 
   const executeSearch = async (kw: string) => {
     if (!kw.trim()) {
-      setSearchError('Silakan masukkan nomor resi atau NIK pemohon.');
+      setSearchError('Silakan masukkan nomor resi surat pengajuan.');
       return;
     }
 
@@ -67,10 +66,10 @@ export const LacakSuratPage: React.FC = () => {
         setExpandedTrackings({ [res.data.data[0].id]: true });
       } else {
         setTrackingResults([]);
-        setSearchError('Nomor resi atau NIK tidak ditemukan dalam arsip pengajuan surat.');
+        setSearchError('Nomor resi tidak ditemukan dalam arsip pengajuan surat.');
       }
     } catch {
-      setSearchError('Gagal memuat status surat. Pastikan format nomor resi atau NIK benar.');
+      setSearchError('Gagal memuat status surat. Pastikan format nomor resi benar.');
     } finally {
       setIsSearching(false);
     }
@@ -115,11 +114,6 @@ export const LacakSuratPage: React.FC = () => {
           
           {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
           <div className="lg:col-span-7 space-y-4 text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100/90 text-emerald-800 text-xs font-black border border-emerald-200 shadow-2xs">
-              <Search className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Pelacak Berkas Publik & QR Realtime</span>
-            </div>
-
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
               Lacak Status Surat &{' '}
               <span className="relative whitespace-nowrap text-emerald-700 inline-block">
@@ -130,20 +124,9 @@ export const LacakSuratPage: React.FC = () => {
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
-              Pantau tahapan verifikasi berkas permohonan Anda secara realtime atau lakukan uji keabsahan tanda tangan elektronik dan stempel QR resmi dokumen di Kabupaten Kediri.
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-xl">
+              Pantau tahapan verifikasi berkas permohonan surat atau periksa keabsahan stempel QR resmi.
             </p>
-
-            <div className="flex flex-wrap items-center gap-4 pt-1 text-xs text-slate-500 font-medium">
-              <span className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <strong className="text-slate-800">Tracking Otomatis</strong> per tahap
-              </span>
-              <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
-                <strong className="text-slate-800">Validasi Sertifikat QR</strong> sah
-              </span>
-            </div>
           </div>
 
           {/* Right Column (40% Fibonacci): QR Validation Card Preview */}
@@ -189,7 +172,7 @@ export const LacakSuratPage: React.FC = () => {
                 <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
                   <span className="flex items-center gap-1.5 font-medium">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Masukkan No. Resi atau NIK</span>
+                    <span>Masukkan No. Resi Surat</span>
                   </span>
                   <span className="font-bold text-slate-700">Akurat 100%</span>
                 </div>
@@ -207,7 +190,7 @@ export const LacakSuratPage: React.FC = () => {
               Cek Posisi Dokumen Anda
             </h2>
             <p className="text-xs text-slate-500">
-              Ketikkan Nomor Resi Surat atau 16 Digit NIK Pemohon
+              Ketikkan Nomor Resi Surat Pelacakan Anda (Contoh: REQ-...)
             </p>
           </div>
 
@@ -216,7 +199,7 @@ export const LacakSuratPage: React.FC = () => {
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder="Contoh: REQ-20260818-001 atau 35060415..."
+                placeholder="Contoh: REQ-20260818-001..."
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
                 className="w-full pl-10 pr-24 py-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all font-mono text-slate-800"
@@ -242,16 +225,16 @@ export const LacakSuratPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSearching}
-              className="px-7 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all press-down disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+              className="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all press-down disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
             >
-              {isSearching ? 'Mencari...' : 'Lacak Status'}
+              {isSearching ? 'Mencari...' : 'Lacak'}
             </button>
           </form>
 
           {/* Quick Resi Helper Chips */}
           <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-500 pt-1 border-t border-slate-100">
-            <span className="font-semibold text-slate-400">Contoh Resi Uji Coba:</span>
-            {['REQ-20260818-001', 'REQ-20260818-002', '3506041205900001'].map((sample) => (
+            <span className="font-semibold text-slate-400">Contoh:</span>
+            {['REQ-20260818-001', 'REQ-20260818-002'].map((sample) => (
               <button
                 key={sample}
                 type="button"
@@ -284,7 +267,6 @@ export const LacakSuratPage: React.FC = () => {
             <div className="space-y-6 animate-fade-in">
               <div className="flex items-center justify-between">
                 <div className="text-xs font-black text-emerald-900 uppercase tracking-wider flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-emerald-600" />
                   <span>Hasil Pelacakan Berkas ({trackingResults.length})</span>
                 </div>
                 <span className="text-[11px] text-slate-500 font-medium">Klik verifikasi untuk cek sertifikat sah</span>
@@ -335,7 +317,7 @@ export const LacakSuratPage: React.FC = () => {
 
                         <h3 className="text-xl font-black text-slate-900 leading-snug">{item.surat_type?.nama_surat}</h3>
                         <div className="text-xs text-slate-600">
-                          Pemohon: <strong className="text-slate-900 font-extrabold">{item.warga_profile?.nama_lengkap}</strong> (NIK: <span className="font-mono">{item.warga_profile?.nik}</span>)
+                          Pemohon: <strong className="text-slate-900 font-extrabold">{item.warga_profile?.nama_lengkap}</strong>
                         </div>
                         <div className="text-xs text-slate-500">Keperluan: <span className="text-slate-800 font-medium">{item.keperluan}</span></div>
                       </div>
@@ -346,8 +328,8 @@ export const LacakSuratPage: React.FC = () => {
                           item.status === 'rejected' ? 'bg-rose-100 text-rose-900 border border-rose-300' :
                           'bg-amber-100 text-amber-900 border border-amber-300'
                         }`}>
-                          {item.status === 'completed' ? '✓ Surat Selesai & Sah' :
-                           item.status === 'rejected' ? '✕ Ditolak' :
+                          {item.status === 'completed' ? 'Surat Selesai & Sah' :
+                           item.status === 'rejected' ? 'Ditolak' :
                            ['processed_sekdes', 'approved_rt'].includes(item.status) ? '⏳ Antrean Kantor Desa' :
                            item.status === 'pending_rw' ? '⏳ Antrean Kantor Desa' : '⏳ Menunggu RT'}
                         </span>
@@ -375,7 +357,7 @@ export const LacakSuratPage: React.FC = () => {
                                   ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 ring-2 ring-emerald-200'
                                   : 'bg-slate-200 text-slate-400 border border-slate-300'
                               }`}>
-                                {isDone && currentStep > st.num ? '✓' : st.num}
+                                {isDone && currentStep > st.num ? <Check className="w-3.5 h-3.5" /> : st.num}
                               </div>
                               <div className={`font-bold truncate ${isCurrent ? 'text-emerald-700 font-black' : isDone ? 'text-slate-800' : 'text-slate-400'}`}>
                                 {st.label}

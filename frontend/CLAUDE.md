@@ -38,64 +38,69 @@
 - **Shared jika >= 2 fitur** - komponen yang dipakai lebih dari 1 fitur wajib dipindah ke src/shared
 - **Separation of Concerns** - pisahkan UI, logic, dan data fetching
 
-### Struktur Folder Aktual
+### Struktur Folder Aktual (Separation of Concerns)
 
+```text
+frontend/
+├── public/                 # Public Layer: image, svg, icon, font
+└── src/
+    ├── app/                # App Layer: Route, Router, App component, Provider integration
+    │   ├── App.tsx
+    │   ├── routes.tsx
+    │   └── index.ts
+    ├── features/           # Feature Layer: Domain features dengan standard structure
+    │   ├── auth/           # Minimal/Lengkap: api/, components/, services/, types/, validation/, index.ts
+    │   ├── dashboard/      # Layout, role dashboards (Admin, Kades, Sekdes, RT, RW, Bendahara, Warga), modals, views, maps
+    │   │   ├── api/
+    │   │   ├── components/
+    │   │   ├── constants/
+    │   │   ├── services/
+    │   │   ├── types/
+    │   │   └── index.ts
+    │   ├── landing/        # Halaman publik portal desa
+    │   │   ├── api/
+    │   │   ├── components/
+    │   │   ├── services/
+    │   │   ├── types/
+    │   │   └── index.ts
+    │   └── index.ts
+    ├── shared/             # Shared Layer: Reusable cross-feature assets
+    │   ├── components/     # BrandLogo, Pagination, CameraUploadModal, UserAvatar, charts/
+    │   ├── constants/      # App constants, roles, status
+    │   ├── hooks/          # Reusable hooks (useDebounce, dsb.)
+    │   ├── lib/            # axios.ts (Axios instance terpusat)
+    │   ├── services/       # Reusable services (storageService, dsb.)
+    │   ├── types/          # Domain TypeScript interfaces (index.ts)
+    │   └── utils/          # getSafeMediaUrl, formatters, dsb.
+    ├── providers/          # Root React Context Providers (AuthProvider, dsb.)
+    ├── middleware/         # Route guards & authentication middleware (ProtectedRoute, requireRole)
+    ├── styles/             # Global CSS styling & Tailwind directives (index.css)
+    ├── App.tsx             # Entry forwarder ke src/app
+    └── main.tsx            # DOM root renderer
 ```
-frontend/src/
-+-- App.tsx
-+-- main.tsx
-+-- index.css
-+-- assets/
-+-- features/
-|   +-- auth/
-|   |   +-- components/    # LoginPage.tsx, RegisterPage.tsx
-|   |   +-- hooks/
-|   |   +-- services/
-|   |   +-- types/
-|   +-- dashboard/
-|   |   +-- components/
-|   |       +-- DashboardLayout.tsx
-|   |       +-- WargaDashboard.tsx
-|   |       +-- RtDashboard.tsx
-|   |       +-- RwDashboard.tsx
-|   |       +-- SekdesDashboard.tsx
-|   |       +-- BendaharaDashboard.tsx
-|   |       +-- BansosManager.tsx
-|   |       +-- CetakSuratModal.tsx
-|   |       +-- QrVerificationModal.tsx
-|   |       +-- KopSuratSetting.tsx
-|   |       +-- SuratTrackingModal.tsx
-|   |       +-- RoleDashboardViews.tsx
-|   +-- landing/
-|       +-- components/
-|           +-- PublicLayout.tsx
-|           +-- PublicNavbar.tsx
-|           +-- PublicFooter.tsx
-|           +-- HomePage.tsx
-|           +-- ProfilDesaPage.tsx
-|           +-- LayananSuratPage.tsx
-|           +-- LacakSuratPage.tsx
-|           +-- TransparansiApbdesPage.tsx
-|           +-- BansosPage.tsx
-|           +-- BeritaPage.tsx
-+-- shared/
-    +-- components/
-    |   +-- BrandLogo.tsx
-    |   +-- charts/
-    |       +-- AreaSplineChart.tsx
-    |       +-- BarActivityChart.tsx
-    |       +-- DonutGauge.tsx
-    |       +-- MetricStatCard.tsx
-    |       +-- MiniCalendarWidget.tsx
-    +-- context/
-    |   +-- AuthContext.tsx
-    +-- hooks/
-    +-- lib/
-    |   +-- axios.ts        # SELALU import dari sini
-    +-- types/
-    |   +-- index.ts        # SEMUA interface domain ada di sini
-    +-- utils/
-```
+
+### Standar Pembuatan Feature Baru
+- **Minimal:**
+  ```text
+  <feature-name>/
+  ├── api/           # Jika feature berinteraksi dengan backend
+  ├── hooks/         # Jika terdapat query, mutation, state bisnis
+  ├── types/         # Jika terdapat request/response/domain model
+  └── index.ts       # Entry point export feature
+  ```
+- **Lengkap:**
+  ```text
+  <feature-name>/
+  ├── api/           # Jika feature berinteraksi dengan backend
+  ├── components/    # Jika feature memiliki UI khusus
+  ├── hooks/         # Jika terdapat query, mutation, state bisnis
+  ├── validation/    # Jika terdapat form
+  ├── types/         # Jika terdapat request/response/domain model
+  ├── services/      # Jika terdapat business logic seperti mapping & kalkulasi
+  ├── constants/     # Jika terdapat konstanta khusus feature
+  ├── utils/         # Jika helper hanya dipakai feature tersebut
+  └── index.ts       # Entry point export feature
+  ```
 
 ### Aturan Import (Urutan Wajib)
 

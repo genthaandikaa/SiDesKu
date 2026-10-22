@@ -22,8 +22,8 @@ class CheckRole
             ], 401);
         }
 
-        // Superadmin bypass
-        if ($user->hasRole('admin')) {
+        // Platform Super Admin bypass
+        if ($user->hasRole('super_admin')) {
             return $next($request);
         }
 

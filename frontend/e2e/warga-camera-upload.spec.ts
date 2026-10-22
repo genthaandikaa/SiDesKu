@@ -70,19 +70,12 @@ test('Verify Warga Multi-Document Attachments and Optional Attachment Submission
 
   // A. Attach 1st document (Foto KTP)
   await page.click('button:has-text("Foto KTP")');
-  await page.click('button:has-text("Unggah dari Berkas")');
-  await expect(page.locator('text=SiDesKu Media & Document Capture')).toBeVisible();
-
-  // Switch to Upload tab and set file
-  await page.click('button:has-text("Pilih dari Berkas / Galeri")');
-  const fileInput = page.locator('input[type="file"][accept="image/*"]');
+  const fileInput = page.locator('input[type="file"]').first();
   await fileInput.setInputFiles({
     name: 'foto_ktp_asli.png',
     mimeType: 'image/png',
     buffer: dummyKtpBuffer,
   });
-  await expect(page.locator('text=Foto Berhasil Diambil')).toBeVisible({ timeout: 8000 });
-  await page.click('button:has-text("Gunakan Foto Ini")');
 
   // Verify 1st document appears in the list
   await expect(page.locator('text=Dokumen Terlampir (1):')).toBeVisible({ timeout: 8000 });
@@ -90,18 +83,11 @@ test('Verify Warga Multi-Document Attachments and Optional Attachment Submission
 
   // B. Attach 2nd document (Kartu Keluarga - KK)
   await page.click('button:has-text("Kartu Keluarga (KK)")');
-  await page.click('button:has-text("+ Unggah Berkas")');
-  await expect(page.locator('text=SiDesKu Media & Document Capture')).toBeVisible();
-
-  await page.click('button:has-text("Pilih dari Berkas / Galeri")');
-  const fileInput2 = page.locator('input[type="file"][accept="image/*"]');
-  await fileInput2.setInputFiles({
+  await fileInput.setInputFiles({
     name: 'kartu_keluarga_asli.png',
     mimeType: 'image/png',
     buffer: dummyKkBuffer,
   });
-  await expect(page.locator('text=Foto Berhasil Diambil')).toBeVisible({ timeout: 8000 });
-  await page.click('button:has-text("Gunakan Foto Ini")');
 
   // Verify BOTH documents appear in list
   await expect(page.locator('text=Dokumen Terlampir (2):')).toBeVisible({ timeout: 8000 });
