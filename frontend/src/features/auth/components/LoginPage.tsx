@@ -382,57 +382,6 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                   </button>
                 </div>
 
-
-                {/* Quick 1-Click Demo Accounts Switcher */}
-                <div className="pt-2 border-t border-slate-100 space-y-2">                    
-                  {/* Petugas Desa */}
-                  <div className="space-y-1">
-                    <p className="text-[9px] font-semibold text-slate-400 pl-0.5">Petugas Desa</p>
-                    <div className="flex flex-wrap gap-1">
-                      {[
-                        { label: 'Warga', user: '3506041505840001', pass: '15051984' },
-                        { label: 'Ketua RT', user: 'rt01', pass: 'password123' },
-                        { label: 'Ketua RW', user: 'rw01', pass: 'password123' },
-                        { label: 'Sekdes', user: 'sekdes', pass: 'password123' },
-                        { label: 'Bendahara', user: 'bendahara_desa', pass: 'password123' },
-                        { label: 'Kades', user: 'kades', pass: 'password123' },
-                      ].map((acc) => (
-                        <button
-                          key={acc.user}
-                          type="button"
-                          disabled={loading}
-                          onClick={() => handleQuickLogin(acc.user, acc.pass)}
-                          className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] border border-slate-200/70 transition-all cursor-pointer press-down shadow-2xs disabled:opacity-50"
-                        >
-                          {acc.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Admin Platform */}
-                  <div className="space-y-1">
-                    <p className="text-[9px] font-semibold text-slate-400 pl-0.5">Admin</p>
-                    <div className="flex flex-wrap gap-1">
-                      {[
-                        { label: 'Admin Desa', user: 'admin', pass: 'password123'},
-                        { label: 'Super Admin', user: 'superadmin', pass: 'password123'},
-                      ].map((acc) => (
-                        <button
-                          key={acc.user}
-                          type="button"
-                          disabled={loading}
-                          onClick={() => handleQuickLogin(acc.user, acc.pass)}
-                          className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] border border-slate-200/70 transition-all cursor-pointer press-down shadow-2xs disabled:opacity-50"
-                        >
-                          {acc.label}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-
                 <div className="text-[10px] text-center text-slate-400 pt-1">
                   Belum memiliki akun? Hubungi kantor desa.
                 </div>
