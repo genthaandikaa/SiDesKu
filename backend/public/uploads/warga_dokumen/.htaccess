@@ -1,0 +1,4 @@
+# Proteksi Akses Langsung Berkas Kependudukan Pribadi (UU PDP No. 27/2022)
+Require all denied
+Deny from all
+Options -Indexes

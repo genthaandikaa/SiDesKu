@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, 
   Search, 
@@ -17,7 +18,6 @@ import {
   RotateCw,
   Zap,
   ZapOff,
-  Sparkles,
   RefreshCw,
   QrCode
 } from 'lucide-react';
@@ -51,6 +51,22 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
   const [torchOn, setTorchOn] = useState(false);
   const [hasTorch, setHasTorch] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+  // Lock body scroll and handle ESC key
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        stopCamera();
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   // Helper to extract clean query/hash from any QR code content (URL, params, or raw hash)
   const extractHashFromQr = (qrRaw: string): string => {
@@ -92,11 +108,11 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
     
     try {
       const res = await api.get(`/public/surat/verify-qr/${encodeURIComponent(cleanHash)}`);
-      if (res.data.success && res.data.data) {
+      if (res.data.success && res.data.valid && res.data.data) {
         setSurat(res.data.data);
         if (res.data.desa) setDesa(res.data.desa);
       } else {
-        setError(res.data.message || 'Dokumen tidak ditemukan atau tanda tangan tidak sah.');
+        setError(res.data.message || 'Dokumen tidak ditemukan atau tanda tangan belum sah.');
       }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Dokumen tidak valid atau tanda tangan digital tidak terdaftar di database Pemdes Doko.');
@@ -391,9 +407,20 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
 
   const w = surat?.warga_profile;
 
-  return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-6 animate-fade-in bg-slate-950/80 backdrop-blur-sm font-sans overflow-y-auto">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden animate-scale-up border border-slate-200 flex flex-col my-auto max-h-[92vh]">
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[999999] flex items-center justify-center p-3 sm:p-6 animate-fade-in bg-slate-950/75 font-sans overflow-y-auto select-none"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          stopCamera();
+          onClose();
+        }
+      }}
+    >
+      <div 
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-xl overflow-hidden animate-scale-up border border-slate-200 flex flex-col my-auto max-h-[92vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
         
         {/* Hidden Canvas for QR video frame decoding */}
         <canvas ref={canvasRef} className="hidden" />
@@ -431,44 +458,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
         {/* Navigation Tabs (Only shown when not showing verified result) */}
         {!surat && !loading && (
           <div className="px-6 pt-4 pb-2 border-b border-slate-100 flex items-center gap-2 bg-slate-50/50 shrink-0">
-            <button
-              type="button"
-              onClick={() => setActiveTab('camera')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'camera'
-                  ? 'bg-emerald-700 text-white shadow-xs'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-              }`}
-            >
-              <Camera className="w-3.5 h-3.5" />
-              <span>Kamera Langsung</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('photo')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'photo'
-                  ? 'bg-emerald-700 text-white shadow-xs'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-              }`}
-            >
-              <ImageIcon className="w-3.5 h-3.5" />
-              <span>Scan dari Foto / Berkas</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('manual')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'manual'
-                  ? 'bg-emerald-700 text-white shadow-xs'
-                  : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
-              }`}
-            >
-              <Search className="w-3.5 h-3.5" />
-              <span>Cari Manual / Arsip</span>
-            </button>
+            {/* arsip */}
           </div>
         )}
 
@@ -505,7 +495,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                     </div>
 
                     <div className="mt-4 px-3 py-1.5 rounded-full bg-slate-950/80 text-emerald-300 text-[11px] font-bold tracking-wide backdrop-blur-md shadow-md border border-emerald-500/30">
-                      ⚡ Mengarahkan kamera ke QR Code...
+                      Mengarahkan kamera ke QR Code...
                     </div>
                   </div>
                 )}
@@ -639,7 +629,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                       {isDecodingPhoto && <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />}
                     </div>
                     <div className="text-[11px] text-slate-500 font-medium">
-                      {isDecodingPhoto ? '🔍 Sedang mendeteksi & mendekode matriks QR Code...' : 'Pemindaian selesai.'}
+                      {isDecodingPhoto ? 'Sedang mendeteksi & mendekode matriks QR Code...' : 'Pemindaian selesai.'}
                     </div>
                   </div>
                 </div>
@@ -708,7 +698,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                         </div>
 
                         <span className="shrink-0 text-[11px] font-extrabold text-emerald-700 bg-white px-2.5 py-1 rounded-xl border border-emerald-200 shadow-2xs group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                          Uji Sah →
+                          Uji Sah
                         </span>
                       </div>
                     ))}
@@ -749,8 +739,8 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
           {surat && !loading && (
             <div className="space-y-5 animate-fade-in">
               
-              {/* Authenticity Certificate Header Banner */}
-              <div className="p-5 rounded-3xl bg-gradient-to-r from-emerald-50 via-[#ecf8f2] to-emerald-50 border-2 border-emerald-400 flex items-center justify-between gap-4 shadow-sm">
+              {/* Authenticity Certificate Header Banner (Clean White) */}
+              <div className="p-5 rounded-3xl bg-white border border-slate-200/90 flex items-center justify-between gap-4 shadow-xs">
                 <div className="flex items-center gap-3.5">
                   <div className="w-14 h-14 rounded-2xl bg-white p-1.5 border border-emerald-200 flex items-center justify-center shrink-0 shadow-xs">
                     <img 
@@ -892,6 +882,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
         </div>
 
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

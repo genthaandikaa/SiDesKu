@@ -37,20 +37,19 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Roles
         $roles = [
-            ['name' => 'Super Admin', 'slug' => 'admin', 'display_name' => 'Administrator Sistem', 'description' => 'Akses penuh seluruh konfigurasi dan master data sistem'],
+            ['name' => 'Super Admin', 'slug' => 'super_admin', 'display_name' => 'Super Administrator Platform', 'description' => 'Pengelola multi-tenant platform SiDesKu lintas desa'],
+            ['name' => 'Admin Desa', 'slug' => 'admin', 'display_name' => 'Administrator Desa', 'description' => 'Akses penuh administrasi dan operasional untuk desa bersangkutan'],
             ['name' => 'Kepala Desa', 'slug' => 'kades', 'display_name' => 'Kepala Desa', 'description' => 'Monitoring analitik desa, persetujuan kebijakan dan laporan umum'],
             ['name' => 'Sekretaris Desa', 'slug' => 'sekdes', 'display_name' => 'Sekretaris Desa', 'description' => 'Pengelolaan administrasi persuratan dan legalisasi stempel QR resmi'],
             ['name' => 'Bendahara Desa', 'slug' => 'bendahara_desa', 'display_name' => 'Kaur Keuangan / Bendahara Desa', 'description' => 'Pengelolaan APBDes dan laporan realisasi keuangan desa transparan'],
             ['name' => 'Ketua RW', 'slug' => 'rw', 'display_name' => 'Ketua RW', 'description' => 'Verifikasi pengantar dari seluruh RT di wilayah RW'],
             ['name' => 'Ketua RT', 'slug' => 'rt', 'display_name' => 'Ketua RT', 'description' => 'Persetujuan awal surat pengantar dan manajemen warga tingkat RT'],
-            ['name' => 'Sekretaris RT', 'slug' => 'sekretaris_rt', 'display_name' => 'Sekretaris RT', 'description' => 'Bantu pencatatan administrasi dan data kependudukan RT'],
-            ['name' => 'Bendahara RT', 'slug' => 'bendahara_rt', 'display_name' => 'Bendahara RT', 'description' => 'Pengelolaan kas iuran warga RT dan laporan keuangan tingkat RT'],
             ['name' => 'Warga', 'slug' => 'warga', 'display_name' => 'Warga Masyarakat', 'description' => 'Pengajuan surat online, cek tracking, transparansi dana & bansos'],
         ];
 
         $roleMap = [];
         foreach ($roles as $r) {
-            $roleMap[$r['slug']] = Role::create($r);
+            $roleMap[$r['slug']] = Role::firstOrCreate(['slug' => $r['slug']], $r);
         }
 
         // 2. Desa Settings (Dynamic Kop Surat)
@@ -77,7 +76,20 @@ class DatabaseSeeder extends Seeder
 
         $defaultPassword = Hash::make('password123');
 
-        // 3. User Akun Petinggi Desa
+        // 3. User Platform & Petinggi Desa
+        $superAdminUser = User::firstOrCreate(
+            ['username' => 'superadmin'],
+            [
+                'role_id' => $roleMap['super_admin']->id,
+                'desa_id' => null,
+                'name' => 'Super Administrator Platform',
+                'email' => 'superadmin@sidesku.desa.id',
+                'phone_number' => '081299999999',
+                'password' => $defaultPassword,
+                'is_active' => true,
+            ]
+        );
+
         $adminUser = User::create([
             'role_id' => $roleMap['admin']->id,
             'name' => 'Administrator SIDes',
@@ -139,26 +151,6 @@ class DatabaseSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        $sekretarisRtUser = User::create([
-            'role_id' => $roleMap['sekretaris_rt']->id,
-            'name' => 'Hendro Santoso (Sekretaris RT 01)',
-            'username' => 'sekretaris_rt01',
-            'email' => 'sekretaris.rt01@sidesku.desa.id',
-            'phone_number' => '081234567896',
-            'password' => $defaultPassword,
-            'is_active' => true,
-        ]);
-
-        $bendaharaRtUser = User::create([
-            'role_id' => $roleMap['bendahara_rt']->id,
-            'name' => 'Sri Wahyuni (Bendahara RT 01)',
-            'username' => 'bendahara_rt01',
-            'email' => 'bendahara.rt01@sidesku.desa.id',
-            'phone_number' => '081234567897',
-            'password' => $defaultPassword,
-            'is_active' => true,
-        ]);
-
         // 5. Akun Warga
         $wargaUser1 = User::create([
             'role_id' => $roleMap['warga']->id,
@@ -209,8 +201,8 @@ class DatabaseSeeder extends Seeder
             'rw_id' => $rw1->id,
             'nomor_rt' => '01',
             'ketua_rt_user_id' => $rtUser->id,
-            'sekretaris_rt_user_id' => $sekretarisRtUser->id,
-            'bendahara_rt_user_id' => $bendaharaRtUser->id,
+            'sekretaris_rt_user_id' => null,
+            'bendahara_rt_user_id' => null,
         ]);
 
         $rt2 = Rt::create([
@@ -531,7 +523,7 @@ class DatabaseSeeder extends Seeder
             'tipe' => 'Pemasukan',
             'jumlah' => 25000.00,
             'keterangan' => 'Iuran RT Bulan Agustus 2026 - KK Bambang Utomo',
-            'created_by_user_id' => $bendaharaRtUser->id,
+            'created_by_user_id' => $rtUser->id,
         ]);
 
         KasRtTransaction::create([
@@ -541,7 +533,7 @@ class DatabaseSeeder extends Seeder
             'tipe' => 'Pengeluaran',
             'jumlah' => 150000.00,
             'keterangan' => 'Penggantian 3 unit bohlam LED PJU Gang Kenanga',
-            'created_by_user_id' => $bendaharaRtUser->id,
+            'created_by_user_id' => $rtUser->id,
         ]);
 
         // 12. Program Bansos & Penerima (PKH)
@@ -601,8 +593,42 @@ class DatabaseSeeder extends Seeder
             'target_id' => $rw1->id,
             'tanggal_mulai' => '2026-08-18',
             'tanggal_selesai' => '2026-08-22',
+            'status' => 'published',
             'is_active' => true,
+            'published_at' => now(),
             'created_by_user_id' => $sekdesUser->id,
         ]);
+
+        // 15. Multi-Tenant desa_id Backfill (Pastikan seluruh data terikat ke Tenant 1 Desa Doko)
+        $operationalTables = [
+            'desa_settings',
+            'users',
+            'dusuns',
+            'rws',
+            'rts',
+            'kartu_keluargas',
+            'warga_profiles',
+            'surat_types',
+            'surat_requests',
+            'surat_trackings',
+            'apbdes_categories',
+            'apbdes_records',
+            'kas_rt_categories',
+            'kas_rt_transactions',
+            'bantuan_sosials',
+            'bantuan_penerimas',
+            'pengaduan_wargas',
+            'notifikasi_logs',
+            'beritas',
+            'pengumumans',
+            'mutasi_penduduks',
+            'activity_logs',
+            'idempotency_keys',
+        ];
+        foreach ($operationalTables as $tbl) {
+            if (\Illuminate\Support\Facades\Schema::hasTable($tbl) && \Illuminate\Support\Facades\Schema::hasColumn($tbl, 'desa_id')) {
+                \Illuminate\Support\Facades\DB::table($tbl)->whereNull('desa_id')->update(['desa_id' => 1]);
+            }
+        }
     }
 }

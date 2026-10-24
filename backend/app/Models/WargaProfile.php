@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToDesa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class WargaProfile extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToDesa;
 
     protected $fillable = [
+        'desa_id',
         'user_id',
         'kk_id',
         'rt_id',
@@ -28,6 +30,10 @@ class WargaProfile extends Model
         'no_hp_wa',
         'alamat_ktp',
         'foto_ktp',
+        'foto_kk',
+        'foto_akta_lahir',
+        'foto_buku_nikah',
+        'dokumen_kependudukan_json',
         'status_keluarga',
         'status_ekonomi',
         'status_kependudukan',
@@ -37,6 +43,7 @@ class WargaProfile extends Model
     {
         return [
             'tanggal_lahir' => 'date',
+            'dokumen_kependudukan_json' => 'array',
         ];
     }
 
@@ -65,7 +72,7 @@ class WargaProfile extends Model
         return $this->hasMany(BantuanPenerima::class);
     }
 
-    public function pengaduans(): HasMany
+    public function pengaduanWargas(): HasMany
     {
         return $this->hasMany(PengaduanWarga::class);
     }

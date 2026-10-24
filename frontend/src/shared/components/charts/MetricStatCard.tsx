@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { DonutGauge } from './DonutGauge';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
@@ -24,42 +24,58 @@ export const MetricStatCard: React.FC<MetricStatCardProps> = ({
   icon,
 }) => {
   return (
-    <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-4 transition-all hover:shadow-xs hover:border-emerald-300">
-      <div className="space-y-1 min-w-0">
-        <span className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wide truncate block">
-          {title}
-        </span>
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight">
-            {value}
+    <div className="p-3.5 sm:p-4.5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-2.5 sm:gap-3 transition-all hover:shadow-xs hover:border-emerald-300 min-w-0 h-full">
+      {/* Left Text Block */}
+      <div className="space-y-1.5 min-w-0 flex-1 flex flex-col justify-between h-full">
+        {/* Title Slot: Fixed min-height (2.25rem = 36px) so 1-line and 2-line titles take identical vertical height */}
+        <div className="min-h-[2.25rem] flex items-start">
+          <span className="text-[10px] sm:text-[11px] font-black text-slate-500 uppercase tracking-wider leading-snug line-clamp-2 block break-words">
+            {title}
           </span>
+        </div>
+
+        {/* Primary Value & Subvalue */}
+        <div className="space-y-0.5 py-0.5 min-w-0">
+          <div className="text-base sm:text-lg xl:text-xl font-black text-slate-950 tracking-tight leading-tight break-words">
+            {value}
+          </div>
           {subvalue && (
-            <span className="text-xs font-bold text-slate-400">
+            <div className="text-[11px] font-bold text-slate-400 line-clamp-1 break-words">
               {subvalue}
-            </span>
+            </div>
           )}
         </div>
 
-        {trend && (
-          <div className={`flex items-center gap-1 text-[10px] font-black ${
-            isPositiveTrend ? 'text-emerald-700' : 'text-rose-600'
-          }`}>
-            {isPositiveTrend ? (
-              <TrendingUp className="w-3 h-3" />
-            ) : (
-              <TrendingDown className="w-3 h-3" />
-            )}
-            <span>{trend}</span>
-          </div>
-        )}
+        {/* Trend Pill Badge anchored to bottom */}
+        <div className="min-h-[1.35rem] flex items-end">
+          {trend ? (
+            <div
+              className={`inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-md ${
+                isPositiveTrend
+                  ? 'text-emerald-700 bg-emerald-50/90 border border-emerald-200/70'
+                  : 'text-rose-700 bg-rose-50/90 border border-rose-200/70'
+              }`}
+            >
+              {isPositiveTrend ? (
+                <TrendingUp className="w-3 h-3 shrink-0" />
+              ) : (
+                <TrendingDown className="w-3 h-3 shrink-0" />
+              )}
+              <span className="line-clamp-1 break-words">{trend}</span>
+            </div>
+          ) : (
+            <div className="h-4" />
+          )}
+        </div>
       </div>
 
+      {/* Right Donut Gauge - centered vertically */}
       {percentage !== undefined && (
-        <div className="shrink-0">
+        <div className="shrink-0 flex items-center justify-center pl-1 self-center">
           <DonutGauge
             percentage={percentage}
-            size={58}
-            strokeWidth={5.5}
+            size={52}
+            strokeWidth={5}
             color={color}
             icon={icon}
           />

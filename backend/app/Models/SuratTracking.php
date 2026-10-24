@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToDesa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class SuratTracking extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToDesa;
 
     protected $fillable = [
+        'desa_id',
         'surat_request_id',
         'actor_user_id',
         'status_stage',

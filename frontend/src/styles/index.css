@@ -1,0 +1,536 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid rgba(5, 150, 105, 0.3);
+  outline-offset: 2px;
+}
+
+button, a {
+  outline: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  min-height: -webkit-fill-available;
+  background-color: #ffffff;
+  color: #0f172a;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f8fafc; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Entrance & Keyframe Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(1deg); }
+}
+
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marqueeReverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marqueeReverse 35s linear infinite;
+}
+
+@keyframes orbitO {
+  0% {
+    transform: translate(0px, 0px);
+  }
+  25% {
+    transform: translate(4px, -8px);
+  }
+  50% {
+    transform: translate(0px, -12px);
+  }
+  75% {
+    transform: translate(-4px, -6px);
+  }
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+.animate-orbit-1 { animation: orbitO 5.5s ease-in-out infinite 0s; }
+.animate-orbit-2 { animation: orbitO 5.5s ease-in-out infinite 0.9s; }
+.animate-orbit-3 { animation: orbitO 5.5s ease-in-out infinite 1.8s; }
+.animate-orbit-4 { animation: orbitO 5.5s ease-in-out infinite 2.7s; }
+.animate-orbit-5 { animation: orbitO 5.5s ease-in-out infinite 3.6s; }
+.animate-orbit-6 { animation: orbitO 5.5s ease-in-out infinite 4.5s; }
+
+@keyframes uPathDip {
+  0% {
+    transform: translateY(-22px) rotate(-2.5deg);
+  }
+  25% {
+    transform: translateY(-6px) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(20px) rotate(0deg);
+  }
+  75% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(-22px) rotate(-2.5deg);
+  }
+}
+
+.animate-u-1 { animation: uPathDip 7.5s ease-in-out infinite 0s; }
+.animate-u-2 { animation: uPathDip 7.5s ease-in-out infinite 1.25s; }
+.animate-u-3 { animation: uPathDip 7.5s ease-in-out infinite 2.5s; }
+.animate-u-4 { animation: uPathDip 7.5s ease-in-out infinite 3.75s; }
+.animate-u-5 { animation: uPathDip 7.5s ease-in-out infinite 5s; }
+.animate-u-6 { animation: uPathDip 7.5s ease-in-out infinite 6.25s; }
+
+.animate-fade-up {
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.25s ease both;
+}
+
+.animate-float {
+  animation: floatSlow 5s ease-in-out infinite;
+}
+
+.animate-float-gentle {
+  animation: floatGentle 4s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+/* Stagger animation delay helper */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+
+/* Micro-interactions */
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.08);
+}
+
+.hover-glow {
+  transition: all 0.25s ease;
+}
+.hover-glow:hover {
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12), 0 10px 25px -5px rgba(16, 185, 129, 0.15);
+}
+
+.press-down {
+  transition: transform 0.12s ease;
+}
+.press-down:active {
+  transform: scale(0.97);
+}
+
+/* Modern Surface Components */
+.card-modern {
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -2px rgba(15, 23, 42, 0.02);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card-modern:hover {
+  border-color: #e2e8f0;
+  box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+}
+
+.card-elevated-mockup {
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 1.75rem;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8);
+}
+
+.card-surface {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+}
+
+.card-elevated {
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px -8px rgba(15, 23, 42, 0.06);
+}
+
+.bg-hero-glow {
+  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.12) 0%, rgba(20, 184, 166, 0.05) 45%, transparent 75%);
+}
+
+.bg-accent-glow {
+  background: radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.06) 0%, rgba(16, 185, 129, 0.04) 50%, transparent 80%);
+}
+
+/* Clean Gradient Text */
+.text-gradient-emerald {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #0d9488 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-indigo {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 50%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Pill Badges */
+.pill-badge-emerald {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  background-color: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.pill-badge-indigo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  background-color: #eef2ff;
+  border: 1px solid #c7d2fe;
+  color: #3730a3;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Glass panel */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.7);
+}
+
+/* Focus ring */
+.focus-ring:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+  border-radius: 0.75rem;
+}
+
+/* Global Modal Standard: Perfect Center (Atas Bawah Kiri Kanan), Highest Z-Index, No Blur */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(2, 6, 23, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease both;
+}
+
+.modal-content {
+  margin: auto;
+  animation: scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Print Styles (A4 Government Format) */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  html, body {
+    background: white !important;
+    color: black !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Universal non-print layout chrome hiding */
+  aside,
+  header.print\:hidden,
+  nav,
+  button,
+  .no-print,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  /* When an official document print portal is active, completely remove #root so non-print elements take 0 space */
+  body:has(#surat-undangan-print-portal) #root,
+  body:has(#surat-print-portal) #root,
+  body:has(#lpj-print-portal) #root,
+  body.printing-bulog-active #root,
+  body.printing-active #root,
+  body:has(#surat-undangan-print-portal) [data-interactive-modal],
+  body:has(#surat-undangan-print-portal) .interactive-modal-portal,
+  body:has(#lpj-print-portal) [data-interactive-modal],
+  body:has(#lpj-print-portal) .interactive-modal-portal,
+  [data-interactive-modal],
+  .interactive-modal-portal {
+    display: none !important;
+  }
+
+  /* Dedicated Print Portal for Surat Undangan Bulog */
+  #surat-undangan-print-portal {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #surat-undangan-print-portal * {
+    visibility: visible !important;
+  }
+
+  /* Surat Undangan inside modal portal */
+  #surat-print-portal,
+  #lpj-print-portal {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    background: white !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Expose only the official letter print container */
+  #surat-print-area,
+  #lpj-print-area,
+  .printable-paper {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 5mm 10mm !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: white !important;
+    color: black !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #surat-print-area *,
+  #lpj-print-area *,
+  .printable-paper * {
+    visibility: visible !important;
+  }
+}
+
+.progress-fill {
+  transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 9999px;
+}
+
+.page-enter {
+  animation: fadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Orbital Rotating Ecosystem */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverseSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-orbit-rotate {
+  animation: spinSlow 55s linear infinite;
+}
+
+.animate-orbit-counter {
+  animation: spinReverseSlow 55s linear infinite;
+}
+
+/* ==========================================================================
+   iOS Safari Bleed-Through & Transparency Safeguards
+   ========================================================================== */
+.ios-solid-modal {
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  isolation: isolate;
+}
+
+/* Force opaque solid backgrounds on iOS WebKit date, time, and select inputs */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+/* Prevent native iOS date/time wheel transparent artifacts */
+::-webkit-datetime-edit,
+::-webkit-datetime-edit-fields-wrapper,
+::-webkit-datetime-edit-text,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-year-field,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-minute-field {
+  background-color: transparent !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}

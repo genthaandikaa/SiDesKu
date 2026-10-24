@@ -14,11 +14,18 @@ import {
 export const PublicFooter: React.FC = () => {
   return (
     <footer className="bg-[#0a1c16] text-slate-300 border-t border-emerald-900/60 relative overflow-hidden font-sans">
+      {/* Subtle Wave Transition on Top of Footer */}
+      <div className="w-full overflow-hidden leading-none opacity-20 pointer-events-none">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-7 text-emerald-400 fill-current">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" />
+        </svg>
+      </div>
+
       {/* Subtle Ambient Radial Glows */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-10 w-96 h-96 bg-teal-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-10 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-10 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           
           {/* Col 1: Official Identity & Contact (5 cols) */}

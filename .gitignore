@@ -44,7 +44,15 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# AI Assistant Instructions & Configs
-CLAUDE.md
-**/CLAUDE.md
+# Testing artifacts
+frontend/test-results/
+frontend/playwright-report/
+scratch/
 
+# Local revision notes & test uploads
+revisi/
+backend/public/uploads/lampiran/*
+!backend/public/uploads/lampiran/.gitkeep
+
+dev-dist/
+frontend/dev-dist/

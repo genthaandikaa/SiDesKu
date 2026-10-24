@@ -14,70 +14,37 @@ import {
   Phone,
   CreditCard,
   Building2,
-  Sparkles,
-  ArrowRight
+  Star,
+  ArrowRight,
+  ArrowLeft,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { BrandLogo } from '@/shared/components/BrandLogo';
+import { GuestSupportChatModal } from '@/features/chat/components/GuestSupportChatModal';
 
 interface AuthPageProps {
   initialMode?: 'login' | 'register';
 }
 
-export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
-  const { login, register } = useAuth();
+export const LoginPage: React.FC<AuthPageProps> = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const [mode, setMode] = useState<'login' | 'register'>(() => {
-    if (initialMode) return initialMode;
-    return location.pathname === '/register' ? 'register' : 'login';
-  });
 
   // Login Form States
   const [loginInput, setLoginInput] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
-
-  // Register Form States
-  const [registerData, setRegisterData] = useState({
-    nik: '',
-    nama_lengkap: '',
-    username: '',
-    email: '',
-    no_hp_wa: '',
-    password: '',
-    password_confirmation: '',
-    rt_id: 1,
-  });
-  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showSupportChat, setShowSupportChat] = useState(false);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Sync mode on URL change if navigated via browser buttons
-  useEffect(() => {
-    if (location.pathname === '/register' && mode !== 'register') {
-      setMode('register');
-      setError('');
-    } else if (location.pathname === '/login' && mode !== 'login') {
-      setMode('login');
-      setError('');
-    }
-  }, [location.pathname]);
-
-  const switchMode = (newMode: 'login' | 'register') => {
-    if (newMode === mode) return;
-    setMode(newMode);
-    setError('');
-    window.history.replaceState(null, '', newMode === 'register' ? '/register' : '/login');
-  };
-
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!loginInput.trim() || !loginPassword.trim()) {
-      setError('Username/NIK/Email dan password wajib diisi.');
+      setError('NIK/Username/Email dan password wajib diisi.');
       return;
     }
     
@@ -87,9 +54,45 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
     try {
       const success = await login(loginInput.trim(), loginPassword);
       if (success) {
-        navigate('/dashboard');
+        const searchParams = new URLSearchParams(location.search);
+        const rawReturnUrl = searchParams.get('returnUrl');
+        let targetUrl = '/dashboard';
+
+        if (rawReturnUrl && typeof rawReturnUrl === 'string') {
+          const trimmed = rawReturnUrl.trim();
+          let isSafe =
+            trimmed.startsWith('/') &&
+            !trimmed.startsWith('//') &&
+            !trimmed.startsWith('/\\') &&
+            !trimmed.includes('\\') &&
+            !trimmed.includes('://') &&
+            !trimmed.includes('\0');
+
+          if (isSafe) {
+            try {
+              const decoded = decodeURIComponent(trimmed);
+              if (
+                !decoded.startsWith('/') ||
+                decoded.startsWith('//') ||
+                decoded.startsWith('/\\') ||
+                decoded.includes('\\') ||
+                decoded.includes('://')
+              ) {
+                isSafe = false;
+              }
+            } catch {
+              isSafe = false;
+            }
+          }
+
+          if (isSafe) {
+            targetUrl = trimmed;
+          }
+        }
+
+        navigate(targetUrl, { replace: true });
       } else {
-        setError('Kredensial tidak cocok. Periksa kembali username/NIK dan password Anda.');
+        setError('Kredensial tidak cocok. Periksa kembali NIK dan password (tanggal lahir) Anda.');
       }
     } catch (err: any) {
       const backendMsg = err.response?.data?.errors?.login?.[0] || 
@@ -101,64 +104,32 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
     }
   };
 
-  const handleRegisterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!registerData.nik || !registerData.nama_lengkap || !registerData.username || !registerData.email || !registerData.password) {
-      setError('Seluruh formulir berbintang (*) wajib diisi.');
-      return;
-    }
-
-    if (registerData.nik.length !== 16) {
-      setError('NIK harus berjumlah tepat 16 digit angka.');
-      return;
-    }
-
-    if (registerData.password.length < 6) {
-      setError('Password minimal 6 karakter.');
-      return;
-    }
-
-    if (registerData.password !== registerData.password_confirmation) {
-      setError('Konfirmasi password tidak sesuai.');
-      return;
-    }
-
-    setLoading(true);
+  const handleQuickLogin = async (u: string, p: string) => {
+    setLoginInput(u);
+    setLoginPassword(p);
     setError('');
-
+    setLoading(true);
     try {
-      const success = await register({
-        nik: registerData.nik.trim(),
-        nama_lengkap: registerData.nama_lengkap.trim(),
-        username: registerData.username.trim(),
-        email: registerData.email.trim(),
-        no_hp_wa: registerData.no_hp_wa.trim(),
-        password: registerData.password,
-        rt_id: Number(registerData.rt_id),
-      });
-
+      const success = await login(u, p);
       if (success) {
-        navigate('/dashboard');
+        navigate('/dashboard', { replace: true });
+      } else {
+        setError('Login gagal untuk akun demo.');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Pendaftaran gagal. Periksa kembali NIK atau Email Anda.');
+      const backendMsg = err.response?.data?.errors?.login?.[0] ||
+        err.response?.data?.message ||
+        'Gagal login. Pastikan server backend terhubung atau kredensial benar.';
+      setError(backendMsg);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleQuickFill = (u: string) => {
-    setLoginInput(u);
-    setLoginPassword('password123');
-    setError('');
-  };
-
   return (
     <div className="h-screen h-[100dvh] max-h-screen w-full bg-[#f8fcf9] font-sans text-slate-800 flex flex-col justify-between relative overflow-hidden select-none">
       
-      {/* =========================================================================
-          RICH FULLSCREEN BACKGROUND ORNAMENTS: Concentric Circles, Glows & Vectors
-         ========================================================================= */}
+      {/* Background Ornaments */}
       {/* 1. Subtle Dot Grid Matrix */}
       <div className="absolute inset-0 bg-[radial-gradient(#059669_1.2px,transparent_1.2px)] [background-size:28px_28px] opacity-[0.07] pointer-events-none -z-30" />
 
@@ -204,9 +175,7 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
         className="absolute bottom-16 left-1/4 w-6 h-6 opacity-35 pointer-events-none animate-float-gentle -z-10 hidden sm:block" 
       />
 
-      {/* =========================================================================
-          TOP NAVIGATION BAR (Exact Match with Image 1)
-         ========================================================================= */}
+      {/* Header */}
       <header className="relative z-30 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-3 sm:py-4 flex items-center justify-between shrink-0">
         <Link to="/" className="hover:opacity-95 transition-opacity shrink-0 outline-none focus:outline-none">
           <BrandLogo size="md" />
@@ -246,119 +215,72 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
           </Link>
         </nav>
 
-        {/* Right Action: Daftar Akun & Portal Masuk (Identical to Image 1) */}
-        <div className="flex items-center gap-2.5 shrink-0">
-          <button
-            type="button"
-            onClick={() => switchMode('register')}
-            className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all shadow-2xs whitespace-nowrap cursor-pointer outline-none ${
-              mode === 'register'
-                ? 'bg-emerald-700 text-white shadow-xs'
-                : 'bg-white text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 border border-slate-200/80'
-            }`}
+        {/* Right Action */}
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-emerald-800 bg-white hover:bg-emerald-50 border border-slate-200/80 transition-all shadow-2xs whitespace-nowrap outline-none"
           >
-            <span>Daftar Akun</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => switchMode('login')}
-            className={`inline-flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-extrabold shadow-md transition-all press-down whitespace-nowrap cursor-pointer outline-none ${
-              mode === 'login'
-                ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-emerald-600/30'
-                : 'bg-white text-slate-700 hover:text-emerald-800 hover:bg-emerald-50 border border-slate-200/80'
-            }`}
-          >
-            <span>Portal Masuk</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
+            <ArrowLeft size={13} />
+            <span>Kembali ke Beranda</span>
+          </Link>
         </div>
       </header>
 
-      {/* =========================================================================
-          MAIN STAGE: 2-LAYER ARCHITECTURE (Layer 1: Unified Container Box, Layer 2: Ornaments)
-         ========================================================================= */}
-      <main className="relative z-20 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 lg:px-12 py-1 sm:py-2 flex items-center justify-center overflow-hidden my-auto">
+      {/* Main Content */}
+      <main className="relative z-20 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 lg:px-12 py-1 sm:py-2 flex items-center justify-center overflow-visible my-auto">
         
-        {/* =====================================================================
-            DYNAMIC SYNCED GREEN CIRCULAR AURA BEHIND RECTANGULAR CARD
-            Mengikuti pergerakan bulatan hijau di dalam persegi panjang
-           ===================================================================== */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 max-w-5xl mx-auto w-full px-3 sm:px-5 lg:px-6">
-          <div className="relative w-full h-full flex items-center">
+        {/* Background Aura */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 w-full overflow-visible">
+          <div className="relative w-full max-w-5xl mx-auto h-full flex items-center">
             <div 
-              className={`w-full lg:w-1/2 flex items-center justify-center transition-transform duration-750 ease-[cubic-bezier(0.65,0,0.35,1)] ${
-                mode === 'login' ? 'translate-x-0 lg:translate-x-full' : 'translate-x-0'
-              }`}
+              className="w-full lg:w-1/2 flex items-center justify-center translate-x-0 lg:translate-x-full"
             >
-              {/* Outer Glowing Green Concentric Circles & Aura (Sangat Halus & Estetik) */}
-              <div className="relative flex items-center justify-center">
-                <div className="w-[540px] h-[540px] rounded-full bg-gradient-to-tr from-emerald-400/40 via-teal-300/35 to-emerald-100/25 blur-2xl transform scale-110" />
-                <div className="absolute w-[460px] h-[460px] rounded-full border border-emerald-400/30 blur-[0.5px]" />
-                <div className="absolute w-[380px] h-[380px] rounded-full bg-gradient-to-bl from-teal-200/40 via-emerald-200/35 to-emerald-100/20 blur-xl" />
-                <div className="absolute w-[300px] h-[300px] rounded-full bg-teal-300/30 blur-lg" />
+              {/* Outer Glowing Green Concentric Circles & Aura (Seamless, Ultra-smooth & Unclipped) */}
+              <div className="relative flex items-center justify-center overflow-visible">
+                <div className="w-[620px] h-[620px] rounded-full bg-gradient-to-tr from-emerald-400/35 via-teal-300/30 to-emerald-100/15 blur-3xl transform scale-110" />
+                <div className="absolute w-[520px] h-[520px] rounded-full border border-emerald-400/30 blur-[0.5px]" />
+                <div className="absolute w-[420px] h-[420px] rounded-full bg-gradient-to-bl from-teal-200/40 via-emerald-200/35 to-emerald-100/20 blur-2xl" />
+                <div className="absolute w-[320px] h-[320px] rounded-full border border-teal-300/35" />
+                <div className="absolute w-[240px] h-[240px] rounded-full bg-emerald-300/30 blur-xl" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* LAYER 1: UNIFIED BIG CARD CONTAINER */}
+        {/* Form Container */}
         <div className="relative w-full max-w-5xl mx-auto bg-white/80 backdrop-blur-2xl rounded-[2.5rem] p-3 sm:p-5 lg:p-6 shadow-2xl shadow-emerald-950/8 border border-white/90 ring-1 ring-emerald-500/10 flex items-center min-h-[490px] overflow-hidden">
           
-          {/* Subtle Layer 1 Inner Corner Glows */}
+          {/* Inner Corner Glows */}
           <div className="absolute -top-24 -right-24 w-64 h-64 bg-emerald-300/20 rounded-full blur-2xl pointer-events-none -z-10" />
           <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-teal-300/20 rounded-full blur-2xl pointer-events-none -z-10" />
 
-          {/* LAYER 2: 2 ORNAMENTS (Panel 1 Form Card + Panel 2 3D Laptop/Circles) */}
           <div className="relative w-full flex items-center">
             
-            {/* =====================================================================
-                PANEL 1: FORM CARRIER (Desktop: Slides Left/Right, Mobile: Centered)
-               ===================================================================== */}
+            {/* Form Panel */}
             <div 
-              className={`w-full lg:w-1/2 p-1 sm:p-3 lg:p-4 flex items-center justify-center transition-transform duration-750 ease-[cubic-bezier(0.65,0,0.35,1)] z-20 ${
-                mode === 'login' ? 'translate-x-0 lg:translate-x-0' : 'translate-x-0 lg:translate-x-full'
-              }`}
+              className="w-full lg:w-1/2 p-1 sm:p-3 lg:p-4 flex items-center justify-center z-20"
             >
               <div className="w-full max-w-md bg-white p-5 sm:p-6 rounded-3xl shadow-xl shadow-slate-900/5 border border-slate-100/90 space-y-3">
               
-              {/* Tab Selector: Login vs Sign up with Staggered Sliding Pill Indicator */}
-              <div className="flex items-center gap-8 border-b border-slate-100 pb-1.5 relative">
-                <button
-                  type="button"
-                  onClick={() => switchMode('login')}
-                  className={`text-lg sm:text-xl font-black tracking-tight transition-all duration-300 cursor-pointer relative pb-1.5 ${
-                    mode === 'login' ? 'text-slate-900 scale-105' : 'text-slate-300 hover:text-slate-500 scale-100'
-                  }`}
-                >
-                  Login
-                  {mode === 'login' && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full transition-all duration-500" />
-                  )}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => switchMode('register')}
-                  className={`text-lg sm:text-xl font-black tracking-tight transition-all duration-300 cursor-pointer relative pb-1.5 ${
-                    mode === 'register' ? 'text-slate-900 scale-105' : 'text-slate-300 hover:text-slate-500 scale-100'
-                  }`}
-                >
-                  Sign up
-                  {mode === 'register' && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600 rounded-full transition-all duration-500" />
-                  )}
-                </button>
-              </div>
-
-              {/* Sub-Headline */}
-              <div className="space-y-0.5">
-                <p className="text-[11px] sm:text-xs text-slate-500 font-medium transition-opacity duration-300">
-                  {mode === 'login' 
-                    ? 'Masukkan akun terdaftar untuk mengakses panel layanan surat dan data desa.'
-                    : 'Daftarkan identitas resmi warga Desa Doko untuk akses layanan digital mandiri.'}
+              {/* Header Title & Information */}
+              <div className="space-y-1 border-b border-slate-100 pb-2">
+                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                  Masuk ke Akun
+                </h1>
+                <p className="text-xs text-slate-500">
+                  Gunakan NIK atau username terdaftar Anda.
                 </p>
               </div>
+
+              {/* Informative notice if came from /register */}
+              {location.pathname === '/register' && (
+                <div className="p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium animate-fade-in flex items-start gap-2">
+                  <div className="text-[11px] leading-snug">
+                    <strong>Pendaftaran Warga Terpusat:</strong> Akun warga didaftarkan langsung oleh kantor desa. Silakan masuk dengan NIK dan tanggal lahir.
+                  </div>
+                </div>
+              )}
 
               {/* Error Notice */}
               {error && (
@@ -368,287 +290,160 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
                 </div>
               )}
 
-              {/* DUAL FORM INNER CONTAINER */}
-              <div className="relative">
-                
-                {/* -------------------- FORM 1: LOGIN -------------------- */}
-                <div 
-                  className={`w-full space-y-3 transition-all duration-500 ease-out ${
-                    mode === 'login' 
-                      ? 'opacity-100 translate-x-0 pointer-events-auto relative' 
-                      : 'opacity-0 -translate-x-8 pointer-events-none absolute inset-0'
-                  }`}
-                >
-                  <form onSubmit={handleLoginSubmit} className="space-y-3">
-                    {/* Email / Username / NIK Pill */}
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <div className="w-6 h-6 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200/80">
-                          <User className="w-3 h-3" />
-                        </div>
-                      </div>
-                      <input
-                        type="text"
-                        value={loginInput}
-                        onChange={(e) => setLoginInput(e.target.value)}
-                        placeholder="Email / NIK / Username"
-                        className="w-full pl-11 pr-4 py-2.5 sm:py-3 bg-slate-50/90 rounded-full border border-slate-200 text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-inner"
-                        required={mode === 'login'}
-                      />
-                    </div>
-
-                    {/* Password Pill */}
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <div className="w-6 h-6 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200/80">
-                          <Lock className="w-3 h-3" />
-                        </div>
-                      </div>
-                      <input
-                        type={showLoginPassword ? 'text' : 'password'}
-                        value={loginPassword}
-                        onChange={(e) => setLoginPassword(e.target.value)}
-                        placeholder="Password"
-                        className="w-full pl-11 pr-11 py-2.5 sm:py-3 bg-slate-50/90 rounded-full border border-slate-200 text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-inner font-mono"
-                        required={mode === 'login'}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowLoginPassword(!showLoginPassword)}
-                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
-                      >
-                        {showLoginPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                      </button>
-                    </div>
-
-                    {/* Forgot Password & Submit Button Row */}
-                    <div className="flex items-center justify-between pt-0.5">
-                      <Link
-                        to="/lacak"
-                        className="text-[11px] font-medium text-slate-400 hover:text-slate-700 transition-colors"
-                      >
-                        Forgot your password?
-                      </Link>
-
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="px-6 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs shadow-md shadow-emerald-500/25 transition-all press-down flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed hover-glow"
-                      >
-                        {loading ? (
-                          <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            <span>Verifikasi...</span>
-                          </>
-                        ) : (
-                          <span>Login</span>
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Quick 1-Click Demo Accounts Switcher */}
-                    <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                      <div className="flex items-center justify-between text-[9px] font-black uppercase text-slate-400 tracking-wider">
-                        <span>Pilih Akun Demo (1-Klik):</span>
-                        <span className="text-emerald-700 font-bold">Password: password123</span>
-                      </div>
-
-                      <div className="flex flex-wrap gap-1">
-                        {[
-                          { label: 'Warga', user: 'warga01' },
-                          { label: 'Ketua RT', user: 'rt01' },
-                          { label: 'Ketua RW', user: 'rw01' },
-                          { label: 'Sekdes', user: 'sekdes' },
-                          { label: 'Bendahara', user: 'bendahara_desa' },
-                          { label: 'Kades', user: 'kades' },
-                          { label: 'Admin', user: 'admin' },
-                        ].map((acc) => (
-                          <button
-                            key={acc.user}
-                            type="button"
-                            onClick={() => handleQuickFill(acc.user)}
-                            className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 font-bold text-[10px] border border-slate-200/70 transition-all cursor-pointer press-down shadow-2xs"
-                          >
-                            {acc.label}
-                          </button>
-                        ))}
+              {/* LOGIN FORM */}
+              <form onSubmit={handleLoginSubmit} className="space-y-3 pt-1">
+                {/* Email / Username / NIK Pill */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 block pl-1">
+                    NIK atau Username
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <div className="w-6 h-6 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200/80">
+                        <User className="w-3 h-3" />
                       </div>
                     </div>
-                  </form>
+                    <input
+                      type="text"
+                      value={loginInput}
+                      onChange={(e) => setLoginInput(e.target.value)}
+                      placeholder="NIK 16 digit atau username"
+                      className="w-full pl-11 pr-4 py-2.5 sm:py-3 bg-slate-50/90 rounded-full border border-slate-200 text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-inner font-mono"
+                      required
+                    />
+                  </div>
                 </div>
 
-                {/* -------------------- FORM 2: REGISTER -------------------- */}
-                <div 
-                  className={`w-full space-y-2.5 transition-all duration-500 ease-out ${
-                    mode === 'register' 
-                      ? 'opacity-100 translate-x-0 pointer-events-auto relative' 
-                      : 'opacity-0 translate-x-8 pointer-events-none absolute inset-0'
-                  }`}
-                >
-                  <form onSubmit={handleRegisterSubmit} className="space-y-2.5">
-                    
-                    {/* Row 1: NIK & Nama Lengkap */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <CreditCard className="w-3.5 h-3.5 text-slate-400" />
-                        </div>
-                        <input
-                          type="text"
-                          name="nik"
-                          maxLength={16}
-                          value={registerData.nik}
-                          onChange={(e) => setRegisterData({ ...registerData, nik: e.target.value })}
-                          placeholder="NIK (16 Digit) *"
-                          className="w-full pl-8 pr-3 py-2 bg-slate-50/90 rounded-full border border-slate-200 text-[11px] font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all font-mono shadow-inner"
-                          required={mode === 'register'}
-                        />
-                      </div>
-
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <User className="w-3.5 h-3.5 text-slate-400" />
-                        </div>
-                        <input
-                          type="text"
-                          name="nama_lengkap"
-                          value={registerData.nama_lengkap}
-                          onChange={(e) => setRegisterData({ ...registerData, nama_lengkap: e.target.value })}
-                          placeholder="Nama Lengkap (KTP) *"
-                          className="w-full pl-8 pr-3 py-2 bg-slate-50/90 rounded-full border border-slate-200 text-[11px] font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner"
-                          required={mode === 'register'}
-                        />
+                {/* Password / Tanggal Lahir Pill */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 block pl-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <div className="w-6 h-6 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200/80">
+                        <Lock className="w-3 h-3" />
                       </div>
                     </div>
-
-                    {/* Row 2: Username & WhatsApp */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <User className="w-3.5 h-3.5 text-slate-400" />
-                        </div>
-                        <input
-                          type="text"
-                          name="username"
-                          value={registerData.username}
-                          onChange={(e) => setRegisterData({ ...registerData, username: e.target.value })}
-                          placeholder="Username Akun *"
-                          className="w-full pl-8 pr-3 py-2 bg-slate-50/90 rounded-full border border-slate-200 text-[11px] font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner"
-                          required={mode === 'register'}
-                        />
-                      </div>
-
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <Phone className="w-3.5 h-3.5 text-slate-400" />
-                        </div>
-                        <input
-                          type="text"
-                          name="no_hp_wa"
-                          value={registerData.no_hp_wa}
-                          onChange={(e) => setRegisterData({ ...registerData, no_hp_wa: e.target.value })}
-                          placeholder="No. WhatsApp *"
-                          className="w-full pl-8 pr-3 py-2 bg-slate-50/90 rounded-full border border-slate-200 text-[11px] font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all font-mono shadow-inner"
-                          required={mode === 'register'}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Row 3: Email */}
-                    <div className="relative">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Mail className="w-3.5 h-3.5 text-slate-400" />
-                      </div>
-                      <input
-                        type="email"
-                        name="email"
-                        value={registerData.email}
-                        onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-                        placeholder="Alamat Email Aktif *"
-                        className="w-full pl-8 pr-3 py-2 bg-slate-50/90 rounded-full border border-slate-200 text-[11px] font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner"
-                        required={mode === 'register'}
-                      />
-                    </div>
-
-                    {/* Row 4: Password & Confirm */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <Lock className="w-3.5 h-3.5 text-slate-400" />
-                        </div>
-                        <input
-                          type={showRegisterPassword ? 'text' : 'password'}
-                          name="password"
-                          value={registerData.password}
-                          onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                          placeholder="Password *"
-                          className="w-full pl-8 pr-8 py-2 bg-slate-50/90 rounded-full border border-slate-200 text-[11px] font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all font-mono shadow-inner"
-                          required={mode === 'register'}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-                          className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
-                        >
-                          {showRegisterPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                        </button>
-                      </div>
-
-                      <div className="relative">
-                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <Lock className="w-3.5 h-3.5 text-slate-400" />
-                        </div>
-                        <input
-                          type={showConfirmPassword ? 'text' : 'password'}
-                          name="password_confirmation"
-                          value={registerData.password_confirmation}
-                          onChange={(e) => setRegisterData({ ...registerData, password_confirmation: e.target.value })}
-                          placeholder="Ulangi Password *"
-                          className="w-full pl-8 pr-8 py-2 bg-slate-50/90 rounded-full border border-slate-200 text-[11px] font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition-all font-mono shadow-inner"
-                          required={mode === 'register'}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer"
-                        >
-                          {showConfirmPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* Submit Button */}
-                    <div className="pt-1">
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all press-down flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed hover-glow"
-                      >
-                        {loading ? (
-                          <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            <span>Mendaftarkan Data...</span>
-                          </>
-                        ) : (
-                          <span>Daftar Akun Warga</span>
-                        )}
-                      </button>
-                    </div>
-                  </form>
+                    <input
+                      type={showLoginPassword ? 'text' : 'password'}
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      placeholder="Password atau tanggal lahir (DDMMYYYY)"
+                      className="w-full pl-11 pr-11 py-2.5 sm:py-3 bg-slate-50/90 rounded-full border border-slate-200 text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-inner font-mono"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                    >
+                      {showLoginPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
                 </div>
 
-              </div>
+                {/* Forgot Password & Submit Button Row */}
+                <div className="flex items-center justify-between pt-1">
+                  <div className="flex items-center gap-3">
+                    <Link
+                      to="/lacak"
+                      className="text-[11px] font-medium text-slate-400 hover:text-emerald-700 transition-colors"
+                    >
+                      Lacak berkas
+                    </Link>
+                    <span className="text-slate-300">•</span>
+                    <button
+                      type="button"
+                      onClick={() => setShowSupportChat(true)}
+                      className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Bantuan / Lupa Akun</span>
+                    </button>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-7 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all press-down flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed hover-glow"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Memverifikasi...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Masuk</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+
+
+                {/* Quick 1-Click Demo Accounts Switcher */}
+                <div className="pt-2 border-t border-slate-100 space-y-2">                    
+                  {/* Petugas Desa */}
+                  <div className="space-y-1">
+                    <p className="text-[9px] font-semibold text-slate-400 pl-0.5">Petugas Desa</p>
+                    <div className="flex flex-wrap gap-1">
+                      {[
+                        { label: 'Warga', user: '3506041505840001', pass: '15051984' },
+                        { label: 'Ketua RT', user: 'rt01', pass: 'password123' },
+                        { label: 'Ketua RW', user: 'rw01', pass: 'password123' },
+                        { label: 'Sekdes', user: 'sekdes', pass: 'password123' },
+                        { label: 'Bendahara', user: 'bendahara_desa', pass: 'password123' },
+                        { label: 'Kades', user: 'kades', pass: 'password123' },
+                      ].map((acc) => (
+                        <button
+                          key={acc.user}
+                          type="button"
+                          disabled={loading}
+                          onClick={() => handleQuickLogin(acc.user, acc.pass)}
+                          className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] border border-slate-200/70 transition-all cursor-pointer press-down shadow-2xs disabled:opacity-50"
+                        >
+                          {acc.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Admin Platform */}
+                  <div className="space-y-1">
+                    <p className="text-[9px] font-semibold text-slate-400 pl-0.5">Admin</p>
+                    <div className="flex flex-wrap gap-1">
+                      {[
+                        { label: 'Admin Desa', user: 'admin', pass: 'password123'},
+                        { label: 'Super Admin', user: 'superadmin', pass: 'password123'},
+                      ].map((acc) => (
+                        <button
+                          key={acc.user}
+                          type="button"
+                          disabled={loading}
+                          onClick={() => handleQuickLogin(acc.user, acc.pass)}
+                          className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[10px] border border-slate-200/70 transition-all cursor-pointer press-down shadow-2xs disabled:opacity-50"
+                        >
+                          {acc.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+
+                <div className="text-[10px] text-center text-slate-400 pt-1">
+                  Belum memiliki akun? Hubungi kantor desa.
+                </div>
+              </form>
 
             </div>
           </div>
 
-          {/* =====================================================================
-              PANEL 2: 3D HERO WORKSPACE & TRUST BADGES (Desktop: Slides Right/Left)
-             ===================================================================== */}
+          {/* Hero Panel */}
           <div 
-            className={`w-full lg:w-1/2 p-2 sm:p-4 items-center justify-center transition-transform duration-750 ease-[cubic-bezier(0.65,0,0.35,1)] z-10 hidden lg:flex relative ${
-              mode === 'login' ? 'translate-x-0' : '-translate-x-full'
-            }`}
+            className="w-full lg:w-1/2 p-2 sm:p-4 items-center justify-center z-10 hidden lg:flex relative"
           >
             {/* Layered Mint Circles Concentric Behind Laptop */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-visible">
@@ -659,20 +454,16 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
 
             <div className="relative w-full max-w-md mx-auto flex flex-col items-center justify-center">
               
-              {/* Subtle Decorative Paper Plane Vector */}
+              {/* Decorative Vector */}
               <img 
                 src="/images/paper-plane.svg" 
                 alt="" 
-                className={`absolute -top-3 w-10 h-10 opacity-80 pointer-events-none animate-float drop-shadow-sm transition-all duration-750 ease-out ${
-                  mode === 'login' ? 'right-1/4 rotate-0' : 'left-1/4 -rotate-12'
-                }`}
+                className="absolute -top-3 w-10 h-10 opacity-80 pointer-events-none animate-float drop-shadow-sm right-1/4 rotate-0"
               />
 
-              {/* Main 3D Laptop with Spring Tilt Transition */}
+              {/* Main 3D Laptop */}
               <div 
-                className={`relative w-full flex items-center justify-center group transition-transform duration-750 ease-[cubic-bezier(0.65,0,0.35,1)] ${
-                  mode === 'login' ? 'scale-100 rotate-0' : 'scale-105 -rotate-1'
-                }`}
+                className="relative w-full flex items-center justify-center group scale-100 rotate-0"
               >
                 {/* Backing Ambient Glow */}
                 <div className="absolute inset-0 bg-emerald-300/20 rounded-full blur-2xl -z-10 group-hover:bg-emerald-400/30 transition-colors" />
@@ -687,26 +478,22 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
                   }}
                 />
 
-                {/* Staggered Floating Badge 1 (Top-Left): TTD QR Code Sah */}
+                {/* Floating Badge 1 */}
                 <div 
-                  className={`absolute -top-2 -left-2 sm:left-2 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-emerald-100 transition-all duration-700 ease-out animate-float ${
-                    mode === 'login' ? 'translate-x-0' : '-translate-x-2 -translate-y-1'
-                  }`}
+                  className="absolute -top-2 -left-2 sm:left-2 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-emerald-100 animate-float"
                 >
                   <div className="w-6 h-6 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                   </div>
                   <div className="text-left text-[10px]">
-                    <div className="font-extrabold text-slate-900 leading-tight">TTD QR Code Sah</div>
-                    <div className="text-[8px] text-emerald-600 font-semibold">DPMPD Kab. Kediri</div>
+                    <div className="font-extrabold text-slate-900 leading-tight">TTD Barcode & QR Sah</div>
+                    <div className="text-[8px] text-emerald-600 font-semibold">Kepala Desa Doko</div>
                   </div>
                 </div>
 
-                {/* Staggered Floating Badge 2 (Bottom-Right): < 15 Menit Layanan */}
+                {/* Floating Badge 2 */}
                 <div 
-                  className={`absolute -bottom-2 right-2 sm:right-4 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-emerald-100 transition-all duration-700 ease-out animate-float-gentle ${
-                    mode === 'login' ? 'translate-x-0' : 'translate-x-2 translate-y-1'
-                  }`}
+                  className="absolute -bottom-2 right-2 sm:right-4 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-emerald-100 animate-float-gentle"
                 >
                   <div className="w-6 h-6 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-black">
                     <Zap className="w-3.5 h-3.5" />
@@ -731,16 +518,14 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
               </div>
 
             </div>
-            </div>
           </div>
 
         </div>
+      </div>
 
       </main>
 
-      {/* =========================================================================
-          BOTTOM FOOTER (Fixed Compact)
-         ========================================================================= */}
+      {/* Footer */}
       <footer className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-2.5 sm:py-3 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-slate-400 font-medium border-t border-slate-100 shrink-0">
         <div>© {new Date().getFullYear()} Pemerintah Desa Doko, Kec. Ngasem, Kab. Kediri.</div>
         <div className="flex items-center gap-4 mt-1 sm:mt-0 font-bold text-slate-500">
@@ -749,6 +534,12 @@ export const LoginPage: React.FC<AuthPageProps> = ({ initialMode }) => {
           <Link to="/lacak" className="hover:text-emerald-700">Bantuan</Link>
         </div>
       </footer>
+      
+      {/* Modal Bantuan Tamu (Lupa Akun / Bantuan Desa) */}
+      <GuestSupportChatModal
+        isOpen={showSupportChat}
+        onClose={() => setShowSupportChat(false)}
+      />
 
     </div>
   );

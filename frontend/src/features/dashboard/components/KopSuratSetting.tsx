@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Building2, Save, Check, Image as ImageIcon, Sparkles } from 'lucide-react';
+import { Building2, Save, Check, Image as ImageIcon, Target } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { DesaSetting } from '@/shared/types';
 
@@ -257,6 +257,43 @@ export const KopSuratSetting: React.FC = () => {
               value={formData.nama_sekdes || ''}
               onChange={handleChange}
               className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+            />
+          </div>
+        </div>
+
+        {/* Visi & Misi Desa Dinamis */}
+        <div className="pt-4 border-t border-gray-100 space-y-4">
+          <div className="flex items-center gap-2">
+            <Target className="w-5 h-5 text-emerald-600" />
+            <div>
+              <h3 className="text-sm font-bold text-gray-900">Visi & Misi Pembangunan Desa (RPJMDes)</h3>
+              <p className="text-xs text-gray-500">Tampil otomatis pada portal profil desa dan transparansi publik</p>
+            </div>
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+              Visi Desa
+            </label>
+            <textarea
+              name="visi"
+              rows={2}
+              placeholder="Masukkan visi pembangunan desa..."
+              value={formData.visi || ''}
+              onChange={handleChange}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm leading-relaxed"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+              Misi Desa (1 baris per butir misi)
+            </label>
+            <textarea
+              name="misi"
+              rows={4}
+              placeholder="Masukkan butir-butir misi pembangunan desa..."
+              value={formData.misi || ''}
+              onChange={handleChange}
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm leading-relaxed font-mono"
             />
           </div>
         </div>

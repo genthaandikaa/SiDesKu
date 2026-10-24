@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToDesa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Berita extends Model
 {
-    use HasFactory;
+    use HasFactory, BelongsToDesa;
 
     protected $table = 'beritas';
 
     protected $fillable = [
+        'desa_id',
         'judul',
         'slug',
         'kategori',
