@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import api from '@/shared/lib/axios';
+import { getSafeMediaUrl } from '@/shared/utils/mediaUrl';
 import { PushNotificationManager } from '@/shared/components/PushNotificationManager';
 import { 
   FileText, 
@@ -594,12 +595,9 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                   <div className="text-center space-y-1">
                     <div className="bg-white p-2 rounded-xl border border-slate-300 inline-block shadow-2xs">
                       <img
-                        src={`/api/public/surat/qr?data=${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`}
+                        src={getSafeMediaUrl(`/api/public/surat/qr?data=${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`)}
                         alt={`Barcode ${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`}
                         className="w-24 h-24 sm:w-28 sm:h-28 mx-auto object-contain"
-                        onError={(e: any) => {
-                          e.currentTarget.src = `http://127.0.0.1:8000/api/public/surat/qr?data=${selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}`;
-                        }}
                       />
                       <div className="text-xs font-mono font-black text-slate-900 tracking-wider mt-1">
                         {selectedAnnouncement.tiket?.barcode || selectedAnnouncement.tiket?.qrHash || '350606200800001'}
