@@ -170,7 +170,7 @@ export const MutasiPendudukSekdesView: React.FC = () => {
   const getJenisBadge = (jenis: string) => {
     switch (jenis) {
       case 'masuk':
-        return <span className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase bg-emerald-100 text-emerald-900 border border-emerald-200">Pindah Masuk</span>;
+        return <span className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase bg-blue-100 text-blue-900 border border-blue-200">Pindah Masuk</span>;
       case 'keluar':
         return <span className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase bg-amber-100 text-amber-900 border border-amber-200">Pindah Keluar</span>;
       case 'lahir':
@@ -188,8 +188,8 @@ export const MutasiPendudukSekdesView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
               Buku Administrasi Penduduk Model A.2 (Permendagri No. 47/2016)
             </span>
           </div>
@@ -204,7 +204,7 @@ export const MutasiPendudukSekdesView: React.FC = () => {
         <button
           type="button"
           onClick={() => setShowModal(true)}
-          className="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs transition-all shadow-sm flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs transition-all shadow-sm flex items-center gap-2 cursor-pointer self-start sm:self-auto"
         >
           <Plus size={15} />
           <span>Catat Mutasi Baru</span>
@@ -219,9 +219,9 @@ export const MutasiPendudukSekdesView: React.FC = () => {
           <span className="text-[10px] text-slate-500 font-bold">Tahun 2026</span>
         </div>
         <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-          <span className="text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider block">Pindah Masuk</span>
-          <div className="text-xl sm:text-2xl font-black text-emerald-900">+{summary.masuk} <span className="text-xs font-bold text-slate-400">Jiwa</span></div>
-          <span className="text-[10px] text-emerald-700 font-bold">Warga Pendatang</span>
+          <span className="text-[10px] font-extrabold text-blue-700 uppercase tracking-wider block">Pindah Masuk</span>
+          <div className="text-xl sm:text-2xl font-black text-blue-900">+{summary.masuk} <span className="text-xs font-bold text-slate-400">Jiwa</span></div>
+          <span className="text-[10px] text-blue-700 font-bold">Warga Pendatang</span>
         </div>
         <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
           <span className="text-[10px] font-extrabold text-amber-700 uppercase tracking-wider block">Pindah Keluar</span>
@@ -258,7 +258,7 @@ export const MutasiPendudukSekdesView: React.FC = () => {
                 onClick={() => setActiveFilter(t.id as any)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
                   activeFilter === t.id
-                    ? 'bg-emerald-700 text-white shadow-xs'
+                    ? 'bg-blue-700 text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -274,7 +274,7 @@ export const MutasiPendudukSekdesView: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cari nama, NIK, atau no. surat..."
-              className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:bg-white focus:border-emerald-500 transition-all"
+              className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:bg-white focus:border-blue-500 transition-all"
             />
           </div>
         </div>
@@ -326,7 +326,7 @@ export const MutasiPendudukSekdesView: React.FC = () => {
                     <td className="py-3 px-3.5 text-xs">
                       <div className="font-medium text-slate-800 line-clamp-1">{r.keterangan || '-'}</div>
                       {r.nomor_surat_keterangan && (
-                        <div className="font-mono text-[10px] text-emerald-800 font-bold">{r.nomor_surat_keterangan}</div>
+                        <div className="font-mono text-[10px] text-blue-800 font-bold">{r.nomor_surat_keterangan}</div>
                       )}
                     </td>
                     <td className="py-3 px-3.5 text-right whitespace-nowrap">
@@ -362,7 +362,7 @@ export const MutasiPendudukSekdesView: React.FC = () => {
           <div className="bg-white rounded-3xl max-w-xl w-full p-6 space-y-5 shadow-xl animate-scale-up max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded">
                   Formulir Administrasi Desa
                 </span>
                 <h3 className="text-lg font-black text-slate-900 mt-0.5">
@@ -522,7 +522,7 @@ export const MutasiPendudukSekdesView: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold cursor-pointer shadow-sm"
+                  className="px-5 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold cursor-pointer shadow-sm"
                 >
                   {isSubmitting ? 'Menyimpan...' : 'Simpan Catatan Mutasi'}
                 </button>

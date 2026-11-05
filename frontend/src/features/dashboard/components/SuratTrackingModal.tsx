@@ -72,15 +72,15 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
     if (isCompleted) {
       return {
         label: 'Selesai & Sah Ber-QR',
-        bg: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-        dot: 'bg-emerald-500'
+        bg: 'bg-blue-50 text-blue-800 border-blue-200',
+        dot: 'bg-blue-500'
       };
     }
     if (['pending_kades', 'processed_sekdes', 'approved_rt'].includes(surat.status)) {
       return {
         label: 'Proses Pengesahan Kades',
-        bg: 'bg-teal-50 text-teal-800 border-teal-200',
-        dot: 'bg-teal-500'
+        bg: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+        dot: 'bg-indigo-500'
       };
     }
     return {
@@ -109,7 +109,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
           <div className="flex items-center gap-3 min-w-0">
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold shrink-0 ${
               isRejected ? 'bg-rose-100 text-rose-700' :
-              isCompleted ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+              isCompleted ? 'bg-blue-100 text-blue-800' : 'bg-amber-100 text-amber-800'
             }`}>
               {isRejected ? <AlertTriangle className="w-5 h-5" /> :
                isCompleted ? <CheckCircle2 className="w-5 h-5" /> : <Clock className="w-5 h-5" />}
@@ -188,33 +188,33 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
 
           {/* BANNER SURAT SAH & SIAP CETAK (JIKA COMPLETED) */}
           {isCompleted && (
-            <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/90 border border-emerald-200 text-emerald-950 space-y-3 shadow-2xs">
+            <div className="p-4 sm:p-5 rounded-2xl bg-blue-50/90 border border-blue-200 text-blue-950 space-y-3 shadow-2xs">
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 rounded-xl bg-emerald-200 text-emerald-800 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-xl bg-blue-200 text-blue-800 flex items-center justify-center shrink-0 mt-0.5">
                   <ShieldCheck className="w-4 h-4" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs font-black uppercase text-emerald-800 tracking-wider">
+                  <div className="text-xs font-black uppercase text-blue-800 tracking-wider">
                     Surat Telah Sah & Terbit
                   </div>
-                  <div className="text-xs text-emerald-900 font-semibold mt-0.5">
-                    Nomor Resmi: <span className="font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">{surat.nomor_surat_resmi || '-'}</span>
+                  <div className="text-xs text-blue-900 font-semibold mt-0.5">
+                    Nomor Resmi: <span className="font-mono font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded">{surat.nomor_surat_resmi || '-'}</span>
                   </div>
-                  <p className="text-xs text-emerald-800/90 mt-1 leading-relaxed">
+                  <p className="text-xs text-blue-800/90 mt-1 leading-relaxed">
                     Dokumen ini telah disahkan dengan Stempel QR Code resmi Kantor Desa Doko dan diakui secara kedinasan.
                   </p>
                 </div>
               </div>
 
               {onPrint && (
-                <div className="pt-2 border-t border-emerald-200/70 flex justify-end">
+                <div className="pt-2 border-t border-blue-200/70 flex justify-end">
                   <button
                     type="button"
                     onClick={() => {
                       onClose();
                       onPrint(surat);
                     }}
-                    className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer"
                   >
                     <Printer className="w-4 h-4" />
                     <span>Cetak / Unduh PDF Sekarang</span>
@@ -246,7 +246,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
           <div className="space-y-3 pt-1">
             <div className="flex items-center justify-between pb-1 border-b border-slate-100">
               <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                <FileText className="w-3.5 h-3.5 text-emerald-700" />
+                <FileText className="w-3.5 h-3.5 text-blue-700" />
                 <span>Alur Verifikasi Surat (Direct RT ke Desa)</span>
               </h4>
               <span className="text-[10px] text-slate-400 font-medium">
@@ -260,7 +260,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
               {/* TAHAP 1: PENGAJUAN ONLINE OLEH WARGA */}
               <div className="relative group">
                 {/* Node Indicator */}
-                <div className="absolute -left-6 sm:-left-8 top-0.5 w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center shadow-xs z-10">
+                <div className="absolute -left-6 sm:-left-8 top-0.5 w-6 sm:w-8 h-6 sm:h-8 rounded-full bg-blue-700 text-white flex items-center justify-center shadow-xs z-10">
                   <Check className="w-3.5 sm:w-4 h-3.5 sm:h-4 stroke-[2.5]" />
                 </div>
                 
@@ -285,7 +285,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                 {/* Node Indicator */}
                 <div className={`absolute -left-6 sm:-left-8 top-0.5 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center shadow-xs z-10 ${
                   isRejectedAtRt ? 'bg-rose-600 text-white' :
-                  rtTracking ? 'bg-emerald-700 text-white' :
+                  rtTracking ? 'bg-blue-700 text-white' :
                   surat.status === 'pending_rt' ? 'bg-amber-500 text-white ring-4 ring-amber-100 animate-pulse' :
                   'bg-slate-200 text-slate-400'
                 }`}>
@@ -306,7 +306,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                         </span>
                       )}
                       {rtTracking && !isRejectedAtRt && (
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
                           Disetujui RT
                         </span>
                       )}
@@ -336,7 +336,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                     <div className={`mt-2 p-3 rounded-xl text-xs leading-relaxed ${
                       isRejectedAtRt 
                         ? 'bg-rose-50/80 border-l-3 border-rose-500 text-rose-900' 
-                        : 'bg-slate-50 border-l-3 border-emerald-500 text-slate-700'
+                        : 'bg-slate-50 border-l-3 border-blue-500 text-slate-700'
                     }`}>
                       <span className="text-[10px] font-bold uppercase tracking-wider block mb-0.5 opacity-70">
                         Catatan Ketua RT 01:
@@ -356,7 +356,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                 <div className="relative group">
                   <div className={`absolute -left-6 sm:-left-8 top-0.5 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center shadow-xs z-10 ${
                     isRejectedAtRw ? 'bg-rose-600 text-white' :
-                    rwTracking ? 'bg-emerald-700 text-white' :
+                    rwTracking ? 'bg-blue-700 text-white' :
                     'bg-slate-200 text-slate-400'
                   }`}>
                     {isRejectedAtRw ? <AlertTriangle className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> :
@@ -388,8 +388,8 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                   {/* Node Indicator */}
                   <div className={`absolute -left-6 sm:-left-8 top-0.5 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center shadow-xs z-10 ${
                     isRejectedAtDesa ? 'bg-rose-600 text-white' :
-                    isCompleted ? 'bg-emerald-700 text-white' :
-                    ['pending_kades', 'processed_sekdes', 'approved_rt'].includes(surat.status) ? 'bg-teal-600 text-white ring-4 ring-teal-100 animate-pulse' :
+                    isCompleted ? 'bg-blue-700 text-white' :
+                    ['pending_kades', 'processed_sekdes', 'approved_rt'].includes(surat.status) ? 'bg-indigo-600 text-white ring-4 ring-indigo-100 animate-pulse' :
                     'bg-slate-200 text-slate-400'
                   }`}>
                     {isRejectedAtDesa ? <AlertTriangle className="w-3.5 sm:w-4 h-3.5 sm:h-4" /> :
@@ -404,12 +404,12 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                       <span className="text-xs sm:text-sm font-bold text-slate-900 flex items-center gap-1.5 flex-wrap">
                         <span>3. Legalisasi Stempel QR & TTD Kepala Desa</span>
                         {isCompleted && (
-                          <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                          <span className="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
                             Resmi & Sah
                           </span>
                         )}
                         {['pending_kades', 'processed_sekdes', 'approved_rt'].includes(surat.status) && (
-                          <span className="text-[10px] font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
+                          <span className="text-[10px] font-bold text-indigo-800 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
                             Sedang Diproses
                           </span>
                         )}
@@ -434,7 +434,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                       <div className={`mt-2 p-3 rounded-xl text-xs leading-relaxed ${
                         isRejectedAtDesa 
                           ? 'bg-rose-50/80 border-l-3 border-rose-500 text-rose-900' 
-                          : 'bg-slate-50 border-l-3 border-teal-500 text-slate-700'
+                          : 'bg-slate-50 border-l-3 border-indigo-500 text-slate-700'
                       }`}>
                         <span className="text-[10px] font-bold uppercase tracking-wider block mb-0.5 opacity-70">
                           Catatan Kepala Desa:
@@ -481,7 +481,7 @@ export const SuratTrackingModal: React.FC<SuratTrackingModalProps> = ({
                   onClose();
                   onPrint(surat);
                 }}
-                className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
+                className="px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Cetak PDF</span>

@@ -166,7 +166,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         );
       case 'completed':
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap bg-emerald-100 text-emerald-900 border border-emerald-200">
+          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold whitespace-nowrap bg-blue-100 text-blue-900 border border-blue-200">
             Selesai & Sah
           </span>
         );
@@ -488,7 +488,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         >
           <div className="flex justify-between items-center pb-4 border-b border-gray-100">
             <div>
-              <span className="text-[10px] font-black uppercase text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md tracking-wider">
+              <span className="text-[10px] font-black uppercase text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md tracking-wider">
                 Pembukuan Kas RT 01
               </span>
               <h3 className="font-black text-xl text-gray-900 mt-1">Catat Transaksi Kas</h3>
@@ -515,7 +515,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 }}
                 className={`flex-1 py-3 rounded-xl text-xs font-black transition-all press-down shadow-xs cursor-pointer ${
                   kasTipe === 'Pemasukan' 
-                    ? 'bg-emerald-600 text-white shadow-emerald-200' 
+                    ? 'bg-blue-600 text-white shadow-blue-200' 
                     : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100'
                 }`}
               >
@@ -546,7 +546,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 required
                 value={kasTanggal}
                 onChange={(e) => setKasTanggal(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none"
               />
             </div>
 
@@ -556,7 +556,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               <select
                 value={kasCategoryId}
                 onChange={(e) => setKasCategoryId(Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all outline-none font-medium"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none font-medium"
               >
                 {filteredCategories.length > 0 ? (
                   filteredCategories.map((c: any) => (
@@ -582,7 +582,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 placeholder="Contoh: 50000"
                 value={kasJumlah}
                 onChange={(e) => setKasJumlah(e.target.value === '' ? '' : Number(e.target.value))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all outline-none font-mono font-bold"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none font-mono font-bold"
               />
             </div>
 
@@ -599,7 +599,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 }
                 value={kasKeterangan}
                 onChange={(e) => setKasKeterangan(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none"
               />
             </div>
 
@@ -610,7 +610,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 <select
                   value={kasWargaId}
                   onChange={(e) => setKasWargaId(e.target.value ? Number(e.target.value) : '')}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all outline-none font-medium"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none font-medium"
                 >
                   <option value="">-- Pilih Warga RT 01 (Bisa Dikosongkan) --</option>
                   {wargas.map((w) => (
@@ -633,7 +633,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               <button
                 type="submit"
                 disabled={isSubmittingKas}
-                className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition-all shadow-md press-down hover-glow cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black transition-all shadow-md press-down hover-glow cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmittingKas ? 'Menyimpan...' : 'Simpan Transaksi Kas'}
               </button>
@@ -702,7 +702,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   </tr>
                 ) : (
                   paginatedSurats.map((s, idx) => (
-                    <tr key={s.id} className="group hover:bg-emerald-50 transition-colors">
+                    <tr key={s.id} className="group hover:bg-blue-50 transition-colors">
                       <td className="py-3 px-3 sm:px-4 font-mono font-bold text-xs text-gray-700 whitespace-nowrap">
                         {s.nomor_resi}
                       </td>
@@ -715,7 +715,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         </div>
                       </td>
                       <td className="py-3 px-3 sm:px-4">
-                        <div className="font-bold text-emerald-800 text-xs leading-snug max-w-[160px] line-clamp-2">
+                        <div className="font-bold text-blue-800 text-xs leading-snug max-w-[160px] line-clamp-2">
                           {s.surat_type?.nama_surat}
                         </div>
                       </td>
@@ -725,7 +725,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       <td className="py-3 px-3 sm:px-4 whitespace-nowrap">
                         {renderStatusBadge(s)}
                       </td>
-                      <td className="py-3 px-3 sm:px-4 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-emerald-50 z-10 shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.06)] transition-colors">
+                      <td className="py-3 px-3 sm:px-4 text-right whitespace-nowrap sticky right-0 bg-white group-hover:bg-blue-50 z-10 shadow-[-6px_0_10px_-4px_rgba(0,0,0,0.06)] transition-colors">
                         <div className="flex items-center justify-end gap-1.5 whitespace-nowrap">
                           <button
                             type="button"
@@ -733,7 +733,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors press-down flex items-center gap-1 cursor-pointer shadow-2xs"
                             title="Lihat Detail & Foto Berkas Lampiran"
                           >
-                            <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                            <Eye className="w-3.5 h-3.5 text-blue-600" />
                             <span>Detail</span>
                           </button>
 
@@ -745,7 +745,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                                   setApproveCatatan('Data warga valid dan terdaftar resmi di RT 01.');
                                 }}
                                 disabled={isProcessing}
-                                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-xs press-down flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                                className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-xs press-down flex items-center gap-1 cursor-pointer whitespace-nowrap"
                                 title="Setujui permohonan surat"
                               >
                                 <Check className="w-3.5 h-3.5" />
@@ -765,7 +765,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                               Ditolak
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-emerald-800 text-xs font-bold bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200/80 shadow-2xs whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1 text-blue-800 text-xs font-bold bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200/80 shadow-2xs whitespace-nowrap">
                               {s.status === 'completed' ? 'Selesai' : 'Disetujui RT'}
                             </span>
                           )}
@@ -814,12 +814,12 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           NIK: {s.warga_profile?.nik}
                         </span>
                       </div>
-                      <span className="px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[10px] font-extrabold border border-emerald-200 shrink-0">
+                      <span className="px-2 py-0.5 rounded-lg bg-blue-50 text-blue-800 text-[10px] font-extrabold border border-blue-200 shrink-0">
                         {s.surat_type?.kode_surat || 'SURAT'}
                       </span>
                     </div>
 
-                    <div className="font-bold text-xs text-emerald-900">
+                    <div className="font-bold text-xs text-blue-900">
                       {s.surat_type?.nama_surat}
                     </div>
 
@@ -840,7 +840,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       onClick={() => setPreviewSurat(s)}
                       className="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs press-down"
                     >
-                      <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                      <Eye className="w-3.5 h-3.5 text-blue-600" />
                       <span>Detail</span>
                     </button>
 
@@ -853,7 +853,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             setApproveCatatan('Data warga valid dan terdaftar resmi di RT 01.');
                           }}
                           disabled={isProcessing}
-                          className="flex-1 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs transition-all shadow-xs press-down flex items-center justify-center gap-1 cursor-pointer"
+                          className="flex-1 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-xs press-down flex items-center justify-center gap-1 cursor-pointer"
                         >
                           <Check className="w-3.5 h-3.5" />
                           <span>Setujui</span>
@@ -872,7 +872,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         Ditolak
                       </span>
                     ) : (
-                      <span className="px-3 py-2 rounded-xl text-emerald-800 text-xs font-bold bg-emerald-50 border border-emerald-200 text-center flex-1">
+                      <span className="px-3 py-2 rounded-xl text-blue-800 text-xs font-bold bg-blue-50 border border-blue-200 text-center flex-1">
                         {s.status === 'completed' ? 'Selesai' : 'Disetujui RT'}
                       </span>
                     )}
@@ -907,7 +907,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             >
               <div className="flex justify-between items-center pb-3 border-b border-gray-100">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                     <Check className="w-4 h-4" />
                   </div>
                   <h3 className="font-black text-xl text-gray-900">Konfirmasi Persetujuan RT</h3>
@@ -922,7 +922,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               </div>
 
               {/* Applicant & Letter Summary */}
-              <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100 text-xs space-y-2">
+              <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 text-xs space-y-2">
                 <div className="flex justify-between">
                   <span className="text-slate-500 font-semibold">Nama Pemohon:</span>
                   <span className="font-bold text-slate-900">{confirmingApproveSurat.warga_profile?.nama_lengkap || '-'}</span>
@@ -933,14 +933,14 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500 font-semibold">Jenis Surat:</span>
-                  <span className="font-bold text-emerald-900">{confirmingApproveSurat.surat_type?.nama_surat || (confirmingApproveSurat as any).jenis_surat || 'Surat Pengantar RT'}</span>
+                  <span className="font-bold text-blue-900">{confirmingApproveSurat.surat_type?.nama_surat || (confirmingApproveSurat as any).jenis_surat || 'Surat Pengantar RT'}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500 font-semibold">Tanggal Pengajuan:</span>
                   <span className="font-medium text-slate-700">{confirmingApproveSurat.created_at ? new Date(confirmingApproveSurat.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-'}</span>
                 </div>
                 {confirmingApproveSurat.keperluan && (
-                  <div className="pt-1 border-t border-emerald-200/60">
+                  <div className="pt-1 border-t border-blue-200/60">
                     <span className="text-slate-500 font-semibold block mb-0.5">Keperluan:</span>
                     <span className="text-slate-800 font-medium italic">"{confirmingApproveSurat.keperluan}"</span>
                   </div>
@@ -954,7 +954,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   placeholder="Catatan validasi domisili dan kelayakan warga..."
                   value={approveCatatan}
                   onChange={(e) => setApproveCatatan(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 text-xs sm:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 transition-all outline-none resize-none"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 text-xs sm:text-sm bg-gray-50 focus:bg-white focus:ring-2 focus:ring-blue-500 transition-all outline-none resize-none"
                 />
               </div>
 
@@ -968,7 +968,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 <button 
                   onClick={() => handleApproveRt(confirmingApproveSurat.id, approveCatatan)} 
                   disabled={isProcessing}
-                  className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold shadow-md cursor-pointer"
+                  className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-xs font-bold shadow-md cursor-pointer"
                 >
                   {isProcessing ? 'Memproses...' : 'Setujui'}
                 </button>
@@ -1108,7 +1108,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               onClick={() => { setRtHistoryFilter('disetujui'); setCompletedSuratPage(1); }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 rtHistoryFilter === 'disetujui'
-                  ? 'bg-emerald-600 text-white shadow-xs'
+                  ? 'bg-blue-600 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -1163,7 +1163,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         <div className="text-[11px] text-slate-400 font-mono mt-0.5">NIK: {s.warga_profile?.nik}</div>
                       </td>
                       <td className="py-3 px-3 sm:px-4">
-                        <div className="font-bold text-emerald-800 text-xs leading-snug max-w-[160px] line-clamp-2">{s.surat_type?.nama_surat}</div>
+                        <div className="font-bold text-blue-800 text-xs leading-snug max-w-[160px] line-clamp-2">{s.surat_type?.nama_surat}</div>
                       </td>
                       <td className="py-3 px-3 sm:px-4 text-slate-600 text-xs max-w-[140px] truncate" title={s.keperluan}>{s.keperluan}</td>
                       <td className="py-3 px-3 sm:px-4 whitespace-nowrap">
@@ -1176,7 +1176,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors inline-flex items-center gap-1 cursor-pointer shadow-2xs press-down"
                           title="Lihat Detail & Foto Berkas Lampiran"
                         >
-                          <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                          <Eye className="w-3.5 h-3.5 text-blue-600" />
                           <span>Detail</span>
                         </button>
                       </td>
@@ -1225,7 +1225,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         </span>
                       </div>
 
-                      <div className="font-bold text-xs text-emerald-900">
+                      <div className="font-bold text-xs text-blue-900">
                         {s.surat_type?.nama_surat}
                       </div>
 
@@ -1254,7 +1254,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         onClick={() => setPreviewSurat(s)}
                         className="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs press-down"
                       >
-                        <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                        <Eye className="w-3.5 h-3.5 text-blue-600" />
                         <span>Lihat Detail & Berkas</span>
                       </button>
                     </div>
@@ -1293,7 +1293,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         >
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-black">
+              <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center font-black">
                 <Building2 className="w-6 h-6" />
               </div>
               <div>
@@ -1318,7 +1318,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               <span className="text-slate-400 font-bold block text-[10px] uppercase">Alamat Hunian:</span>
               <span className="font-bold text-slate-800">{selectedKkDetail.alamat_lengkap}</span>
             </div>
-            <span className="px-2.5 py-1 rounded-full text-xs font-black bg-teal-100 text-teal-800">
+            <span className="px-2.5 py-1 rounded-full text-xs font-black bg-indigo-100 text-indigo-800">
               {currentMembers.length} Anggota Jiwa
             </span>
           </div>
@@ -1411,7 +1411,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-200">
                 Kependudukan RT 01
               </span>
               <span className="text-xs text-slate-400 font-bold">• RW 01 Dusun Krajan</span>
@@ -1430,7 +1430,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">Total Warga RT 01</span>
-              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-700">
                 <Users className="w-4 h-4" />
               </div>
             </div>
@@ -1454,7 +1454,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">Kepala Keluarga</span>
-              <div className="p-2 rounded-xl bg-teal-50 text-teal-700">
+              <div className="p-2 rounded-xl bg-indigo-50 text-indigo-700">
                 <Building2 className="w-4 h-4" />
               </div>
             </div>
@@ -1483,7 +1483,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               value={wargaSearch}
               onChange={(e) => setWargaSearch(e.target.value)}
               placeholder="Cari Nama Lengkap, NIK, atau No KK..."
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition-colors"
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
 
@@ -1526,13 +1526,13 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               onClick={() => { setWargaViewMode('per_kk'); setWargaPage(1); }}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                 wargaViewMode === 'per_kk'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
               }`}
             >
               <Building2 className="w-4 h-4" />
               <span>Data per Kartu Keluarga (Rapi)</span>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full ${wargaViewMode === 'per_kk' ? 'bg-emerald-800 text-emerald-100' : 'bg-white text-slate-600 border border-slate-200'}`}>
+              <span className={`text-[10px] px-2 py-0.5 rounded-full ${wargaViewMode === 'per_kk' ? 'bg-blue-800 text-blue-100' : 'bg-white text-slate-600 border border-slate-200'}`}>
                 {effectiveKkList.length} KK
               </span>
             </button>
@@ -1542,13 +1542,13 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               onClick={() => { setWargaViewMode('semua_warga'); setWargaPage(1); }}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                 wargaViewMode === 'semua_warga'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100 border border-slate-200'
               }`}
             >
               <Users className="w-4 h-4" />
               <span>Buku Induk Lengkap (Per Jiwa)</span>
-              <span className={`text-[10px] px-2 py-0.5 rounded-full ${wargaViewMode === 'semua_warga' ? 'bg-emerald-800 text-emerald-100' : 'bg-white text-slate-600 border border-slate-200'}`}>
+              <span className={`text-[10px] px-2 py-0.5 rounded-full ${wargaViewMode === 'semua_warga' ? 'bg-blue-800 text-blue-100' : 'bg-white text-slate-600 border border-slate-200'}`}>
                 {wargas.length} Jiwa
               </span>
             </button>
@@ -1600,10 +1600,10 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       })
                       .slice((wargaPage - 1) * RT_PAGE_SIZE, wargaPage * RT_PAGE_SIZE)
                       .map((kk, idx) => (
-                        <tr key={kk.id || idx} className="hover:bg-emerald-50/70 transition-colors">
+                        <tr key={kk.id || idx} className="hover:bg-blue-50/70 transition-colors">
                           <td className="py-3 px-3 sm:px-4 font-mono font-bold text-slate-900">
                             <div className="inline-flex items-center gap-1.5 bg-slate-100 px-2.5 py-1 rounded-xl text-slate-800 border border-slate-200">
-                              <Building2 className="w-3.5 h-3.5 text-emerald-700" />
+                              <Building2 className="w-3.5 h-3.5 text-blue-700" />
                               <span>{kk.no_kk}</span>
                             </div>
                           </td>
@@ -1618,7 +1618,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             </div>
                           </td>
                           <td className="py-3 px-3 sm:px-4">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-800 border border-blue-200">
                               <Users className="w-3 h-3" />
                               <span>{(kk.anggotaKeluarga || []).length} Jiwa</span>
                             </span>
@@ -1627,7 +1627,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
                               kk.status_ekonomi?.toLowerCase().includes('pkh')
                                 ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                                : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                                : 'bg-blue-50 text-blue-800 border border-blue-200'
                             }`}>
                               {kk.status_ekonomi?.toLowerCase().includes('pkh') ? 'Penerima Bansos PKH' : 'Keluarga Mandiri'}
                             </span>
@@ -1636,7 +1636,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             <button
                               type="button"
                               onClick={() => setSelectedKkDetail(kk)}
-                              className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-colors flex items-center gap-1.5 ml-auto cursor-pointer shadow-xs press-down"
+                              className="px-3 py-1.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs transition-colors flex items-center gap-1.5 ml-auto cursor-pointer shadow-xs press-down"
                               title="Lihat Rincian Anggota Keluarga"
                             >
                               <Users className="w-3.5 h-3.5" />
@@ -1693,7 +1693,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       >
                         <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
                           <div className="flex items-center gap-1.5 min-w-0">
-                            <Building2 className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                            <Building2 className="w-3.5 h-3.5 text-blue-700 shrink-0" />
                             <span className="font-mono font-black text-xs text-slate-800 truncate">
                               {kk.no_kk}
                             </span>
@@ -1701,7 +1701,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 ${
                             isPkh
                               ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                              : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                              : 'bg-blue-50 text-blue-800 border border-blue-200'
                           }`}>
                             {isPkh ? 'Bansos PKH' : 'Mandiri'}
                           </span>
@@ -1717,7 +1717,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                                 {kk.nama_kepala_keluarga}
                               </h4>
                             </div>
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 shrink-0">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-blue-50 text-blue-800 border border-blue-200 shrink-0">
                               <Users className="w-3 h-3" />
                               <span>{memberCount} Jiwa</span>
                             </span>
@@ -1733,7 +1733,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           <button
                             type="button"
                             onClick={() => setSelectedKkDetail(kk)}
-                            className="w-full py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs press-down"
+                            className="w-full py-2.5 px-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs press-down"
                           >
                             <Users className="w-3.5 h-3.5" />
                             <span>Lihat Rincian Anggota ({memberCount} Jiwa)</span>
@@ -1788,11 +1788,11 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                     </tr>
                   ) : (
                     paginatedWargas.map((w) => (
-                      <tr key={w.id} className="hover:bg-emerald-50/70 transition-colors">
+                      <tr key={w.id} className="hover:bg-blue-50/70 transition-colors">
                         <td className="py-3 px-3 sm:px-4">
                           <div className="flex items-center gap-3">
                             <div className={`w-8 h-8 rounded-xl font-bold flex items-center justify-center text-xs shrink-0 ${
-                              w.jenis_kelamin === 'P' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-800'
+                              w.jenis_kelamin === 'P' ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-800'
                             }`}>
                               {w.nama_lengkap.charAt(0)}
                             </div>
@@ -1822,10 +1822,10 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                               href={`https://wa.me/${w.no_hp_wa.replace(/\D/g, '')}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 text-emerald-700 hover:text-emerald-800 font-bold hover:underline"
+                              className="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-800 font-bold hover:underline"
                               title="Kirim Pesan WhatsApp"
                             >
-                              <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                              <Phone className="w-3.5 h-3.5 text-blue-600" />
                               <span>{w.no_hp_wa}</span>
                             </a>
                           ) : (
@@ -1842,7 +1842,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                               ? 'bg-amber-100 text-amber-900 border border-amber-200'
                               : w.status_ekonomi?.toLowerCase().includes('rentan')
                               ? 'bg-orange-100 text-orange-900 border border-orange-200'
-                              : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                              : 'bg-blue-50 text-blue-800 border border-blue-200'
                           }`}>
                             {w.status_ekonomi || 'Mampu'}
                           </span>
@@ -1854,7 +1854,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors flex items-center gap-1 ml-auto cursor-pointer shadow-2xs press-down"
                             title="Lihat Profil Lengkap Warga"
                           >
-                            <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                            <Eye className="w-3.5 h-3.5 text-blue-600" />
                             <span>Detail</span>
                           </button>
                         </td>
@@ -1885,7 +1885,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       <div className="flex items-start justify-between gap-3 pb-2.5 border-b border-slate-100">
                         <div className="flex items-center gap-2.5 min-w-0">
                           <div className={`w-9 h-9 rounded-xl font-bold flex items-center justify-center text-xs shrink-0 ${
-                            w.jenis_kelamin === 'P' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-800'
+                            w.jenis_kelamin === 'P' ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-800'
                           }`}>
                             {w.nama_lengkap.charAt(0)}
                           </div>
@@ -1901,7 +1901,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 ${
                           isPkh ? 'bg-amber-100 text-amber-900 border border-amber-200' :
                           isRentan ? 'bg-orange-100 text-orange-900 border border-orange-200' :
-                          'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                          'bg-blue-50 text-blue-800 border border-blue-200'
                         }`}>
                           {isPkh ? 'PKH' : isRentan ? 'Rentan' : 'Mandiri'}
                         </span>
@@ -1929,9 +1929,9 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             href={`https://wa.me/${w.no_hp_wa.replace(/\D/g, '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-emerald-700 hover:text-emerald-800 font-extrabold text-xs bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                            className="inline-flex items-center gap-1 text-blue-700 hover:text-blue-800 font-extrabold text-xs bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200 hover:bg-blue-100 transition-colors"
                           >
-                            <Phone className="w-3 h-3 text-emerald-600" />
+                            <Phone className="w-3 h-3 text-blue-600" />
                             <span>WhatsApp</span>
                           </a>
                         ) : (
@@ -1946,7 +1946,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           onClick={() => setSelectedWargaDetail(w)}
                           className="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs press-down"
                         >
-                          <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                          <Eye className="w-3.5 h-3.5 text-blue-600" />
                           <span>Lihat Profil Lengkap Warga</span>
                         </button>
                       </div>
@@ -1978,7 +1978,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             >
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-lg">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-black text-lg">
                     {selectedWargaDetail.nama_lengkap.charAt(0)}
                   </div>
                   <div>
@@ -2021,7 +2021,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 </div>
                 <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
                   <span className="text-slate-400 font-bold block text-[10px] uppercase">Klasifikasi Ekonomi</span>
-                  <span className="font-bold text-emerald-700">{selectedWargaDetail.status_ekonomi || 'Mampu'}</span>
+                  <span className="font-bold text-blue-700">{selectedWargaDetail.status_ekonomi || 'Mampu'}</span>
                 </div>
               </div>
 
@@ -2038,7 +2038,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                     href={`https://wa.me/${selectedWargaDetail.no_hp_wa.replace(/\D/g, '')}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all press-down"
+                    className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all press-down"
                   >
                     <Phone className="w-4 h-4" />
                     <span>Kirim Pesan WhatsApp Langsung</span>
@@ -2082,7 +2082,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-teal-100 text-teal-800 border border-teal-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-100 text-indigo-800 border border-indigo-200">
                 Register Kartu Keluarga
               </span>
               <span className="text-xs text-slate-400 font-bold">• RT 01 Krajan</span>
@@ -2101,7 +2101,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">Total Kepala Keluarga</span>
-              <div className="p-2 rounded-xl bg-teal-50 text-teal-700">
+              <div className="p-2 rounded-xl bg-indigo-50 text-indigo-700">
                 <Building2 className="w-4 h-4" />
               </div>
             </div>
@@ -2136,11 +2136,11 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">Keluarga Mandiri</span>
-              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-700">
                 <ShieldCheck className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-emerald-800 mt-2">{totalKk - totalKkPkh} KK</div>
+            <div className="text-2xl sm:text-3xl font-black text-blue-800 mt-2">{totalKk - totalKkPkh} KK</div>
             <div className="text-[11px] text-slate-400 font-medium mt-1">Swadaya & Sejahtera</div>
           </div>
         </div>
@@ -2154,7 +2154,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               value={kkSearch}
               onChange={(e) => setKkSearch(e.target.value)}
               placeholder="Cari No. KK, Nama Kepala Keluarga, atau Alamat..."
-              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-teal-500 transition-colors"
+              className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-indigo-500 transition-colors"
             />
           </div>
 
@@ -2199,10 +2199,10 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   </tr>
                 ) : (
                   paginatedKk.map((kk, idx) => (
-                    <tr key={kk.id || idx} className="hover:bg-teal-50/60 transition-colors">
+                    <tr key={kk.id || idx} className="hover:bg-indigo-50/60 transition-colors">
                       <td className="py-3 px-3 sm:px-4 font-mono font-bold text-slate-900">
                         <div className="inline-flex items-center gap-1.5 bg-slate-100 px-2.5 py-1 rounded-xl text-slate-800 border border-slate-200">
-                          <Building2 className="w-3.5 h-3.5 text-teal-600" />
+                          <Building2 className="w-3.5 h-3.5 text-indigo-600" />
                           <span>{kk.no_kk}</span>
                         </div>
                       </td>
@@ -2217,7 +2217,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         </div>
                       </td>
                       <td className="py-3 px-3 sm:px-4">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-800 border border-teal-200">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-800 border border-indigo-200">
                           <Users className="w-3 h-3" />
                           <span>{(kk.anggotaKeluarga || kk.anggota_keluarga || []).length} Jiwa</span>
                         </span>
@@ -2226,7 +2226,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
                           kk.status_ekonomi?.toLowerCase().includes('pkh')
                             ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                            : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                            : 'bg-blue-50 text-blue-800 border border-blue-200'
                         }`}>
                           {kk.status_ekonomi?.toLowerCase().includes('pkh') ? 'Penerima Bansos PKH' : 'Keluarga Mandiri'}
                         </span>
@@ -2235,7 +2235,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         <button
                           type="button"
                           onClick={() => setSelectedKkDetail(kk)}
-                          className="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs transition-colors flex items-center gap-1.5 ml-auto cursor-pointer shadow-xs press-down"
+                          className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition-colors flex items-center gap-1.5 ml-auto cursor-pointer shadow-xs press-down"
                           title="Lihat Anggota Keluarga"
                         >
                           <Users className="w-3.5 h-3.5" />
@@ -2268,7 +2268,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                     {/* Header: No KK & Bansos Badge */}
                     <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
                       <div className="flex items-center gap-1.5 min-w-0">
-                        <Building2 className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                        <Building2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
                         <span className="font-mono font-black text-xs text-slate-800 truncate">
                           {kk.no_kk}
                         </span>
@@ -2276,7 +2276,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold shrink-0 ${
                         isPkh
                           ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                          : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                          : 'bg-blue-50 text-blue-800 border border-blue-200'
                       }`}>
                         {isPkh ? 'Bansos PKH' : 'Mandiri'}
                       </span>
@@ -2293,7 +2293,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             {kk.nama_kepala_keluarga}
                           </h4>
                         </div>
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-teal-50 text-teal-800 border border-teal-200 shrink-0">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-extrabold bg-indigo-50 text-indigo-800 border border-indigo-200 shrink-0">
                           <Users className="w-3 h-3" />
                           <span>{memberCount} Jiwa</span>
                         </span>
@@ -2310,7 +2310,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       <button
                         type="button"
                         onClick={() => setSelectedKkDetail(kk)}
-                        className="w-full py-2.5 px-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs press-down"
+                        className="w-full py-2.5 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs press-down"
                       >
                         <Users className="w-3.5 h-3.5" />
                         <span>Lihat Rincian Anggota Keluarga ({memberCount} Jiwa)</span>
@@ -2365,7 +2365,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         icon: 'baby',
         lat: -7.81770,
         lng: 112.04260,
-        bg: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+        bg: 'bg-blue-50 border-blue-200 text-blue-800',
         desc: 'Pelayanan timbang balita, imunisasi dasar, penyuluhan gizi, dan pemeriksaan lansia.'
       },
       {
@@ -2379,7 +2379,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         icon: 'mosque',
         lat: -7.81740,
         lng: 112.04310,
-        bg: 'bg-teal-50 border-teal-200 text-teal-800',
+        bg: 'bg-indigo-50 border-indigo-200 text-indigo-800',
         desc: 'Tempat ibadah berjamaah warga, pengajian malam Jumat, dan taman pendidikan Al-Quran anak-anak.'
       },
       {
@@ -2434,7 +2434,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-200">
                 Peta Geospasial Lingkungan
               </span>
               <span className="text-xs text-slate-400 font-bold">• RT 01 / RW 01 Dusun Krajan</span>
@@ -2453,7 +2453,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">Luas Teritorial</span>
-              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-700">
                 <Compass className="w-4 h-4" />
               </div>
             </div>
@@ -2464,7 +2464,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">Bangunan Hunian</span>
-              <div className="p-2 rounded-xl bg-teal-50 text-teal-700">
+              <div className="p-2 rounded-xl bg-indigo-50 text-indigo-700">
                 <Home className="w-4 h-4" />
               </div>
             </div>
@@ -2486,11 +2486,11 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-slate-500">Status Keamanan</span>
-              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700">
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-700">
                 <ShieldCheck className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-xl sm:text-2xl font-black text-emerald-800 mt-2">Zona Hijau</div>
+            <div className="text-xl sm:text-2xl font-black text-blue-800 mt-2">Zona Hijau</div>
             <div className="text-[11px] text-slate-400 font-medium mt-1">Aman • Siskamling Aktif 24 Jam</div>
           </div>
         </div>
@@ -2499,7 +2499,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <div className="bg-white p-4 sm:p-6 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-2xl bg-emerald-50 text-emerald-700">
+              <div className="p-2 rounded-2xl bg-blue-50 text-blue-700">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
@@ -2512,8 +2512,8 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               </div>
             </div>
             <div className="flex items-center gap-2 text-xs font-bold">
-              <span className="inline-flex items-center gap-1.5 text-emerald-800 bg-emerald-50 px-3 py-1 rounded-2xl border border-emerald-200">
-                <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 text-blue-800 bg-blue-50 px-3 py-1 rounded-2xl border border-blue-200">
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
                 Satelit Esri & OSM
               </span>
               <span className="inline-flex items-center gap-1.5 text-blue-800 bg-blue-50 px-3 py-1 rounded-2xl border border-blue-200">
@@ -2535,12 +2535,12 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <div className="bg-white rounded-3xl border border-slate-200/90 p-5 shadow-2xs transition-all">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
             <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-2xl shadow-xs shrink-0">
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center text-2xl shadow-xs shrink-0">
                 {activePin.icon}
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                     {activePin.isHouse ? 'Hunian Warga Terdata' : 'Fasilitas Lingkungan RT'}
                   </span>
                   <span className="text-xs text-slate-400 font-bold">• {activePin.blok}</span>
@@ -2564,7 +2564,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
 
               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-2.5 px-3.5 text-left grow sm:grow-0">
                 <div className="text-[10px] font-bold uppercase text-slate-400">Status Sarana</div>
-                <div className="text-xs font-black text-emerald-700">{activePin.status}</div>
+                <div className="text-xs font-black text-blue-700">{activePin.status}</div>
               </div>
 
               {activePin.jam && activePin.jam.includes('WhatsApp:') ? (
@@ -2572,7 +2572,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   href={`https://wa.me/${activePin.jam.replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto p-2.5 px-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer press-down"
+                  className="w-full sm:w-auto p-2.5 px-4 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-black text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer press-down"
                 >
                   <Phone className="w-3.5 h-3.5" />
                   <span>Hubungi WhatsApp</span>
@@ -2585,7 +2585,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         {/* Batas Administrasi Wilayah RT 01 (4 Cards Horizontal Grid) */}
         <div className="space-y-2">
           <div className="flex items-center gap-2 px-1">
-            <Compass className="w-4 h-4 text-emerald-600" />
+            <Compass className="w-4 h-4 text-blue-600" />
             <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">
               Batas Administrasi 4 Arah RT 01 Krajan
             </h4>
@@ -2593,7 +2593,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-              <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+              <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
                 UTARA
               </span>
               <div className="text-xs font-bold text-slate-900 mt-1">RT 02 Dusun Krajan</div>
@@ -2601,7 +2601,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             </div>
 
             <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-              <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+              <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
                 SELATAN
               </span>
               <div className="text-xs font-bold text-slate-900 mt-1">Jalan Raya Ngasem - Doko</div>
@@ -2609,7 +2609,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             </div>
 
             <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-              <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+              <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
                 TIMUR
               </span>
               <div className="text-xs font-bold text-slate-900 mt-1">Persawahan Kas Desa</div>
@@ -2617,7 +2617,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             </div>
 
             <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
-              <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+              <span className="text-[10px] font-black uppercase text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
                 BARAT
               </span>
               <div className="text-xs font-bold text-slate-900 mt-1">RT 03 Dusun Krajan</div>
@@ -2656,7 +2656,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       key={f.id} 
                       onClick={() => setSelectedPetaPin(f)}
                       className={`cursor-pointer transition-colors ${
-                        isSelected ? 'bg-emerald-50/80 font-medium' : 'hover:bg-slate-50'
+                        isSelected ? 'bg-blue-50/80 font-medium' : 'hover:bg-slate-50'
                       }`}
                       title="Klik untuk pusatkan peta ke fasilitas ini"
                     >
@@ -2665,7 +2665,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           <span className="text-base">{f.icon}</span>
                           <span>{f.nama}</span>
                           {isSelected && (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-600 text-white font-black tracking-wide">
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-600 text-white font-black tracking-wide">
                               Terpilih
                             </span>
                           )}
@@ -2676,8 +2676,8 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       <td className="py-3 px-4 font-medium text-slate-800">{f.pic}</td>
                       <td className="py-3 px-4 font-mono text-slate-600">{f.jam}</td>
                       <td className="py-3 px-4 text-right">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">
+                          <CheckCircle2 className="w-3 h-3 text-blue-600" />
                           <span>Terawat & Aktif</span>
                         </span>
                       </td>
@@ -2701,7 +2701,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   }}
                   className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                     isSelected
-                      ? 'bg-emerald-50/90 border-emerald-500 shadow-xs ring-2 ring-emerald-500/20'
+                      ? 'bg-blue-50/90 border-blue-500 shadow-xs ring-2 ring-blue-500/20'
                       : 'bg-white border-slate-200 hover:border-slate-300'
                   }`}
                 >
@@ -2709,7 +2709,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                     <span className="text-2xl p-2 rounded-xl bg-slate-50 border border-slate-100">{f.icon}</span>
                     <div>
                       <div className="font-black text-xs text-slate-900">{f.nama}</div>
-                      <div className="text-[11px] text-emerald-700 font-semibold">{f.tipe}</div>
+                      <div className="text-[11px] text-blue-700 font-semibold">{f.tipe}</div>
                       <div className="text-[10px] text-slate-500 mt-0.5">PIC: {f.pic} • {f.blok}</div>
                     </div>
                   </div>
@@ -2744,7 +2744,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
 
           <button
             onClick={() => setShowKasModal(true)}
-            className="px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md hover-glow shrink-0 cursor-pointer"
+            className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md hover-glow shrink-0 cursor-pointer"
           >
             <Plus className="w-5 h-5" /> Catat Transaksi Kas
           </button>
@@ -2753,9 +2753,9 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         {/* Ringkasan Saldo: Desktop 3-Card Grid vs Mobile Modern Wallet Card */}
         {/* Desktop View */}
         <div className="hidden sm:grid sm:grid-cols-3 gap-4 text-sm">
-          <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200">
+          <div className="p-5 rounded-2xl bg-blue-50 border border-blue-200">
             <div className="text-gray-600 font-medium">Total Iuran Masuk</div>
-            <div className="text-2xl font-black text-emerald-800 mt-2">
+            <div className="text-2xl font-black text-blue-800 mt-2">
               Rp {Number(kasData?.summary?.total_masuk || 25000).toLocaleString('id-ID')}
             </div>
           </div>
@@ -2777,12 +2777,12 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <div className="sm:hidden p-4 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Wallet className="w-4 h-4 text-emerald-600" />
+              <Wallet className="w-4 h-4 text-blue-600" />
               <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
                 Saldo Kas RT 01
               </span>
             </div>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
               Kas Aktif
             </span>
           </div>
@@ -2790,9 +2790,9 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             Rp {Number(kasData?.summary?.saldo || 0).toLocaleString('id-ID')}
           </div>
           <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
-            <div className="p-2.5 rounded-2xl bg-emerald-50/70 border border-emerald-100">
-              <span className="text-[10px] text-emerald-700 block font-medium">Total Masuk</span>
-              <span className="font-black text-emerald-800 font-mono text-xs">
+            <div className="p-2.5 rounded-2xl bg-blue-50/70 border border-blue-100">
+              <span className="text-[10px] text-blue-700 block font-medium">Total Masuk</span>
+              <span className="font-black text-blue-800 font-mono text-xs">
                 +Rp {Number(kasData?.summary?.total_masuk || 25000).toLocaleString('id-ID')}
               </span>
             </div>
@@ -2828,19 +2828,19 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   }
 
                   return paginatedKas.map((tx: any) => (
-                    <tr key={tx.id} className="hover:bg-emerald-50 transition-colors">
+                    <tr key={tx.id} className="hover:bg-blue-50 transition-colors">
                       <td className="p-4 font-mono text-gray-600">{new Date(tx.tanggal_transaksi).toLocaleDateString('id-ID')}</td>
                       <td className="p-4 font-bold text-gray-900">{tx.category?.nama_kategori || 'Kas RT'}</td>
                       <td className="p-4 text-gray-700">{tx.keterangan}</td>
                       <td className="p-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                          tx.tipe === 'Pemasukan' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-rose-50 text-rose-800 border-rose-200'
+                          tx.tipe === 'Pemasukan' ? 'bg-blue-50 text-blue-800 border-blue-200' : 'bg-rose-50 text-rose-800 border-rose-200'
                         }`}>
                           {tx.tipe}
                         </span>
                       </td>
                       <td className={`p-4 text-right font-bold font-mono text-base ${
-                        tx.tipe === 'Pemasukan' ? 'text-emerald-700' : 'text-rose-700'
+                        tx.tipe === 'Pemasukan' ? 'text-blue-700' : 'text-rose-700'
                       }`}>
                         {tx.tipe === 'Pemasukan' ? '+' : '-'} Rp {Number(tx.jumlah).toLocaleString('id-ID')}
                       </td>
@@ -2874,7 +2874,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-bold ${
-                        isMasuk ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
+                        isMasuk ? 'bg-blue-100 text-blue-700' : 'bg-rose-100 text-rose-700'
                       }`}>
                         {isMasuk ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
                       </div>
@@ -2884,7 +2884,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         </h4>
                         <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-slate-400 font-medium">
                           <span className={`px-1.5 py-0.5 rounded-md font-bold ${
-                            isMasuk ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'
+                            isMasuk ? 'bg-blue-50 text-blue-800' : 'bg-rose-50 text-rose-800'
                           }`}>
                             {tx.category?.nama_kategori || (isMasuk ? 'Pemasukan' : 'Pengeluaran')}
                           </span>
@@ -2897,7 +2897,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                     </div>
 
                     <div className={`text-right shrink-0 font-mono font-black text-xs ${
-                      isMasuk ? 'text-emerald-700' : 'text-rose-700'
+                      isMasuk ? 'text-blue-700' : 'text-rose-700'
                     }`}>
                       {isMasuk ? '+' : '-'} Rp {Number(tx.jumlah).toLocaleString('id-ID')}
                     </div>
@@ -2929,21 +2929,21 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
       {/* Top 4 Modular Stat Metric Cards (2x2 Grid di Mobile, 4-Col di Desktop) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         <MetricStatCard
-          title="Menunggu Validasi RT"
+          title="Menunggu Validasi"
           value={`${pendingSurats.length} Berkas`}
           subvalue="Perlu Tindakan"
           percentage={pendingSurats.length > 0 ? 55 : 100}
           color="amber"
-          trend="SLA Rata-rata < 15 Menit"
+          trend="Perlu ditinjau"
           isPositiveTrend={true}
         />
         <MetricStatCard
-          title="Total Warga RT 01"
+          title="Warga RT 01"
           value={`${wargas.length} Jiwa`}
           subvalue="Terdata Aktif"
           percentage={100}
-          color="emerald"
-          trend="Data SIAK"
+          color="blue"
+          trend="Terdata"
           isPositiveTrend={true}
         />
         <MetricStatCard
@@ -2951,17 +2951,17 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           value={`${completedSurats.length} Surat`}
           subvalue="Bulan Ini"
           percentage={surats.length > 0 ? Math.round((completedSurats.length / surats.length) * 100) : 100}
-          color="teal"
-          trend="100% Ditandatangani"
+          color="indigo"
+          trend="Ditandatangani"
           isPositiveTrend={true}
         />
         <MetricStatCard
           title="Partisipasi Warga"
           value="98.5%"
-          subvalue="Iuran Kas RT 01"
+          subvalue="Iuran kas"
           percentage={98}
           color="sky"
-          trend="Tertib BKU"
+          trend="Tercatat"
           isPositiveTrend={true}
         />
       </div>
@@ -2973,8 +2973,8 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           {/* Performance Overview Spline Area Chart (Hidden on mobile to reduce clutter) */}
           <div className="hidden lg:block space-y-5">
             <AreaSplineChart
-              title="Efisiensi Validasi & Alur Surat RT 01"
-              subtitle="Statistik Pelayanan Warga Lingkungan"
+              title="Validasi Surat RT"
+              subtitle="Ringkasan pelayanan"
               data={[
                 { label: 'Jan', value: 12, secondaryValue: 12, tooltipText: 'Surat Disetujui' },
                 { label: 'Feb', value: 18, secondaryValue: 17, tooltipText: 'Surat Disetujui' },
@@ -2986,7 +2986,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 { label: 'Agu', value: Math.max(45, surats.length * 3), secondaryValue: completedSurats.length, tooltipText: 'Surat Disetujui' },
               ]}
               highlightValue="99.2%"
-              highlightLabel="Tingkat Validasi Akurat RT 01"
+              highlightLabel="Validasi akurat"
               trendText="+15.4% vs bulan lalu"
             />
           </div>
@@ -2994,8 +2994,8 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="hidden lg:block">
               <BarActivityChart
-                title="Aktivitas Pelayanan Harian"
-                subtitle="Statistik Mingguan RT 01"
+                title="Aktivitas Pelayanan"
+                subtitle="Minggu ini"
                 data={[
                   { label: 'Sen', value: 14 },
                   { label: 'Sel', value: 22 },
@@ -3006,14 +3006,14 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   { label: 'Min', value: 10 },
                 ]}
                 mainValue="38.5 Jam"
-                mainLabel="Waktu Pelayanan Aktif Minggu Ini"
+                mainLabel="Waktu layanan"
               />
             </div>
 
             {/* Quick Action & Kas Shortcut Card */}
             <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+                <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
                   Panel Tindakan Cepat
                 </span>
                 <h4 className="text-sm font-black text-slate-900 mt-1">Aksi Cepat RT</h4>
@@ -3024,7 +3024,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                 <button
                   type="button"
                   onClick={() => setShowKasModal(true)}
-                  className="w-full p-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all press-down flex items-center justify-between cursor-pointer"
+                  className="w-full p-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-xs transition-all press-down flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
                     <Plus className="w-4 h-4" />
@@ -3047,7 +3047,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   className="w-full p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-600" />
+                    <Check className="w-4 h-4 text-blue-600" />
                     <span>Periksa permohonan</span>
                   </span>
                   <span className="text-[10px] font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
@@ -3064,13 +3064,13 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       handleSetActiveTab('warga');
                     }
                   }}
-                  className="w-full p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 text-emerald-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                  className="w-full p-3 rounded-2xl bg-blue-50 hover:bg-blue-100/80 border border-blue-200 text-blue-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-emerald-700" />
+                    <Users className="w-4 h-4 text-blue-700" />
                     <span>Data warga</span>
                   </span>
-                  <span className="text-[10px] font-black text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-black text-blue-800 bg-blue-200/60 px-2 py-0.5 rounded-full">
                     {wargas.length} Jiwa
                   </span>
                 </button>
@@ -3084,10 +3084,10 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           {/* Ketua RT Profile Card */}
           <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
                 Profil Pejabat Lingkungan
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-200">
                 ● Aktif Menjabat
               </span>
             </div>
@@ -3096,14 +3096,14 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               <UserAvatar
                 src={user?.avatar}
                 name={user?.name}
-                className="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-400 shadow-xs shrink-0"
-                fallbackClassName="w-14 h-14 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
+                className="w-14 h-14 rounded-2xl object-cover border-2 border-blue-400 shadow-xs shrink-0"
+                fallbackClassName="w-14 h-14 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
               />
               <div className="min-w-0 flex-1">
                 <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
                   {user?.name || 'Bambang Utomo'}
                 </h4>
-                <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
+                <div className="text-[11px] text-blue-700 font-extrabold mt-0.5">
                   Ketua Rukun Tetangga (RT 01)
                 </div>
                 <div className="text-[10px] font-mono text-slate-400 truncate">
@@ -3123,7 +3123,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               </div>
               <div className="flex justify-between items-center text-[11px]">
                 <span className="text-slate-400 font-bold">Otoritas Validasi:</span>
-                <span className="text-emerald-700 font-black">Level 1 (Pengantar RT)</span>
+                <span className="text-blue-700 font-black">Level 1 (Pengantar RT)</span>
               </div>
             </div>
           </div>
@@ -3138,7 +3138,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <button
           onClick={() => handleSetActiveTab('antrean')}
           className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all press-down ${
-            activeTab === 'antrean' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            activeTab === 'antrean' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
           }`}
         >
           Antrean Surat ({surats.length})
@@ -3146,7 +3146,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <button
           onClick={() => handleSetActiveTab('warga')}
           className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all press-down ${
-            activeTab === 'warga' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            activeTab === 'warga' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
           }`}
         >
           Data Kependudukan ({wargas.length})
@@ -3154,7 +3154,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <button
           onClick={() => handleSetActiveTab('kas')}
           className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all press-down ${
-            activeTab === 'kas' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            activeTab === 'kas' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
           }`}
         >
           Pembukuan Kas & Iuran
@@ -3162,7 +3162,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <button
           onClick={() => handleSetActiveTab('konfirmasi_warga')}
           className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all press-down flex items-center gap-1.5 ${
-            activeTab === 'konfirmasi_warga' ? 'bg-emerald-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            activeTab === 'konfirmasi_warga' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
           }`}
         >
           <span>Konfirmasi Warga Baru</span>
@@ -3205,7 +3205,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   </tr>
                 ) : (
                   surats.map((s, idx) => (
-                    <tr key={s.id} className="group hover:bg-emerald-50 transition-colors" style={{ animationDelay: `${(idx + 1) * 50}ms` }}>
+                    <tr key={s.id} className="group hover:bg-blue-50 transition-colors" style={{ animationDelay: `${(idx + 1) * 50}ms` }}>
                       <td className="py-3 px-3 sm:px-4 font-mono font-bold text-xs text-gray-700 whitespace-nowrap">
                         {s.nomor_resi}
                       </td>
@@ -3214,7 +3214,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         <div className="text-[11px] text-gray-500 font-mono mt-0.5">NIK: {s.warga_profile?.nik}</div>
                       </td>
                       <td className="py-3 px-3 sm:px-4">
-                        <div className="font-bold text-emerald-800 text-xs leading-snug max-w-[160px] line-clamp-2">{s.surat_type?.nama_surat}</div>
+                        <div className="font-bold text-blue-800 text-xs leading-snug max-w-[160px] line-clamp-2">{s.surat_type?.nama_surat}</div>
                       </td>
                       <td className="py-3 px-3 sm:px-4 text-gray-600 text-xs max-w-[140px] truncate" title={s.keperluan}>{s.keperluan}</td>
                       <td className="py-3 px-3 sm:px-4 whitespace-nowrap">
@@ -3228,7 +3228,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors press-down flex items-center gap-1 cursor-pointer shadow-2xs"
                             title="Lihat Detail & Foto Berkas Lampiran"
                           >
-                            <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                            <Eye className="w-3.5 h-3.5 text-blue-600" />
                             <span>Detail</span>
                           </button>
 
@@ -3240,7 +3240,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                                   setApproveCatatan('Data warga valid dan terdaftar resmi di RT 01.');
                                 }}
                                 disabled={isProcessing}
-                                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-all shadow-xs press-down flex items-center gap-1 cursor-pointer whitespace-nowrap"
+                                className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-xs press-down flex items-center gap-1 cursor-pointer whitespace-nowrap"
                                 title="ACC & Teruskan ke Kantor Desa"
                               >
                                 <Check className="w-3.5 h-3.5" />
@@ -3260,7 +3260,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                               Ditolak
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-emerald-800 text-xs font-bold bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200/80 shadow-2xs whitespace-nowrap">
+                            <span className="inline-flex items-center gap-1 text-blue-800 text-xs font-bold bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200/80 shadow-2xs whitespace-nowrap">
                               {s.status === 'completed' ? 'Dokumen Sah' : 'Disetujui RT 01'}
                             </span>
                           )}
@@ -3307,12 +3307,12 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           NIK: {s.warga_profile?.nik}
                         </span>
                       </div>
-                      <span className="px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 text-[10px] font-extrabold border border-emerald-200 shrink-0">
+                      <span className="px-2 py-0.5 rounded-lg bg-blue-50 text-blue-800 text-[10px] font-extrabold border border-blue-200 shrink-0">
                         {s.surat_type?.kode_surat || 'SURAT'}
                       </span>
                     </div>
 
-                    <div className="font-bold text-xs text-emerald-900">
+                    <div className="font-bold text-xs text-blue-900">
                       {s.surat_type?.nama_surat}
                     </div>
 
@@ -3332,7 +3332,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       onClick={() => setPreviewSurat(s)}
                       className="flex-1 py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs press-down"
                     >
-                      <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                      <Eye className="w-3.5 h-3.5 text-blue-600" />
                       <span>Detail</span>
                     </button>
 
@@ -3345,7 +3345,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                             setApproveCatatan('Data warga valid dan terdaftar resmi di RT 01.');
                           }}
                           disabled={isProcessing}
-                          className="flex-1 py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs transition-all shadow-xs press-down flex items-center justify-center gap-1 cursor-pointer"
+                          className="flex-1 py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-xs press-down flex items-center justify-center gap-1 cursor-pointer"
                         >
                           <Check className="w-3.5 h-3.5" />
                           <span>ACC</span>
@@ -3364,7 +3364,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         Ditolak
                       </span>
                     ) : (
-                      <span className="px-3 py-2 rounded-xl text-emerald-800 text-xs font-bold bg-emerald-50 border border-emerald-200 text-center flex-1">
+                      <span className="px-3 py-2 rounded-xl text-blue-800 text-xs font-bold bg-blue-50 border border-blue-200 text-center flex-1">
                         {s.status === 'completed' ? 'Dokumen Sah' : 'Disetujui RT'}
                       </span>
                     )}
@@ -3400,21 +3400,21 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   <tr><td colSpan={5} className="p-8 text-center text-gray-400">Belum ada data warga terdaftar</td></tr>
                 ) : (
                   wargas.map((w, idx) => (
-                    <tr key={w.id} className="hover:bg-emerald-50 transition-colors animate-fade-in" style={{ animationDelay: `${(idx + 1) * 50}ms` }}>
+                    <tr key={w.id} className="hover:bg-blue-50 transition-colors animate-fade-in" style={{ animationDelay: `${(idx + 1) * 50}ms` }}>
                       <td className="py-3 px-4 font-bold text-gray-900 text-xs sm:text-sm">{w.nama_lengkap}</td>
                       <td className="py-3 px-4 font-mono text-xs text-gray-600">
                         <div>NIK: {w.nik}</div>
                         <div className="text-[10px] text-gray-400 mt-0.5">KK: {w.kartu_keluarga?.no_kk || '-'}</div>
                       </td>
-                      <td className="py-3 px-4 font-mono text-emerald-800 font-medium text-xs">
+                      <td className="py-3 px-4 font-mono text-blue-800 font-medium text-xs">
                         {w.no_hp_wa ? (
                           <a
                             href={`https://wa.me/${w.no_hp_wa.replace(/\D/g, '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 hover:underline text-emerald-700"
+                            className="inline-flex items-center gap-1 hover:underline text-blue-700"
                           >
-                            <Phone className="w-3 h-3 text-emerald-600" />
+                            <Phone className="w-3 h-3 text-blue-600" />
                             <span>{w.no_hp_wa}</span>
                           </a>
                         ) : '-'}
@@ -3458,7 +3458,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                     <span className={`px-2 py-0.5 rounded-full text-[9px] font-extrabold shrink-0 ${
                       w.status_ekonomi?.toLowerCase().includes('pkh')
                         ? 'bg-amber-100 text-amber-900 border border-amber-200'
-                        : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                        : 'bg-blue-50 text-blue-800 border border-blue-200'
                     }`}>
                       {w.status_ekonomi}
                     </span>
@@ -3471,9 +3471,9 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         href={`https://wa.me/${w.no_hp_wa.replace(/\D/g, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-lg border border-emerald-200"
+                        className="inline-flex items-center gap-1 text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-lg border border-blue-200"
                       >
-                        <Phone className="w-3 h-3 text-emerald-600" />
+                        <Phone className="w-3 h-3 text-blue-600" />
                         <span>WhatsApp</span>
                       </a>
                     ) : (
@@ -3498,7 +3498,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
 
             <button
               onClick={() => setShowKasModal(true)}
-              className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover-lift press-down hover-glow shrink-0 cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md hover-lift press-down hover-glow shrink-0 cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Catat Transaksi Kas
             </button>
@@ -3506,9 +3506,9 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
 
           {/* Ringkasan Saldo: Desktop 3 Cards vs Mobile Wallet Card */}
           <div className="hidden sm:grid sm:grid-cols-3 gap-4 text-sm">
-            <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200 hover-lift transition-all">
+            <div className="p-5 rounded-2xl bg-blue-50 border border-blue-200 hover-lift transition-all">
               <div className="text-gray-600 font-medium">Total Iuran Masuk</div>
-              <div className="text-2xl font-black text-emerald-800 mt-2">
+              <div className="text-2xl font-black text-blue-800 mt-2">
                 Rp {Number(kasData?.summary?.total_masuk || 25000).toLocaleString('id-ID')}
               </div>
             </div>
@@ -3530,12 +3530,12 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           <div className="sm:hidden p-4 rounded-3xl bg-white border border-slate-200/90 shadow-xs space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Wallet className="w-4 h-4 text-emerald-600" />
+                <Wallet className="w-4 h-4 text-blue-600" />
                 <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wider">
                   Saldo Kas RT 01
                 </span>
               </div>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
                 Kas Aktif
               </span>
             </div>
@@ -3543,9 +3543,9 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               Rp {Number(kasData?.summary?.saldo || 0).toLocaleString('id-ID')}
             </div>
             <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-100 text-xs">
-              <div className="p-2.5 rounded-2xl bg-emerald-50/70 border border-emerald-100">
-                <span className="text-[10px] text-emerald-700 block font-medium">Total Masuk</span>
-                <span className="font-black text-emerald-800 font-mono text-xs">
+              <div className="p-2.5 rounded-2xl bg-blue-50/70 border border-blue-100">
+                <span className="text-[10px] text-blue-700 block font-medium">Total Masuk</span>
+                <span className="font-black text-blue-800 font-mono text-xs">
                   +Rp {Number(kasData?.summary?.total_masuk || 25000).toLocaleString('id-ID')}
                 </span>
               </div>
@@ -3573,19 +3573,19 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               <tbody className="divide-y divide-gray-100 bg-white">
                 {kasData?.transactions && kasData.transactions.length > 0 ? (
                   kasData.transactions.map((tx: any, idx: number) => (
-                    <tr key={tx.id} className="hover:bg-emerald-50 transition-colors animate-fade-in" style={{ animationDelay: `${(idx + 1) * 50}ms` }}>
+                    <tr key={tx.id} className="hover:bg-blue-50 transition-colors animate-fade-in" style={{ animationDelay: `${(idx + 1) * 50}ms` }}>
                       <td className="p-4 font-mono text-gray-600">{new Date(tx.tanggal_transaksi).toLocaleDateString('id-ID')}</td>
                       <td className="p-4 font-bold text-gray-900">{tx.category?.nama_kategori || 'Kas RT'}</td>
                       <td className="p-4 text-gray-700">{tx.keterangan}</td>
                       <td className="p-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
-                          tx.tipe === 'Pemasukan' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-rose-50 text-rose-800 border-rose-200'
+                          tx.tipe === 'Pemasukan' ? 'bg-blue-50 text-blue-800 border-blue-200' : 'bg-rose-50 text-rose-800 border-rose-200'
                         }`}>
                           {tx.tipe}
                         </span>
                       </td>
                       <td className={`p-4 text-right font-bold font-mono text-base ${
-                        tx.tipe === 'Pemasukan' ? 'text-emerald-700' : 'text-rose-700'
+                        tx.tipe === 'Pemasukan' ? 'text-blue-700' : 'text-rose-700'
                       }`}>
                         {tx.tipe === 'Pemasukan' ? '+' : '-'} Rp {Number(tx.jumlah).toLocaleString('id-ID')}
                       </td>
@@ -3610,7 +3610,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-bold ${
-                        isMasuk ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
+                        isMasuk ? 'bg-blue-100 text-blue-700' : 'bg-rose-100 text-rose-700'
                       }`}>
                         {isMasuk ? <ArrowDownLeft className="w-5 h-5" /> : <ArrowUpRight className="w-5 h-5" />}
                       </div>
@@ -3620,7 +3620,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                         </h4>
                         <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-slate-400 font-medium">
                           <span className={`px-1.5 py-0.5 rounded-md font-bold ${
-                            isMasuk ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'
+                            isMasuk ? 'bg-blue-50 text-blue-800' : 'bg-rose-50 text-rose-800'
                           }`}>
                             {tx.category?.nama_kategori || (isMasuk ? 'Pemasukan' : 'Pengeluaran')}
                           </span>
@@ -3633,7 +3633,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                     </div>
 
                     <div className={`text-right shrink-0 font-mono font-black text-xs ${
-                      isMasuk ? 'text-emerald-700' : 'text-rose-700'
+                      isMasuk ? 'text-blue-700' : 'text-rose-700'
                     }`}>
                       {isMasuk ? '+' : '-'} Rp {Number(tx.jumlah).toLocaleString('id-ID')}
                     </div>
@@ -3654,7 +3654,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
         <div className="card-surface p-4 sm:p-6 space-y-4 animate-fade-up">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-gray-100">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">
+              <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">
                 Verifikasi Mandiri Lingkungan RT 01
               </div>
               <h3 className="text-lg font-black text-slate-900">
@@ -3670,8 +3670,8 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
           </div>
 
           {verifyWargaAlert && (
-            <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-semibold flex items-center gap-2 animate-in fade-in">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+            <div className="p-4 rounded-2xl bg-blue-50 border border-blue-300 text-blue-900 text-xs font-semibold flex items-center gap-2 animate-in fade-in">
+              <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
               <span>{verifyWargaAlert}</span>
             </div>
           )}
@@ -3687,7 +3687,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
               {pendingWargas.map((w) => (
                 <div
                   key={w.id}
-                  className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-emerald-300 transition space-y-4"
+                  className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs hover:border-blue-300 transition space-y-4"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -3720,9 +3720,9 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                       href={`https://wa.me/62${w.no_hp_wa.replace(/^0/, '')}?text=Halo%20${encodeURIComponent(w.nama)},%20saya%20Ketua%20RT%2001%20Krajan%20mengenai%20pendaftaran%20warga%20Anda.`}
                       target="_blank"
                       rel="noreferrer"
-                      className="px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl bg-blue-50 text-blue-800 hover:bg-blue-100 border border-blue-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
                     >
-                      <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                      <Phone className="w-3.5 h-3.5 text-blue-600" />
                       <span>Hubungi WhatsApp</span>
                     </a>
 
@@ -3749,7 +3749,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
                           setVerifyWargaAlert(`Sukses: ${w.nama} resmi diverifikasi dan disahkan sebagai warga RT 01! Data telah diteruskan ke Sekdes.`);
                           setTimeout(() => setVerifyWargaAlert(null), 4500);
                         }}
-                        className="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1 cursor-pointer"
+                        className="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1 cursor-pointer"
                       >
                         <Check className="w-3.5 h-3.5" />
                         <span>Verifikasi & Sahkan</span>

@@ -208,12 +208,12 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
         <div
           className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium transition-all ${
             notification.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
+              ? 'bg-blue-50 border-blue-300 text-blue-900'
               : 'bg-rose-50 border-rose-300 text-rose-900'
           }`}
         >
           {notification.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
           ) : (
             <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
           )}
@@ -262,7 +262,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
             {/* 1. Identitas Wilayah */}
             <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-6 space-y-4">
               <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shrink-0 border border-emerald-100">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold shrink-0 border border-blue-100">
                   <Building2 className="w-4 h-4" />
                 </div>
                 <div>
@@ -282,7 +282,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.nama_desa}
                     onChange={(e) => setFormData({ ...formData, nama_desa: e.target.value })}
                     placeholder="Contoh: Desa Sukorejo"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -296,7 +296,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.kode_desa}
                     onChange={(e) => setFormData({ ...formData, kode_desa: e.target.value })}
                     placeholder="Contoh: 35.06.04.2002"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -310,7 +310,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.kecamatan}
                     onChange={(e) => setFormData({ ...formData, kecamatan: e.target.value })}
                     placeholder="Contoh: Kecamatan Ngasem"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -324,7 +324,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.kabupaten}
                     onChange={(e) => setFormData({ ...formData, kabupaten: e.target.value })}
                     placeholder="Contoh: Kabupaten Kediri"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -337,7 +337,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.provinsi}
                     onChange={(e) => setFormData({ ...formData, provinsi: e.target.value })}
                     placeholder="Jawa Timur"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -350,7 +350,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.kode_pos}
                     onChange={(e) => setFormData({ ...formData, kode_pos: e.target.value })}
                     placeholder="64182"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -363,7 +363,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.alamat_kantor}
                     onChange={(e) => setFormData({ ...formData, alamat_kantor: e.target.value })}
                     placeholder="Contoh: Jl. Sukorejo No. 01, Kec. Ngasem, Kab. Kediri"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -376,7 +376,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.telepon}
                     onChange={(e) => setFormData({ ...formData, telepon: e.target.value })}
                     placeholder="Contoh: 0354-689999 / 08123456789"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -389,7 +389,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="Contoh: pemdes.sukorejo@kedirikab.go.id"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -402,7 +402,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.website}
                     onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                     placeholder="Contoh: https://sukorejo.desa.id"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
               </div>
@@ -431,7 +431,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.admin_name}
                     onChange={(e) => setFormData({ ...formData, admin_name: e.target.value })}
                     placeholder="Contoh: Admin Desa Sukorejo"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -445,7 +445,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.admin_username}
                     onChange={(e) => setFormData({ ...formData, admin_username: e.target.value })}
                     placeholder="Contoh: admin_sukorejo"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -459,7 +459,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.admin_email}
                     onChange={(e) => setFormData({ ...formData, admin_email: e.target.value })}
                     placeholder="Contoh: admin@sukorejo.desa.id"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
 
@@ -472,7 +472,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     value={formData.admin_password}
                     onChange={(e) => setFormData({ ...formData, admin_password: e.target.value })}
                     placeholder="password123"
-                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono font-medium focus:bg-white focus:outline-none focus:border-emerald-500 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-mono font-medium focus:bg-white focus:outline-none focus:border-blue-500 transition"
                   />
                 </div>
               </div>
@@ -503,7 +503,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
               <button
                 type="submit"
                 disabled={submitting}
-                className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs sm:text-sm font-bold transition shadow-xs disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full sm:w-auto px-6 py-3 sm:py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs sm:text-sm font-bold transition shadow-xs disabled:opacity-60 flex items-center justify-center gap-2 cursor-pointer"
               >
                 {submitting ? (
                   <>
@@ -556,7 +556,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                   setViewMode('create');
                   onNavigate?.('tambah_desa');
                 }}
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold transition shadow-xs cursor-pointer"
+                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold transition shadow-xs cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
                 <span>Daftarkan Desa Baru</span>
@@ -571,13 +571,13 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                 <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Total Tenant Desa
                 </span>
-                <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100 shrink-0">
-                  <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
+                <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100 shrink-0">
+                  <Building2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 </div>
               </div>
               <div className="mt-2 sm:mt-3 flex items-baseline gap-1.5 sm:gap-2 flex-wrap">
                 <span className="text-xl sm:text-3xl font-extrabold text-slate-900">{stats.total}</span>
-                <span className="text-[10px] sm:text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] sm:text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
                   {stats.active} Aktif
                 </span>
               </div>
@@ -645,7 +645,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
               </div>
               <div className="mt-2 sm:mt-3 flex items-baseline gap-1.5 sm:gap-2 flex-wrap">
                 <span className="text-xl sm:text-3xl font-extrabold text-slate-900">100%</span>
-                <span className="text-[10px] sm:text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] sm:text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
                   Ketat
                 </span>
               </div>
@@ -662,7 +662,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Cari nama desa, kode desa, kecamatan..."
-                className="w-full pl-10 pr-4 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/10 transition"
+                className="w-full pl-10 pr-4 py-2.5 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition"
               />
             </div>
 
@@ -675,7 +675,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     onClick={() => setFilterActive(f)}
                     className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer text-center ${
                       filterActive === f
-                        ? 'bg-emerald-600 text-white shadow-2xs'
+                        ? 'bg-blue-600 text-white shadow-2xs'
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
                     }`}
                   >
@@ -704,14 +704,14 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                         <span
                           className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
                             desa.is_active
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'bg-blue-100 text-blue-800'
                               : 'bg-rose-100 text-rose-800'
                           }`}
                         >
                           {desa.is_active ? '● Aktif' : '○ Non-Aktif'}
                         </span>
                       </div>
-                      <h3 className="text-base font-bold text-slate-900 mt-1.5 group-hover:text-emerald-700 transition truncate">
+                      <h3 className="text-base font-bold text-slate-900 mt-1.5 group-hover:text-blue-700 transition truncate">
                         {desa.nama_desa}
                       </h3>
                       <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5 truncate">
@@ -719,7 +719,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                         <span className="truncate">{desa.kecamatan}, {desa.kabupaten}</span>
                       </p>
                     </div>
-                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-sm shrink-0 border border-emerald-100">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold text-sm shrink-0 border border-blue-100">
                       <Building2 className="w-5 h-5" />
                     </div>
                   </div>
@@ -783,7 +783,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
                     className={`flex-1 inline-flex items-center justify-center gap-1 px-3 py-2 sm:py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer shadow-2xs ${
                       desa.is_active
                         ? 'border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800'
-                        : 'border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800'
+                        : 'border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-800'
                     }`}
                   >
                     <span>{desa.is_active ? 'Nonaktifkan' : 'Aktifkan'}</span>
@@ -816,7 +816,7 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
           <div className="bg-white rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl border border-slate-100 space-y-4 my-auto">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold shrink-0">
+                <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold shrink-0">
                   <Building2 className="w-5 h-5" />
                 </div>
                 <div>
@@ -862,8 +862,8 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
               </div>
 
               {selectedDesa.setting && (
-                <div className="p-3 rounded-2xl bg-emerald-50/80 border border-emerald-100 space-y-1">
-                  <span className="text-emerald-800 font-bold">Pejabat Utama Desa:</span>
+                <div className="p-3 rounded-2xl bg-blue-50/80 border border-blue-100 space-y-1">
+                  <span className="text-blue-800 font-bold">Pejabat Utama Desa:</span>
                   <div className="grid grid-cols-2 gap-2 mt-1">
                     <div>
                       <span className="text-slate-500 text-[11px]">Kepala Desa:</span>

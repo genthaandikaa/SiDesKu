@@ -8,7 +8,7 @@ interface AgendaItem {
   time?: string;
   category?: string;
   location?: string;
-  color?: 'emerald' | 'amber' | 'sky';
+  color?: 'blue' | 'amber' | 'sky';
 }
 
 interface MiniCalendarWidgetProps {
@@ -27,7 +27,7 @@ export const MiniCalendarWidget: React.FC<MiniCalendarWidgetProps> = ({
       time: '08.30 WIB',
       category: 'Kesehatan',
       location: 'Poskesdes Doko',
-      color: 'emerald',
+      color: 'blue',
     },
     {
       id: '2',
@@ -82,7 +82,7 @@ export const MiniCalendarWidget: React.FC<MiniCalendarWidgetProps> = ({
       {/* Calendar Header with Navigation */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-emerald-100/80 text-emerald-700 flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-blue-100/80 text-blue-700 flex items-center justify-center font-bold">
             <CalendarIcon className="w-4 h-4" />
           </div>
           <div>
@@ -143,15 +143,15 @@ export const MiniCalendarWidget: React.FC<MiniCalendarWidgetProps> = ({
                 onClick={() => setSelectedDay(dayNum)}
                 className={`relative py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer flex flex-col items-center justify-center ${
                   isSelected
-                    ? 'bg-emerald-600 text-white shadow-xs scale-105'
+                    ? 'bg-blue-600 text-white shadow-xs scale-105'
                     : isToday
-                    ? 'bg-emerald-100 text-emerald-900 font-black'
+                    ? 'bg-blue-100 text-blue-900 font-black'
                     : 'text-slate-700 hover:bg-slate-100'
                 }`}
               >
                 <span>{dayNum}</span>
                 {hasEvent && !isSelected && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-0.5" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-0.5" />
                 )}
               </button>
             );
@@ -177,20 +177,20 @@ export const MiniCalendarWidget: React.FC<MiniCalendarWidgetProps> = ({
             if (str.includes('sosial') || str.includes('bansos') || str.includes('pkh') || str.includes('blt')) {
               return <HandHeart className="w-3.5 h-3.5 text-amber-500 shrink-0" />;
             }
-            return <CalendarIcon className="w-3.5 h-3.5 text-emerald-500 shrink-0" />;
+            return <CalendarIcon className="w-3.5 h-3.5 text-blue-500 shrink-0" />;
           };
 
           return (
             <div
               key={a.id}
-              className="p-2.5 rounded-2xl bg-slate-50 hover:bg-emerald-50/50 border border-slate-100 hover:border-emerald-200 transition-all space-y-1 text-xs"
+              className="p-2.5 rounded-2xl bg-slate-50 hover:bg-blue-50/50 border border-slate-100 hover:border-blue-200 transition-all space-y-1 text-xs"
             >
               <div className="flex items-center justify-between">
                 <span className="font-extrabold text-slate-900 truncate pr-2 flex items-center gap-1.5">
                   {getCategoryIcon(a.category, a.title)}
                   <span className="truncate">{a.title}</span>
                 </span>
-                <span className="text-[9px] font-black text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-md shrink-0">
+                <span className="text-[9px] font-black text-blue-800 bg-blue-100/80 px-2 py-0.5 rounded-md shrink-0">
                   Tgl {a.date}
                 </span>
               </div>

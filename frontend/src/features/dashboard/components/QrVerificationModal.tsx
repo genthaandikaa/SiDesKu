@@ -428,12 +428,12 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
         {/* Modal Header */}
         <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/90 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold shadow-xs">
+            <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold shadow-xs">
               <QrCode className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-600 text-white shadow-2xs">
+                <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-blue-600 text-white shadow-2xs">
                   Petugas Desa / Admin
                 </span>
                 <span className="text-[10px] text-slate-400 font-mono">Pemdes Doko</span>
@@ -468,7 +468,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
           {/* TAB 1: LIVE CAMERA SCANNER */}
           {activeTab === 'camera' && !surat && !loading && (
             <div className="space-y-4">
-              <div className="relative w-full aspect-4/3 sm:aspect-16/10 bg-slate-950 rounded-3xl overflow-hidden shadow-inner border-2 border-emerald-500/80 flex items-center justify-center">
+              <div className="relative w-full aspect-4/3 sm:aspect-16/10 bg-slate-950 rounded-3xl overflow-hidden shadow-inner border-2 border-blue-500/80 flex items-center justify-center">
                 
                 {/* Live Video Feed */}
                 <video
@@ -483,18 +483,18 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                 {cameraActive && (
                   <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center p-6">
                     {/* Viewfinder Target Box */}
-                    <div className="relative w-56 h-56 sm:w-64 sm:h-64 border-2 border-emerald-400/90 rounded-3xl shadow-2xl bg-emerald-950/10 backdrop-blur-[1px] flex items-center justify-center">
+                    <div className="relative w-56 h-56 sm:w-64 sm:h-64 border-2 border-blue-400/90 rounded-3xl shadow-2xl bg-blue-950/10 backdrop-blur-[1px] flex items-center justify-center">
                       {/* Corner Target Markers */}
-                      <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-emerald-400 rounded-tl-xl" />
-                      <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-emerald-400 rounded-tr-xl" />
-                      <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-emerald-400 rounded-bl-xl" />
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-emerald-400 rounded-br-xl" />
+                      <div className="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-blue-400 rounded-tl-xl" />
+                      <div className="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-blue-400 rounded-tr-xl" />
+                      <div className="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-blue-400 rounded-bl-xl" />
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-blue-400 rounded-br-xl" />
 
                       {/* Moving Red/Green Laser Line */}
-                      <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_12px_#34d399] animate-pulse" />
+                      <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent shadow-[0_0_12px_#60a5fa] animate-pulse" />
                     </div>
 
-                    <div className="mt-4 px-3 py-1.5 rounded-full bg-slate-950/80 text-emerald-300 text-[11px] font-bold tracking-wide backdrop-blur-md shadow-md border border-emerald-500/30">
+                    <div className="mt-4 px-3 py-1.5 rounded-full bg-slate-950/80 text-blue-300 text-[11px] font-bold tracking-wide backdrop-blur-md shadow-md border border-blue-500/30">
                       Mengarahkan kamera ke QR Code...
                     </div>
                   </div>
@@ -523,7 +523,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                       <button
                         type="button"
                         onClick={() => directMobileCameraRef.current?.click()}
-                        className="w-full px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer press-down"
+                        className="w-full px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer press-down"
                       >
                         <Camera className="w-4 h-4" />
                         <span>Buka Kamera HP & Jepret QR</span>
@@ -573,9 +573,9 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                 <button
                   type="button"
                   onClick={() => directMobileCameraRef.current?.click()}
-                  className="p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-300 text-emerald-900 font-extrabold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs"
+                  className="p-3 rounded-2xl bg-blue-50 hover:bg-blue-100/80 border border-blue-300 text-blue-900 font-extrabold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs"
                 >
-                  <Camera className="w-4 h-4 text-emerald-700" />
+                  <Camera className="w-4 h-4 text-blue-700" />
                   <span>Jepret QR Kamera HP</span>
                 </button>
                 <button
@@ -593,8 +593,8 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
           {/* TAB 2: SCAN DARI FOTO / BERKAS GAMBAR */}
           {activeTab === 'photo' && !surat && !loading && (
             <div className="space-y-4">
-              <label className="block p-8 rounded-3xl border-2 border-dashed border-emerald-300 hover:border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50/70 transition-all text-center cursor-pointer space-y-3 group">
-                <div className="w-14 h-14 rounded-2xl bg-white shadow-xs text-emerald-700 flex items-center justify-center mx-auto group-hover:scale-105 transition-transform">
+              <label className="block p-8 rounded-3xl border-2 border-dashed border-blue-300 hover:border-blue-500 bg-blue-50/40 hover:bg-blue-50/70 transition-all text-center cursor-pointer space-y-3 group">
+                <div className="w-14 h-14 rounded-2xl bg-white shadow-xs text-blue-700 flex items-center justify-center mx-auto group-hover:scale-105 transition-transform">
                   <ImageIcon className="w-7 h-7" />
                 </div>
                 <div>
@@ -605,7 +605,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                     Mendukung format PNG, JPG, JPEG, WEBP langsung dari galeri atau berkas komputer/HP.
                   </p>
                 </div>
-                <span className="inline-block px-4 py-2 rounded-xl bg-emerald-700 text-white font-extrabold text-xs shadow-xs group-hover:bg-emerald-800 transition-colors">
+                <span className="inline-block px-4 py-2 rounded-xl bg-blue-700 text-white font-extrabold text-xs shadow-xs group-hover:bg-blue-800 transition-colors">
                   Jelajahi File Foto...
                 </span>
                 <input
@@ -626,7 +626,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                   <div className="text-xs text-slate-600">
                     <div className="font-black text-slate-900 flex items-center gap-2">
                       <span>Foto Berhasil Diunggah</span>
-                      {isDecodingPhoto && <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />}
+                      {isDecodingPhoto && <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-600" />}
                     </div>
                     <div className="text-[11px] text-slate-500 font-medium">
                       {isDecodingPhoto ? 'Sedang mendeteksi & mendekode matriks QR Code...' : 'Pemindaian selesai.'}
@@ -658,12 +658,12 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                     value={searchHash}
                     onChange={(e) => setSearchHash(e.target.value)}
                     placeholder="Contoh: REQ-20260818-XXX atau Kode Hash..."
-                    className="w-full pl-10 pr-24 py-2.5 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs"
+                    className="w-full pl-10 pr-24 py-2.5 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs"
                   />
                   <button
                     type="submit"
                     disabled={loading || !searchHash.trim()}
-                    className="absolute right-1.5 px-4 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl transition-all shadow-xs disabled:opacity-50 cursor-pointer"
+                    className="absolute right-1.5 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl transition-all shadow-xs disabled:opacity-50 cursor-pointer"
                   >
                     Verifikasi
                   </button>
@@ -675,7 +675,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                 <div className="space-y-2.5 pt-2 border-t border-slate-100">
                   <div className="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center justify-between">
                     <span>Arsip Dokumen Terdaftar:</span>
-                    <span className="text-[10px] text-emerald-700 font-bold">1-Klik Uji Langsung</span>
+                    <span className="text-[10px] text-blue-700 font-bold">1-Klik Uji Langsung</span>
                   </div>
 
                   <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
@@ -686,10 +686,10 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                           setSearchHash(item.nomor_resi);
                           handleVerify(item.nomor_resi);
                         }}
-                        className="p-3 rounded-2xl bg-slate-50 hover:bg-emerald-50/80 border border-slate-200 hover:border-emerald-300 transition-all cursor-pointer flex items-center justify-between group shadow-2xs"
+                        className="p-3 rounded-2xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200 hover:border-blue-300 transition-all cursor-pointer flex items-center justify-between group shadow-2xs"
                       >
                         <div className="space-y-0.5 min-w-0 pr-2">
-                          <div className="font-extrabold text-xs text-slate-900 group-hover:text-emerald-800 truncate">
+                          <div className="font-extrabold text-xs text-slate-900 group-hover:text-blue-800 truncate">
                             {item.surat_type?.nama_surat}
                           </div>
                           <div className="text-[11px] text-slate-500 truncate">
@@ -697,7 +697,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                           </div>
                         </div>
 
-                        <span className="shrink-0 text-[11px] font-extrabold text-emerald-700 bg-white px-2.5 py-1 rounded-xl border border-emerald-200 shadow-2xs group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                        <span className="shrink-0 text-[11px] font-extrabold text-blue-700 bg-white px-2.5 py-1 rounded-xl border border-blue-200 shadow-2xs group-hover:bg-blue-600 group-hover:text-white transition-all">
                           Uji Sah
                         </span>
                       </div>
@@ -711,7 +711,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
           {/* LOADING STATE */}
           {loading && (
             <div className="py-12 flex flex-col items-center justify-center text-slate-500 space-y-3 animate-fade-in">
-              <Loader2 className="w-10 h-10 animate-spin text-emerald-600" />
+              <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
               <p className="text-sm font-extrabold text-slate-900">Memverifikasi Tanda Tangan Digital...</p>
               <p className="text-[11px] text-slate-400 font-mono">Mengecek integritas kriptografi SHA-256 pada register desa</p>
             </div>
@@ -742,7 +742,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
               {/* Authenticity Certificate Header Banner (Clean White) */}
               <div className="p-5 rounded-3xl bg-white border border-slate-200/90 flex items-center justify-between gap-4 shadow-xs">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-14 h-14 rounded-2xl bg-white p-1.5 border border-emerald-200 flex items-center justify-center shrink-0 shadow-xs">
+                  <div className="w-14 h-14 rounded-2xl bg-white p-1.5 border border-blue-200 flex items-center justify-center shrink-0 shadow-xs">
                     <img 
                       src="/images/logo-kediri.png" 
                       alt="Kediri Shield" 
@@ -754,14 +754,14 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                     />
                   </div>
                   <div>
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-700 text-white font-black text-[10px] uppercase shadow-2xs">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-700 text-white font-black text-[10px] uppercase shadow-2xs">
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Dokumen Terverifikasi Sah</span>
                     </div>
-                    <h4 className="font-black text-sm text-emerald-950 mt-1">
+                    <h4 className="font-black text-sm text-blue-950 mt-1">
                       Terdaftar di Buku Register Arsip Desa
                     </h4>
-                    <p className="text-[11px] text-emerald-800 font-medium">
+                    <p className="text-[11px] text-blue-800 font-medium">
                       Pemerintah Desa Doko • Kec. Ngasem, Kab. Kediri
                     </p>
                   </div>
@@ -769,7 +769,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
 
                 <div className="hidden sm:block text-right">
                   <div className="text-[10px] font-bold text-slate-400 uppercase">Tanda Tangan QR:</div>
-                  <div className="text-xs font-mono font-black text-emerald-900">VALID ASLI</div>
+                  <div className="text-xs font-mono font-black text-blue-900">VALID ASLI</div>
                 </div>
               </div>
 
@@ -783,7 +783,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                   </div>
                   <div>
                     <span className="text-[10px] font-bold text-slate-400 uppercase">Nomor Registrasi Desa</span>
-                    <div className="font-mono font-bold text-emerald-800 text-xs mt-0.5">
+                    <div className="font-mono font-bold text-blue-800 text-xs mt-0.5">
                       {surat.nomor_surat_resmi || surat.nomor_resi}
                     </div>
                   </div>
@@ -808,7 +808,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-semibold">Pejabat Pengesah:</span>
-                    <span className="font-bold text-emerald-900">{desa?.nama_sekdes || 'Ahmad Fauzi, S.Kom'} (Sekretaris Desa)</span>
+                    <span className="font-bold text-blue-900">{desa?.nama_sekdes || 'Ahmad Fauzi, S.Kom'} (Sekretaris Desa)</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-500 font-semibold">Tanggal Pengesahan:</span>
@@ -821,7 +821,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                 {/* Verification Hash Stamp */}
                 <div className="pt-2 border-t border-slate-200 text-[10px] text-slate-500 font-mono break-all bg-white p-2.5 rounded-2xl border border-slate-200">
                   <div className="text-[9px] font-bold text-slate-400 uppercase mb-0.5">Hash Integritas Kriptografi (SHA-256):</div>
-                  <div className="text-emerald-800 font-bold">{surat.qr_verification_hash}</div>
+                  <div className="text-blue-800 font-bold">{surat.qr_verification_hash}</div>
                 </div>
 
               </div>
@@ -836,7 +836,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                     {surat.trackings.map((t, idx) => (
                       <div key={idx} className="p-3 rounded-2xl bg-white border border-slate-200 flex items-center justify-between text-xs">
                         <div className="flex items-center gap-2.5">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                           <div>
                             <span className="font-black text-slate-900">{t.status_stage}</span>
                             <span className="text-slate-500 text-[11px] ml-1.5">• {t.status_action}</span>
@@ -859,7 +859,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
             <button
               type="button"
               onClick={resetToScanAgain}
-              className="px-4 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+              className="px-4 py-2.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
             >
               <Camera className="w-3.5 h-3.5" />
               <span>Pindai Surat Lain</span>

@@ -13,8 +13,10 @@ return new class extends Migration
     public function up(): void
     {
         // 1. Modify enum columns to varchar(50) for robust state transitions
-        DB::statement("ALTER TABLE surat_requests MODIFY COLUMN status VARCHAR(50) NOT NULL DEFAULT 'pending_rt'");
-        DB::statement("ALTER TABLE surat_trackings MODIFY COLUMN status_action VARCHAR(50) NOT NULL");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE surat_requests MODIFY COLUMN status VARCHAR(50) NOT NULL DEFAULT 'pending_rt'");
+            DB::statement("ALTER TABLE surat_trackings MODIFY COLUMN status_action VARCHAR(50) NOT NULL");
+        }
 
         // 2. Add verification & snapshot columns to surat_requests
         Schema::table('surat_requests', function (Blueprint $table) {

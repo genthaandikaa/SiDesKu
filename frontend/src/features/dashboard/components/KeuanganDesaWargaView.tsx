@@ -139,7 +139,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
       anggaran: 80000000,
       realisasi: 76500000,
       persen: 95.6,
-      color: 'bg-emerald-600',
+      color: 'bg-blue-600',
       desc: 'Penghasilan aparatur desa, operasional balai desa, dan pelayanan surat warga.',
     },
     {
@@ -148,7 +148,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
       anggaran: 175000000,
       realisasi: 172500000,
       persen: 98.6,
-      color: 'bg-teal-600',
+      color: 'bg-indigo-600',
       desc: 'Irigasi sawah Dusun Doko 350m, rabat beton jalan tani RT 02, dan drainase pemukiman.',
     },
     {
@@ -211,7 +211,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
       <div className="bg-white p-5 sm:p-7 rounded-3xl border border-slate-200/90 shadow-2xs space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1.5 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-xs font-bold border border-emerald-200">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-bold border border-blue-200">
               <span>Transparansi Dana Desa {apbdesData?.nama_desa || 'Doko'} • Tahun {apbdesData?.tahun || 2026}</span>
             </div>
 
@@ -225,8 +225,8 @@ export const KeuanganDesaWargaView: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap md:flex-col items-start md:items-end gap-2 shrink-0">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-800 bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-200">
+              <CheckCircle2 className="w-4 h-4 text-blue-600" />
               <span>Disahkan BPD & Kades</span>
             </span>
             <span className="text-[11px] text-slate-400 font-medium">
@@ -242,10 +242,10 @@ export const KeuanganDesaWargaView: React.FC = () => {
         {/* Pilar 1: Uang Masuk (Pendapatan) */}
         <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-2xs space-y-3">
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
-              <ArrowDownRight className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
+              <ArrowDownRight className="w-5 h-5 text-blue-600" />
             </div>
-            <span className="text-[11px] font-black uppercase text-emerald-800 bg-emerald-100/70 px-2.5 py-0.5 rounded-full">
+            <span className="text-[11px] font-black uppercase text-blue-800 bg-blue-100/70 px-2.5 py-0.5 rounded-full">
               Tercapai {pctPendapatan}%
             </span>
           </div>
@@ -262,7 +262,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
           </div>
           <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
             <div 
-              className="bg-emerald-600 h-full rounded-full transition-all duration-700" 
+              className="bg-blue-600 h-full rounded-full transition-all duration-700" 
               style={{ width: `${Math.min(100, pctPendapatan)}%` }} 
             />
           </div>
@@ -274,10 +274,10 @@ export const KeuanganDesaWargaView: React.FC = () => {
         {/* Pilar 2: Uang Keluar (Belanja Kegiatan) */}
         <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-2xs space-y-3">
           <div className="flex items-center justify-between">
-            <div className="w-10 h-10 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center font-bold">
-              <ArrowUpRight className="w-5 h-5 text-teal-600" />
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold">
+              <ArrowUpRight className="w-5 h-5 text-indigo-600" />
             </div>
-            <span className="text-[11px] font-black uppercase text-teal-800 bg-teal-100/70 px-2.5 py-0.5 rounded-full">
+            <span className="text-[11px] font-black uppercase text-indigo-800 bg-indigo-100/70 px-2.5 py-0.5 rounded-full">
               Serapan {pctBelanja}%
             </span>
           </div>
@@ -294,7 +294,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
           </div>
           <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
             <div 
-              className="bg-teal-600 h-full rounded-full transition-all duration-700" 
+              className="bg-indigo-600 h-full rounded-full transition-all duration-700" 
               style={{ width: `${Math.min(100, pctBelanja)}%` }} 
             />
           </div>
@@ -327,8 +327,8 @@ export const KeuanganDesaWargaView: React.FC = () => {
           <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
             <div className="bg-indigo-600 h-full rounded-full w-full" />
           </div>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-700">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-700">
+            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
             <span>Kondisi keuangan desa sehat & aman</span>
           </div>
         </div>
@@ -347,7 +347,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
             </p>
           </div>
           <span className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200 self-start sm:self-auto">
-            <PieChart className="w-3.5 h-3.5 text-emerald-700" />
+            <PieChart className="w-3.5 h-3.5 text-blue-700" />
             <span>5 Sektor Prioritas</span>
           </span>
         </div>
@@ -371,7 +371,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
                   <span className="text-slate-500">
                     Pagu: Rp {b.anggaran.toLocaleString('id-ID')}
                   </span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 ml-auto sm:ml-0">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 ml-auto sm:ml-0">
                     {b.persen}%
                   </span>
                 </div>
@@ -423,7 +423,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
               onClick={() => { setFilterType('belanja'); setCurrentPage(1); }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 filterType === 'belanja'
-                  ? 'bg-white text-teal-800 shadow-2xs'
+                  ? 'bg-white text-indigo-800 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -433,7 +433,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
               onClick={() => { setFilterType('pendapatan'); setCurrentPage(1); }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 filterType === 'pendapatan'
-                  ? 'bg-white text-emerald-800 shadow-2xs'
+                  ? 'bg-white text-blue-800 shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -450,7 +450,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
             value={searchQuery}
             onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
             placeholder="Cari nama kegiatan (contoh: jalan, irigasi, posyandu, BLT)..."
-            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all font-sans"
+            className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-sans"
           />
         </div>
 
@@ -478,14 +478,14 @@ export const KeuanganDesaWargaView: React.FC = () => {
                   <div className="flex items-center justify-between gap-2">
                     <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider ${
                       isPendapatan 
-                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
-                        : 'bg-teal-50 text-teal-800 border border-teal-200'
+                        ? 'bg-blue-50 text-blue-800 border border-blue-200' 
+                        : 'bg-indigo-50 text-indigo-800 border border-indigo-200'
                     }`}>
                       {r.category?.jenis || 'Belanja'}
                     </span>
 
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                      <CheckCircle2 size={11} className="text-emerald-600" />
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                      <CheckCircle2 size={11} className="text-blue-600" />
                       <span>{pct}% Terlaksana</span>
                     </span>
                   </div>
@@ -515,7 +515,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
                       <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide block">
                         Realisasi Fisik
                       </span>
-                      <span className="font-mono font-bold text-emerald-800 text-xs">
+                      <span className="font-mono font-bold text-blue-800 text-xs">
                         Rp {rea.toLocaleString('id-ID')}
                       </span>
                     </div>
@@ -524,7 +524,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
                   {/* Progress Bar Visual */}
                   <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                     <div 
-                      className={`h-full rounded-full ${isPendapatan ? 'bg-emerald-600' : 'bg-teal-600'}`}
+                      className={`h-full rounded-full ${isPendapatan ? 'bg-blue-600' : 'bg-indigo-600'}`}
                       style={{ width: `${Math.min(100, pct)}%` }}
                     />
                   </div>
@@ -565,8 +565,8 @@ export const KeuanganDesaWargaView: React.FC = () => {
                       <td className="py-3.5 px-4 whitespace-nowrap">
                         <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase ${
                           isPendapatan 
-                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' 
-                            : 'bg-teal-50 text-teal-800 border border-teal-200'
+                            ? 'bg-blue-50 text-blue-800 border border-blue-200' 
+                            : 'bg-indigo-50 text-indigo-800 border border-indigo-200'
                         }`}>
                           {r.category?.jenis || 'Umum'}
                         </span>
@@ -584,8 +584,8 @@ export const KeuanganDesaWargaView: React.FC = () => {
                         Rp {rea.toLocaleString('id-ID')}
                       </td>
                       <td className="py-3.5 px-4 text-center whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                          <CheckCircle2 size={12} className="text-emerald-600" />
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+                          <CheckCircle2 size={12} className="text-blue-600" />
                           <span>{pct}% Terlaksana</span>
                         </span>
                       </td>
@@ -612,14 +612,14 @@ export const KeuanganDesaWargaView: React.FC = () => {
       </div>
 
       {/* 5. Info Box Edukasi Partisipasi Warga */}
-      <div className="p-5 sm:p-6 rounded-3xl bg-emerald-50/80 border border-emerald-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-emerald-950">
+      <div className="p-5 sm:p-6 rounded-3xl bg-blue-50/80 border border-blue-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-blue-950">
         <div className="flex items-start gap-3.5">
-          <Info className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
+          <Info className="w-5 h-5 text-blue-700 shrink-0 mt-0.5" />
           <div className="space-y-0.5">
-            <h4 className="font-black text-sm text-emerald-900">
+            <h4 className="font-black text-sm text-blue-900">
               Punya Usulan Pembangunan Lingkungan RT Anda?
             </h4>
-            <p className="text-emerald-800/90 leading-relaxed text-[11px]">
+            <p className="text-blue-800/90 leading-relaxed text-[11px]">
               Sampaikan ide dan usulan pembangunan melalui Ketua RT setempat untuk dimasukkan dalam agenda Musyawarah Perencanaan Pembangunan Desa (Musrenbangdes).
             </p>
           </div>
@@ -627,7 +627,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
 
         <a
           href="/dashboard?tab=pengaduan"
-          className="shrink-0 px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-all shadow-xs cursor-pointer whitespace-nowrap self-start sm:self-auto inline-flex items-center gap-1.5"
+          className="shrink-0 px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs transition-all shadow-xs cursor-pointer whitespace-nowrap self-start sm:self-auto inline-flex items-center gap-1.5"
         >
           <span>Sampaikan Aspirasi Warga</span>
           <ArrowRight className="w-3.5 h-3.5" />

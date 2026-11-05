@@ -71,14 +71,14 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           {user ? (
             <>
               <span>SIDes</span>
-              <span className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 bg-clip-text text-transparent font-black">
+              <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 bg-clip-text text-transparent font-black">
                 {villageName}
               </span>
             </>
           ) : (
             <>
               <span>Kabupaten</span>
-              <span className="bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 bg-clip-text text-transparent font-black">
+              <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 bg-clip-text text-transparent font-black">
                 Kediri
               </span>
             </>
@@ -86,7 +86,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         </div>
         
         {showSubtitle && (
-          <div className={`text-[11px] sm:text-xs font-semibold leading-tight mt-1 flex items-center gap-1.5 ${isDark ? 'text-emerald-200/80' : 'text-slate-500'}`}>
+          <div className={`text-[11px] sm:text-xs font-semibold leading-tight mt-1 flex items-center gap-1.5 ${isDark ? 'text-blue-200/80' : 'text-slate-500'}`}>
             <span>{detectedSubtitle}</span>
           </div>
         )}

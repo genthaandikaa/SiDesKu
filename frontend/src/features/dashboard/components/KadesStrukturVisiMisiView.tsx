@@ -51,7 +51,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
       level: 1,
       roleSlug: 'kades',
       status: 'Aktif',
-      color: 'from-emerald-700 to-teal-800',
+      color: 'from-blue-700 to-indigo-800',
     },
     {
       id: 'sekdes-1',
@@ -63,7 +63,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
       level: 2,
       roleSlug: 'sekdes',
       status: 'Aktif',
-      color: 'from-emerald-600 to-teal-700',
+      color: 'from-blue-600 to-indigo-700',
     },
     {
       id: 'bpd-1',
@@ -97,7 +97,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
       level: 3,
       roleSlug: 'kaur_tu',
       status: 'Aktif',
-      color: 'from-teal-600 to-teal-700',
+      color: 'from-indigo-600 to-indigo-700',
     },
     {
       id: 'kesra-1',
@@ -141,7 +141,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
       level: 4,
       roleSlug: 'rt',
       status: 'Aktif',
-      color: 'from-emerald-600 to-teal-600',
+      color: 'from-blue-600 to-indigo-600',
     },
   ];
 
@@ -194,7 +194,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">
             Pemerintah Desa • RPJMDes & Tata Usaha
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
@@ -209,20 +209,20 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
           href="/profil-desa"
           target="_blank"
           rel="noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-emerald-700 hover:border-emerald-300 transition shadow-2xs cursor-pointer"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-blue-700 hover:border-blue-300 transition shadow-2xs cursor-pointer"
         >
-          <ExternalLink className="w-4 h-4 text-emerald-600" />
+          <ExternalLink className="w-4 h-4 text-blue-600" />
           <span>Lihat di Landing Page</span>
         </a>
       </div>
 
       {/* Success Banner */}
       {saveSuccess && (
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-semibold flex items-center gap-3 animate-in fade-in">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+        <div className="p-4 rounded-2xl bg-blue-50 border border-blue-300 text-blue-900 text-xs font-semibold flex items-center gap-3 animate-in fade-in">
+          <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
           <div>
             <strong>Visi & Misi Berhasil Diperbarui!</strong>
-            <p className="font-normal text-emerald-800 mt-0.5">
+            <p className="font-normal text-blue-800 mt-0.5">
               Perubahan telah tersinkronisasi ke seluruh antarmuka sistem dan halaman profil publik desa.
             </p>
           </div>
@@ -233,8 +233,8 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-6 sm:p-8 space-y-6">
         <div className="flex items-center justify-between pb-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-100/80 flex items-center justify-center font-bold">
-              <Building2 className="w-5 h-5 text-emerald-600" />
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 border border-blue-100/80 flex items-center justify-center font-bold">
+              <Building2 className="w-5 h-5 text-blue-600" />
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-900">Perumusan Visi & Misi Desa Periode Aktif</h3>
@@ -253,7 +253,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
               rows={3}
               value={visi}
               onChange={(e) => setVisi(e.target.value)}
-              className="w-full p-3.5 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 transition leading-relaxed"
+              className="w-full p-3.5 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 transition leading-relaxed"
               placeholder="Tuliskan rumusan visi desa..."
             />
           </div>
@@ -267,7 +267,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
               rows={5}
               value={misi}
               onChange={(e) => setMisi(e.target.value)}
-              className="w-full p-3.5 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:border-emerald-600 focus:ring-4 focus:ring-emerald-500/10 transition leading-relaxed font-mono"
+              className="w-full p-3.5 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 transition leading-relaxed font-mono"
               placeholder="Tuliskan butir-butir misi (satu baris per poin misi)..."
             />
           </div>
@@ -276,7 +276,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
             <button
               type="submit"
               disabled={isSaving}
-              className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
               <span>{isSaving ? 'Menyimpan ke Server...' : 'Simpan Visi & Misi'}</span>
@@ -289,7 +289,7 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center font-bold">
               <Users className="w-5 h-5" />
             </div>
             <div>
@@ -299,8 +299,8 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
               </p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full w-fit">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-bold px-3 py-1 bg-blue-50 text-blue-800 border border-blue-200 rounded-full w-fit">
+            <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
             <span>Terkoneksi Real-Time ke Landing Page</span>
           </span>
         </div>
@@ -314,19 +314,19 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
               .map((a) => (
                 <div
                   key={a.id}
-                  className="w-full max-w-md bg-gradient-to-r from-emerald-700 to-teal-800 text-white rounded-3xl p-5 shadow-lg border-2 border-emerald-500 space-y-2 relative"
+                  className="w-full max-w-md bg-gradient-to-r from-blue-700 to-indigo-800 text-white rounded-3xl p-5 shadow-lg border-2 border-blue-500 space-y-2 relative"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] uppercase font-black tracking-widest text-emerald-200 bg-white/15 px-2.5 py-0.5 rounded-full">
+                    <span className="text-[10px] uppercase font-black tracking-widest text-blue-200 bg-white/15 px-2.5 py-0.5 rounded-full">
                       Pucuk Pimpinan Desa
                     </span>
-                    <span className="text-[10px] bg-emerald-400 text-emerald-950 font-bold px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] bg-blue-400 text-blue-950 font-bold px-2 py-0.5 rounded-full">
                       {a.status}
                     </span>
                   </div>
                   <h4 className="text-base font-black">{a.nama}</h4>
-                  <p className="text-xs text-emerald-100 font-semibold">{a.jabatan}</p>
-                  <div className="pt-2 border-t border-white/20 text-[10px] text-emerald-200 space-y-0.5 font-mono">
+                  <p className="text-xs text-blue-100 font-semibold">{a.jabatan}</p>
+                  <div className="pt-2 border-t border-white/20 text-[10px] text-blue-200 space-y-0.5 font-mono">
                     <div>NIP: {a.nip}</div>
                     <div>SK: {a.noSk}</div>
                   </div>
@@ -343,10 +343,10 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
               .map((a) => (
                 <div
                   key={a.id}
-                  className="bg-white border-2 border-slate-200 hover:border-emerald-400 rounded-2xl p-4 shadow-xs space-y-2 transition"
+                  className="bg-white border-2 border-slate-200 hover:border-blue-400 rounded-2xl p-4 shadow-xs space-y-2 transition"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md">
+                    <span className="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md">
                       {a.jabatan}
                     </span>
                     <span className="text-[10px] text-slate-500 font-semibold">{a.status}</span>

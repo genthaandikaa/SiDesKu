@@ -121,8 +121,8 @@ export const DataKkSekdesView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
               Buku Administrasi Penduduk Model A.3
             </span>
           </div>
@@ -134,7 +134,7 @@ export const DataKkSekdesView: React.FC = () => {
           </p>
         </div>
 
-        <span className="px-3.5 py-1.5 rounded-2xl bg-emerald-100 text-emerald-900 font-extrabold text-xs border border-emerald-200 self-start sm:self-auto">
+        <span className="px-3.5 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-extrabold text-xs border border-blue-200 self-start sm:self-auto">
           {totalKk} Kartu Keluarga Terdata
         </span>
       </div>
@@ -144,11 +144,11 @@ export const DataKkSekdesView: React.FC = () => {
         <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
           <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Total Kepala Keluarga</span>
           <div className="text-2xl font-black text-slate-900">{totalKk} <span className="text-xs font-bold text-slate-500">KK</span></div>
-          <span className="text-[11px] text-emerald-700 font-bold">100% Tercatat di Buku Induk</span>
+          <span className="text-[11px] text-blue-700 font-bold">100% Tercatat di Buku Induk</span>
         </div>
         <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
           <span className="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Total Anggota Keluarga (Jiwa)</span>
-          <div className="text-2xl font-black text-emerald-900">{totalJiwa} <span className="text-xs font-bold text-slate-500">Jiwa</span></div>
+          <div className="text-2xl font-black text-blue-900">{totalJiwa} <span className="text-xs font-bold text-slate-500">Jiwa</span></div>
           <span className="text-[11px] text-slate-500 font-bold">Tersebar di 3 RW dan 13 RT</span>
         </div>
         <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
@@ -168,7 +168,7 @@ export const DataKkSekdesView: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cari No. KK, Nama Kepala Keluarga, atau alamat..."
-              className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:bg-white focus:border-emerald-500 transition-all"
+              className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:bg-white focus:border-blue-500 transition-all"
             />
           </div>
 
@@ -207,10 +207,10 @@ export const DataKkSekdesView: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => handleCopy(kk.no_kk)}
-                        className="p-1 text-slate-400 hover:text-emerald-700 rounded cursor-pointer"
+                        className="p-1 text-slate-400 hover:text-blue-700 rounded cursor-pointer"
                         title="Salin No KK"
                       >
-                        {copiedKk === kk.no_kk ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
+                        {copiedKk === kk.no_kk ? <Check size={12} className="text-blue-600" /> : <Copy size={12} />}
                       </button>
                     </div>
                     <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 text-slate-800 border border-slate-200">
@@ -224,7 +224,7 @@ export const DataKkSekdesView: React.FC = () => {
                   </div>
 
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
+                    <span className="px-2.5 py-1 rounded-xl text-xs font-black bg-blue-50 text-blue-800 border border-blue-200">
                       {members.length} Jiwa
                     </span>
                     <button
@@ -232,7 +232,7 @@ export const DataKkSekdesView: React.FC = () => {
                       onClick={() => setSelectedKkDetail(kk)}
                       className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors flex items-center gap-1 cursor-pointer"
                     >
-                      <Eye size={13} className="text-emerald-600" />
+                      <Eye size={13} className="text-blue-600" />
                       <span>Anggota ({members.length})</span>
                     </button>
                   </div>
@@ -278,10 +278,10 @@ export const DataKkSekdesView: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => handleCopy(kk.no_kk)}
-                            className="p-1 text-slate-400 hover:text-emerald-700 rounded cursor-pointer"
+                            className="p-1 text-slate-400 hover:text-blue-700 rounded cursor-pointer"
                             title="Salin No KK"
                           >
-                            {copiedKk === kk.no_kk ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
+                            {copiedKk === kk.no_kk ? <Check size={12} className="text-blue-600" /> : <Copy size={12} />}
                           </button>
                         </div>
                       </td>
@@ -297,7 +297,7 @@ export const DataKkSekdesView: React.FC = () => {
                         {kk.alamat_lengkap}
                       </td>
                       <td className="py-3 px-3.5 text-center whitespace-nowrap">
-                        <span className="px-2.5 py-1 rounded-xl text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <span className="px-2.5 py-1 rounded-xl text-xs font-black bg-blue-50 text-blue-800 border border-blue-200">
                           {members.length} Jiwa
                         </span>
                       </td>
@@ -307,7 +307,7 @@ export const DataKkSekdesView: React.FC = () => {
                           onClick={() => setSelectedKkDetail(kk)}
                           className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors flex items-center gap-1 ml-auto cursor-pointer"
                         >
-                          <Eye size={13} className="text-emerald-600" />
+                          <Eye size={13} className="text-blue-600" />
                           <span>Anggota Keluarga</span>
                         </button>
                       </td>
@@ -335,7 +335,7 @@ export const DataKkSekdesView: React.FC = () => {
           <div className="bg-white rounded-3xl max-w-3xl w-full p-6 space-y-5 shadow-xl animate-scale-up max-h-[90vh] flex flex-col">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded">
+                <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded">
                   Susunan Anggota Keluarga
                 </span>
                 <h3 className="text-lg font-black text-slate-900 mt-0.5">
@@ -382,7 +382,7 @@ export const DataKkSekdesView: React.FC = () => {
                           <td className="py-2.5 px-3">
                             <span className={`px-2 py-0.5 rounded text-[10px] font-extrabold ${
                               m.status_keluarga === 'Kepala Keluarga' 
-                                ? 'bg-emerald-100 text-emerald-900' 
+                                ? 'bg-blue-100 text-blue-900' 
                                 : 'bg-slate-100 text-slate-800'
                             }`}>
                               {m.status_keluarga}

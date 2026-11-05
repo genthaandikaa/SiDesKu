@@ -353,7 +353,7 @@ export const CameraUploadModal: React.FC<CameraUploadModalProps> = ({
         {/* Header */}
         <div className="p-4 sm:p-5 bg-white text-slate-900 flex items-center justify-between border-b border-slate-100">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center font-bold">
+            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center font-bold">
               <Camera className="w-4 h-4" />
             </div>
             <div>
@@ -391,7 +391,7 @@ export const CameraUploadModal: React.FC<CameraUploadModalProps> = ({
                 <button
                   type="button"
                   onClick={() => nativeCameraInputRef.current?.click()}
-                  className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                  className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs"
                 >
                   <Camera className="w-4 h-4" />
                   <span>Buka Kamera HP</span>
@@ -443,7 +443,7 @@ export const CameraUploadModal: React.FC<CameraUploadModalProps> = ({
                   type="button"
                   onClick={handleShutter}
                   disabled={isCapturing}
-                  className="flex-1 py-3 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                  className="flex-1 py-3 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-bold text-sm shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   <Camera className="w-4 h-4" />
                   <span>{isCapturing ? 'Memproses...' : 'Jepret Foto'}</span>
@@ -475,7 +475,7 @@ export const CameraUploadModal: React.FC<CameraUploadModalProps> = ({
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="text-emerald-700 hover:text-emerald-800 font-medium cursor-pointer flex items-center gap-1.5"
+            className="text-blue-700 hover:text-blue-800 font-medium cursor-pointer flex items-center gap-1.5"
           >
             <Upload className="w-3.5 h-3.5" />
             <span>Pilih dari Galeri</span>

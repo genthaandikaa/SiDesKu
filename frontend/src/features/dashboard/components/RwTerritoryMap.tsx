@@ -100,8 +100,8 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       kkCount: 42,
       wargaCount: 156,
       areaHectares: 4.2,
-      color: '#10b981', // Emerald
-      borderColor: '#047857',
+      color: '#3b82f6', // Emerald
+      borderColor: '#1d4ed8',
       center: [-7.81690, 112.04105],
       polygonCoords: [
         [-7.81580, 112.03980],
@@ -277,15 +277,15 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
 
       // Outer RW 01 Boundary (Dashed outline)
       const outerBoundary = L.polygon(rwOuterBoundaryCoords, {
-        color: '#047857',
+        color: '#1d4ed8',
         weight: 3,
         dashArray: '8, 8',
-        fillColor: '#10b981',
+        fillColor: '#3b82f6',
         fillOpacity: 0.05,
       }).addTo(map);
 
       outerBoundary.bindTooltip(
-        '<div class="font-sans font-black text-xs text-emerald-950">Batas Teritorial Wilayah RW 01 Dusun Krajan (6 RT)</div>',
+        '<div class="font-sans font-black text-xs text-blue-950">Batas Teritorial Wilayah RW 01 Dusun Krajan (6 RT)</div>',
         { sticky: true, className: 'custom-leaflet-tooltip' }
       );
       rwBoundaryRef.current = outerBoundary;
@@ -376,7 +376,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
         <div class="font-sans text-xs space-y-0.5">
           <div class="font-black text-slate-900">${rt.nama}</div>
           <div class="text-[11px] text-slate-600">Ketua: <strong>${rt.ketua}</strong></div>
-          <div class="text-[10px] text-emerald-800 font-bold">${rt.kkCount} KK • ${rt.wargaCount} Jiwa</div>
+          <div class="text-[10px] text-blue-800 font-bold">${rt.kkCount} KK • ${rt.wargaCount} Jiwa</div>
         </div>
         `,
         { sticky: true, className: 'custom-leaflet-tooltip' }
@@ -435,11 +435,11 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
         className: 'custom-fac-icon',
         html: `
           <div class="relative group cursor-pointer transition-transform duration-300 hover:scale-115">
-            <div class="w-8 h-8 rounded-xl bg-white shadow-md border-2 border-emerald-600 flex items-center justify-center text-sm">
+            <div class="w-8 h-8 rounded-xl bg-white shadow-md border-2 border-blue-600 flex items-center justify-center text-sm">
               <span>•</span>
             </div>
-            <div class="w-2 h-2 mx-auto -mt-1 rotate-45 bg-white border-r border-b border-emerald-600"></div>
-            <div class="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap bg-emerald-950/90 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs pointer-events-none opacity-90">
+            <div class="w-2 h-2 mx-auto -mt-1 rotate-45 bg-white border-r border-b border-blue-600"></div>
+            <div class="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap bg-blue-950/90 text-white text-[9px] font-bold px-1.5 py-0.5 rounded shadow-xs pointer-events-none opacity-90">
               ${fac.nama?.length > 16 ? fac.nama.substring(0, 14) + '...' : fac.nama}
             </div>
           </div>
@@ -456,7 +456,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
             <span class="text-xs font-bold">•</span>
             <div>
               <div class="font-black text-xs text-slate-900">${fac.nama}</div>
-              <div class="text-[10px] text-emerald-700 font-bold">${fac.tipe}</div>
+              <div class="text-[10px] text-blue-700 font-bold">${fac.tipe}</div>
             </div>
           </div>
           <div class="text-[11px] text-slate-600 leading-snug">${fac.desc}</div>
@@ -517,7 +517,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-2 sm:p-2.5 flex flex-wrap items-center justify-between gap-2.5">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full sm:w-auto">
           <span className="text-xs font-black text-slate-700 mr-1 hidden sm:flex items-center gap-1 shrink-0">
-            <Grid className="w-3.5 h-3.5 text-emerald-700" />
+            <Grid className="w-3.5 h-3.5 text-blue-700" />
             <span>Pilih Kotak RT:</span>
           </span>
 
@@ -572,7 +572,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
               type="checkbox"
               checked={showRtBoxes}
               onChange={(e) => setShowRtBoxes(e.target.checked)}
-              className="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5"
+              className="rounded text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
             />
             <span>Kotak RT</span>
           </label>
@@ -582,7 +582,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
               type="checkbox"
               checked={showFacilities}
               onChange={(e) => setShowFacilities(e.target.checked)}
-              className="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5"
+              className="rounded text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
             />
             <span>Fasum RW</span>
           </label>
@@ -592,7 +592,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
               type="checkbox"
               checked={showWargas}
               onChange={(e) => setShowWargas(e.target.checked)}
-              className="rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5"
+              className="rounded text-blue-600 focus:ring-blue-500 w-3.5 h-3.5"
             />
             <span>Titik Warga</span>
           </label>
@@ -614,7 +614,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
               onClick={() => setActiveLayer('streets')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 activeLayer === 'streets'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -627,7 +627,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
               onClick={() => setActiveLayer('satellite')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 activeLayer === 'satellite'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -640,7 +640,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
               onClick={() => setActiveLayer('voyager')}
               className={`hidden md:flex px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all items-center gap-1 cursor-pointer ${
                 activeLayer === 'voyager'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -654,7 +654,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
             <button
               type="button"
               onClick={handleResetView}
-              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-blue-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
               title="Pusatkan Kembali ke Peta RW 01"
             >
               <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -663,7 +663,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
             <button
               type="button"
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-blue-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
               title={isFullscreen ? 'Kecilkan Peta' : 'Layar Penuh Peta'}
             >
               {isFullscreen ? <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
@@ -677,7 +677,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
         {/* Bottom Floating Legend & Mobile Helper */}
         <div className="absolute bottom-2.5 left-2.5 z-[1000] flex items-center gap-2 pointer-events-none">
           <div className="hidden sm:flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-mono px-2.5 sm:px-3 py-1.5 rounded-xl shadow-md border border-white/10">
-            <MapPin className="w-3 h-3 text-emerald-400" />
+            <MapPin className="w-3 h-3 text-blue-400" />
             <span>7°49'06"S 112°02'35"E • Wilayah RW 01 Dusun Krajan (6 Blok RT)</span>
           </div>
 
@@ -700,7 +700,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                     Bina Wilayah RW 01
                   </span>
                   <span className="text-xs text-slate-500 font-medium">Estimasi Luas: {selectedRt.areaHectares} Ha</span>
@@ -718,7 +718,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
               </div>
               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-2.5 px-4 text-center">
                 <div className="text-[10px] font-bold uppercase text-slate-500">Total Warga</div>
-                <div className="text-base font-black text-emerald-700">{selectedRt.wargaCount} Jiwa</div>
+                <div className="text-base font-black text-blue-700">{selectedRt.wargaCount} Jiwa</div>
               </div>
               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-2.5 px-4 text-center">
                 <div className="text-[10px] font-bold uppercase text-slate-500">Ketua RT</div>
@@ -731,7 +731,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
                   href={`https://wa.me/${selectedRt.phone.replace(/[^0-9]/g, '')}?text=Halo%20Ketua%20RT%20${selectedRt.nomorRt}%20terkait%20koordinasi%20RW%2001`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 px-3.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer press-down"
+                  className="p-2.5 px-3.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer press-down"
                 >
                   <Phone className="w-3.5 h-3.5" />
                   <span>WhatsApp Ketua RT</span>
@@ -754,13 +754,13 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       ) : (
         <div className="bg-white rounded-3xl border border-slate-200/90 p-4 shadow-2xs flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600 font-medium">
           <div className="flex items-center gap-2">
-            <Info className="w-4 h-4 text-emerald-700 shrink-0" />
+            <Info className="w-4 h-4 text-blue-700 shrink-0" />
             <span>
               <strong>Panduan RW:</strong> Peta wilayah RW 01 terbagi menjadi <strong>6 kotak blok RT</strong>. Klik pada salah satu kotak RT di peta untuk melihat profil batas wilayah, data kontak Ketua RT, dan statistik warganya.
             </span>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
             <span className="font-bold text-slate-800">Total Cakupan: 6 RT • 225 KK • 828 Jiwa</span>
           </div>
         </div>

@@ -109,13 +109,13 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
       <div className="fixed top-5 right-5 z-[999999] max-w-md w-full px-4 animate-fade-in pointer-events-none">
         <div className={`p-4 rounded-2xl shadow-xl border flex items-start gap-3 pointer-events-auto ${
           toastNotification.type === 'success' 
-            ? 'bg-emerald-900 text-white border-emerald-700 shadow-emerald-950/20'
+            ? 'bg-blue-900 text-white border-blue-700 shadow-blue-950/20'
             : toastNotification.type === 'error'
             ? 'bg-rose-900 text-white border-rose-700 shadow-rose-950/20'
             : 'bg-slate-900 text-white border-slate-700 shadow-slate-950/20'
         }`}>
           <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${
-            toastNotification.type === 'success' ? 'bg-emerald-800 text-emerald-200' :
+            toastNotification.type === 'success' ? 'bg-blue-800 text-blue-200' :
             toastNotification.type === 'error' ? 'bg-rose-800 text-rose-200' :
             'bg-slate-800 text-slate-200'
           }`}>
@@ -170,7 +170,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
               Buku register dan arsip dokumen resmi yang telah disahkan.
             </p>
           </div>
-          <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-200">
+          <span className="px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-200">
             {completedCount} Surat terbit
           </span>
         </div>
@@ -220,7 +220,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                 ) : (
                   riwayatPaginated.map((s) => (
                     <tr key={s.id} className="group hover:bg-gray-50 transition-colors">
-                      <td className="py-3 px-3 sm:px-3.5 font-mono font-black text-emerald-800 whitespace-nowrap">{s.nomor_surat_resmi || '-'}</td>
+                      <td className="py-3 px-3 sm:px-3.5 font-mono font-black text-blue-800 whitespace-nowrap">{s.nomor_surat_resmi || '-'}</td>
                       <td className="py-3 px-3 sm:px-3.5 font-mono text-gray-500 whitespace-nowrap">{s.nomor_resi}</td>
                       <td className="py-3 px-3 sm:px-3.5">
                         <div className="font-bold text-gray-900 text-xs sm:text-sm leading-tight">{s.warga_profile?.nama_lengkap}</div>
@@ -238,13 +238,13 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                             className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors press-down flex items-center gap-1 cursor-pointer shadow-2xs"
                             title="Lihat Detail & Foto Berkas Lampiran"
                           >
-                            <Eye size={13} className="text-emerald-600" />
+                            <Eye size={13} className="text-blue-600" />
                             <span>Detail</span>
                           </button>
                           <button 
                             type="button"
                             onClick={() => setPrintSurat(s)}
-                            className="px-3 py-1.5 bg-emerald-50 text-emerald-800 rounded-xl text-xs font-bold hover:bg-emerald-100 press-down flex items-center gap-1 cursor-pointer border border-emerald-200 shadow-2xs whitespace-nowrap"
+                            className="px-3 py-1.5 bg-blue-50 text-blue-800 rounded-xl text-xs font-bold hover:bg-blue-100 press-down flex items-center gap-1 cursor-pointer border border-blue-200 shadow-2xs whitespace-nowrap"
                           >
                             <Printer size={13} />
                             <span>Cetak</span>
@@ -271,7 +271,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                   className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3 animate-fade-in"
                 >
                   <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100">
-                    <span className="font-mono font-black text-xs text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 truncate">
+                    <span className="font-mono font-black text-xs text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 truncate">
                       {s.nomor_surat_resmi || s.nomor_resi}
                     </span>
                     <span className="text-[10px] text-slate-400 font-medium shrink-0">
@@ -286,7 +286,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                     <div className="text-[11px] font-mono text-slate-500">
                       NIK: {s.warga_profile?.nik} • Resi: {s.nomor_resi}
                     </div>
-                    <div className="font-bold text-xs text-emerald-900 pt-0.5">
+                    <div className="font-bold text-xs text-blue-900 pt-0.5">
                       {s.surat_type?.nama_surat}
                     </div>
                   </div>
@@ -297,13 +297,13 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                       onClick={() => setPreviewSurat(s)}
                       className="flex-1 py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs transition-colors flex items-center justify-center gap-1 cursor-pointer shadow-2xs press-down"
                     >
-                      <Eye size={13} className="text-emerald-600" />
+                      <Eye size={13} className="text-blue-600" />
                       <span>Detail</span>
                     </button>
                     <button 
                       type="button"
                       onClick={() => setPrintSurat(s)}
-                      className="flex-1 py-2 px-3 bg-emerald-600 text-white rounded-xl text-xs font-extrabold hover:bg-emerald-700 press-down transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
+                      className="flex-1 py-2 px-3 bg-blue-600 text-white rounded-xl text-xs font-extrabold hover:bg-blue-700 press-down transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
                     >
                       <Printer size={13} />
                       <span>Cetak</span>
@@ -384,8 +384,8 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[11px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md">
                 Sistem Informasi Geografis Desa (GIS)
               </span>
             </div>
@@ -395,7 +395,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3.5 py-1.5 rounded-2xl bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-200 shadow-2xs">
+            <span className="px-3.5 py-1.5 rounded-2xl bg-blue-50 text-blue-800 font-extrabold text-xs border border-blue-200 shadow-2xs">
               Desa Doko, Kec. Ngasem
             </span>
             <span className="px-3.5 py-1.5 rounded-2xl bg-slate-900 text-white font-extrabold text-xs shadow-2xs">
@@ -423,7 +423,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           subvalue="Antrean Kantor Desa"
           percentage={pendingCount > 0 ? 65 : 100}
           color="amber"
-          trend="SLA Rata-rata < 15 Menit"
+          trend="Rata-rata < 15 menit"
           isPositiveTrend={true}
         />
         <MetricStatCard
@@ -431,7 +431,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           value={`${completedCount} Surat`}
           subvalue="Tercatat di Buku Register"
           percentage={100}
-          color="emerald"
+          color="blue"
           trend="100% Berstempel QR"
           isPositiveTrend={true}
         />
@@ -440,7 +440,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           value="14 Jenis"
           subvalue="Katalog Permendagri"
           percentage={100}
-          color="teal"
+          color="indigo"
           trend="Format Standar Resmi"
           isPositiveTrend={true}
         />
@@ -461,8 +461,8 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
         <div className="xl:col-span-8 space-y-5">
           <div className="hidden lg:block space-y-5">
             <AreaSplineChart
-              title="Statistik Pelayanan Persuratan & Digital Signature"
-              subtitle="Volume Penerbitan Dokumen Resmi Desa Doko (Jan - Agu)"
+              title="Penerbitan Surat"
+              subtitle="Dokumen resmi desa"
               data={[
                 { label: 'Jan', value: 24, secondaryValue: 24, tooltipText: 'Dokumen Sah' },
                 { label: 'Feb', value: 36, secondaryValue: 35, tooltipText: 'Dokumen Sah' },
@@ -474,7 +474,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                 { label: 'Agu', value: Math.max(82, surats.length * 4), secondaryValue: completedCount, tooltipText: 'Dokumen Sah' },
               ]}
               highlightValue="99.8%"
-              highlightLabel="Kecepatan Legalisasi QR Balai Desa"
+              highlightLabel="Legalisasi QR"
               trendText="+18.4% vs bulan lalu"
             />
           </div>
@@ -483,8 +483,8 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="hidden lg:block">
               <BarActivityChart
-                title="Aktivitas Jam Layanan Kantor"
-                subtitle="Statistik Mingguan Pelayanan"
+                title="Aktivitas Layanan"
+                subtitle="Minggu ini"
                 data={[
                   { label: 'Sen', value: 25 },
                   { label: 'Sel', value: 34 },
@@ -495,29 +495,28 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                   { label: 'Min', value: 8 },
                 ]}
                 mainValue="48.5 Jam"
-                mainLabel="Waktu Aktif Loket Pelayanan"
+                mainLabel="Waktu layanan"
               />
             </div>
 
             {/* Quick Action Box */}
             <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+                <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
                   Aksi Eksekutif
                 </span>
-                <h4 className="text-sm font-black text-slate-900 mt-1">Pintasan Sekretaris Desa</h4>
-                <p className="text-xs text-slate-500 mt-0.5">Kelola template surat, bansos PKH, dan pengaturan desa.</p>
+                <h4 className="text-sm font-black text-slate-900 mt-1">Aksi Sekdes</h4>
               </div>
 
               <div className="space-y-2">
                 <button
                   type="button"
                   onClick={() => setActiveTab('arsip')}
-                  className="w-full p-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all press-down flex items-center justify-between cursor-pointer"
+                  className="w-full p-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-xs transition-all press-down flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
                     <FileText className="w-4 h-4" />
-                    <span>Buku Register & Arsip Surat Sah ({completedCount})</span>
+                    <span>Arsip Surat ({completedCount})</span>
                   </span>
                   <span className="text-[10px] font-black bg-white/20 px-2 py-0.5 rounded-full">
                     Arsip Sah
@@ -527,13 +526,13 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                 <button
                   type="button"
                   onClick={() => setActiveTab('penomoran')}
-                  className="w-full p-3 rounded-2xl bg-teal-50 hover:bg-teal-100/80 border border-teal-200 text-teal-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                  className="w-full p-3 rounded-2xl bg-indigo-50 hover:bg-indigo-100/80 border border-indigo-200 text-indigo-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <Sliders className="w-4 h-4 text-teal-700" />
-                    <span>Format & Urutan No. Surat (API Kalender)</span>
+                    <Sliders className="w-4 h-4 text-indigo-700" />
+                    <span>Format Nomor Surat</span>
                   </span>
-                  <span className="text-[10px] font-black text-teal-800 bg-teal-200/60 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-black text-indigo-800 bg-indigo-200/60 px-2 py-0.5 rounded-full">
                     Katalog No.
                   </span>
                 </button>
@@ -545,7 +544,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                 >
                   <span className="flex items-center gap-2">
                     <UserPlus className="w-4 h-4 text-blue-700" />
-                    <span>Register Warga Baru (Login NIK & Tgl Lahir)</span>
+                    <span>Tambah Warga</span>
                   </span>
                   <span className="text-[10px] font-black text-blue-800 bg-blue-200/60 px-2 py-0.5 rounded-full">
                     Buku Warga
@@ -558,10 +557,10 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                   className="w-full p-3 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-800 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <Megaphone className="w-4 h-4 text-emerald-700" />
-                    <span>Manajemen Bansos & Broadcast WhatsApp</span>
+                    <Megaphone className="w-4 h-4 text-blue-700" />
+                    <span>Kelola Bansos</span>
                   </span>
-                  <span className="text-[10px] font-black text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-black text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
                     KPM Aktif
                   </span>
                 </button>
@@ -569,13 +568,13 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                 <button
                   type="button"
                   onClick={() => setActiveTab('kop')}
-                  className="w-full p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 text-emerald-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                  className="w-full p-3 rounded-2xl bg-blue-50 hover:bg-blue-100/80 border border-blue-200 text-blue-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <Settings className="w-4 h-4 text-emerald-700" />
-                    <span>Kop Surat & Pengaturan Pemdes</span>
+                    <Settings className="w-4 h-4 text-blue-700" />
+                    <span>Pengaturan Desa</span>
                   </span>
-                  <span className="text-[10px] font-black text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] font-black text-blue-800 bg-blue-200/60 px-2 py-0.5 rounded-full">
                     Format Resmi
                   </span>
                 </button>
@@ -589,10 +588,10 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
           {/* Sekdes Profile Card */}
           <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
                 Tata Usaha & Administrasi
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-200">
                 ● Aktif Menjabat
               </span>
             </div>
@@ -601,14 +600,14 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
               <UserAvatar
                 src={user?.avatar}
                 name={user?.name}
-                className="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-400 shadow-xs shrink-0"
-                fallbackClassName="w-14 h-14 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
+                className="w-14 h-14 rounded-2xl object-cover border-2 border-blue-400 shadow-xs shrink-0"
+                fallbackClassName="w-14 h-14 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
               />
               <div className="min-w-0 flex-1">
                 <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
                   {user?.name || 'Ahmad Fauzi, S.AP'}
                 </h4>
-                <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
+                <div className="text-[11px] text-blue-700 font-extrabold mt-0.5">
                   Sekretaris Desa Doko
                 </div>
                 <div className="text-[10px] font-mono text-slate-400 truncate">
@@ -628,7 +627,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
               </div>
               <div className="flex justify-between items-center text-[11px]">
                 <span className="text-slate-400 font-bold">Kecamatan / Kab:</span>
-                <span className="text-emerald-700 font-black">Ngasem / Kediri</span>
+                <span className="text-blue-700 font-black">Ngasem / Kediri</span>
               </div>
             </div>
           </div>
@@ -653,7 +652,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
             onClick={() => setActiveTab(tab.key)}
             className={`px-4 py-2.5 rounded-xl font-extrabold text-xs transition-all press-down flex items-center gap-2 ${
               activeTab === tab.key 
-                ? 'bg-emerald-600 text-white shadow-md' 
+                ? 'bg-blue-600 text-white shadow-md' 
                 : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
             }`}
           >
@@ -688,7 +687,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
 
             {loading ? (
               <div className="flex justify-center py-12">
-                <Loader2 className="animate-spin text-emerald-500" size={28} />
+                <Loader2 className="animate-spin text-blue-500" size={28} />
               </div>
             ) : (() => {
               const completedList = surats.filter(s => s.status === 'completed');
@@ -731,7 +730,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                             key={s.id} 
                             className={`transition-all animate-fade-in stagger-${Math.min(idx + 1, 8)} hover:bg-gray-50`}
                           >
-                            <td className="p-3 font-mono font-bold text-emerald-800 whitespace-nowrap">
+                            <td className="p-3 font-mono font-bold text-blue-800 whitespace-nowrap">
                               {s.nomor_surat_resmi || '-'}
                             </td>
                             <td className="p-3 font-mono text-gray-600">{s.nomor_resi}</td>
@@ -751,13 +750,13 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                                   className="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-bold transition-all flex items-center gap-1 cursor-pointer shadow-2xs"
                                   title="Lihat Detail & Foto Berkas Lampiran"
                                 >
-                                  <Eye size={12} className="text-emerald-600" />
+                                  <Eye size={12} className="text-blue-600" />
                                   <span>Detail</span>
                                 </button>
                                 <button 
                                   type="button"
                                   onClick={() => setPrintSurat(s)}
-                                  className="px-3 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg text-xs font-bold hover:bg-emerald-100 hover-glow press-down flex items-center gap-1 transition-all cursor-pointer whitespace-nowrap"
+                                  className="px-3 py-1.5 bg-blue-50 text-blue-800 border border-blue-200 rounded-lg text-xs font-bold hover:bg-blue-100 hover-glow press-down flex items-center gap-1 transition-all cursor-pointer whitespace-nowrap"
                                 >
                                   <Printer size={12} /> Cetak
                                 </button>
@@ -777,7 +776,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                         className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3 animate-fade-in"
                       >
                         <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100">
-                          <span className="font-mono font-black text-xs text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 truncate">
+                          <span className="font-mono font-black text-xs text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200 truncate">
                             {s.nomor_surat_resmi || s.nomor_resi}
                           </span>
                           <span className="text-[10px] text-slate-400 font-medium shrink-0">
@@ -792,7 +791,7 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                           <div className="text-[11px] font-mono text-slate-500">
                             NIK: {s.warga_profile?.nik} • Resi: {s.nomor_resi}
                           </div>
-                          <div className="font-bold text-xs text-emerald-900 pt-0.5">
+                          <div className="font-bold text-xs text-blue-900 pt-0.5">
                             {s.surat_type?.nama_surat}
                           </div>
                         </div>
@@ -803,13 +802,13 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
                             onClick={() => setPreviewSurat(s)}
                             className="flex-1 py-2 px-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-extrabold text-xs transition-colors flex items-center justify-center gap-1 cursor-pointer shadow-2xs press-down"
                           >
-                            <Eye size={13} className="text-emerald-600" />
+                            <Eye size={13} className="text-blue-600" />
                             <span>Detail</span>
                           </button>
                           <button 
                             type="button"
                             onClick={() => setPrintSurat(s)}
-                            className="flex-1 py-2 px-3 bg-emerald-600 text-white rounded-xl text-xs font-extrabold hover:bg-emerald-700 press-down transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
+                            className="flex-1 py-2 px-3 bg-blue-600 text-white rounded-xl text-xs font-extrabold hover:bg-blue-700 press-down transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs whitespace-nowrap"
                           >
                             <Printer size={13} />
                             <span>Cetak Surat</span>

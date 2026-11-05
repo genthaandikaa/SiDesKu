@@ -21,7 +21,9 @@ return new class extends Migration
 
             // Ubah tipe kolom status dari ENUM ke VARCHAR agar fleksibel dan tidak error saat disposisi kustom
             try {
+            if (DB::getDriverName() !== 'sqlite') {
                 DB::statement("ALTER TABLE pengaduan_wargas MODIFY COLUMN status VARCHAR(100) NOT NULL DEFAULT 'Menunggu Disposisi'");
+            }
             } catch (\Throwable $e) {
                 // Ignore if already varchar
             }

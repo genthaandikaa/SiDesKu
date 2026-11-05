@@ -318,7 +318,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
   if (loading) {
     return (
       <div className="flex justify-center items-center py-20 page-enter">
-        <Loader2 className="animate-spin text-emerald-500" size={32} />
+        <Loader2 className="animate-spin text-blue-500" size={32} />
       </div>
     );
   }
@@ -338,7 +338,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer press-down"
+            className="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer press-down"
           >
             <Plus size={16} />
             <span>Tambah transaksi</span>
@@ -350,22 +350,22 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           <div className="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1 sm:order-last">
             <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
               <span>Saldo Kas Saat Ini</span>
-              <div className="w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center">
-                <Wallet size={15} className="text-emerald-600" />
+              <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
+                <Wallet size={15} className="text-blue-600" />
               </div>
             </div>
             <div className="text-xl sm:text-2xl font-black text-slate-900 font-mono tracking-tight">
               Rp {surplus.toLocaleString('id-ID')}
             </div>
-            <p className="text-[11px] text-emerald-700 font-medium">Status kas desa surplus & likuid</p>
+            <p className="text-[11px] text-blue-700 font-medium">Status kas desa surplus & likuid</p>
           </div>
 
           <div className="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
             <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
               <span>Penerimaan (Debet)</span>
-              <TrendingUp size={16} className="text-emerald-600" />
+              <TrendingUp size={16} className="text-blue-600" />
             </div>
-            <div className="text-lg sm:text-xl font-black text-emerald-800 font-mono">
+            <div className="text-lg sm:text-xl font-black text-blue-800 font-mono">
               Rp {Number(s?.pendapatan?.realisasi || 675000000).toLocaleString('id-ID')}
             </div>
             <p className="text-[10px] text-slate-400">Total akumulasi kas masuk</p>
@@ -374,9 +374,9 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           <div className="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
             <div className="flex items-center justify-between text-slate-500 text-xs font-bold">
               <span>Pengeluaran (Kredit)</span>
-              <TrendingDown size={16} className="text-teal-600" />
+              <TrendingDown size={16} className="text-indigo-600" />
             </div>
-            <div className="text-lg sm:text-xl font-black text-teal-800 font-mono">
+            <div className="text-lg sm:text-xl font-black text-indigo-800 font-mono">
               Rp {Number(s?.belanja?.realisasi || 217500000).toLocaleString('id-ID')}
             </div>
             <p className="text-[10px] text-slate-400">Total belanja kas keluar</p>
@@ -398,7 +398,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               <button
                 onClick={() => setFilterJenis('Pendapatan')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                  filterJenis === 'Pendapatan' ? 'bg-emerald-700 text-white shadow-xs' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+                  filterJenis === 'Pendapatan' ? 'bg-blue-700 text-white shadow-xs' : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
                 }`}
               >
                 Penerimaan (Debet)
@@ -406,7 +406,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               <button
                 onClick={() => setFilterJenis('Belanja')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
-                  filterJenis === 'Belanja' ? 'bg-teal-700 text-white shadow-xs' : 'bg-teal-50 text-teal-700 hover:bg-teal-100'
+                  filterJenis === 'Belanja' ? 'bg-indigo-700 text-white shadow-xs' : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100'
                 }`}
               >
                 Pengeluaran (Kredit)
@@ -420,7 +420,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 placeholder="Cari uraian transaksi..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:border-emerald-500 bg-white"
+                className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 text-xs focus:border-blue-500 bg-white"
               />
             </div>
           </div>
@@ -437,13 +437,13 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 return (
                   <div
                     key={r.id}
-                    className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs space-y-3 transition-all hover:border-emerald-300"
+                    className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-2xs space-y-3 transition-all hover:border-blue-300"
                   >
                     <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-2.5">
                       <div className="flex items-center gap-2">
                         <span
                           className={`px-2.5 py-0.5 rounded-full text-[10px] font-black ${
-                            isPendapatan ? 'bg-emerald-100 text-emerald-800' : 'bg-teal-100 text-teal-800'
+                            isPendapatan ? 'bg-blue-100 text-blue-800' : 'bg-indigo-100 text-indigo-800'
                           }`}
                         >
                           {isPendapatan ? 'Penerimaan' : 'Pengeluaran'}
@@ -477,7 +477,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                       </div>
                       <div className="text-right">
                         <div className="text-[9px] font-bold uppercase text-slate-400">Kas Terealisasi</div>
-                        <div className={`font-mono font-black text-sm ${isPendapatan ? 'text-emerald-800' : 'text-teal-800'}`}>
+                        <div className={`font-mono font-black text-sm ${isPendapatan ? 'text-blue-800' : 'text-indigo-800'}`}>
                           Rp {Number(r.realisasi).toLocaleString('id-ID')}
                         </div>
                       </div>
@@ -524,14 +524,14 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                           {r.uraian}
                         </td>
                         <td className="py-3 px-3.5 text-center whitespace-nowrap">
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black ${isPendapatan ? 'bg-emerald-100 text-emerald-800' : 'bg-teal-100 text-teal-800'}`}>
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black ${isPendapatan ? 'bg-blue-100 text-blue-800' : 'bg-indigo-100 text-indigo-800'}`}>
                             {isPendapatan ? 'Penerimaan' : 'Pengeluaran'}
                           </span>
                         </td>
                         <td className="py-3 px-3.5 text-right font-mono font-bold text-slate-900 whitespace-nowrap">
                           Rp {Number(r.anggaran).toLocaleString('id-ID')}
                         </td>
-                        <td className="py-3 px-3.5 text-right font-mono font-bold whitespace-nowrap text-emerald-800">
+                        <td className="py-3 px-3.5 text-right font-mono font-bold whitespace-nowrap text-blue-800">
                           Rp {Number(r.realisasi).toLocaleString('id-ID')}
                         </td>
                         <td className="py-3 px-3.5 text-center">
@@ -572,8 +572,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
       <div className="space-y-6 animate-fade-in font-sans max-w-2xl mx-auto">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
               Modul Transaksi Kas Desa
             </span>
           </div>
@@ -593,7 +593,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               onClick={() => { setTxType('Pendapatan'); setCategoryId(''); }}
               className={`flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 ${
                 txType === 'Pendapatan'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -605,7 +605,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               onClick={() => { setTxType('Belanja'); setCategoryId(''); }}
               className={`flex-1 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 ${
                 txType === 'Belanja'
-                  ? 'bg-teal-700 text-white shadow-xs'
+                  ? 'bg-indigo-700 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -733,7 +733,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-6 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold transition-all shadow-xs cursor-pointer flex items-center gap-2 press-down"
+                className="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold transition-all shadow-xs cursor-pointer flex items-center gap-2 press-down"
               >
                 {isSubmitting ? (
                   <>
@@ -761,8 +761,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                 Matriks Realisasi Anggaran
               </span>
             </div>
@@ -791,12 +791,12 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           </div>
           <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
             <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400">Kas Terealisasi</span>
-            <div className="text-base sm:text-2xl font-black text-emerald-800 font-mono tracking-tight">Rp 948 Jt</div>
-            <div className="text-[10px] sm:text-[11px] text-emerald-700 font-bold">85.4% Serapan</div>
+            <div className="text-base sm:text-2xl font-black text-blue-800 font-mono tracking-tight">Rp 948 Jt</div>
+            <div className="text-[10px] sm:text-[11px] text-blue-700 font-bold">85.4% Serapan</div>
           </div>
           <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
             <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400">Sisa Pagu Belanja</span>
-            <div className="text-base sm:text-2xl font-black text-teal-800 font-mono tracking-tight">Rp 162 Jt</div>
+            <div className="text-base sm:text-2xl font-black text-indigo-800 font-mono tracking-tight">Rp 162 Jt</div>
             <div className="text-[10px] sm:text-[11px] text-slate-500 font-medium">Tersedia di Kas</div>
           </div>
           <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
@@ -819,16 +819,16 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 <span className="flex items-center gap-1.5 text-slate-600">
                   <span className="w-2.5 h-2.5 rounded-md bg-slate-300 inline-block" /> Pagu
                 </span>
-                <span className="flex items-center gap-1.5 text-emerald-800">
-                  <span className="w-2.5 h-2.5 rounded-md bg-emerald-600 inline-block" /> Realisasi
+                <span className="flex items-center gap-1.5 text-blue-800">
+                  <span className="w-2.5 h-2.5 rounded-md bg-blue-600 inline-block" /> Realisasi
                 </span>
               </div>
             </div>
 
             <div className="space-y-4 pt-1">
               {[
-                { bidang: '1. Penyelenggaraan Pemdes', pagu: 120, realisasi: 114, pct: 95.0, color: 'bg-emerald-600' },
-                { bidang: '2. Pembangunan Desa (Fisik)', pagu: 650, realisasi: 572, pct: 88.0, color: 'bg-teal-600' },
+                { bidang: '1. Penyelenggaraan Pemdes', pagu: 120, realisasi: 114, pct: 95.0, color: 'bg-blue-600' },
+                { bidang: '2. Pembangunan Desa (Fisik)', pagu: 650, realisasi: 572, pct: 88.0, color: 'bg-indigo-600' },
                 { bidang: '3. Pembinaan Kemasyarakatan', pagu: 85, realisasi: 66.3, pct: 78.0, color: 'bg-sky-600' },
                 { bidang: '4. Pemberdayaan Masyarakat', pagu: 160, realisasi: 131.2, pct: 82.0, color: 'bg-indigo-600' },
                 { bidang: '5. Bencana & Keadaan Darurat', pagu: 95, realisasi: 66.5, pct: 70.0, color: 'bg-amber-600' },
@@ -840,7 +840,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                       <span className="text-slate-600 font-mono text-[11px]">
                         <strong>Rp {item.realisasi} Jt</strong> / <span className="text-slate-400">Rp {item.pagu} Jt</span>
                       </span>
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800">
                         {item.pct}%
                       </span>
                     </div>
@@ -865,8 +865,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
 
               <div className="space-y-3 pt-3">
                 {[
-                  { label: 'DDS - Dana Desa (APBN)', nominal: 'Rp 480.000.000', pct: 58, color: 'bg-emerald-600' },
-                  { label: 'ADD - Alokasi Dana Desa (Kab)', nominal: 'Rp 150.000.000', pct: 24, color: 'bg-teal-600' },
+                  { label: 'DDS - Dana Desa (APBN)', nominal: 'Rp 480.000.000', pct: 58, color: 'bg-blue-600' },
+                  { label: 'ADD - Alokasi Dana Desa (Kab)', nominal: 'Rp 150.000.000', pct: 24, color: 'bg-indigo-600' },
                   { label: 'PADes - Pendapatan Asli Desa', nominal: 'Rp 45.000.000', pct: 12, color: 'bg-sky-600' },
                   { label: 'BHP - Bagi Hasil Pajak/Retribusi', nominal: 'Rp 25.000.000', pct: 6, color: 'bg-amber-600' },
                 ].map((dana, idx) => (
@@ -884,8 +884,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               </div>
             </div>
 
-            <div className="p-3 sm:p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 font-medium mt-3">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 inline mr-1" /> <strong>Kepatuhan Fiskal:</strong> Seluruh pencairan DDS Tahap I & ADD telah sesuai PMK No. 145/2023.
+            <div className="p-3 sm:p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-xs text-blue-950 font-medium mt-3">
+              <CheckCircle2 className="w-4 h-4 text-blue-600 inline mr-1" /> <strong>Kepatuhan Fiskal:</strong> Seluruh pencairan DDS Tahap I & ADD telah sesuai PMK No. 145/2023.
             </div>
           </div>
         </div>
@@ -896,11 +896,11 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             <span className="text-xs font-bold text-slate-500">Bidang 1: Penyelenggaraan Pemdes</span>
             <div className="text-lg sm:text-xl font-black text-slate-900">Rp 120.000.000</div>
             <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div className="bg-emerald-600 h-full w-[95%]" />
+              <div className="bg-blue-600 h-full w-[95%]" />
             </div>
             <div className="flex justify-between text-[11px] text-slate-500 font-semibold">
               <span>Realisasi: Rp 114 Jt</span>
-              <span className="text-emerald-700 font-bold">95.0% Serapan</span>
+              <span className="text-blue-700 font-bold">95.0% Serapan</span>
             </div>
           </div>
 
@@ -908,11 +908,11 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             <span className="text-xs font-bold text-slate-500">Bidang 2: Pembangunan Desa</span>
             <div className="text-lg sm:text-xl font-black text-slate-900">Rp 650.000.000</div>
             <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-              <div className="bg-teal-600 h-full w-[88%]" />
+              <div className="bg-indigo-600 h-full w-[88%]" />
             </div>
             <div className="flex justify-between text-[11px] text-slate-500 font-semibold">
               <span>Realisasi: Rp 572 Jt</span>
-              <span className="text-teal-700 font-bold">88.0% Serapan</span>
+              <span className="text-indigo-700 font-bold">88.0% Serapan</span>
             </div>
           </div>
 
@@ -963,8 +963,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                 Pertanggungjawaban Keuangan
               </span>
             </div>
@@ -980,7 +980,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               onClick={() => { setTargetTtdRole('bendahara'); setShowTtdModal(true); }}
               className="flex-1 sm:flex-initial px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer"
             >
-              <ShieldCheck size={14} className="text-emerald-400" />
+              <ShieldCheck size={14} className="text-blue-400" />
               <span>TTD Bendahara</span>
             </button>
             <button
@@ -992,7 +992,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             </button>
             <button
               onClick={() => setShowLpjModal(true)}
-              className="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer"
+              className="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all cursor-pointer"
             >
               <Printer size={14} />
               <span>Cetak Dokumen LPJ Fisik</span>
@@ -1005,7 +1005,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           <div className="text-center border-b pb-4 space-y-1">
             <h3 className="font-black text-xs sm:text-sm uppercase tracking-wide">Pemerintah Kabupaten Kediri</h3>
             <h4 className="font-extrabold text-xs sm:text-sm uppercase">Kecamatan Ngasem - Desa Doko</h4>
-            <h5 className="font-black text-xs underline uppercase text-emerald-900 tracking-tight pt-1">
+            <h5 className="font-black text-xs underline uppercase text-blue-900 tracking-tight pt-1">
               Laporan Realisasi Pelaksanaan APBDes Tahun Anggaran 2026
             </h5>
           </div>
@@ -1016,7 +1016,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               <span>Jumlah Realisasi (Rp)</span>
             </div>
 
-            <div className="flex items-center justify-between text-emerald-900 font-black text-xs sm:text-sm pt-1">
+            <div className="flex items-center justify-between text-blue-900 font-black text-xs sm:text-sm pt-1">
               <span>1. PENDAPATAN DESA</span>
               <span className="font-mono">Rp {Number(s?.pendapatan?.realisasi || 675000000).toLocaleString('id-ID')}</span>
             </div>
@@ -1033,7 +1033,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               <span className="font-mono font-medium shrink-0">Rp 150.000.000</span>
             </div>
 
-            <div className="flex items-center justify-between text-teal-900 font-black text-xs sm:text-sm pt-2 border-t border-slate-100">
+            <div className="flex items-center justify-between text-indigo-900 font-black text-xs sm:text-sm pt-2 border-t border-slate-100">
               <span>2. BELANJA DESA</span>
               <span className="font-mono">Rp {Number(s?.belanja?.realisasi || 217500000).toLocaleString('id-ID')}</span>
             </div>
@@ -1052,7 +1052,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
 
             <div className="flex items-center justify-between text-slate-900 font-black border-t-2 border-slate-800 pt-2.5 text-xs sm:text-sm">
               <span>SURPLUS / (DEFISIT) KAS</span>
-              <span className="text-emerald-800 font-mono">Rp {surplus.toLocaleString('id-ID')}</span>
+              <span className="text-blue-800 font-mono">Rp {surplus.toLocaleString('id-ID')}</span>
             </div>
           </div>
 
@@ -1118,8 +1118,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                 Keterbukaan Informasi Publik (KIP)
               </span>
             </div>
@@ -1135,7 +1135,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
         {/* Kotak Edukasi yang Ramah Orang Awam (Clean & Warm) */}
         <div className="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200/90 space-y-3 shadow-2xs">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black shrink-0">
+            <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-black shrink-0">
               <Globe size={18} />
             </div>
             <div>
@@ -1146,8 +1146,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1 text-xs">
             <div className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 space-y-1.5 shadow-2xs">
-              <div className="flex items-center gap-1.5 font-black text-emerald-800 text-xs">
-                <span className="w-2 h-2 rounded-full bg-emerald-600" />
+              <div className="flex items-center gap-1.5 font-black text-blue-800 text-xs">
+                <span className="w-2 h-2 rounded-full bg-blue-600" />
                 <span>Status AKTIF (Live Terbuka):</span>
               </div>
               <p className="text-slate-600 leading-relaxed text-[11px]">
@@ -1178,7 +1178,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               onClick={handleTogglePublish}
               className={`w-full sm:w-auto px-5 py-3 rounded-2xl text-xs font-black transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-95 ${
                 isPublished 
-                  ? 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-emerald-700/20' 
+                  ? 'bg-blue-700 hover:bg-blue-800 text-white shadow-blue-700/20' 
                   : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
               }`}
             >
@@ -1187,11 +1187,11 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             </button>
           </div>
 
-          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-emerald-900 flex items-start gap-2.5">
-            <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-700 shrink-0 mt-0.5" />
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-blue-50/70 border border-blue-200/80 text-xs text-blue-900 flex items-start gap-2.5">
+            <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-700 shrink-0 mt-0.5" />
             <div>
               <span className="font-black text-xs sm:text-sm">Endpoint `/api/public/apbdes/summary` Sinkron Otomatis</span>
-              <p className="text-emerald-800/90 mt-0.5 leading-relaxed text-[11px] sm:text-xs">
+              <p className="text-blue-800/90 mt-0.5 leading-relaxed text-[11px] sm:text-xs">
                 Ketika saklar ini diaktifkan, infografis APBDes terbaru otomatis tersinkronisasi ke portal warga tanpa perlu konfigurasi teknis manual.
               </p>
             </div>
@@ -1207,8 +1207,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
       <div className="space-y-6 animate-fade-in font-sans">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
               Pusat Unduhan & Arsip Kas
             </span>
           </div>
@@ -1222,14 +1222,14 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
           <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center">
               <FileSpreadsheet size={20} />
             </div>
             <h4 className="font-black text-sm text-slate-900">Buku Kas Umum (.CSV / Excel)</h4>
             <p className="text-xs text-slate-500">Ekspor seluruh baris transaksi kas masuk dan keluar tahun anggaran 2026.</p>
             <button
               onClick={handleExportCsv}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
             >
               <Download size={14} />
               <span>Unduh Spreadsheet CSV</span>
@@ -1237,14 +1237,14 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           </div>
 
           <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
-            <div className="w-10 h-10 rounded-2xl bg-teal-50 text-teal-700 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
               <Printer size={20} />
             </div>
             <h4 className="font-black text-sm text-slate-900">Cetak Laporan Pertanggungjawaban</h4>
             <p className="text-xs text-slate-500">Pratinjau cetak formulir resmi pertanggungjawaban realisasi APBDes.</p>
             <button
               onClick={() => setShowLpjModal(true)}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
             >
               <Printer size={14} />
               <span>Cetak Dokumen LPJ Fisik</span>
@@ -1277,7 +1277,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           value={`Rp ${(Number(s?.pendapatan?.realisasi || 675000000) / 1000000).toFixed(0)} Jt`}
           subvalue={`/ ${s?.pendapatan?.persen || 60.8}% Target`}
           percentage={Math.round(s?.pendapatan?.persen || 60.8)}
-          color="emerald"
+          color="blue"
           trend="ADD & DD Masuk"
           isPositiveTrend={true}
         />
@@ -1286,7 +1286,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           value={`Rp ${(Number(s?.belanja?.realisasi || 217500000) / 1000000).toFixed(0)} Jt`}
           subvalue={`/ ${s?.belanja?.persen || 92.5}% Pagu`}
           percentage={Math.round(s?.belanja?.persen || 92.5)}
-          color="teal"
+          color="indigo"
           trend="Sesuai Target"
           isPositiveTrend={true}
         />
@@ -1315,8 +1315,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
         <div className="xl:col-span-8 space-y-5">
           <div className="hidden lg:block space-y-5">
             <AreaSplineChart
-              title="Arus Kas Masuk vs Realisasi Belanja APBDes 2026"
-              subtitle="Grafik Tren Finansial Bulanan"
+              title="Arus Kas & Belanja"
+              subtitle="Tren bulanan APBDes"
               data={[
                 { label: 'Jan', value: 45, secondaryValue: 20, tooltipText: 'Kas Masuk (Juta)' },
                 { label: 'Feb', value: 60, secondaryValue: 35, tooltipText: 'Kas Masuk (Juta)' },
@@ -1328,7 +1328,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 { label: 'Agu', value: 245, secondaryValue: 190, tooltipText: 'Kas Masuk (Juta)' },
               ]}
               highlightValue="94.2%"
-              highlightLabel="Efektivitas Serapan Anggaran Pembangunan"
+              highlightLabel="Serapan anggaran"
               trendText="+11.5% vs pagu awal"
             />
           </div>
@@ -1336,8 +1336,8 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="hidden lg:block">
               <BarActivityChart
-                title="Aktivitas Transaksi Finansial"
-                subtitle="Statistik Mingguan BKU"
+                title="Transaksi Kas"
+                subtitle="Minggu ini"
                 data={[
                   { label: 'Sen', value: 16 },
                   { label: 'Sel', value: 24 },
@@ -1348,23 +1348,22 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                   { label: 'Min', value: 4 },
                 ]}
                 mainValue="32 Transaksi"
-                mainLabel="Mutasi Kas Tercatat Minggu Ini"
+                mainLabel="Mutasi kas"
               />
             </div>
 
             <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+                <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
                   Aksi Kaur Keuangan
                 </span>
-                <h4 className="text-sm font-black text-slate-900 mt-1">Pintasan Buku Kas Umum</h4>
-                <p className="text-xs text-slate-500 mt-0.5">Input pos baru, cetak LPJ, dan ekspor APBDes.</p>
+                <h4 className="text-sm font-black text-slate-900">Pintasan Keuangan</h4>
               </div>
 
               <div className="space-y-2 text-xs font-bold">
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="w-full py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white flex items-center justify-between transition-colors shadow-xs cursor-pointer"
+                  className="w-full py-2.5 px-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white flex items-center justify-between transition-colors shadow-xs cursor-pointer"
                 >
                   <span>Catat Transaksi Baru</span>
                   <ArrowRight size={14} />
@@ -1373,7 +1372,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                   onClick={handleExportCsv}
                   className="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-between transition-colors cursor-pointer"
                 >
-                  <span>Ekspor Spreadsheet (.CSV)</span>
+                  <span>Ekspor CSV</span>
                   <Download size={14} />
                 </button>
               </div>
@@ -1386,7 +1385,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             title="Kalender Fiskal & Kas Desa"
             initialDate={new Date()}
             agendas={[
-              { id: '1', date: 15, title: 'Rekonsiliasi BKU Mingguan', time: '09:00 WIB', category: 'Keuangan', color: 'emerald' },
+              { id: '1', date: 15, title: 'Rekonsiliasi BKU Mingguan', time: '09:00 WIB', category: 'Keuangan', color: 'blue' },
               { id: '2', date: 20, title: 'Batas Penyerahan SPP', time: '14:00 WIB', category: 'Keuangan', color: 'amber' },
               { id: '3', date: 28, title: 'Penyaluran BLT-DD', time: '08:30 WIB', category: 'Bansos', color: 'sky' },
             ]}
@@ -1417,7 +1416,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           {/* Header */}
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black">
+              <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-black">
                 <ShieldCheck size={22} />
               </div>
               <div>
@@ -1442,7 +1441,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 onClick={() => setTargetTtdRole('bendahara')}
                 className={`py-2 px-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   targetTtdRole === 'bendahara'
-                    ? 'bg-emerald-700 text-white shadow-xs'
+                    ? 'bg-blue-700 text-white shadow-xs'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
@@ -1453,7 +1452,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 onClick={() => setTargetTtdRole('kades')}
                 className={`py-2 px-3 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                   targetTtdRole === 'kades'
-                    ? 'bg-emerald-700 text-white shadow-xs'
+                    ? 'bg-blue-700 text-white shadow-xs'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
@@ -1509,7 +1508,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
                 />
                 <label
                   htmlFor="ttd-file-input"
-                  className="px-4 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs inline-flex items-center gap-2 cursor-pointer shadow-xs"
+                  className="px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs inline-flex items-center gap-2 cursor-pointer shadow-xs"
                 >
                   <Download size={14} className="rotate-180" />
                   <span>Pilih Gambar Tanda Tangan (PNG / JPG)</span>
@@ -1599,7 +1598,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               type="button"
               disabled={isSavingTtd}
               onClick={() => handleSaveTtd()}
-              className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50 press-down"
+              className="px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs transition-all shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50 press-down"
             >
               {isSavingTtd ? <Loader2 size={15} className="animate-spin" /> : <CheckCircle2 size={15} />}
               <span>Simpan & Terapkan TTD</span>
@@ -1642,7 +1641,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               onClick={() => { setTxType('Pendapatan'); setCategoryId(''); }}
               className={`flex-1 py-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
                 txType === 'Pendapatan'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -1654,7 +1653,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               onClick={() => { setTxType('Belanja'); setCategoryId(''); }}
               className={`flex-1 py-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
                 txType === 'Belanja'
-                  ? 'bg-teal-700 text-white shadow-xs'
+                  ? 'bg-indigo-700 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -1787,7 +1786,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white transition-colors font-bold shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50 press-down"
+                className="px-5 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white transition-colors font-bold shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50 press-down"
               >
                 {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : <Plus size={15} />}
                 <span>Simpan Pos Mutasi</span>

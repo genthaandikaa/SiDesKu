@@ -84,7 +84,7 @@ const DocumentImagePreview: React.FC<{
           onClick={() => onPreview(safeUrl)}
           className="mt-1 px-3 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-700 text-[11px] font-bold border border-slate-200 shadow-2xs flex items-center gap-1 cursor-pointer"
         >
-          <Eye className="w-3.5 h-3.5 text-emerald-600" />
+          <Eye className="w-3.5 h-3.5 text-blue-600" />
           <span>Buka Berkas</span>
         </button>
       </div>
@@ -106,7 +106,7 @@ const DocumentImagePreview: React.FC<{
         className="absolute bottom-2.5 right-2.5 px-3 py-1.5 rounded-xl bg-white/95 hover:bg-white text-slate-800 text-[11px] font-extrabold border border-slate-200/90 shadow-sm flex items-center gap-1.5 cursor-pointer backdrop-blur-xs transition-all hover:scale-105 active:scale-95"
         title="Perbesar Tampilan Dokumen"
       >
-        <Eye className="w-3.5 h-3.5 text-emerald-700" />
+        <Eye className="w-3.5 h-3.5 text-blue-700" />
         <span>Perbesar</span>
       </button>
     </div>
@@ -176,7 +176,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
             onClick={() => setPreviewDoc({ url: safeUrl, title: title || 'Dokumen' })}
             className="px-3 py-1 rounded-lg bg-white hover:bg-slate-100 text-slate-800 text-[11px] font-extrabold border border-slate-200 shadow-2xs flex items-center gap-1 cursor-pointer"
           >
-            <Eye className="w-3.5 h-3.5 text-emerald-600" />
+            <Eye className="w-3.5 h-3.5 text-blue-600" />
             <span>Lihat Berkas</span>
           </button>
         </div>
@@ -265,7 +265,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
   if (loading) {
     return (
       <div className="card-surface p-12 text-center space-y-3 font-sans animate-fade-in">
-        <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mx-auto" />
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin mx-auto" />
         <p className="text-xs font-bold text-slate-500">Memuat berkas master kependudukan Anda...</p>
       </div>
     );
@@ -279,8 +279,8 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
       
       {/* Toast Notification */}
       {toastMessage && createPortal(
-        <div className="fixed top-5 right-5 z-[9999999] bg-emerald-950/90 text-white px-4 py-3 rounded-2xl shadow-xl border border-emerald-400/40 backdrop-blur-md flex items-center gap-2 text-xs font-bold animate-fade-in">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="fixed top-5 right-5 z-[9999999] bg-blue-950/90 text-white px-4 py-3 rounded-2xl shadow-xl border border-blue-400/40 backdrop-blur-md flex items-center gap-2 text-xs font-bold animate-fade-in">
+          <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
           <span>{toastMessage}</span>
         </div>,
         document.body
@@ -289,8 +289,8 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
       {/* Header Banner: Solusi Cukup Sekali Upload (Clean White & Emerald Accent) */}
       <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-2xs space-y-4">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-800 text-[11px] font-black">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-blue-800 text-[11px] font-black">
+            <ShieldCheck className="w-4 h-4 text-blue-600" />
             <span>Master Berkas Kependudukan Terpadu</span>
           </div>
 
@@ -306,17 +306,17 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
           {/* Quick stats & verification badge */}
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <div className="px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-mono text-xs flex items-center gap-2 shadow-2xs">
-              <span className="text-emerald-700 font-bold">NIK:</span>
+              <span className="text-blue-700 font-bold">NIK:</span>
               <span className="font-extrabold text-slate-900">{data?.warga.nik}</span>
             </div>
             {data?.warga.no_kk && (
               <div className="px-3.5 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 font-mono text-xs flex items-center gap-2 shadow-2xs">
-                <span className="text-emerald-700 font-bold">No. KK:</span>
+                <span className="text-blue-700 font-bold">No. KK:</span>
                 <span className="font-extrabold text-slate-900">{data.warga.no_kk}</span>
               </div>
             )}
-            <div className="px-3.5 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <div className="px-3.5 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold flex items-center gap-1.5 shadow-2xs">
+              <CheckCircle2 className="w-4 h-4 text-blue-600" />
               <span>{stats?.total_terunggah || 0} Berkas Tersimpan</span>
             </div>
             <button
@@ -328,7 +328,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
                   navigate('/dashboard/ajukan');
                 }
               }}
-              className="ml-auto inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs transition-all shadow-xs cursor-pointer press-down"
+              className="ml-auto inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs transition-all shadow-xs cursor-pointer press-down"
             >
               <span>Ajukan Surat Langsung</span>
               <ArrowRight className="w-4 h-4 text-white" />
@@ -357,7 +357,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-black">
                     <CreditCard className="w-5 h-5" />
                   </div>
                   <div>
@@ -368,10 +368,10 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
 
                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 ${
                   doc?.foto_ktp 
-                    ? 'bg-emerald-100 text-emerald-900 border border-emerald-200' 
+                    ? 'bg-blue-100 text-blue-900 border border-blue-200' 
                     : 'bg-amber-100 text-amber-900 border border-amber-200'
                 }`}>
-                  {doc?.foto_ktp ? <CheckCircle2 className="w-3 h-3 text-emerald-700" /> : <AlertCircle className="w-3 h-3 text-amber-700" />}
+                  {doc?.foto_ktp ? <CheckCircle2 className="w-3 h-3 text-blue-700" /> : <AlertCircle className="w-3 h-3 text-amber-700" />}
                   <span>{doc?.foto_ktp ? 'Tersimpan di Desa' : 'Belum Diunggah'}</span>
                 </span>
               </div>
@@ -395,7 +395,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
               <button
                 type="button"
                 onClick={() => handleOpenUpload('ktp', 'Ambil / Unggah Foto KTP', 'ktp')}
-                className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer press-down"
+                className="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer press-down"
               >
                 <Camera className="w-3.5 h-3.5" />
                 <span>{doc?.foto_ktp ? 'Ganti Foto KTP' : 'Upload KTP Sekarang'}</span>
@@ -418,7 +418,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-2xl bg-teal-100 text-teal-800 flex items-center justify-center font-black">
+                  <div className="w-10 h-10 rounded-2xl bg-indigo-100 text-indigo-800 flex items-center justify-center font-black">
                     <Users className="w-5 h-5" />
                   </div>
                   <div>
@@ -429,10 +429,10 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
 
                 <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider flex items-center gap-1 ${
                   doc?.foto_kk 
-                    ? 'bg-emerald-100 text-emerald-900 border border-emerald-200' 
+                    ? 'bg-blue-100 text-blue-900 border border-blue-200' 
                     : 'bg-amber-100 text-amber-900 border border-amber-200'
                 }`}>
-                  {doc?.foto_kk ? <CheckCircle2 className="w-3 h-3 text-emerald-700" /> : <AlertCircle className="w-3 h-3 text-amber-700" />}
+                  {doc?.foto_kk ? <CheckCircle2 className="w-3 h-3 text-blue-700" /> : <AlertCircle className="w-3 h-3 text-amber-700" />}
                   <span>{doc?.foto_kk ? 'Tersimpan di Desa' : 'Belum Diunggah'}</span>
                 </span>
               </div>
@@ -456,7 +456,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
               <button
                 type="button"
                 onClick={() => handleOpenUpload('kk', 'Ambil / Unggah Foto Kartu Keluarga', 'dokumen')}
-                className="flex-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer press-down"
+                className="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer press-down"
               >
                 <Camera className="w-3.5 h-3.5" />
                 <span>{doc?.foto_kk ? 'Ganti Foto KK' : 'Upload KK Sekarang'}</span>
@@ -495,11 +495,11 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-black text-slate-900 flex items-center gap-1.5">
-                  <FileText className="w-4 h-4 text-emerald-600" />
+                  <FileText className="w-4 h-4 text-blue-600" />
                   <span>Akta Kelahiran</span>
                 </span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  doc?.foto_akta_lahir ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'
+                  doc?.foto_akta_lahir ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-500'
                 }`}>
                   {doc?.foto_akta_lahir ? 'Tersimpan' : 'Opsional'}
                 </span>
@@ -530,7 +530,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
                   <span>Buku / Akta Nikah</span>
                 </span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  doc?.foto_buku_nikah ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-500'
+                  doc?.foto_buku_nikah ? 'bg-blue-100 text-blue-800' : 'bg-slate-100 text-slate-500'
                 }`}>
                   {doc?.foto_buku_nikah ? 'Tersimpan' : 'Opsional'}
                 </span>
@@ -553,16 +553,16 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
           </div>
 
           {/* Dokumen Bebas Lainnya */}
-          <div className="p-5 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-300 hover:border-emerald-400 transition-colors flex flex-col justify-between items-center text-center space-y-3 p-6">
+          <div className="p-5 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-300 hover:border-blue-400 transition-colors flex flex-col justify-between items-center text-center space-y-3 p-6">
             <div className="space-y-1">
-              <Plus className="w-8 h-8 text-emerald-600 mx-auto" />
+              <Plus className="w-8 h-8 text-blue-600 mx-auto" />
               <h4 className="text-xs font-black text-slate-900">Dokumen Custom / Tambahan</h4>
               <p className="text-[11px] text-slate-500">Ijazah, Surat Kematian, NPWP, atau berkas pendukung lainnya.</p>
             </div>
             <button
               type="button"
               onClick={() => handleOpenUpload('tambahan', 'Tambah Dokumen Lainnya', 'dokumen')}
-              className="w-full py-2 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs shadow-xs transition-all cursor-pointer press-down"
+              className="w-full py-2 px-3 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs shadow-xs transition-all cursor-pointer press-down"
             >
               + Tambah Dokumen Baru
             </button>
@@ -579,14 +579,14 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
               {doc.dokumen_tambahan.map((item) => {
                 const isPdf = item.nama?.toLowerCase().endsWith('.pdf') || item.url?.toLowerCase().endsWith('.pdf');
                 return (
-                  <div key={item.id} className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-all flex items-center justify-between gap-2">
+                  <div key={item.id} className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs hover:border-blue-300 transition-all flex items-center justify-between gap-2">
                     <div 
                       onClick={() => setPreviewDoc({ url: item.url, title: item.nama })}
                       className="flex items-center gap-2.5 min-w-0 cursor-pointer group flex-1"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 overflow-hidden shrink-0 border border-emerald-100 flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 overflow-hidden shrink-0 border border-blue-100 flex items-center justify-center">
                         {isPdf ? (
-                          <FileText className="w-5 h-5 text-emerald-700" />
+                          <FileText className="w-5 h-5 text-blue-700" />
                         ) : (
                           <img 
                             src={item.url} 
@@ -600,7 +600,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
                         )}
                       </div>
                       <div className="min-w-0 truncate">
-                        <div className="text-xs font-bold text-slate-900 truncate group-hover:text-emerald-700">{item.nama}</div>
+                        <div className="text-xs font-bold text-slate-900 truncate group-hover:text-blue-700">{item.nama}</div>
                         <div className="text-[10px] text-slate-400">Klik untuk melihat</div>
                       </div>
                     </div>
@@ -648,7 +648,7 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
           >
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
               <span className="text-sm font-black text-slate-900 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-emerald-600" />
+                <FileText className="w-4 h-4 text-blue-600" />
                 <span>Pratinjau Dokumen: {previewDoc.title}</span>
               </span>
               <div className="flex items-center gap-2">

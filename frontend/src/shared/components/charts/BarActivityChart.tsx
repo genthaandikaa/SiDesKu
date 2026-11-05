@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { BarChart2, ChevronDown, Check } from 'lucide-react';
 
 export interface BarDataPoint {
@@ -36,13 +36,13 @@ export const BarActivityChart: React.FC<BarActivityChartProps> = ({
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div>
-          <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+          <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
             {subtitle}
           </span>
           <h4 className="text-sm font-black text-slate-900 mt-1">{title}</h4>
         </div>
 
-        <div className="text-[11px] font-extrabold text-emerald-800 bg-emerald-50/80 px-2.5 py-1 rounded-xl border border-emerald-200 flex items-center gap-1 cursor-pointer hover:bg-emerald-100 transition-colors">
+        <div className="text-[11px] font-extrabold text-blue-800 bg-blue-50/80 px-2.5 py-1 rounded-xl border border-blue-200 flex items-center gap-1 cursor-pointer hover:bg-blue-100 transition-colors">
           <span>{activeFilter}</span>
         </div>
       </div>
@@ -74,7 +74,7 @@ export const BarActivityChart: React.FC<BarActivityChartProps> = ({
               >
                 {/* Tooltip on hover */}
                 {isHovered && (
-                  <div className="text-[10px] font-black text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded-md mb-1.5 shadow-2xs transition-all animate-scale-up">
+                  <div className="text-[10px] font-black text-blue-800 bg-blue-100 px-1.5 py-0.5 rounded-md mb-1.5 shadow-2xs transition-all animate-scale-up">
                     {item.value}
                   </div>
                 )}
@@ -85,8 +85,8 @@ export const BarActivityChart: React.FC<BarActivityChartProps> = ({
                     style={{ height: `${heightPct}%` }}
                     className={`w-full rounded-2xl transition-all duration-500 ${
                       isFeatured
-                        ? 'bg-gradient-to-t from-emerald-700 to-emerald-500 shadow-xs scale-y-100'
-                        : 'bg-emerald-300/80 hover:bg-emerald-400'
+                        ? 'bg-gradient-to-t from-blue-700 to-blue-500 shadow-xs scale-y-100'
+                        : 'bg-blue-300/80 hover:bg-blue-400'
                     }`}
                   />
                 </div>
@@ -94,7 +94,7 @@ export const BarActivityChart: React.FC<BarActivityChartProps> = ({
                 {/* Day / Label underneath */}
                 <span
                   className={`mt-2 text-[10px] font-bold transition-colors ${
-                    isHovered ? 'text-emerald-800 font-black' : 'text-slate-400'
+                    isHovered ? 'text-blue-800 font-black' : 'text-slate-400'
                   }`}
                 >
                   {item.label}

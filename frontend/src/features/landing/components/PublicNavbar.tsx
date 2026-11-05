@@ -67,11 +67,9 @@ export const PublicNavbar: React.FC = () => {
     { name: 'APBDes', path: '/transparansi' },
     { name: 'Bansos', path: '/bansos' },
     { name: 'Warta', path: '/berita' },
-    { name: 'Dashboard', path: '/dashboard', isSpecial: true },
   ];
 
   const activeLinks = user ? postLoginLinks : preLoginLinks;
-
   const isActive = (path: string) => {
     if (path === '/' && location.pathname === '/') return true;
     if (path !== '/' && location.pathname.startsWith(path)) return true;
@@ -93,15 +91,10 @@ export const PublicNavbar: React.FC = () => {
         : 'bg-white py-3.5 shadow-2xs'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-4">
-          
-          {/* Logo Brand */}
-          <Link to="/" className="hover:opacity-95 transition-opacity shrink-0 outline-none focus:outline-none">
-            <BrandLogo size="md" />
-          </Link>
+        <div className="relative flex items-center justify-between gap-4 min-h-[44px]">
 
           {/* Desktop Navigation Links (Unboxed, Seamless with Navbar Background, Hover-Lift Animated) */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center justify-center gap-1.5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             {activeLinks.map((item) => {
               const active = isActive(item.path);
               if (item.isSpecial) {
@@ -109,27 +102,18 @@ export const PublicNavbar: React.FC = () => {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`px-4 py-2 rounded-full text-xs font-black transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap outline-none focus:outline-none hover:-translate-y-0.5 active:scale-95 ${
-                      active 
-                        ? 'bg-emerald-700 text-white shadow-sm shadow-emerald-700/30' 
-                        : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs'
-                    }`}
+                    className={`px-4.5 py-2 rounded-full text-[13px] sm:text-sm font-black transition-all duration-300 flex items-center gap-1.5 whitespace-nowrap outline-none focus:outline-none hover:-translate-y-0.5 active:scale-95 ${active ? 'bg-blue-700 text-white shadow-sm shadow-blue-700/30' : 'bg-blue-600 hover:bg-blue-700 text-white shadow-xs'}`}
                   >
                     <LayoutDashboard className="w-3.5 h-3.5" />
                     <span>Dashboard</span>
                   </Link>
                 );
               }
-
               return (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`px-3.5 py-2 rounded-full text-xs font-extrabold whitespace-nowrap transition-all duration-300 outline-none focus:outline-none hover:-translate-y-0.5 active:scale-95 border ${
-                    active 
-                      ? 'bg-emerald-700 text-white border-emerald-700 shadow-md shadow-emerald-700/25 font-black' 
-                      : 'text-slate-700 border-transparent hover:text-emerald-900 hover:bg-white/80 hover:border-emerald-100/90 hover:shadow-xs'
-                  }`}
+                  className={`px-4 py-2 rounded-full text-[13px] sm:text-sm font-extrabold whitespace-nowrap transition-all duration-300 outline-none focus:outline-none hover:-translate-y-0.5 active:scale-95 border ${active ? 'bg-blue-700 text-white border-blue-700 shadow-md shadow-blue-700/25 font-black' : 'text-slate-700 border-transparent hover:text-blue-900 hover:bg-white/80 hover:border-blue-100/90 hover:shadow-xs'}`}
                 >
                   <span>{item.name}</span>
                 </Link>
@@ -138,26 +122,16 @@ export const PublicNavbar: React.FC = () => {
           </nav>
 
           {/* Right Action: Dual Mode (Pre-login = Login/Register, Post-login = User Profile Card) */}
-          <div className="hidden sm:flex items-center gap-2.5 shrink-0">
+          <div className="hidden sm:flex items-center gap-2.5 shrink-0 ml-auto">
             {user ? (
               <div className="relative" ref={profileRef}>
                 <button
                   type="button"
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="flex items-center gap-2.5 p-1.5 pr-3.5 rounded-full bg-white hover:bg-slate-50 border border-slate-200/80 transition-all shadow-xs press-down outline-none focus:outline-none cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-600/25 transition-all press-down outline-none focus:outline-none cursor-pointer"
                 >
-                  <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-extrabold text-xs shadow-xs">
-                    {displayName.charAt(0)}
-                  </div>
-                  <div className="text-left text-xs">
-                    <div className="font-extrabold text-slate-900 leading-tight max-w-[110px] truncate">
-                      {displayName}
-                    </div>
-                    <div className="text-[10px] text-emerald-700 font-bold capitalize leading-none mt-0.5">
-                      {user.role?.display_name || 'Warga'}
-                    </div>
-                  </div>
-                  <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Layanan Utama</span>
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${profileDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* Profile Dropdown Menu */}
@@ -172,10 +146,10 @@ export const PublicNavbar: React.FC = () => {
                     <Link
                       to="/dashboard"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="w-full px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center gap-2.5 transition-colors outline-none focus:outline-none"
+                      className="w-full px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-800 flex items-center gap-2.5 transition-colors outline-none focus:outline-none"
                     >
-                      <LayoutDashboard className="w-4 h-4 text-emerald-600" />
-                      <span>Buka Panel Dashboard</span>
+                      <LayoutDashboard className="w-4 h-4 text-blue-600" />
+                      <span>Buka Panel Layanan</span>
                     </Link>
 
                     <Link
@@ -204,7 +178,7 @@ export const PublicNavbar: React.FC = () => {
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs shadow-md shadow-emerald-600/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-xs shadow-md shadow-blue-600/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
                 >
                   <LogIn className="w-3.5 h-3.5" />
                   <span>Login</span>
@@ -230,14 +204,14 @@ export const PublicNavbar: React.FC = () => {
         {mobileMenuOpen && (
           <div className="lg:hidden mt-3 p-4 bg-white rounded-3xl border border-slate-200 shadow-xl space-y-3 animate-fade-in">
             {user && (
-              <div className="p-3 rounded-2xl bg-emerald-50/80 border border-emerald-100 flex items-center justify-between">
+              <div className="p-3 rounded-2xl bg-blue-50/80 border border-blue-100 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
+                  <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
                     {displayName.charAt(0)}
                   </div>
                   <div>
                     <div className="font-extrabold text-xs text-slate-900">{displayName}</div>
-                    <div className="text-[10px] text-emerald-700 font-bold capitalize">{user.role?.display_name || 'Warga'}</div>
+                    <div className="text-[10px] text-blue-700 font-bold capitalize">{user.role?.display_name || 'Warga'}</div>
                   </div>
                 </div>
                 <button
@@ -255,11 +229,7 @@ export const PublicNavbar: React.FC = () => {
                   key={item.path}
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-2.5 rounded-2xl text-xs font-bold transition-all ${
-                    isActive(item.path)
-                      ? 'bg-emerald-600 text-white shadow-xs'
-                      : 'text-slate-700 hover:bg-slate-50'
-                  }`}
+                  className={`block px-4 py-2.5 rounded-2xl text-xs font-bold transition-all ${isActive(item.path) ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-700 hover:bg-slate-50'}`}
                 >
                   {item.name}
                 </Link>
@@ -271,7 +241,7 @@ export const PublicNavbar: React.FC = () => {
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 text-center text-xs font-black rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-md shadow-emerald-600/20 flex items-center justify-center gap-1.5"
+                  className="w-full py-2.5 text-center text-xs font-black rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/20 flex items-center justify-center gap-1.5"
                 >
                   <LogIn className="w-3.5 h-3.5" />
                   <span>Login</span>

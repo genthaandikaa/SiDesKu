@@ -725,12 +725,12 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
 
             {/* Success Banner */}
             {submitSuccess && (
-              <div className="p-6 rounded-3xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-3 animate-scale-up shadow-xs">
+              <div className="p-6 rounded-3xl bg-blue-50 border border-blue-200 text-blue-900 space-y-3 animate-scale-up shadow-xs">
                 <div className="flex items-center gap-2 font-black text-base">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                  <CheckCircle2 className="w-5 h-5 text-blue-600" />
                   <span>{editingSurat ? 'Perubahan Pengajuan Berhasil Disimpan!' : 'Pengajuan Surat Berhasil Dikirim!'}</span>
                 </div>
-                <p className="text-xs text-emerald-800 leading-relaxed">
+                <p className="text-xs text-blue-800 leading-relaxed">
                   {editingSurat 
                     ? 'Data permohonan surat Anda telah berhasil diperbarui dan dialirkan ke antrean verifikasi Ketua RT 01.'
                     : 'Permohonan surat Anda telah otomatis masuk ke antrean verifikasi Ketua RT 01. Anda dapat memantau progresnya di menu Status Surat.'}
@@ -739,7 +739,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   <button
                     type="button"
                     onClick={() => navigate('/dashboard/status-surat')}
-                    className="px-4 py-2 rounded-xl bg-emerald-700 text-white font-bold text-xs shadow-xs hover:bg-emerald-800 cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-blue-700 text-white font-bold text-xs shadow-xs hover:bg-blue-800 cursor-pointer"
                   >
                     Pantau di Status Surat
                   </button>
@@ -749,7 +749,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       setSubmitSuccess(false);
                       navigate('/dashboard/ajukan');
                     }}
-                    className="px-4 py-2 rounded-xl bg-white text-emerald-900 border border-emerald-300 font-bold text-xs shadow-2xs hover:bg-emerald-50 cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-white text-blue-900 border border-blue-300 font-bold text-xs shadow-2xs hover:bg-blue-50 cursor-pointer"
                   >
                     Ajukan Surat Lain
                   </button>
@@ -761,12 +761,12 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-emerald-100/70 text-emerald-800 flex items-center justify-center font-black">
+                  <div className="w-11 h-11 rounded-2xl bg-blue-100/70 text-blue-800 flex items-center justify-center font-black">
                     <FileText className="w-6 h-6" />
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-black text-emerald-800 bg-emerald-100/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      <span className="text-[10px] font-black text-blue-800 bg-blue-100/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                         {currentType.kode_surat}
                       </span>
                       <span className="text-xs font-mono text-slate-400">Masa Berlaku: {currentType.masa_berlaku_hari} Hari</span>
@@ -787,7 +787,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   {currentType.persyaratan_json && currentType.persyaratan_json.length > 0 ? (
                     currentType.persyaratan_json.map((syarat, sIdx) => (
                       <span key={sIdx} className="px-2.5 py-1 rounded-xl bg-white border border-slate-200 text-[11px] font-medium text-slate-700 flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <CheckCircle2 className="w-3 h-3 text-blue-600" />
                         <span>{syarat}</span>
                       </span>
                     ))
@@ -815,7 +815,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     value={keperluan}
                     onChange={(e) => setKeperluan(e.target.value)}
                     placeholder="Contoh: Persyaratan pembuatan KTP baru karena rusak/hilang di Kantor Kecamatan Ngasem..."
-                    className="w-full p-3.5 rounded-2xl bg-white border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs"
+                    className="w-full p-3.5 rounded-2xl bg-white border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs"
                   />
                 </div>
 
@@ -825,8 +825,8 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   const hasKk = Boolean(masterDokumen?.stats?.has_kk ?? masterDokumen?.dokumen?.foto_kk);
                   if (hasKtp || hasKk) {
                     return (
-                      <div className="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-[11px] text-emerald-900 flex items-center gap-2.5 shadow-2xs">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <div className="p-3 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-[11px] text-blue-900 flex items-center gap-2.5 shadow-2xs">
+                        <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                         <span className="font-medium">
                           Identitas <strong className="font-bold">{[hasKtp && 'KTP', hasKk && 'Kartu Keluarga'].filter(Boolean).join(' & ')}</strong> Anda telah terhubung otomatis dari arsip kependudukan desa.
                         </span>
@@ -841,7 +841,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   <div className="flex items-center justify-between">
                     <div>
                       <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                        <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                        <Paperclip className="w-3.5 h-3.5 text-blue-600" />
                         <span>Foto / Lampiran Dokumen</span>
                       </label>
                     </div>
@@ -862,7 +862,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                         {lampiranList.map((item, idx) => (
                           <div
                             key={item.id}
-                            className="p-2.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-emerald-300 flex items-center justify-between gap-3 transition-all"
+                            className="p-2.5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-between gap-3 transition-all"
                           >
                             <div
                               onClick={() => {
@@ -872,7 +872,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                               className="flex items-center gap-2.5 min-w-0 cursor-pointer group"
                               title="Ketuk untuk melihat foto ukuran penuh"
                             >
-                              <div className="relative w-11 h-11 rounded-xl bg-slate-900 overflow-hidden shrink-0 border border-slate-200 shadow-2xs group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
+                              <div className="relative w-11 h-11 rounded-xl bg-slate-900 overflow-hidden shrink-0 border border-slate-200 shadow-2xs group-hover:ring-2 group-hover:ring-blue-500 transition-all">
                                 <img
                                   src={item.url}
                                   alt={item.nama}
@@ -883,10 +883,10 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                                 </div>
                               </div>
                               <div className="min-w-0">
-                                <div className="text-xs font-bold text-slate-900 truncate group-hover:text-emerald-700 transition-colors">
+                                <div className="text-xs font-bold text-slate-900 truncate group-hover:text-blue-700 transition-colors">
                                   {item.nama}
                                 </div>
-                                <div className="text-[10px] text-emerald-600 font-medium flex items-center gap-1 mt-0.5">
+                                <div className="text-[10px] text-blue-600 font-medium flex items-center gap-1 mt-0.5">
                                   <CheckCircle2 className="w-3 h-3" />
                                   <span>Siap dilampirkan</span>
                                 </div>
@@ -935,7 +935,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       }}
                       className="p-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 transition-all flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer shadow-2xs group press-down"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center group-hover:border-emerald-500 group-hover:text-emerald-700 transition-colors">
+                      <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center group-hover:border-blue-500 group-hover:text-blue-700 transition-colors">
                         <Upload className="w-4 h-4" />
                       </div>
                       <div>
@@ -959,16 +959,16 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                           setIsCameraModalOpen(true);
                         }
                       }}
-                      className="p-3.5 rounded-2xl bg-emerald-50/70 hover:bg-emerald-100/70 border border-emerald-200 text-emerald-950 transition-all flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer shadow-2xs group press-down"
+                      className="p-3.5 rounded-2xl bg-blue-50/70 hover:bg-blue-100/70 border border-blue-200 text-blue-950 transition-all flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer shadow-2xs group press-down"
                     >
-                      <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                      <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
                         <Camera className="w-4 h-4" />
                       </div>
                       <div>
-                        <div className="text-xs font-black text-emerald-950">
+                        <div className="text-xs font-black text-blue-950">
                           {lampiranList.length > 0 ? '+ Jepret Kamera' : 'Buka Kamera HP'}
                         </div>
-                        <div className="text-[10px] text-emerald-700 font-medium">Foto berkas langsung</div>
+                        <div className="text-[10px] text-blue-700 font-medium">Foto berkas langsung</div>
                       </div>
                     </button>
 
@@ -1010,8 +1010,8 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       disabled={isSubmitting}
                       className={`flex-1 py-3.5 px-5 rounded-2xl text-white font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 ${
                         isSubmitting 
-                          ? 'bg-emerald-800/80 cursor-not-allowed opacity-80' 
-                          : 'bg-emerald-700 hover:bg-emerald-800 active:scale-[0.99] cursor-pointer'
+                          ? 'bg-blue-800/80 cursor-not-allowed opacity-80' 
+                          : 'bg-blue-700 hover:bg-blue-800 active:scale-[0.99] cursor-pointer'
                       }`}
                     >
                       {isSubmitting ? (
@@ -1028,7 +1028,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     </button>
                   </div>
                   <div className="text-[11px] text-slate-500 font-medium text-center flex items-center justify-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                     <span>Layanan resmi Pemerintah Desa Doko • Gratis tanpa pungutan biaya</span>
                   </div>
                 </div>
@@ -1061,7 +1061,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                 placeholder="Cari jenis surat: KTP, KK, SKTM..."
                 value={suratSearch}
                 onChange={(e) => setSuratSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-white rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs"
+                className="w-full pl-10 pr-4 py-2.5 bg-white rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs"
               />
             </div>
           </div>
@@ -1101,20 +1101,20 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               {paginatedTypes.map((t) => (
                 <div
                   key={t.id}
-                  className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-2xs hover:border-emerald-400 hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-4 group"
+                  className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-2xs hover:border-blue-400 hover:shadow-md transition-all duration-200 flex flex-col justify-between space-y-4 group"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-2xs group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                      <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold shadow-2xs group-hover:bg-blue-600 group-hover:text-white transition-colors">
                         <FileText className="w-5 h-5" />
                       </div>
-                      <span className="text-[10px] font-black text-emerald-800 bg-emerald-100/70 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      <span className="text-[10px] font-black text-blue-800 bg-blue-100/70 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
                         {t.kode_surat}
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="font-black text-sm text-slate-900 group-hover:text-emerald-800 transition-colors leading-snug">
+                      <h3 className="font-black text-sm text-slate-900 group-hover:text-blue-800 transition-colors leading-snug">
                         {t.nama_surat}
                       </h3>
                       <div className="text-[11px] text-slate-500 mt-2 space-y-1">
@@ -1137,7 +1137,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     <button
                       type="button"
                       onClick={() => navigate(`/dashboard/ajukan/${t.id}`)}
-                      className="w-full py-2.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-all shadow-xs press-down flex items-center justify-center gap-2 cursor-pointer group/btn"
+                      className="w-full py-2.5 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all shadow-xs press-down flex items-center justify-center gap-2 cursor-pointer group/btn"
                     >
                       <span>Pengajuan</span>
                       <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
@@ -1173,7 +1173,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     onClick={() => setCatalogPage(pageNum)}
                     className={`w-8 h-8 rounded-xl font-black text-xs transition-all cursor-pointer ${
                       catalogPage === pageNum
-                        ? 'bg-emerald-600 text-white shadow-xs'
+                        ? 'bg-blue-600 text-white shadow-xs'
                         : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200'
                     }`}
                   >
@@ -1211,8 +1211,8 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         </div>
 
         {pendingSurats.length === 0 ? (
-          <div className="bg-white p-12 rounded-3xl border border-slate-200/80 text-center space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold mx-auto">
+        <div className="bg-white p-12 rounded-3xl border border-slate-200/80 text-center space-y-3">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
             <h3 className="font-extrabold text-sm text-slate-900">Belum ada pengajuan aktif</h3>
@@ -1265,7 +1265,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       <div className="absolute left-8 right-8 top-4 h-1 bg-slate-100 -z-0 rounded-full overflow-hidden">
                         <div 
                           className={`h-full transition-all duration-500 rounded-full ${
-                            isRTStepDone ? 'w-full bg-emerald-500' : 'w-0'
+                            isRTStepDone ? 'w-full bg-blue-500' : 'w-0'
                           }`}
                         />
                       </div>
@@ -1274,12 +1274,12 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       <div className="relative z-10 flex flex-col items-center text-center">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-all shadow-2xs ${
                           isRTStepDone
-                            ? 'bg-emerald-600 text-white shadow-emerald-200'
+                            ? 'bg-blue-600 text-white shadow-blue-200'
                             : 'bg-amber-500 text-white ring-4 ring-amber-100'
                         }`}>
                           {isRTStepDone ? <CheckCircle2 className="w-4 h-4" /> : '1'}
                         </div>
-                        <span className={`text-[11px] font-bold mt-1.5 ${isRTStepDone ? 'text-emerald-800' : 'text-slate-900'}`}>
+                        <span className={`text-[11px] font-bold mt-1.5 ${isRTStepDone ? 'text-blue-800' : 'text-slate-900'}`}>
                           Ketua RT 01
                         </span>
                         <span className="text-[10px] text-slate-600 font-medium">
@@ -1291,7 +1291,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       <div className="relative z-10 flex flex-col items-center text-center">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition-all shadow-2xs ${
                           isDone
-                            ? 'bg-emerald-600 text-white'
+                            ? 'bg-blue-600 text-white'
                             : isDesaStepActive
                             ? 'bg-blue-600 text-white ring-4 ring-blue-100'
                             : 'bg-slate-200 text-slate-500'
@@ -1300,7 +1300,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                         </div>
                         <span className={`text-[11px] font-bold mt-1.5 ${
                           isDone 
-                            ? 'text-emerald-800' 
+                            ? 'text-blue-800' 
                             : isDesaStepActive 
                             ? 'text-blue-900' 
                             : 'text-slate-600'
@@ -1324,12 +1324,12 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       ? 'bg-amber-50/70 border border-amber-200/80 text-amber-950'
                       : isDesaStepActive
                       ? 'bg-blue-50/70 border border-blue-200/80 text-blue-950'
-                      : 'bg-emerald-50/70 border border-emerald-200/80 text-emerald-950'
+                      : 'bg-blue-50/70 border border-blue-200/80 text-blue-950'
                   }`}>
                     <div className="shrink-0">
                       {s.status === 'pending_rt' && <Clock className="w-4 h-4 text-amber-600" />}
                       {isDesaStepActive && <FileCheck2 className="w-4 h-4 text-blue-600" />}
-                      {isDone && <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+                      {isDone && <CheckCircle2 className="w-4 h-4 text-blue-600" />}
                     </div>
                     <div className="leading-relaxed">
                       {s.status === 'pending_rt' && 'Berkas telah terkirim dan sedang menunggu persetujuan digital dari Ketua RT 01.'}
@@ -1351,7 +1351,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition-all cursor-pointer shadow-2xs"
                           title="Lihat foto dokumen terlampir"
                         >
-                          <Paperclip className="w-3.5 h-3.5 text-emerald-600" />
+                          <Paperclip className="w-3.5 h-3.5 text-blue-600" />
                           <span>{lampiranDocs.length} Foto Lampiran</span>
                         </button>
                       ) : (
@@ -1438,10 +1438,10 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         ) : (
           <div className="grid grid-cols-1 gap-4">
             {completedSurats.map((s) => (
-              <div key={s.id} className="bg-white p-6 rounded-3xl border border-emerald-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div key={s.id} className="bg-white p-6 rounded-3xl border border-blue-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black">
+                    <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-black">
                       TERBIT
                     </span>
                     <span className="text-xs font-mono text-slate-500">No: {s.nomor_surat_resmi || s.nomor_resi}</span>
@@ -1459,7 +1459,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   </button>
                   <button
                     onClick={() => setPrintSurat(s)}
-                    className="px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition-all press-down flex items-center gap-2 cursor-pointer"
+                    className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md transition-all press-down flex items-center gap-2 cursor-pointer"
                   >
                     <Printer className="w-4 h-4" />
                     <span>Cetak</span>
@@ -1494,7 +1494,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               placeholder="Cari resi / nama surat..."
               value={historySearch}
               onChange={(e) => setHistorySearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white rounded-2xl border border-slate-200 text-xs font-medium focus:outline-none focus:border-emerald-500"
+              className="w-full pl-10 pr-4 py-2.5 bg-white rounded-2xl border border-slate-200 text-xs font-medium focus:outline-none focus:border-blue-500"
             />
           </div>
         </div>
@@ -1515,7 +1515,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             type="button"
             onClick={() => setHistoryStatusFilter('selesai')}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer flex items-center gap-1.5 ${
-              historyStatusFilter === 'selesai' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100/80'
+              historyStatusFilter === 'selesai' ? 'bg-blue-600 text-white shadow-xs' : 'bg-blue-50 text-blue-800 border border-blue-200 hover:bg-blue-100/80'
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
@@ -1599,7 +1599,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                         <td className="px-3.5 py-3.5 text-slate-400 text-[11px] whitespace-nowrap">{new Date(s.created_at).toLocaleDateString('id-ID')}</td>
                         <td className="px-3.5 py-3.5 whitespace-nowrap">
                           <span className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
-                            isCompleted ? 'bg-emerald-100 text-emerald-800' :
+                            isCompleted ? 'bg-blue-100 text-blue-800' :
                             isRejected ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-100 text-amber-900'
                           }`}>
                             {isCompleted ? 'Diterima & Sah' : isRejected ? 'Ditolak' : 'Sedang Diproses'}
@@ -1625,7 +1625,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                             {isCompleted ? (
                               <button
                                 onClick={() => setPrintSurat(s)}
-                                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer press-down"
+                                className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-2xs transition-colors flex items-center gap-1.5 cursor-pointer press-down"
                                 title="Cetak atau Unduh Dokumen Sah PDF"
                               >
                                 <Printer className="w-3.5 h-3.5" />
@@ -1682,7 +1682,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                         <h4 className="text-xs font-black text-slate-900 mt-0.5">{s.surat_type?.nama_surat}</h4>
                       </div>
                       <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black shrink-0 ${
-                        isCompleted ? 'bg-emerald-100 text-emerald-800' :
+                        isCompleted ? 'bg-blue-100 text-blue-800' :
                         isRejected ? 'bg-rose-100 text-rose-800 border border-rose-200' : 'bg-amber-100 text-amber-900'
                       }`}>
                         {isCompleted ? 'Diterima & Sah' : isRejected ? 'Ditolak' : 'Sedang Diproses'}
@@ -1723,7 +1723,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                         {isCompleted ? (
                           <button
                             onClick={() => setPrintSurat(s)}
-                            className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer press-down"
+                            className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-xs transition-colors flex items-center gap-1 cursor-pointer press-down"
                           >
                             <Printer className="w-3 h-3" />
                             <span>Cetak / Unduh</span>
@@ -1806,22 +1806,22 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               <UserAvatar
                 src={user?.avatar}
                 name={p?.nama_lengkap || user?.name}
-                className="w-12 h-12 rounded-2xl object-cover border-2 border-emerald-500 shadow-xs shrink-0"
-                fallbackClassName="w-12 h-12 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-lg shadow-xs shrink-0"
+                className="w-12 h-12 rounded-2xl object-cover border-2 border-blue-500 shadow-xs shrink-0"
+                fallbackClassName="w-12 h-12 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-lg shadow-xs shrink-0"
               />
               <div className="min-w-0">
                 <span className="text-[11px] text-slate-400 font-medium block">Selamat datang,</span>
                 <h2 className="text-sm font-black text-slate-900 truncate">
                   {p?.nama_lengkap || user?.name || 'Warga Desa Doko'}
                 </h2>
-                <div className="text-[11px] font-semibold text-emerald-700 flex items-center gap-1.5 flex-wrap mt-0.5">
+                <div className="text-[11px] font-semibold text-blue-700 flex items-center gap-1.5 flex-wrap mt-0.5">
                   <span>RT 01 / RW 01 • Desa Doko</span>
                 </div>
               </div>
             </div>
 
             <div className="shrink-0 flex flex-col items-end gap-1">
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-50 text-blue-800 border border-blue-200">
                 ● Warga Sah
               </span>
             </div>
@@ -1831,7 +1831,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             <span className="font-mono text-[10px] text-slate-400">
               NIK: {p?.nik || '3506041505840001'}
             </span>
-            <span className="text-emerald-700 font-bold text-[10px]">
+            <span className="text-blue-700 font-bold text-[10px]">
               Iuran RT: Lunas (Agustus)
             </span>
           </div>
@@ -1843,7 +1843,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           <button
             type="button"
             onClick={() => onNavigate ? onNavigate('ajukan_surat') : null}
-            className="w-full p-4 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs shadow-xs transition-all flex items-center justify-between cursor-pointer group"
+            className="w-full p-4 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-black text-xs shadow-xs transition-all flex items-center justify-between cursor-pointer group"
           >
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center font-bold shrink-0">
@@ -1851,10 +1851,10 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               </div>
               <div className="text-left">
                 <div className="font-black text-xs leading-tight">Ajukan Surat Baru</div>
-                <div className="text-[11px] text-emerald-100/90 font-normal mt-0.5">14 jenis surat siap diproses</div>
+                <div className="text-[11px] text-blue-100/90 font-normal mt-0.5">14 jenis surat siap diproses</div>
               </div>
             </div>
-            <ArrowRight className="w-4 h-4 text-emerald-200 group-hover:translate-x-1 transition-transform shrink-0" />
+            <ArrowRight className="w-4 h-4 text-blue-200 group-hover:translate-x-1 transition-transform shrink-0" />
           </button>
 
           {/* 4 Icon Pintas Cepat (Grid 2x2 di Mobile) */}
@@ -1885,20 +1885,20 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             <button
               type="button"
               onClick={() => onNavigate ? onNavigate('surat_selesai') : null}
-              className="p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-emerald-300 hover:bg-emerald-50/40 shadow-2xs transition-all text-left space-y-1.5 cursor-pointer group"
+              className="p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-blue-300 hover:bg-blue-50/40 shadow-2xs transition-all text-left space-y-1.5 cursor-pointer group"
             >
               <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center">
                   <FileCheck2 className="w-4 h-4" />
                 </div>
                 {completedSurats.length > 0 && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-200">
                     {completedSurats.length}
                   </span>
                 )}
               </div>
               <div>
-                <div className="text-xs font-black text-slate-900 group-hover:text-emerald-900 leading-tight">Surat Sah</div>
+                <div className="text-xs font-black text-slate-900 group-hover:text-blue-900 leading-tight">Surat Sah</div>
                 <div className="text-[10px] text-slate-400 mt-0.5">Dokumen berstempel QR</div>
               </div>
             </button>
@@ -1927,18 +1927,18 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             <button
               type="button"
               onClick={() => onNavigate ? onNavigate('keuangan_desa') : null}
-              className="p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-teal-300 hover:bg-teal-50/40 shadow-2xs transition-all text-left space-y-1.5 cursor-pointer group"
+              className="p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-indigo-300 hover:bg-indigo-50/40 shadow-2xs transition-all text-left space-y-1.5 cursor-pointer group"
             >
               <div className="flex items-center justify-between">
-                <div className="w-8 h-8 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-800 flex items-center justify-center">
                   <Wallet className="w-4 h-4" />
                 </div>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-teal-100 text-teal-800 border border-teal-200">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-100 text-indigo-800 border border-indigo-200">
                   APBDes
                 </span>
               </div>
               <div>
-                <div className="text-xs font-black text-slate-900 group-hover:text-teal-900 leading-tight">APBDes</div>
+                <div className="text-xs font-black text-slate-900 group-hover:text-indigo-900 leading-tight">APBDes</div>
                 <div className="text-[10px] text-slate-400 mt-0.5">Transparansi anggaran</div>
               </div>
             </button>
@@ -1950,7 +1950,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
             <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">Total Pengajuan</span>
             <div className="text-base font-black text-slate-900">{surats.length} Surat</div>
-            <div className="text-[10px] text-emerald-700 font-semibold truncate">
+            <div className="text-[10px] text-blue-700 font-semibold truncate">
               ● Kuota Bebas Layanan
             </div>
           </div>
@@ -1965,8 +1965,8 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
 
           <div className="p-3 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-1">
             <span className="text-[10px] font-bold uppercase text-slate-400 block tracking-wider">Surat Sah & Terbit</span>
-            <div className="text-base font-black text-emerald-800">{completedSurats.length} Selesai</div>
-            <div className="text-[10px] text-emerald-700 font-semibold truncate">
+            <div className="text-base font-black text-blue-800">{completedSurats.length} Selesai</div>
+            <div className="text-[10px] text-blue-700 font-semibold truncate">
               100% Sah & Berstempel QR
             </div>
           </div>
@@ -1984,7 +1984,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         <div className="p-4 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
           <div className="flex items-center justify-between gap-2">
             <div>
-              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
                 Aktivitas Dokumen
               </span>
               <h3 className="text-xs font-black text-slate-900 mt-1">Daftar Permohonan Surat</h3>
@@ -1993,7 +1993,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             <button
               type="button"
               onClick={() => onNavigate ? onNavigate('riwayat_surat') : null}
-              className="text-xs font-black text-emerald-700 hover:text-emerald-900 flex items-center gap-1 cursor-pointer shrink-0"
+              className="text-xs font-black text-blue-700 hover:text-blue-900 flex items-center gap-1 cursor-pointer shrink-0"
             >
               <span>Semua ({surats.length})</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -2011,7 +2011,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                 const isRejected = ['rejected', 'rejected_rt', 'rejected_kades'].includes(s.status);
                 const statusLabel = isCompleted ? 'Sah & Ber-QR' : isRejected ? 'Perlu Diperbaiki' : 'Sedang Diproses';
                 const statusClass = isCompleted 
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+                  ? 'bg-blue-50 text-blue-800 border-blue-200' 
                   : isRejected 
                   ? 'bg-rose-50 text-rose-800 border-rose-200' 
                   : 'bg-amber-50 text-amber-900 border-amber-200';
@@ -2043,7 +2043,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                         <button
                           type="button"
                           onClick={() => setPrintSurat(s)}
-                          className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center gap-1 shadow-2xs cursor-pointer"
+                          className="px-3 py-1.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs flex items-center gap-1 shadow-2xs cursor-pointer"
                         >
                           <Printer className="w-3.5 h-3.5" />
                           <span>Cetak</span>
@@ -2079,7 +2079,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         <div className="p-4 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-2.5">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
                 Informasi Desa
               </span>
               <h3 className="text-xs font-black text-slate-900 mt-1">Agenda Desa Doko</h3>
@@ -2088,7 +2088,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               <button
                 type="button"
                 onClick={() => onNavigate('agenda_desa')}
-                className="text-[11px] font-bold text-emerald-700 hover:underline cursor-pointer"
+                className="text-[11px] font-bold text-blue-700 hover:underline cursor-pointer"
               >
                 Lihat Semua
               </button>
@@ -2103,10 +2103,10 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               <div key={ag.id} className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1 text-xs">
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-slate-900 flex items-center gap-1.5 truncate">
-                    <Calendar className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <Calendar className="w-4 h-4 text-blue-600 shrink-0" />
                     <span className="truncate">{ag.judul}</span>
                   </span>
-                  <span className="text-[9px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md shrink-0">
+                  <span className="text-[9px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded-md shrink-0">
                     {ag.tipe}
                   </span>
                 </div>
@@ -2127,21 +2127,21 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         {/* 4 Top Modular Stat Metric Cards */}
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5">
           <MetricStatCard
-            title="Total Surat Diajukan"
+            title="Surat Diajukan"
             value={`${surats.length} Surat`}
             subvalue="/ Kuota Bebas"
             percentage={100}
-            color="emerald"
-            trend="+18.5% vs bulan lalu"
+            color="blue"
+            trend="Bulan ini"
             isPositiveTrend={true}
           />
           <MetricStatCard
-            title="Surat Diterima & Sah"
+            title="Surat Selesai"
             value={`${completedSurats.length} Selesai`}
             subvalue="Siap Unduh PDF"
             percentage={surats.length > 0 ? Math.round((completedSurats.length / surats.length) * 100) : 100}
-            color="teal"
-            trend="100% Sah & Ber-QR"
+            color="indigo"
+            trend="Sah & ber-QR"
             isPositiveTrend={true}
           />
           <MetricStatCard
@@ -2150,7 +2150,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             subvalue="Sedang Diperiksa"
             percentage={pendingSurats.length > 0 ? 65 : 100}
             color="amber"
-            trend="SLA Rata-rata < 15 Menit"
+            trend="Diproses RT"
             isPositiveTrend={true}
           />
           <MetricStatCard
@@ -2169,39 +2169,35 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           {/* Left 8 Cols: Performance Spline Chart + Sub-grid (Bar Chart + Quick Actions) */}
           <div className="xl:col-span-8 space-y-5">
             <AreaSplineChart
-              title="Overview Efisiensi & Volume Surat"
-              subtitle="Statistik Layanan Administrasi Desa"
+              title="Ringkasan Surat"
+              subtitle="Status pengajuan surat"
               data={performanceData}
               highlightValue="96.75%"
-              highlightLabel="Kecepatan Penerbitan & Kepuasan Warga"
+              highlightLabel="Layanan surat"
               trendText="+12.8% vs bulan lalu"
             />
 
             {/* Sub-grid under Chart: Weekly Bar Activity (6 Col) + Quick Actions (6 Col) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <BarActivityChart
-                title="Aktivitas Jam Layanan"
-                subtitle="Statistik Mingguan"
+                title="Aktivitas Layanan"
+                subtitle="Minggu ini"
                 data={weeklyActivityData}
                 mainValue="34.30 Jam"
-                mainLabel="Waktu Pelayanan Aktif Minggu Ini"
+                mainLabel="Waktu layanan"
               />
 
               {/* Quick Action & Document Hub Card */}
               <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
                 <div>
-                  <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
-                    Aksi Mandiri
-                  </span>
-                  <h4 className="text-sm font-black text-slate-900 mt-1">Layanan Pintas</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">Akses cepat layanan surat dan kependudukan.</p>
+                  <h4 className="text-sm font-black text-slate-900">Layanan Pintas</h4>
                 </div>
 
                 <div className="space-y-2">
                   <button
                     type="button"
                     onClick={() => onNavigate ? onNavigate('ajukan_surat') : null}
-                    className="w-full p-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all press-down flex items-center justify-between cursor-pointer"
+                    className="w-full p-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-xs transition-all press-down flex items-center justify-between cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
                       <Plus className="w-4 h-4" />
@@ -2227,13 +2223,13 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   <button
                     type="button"
                     onClick={() => onNavigate ? onNavigate('surat_selesai') : null}
-                    className="w-full p-3 rounded-2xl bg-emerald-50 hover:bg-emerald-100/80 border border-emerald-200 text-emerald-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
+                    className="w-full p-3 rounded-2xl bg-blue-50 hover:bg-blue-100/80 border border-blue-200 text-blue-900 font-extrabold text-xs transition-all flex items-center justify-between cursor-pointer"
                   >
                     <span className="flex items-center gap-2">
-                      <Download className="w-4 h-4 text-emerald-700" />
+                      <Download className="w-4 h-4 text-blue-700" />
                       <span>Unduh surat sah</span>
                     </span>
-                    <span className="text-[10px] font-black text-emerald-800 bg-emerald-200/60 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-black text-blue-800 bg-blue-200/60 px-2 py-0.5 rounded-full">
                       {completedSurats.length} Sah
                     </span>
                   </button>
@@ -2261,10 +2257,10 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             {/* Quick Profile / Personal Info Card Matching Reference */}
             <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
-                  Identitas Akun
+                <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
+                  Profil
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-200">
                   ● Aktif / Terverifikasi
                 </span>
               </div>
@@ -2273,14 +2269,14 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                 <UserAvatar
                   src={user?.avatar}
                   name={p?.nama_lengkap || user?.name}
-                  className="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-400 shadow-xs shrink-0"
-                  fallbackClassName="w-14 h-14 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
+                  className="w-14 h-14 rounded-2xl object-cover border-2 border-blue-400 shadow-xs shrink-0"
+                  fallbackClassName="w-14 h-14 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
                 />
                 <div className="min-w-0 flex-1">
                   <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
                     {p?.nama_lengkap || user?.name}
                   </h4>
-                  <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
+                  <div className="text-[11px] text-blue-700 font-extrabold mt-0.5">
                     Warga Penduduk Tetap
                   </div>
                   <div className="text-[10px] font-mono text-slate-400 truncate">
@@ -2300,7 +2296,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                 </div>
                 <div className="flex justify-between items-center text-[11px]">
                   <span className="text-slate-400 font-bold">Status Iuran Kas RT:</span>
-                  <span className="text-emerald-700 font-black">Lunas (Agustus)</span>
+                  <span className="text-blue-700 font-black">Lunas (Agustus)</span>
                 </div>
               </div>
             </div>
@@ -2321,7 +2317,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   time: a.waktu,
                   category: a.tipe,
                   location: a.tempat,
-                  color: a.is_custom ? 'emerald' : 'sky',
+                  color: a.is_custom ? 'blue' : 'sky',
                 };
               }) : undefined}
             />
@@ -2332,17 +2328,17 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
         <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
-                Aktivitas Dokumen Terbaru
-              </span>
-              <h3 className="text-base font-black text-slate-900 mt-1">Daftar Permohonan & Surat Sah</h3>
+                <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
+                  Surat Terbaru
+                </span>
+              <h3 className="text-base font-black text-slate-900 mt-1">Riwayat Surat</h3>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => onNavigate ? onNavigate('riwayat_surat') : null}
-                className="text-xs font-black text-emerald-700 hover:text-emerald-900 underline flex items-center gap-1 cursor-pointer"
+                className="text-xs font-black text-blue-700 hover:text-blue-900 underline flex items-center gap-1 cursor-pointer"
               >
                 <span>Lihat Seluruh Arsip ({surats.length})</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -2383,7 +2379,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                         </td>
                         <td className="p-3.5">
                           <span className={`px-2.5 py-1 rounded-full text-[10px] font-black ${
-                            isCompleted ? 'bg-emerald-100 text-emerald-800' :
+                            isCompleted ? 'bg-blue-100 text-blue-800' :
                             isRejected ? 'bg-rose-100 text-rose-800 border border-rose-200' :
                             'bg-amber-100 text-amber-900'
                           }`}>
@@ -2395,7 +2391,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                             {isCompleted ? (
                               <button
                                 onClick={() => setPrintSurat(s)}
-                                className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-2xs transition-all cursor-pointer flex items-center gap-1"
+                                className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-2xs transition-all cursor-pointer flex items-center gap-1"
                               >
                                 <Printer className="w-3.5 h-3.5" />
                                 <span>Cetak PDF</span>
@@ -2485,12 +2481,12 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             onClick={(e) => e.stopPropagation()}
           >
             {/* Celebration Icon */}
-            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-sm ring-8 ring-emerald-50">
+            <div className="w-16 h-16 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto shadow-sm ring-8 ring-blue-50">
               <CheckCircle2 className="w-9 h-9" />
             </div>
 
             <div className="space-y-1.5">
-              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+              <span className="text-[10px] font-black uppercase tracking-widest text-blue-800 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
                 {submitSuccessModal.isEdit ? 'Pembaruan Berhasil' : 'Pengajuan Berhasil Terkirim'}
               </span>
               <h3 className="text-xl font-black text-slate-900 pt-1">
@@ -2513,7 +2509,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     Nomor Resi Pelacakan
                   </div>
                   <div className="flex items-center justify-between mt-1">
-                    <span className="text-sm font-mono font-black text-emerald-800 bg-emerald-100/80 px-2.5 py-1 rounded-xl">
+                    <span className="text-sm font-mono font-black text-blue-800 bg-blue-100/80 px-2.5 py-1 rounded-xl">
                       {submitSuccessModal.surat.nomor_resi}
                     </span>
                     <button
@@ -2523,11 +2519,11 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                         setCopiedResi(true);
                         setTimeout(() => setCopiedResi(false), 2000);
                       }}
-                      className="text-[11px] font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs"
+                      className="text-[11px] font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs"
                     >
                       {copiedResi ? (
                         <>
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                           <span>Tersalin</span>
                         </>
                       ) : (
@@ -2564,7 +2560,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                   setSubmitSuccessModal(null);
                   navigate('/dashboard/status-surat');
                 }}
-                className="w-full py-3.5 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer hover-glow press-down"
+                className="w-full py-3.5 px-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer hover-glow press-down"
               >
                 <span>Pantau di Status Surat</span>
                 <ArrowRight className="w-4 h-4" />
@@ -2658,7 +2654,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           >
             <div className="flex items-center justify-between text-slate-900 pb-3 border-b border-slate-100 shrink-0">
               <span className="text-xs font-bold flex items-center gap-2 truncate text-slate-800">
-                <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center shrink-0">
+                <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center shrink-0">
                   <Eye className="w-4 h-4" />
                 </div>
                 <span className="truncate">
@@ -2718,7 +2714,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                     type="button"
                     onClick={() => setGalleryIndex(idx)}
                     className={`relative w-14 h-14 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                      galleryIndex === idx ? 'border-emerald-500 scale-105' : 'border-slate-200 opacity-60 hover:opacity-100'
+                      galleryIndex === idx ? 'border-blue-500 scale-105' : 'border-slate-200 opacity-60 hover:opacity-100'
                     }`}
                   >
                     <img src={doc.url} alt={doc.nama} className="w-full h-full object-cover" />
@@ -2737,7 +2733,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           <div
             className={`pointer-events-auto flex items-start gap-3 p-4 rounded-2xl shadow-2xl border backdrop-blur-md transition-all ${
               actionToast.type === 'success'
-                ? 'bg-emerald-950/95 border-emerald-500/60 text-white shadow-emerald-950/50'
+                ? 'bg-blue-950/95 border-blue-500/60 text-white shadow-blue-950/50'
                 : actionToast.type === 'error'
                 ? 'bg-rose-950/95 border-rose-500/60 text-white shadow-rose-950/50'
                 : 'bg-slate-900/95 border-blue-500/60 text-white shadow-slate-950/50'
@@ -2746,7 +2742,7 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           >
             <div className="shrink-0 mt-0.5">
               {actionToast.type === 'success' && (
-                <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+                <div className="w-8 h-8 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
                   <CheckCircle2 className="w-5 h-5" />
                 </div>
               )}

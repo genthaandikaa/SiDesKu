@@ -89,7 +89,7 @@ const getRoleCategoryBadge = (category?: string, roleName?: string) => {
   if (category === 'aparatur_desa') {
     return {
       label: roleName || 'Aparatur Desa',
-      bg: 'bg-emerald-50 text-emerald-800 border-emerald-200/80',
+      bg: 'bg-blue-50 text-blue-800 border-blue-200/80',
     };
   }
   if (category === 'pengurus_wilayah') {
@@ -289,7 +289,7 @@ export const PusatPesanView: React.FC = () => {
       <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="p-2 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+            <span className="p-2 rounded-2xl bg-blue-50 text-blue-700 border border-blue-200/80">
               <MessageSquare className="w-5 h-5" />
             </span>
             <h1 className="text-xl font-black text-slate-900 tracking-tight">Pusat Pesan & Komunikasi Desa</h1>
@@ -306,12 +306,12 @@ export const PusatPesanView: React.FC = () => {
             className="p-2.5 rounded-2xl border border-slate-200 hover:bg-slate-50 text-slate-600 transition cursor-pointer"
             title="Muat Ulang Pesan"
           >
-            <RefreshCw className={`w-4 h-4 ${loadingRooms ? 'animate-spin text-emerald-600' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loadingRooms ? 'animate-spin text-blue-600' : ''}`} />
           </button>
           <button
             type="button"
             onClick={() => setIsNewChatModalOpen(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Mulai Chat Baru</span>
@@ -340,7 +340,7 @@ export const PusatPesanView: React.FC = () => {
                 placeholder="Cari obrolan atau pesan..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:border-emerald-600 bg-slate-50 focus:bg-white transition"
+                className="w-full pl-9 pr-3 py-2 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:border-blue-600 bg-slate-50 focus:bg-white transition"
               />
             </div>
 
@@ -351,7 +351,7 @@ export const PusatPesanView: React.FC = () => {
                 onClick={() => setCategoryFilter('all')}
                 className={`px-3 py-1.5 rounded-xl transition cursor-pointer shrink-0 ${
                   categoryFilter === 'all'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -362,7 +362,7 @@ export const PusatPesanView: React.FC = () => {
                 onClick={() => setCategoryFilter('aparatur')}
                 className={`px-3 py-1.5 rounded-xl transition cursor-pointer shrink-0 ${
                   categoryFilter === 'aparatur'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -373,7 +373,7 @@ export const PusatPesanView: React.FC = () => {
                 onClick={() => setCategoryFilter('wilayah')}
                 className={`px-3 py-1.5 rounded-xl transition cursor-pointer shrink-0 ${
                   categoryFilter === 'wilayah'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -384,7 +384,7 @@ export const PusatPesanView: React.FC = () => {
                 onClick={() => setCategoryFilter('warga')}
                 className={`px-3 py-1.5 rounded-xl transition cursor-pointer shrink-0 ${
                   categoryFilter === 'warga'
-                    ? 'bg-emerald-600 text-white shadow-2xs'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -405,7 +405,7 @@ export const PusatPesanView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewChatModalOpen(true)}
-                  className="mt-4 px-3.5 py-1.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs hover:bg-emerald-100 transition cursor-pointer"
+                  className="mt-4 px-3.5 py-1.5 rounded-xl bg-blue-50 text-blue-700 border border-blue-200 font-bold text-xs hover:bg-blue-100 transition cursor-pointer"
                 >
                   + Hubungi Kontak
                 </button>
@@ -428,15 +428,15 @@ export const PusatPesanView: React.FC = () => {
                     onClick={() => setActiveRoom(room)}
                     className={`p-3 rounded-2xl transition cursor-pointer flex items-center justify-between gap-3 mb-1 ${
                       isSelected
-                        ? 'bg-white border border-emerald-200/90 shadow-xs'
+                        ? 'bg-white border border-blue-200/90 shadow-xs'
                         : 'hover:bg-white/80'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 border ${
                         isSelected
-                          ? 'bg-emerald-600 text-white border-emerald-600'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                          ? 'bg-blue-600 text-white border-blue-600'
+                          : 'bg-blue-50 text-blue-700 border-blue-100'
                       }`}>
                         {displayName.charAt(0).toUpperCase()}
                       </div>
@@ -467,7 +467,7 @@ export const PusatPesanView: React.FC = () => {
                         {formatRelativeTime(room.last_message_at)}
                       </span>
                       {unread > 0 && (
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black shadow-xs">
+                        <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-black shadow-xs">
                           {unread}
                         </span>
                       )}
@@ -506,7 +506,7 @@ export const PusatPesanView: React.FC = () => {
 
                     return (
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-sm shrink-0 border border-emerald-200/80">
+                        <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-sm shrink-0 border border-blue-200/80">
                           {displayName.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
@@ -519,7 +519,7 @@ export const PusatPesanView: React.FC = () => {
                             </span>
                           </div>
                           <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-medium mt-0.5">
-                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                            <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
                             <span>Terenkripsi Standar Desa Digital</span>
                             {activeRoom.support_ticket_number && (
                               <span className="font-mono text-slate-400">({activeRoom.support_ticket_number})</span>
@@ -548,14 +548,14 @@ export const PusatPesanView: React.FC = () => {
                 {/* Security Announcement Pill */}
                 <div className="flex justify-center">
                   <div className="px-3 py-1 rounded-full bg-white border border-slate-200/80 text-[10px] text-slate-500 flex items-center gap-1.5 shadow-2xs">
-                    <Lock className="w-3 h-3 text-emerald-600" />
+                    <Lock className="w-3 h-3 text-blue-600" />
                     <span>Pesan dilindungi enskripsi integritas data desa.</span>
                   </div>
                 </div>
 
                 {messages.length === 0 ? (
                   <div className="text-center py-20 text-slate-400">
-                    <Sparkles className="w-8 h-8 mx-auto mb-2 text-emerald-500 stroke-1" />
+                    <Sparkles className="w-8 h-8 mx-auto mb-2 text-blue-500 stroke-1" />
                     <p className="font-bold text-xs text-slate-700">Mulai Percakapan Anda</p>
                     <p className="text-[11px] text-slate-500 mt-1">
                       Kirim pesan pertanyaan, koordinasi surat, atau konfirmasi berkas di bawah.
@@ -575,14 +575,14 @@ export const PusatPesanView: React.FC = () => {
                         <div
                           className={`max-w-[85%] sm:max-w-[70%] px-4 py-2.5 rounded-2xl text-xs break-words shadow-xs ${
                             isMe
-                              ? 'bg-emerald-600 text-white rounded-tr-xs'
+                              ? 'bg-blue-600 text-white rounded-tr-xs'
                               : 'bg-white border border-slate-200/90 text-slate-800 rounded-tl-xs'
                           }`}
                         >
                           <p className="leading-relaxed whitespace-pre-wrap">{m.message_encrypted}</p>
                           <div
                             className={`flex items-center justify-end gap-1.5 text-[9px] mt-1.5 ${
-                              isMe ? 'text-emerald-100' : 'text-slate-400'
+                              isMe ? 'text-blue-100' : 'text-slate-400'
                             }`}
                           >
                             <span>
@@ -591,7 +591,7 @@ export const PusatPesanView: React.FC = () => {
                                 minute: '2-digit',
                               })}
                             </span>
-                            {isMe && <CheckCheck className="w-3 h-3 text-emerald-200" />}
+                            {isMe && <CheckCheck className="w-3 h-3 text-blue-200" />}
                           </div>
                         </div>
                       </div>
@@ -611,12 +611,12 @@ export const PusatPesanView: React.FC = () => {
                   placeholder="Ketik pesan untuk aparatur desa atau warga..."
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
-                  className="flex-1 px-4 py-2.5 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:border-emerald-600 bg-slate-50 focus:bg-white transition"
+                  className="flex-1 px-4 py-2.5 text-xs rounded-2xl border border-slate-200 focus:outline-none focus:border-blue-600 bg-slate-50 focus:bg-white transition"
                 />
                 <button
                   type="submit"
                   disabled={!messageInput.trim() || sending}
-                  className="px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer shrink-0"
+                  className="px-4 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition cursor-pointer shrink-0"
                 >
                   <Send className="w-4 h-4" />
                   <span className="hidden sm:inline">Kirim</span>
@@ -626,7 +626,7 @@ export const PusatPesanView: React.FC = () => {
           ) : (
             /* Empty selection placeholder */
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400">
-              <div className="w-16 h-16 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 border border-emerald-100">
+              <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4 border border-blue-100">
                 <MessageSquare className="w-8 h-8" />
               </div>
               <h3 className="font-extrabold text-sm text-slate-800">Pilih Obrolan untuk Membaca</h3>
@@ -636,7 +636,7 @@ export const PusatPesanView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setIsNewChatModalOpen(true)}
-                className="mt-5 px-5 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs cursor-pointer flex items-center gap-2"
+                className="mt-5 px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs cursor-pointer flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 <span>Mulai Obrolan Baru</span>
@@ -674,7 +674,7 @@ export const PusatPesanView: React.FC = () => {
                   placeholder="Cari nama, jabatan, atau role..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 bg-white"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 bg-white"
                 />
               </div>
             </div>
@@ -692,10 +692,10 @@ export const PusatPesanView: React.FC = () => {
                     <div
                       key={contact.id}
                       onClick={() => handleStartChat(contact)}
-                      className="p-3 rounded-2xl hover:bg-emerald-50/60 transition cursor-pointer flex items-center justify-between gap-3 group"
+                      className="p-3 rounded-2xl hover:bg-blue-50/60 transition cursor-pointer flex items-center justify-between gap-3 group"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-9 h-9 rounded-xl bg-slate-100 group-hover:bg-emerald-100 text-slate-700 group-hover:text-emerald-800 flex items-center justify-center font-bold text-xs shrink-0 transition">
+                        <div className="w-9 h-9 rounded-xl bg-slate-100 group-hover:bg-blue-100 text-slate-700 group-hover:text-blue-800 flex items-center justify-center font-bold text-xs shrink-0 transition">
                           {contact.name.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0">
@@ -707,7 +707,7 @@ export const PusatPesanView: React.FC = () => {
                           </span>
                         </div>
                       </div>
-                      <span className="text-xs font-bold text-emerald-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                      <span className="text-xs font-bold text-blue-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">
                         <span>Chat</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </span>

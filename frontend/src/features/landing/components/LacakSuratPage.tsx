@@ -94,62 +94,68 @@ export const LacakSuratPage: React.FC = () => {
   };
 
   return (
-    <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800">
+    <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800 bg-white">
       
       {/* Div 1: Clean Ambient Hero Section with SVG Vectors (Canvas Mint) */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-16 sm:pb-20 overflow-hidden">
+      <section className="relative isolate w-full px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-10 text-center overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-blue-500/15 via-sky-400/10 to-transparent blur-3xl pointer-events-none -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-gradient-to-tr from-blue-500/20 via-sky-400/15 to-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
         {/* SVG Ambient Concentric Watermark Vectors */}
-        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-emerald-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-blue-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
           <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="2" strokeDasharray="6 6" />
           <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.5" />
           <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" />
           <circle cx="200" cy="200" r="40" stroke="currentColor" strokeWidth="1" />
         </svg>
-        <svg className="absolute -left-20 top-1/4 w-[420px] h-[420px] text-teal-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+        <svg className="absolute -left-20 top-1/4 w-[420px] h-[420px] text-indigo-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
           <path d="M 0,200 Q 100,70 200,200 T 400,200" stroke="currentColor" strokeWidth="2" fill="none" />
           <path d="M 0,230 Q 100,100 200,230 T 400,230" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.6" />
         </svg>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div className="relative z-10 mx-auto max-w-4xl">
           
           {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
-          <div className="lg:col-span-7 space-y-4 text-left">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
+          <div className="space-y-4 text-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs animate-fade-in">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <span>Pelacakan Surat Desa</span>
+            </div>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.08] max-w-4xl mx-auto">
               Lacak Status Surat &{' '}
-              <span className="relative whitespace-nowrap text-emerald-700 inline-block">
+              <span className="relative whitespace-nowrap text-blue-700 inline-block">
                 Validasi QR
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400" viewBox="0 0 100 20" preserveAspectRatio="none">
+                <svg className="absolute -bottom-2 left-0 w-full h-3 text-blue-400" viewBox="0 0 100 20" preserveAspectRatio="none">
                   <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
                 </svg>
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-xl">
-              Pantau tahapan verifikasi berkas permohonan surat atau periksa keabsahan stempel QR resmi.
+            <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl mx-auto">
+              Lacak proses surat atau cek keaslian QR.
             </p>
           </div>
 
           {/* Right Column (40% Fibonacci): QR Validation Card Preview */}
-          <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
+          <div className="hidden">
             <div className="w-full max-w-md animate-float-gentle">
               <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
                 
                 {/* Top Bar with QR Scanner Badge */}
                 <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
+                    <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-black">
                       <QrCode className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="font-black text-xs text-slate-900 leading-tight">
                         Scanner Keabsahan QR
                       </div>
-                      <div className="text-[10px] text-emerald-600 font-bold">
+                      <div className="text-[10px] text-blue-600 font-bold">
                         Integritas Dokumen Terjamin
                       </div>
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] border border-emerald-200">
+                  <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 font-extrabold text-[10px] border border-blue-200">
                     Live Verify
                   </span>
                 </div>
@@ -158,20 +164,20 @@ export const LacakSuratPage: React.FC = () => {
                 <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2 text-xs">
                   <div className="font-black text-slate-900 text-xs flex items-center justify-between">
                     <span>Proses Disposisi Berjenjang</span>
-                    <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md">4 Tahap</span>
+                    <span className="text-[10px] font-mono text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-md">4 Tahap</span>
                   </div>
                   <div className="grid grid-cols-4 gap-1.5 text-center text-[10px] font-bold pt-1">
-                    <div className="bg-emerald-100 text-emerald-800 p-1.5 rounded-lg border border-emerald-200">1. Warga</div>
-                    <div className="bg-emerald-100 text-emerald-800 p-1.5 rounded-lg border border-emerald-200">2. RT</div>
-                    <div className="bg-emerald-100 text-emerald-800 p-1.5 rounded-lg border border-emerald-200">3. RW</div>
-                    <div className="bg-emerald-600 text-white p-1.5 rounded-lg shadow-xs">4. Sah QR</div>
+                    <div className="bg-blue-100 text-blue-800 p-1.5 rounded-lg border border-blue-200">1. Warga</div>
+                    <div className="bg-blue-100 text-blue-800 p-1.5 rounded-lg border border-blue-200">2. RT</div>
+                    <div className="bg-blue-100 text-blue-800 p-1.5 rounded-lg border border-blue-200">3. RW</div>
+                    <div className="bg-blue-600 text-white p-1.5 rounded-lg shadow-xs">4. Sah QR</div>
                   </div>
                 </div>
 
                 {/* Instant Lookup Hint */}
                 <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
                   <span className="flex items-center gap-1.5 font-medium">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                     <span>Masukkan No. Resi Surat</span>
                   </span>
                   <span className="font-bold text-slate-700">Akurat 100%</span>
@@ -183,14 +189,14 @@ export const LacakSuratPage: React.FC = () => {
       </section>
 
       {/* Floating Main Search Bar - Straddling Seam Line */}
-      <div className="relative z-30 max-w-4xl mx-auto px-4 sm:px-6 w-full -mb-[48px] sm:-mb-[54px]">
+      <div className="relative z-30 mt-6 sm:mt-8 max-w-4xl mx-auto px-4 sm:px-6 w-full">
         <div className="bg-white/95 backdrop-blur-xl rounded-[2rem] border border-slate-200/90 p-6 sm:p-7 space-y-4 shadow-xl shadow-slate-900/10">
           <div className="text-center space-y-1">
             <h2 className="text-xl font-black text-slate-900">
               Cek Posisi Dokumen Anda
             </h2>
             <p className="text-xs text-slate-500">
-              Ketikkan Nomor Resi Surat Pelacakan Anda (Contoh: REQ-...)
+              Masukkan nomor resi, contoh REQ-20260818-001.
             </p>
           </div>
 
@@ -199,10 +205,10 @@ export const LacakSuratPage: React.FC = () => {
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder="Contoh: REQ-20260818-001..."
+                placeholder="Nomor resi surat"
                 value={keyword}
                 onChange={(e) => setKeyword(e.target.value)}
-                className="w-full pl-10 pr-24 py-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all font-mono text-slate-800"
+                className="w-full pl-10 pr-24 py-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm font-medium focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all font-mono text-slate-800"
               />
               <button
                 type="button"
@@ -217,7 +223,7 @@ export const LacakSuratPage: React.FC = () => {
                     // Fallback
                   }
                 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-extrabold text-[10px] transition-all cursor-pointer"
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-800 font-extrabold text-[10px] transition-all cursor-pointer"
               >
                 Paste / Tempel
               </button>
@@ -225,7 +231,7 @@ export const LacakSuratPage: React.FC = () => {
             <button
               type="submit"
               disabled={isSearching}
-              className="px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-600/20 transition-all press-down disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+              className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-600/20 transition-all press-down disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
             >
               {isSearching ? 'Mencari...' : 'Lacak'}
             </button>
@@ -242,7 +248,7 @@ export const LacakSuratPage: React.FC = () => {
                   setKeyword(sample);
                   executeSearch(sample);
                 }}
-                className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-mono font-bold text-[11px] border border-emerald-200/80 transition-all cursor-pointer"
+                className="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 font-mono font-bold text-[11px] border border-blue-200/80 transition-all cursor-pointer"
               >
                 {sample}
               </button>
@@ -259,14 +265,14 @@ export const LacakSuratPage: React.FC = () => {
       </div>
 
       {/* Div 2: Hasil Pelacakan & Rincian Berkas (Full-Width Pure White Band) */}
-      <section className="w-full bg-white pt-20 sm:pt-24 pb-16 sm:pb-24 border-y border-slate-200/80 relative z-20">
+      <section className="w-full bg-white pt-10 sm:pt-12 pb-16 sm:pb-24 border-b border-slate-200/80 relative z-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
           
           {/* Tracking Results Case */}
           {hasSearched && trackingResults && trackingResults.length > 0 ? (
             <div className="space-y-6 animate-fade-in">
               <div className="flex items-center justify-between">
-                <div className="text-xs font-black text-emerald-900 uppercase tracking-wider flex items-center gap-2">
+                <div className="text-xs font-black text-blue-900 uppercase tracking-wider flex items-center gap-2">
                   <span>Hasil Pelacakan Berkas ({trackingResults.length})</span>
                 </div>
                 <span className="text-[11px] text-slate-500 font-medium">Klik verifikasi untuk cek sertifikat sah</span>
@@ -282,7 +288,7 @@ export const LacakSuratPage: React.FC = () => {
                 else if (item.status === 'pending_rt') currentStep = 2;
 
                 return (
-                  <div key={item.id} className="bg-slate-50/60 rounded-3xl p-6 sm:p-7 space-y-6 border border-slate-200/80 hover:border-emerald-300 shadow-lg transition-all">
+                  <div key={item.id} className="bg-slate-50/60 rounded-3xl p-6 sm:p-7 space-y-6 border border-slate-200/80 hover:border-blue-300 shadow-lg transition-all">
                     <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-slate-200/80">
                       <div className="space-y-2">
                         <div className="flex flex-wrap items-center gap-2">
@@ -291,13 +297,13 @@ export const LacakSuratPage: React.FC = () => {
                             <button
                               type="button"
                               onClick={() => handleCopy(item.nomor_resi)}
-                              className="text-xs text-emerald-700 hover:text-emerald-900 font-bold flex items-center gap-1 cursor-pointer pl-1.5 border-l border-slate-200"
+                              className="text-xs text-blue-700 hover:text-blue-900 font-bold flex items-center gap-1 cursor-pointer pl-1.5 border-l border-slate-200"
                               title="Salin Nomor Resi"
                             >
                               {copiedResi === item.nomor_resi ? (
                                 <>
-                                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                  <span className="text-[10px] text-emerald-700 font-extrabold">Tersalin!</span>
+                                  <Check className="w-3.5 h-3.5 text-blue-600" />
+                                  <span className="text-[10px] text-blue-700 font-extrabold">Tersalin!</span>
                                 </>
                               ) : (
                                 <>
@@ -309,7 +315,7 @@ export const LacakSuratPage: React.FC = () => {
                           </div>
 
                           {item.nomor_surat_resmi && (
-                            <span className="text-[11px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200">
+                            <span className="text-[11px] font-mono font-bold text-blue-800 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200">
                               No: {item.nomor_surat_resmi}
                             </span>
                           )}
@@ -324,7 +330,7 @@ export const LacakSuratPage: React.FC = () => {
 
                       <div className="text-right space-y-1.5">
                         <span className={`inline-flex items-center px-4 py-1.5 rounded-full text-xs font-black shadow-xs ${
-                          item.status === 'completed' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' :
+                          item.status === 'completed' ? 'bg-blue-100 text-blue-900 border border-blue-300' :
                           item.status === 'rejected' ? 'bg-rose-100 text-rose-900 border border-rose-300' :
                           'bg-amber-100 text-amber-900 border border-amber-300'
                         }`}>
@@ -354,12 +360,12 @@ export const LacakSuratPage: React.FC = () => {
                             <div key={st.num} className="space-y-1.5">
                               <div className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center font-black transition-all ${
                                 isDone
-                                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 ring-2 ring-emerald-200'
+                                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 ring-2 ring-blue-200'
                                   : 'bg-slate-200 text-slate-400 border border-slate-300'
                               }`}>
                                 {isDone && currentStep > st.num ? <Check className="w-3.5 h-3.5" /> : st.num}
                               </div>
-                              <div className={`font-bold truncate ${isCurrent ? 'text-emerald-700 font-black' : isDone ? 'text-slate-800' : 'text-slate-400'}`}>
+                              <div className={`font-bold truncate ${isCurrent ? 'text-blue-700 font-black' : isDone ? 'text-slate-800' : 'text-slate-400'}`}>
                                 {st.label}
                               </div>
                             </div>
@@ -376,10 +382,10 @@ export const LacakSuratPage: React.FC = () => {
                       className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200/80 flex items-center justify-between text-xs font-black text-slate-800 transition-all cursor-pointer shadow-2xs"
                     >
                       <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                        <CheckCircle2 className="w-4 h-4 text-blue-600" />
                         <span>Tahapan Riwayat Persetujuan Berjenjang ({item.trackings?.length || 0})</span>
                       </div>
-                      <span className="text-[11px] text-emerald-700 font-extrabold flex items-center gap-1">
+                      <span className="text-[11px] text-blue-700 font-extrabold flex items-center gap-1">
                         {isExpanded ? 'Sembunyikan ▲' : 'Buka Detail ▼'}
                       </span>
                     </button>
@@ -390,10 +396,10 @@ export const LacakSuratPage: React.FC = () => {
                         {item.trackings && item.trackings.length > 0 ? (
                           item.trackings.map((t, idx) => (
                             <div key={t.id || idx} className="flex items-start gap-3 bg-white p-3 rounded-xl border border-slate-200/90 shadow-2xs">
-                              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                               <div className="flex-1 text-xs">
                                 <div className="flex items-center justify-between">
-                                  <span className="font-extrabold text-slate-900">{t.status_stage} — <span className="text-emerald-700">{t.status_action}</span></span>
+                                  <span className="font-extrabold text-slate-900">{t.status_stage} — <span className="text-blue-700">{t.status_action}</span></span>
                                   <span className="text-[11px] text-slate-400 font-medium font-mono">{new Date(t.created_at).toLocaleString('id-ID')}</span>
                                 </div>
                                 {t.catatan && <p className="text-slate-600 mt-1 italic">{t.catatan}</p>}
@@ -415,7 +421,7 @@ export const LacakSuratPage: React.FC = () => {
                       >
                         {copiedResi === (item.qr_verification_hash || item.nomor_resi) ? (
                           <>
-                            <Check className="w-4 h-4 text-emerald-600" />
+                            <Check className="w-4 h-4 text-blue-600" />
                             <span>Kode Berhasil Disalin!</span>
                           </>
                         ) : (
@@ -432,7 +438,7 @@ export const LacakSuratPage: React.FC = () => {
                             setQrVerifyHash(item.qr_verification_hash || item.nomor_resi);
                             setIsVerifyModalOpen(true);
                           }}
-                          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-emerald-700 text-white text-xs font-extrabold hover:bg-emerald-800 transition-all shadow-sm press-down cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-blue-700 text-white text-xs font-extrabold hover:bg-blue-800 transition-all shadow-sm press-down cursor-pointer"
                         >
                           <ShieldCheck className="w-4 h-4" />
                           Uji Sertifikat Validasi QR
@@ -447,55 +453,55 @@ export const LacakSuratPage: React.FC = () => {
             /* Default Informational Guide when not searched */
             <div className="space-y-8">
               <div className="text-center max-w-xl mx-auto space-y-2">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/80 uppercase tracking-widest">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200/80 uppercase tracking-widest">
                   Transparansi Birokrasi
                 </div>
                 <h3 className="text-2xl font-black text-slate-900 tracking-tight">
-                  Bagaimana Cara Kerja Pelacakan Berkas?
+                  Cara melacak surat
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-500">
-                  Setiap dokumen yang diajukan melalui portal SIDes akan melewati proses disposisi berjenjang yang aman dan dapat dipantau setiap detiknya.
+                  Masukkan nomor resi untuk melihat status surat.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs">
+                  <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs">
                     1
                   </div>
-                  <h4 className="font-black text-sm text-slate-900">1. Simpan Nomor Resi Permohonan</h4>
+                  <h4 className="font-black text-sm text-slate-900">1. Simpan nomor resi</h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Setelah Anda mengajukan surat di portal, sistem otomatis menerbitkan Nomor Resi unik (contoh: <code>REQ-20260818-001</code>).
+                    Nomor resi terbit setelah pengajuan dikirim.
                   </p>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs">
+                  <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs">
                     2
                   </div>
-                  <h4 className="font-black text-sm text-slate-900">2. Pantau Approval RT & RW</h4>
+                  <h4 className="font-black text-sm text-slate-900">2. Pantau verifikasi RT/RW</h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Lacak kapan Ketua RT dan Ketua RW Anda menekan tombol persetujuan (ACC) langsung dari smartphone mereka.
+                    Lihat saat RT dan RW memverifikasi pengajuan.
                   </p>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs">
+                  <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs">
                     3
                   </div>
-                  <h4 className="font-black text-sm text-slate-900">3. Penerbitan TTD QR Sekdes</h4>
+                  <h4 className="font-black text-sm text-slate-900">3. Surat diterbitkan</h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Sekretaris Desa membubuhkan TTD elektronik resmi dan stempel digital berstempel barcode sah yang siap diunduh.
+                    Sekdes menerbitkan surat ber-QR.
                   </p>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs">
+                  <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs">
                     4
                   </div>
-                  <h4 className="font-black text-sm text-slate-900">4. Unduh & Cetak Mandiri</h4>
+                  <h4 className="font-black text-sm text-slate-900">4. Unduh surat</h4>
                   <p className="text-xs text-slate-600 leading-relaxed">
-                    Dokumen siap dicetak dalam format PDF standar A4 dinas tanpa perlu antre fisik di Balai Desa Doko.
+                    Unduh PDF setelah surat terbit.
                   </p>
                 </div>
               </div>
@@ -506,7 +512,7 @@ export const LacakSuratPage: React.FC = () => {
       </section>
 
       {/* Div 3: Verifikasi Keaslian Stempel & TTD QR (Full-Width Emerald Background Banner Band) */}
-      <section className="w-full bg-gradient-to-b from-[#065f46] via-[#047857] to-[#064e3b] py-16 sm:py-24 text-white relative overflow-hidden">
+      <section className="w-full bg-gradient-to-b from-[#1e3a5f] via-[#1d4ed8] to-[#172554] py-16 sm:py-24 text-white relative overflow-hidden">
         {/* Concentric Circle Orbit Watermark */}
         <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full border border-white/10 pointer-events-none" />
         <div className="absolute -left-20 bottom-0 w-80 h-80 rounded-full border border-white/10 pointer-events-none" />
@@ -515,18 +521,18 @@ export const LacakSuratPage: React.FC = () => {
           <div className="p-8 sm:p-12 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 text-center sm:text-left">
               <div className="w-16 h-16 rounded-3xl bg-white/20 text-white flex items-center justify-center font-black shrink-0 shadow-inner">
-                <QrCode className="w-8 h-8 text-emerald-200" />
+                <QrCode className="w-8 h-8 text-blue-200" />
               </div>
               <div className="space-y-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-emerald-200 text-xs font-bold border border-white/20">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 text-blue-200 text-xs font-bold border border-white/20">
+                  <ShieldCheck className="w-3.5 h-3.5 text-blue-300" />
                   <span>INTEGRITAS SERTIFIKAT DIGITAL</span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-black text-white">
-                  Punya Dokumen Bertanda Tangan QR?
+                  Cek surat ber-QR
                 </h3>
-                <p className="text-xs sm:text-sm text-emerald-100/90 max-w-xl leading-relaxed">
-                  Periksa keaslian surat yang Anda terima dari Desa Doko dengan memindai kode QR atau memasukkan kode hash verifikasi ke sistem verifikator sah.
+                <p className="text-xs sm:text-sm text-blue-100/90 max-w-xl leading-relaxed">
+                  Pindai QR atau masukkan kode verifikasi untuk cek keaslian surat.
                 </p>
               </div>
             </div>
@@ -536,9 +542,9 @@ export const LacakSuratPage: React.FC = () => {
                 setQrVerifyHash(null);
                 setIsVerifyModalOpen(true);
               }}
-              className="px-8 py-4 rounded-2xl bg-white hover:bg-emerald-50 text-emerald-950 font-black text-xs sm:text-sm transition-all shrink-0 shadow-xl press-down cursor-pointer flex items-center gap-2"
+              className="px-8 py-4 rounded-2xl bg-white hover:bg-blue-50 text-blue-950 font-black text-xs sm:text-sm transition-all shrink-0 shadow-xl press-down cursor-pointer flex items-center gap-2"
             >
-              <QrCode className="w-4 h-4 text-emerald-700" />
+              <QrCode className="w-4 h-4 text-blue-700" />
               <span>Buka Verifikator QR</span>
             </button>
           </div>

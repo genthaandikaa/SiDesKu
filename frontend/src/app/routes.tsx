@@ -53,7 +53,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
               this.setState({ hasError: false });
               window.location.reload();
             }}
-            className="px-5 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs transition-all cursor-pointer"
+            className="px-5 py-2.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-xs transition-all cursor-pointer"
           >
             Muat Ulang Halaman
           </button>
@@ -67,7 +67,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 const PageLoadingFallback: React.FC = () => (
   <div className="min-h-[50vh] flex items-center justify-center p-8 font-sans">
     <div className="flex flex-col items-center gap-3">
-      <div className="w-10 h-10 border-4 border-emerald-600/20 border-t-emerald-600 rounded-full animate-spin" />
+      <div className="w-10 h-10 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
       <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Memuat Halaman...</span>
     </div>
   </div>

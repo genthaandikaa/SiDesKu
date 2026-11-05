@@ -68,7 +68,7 @@ export const LayananSuratPage: React.FC = () => {
         'Surat Pengantar dari Ketua RT setempat (otomatis via SIDes)',
         'Foto kondisi rumah / surat pernyataan penghasilan orang tua (bila diminta)',
       ],
-      kegunaan: 'Syarat beasiswa sekolah/kuliah, pengajuan KIP Kuliah, keringanan biaya RSUD, atau permohonan bansos.',
+      kegunaan: 'Beasiswa, KIP, layanan kesehatan, atau bansos.',
     },
     {
       id: 2,
@@ -82,7 +82,7 @@ export const LayananSuratPage: React.FC = () => {
         'Kartu Keluarga (KK)',
         'Persetujuan Ketua RT & Ketua RW sesuai alamat tinggal',
       ],
-      kegunaan: 'Persyaratan pembukaan rekening bank, pendaftaran kerja, verifikasi alamat domisili sementara.',
+      kegunaan: 'Bukti alamat untuk keperluan bank atau kerja.',
     },
     {
       id: 3,
@@ -97,7 +97,7 @@ export const LayananSuratPage: React.FC = () => {
         'Foto tempat usaha / kegiatan dagang',
         'Verifikasi pengurus RT bahwa usaha aktif beroperasi di Desa Doko',
       ],
-      kegunaan: 'Pengajuan KUR Bank (BRI/Mandiri/Jatim), legalitas izin usaha mikro, pengajuan bantuan modal UMKM.',
+      kegunaan: 'KUR, izin usaha, atau bantuan modal UMKM.',
     },
     {
       id: 4,
@@ -112,7 +112,7 @@ export const LayananSuratPage: React.FC = () => {
         'Pas foto 4x6 background merah',
         'Surat pengantar RT yang menyatakan berkelakuan baik',
       ],
-      kegunaan: 'Persyaratan penerbitan SKCK di Polsek Ngasem / Polres Kediri untuk melamar pekerjaan atau CPNS/BUMN.',
+      kegunaan: 'Pengantar SKCK untuk kerja atau keperluan lain.',
     },
     {
       id: 5,
@@ -127,7 +127,7 @@ export const LayananSuratPage: React.FC = () => {
         'Surat Keterangan Kematian dari RS / Puskesmas / Bidan Desa (jika ada)',
         'Keterangan saksi dari RT setempat',
       ],
-      kegunaan: 'Pengurusan Akta Kematian Dispendukcapil, klaim asuransi/Taspen, dan penghapusan data kependudukan.',
+      kegunaan: 'Akta kematian, klaim, dan pembaruan data warga.',
     },
     {
       id: 6,
@@ -142,7 +142,7 @@ export const LayananSuratPage: React.FC = () => {
         'Buku Nikah / Akta Perkawinan Orang Tua',
         'Kartu Keluarga (KK)',
       ],
-      kegunaan: 'Pengurusan Akta Kelahiran dan penambahan anggota keluarga baru di KK Dispendukcapil Kab. Kediri.',
+      kegunaan: 'Akta kelahiran dan pembaruan Kartu Keluarga.',
     },
     {
       id: 7,
@@ -157,7 +157,7 @@ export const LayananSuratPage: React.FC = () => {
         'Surat pernyataan belum pernah menikah bermaterai Rp 10.000',
         'Persetujuan Ketua RT & RW',
       ],
-      kegunaan: 'Syarat pernikahan di KUA (Model N1-N4), pendaftaran beasiswa ikatan dinas, atau persyaratan rekrutmen kerja.',
+      kegunaan: 'Pernikahan, beasiswa, atau persyaratan kerja.',
     },
     {
       id: 8,
@@ -172,7 +172,7 @@ export const LayananSuratPage: React.FC = () => {
         'Alasan kepindahan',
         'Surat bebas tanggungan kas RT',
       ],
-      kegunaan: 'Penerbitan Surat Keterangan Pindah WNI (SKPWNI) dari Dispendukcapil Kabupaten Kediri.',
+      kegunaan: 'Pengurusan surat pindah di Dispendukcapil.',
     },
   ];
 
@@ -186,20 +186,20 @@ export const LayananSuratPage: React.FC = () => {
 
   const faqs = [
     {
-      q: 'Apakah pengurusan surat di SIDes Desa Doko dipungut biaya?',
-      a: 'Sama sekali TIDAK. Seluruh jenis surat pengantar dan administrasi desa berstatus GRATIS (Rp 0,-) sesuai peraturan perundang-undangan.',
+      q: 'Apakah layanan surat berbayar?',
+      a: 'Tidak. Layanan surat desa gratis.',
     },
     {
-      q: 'Bagaimana cara warga mengurus surat jika belum memiliki akun?',
-      a: 'Warga yang sudah terdata dalam Kartu Keluarga di Desa Doko dapat langsung login menggunakan NIK atau username, atau klik tombol Sign up untuk membuat akun warga mandiri.',
+      q: 'Belum punya akun?',
+      a: 'Warga terdaftar dapat masuk dengan NIK atau username. Hubungi kantor desa jika belum memiliki akun.',
     },
     {
-      q: 'Berapa lama surat saya selesai dan bisa dicetak?',
-      a: 'Rata-rata 10 hingga 30 menit. Setelah Ketua RT menyetujui, Kepala Desa langsung mengesahkan dokumen dengan tanda tangan QR resmi.',
+      q: 'Berapa lama prosesnya?',
+      a: 'Waktu bergantung pada verifikasi RT/RW dan penerbitan surat.',
     },
     {
-      q: 'Apakah dokumen yang diunduh dari SIDes sah di instansi luar?',
-      a: 'Sangat sah. Setiap surat dilengkapi nomor registrasi resmi dan QR Code yang dapat diverifikasi oleh instansi eksternal.',
+      q: 'Apakah surat digital bisa diverifikasi?',
+      a: 'Bisa. Pindai QR pada surat untuk memeriksa keasliannya.',
     },
   ];
 
@@ -207,41 +207,47 @@ export const LayananSuratPage: React.FC = () => {
     <div className="page-enter relative w-full overflow-hidden flex flex-col">
       
       {/* Div 1: Clean Ambient Hero Section with SVG Vectors (Canvas Mint) */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-16 sm:pb-20 overflow-hidden">
+      <section className="relative isolate w-full px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 pb-12 sm:pb-16 text-center">
+        <div className="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-blue-500/15 via-sky-400/10 to-transparent blur-3xl pointer-events-none -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-gradient-to-tr from-blue-500/20 via-sky-400/15 to-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
         {/* SVG Ambient Concentric Watermark Vectors */}
-        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-emerald-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-blue-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
           <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="2" strokeDasharray="6 6" />
           <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.5" />
           <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" />
           <circle cx="200" cy="200" r="40" stroke="currentColor" strokeWidth="1" />
         </svg>
-        <svg className="absolute -left-20 top-1/3 w-[420px] h-[420px] text-teal-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+        <svg className="absolute -left-20 top-1/3 w-[420px] h-[420px] text-indigo-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
           <path d="M 0,200 Q 100,70 200,200 T 400,200" stroke="currentColor" strokeWidth="2" fill="none" />
           <path d="M 0,230 Q 100,100 200,230 T 400,230" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.6" />
         </svg>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div className="relative z-10 mx-auto max-w-4xl">
           
           {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
-          <div className="lg:col-span-7 space-y-4 text-left">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
+          <div className="space-y-4 text-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs animate-fade-in">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <span>Layanan Digital Desa Doko</span>
+            </div>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.08] max-w-4xl mx-auto">
               Katalog Layanan{' '}
-              <span className="relative whitespace-nowrap text-emerald-700 inline-block">
+              <span className="relative whitespace-nowrap text-blue-700 inline-block">
                 Surat Digital
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400" viewBox="0 0 100 20" preserveAspectRatio="none">
+                <svg className="absolute -bottom-2 left-0 w-full h-3 text-blue-400" viewBox="0 0 100 20" preserveAspectRatio="none">
                   <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
                 </svg>
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-xl">
-              Daftar surat keterangan resmi desa beserta persyaratan berkas untuk pengajuan online.
+            <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl mx-auto">
+              Pilih surat, cek syarat, lalu ajukan secara online.
             </p>
 
-            <div className="pt-1">
+            <div className="flex justify-center pt-1">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-emerald-700/20 transition-all press-down hover-glow"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-700/20 transition-all press-down hover-glow"
               >
                 <span>Ajukan surat</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -250,7 +256,7 @@ export const LayananSuratPage: React.FC = () => {
           </div>
 
           {/* Right Column (40% Fibonacci): Document Mockup Preview */}
-          <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
+          <div className="hidden">
             <div className="w-full max-w-md animate-float-gentle">
               <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
                 
@@ -266,12 +272,12 @@ export const LayananSuratPage: React.FC = () => {
                       <div className="font-black text-xs text-slate-900 leading-tight">
                         Dokumen Resmi Dinas
                       </div>
-                      <div className="text-[10px] text-emerald-600 font-bold">
+                      <div className="text-[10px] text-blue-600 font-bold">
                         Kop Surat Pemdes Doko
                       </div>
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] border border-emerald-200">
+                  <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 font-extrabold text-[10px] border border-blue-200">
                     Gratis Rp 0,-
                   </span>
                 </div>
@@ -280,21 +286,21 @@ export const LayananSuratPage: React.FC = () => {
                 <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2.5 text-xs">
                   <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
                     <span className="font-black text-slate-800">Surat Keterangan Usaha (SKU)</span>
-                    <span className="text-[10px] font-mono text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md">
+                    <span className="text-[10px] font-mono text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-md">
                       503/042/.../2026
                     </span>
                   </div>
                   <div className="space-y-1 text-[11px] text-slate-500">
                     <div className="flex justify-between"><span>Pemohon:</span><strong className="text-slate-800">Bambang Utomo</strong></div>
-                    <div className="flex justify-between"><span>Verifikasi RT:</span><span className="text-emerald-700 font-bold">Selesai ACC</span></div>
-                    <div className="flex justify-between"><span>Pengesahan:</span><span className="text-emerald-700 font-bold">Stempel & QR TTD</span></div>
+                    <div className="flex justify-between"><span>Verifikasi RT:</span><span className="text-blue-700 font-bold">Selesai ACC</span></div>
+                    <div className="flex justify-between"><span>Pengesahan:</span><span className="text-blue-700 font-bold">Stempel & QR TTD</span></div>
                   </div>
                 </div>
 
                 {/* Instant Guarantee */}
                 <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
                   <span className="flex items-center gap-1.5 font-medium">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                     <span>Diproses Rata-rata &lt; 15 Menit</span>
                   </span>
                   <span className="font-bold text-slate-700">100% Online</span>
@@ -317,7 +323,7 @@ export const LayananSuratPage: React.FC = () => {
               Jenis Surat Resmi
             </div>
             <div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/70">
                 Katalog Lengkap
               </span>
             </div>
@@ -325,14 +331,14 @@ export const LayananSuratPage: React.FC = () => {
 
           {/* Card 2 */}
           <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
-            <div className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight leading-none group-hover:scale-105 transition-transform">
+            <div className="text-2xl sm:text-3xl font-black text-blue-600 tracking-tight leading-none group-hover:scale-105 transition-transform">
               Rp 0,-
             </div>
             <div className="text-xs sm:text-[13px] font-bold text-slate-700">
               Gratis Tanpa Pungli
             </div>
             <div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/70">
                 Anti Biaya Siluman
               </span>
             </div>
@@ -347,7 +353,7 @@ export const LayananSuratPage: React.FC = () => {
               Rata-rata SLA
             </div>
             <div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/70">
                 Disposisi Cepat
               </span>
             </div>
@@ -355,14 +361,14 @@ export const LayananSuratPage: React.FC = () => {
 
           {/* Card 4 */}
           <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
-            <div className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight leading-none group-hover:scale-105 transition-transform">
+            <div className="text-2xl sm:text-3xl font-black text-blue-600 tracking-tight leading-none group-hover:scale-105 transition-transform">
               100%
             </div>
             <div className="text-xs sm:text-[13px] font-bold text-slate-700">
               Legalitas QR Sah
             </div>
             <div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200/70">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/70">
                 Standar DPMPD
               </span>
             </div>
@@ -374,66 +380,66 @@ export const LayananSuratPage: React.FC = () => {
       <section className="w-full bg-white pt-20 sm:pt-24 pb-16 sm:pb-24 border-y border-slate-200/80 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto space-y-2 mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-200/80 uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200/80 uppercase tracking-widest">
               Transparansi Proses
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
               Alur Pelayanan Surat 4 Tahap
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 font-medium">
-              Mekanisme birokrasi berjenjang yang aman, akuntabel, dan terlacak realtime dari ponsel warga hingga balai desa.
+              Empat langkah dari pengajuan hingga surat terbit.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-emerald-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
+            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
+              <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
                 1
               </div>
               <h3 className="font-bold text-base text-gray-900">Pengajuan Warga</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Warga login ke portal, memilih jenis surat yang dibutuhkan, dan mengisi alasan/keperluan permohonan.
+                Pilih surat, isi formulir, lalu kirim permohonan.
               </p>
-              <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 p-2 rounded-xl">
+              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 p-2 rounded-xl">
                 ⏱ Seketika (1 Menit)
               </div>
             </div>
 
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-emerald-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
+            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
+              <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
                 2
               </div>
               <h3 className="font-bold text-base text-gray-900">Validasi Ketua RT</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Ketua RT memeriksa kebenaran data warganya dan memberikan persetujuan (ACC) via smartphone.
+                RT memeriksa data dan memberi persetujuan online.
               </p>
-              <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 p-2 rounded-xl">
+              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 p-2 rounded-xl">
                 ⏱ Notifikasi Realtime
               </div>
             </div>
 
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-emerald-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
+            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
+              <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
                 3
               </div>
               <h3 className="font-bold text-base text-gray-900">Verifikasi Ketua RW</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Ketua RW memvalidasi berkas pengantar untuk memastikan tertib administrasi tingkat rukun warga.
+                RW memvalidasi permohonan.
               </p>
-              <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 p-2 rounded-xl">
+              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 p-2 rounded-xl">
                 ⏱ 1-Klik Verifikasi
               </div>
             </div>
 
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-emerald-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
+            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
+              <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
                 4
               </div>
               <h3 className="font-bold text-base text-gray-900">Penerbitan Sekdes & QR</h3>
               <p className="text-xs text-gray-600 leading-relaxed">
-                Sekdes menerbitkan nomor registrasi otomatis, stempel resmi, dan tanda tangan QR yang siap diunduh/cetak.
+                Sekdes menerbitkan surat ber-QR untuk diunduh.
               </p>
-              <div className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 p-2 rounded-xl">
+              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 p-2 rounded-xl">
                 ⏱ Terbit Sah & Resmi
               </div>
             </div>
@@ -442,7 +448,7 @@ export const LayananSuratPage: React.FC = () => {
       </section>
 
       {/* Div 3: Standar Legalitas & Keamanan Dokumen Digital (Full-Width Emerald Background Banner Band) */}
-      <section className="w-full bg-gradient-to-b from-[#065f46] via-[#047857] to-[#064e3b] py-16 sm:py-24 text-white relative overflow-hidden">
+      <section className="w-full bg-gradient-to-b from-[#1e3a5f] via-[#1d4ed8] to-[#172554] py-16 sm:py-24 text-white relative overflow-hidden">
         {/* Concentric Circle Orbit Watermark */}
         <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full border border-white/10 pointer-events-none" />
         <div className="absolute -right-12 -top-12 w-72 h-72 rounded-full border border-white/10 pointer-events-none" />
@@ -451,26 +457,26 @@ export const LayananSuratPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-emerald-200 text-xs font-black border border-white/20">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-blue-200 text-xs font-black border border-white/20">
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-300" />
                 <span>KEAMANAN & LEGALITAS TERVERIFIKASI</span>
               </div>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
-                Surat Sah Ber-QR Code, Diakui Instansi Eksternal
+                Surat Resmi dengan QR
               </h2>
-              <p className="text-sm text-emerald-100/90 leading-relaxed font-medium">
-                Seluruh dokumen digital yang diterbitkan melalui SIDes dilengkapi hash kriptografi SHA-256 unik berstempel sah DPMPD Kabupaten Kediri, setara kekuatan hukum tanda tangan basah.
+              <p className="text-sm text-blue-100/90 leading-relaxed font-medium">
+                Setiap surat memiliki nomor registrasi dan QR untuk verifikasi.
               </p>
             </div>
 
             <div className="flex items-center gap-3 shrink-0">
               <Link
                 to="/lacak"
-                className="px-5 py-3 rounded-2xl bg-white text-emerald-900 font-extrabold text-xs sm:text-sm hover:bg-emerald-50 transition-all shadow-lg flex items-center gap-2 press-down"
+                className="px-5 py-3 rounded-2xl bg-white text-blue-900 font-extrabold text-xs sm:text-sm hover:bg-blue-50 transition-all shadow-lg flex items-center gap-2 press-down"
               >
-                <Search className="w-4 h-4 text-emerald-700" />
+                <Search className="w-4 h-4 text-blue-700" />
                 <span>Uji Pelacak Surat Demo</span>
-                <ArrowRight className="w-3.5 h-3.5 text-emerald-700" />
+                <ArrowRight className="w-3.5 h-3.5 text-blue-700" />
               </Link>
             </div>
           </div>
@@ -478,31 +484,31 @@ export const LayananSuratPage: React.FC = () => {
           {/* 3 Callout Cards on Banner */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white/10 backdrop-blur-md border border-white/15 p-6 rounded-3xl space-y-3 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/30 text-white flex items-center justify-center border border-white/20">
-                <Lock className="w-6 h-6 text-emerald-200" />
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/30 text-white flex items-center justify-center border border-white/20">
+                <Lock className="w-6 h-6 text-blue-200" />
               </div>
-              <h3 className="font-extrabold text-lg text-white">Kriptografi Anti-Pemalsuan</h3>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                QR Code terenkripsi yang langsung mengarah ke server desa untuk memvalidasi keaslian dokumen secara realtime saat dipindai oleh pihak perbankan, kepolisian, atau dinas.
+              <h3 className="font-extrabold text-lg text-white">Verifikasi QR</h3>
+              <p className="text-xs text-blue-100/80 leading-relaxed">
+                Pindai QR untuk memeriksa keaslian surat.
               </p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md border border-white/15 p-6 rounded-3xl space-y-3 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/30 text-white flex items-center justify-center border border-white/20">
-                <Clock className="w-6 h-6 text-emerald-200" />
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/30 text-white flex items-center justify-center border border-white/20">
+                <Clock className="w-6 h-6 text-blue-200" />
               </div>
-              <h3 className="font-extrabold text-lg text-white">SLA Cepat & Transparan</h3>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                Rata-rata proses persuratan selesai dalam 10 - 20 menit. Tidak perlu berulang kali datang ke balai desa untuk mengecek status disposisi permohonan.
+              <h3 className="font-extrabold text-lg text-white">Proses Terpantau</h3>
+              <p className="text-xs text-blue-100/80 leading-relaxed">
+                Pantau status tanpa datang ke balai desa.
               </p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md border border-white/15 p-6 rounded-3xl space-y-3 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-500/30 text-white flex items-center justify-center border border-white/20">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/30 text-white flex items-center justify-center border border-white/20">
               </div>
-              <h3 className="font-extrabold text-lg text-white">Resmi Rp 0,- Tanpa Pungli</h3>
-              <p className="text-xs text-emerald-100/80 leading-relaxed">
-                Komitmen integritas pelayanan masyarakat Desa Doko 100% bebas biaya administrasi sesuai peraturan perundangan yang berlaku.
+              <h3 className="font-extrabold text-lg text-white">Gratis</h3>
+              <p className="text-xs text-blue-100/80 leading-relaxed">
+                Tidak ada biaya administrasi.
               </p>
             </div>
           </div>
@@ -514,9 +520,9 @@ export const LayananSuratPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
             <div className="space-y-1">
-              <div className="text-xs font-bold text-emerald-700 uppercase tracking-widest">Katalog Layanan Digital</div>
+              <div className="text-xs font-bold text-blue-700 uppercase tracking-widest">Katalog Layanan Digital</div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-                Pilih Jenis Surat yang Anda Butuhkan
+                Pilih jenis surat
               </h2>
             </div>
 
@@ -525,10 +531,10 @@ export const LayananSuratPage: React.FC = () => {
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
-                placeholder="Ketik nama surat atau kode (SKTM, SKU, SKD)..."
+                placeholder="Cari nama atau kode surat..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50/80 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-2xs"
+                className="w-full pl-10 pr-4 py-2.5 bg-slate-50/80 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-2xs"
               />
             </div>
           </div>
@@ -542,8 +548,8 @@ export const LayananSuratPage: React.FC = () => {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
                   selectedCategory === cat
-                    ? 'bg-emerald-700 text-white shadow-xs scale-102'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-emerald-50 hover:text-emerald-800'
+                    ? 'bg-blue-700 text-white shadow-xs scale-102'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-blue-50 hover:text-blue-800'
                 }`}
               >
                 {cat}
@@ -554,16 +560,16 @@ export const LayananSuratPage: React.FC = () => {
           {/* Surat Catalog Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredSuratTypes.map((s) => (
-              <div key={s.id} className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-emerald-300 hover:shadow-xl transition-all duration-300 hover-lift group">
+              <div key={s.id} className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 hover:shadow-xl transition-all duration-300 hover-lift group">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-black text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                    <span className="text-[10px] font-mono font-black text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
                       {s.kode}
                     </span>
                     <span className="text-[10px] text-slate-500 font-bold bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">{s.waktu}</span>
                   </div>
 
-                  <h3 className="font-black text-base text-gray-900 group-hover:text-emerald-700 transition-colors leading-snug">
+                  <h3 className="font-black text-base text-gray-900 group-hover:text-blue-700 transition-colors leading-snug">
                     {s.nama}
                   </h3>
                   <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
@@ -575,9 +581,9 @@ export const LayananSuratPage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setSelectedSurat(s)}
-                    className="text-xs font-bold text-slate-600 hover:text-emerald-700 hover:underline cursor-pointer"
+                    className="text-xs font-bold text-slate-600 hover:text-blue-700 hover:underline cursor-pointer"
                   >
-                    Syarat Berkas
+                    Syarat
                   </button>
                   <button
                     type="button"
@@ -585,7 +591,7 @@ export const LayananSuratPage: React.FC = () => {
                       if (user) navigate('/dashboard');
                       else navigate('/login');
                     }}
-                    className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] shadow-2xs transition-all press-down cursor-pointer"
+                    className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] shadow-2xs transition-all press-down cursor-pointer"
                   >
                     Ajukan
                   </button>
@@ -597,22 +603,22 @@ export const LayananSuratPage: React.FC = () => {
       </section>
 
       {/* Div 5: Pertanyaan Umum (FAQ) & Pusat Bantuan (Full-Width Emerald Background Banner Band) */}
-      <section className="w-full bg-gradient-to-b from-[#065f46] via-[#047857] to-[#064e3b] py-16 sm:py-24 text-white relative overflow-hidden">
+      <section className="w-full bg-gradient-to-b from-[#1e3a5f] via-[#1d4ed8] to-[#172554] py-16 sm:py-24 text-white relative overflow-hidden">
         {/* Ambient Glows */}
-        <div className="absolute left-10 top-1/2 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute right-10 bottom-10 w-96 h-96 bg-teal-300/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute left-10 top-1/2 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute right-10 bottom-10 w-96 h-96 bg-indigo-300/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center space-y-3 mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-emerald-200 text-xs font-black border border-white/20">
-              <FileQuestion className="w-3.5 h-3.5 text-emerald-300" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-blue-200 text-xs font-black border border-white/20">
+              <FileQuestion className="w-3.5 h-3.5 text-blue-300" />
               <span>PERTANYAAN UMUM PERSURATAN (FAQ)</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
               Hal yang Sering Ditanyakan Warga
             </h2>
-            <p className="text-xs sm:text-sm text-emerald-100/90 max-w-xl mx-auto font-medium">
-              Informasi penting seputar tata cara pengajuan, verifikasi RT/RW, dan keabsahan dokumen digital desa.
+            <p className="text-xs sm:text-sm text-blue-100/90 max-w-xl mx-auto font-medium">
+              Jawaban singkat tentang pengajuan dan surat digital.
             </p>
           </div>
 
@@ -622,7 +628,7 @@ export const LayananSuratPage: React.FC = () => {
               return (
                 <div 
                   key={idx} 
-                  className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl overflow-hidden transition-all duration-300 hover:border-emerald-300/40"
+                  className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl overflow-hidden transition-all duration-300 hover:border-blue-300/40"
                 >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
@@ -630,13 +636,13 @@ export const LayananSuratPage: React.FC = () => {
                   >
                     <span>{f.q}</span>
                     {isOpen ? (
-                      <ChevronUp className="w-4 h-4 text-emerald-300 shrink-0" />
+                      <ChevronUp className="w-4 h-4 text-blue-300 shrink-0" />
                     ) : (
-                      <ChevronDown className="w-4 h-4 text-emerald-200/80 shrink-0" />
+                      <ChevronDown className="w-4 h-4 text-blue-200/80 shrink-0" />
                     )}
                   </button>
                   {isOpen && (
-                    <div className="p-5 pt-0 text-xs sm:text-sm text-emerald-50/95 border-t border-white/10 bg-black/10 leading-relaxed animate-fade-in">
+                    <div className="p-5 pt-0 text-xs sm:text-sm text-blue-50/95 border-t border-white/10 bg-black/10 leading-relaxed animate-fade-in">
                       {f.a}
                     </div>
                   )}
@@ -648,18 +654,18 @@ export const LayananSuratPage: React.FC = () => {
           {/* Helpdesk Callout Card */}
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
             <div className="space-y-1">
-              <h4 className="text-base sm:text-lg font-black text-white">Butuh Bantuan Pendampingan Langsung?</h4>
-              <p className="text-xs text-emerald-100/80">
-                Petugas loket Balai Desa Doko siap melayani lansia & warga offline: Senin - Jumat 08.00 - 15.30 WIB.
+              <h4 className="text-base sm:text-lg font-black text-white">Perlu bantuan?</h4>
+              <p className="text-xs text-blue-100/80">
+                Petugas desa melayani Senin–Jumat, 08.00–15.30 WIB.
               </p>
             </div>
             <a
               href="https://wa.me/6281234567890"
               target="_blank"
               rel="noopener noreferrer"
-              className="shrink-0 px-5 py-2.5 rounded-2xl bg-white text-emerald-900 font-extrabold text-xs hover:bg-emerald-50 transition-all shadow-md flex items-center gap-2 press-down"
+              className="shrink-0 px-5 py-2.5 rounded-2xl bg-white text-blue-900 font-extrabold text-xs hover:bg-blue-50 transition-all shadow-md flex items-center gap-2 press-down"
             >
-              <Smartphone className="w-3.5 h-3.5 text-emerald-700" />
+              <Smartphone className="w-3.5 h-3.5 text-blue-700" />
               <span>Konsultasi Petugas</span>
             </a>
           </div>
@@ -680,7 +686,7 @@ export const LayananSuratPage: React.FC = () => {
           >
             <div className="flex justify-between items-start pb-4 border-b border-gray-100">
               <div>
-                <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <span className="text-[10px] font-mono font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
                   {selectedSurat.kode}
                 </span>
                 <h3 className="font-extrabold text-lg text-gray-900 mt-2">{selectedSurat.nama}</h3>
@@ -707,7 +713,7 @@ export const LayananSuratPage: React.FC = () => {
                 <ul className="space-y-2">
                   {selectedSurat.syarat.map((syarat: string, i: number) => (
                     <li key={i} className="flex items-start gap-2.5 text-gray-700">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                       <span>{syarat}</span>
                     </li>
                   ))}
@@ -715,13 +721,13 @@ export const LayananSuratPage: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3 pt-2">
-                <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
+                <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-100">
                   <div className="text-gray-400 text-[10px]">Estimasi Waktu</div>
-                  <div className="font-bold text-emerald-950">{selectedSurat.waktu}</div>
+                  <div className="font-bold text-blue-950">{selectedSurat.waktu}</div>
                 </div>
-                <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
+                <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-100">
                   <div className="text-gray-400 text-[10px]">Biaya Administrasi</div>
-                  <div className="font-bold text-emerald-800">{selectedSurat.biaya}</div>
+                  <div className="font-bold text-blue-800">{selectedSurat.biaya}</div>
                 </div>
               </div>
             </div>
@@ -739,7 +745,7 @@ export const LayananSuratPage: React.FC = () => {
                   if (user) navigate('/dashboard');
                   else navigate('/login');
                 }}
-                className="px-5 py-2 rounded-xl bg-emerald-700 text-white text-xs font-bold hover:bg-emerald-800 transition-colors cursor-pointer shadow-xs"
+                className="px-5 py-2 rounded-xl bg-blue-700 text-white text-xs font-bold hover:bg-blue-800 transition-colors cursor-pointer shadow-xs"
               >
                 Ajukan Surat Ini Sekarang
               </button>

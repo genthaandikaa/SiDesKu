@@ -198,8 +198,8 @@ export const defaultSuratTypesCatalog: SuratTypeCatalogItem[] = [
 
 const DashboardLoadingFallback: React.FC = () => (
   <div className="min-h-[400px] flex flex-col items-center justify-center p-8 font-sans animate-fade-in">
-    <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-3">
-      <div className="w-6 h-6 border-2 border-emerald-600/30 border-t-emerald-600 rounded-full animate-spin" />
+    <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mb-3">
+      <div className="w-6 h-6 border-2 border-blue-600/30 border-t-blue-600 rounded-full animate-spin" />
     </div>
     <div className="text-sm font-black text-slate-800">Menyiapkan Dashboard...</div>
     <div className="text-xs text-slate-400 mt-1">Memuat modul kerja dan data terverifikasi</div>
@@ -782,7 +782,7 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Informasi Desa',
             items: [
-              { id: 'pengumuman', label: 'Pengumuman', icon: Newspaper, badge: unreadPengumumanCount > 0 ? unreadPengumumanCount.toString() : '', badgeColor: 'bg-emerald-100 text-emerald-800' },
+              { id: 'pengumuman', label: 'Pengumuman', icon: Newspaper, badge: unreadPengumumanCount > 0 ? unreadPengumumanCount.toString() : '', badgeColor: 'bg-blue-100 text-blue-800' },
               { id: 'agenda_desa', label: 'Agenda Desa', icon: Calendar },
               { id: 'keuangan_desa', label: 'Keuangan Desa', icon: DollarSign },
               { id: 'aspirasi_warga', label: 'Aspirasi & Pengaduan', icon: MessageSquare },
@@ -791,7 +791,7 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Akun & Komunikasi',
             items: [
-              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-emerald-600 text-white' },
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
               { id: 'profil_saya', label: 'Profil Saya', icon: UserIcon },
               { id: 'notifikasi', label: 'Notifikasi', icon: Bell },
             ],
@@ -821,7 +821,7 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Informasi & Akun',
             items: [
-              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-emerald-600 text-white' },
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
               { id: 'pengumuman', label: 'Pengumuman', icon: Newspaper },
               { id: 'agenda_rt', label: 'Agenda RT', icon: Calendar },
               { id: 'profil_saya', label: 'Profil Akun', icon: UserIcon },
@@ -849,7 +849,7 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Informasi & Akun',
             items: [
-              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-emerald-600 text-white' },
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
               { id: 'pengumuman', label: 'Pengumuman', icon: Newspaper },
               { id: 'agenda_rw', label: 'Agenda RW', icon: Calendar },
               { id: 'profil_saya', label: 'Profil Akun', icon: UserIcon },
@@ -881,12 +881,12 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Informasi & Penyaluran',
             items: [
-              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-emerald-600 text-white' },
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
               { id: 'agenda_desa', label: 'Agenda & Notulensi Desa', icon: Calendar },
               { id: 'pengumuman', label: 'Pengumuman Desa', icon: Newspaper },
               { id: 'bansos_manager', label: 'Bansos Manager', icon: HeartHandshake },
               { id: 'visi_misi', label: 'Visi & Misi Desa', icon: Target },
-              { id: 'notifikasi', label: 'Notifikasi', icon: Bell, badge: '4', badgeColor: 'bg-emerald-100 text-emerald-800' },
+              { id: 'notifikasi', label: 'Notifikasi', icon: Bell, badge: '4', badgeColor: 'bg-blue-100 text-blue-800' },
               { id: 'profil_saya', label: 'Profil Akun', icon: UserIcon },
             ],
           },
@@ -916,7 +916,7 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Informasi & Akun',
             items: [
-              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-emerald-600 text-white' },
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
               { id: 'agenda_desa', label: 'Agenda Kegiatan Desa', icon: Calendar },
               { id: 'notifikasi', label: 'Notifikasi', icon: Bell },
               { id: 'profil_saya', label: 'Profil Akun', icon: UserIcon },
@@ -946,7 +946,7 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Akun & Notifikasi',
             items: [
-              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-emerald-600 text-white' },
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
               { id: 'notifikasi', label: 'Notifikasi', icon: Bell },
               { id: 'profil_saya', label: 'Profil Akun', icon: UserIcon },
             ],
@@ -969,7 +969,7 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Data & Layanan Desa',
             items: [
-              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-emerald-600 text-white' },
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
               { id: 'data_penduduk', label: 'Data Penduduk', icon: Users },
               { id: 'semua_surat', label: 'Semua Pengajuan Surat', icon: FileText },
               { id: 'data_keuangan', label: 'Data Keuangan & APBDes', icon: DollarSign },
@@ -995,13 +995,13 @@ export const DashboardLayout: React.FC = () => {
             items: [
               { id: 'beranda', label: 'Dashboard', icon: Home },
               { id: 'kelola_desa', label: 'Kelola Desa', icon: Building2, badgeColor: 'bg-rose-100 text-rose-800' },
-              { id: 'tambah_desa', label: 'Daftarkan Desa Baru', icon: Plus, badge: 'Baru', badgeColor: 'bg-emerald-100 text-emerald-800' },
+              { id: 'tambah_desa', label: 'Daftarkan Desa Baru', icon: Plus, badge: 'Baru', badgeColor: 'bg-blue-100 text-blue-800' },
             ],
           },
           {
             title: 'Tata Kelola Global',
             items: [
-              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-emerald-600 text-white' },
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
               { id: 'kelola_user', label: 'Mastes Pengguna', icon: Users },
               { id: 'atur_hak_akses', label: 'Hak Akses', icon: ShieldCheck },
               { id: 'log_aktivitas', label: 'Log Aktivitas', icon: Clock },
@@ -1266,7 +1266,7 @@ export const DashboardLayout: React.FC = () => {
                     onClick={() => handleMenuNavigate(item.id)}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl font-extrabold text-xs transition-all press-down ${
                       isActive 
-                        ? 'bg-emerald-700 text-white shadow-xs' 
+                        ? 'bg-blue-700 text-white shadow-xs' 
                         : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                     }`}
                   >
@@ -1277,7 +1277,7 @@ export const DashboardLayout: React.FC = () => {
 
                     {item.badge && (
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
-                        isActive ? 'bg-white/20 text-white' : (item.badgeColor || 'bg-emerald-100 text-emerald-800')
+                        isActive ? 'bg-white/20 text-white' : (item.badgeColor || 'bg-blue-100 text-blue-800')
                       }`}>
                         {item.badge}
                       </span>
@@ -1294,7 +1294,7 @@ export const DashboardLayout: React.FC = () => {
         <div className="p-4 space-y-2 border-t border-[#e8efe9] shrink-0 bg-white">
           <Link
             to="/"
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-emerald-900 bg-emerald-50 hover:bg-emerald-100 font-extrabold text-xs transition-colors border border-emerald-200 shadow-2xs"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-blue-900 bg-blue-50 hover:bg-blue-100 font-extrabold text-xs transition-colors border border-blue-200 shadow-2xs"
           >
             <Globe size={14} />
             <span>Lihat Halaman Publik</span>
@@ -1337,7 +1337,7 @@ export const DashboardLayout: React.FC = () => {
                   }}
                   onFocus={() => setIsSearchOpen(true)}
                   placeholder="Cari menu, surat, NIK warga..." 
-                  className="w-full pl-8 sm:pl-9 pr-8 sm:pr-14 py-2 bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 focus:border-emerald-500 rounded-2xl text-xs font-medium focus:outline-none focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                  className="w-full pl-8 sm:pl-9 pr-8 sm:pr-14 py-2 bg-slate-50 hover:bg-slate-100/70 focus:bg-white border border-slate-200 focus:border-blue-500 rounded-2xl text-xs font-medium focus:outline-none focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                 />
                 {searchQuery ? (
                   <button
@@ -1387,7 +1387,7 @@ export const DashboardLayout: React.FC = () => {
                                   key={idx}
                                   type="button"
                                   onClick={() => setSearchQuery(chip.q)}
-                                  className="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-emerald-100/70 text-slate-700 hover:text-emerald-900 font-bold text-[11px] transition-colors cursor-pointer border border-slate-200/70"
+                                  className="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-blue-100/70 text-slate-700 hover:text-blue-900 font-bold text-[11px] transition-colors cursor-pointer border border-slate-200/70"
                                 >
                                   {chip.label}
                                 </button>
@@ -1414,11 +1414,11 @@ export const DashboardLayout: React.FC = () => {
                                     className="w-full flex items-center justify-between px-3 py-2 rounded-2xl hover:bg-slate-50 text-left transition-colors group cursor-pointer"
                                   >
                                     <div className="flex items-center gap-2.5 min-w-0">
-                                      <div className="w-7 h-7 rounded-xl bg-slate-100 group-hover:bg-emerald-100 text-slate-600 group-hover:text-emerald-700 flex items-center justify-center shrink-0 transition-colors">
+                                      <div className="w-7 h-7 rounded-xl bg-slate-100 group-hover:bg-blue-100 text-slate-600 group-hover:text-blue-700 flex items-center justify-center shrink-0 transition-colors">
                                         <IconComponent size={14} />
                                       </div>
                                       <div className="min-w-0">
-                                        <div className="text-xs font-black text-slate-800 group-hover:text-emerald-800 truncate">
+                                        <div className="text-xs font-black text-slate-800 group-hover:text-blue-800 truncate">
                                           {item.label}
                                         </div>
                                         <div className="text-[10px] text-slate-400 truncate">
@@ -1426,7 +1426,7 @@ export const DashboardLayout: React.FC = () => {
                                         </div>
                                       </div>
                                     </div>
-                                    <ArrowRight size={12} className="text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                                    <ArrowRight size={12} className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
                                   </button>
                                 );
                               })}
@@ -1441,9 +1441,9 @@ export const DashboardLayout: React.FC = () => {
                           {/* 1. SEKSI KATALOG SURAT UNTUK DIAJUKAN */}
                           {filteredSuratTypes.length > 0 && (
                             <div className="space-y-1.5 pb-2">
-                              <div className="px-1 text-[10px] font-black uppercase tracking-wider text-emerald-800 flex items-center justify-between">
+                              <div className="px-1 text-[10px] font-black uppercase tracking-wider text-blue-800 flex items-center justify-between">
                                 <span className="flex items-center gap-1.5">
-                                  <Plus size={12} className="text-emerald-600" />
+                                  <Plus size={12} className="text-blue-600" />
                                   <span>Katalog Pengajuan Surat ({filteredSuratTypes.length})</span>
                                 </span>
                                 <span className="text-[9px] text-slate-400">Klik untuk langsung membuka form</span>
@@ -1453,14 +1453,14 @@ export const DashboardLayout: React.FC = () => {
                                   <div
                                     key={type.id}
                                     onClick={() => handleSelectSuratType(type)}
-                                    className="p-2.5 rounded-2xl bg-emerald-50/50 hover:bg-emerald-50 border border-emerald-200/80 hover:border-emerald-300 flex items-center justify-between gap-3 transition-all cursor-pointer group shadow-2xs"
+                                    className="p-2.5 rounded-2xl bg-blue-50/50 hover:bg-blue-50 border border-blue-200/80 hover:border-blue-300 flex items-center justify-between gap-3 transition-all cursor-pointer group shadow-2xs"
                                   >
                                     <div className="flex items-center gap-2.5 min-w-0">
-                                      <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
+                                      <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs">
                                         {type.kode_surat}
                                       </div>
                                       <div className="min-w-0">
-                                        <div className="text-xs font-black text-slate-900 group-hover:text-emerald-800 truncate">
+                                        <div className="text-xs font-black text-slate-900 group-hover:text-blue-800 truncate">
                                           {type.nama_surat}
                                         </div>
                                         <div className="text-[10px] text-slate-500 truncate">
@@ -1475,7 +1475,7 @@ export const DashboardLayout: React.FC = () => {
                                         e.stopPropagation();
                                         handleSelectSuratType(type);
                                       }}
-                                      className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-[11px] shrink-0 shadow-2xs flex items-center gap-1 cursor-pointer transition-colors"
+                                      className="px-3 py-1.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-[11px] shrink-0 shadow-2xs flex items-center gap-1 cursor-pointer transition-colors"
                                     >
                                       <span>Ajukan</span>
                                       <ArrowRight size={12} />
@@ -1507,11 +1507,11 @@ export const DashboardLayout: React.FC = () => {
                                       className="w-full flex items-center justify-between px-3 py-2 rounded-2xl hover:bg-slate-50 text-left transition-colors group cursor-pointer"
                                     >
                                       <div className="flex items-center gap-2.5 min-w-0">
-                                        <div className="w-7 h-7 rounded-xl bg-slate-100 group-hover:bg-emerald-100 text-slate-600 group-hover:text-emerald-700 flex items-center justify-center shrink-0 transition-colors">
+                                        <div className="w-7 h-7 rounded-xl bg-slate-100 group-hover:bg-blue-100 text-slate-600 group-hover:text-blue-700 flex items-center justify-center shrink-0 transition-colors">
                                           <IconComponent size={14} />
                                         </div>
                                         <div className="min-w-0">
-                                          <div className="text-xs font-black text-slate-800 group-hover:text-emerald-800 truncate">
+                                          <div className="text-xs font-black text-slate-800 group-hover:text-blue-800 truncate">
                                             {item.label}
                                           </div>
                                           <div className="text-[10px] text-slate-400 truncate">
@@ -1525,7 +1525,7 @@ export const DashboardLayout: React.FC = () => {
                                             {item.badge}
                                           </span>
                                         )}
-                                        <ArrowRight size={12} className="text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                                        <ArrowRight size={12} className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
                                       </div>
                                     </button>
                                   );
@@ -1539,7 +1539,7 @@ export const DashboardLayout: React.FC = () => {
                             <div className="space-y-1 pt-2">
                               <div className="px-1 text-[10px] font-black uppercase tracking-wider text-slate-400 flex items-center justify-between">
                                 <span>Data Permohonan Surat ({filteredSurats.length})</span>
-                                {isSearchingSurat && <span className="text-[10px] text-emerald-600 animate-pulse">Memuat...</span>}
+                                {isSearchingSurat && <span className="text-[10px] text-blue-600 animate-pulse">Memuat...</span>}
                               </div>
                               <div className="space-y-1">
                                 {filteredSurats.map((surat: any) => {
@@ -1551,7 +1551,7 @@ export const DashboardLayout: React.FC = () => {
                                       case 'approved_rt':
                                         return { label: 'Proses Desa', bg: 'bg-blue-100 text-blue-800' };
                                       case 'completed':
-                                        return { label: 'Selesai & Sah', bg: 'bg-emerald-100 text-emerald-800' };
+                                        return { label: 'Selesai & Sah', bg: 'bg-blue-100 text-blue-800' };
                                       case 'rejected':
                                         return { label: 'Ditolak', bg: 'bg-rose-100 text-rose-800' };
                                       default:
@@ -1593,7 +1593,7 @@ export const DashboardLayout: React.FC = () => {
                                           <FileText size={14} />
                                         </div>
                                         <div className="min-w-0">
-                                          <div className="text-xs font-black text-slate-800 group-hover:text-emerald-800 truncate">
+                                          <div className="text-xs font-black text-slate-800 group-hover:text-blue-800 truncate">
                                             {surat.surat_type?.nama_surat || surat.nama_surat || 'Surat Permohonan'}
                                           </div>
                                           <div className="text-[10px] text-slate-400 truncate flex items-center gap-2">
@@ -1606,7 +1606,7 @@ export const DashboardLayout: React.FC = () => {
                                         <span className={`px-2 py-0.5 rounded-md text-[9px] font-extrabold ${badge.bg}`}>
                                           {badge.label}
                                         </span>
-                                        <ArrowRight size={12} className="text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+                                        <ArrowRight size={12} className="text-slate-300 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
                                       </div>
                                     </button>
                                   );
@@ -1651,7 +1651,7 @@ export const DashboardLayout: React.FC = () => {
           <div className="flex items-center gap-3">
             <Link
               to="/"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl border border-slate-200 text-slate-700 hover:text-emerald-800 text-xs font-extrabold hover:bg-slate-50 transition-colors shadow-2xs"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl border border-slate-200 text-slate-700 hover:text-blue-800 text-xs font-extrabold hover:bg-slate-50 transition-colors shadow-2xs"
             >
               <Globe size={13} />
               <span>Public</span>
@@ -1662,7 +1662,7 @@ export const DashboardLayout: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowQrModal(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black transition-all shadow-2xs press-down cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-black transition-all shadow-2xs press-down cursor-pointer"
                 title="Pindai / Validasi QR Code Kamera & Foto (Admin / Perangkat Desa)"
               >
                 <QrCode size={14} />
@@ -1675,14 +1675,14 @@ export const DashboardLayout: React.FC = () => {
               type="button"
               onClick={() => handleMenuNavigate('pesan')}
               className={`p-2.5 rounded-2xl transition-colors relative cursor-pointer ${
-                activeMenu === 'pesan' ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:bg-slate-100'
+                activeMenu === 'pesan' ? 'bg-blue-50 text-blue-700' : 'text-slate-500 hover:bg-slate-100'
               }`}
               title="Pusat Pesan & Chat Desa"
               aria-label="Pusat Pesan & Chat"
             >
               <MessageSquare size={18} />
               {chatUnreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 bg-emerald-600 text-white text-[10px] font-black rounded-full flex items-center justify-center ring-2 ring-white">
+                <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 bg-blue-600 text-white text-[10px] font-black rounded-full flex items-center justify-center ring-2 ring-white">
                   {chatUnreadCount > 9 ? '9+' : chatUnreadCount}
                 </span>
               )}
@@ -1700,7 +1700,7 @@ export const DashboardLayout: React.FC = () => {
               >
                 <Bell size={18} />
                 {notifications.some(n => n.unread) && (
-                  <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-emerald-600 rounded-full ring-2 ring-white animate-pulse"></span>
+                  <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-blue-600 rounded-full ring-2 ring-white animate-pulse"></span>
                 )}
               </button>
               
@@ -1708,7 +1708,7 @@ export const DashboardLayout: React.FC = () => {
                 <div className="fixed sm:absolute right-3 sm:right-0 top-16 sm:top-full mt-1 sm:mt-2 w-[calc(100vw-1.5rem)] max-w-sm sm:w-96 bg-white rounded-3xl shadow-2xl border border-slate-200 py-3 z-50 animate-slide-down">
                   <div className="px-5 pb-2.5 border-b border-slate-100 font-extrabold text-xs text-slate-900 flex items-center justify-between">
                     <span>Notifikasi Masuk</span>
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black">
+                    <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-black">
                       {notifications.filter(n => n.unread).length} Baru
                     </span>
                   </div>
@@ -1720,13 +1720,13 @@ export const DashboardLayout: React.FC = () => {
                         onClick={() => handleOpenNotifDetail(n)}
                         className={`p-3 rounded-2xl border transition-all cursor-pointer text-xs space-y-1 ${
                           n.unread
-                            ? 'bg-emerald-50/80 border-emerald-200 hover:bg-emerald-100/70 shadow-2xs'
+                            ? 'bg-blue-50/80 border-blue-200 hover:bg-blue-100/70 shadow-2xs'
                             : 'bg-slate-50/70 border-slate-200/80 hover:bg-slate-100'
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="font-extrabold text-slate-900 flex items-center gap-1.5 truncate">
-                            {n.unread && <span className="w-2 h-2 rounded-full bg-emerald-600 shrink-0" />}
+                            {n.unread && <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />}
                             <span className="truncate">{n.title}</span>
                           </div>
                           <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap ml-2">{n.time}</span>
@@ -1742,7 +1742,7 @@ export const DashboardLayout: React.FC = () => {
                         handleMenuNavigate('notifikasi');
                         setIsNotificationsOpen(false);
                       }}
-                      className="w-full py-2 text-center text-xs font-black text-emerald-700 hover:bg-emerald-50 rounded-xl transition-colors cursor-pointer"
+                      className="w-full py-2 text-center text-xs font-black text-blue-700 hover:bg-blue-50 rounded-xl transition-colors cursor-pointer"
                     >
                       <span className="inline-flex items-center justify-center gap-1">
                         <span>Buka Semua Notifikasi ({notifications.length})</span>
@@ -1768,12 +1768,12 @@ export const DashboardLayout: React.FC = () => {
                 <UserAvatar
                   src={user?.avatar}
                   name={displayName}
-                  className="w-8 h-8 rounded-full object-cover border border-emerald-500 shadow-xs"
-                  fallbackClassName="w-8 h-8 rounded-full bg-emerald-700 text-white font-black flex items-center justify-center text-xs shadow-xs"
+                  className="w-8 h-8 rounded-full object-cover border border-blue-500 shadow-xs"
+                  fallbackClassName="w-8 h-8 rounded-full bg-blue-700 text-white font-black flex items-center justify-center text-xs shadow-xs"
                 />
                 <div className="text-left hidden md:block">
                   <div className="text-xs font-black text-slate-900 leading-tight max-w-[120px] truncate">{displayName}</div>
-                  <div className="text-[10px] text-emerald-700 font-bold capitalize leading-none mt-0.5">
+                  <div className="text-[10px] text-blue-700 font-bold capitalize leading-none mt-0.5">
                     {user?.role?.display_name || roleSlug}
                   </div>
                 </div>
@@ -1793,7 +1793,7 @@ export const DashboardLayout: React.FC = () => {
                       handleMenuNavigate('profil_saya');
                       setIsProfileOpen(false);
                     }}
-                    className="w-full px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 flex items-center gap-2.5 transition-colors cursor-pointer"
+                    className="w-full px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-800 flex items-center gap-2.5 transition-colors cursor-pointer"
                   >
                     <UserIcon size={14} />
                     <span>Profil & Data Diri</span>
@@ -1817,7 +1817,7 @@ export const DashboardLayout: React.FC = () => {
 
         {/* Dynamic Main Body */}
         <div className="flex-1 p-4 sm:p-5 lg:p-6 xl:p-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="dashboard-rounded-tables max-w-7xl mx-auto">
             <PushNotificationBanner />
             <React.Suspense fallback={<DashboardLoadingFallback />}>
               {renderContent()}
@@ -1849,12 +1849,12 @@ export const DashboardLayout: React.FC = () => {
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-xs">
+                <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold shadow-xs">
                   <Bell className="w-5 h-5" />
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800">
+                    <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">
                       {selectedNotif.category}
                     </span>
                     <span className="text-[11px] text-slate-400 font-medium">{selectedNotif.time}</span>
@@ -1892,13 +1892,13 @@ export const DashboardLayout: React.FC = () => {
                   {selectedNotif.meta.nomorResi && (
                     <div className="flex justify-between py-1 border-b border-slate-200/60">
                       <span className="text-slate-500">Nomor Resi:</span>
-                      <span className="font-mono font-bold text-emerald-800">{selectedNotif.meta.nomorResi}</span>
+                      <span className="font-mono font-bold text-blue-800">{selectedNotif.meta.nomorResi}</span>
                     </div>
                   )}
                   {selectedNotif.meta.nomorSurat && (
                     <div className="flex justify-between py-1 border-b border-slate-200/60">
                       <span className="text-slate-500">Nomor Surat Resmi:</span>
-                      <span className="font-mono font-bold text-emerald-800">{selectedNotif.meta.nomorSurat}</span>
+                      <span className="font-mono font-bold text-blue-800">{selectedNotif.meta.nomorSurat}</span>
                     </div>
                   )}
                   {selectedNotif.meta.signedBy && (
@@ -1927,7 +1927,7 @@ export const DashboardLayout: React.FC = () => {
                     handleMenuNavigate(selectedNotif.meta!.targetMenu!);
                     setIsNotifDetailOpen(false);
                   }}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-extrabold shadow-sm transition-all press-down cursor-pointer flex items-center gap-1.5"
+                  className="px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-extrabold shadow-sm transition-all press-down cursor-pointer flex items-center gap-1.5"
                 >
                   <span>{selectedNotif.meta.actionLabel || 'Buka Halaman Terkait'}</span>
                   <ChevronRight className="w-3.5 h-3.5" />

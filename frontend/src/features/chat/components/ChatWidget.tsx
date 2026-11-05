@@ -222,7 +222,7 @@ export const ChatWidget: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-40 bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 sm:px-4 sm:py-3 rounded-full shadow-lg flex items-center gap-2.5 transition-all duration-200 hover:scale-105 cursor-pointer group"
+          className="fixed bottom-6 right-6 z-40 bg-blue-600 hover:bg-blue-700 text-white p-3.5 sm:px-4 sm:py-3 rounded-full shadow-lg flex items-center gap-2.5 transition-all duration-200 hover:scale-105 cursor-pointer group"
           title="Pusat Pesan & Chat Terenkripsi Desa"
         >
           <div className="relative">
@@ -245,7 +245,7 @@ export const ChatWidget: React.FC = () => {
           {/* Header */}
           <div className="bg-white text-slate-900 border-b border-slate-100 p-3.5 sm:p-4 flex items-center justify-between shrink-0 shadow-xs">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center shrink-0">
                 <Lock className="w-4 h-4" />
               </div>
               <div className="min-w-0">
@@ -253,7 +253,7 @@ export const ChatWidget: React.FC = () => {
                   {activeRoom ? activeRoom.title : 'Ruang Pesan Desa'}
                 </h3>
                 <div className="flex items-center gap-1.5 text-[10px] text-slate-500">
-                  <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
+                  <ShieldCheck className="w-3 h-3 text-blue-600 shrink-0" />
                   <span>Terenkripsi Standar Desa Digital</span>
                 </div>
               </div>
@@ -345,14 +345,14 @@ export const ChatWidget: React.FC = () => {
                         <div
                           className={`max-w-[82%] px-3 py-2 rounded-2xl text-xs break-words shadow-xs ${
                             isMe
-                              ? 'bg-emerald-600 text-white rounded-tr-xs'
+                              ? 'bg-blue-600 text-white rounded-tr-xs'
                               : 'bg-white border border-slate-200 text-slate-800 rounded-tl-xs'
                           }`}
                         >
                           <p className="leading-relaxed whitespace-pre-wrap">{m.message_encrypted}</p>
                           <div
                             className={`flex items-center justify-end gap-1 text-[9px] mt-1 ${
-                              isMe ? 'text-emerald-100' : 'text-slate-400'
+                              isMe ? 'text-blue-100' : 'text-slate-400'
                             }`}
                           >
                             <span>
@@ -361,7 +361,7 @@ export const ChatWidget: React.FC = () => {
                                 minute: '2-digit',
                               })}
                             </span>
-                            {isMe && <CheckCheck className="w-3 h-3 text-emerald-200" />}
+                            {isMe && <CheckCheck className="w-3 h-3 text-blue-200" />}
                           </div>
                         </div>
                       </div>
@@ -381,12 +381,12 @@ export const ChatWidget: React.FC = () => {
                   placeholder="Ketik pesan terenkripsi..."
                   value={messageInput}
                   onChange={(e) => setMessageInput(e.target.value)}
-                  className="flex-1 px-3.5 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition bg-slate-50 focus:bg-white"
+                  className="flex-1 px-3.5 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition bg-slate-50 focus:bg-white"
                 />
                 <button
                   type="submit"
                   disabled={!messageInput.trim()}
-                  className="w-9 h-9 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white flex items-center justify-center transition shadow-xs cursor-pointer shrink-0"
+                  className="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white flex items-center justify-center transition shadow-xs cursor-pointer shrink-0"
                 >
                   <Send className="w-4 h-4" />
                 </button>
@@ -401,7 +401,7 @@ export const ChatWidget: React.FC = () => {
                   onClick={() => setActiveTab('rooms')}
                   className={`py-2.5 transition border-b-2 cursor-pointer flex items-center justify-center gap-1.5 ${
                     activeTab === 'rooms'
-                      ? 'border-emerald-600 text-emerald-700 font-bold bg-emerald-50/40'
+                      ? 'border-blue-600 text-blue-700 font-bold bg-blue-50/40'
                       : 'border-transparent text-slate-500 hover:text-slate-700'
                   }`}
                 >
@@ -414,7 +414,7 @@ export const ChatWidget: React.FC = () => {
                   onClick={() => setActiveTab('contacts')}
                   className={`py-2.5 transition border-b-2 cursor-pointer ${
                     activeTab === 'contacts'
-                      ? 'border-emerald-600 text-emerald-700 font-bold bg-emerald-50/40'
+                      ? 'border-blue-600 text-blue-700 font-bold bg-blue-50/40'
                       : 'border-transparent text-slate-500 hover:text-slate-700'
                   }`}
                 >
@@ -452,7 +452,7 @@ export const ChatWidget: React.FC = () => {
                           className="p-3 hover:bg-slate-50 rounded-xl transition cursor-pointer flex items-center justify-between gap-3"
                         >
                           <div className="flex items-center gap-2.5 min-w-0">
-                            <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-xs">
+                            <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-xs">
                               {displayName.charAt(0).toUpperCase()}
                             </div>
                             <div className="min-w-0">
@@ -460,7 +460,7 @@ export const ChatWidget: React.FC = () => {
                                 {displayName}
                               </h4>
                               <p className="text-[10px] text-slate-500 truncate flex items-center gap-1">
-                                <Lock className="w-2.5 h-2.5 text-emerald-600" />
+                                <Lock className="w-2.5 h-2.5 text-blue-600" />
                                 {room.latest_message ? room.latest_message.message_encrypted : 'Mulai chat terenkripsi'}
                               </p>
                             </div>
@@ -475,7 +475,7 @@ export const ChatWidget: React.FC = () => {
                               </span>
                             )}
                             {unread > 0 && (
-                              <span className="px-1.5 py-0.2 rounded-full bg-emerald-600 text-white text-[9px] font-black">
+                              <span className="px-1.5 py-0.2 rounded-full bg-blue-600 text-white text-[9px] font-black">
                                 {unread}
                               </span>
                             )}
@@ -497,7 +497,7 @@ export const ChatWidget: React.FC = () => {
                       placeholder="Cari aparatur / RT / warga..."
                       value={searchContact}
                       onChange={(e) => setSearchContact(e.target.value)}
-                      className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                      className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
                     />
                   </div>
 
@@ -511,7 +511,7 @@ export const ChatWidget: React.FC = () => {
                         <div
                           key={contact.id}
                           onClick={() => handleStartChatWithUser(contact)}
-                          className="p-2.5 hover:bg-emerald-50/50 rounded-xl transition cursor-pointer flex items-center justify-between gap-2"
+                          className="p-2.5 hover:bg-blue-50/50 rounded-xl transition cursor-pointer flex items-center justify-between gap-2"
                         >
                           <div className="flex items-center gap-2 min-w-0">
                             <div className="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs shrink-0">
@@ -526,7 +526,7 @@ export const ChatWidget: React.FC = () => {
                               </span>
                             </div>
                           </div>
-                          <span className="text-[10px] font-bold text-emerald-600 shrink-0 flex items-center gap-1">
+                          <span className="text-[10px] font-bold text-blue-600 shrink-0 flex items-center gap-1">
                             <span>Mulai Chat</span>
                             <ArrowRight className="w-3 h-3" />
                           </span>

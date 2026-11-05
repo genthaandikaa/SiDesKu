@@ -295,7 +295,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
         {canCreate && (
           <button
             onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition-all press-down"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md transition-all press-down"
           >
             <Plus className="w-4 h-4" />
             <span>Buat Pengumuman Baru</span>
@@ -308,13 +308,13 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
           onClick={() => setActiveTab('pengumuman')}
           className={`px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-2 cursor-pointer ${
             activeTab === 'pengumuman'
-              ? 'bg-emerald-700 text-white shadow-xs'
+              ? 'bg-blue-700 text-white shadow-xs'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
           <span>Pengumuman Desa</span>
           <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
-            activeTab === 'pengumuman' ? 'bg-emerald-800 text-emerald-100' : 'bg-slate-100 text-slate-700'
+            activeTab === 'pengumuman' ? 'bg-blue-800 text-blue-100' : 'bg-slate-100 text-slate-700'
           }`}>
             {announcements.length}
           </span>
@@ -324,13 +324,13 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
           onClick={() => setActiveTab('sk_kades')}
           className={`px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-2 cursor-pointer ${
             activeTab === 'sk_kades'
-              ? 'bg-emerald-700 text-white shadow-xs'
+              ? 'bg-blue-700 text-white shadow-xs'
               : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
           }`}
         >
           <span>Buku Keputusan & SK Kepala Desa</span>
           <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
-            activeTab === 'sk_kades' ? 'bg-emerald-800 text-emerald-100' : 'bg-slate-100 text-slate-700'
+            activeTab === 'sk_kades' ? 'bg-blue-800 text-blue-100' : 'bg-slate-100 text-slate-700'
           }`}>
             {skList.length} Sah
           </span>
@@ -343,7 +343,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
           {/* Loading Skeleton */}
           {loading && announcements.length === 0 && (
             <div className="p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs space-y-3">
-              <div className="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
+              <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
               <p className="text-xs font-bold text-slate-500">Memuat data pengumuman & tiket resmi dari database...</p>
             </div>
           )}
@@ -354,12 +354,12 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
           <div 
             key={a.id} 
             onClick={() => setSelectedAnnouncement(a)}
-            className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-emerald-300 transition-all space-y-3.5 cursor-pointer hover:shadow-md group"
+            className="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs hover:border-blue-300 transition-all space-y-3.5 cursor-pointer hover:shadow-md group"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
-                  a.status === 'Penting' ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'
+                  a.status === 'Penting' ? 'bg-rose-100 text-rose-800' : 'bg-blue-100 text-blue-800'
                 }`}>
                   {a.kategori}
                 </span>
@@ -374,7 +374,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                   </span>
                 )}
                 {a.workflow_status === 'published' && (
-                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200">
                     Terpublikasi
                   </span>
                 )}
@@ -383,7 +383,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
               <span className="text-xs font-bold text-slate-500">{a.oleh}</span>
             </div>
 
-            <h3 className="text-base sm:text-lg font-black text-slate-900 leading-snug group-hover:text-emerald-800 transition-colors">
+            <h3 className="text-base sm:text-lg font-black text-slate-900 leading-snug group-hover:text-blue-800 transition-colors">
               {a.judul}
             </h3>
 
@@ -394,7 +394,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
             {/* Quick Ticket Badge & Action Trigger */}
             <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-mono font-black text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200 shadow-2xs">
+                <span className="text-[11px] font-mono font-black text-blue-800 bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200 shadow-2xs">
                   {a.tiket?.isSuratUndanganResmi ? `No. Urut: ${a.tiket.noUrut || a.tiket.nomorAntrean}` : `Antrean: ${a.tiket?.nomorAntrean}`}
                 </span>
                 <span className="text-[11px] text-slate-500 font-medium hidden sm:inline">
@@ -408,7 +408,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                   e.stopPropagation();
                   setSelectedAnnouncement(a);
                 }}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs shadow-2xs transition-all press-down"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs shadow-2xs transition-all press-down"
               >
                 <span>Buka Tiket & Detail Undangan</span>
               </button>
@@ -427,14 +427,14 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
               <h3 className="font-black text-sm text-slate-900">Buku Register Produk Hukum & SK Kepala Desa Doko</h3>
               <p className="text-xs text-slate-500">Transparansi ketetapan kebijakan, regulasi, dan penetapan penerima bantuan resmi desa.</p>
             </div>
-            <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0">
+            <span className="px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-800 border border-blue-200 shrink-0">
               {skList.length} Ketetapan Sah
             </span>
           </div>
 
           {skLoading && skList.length === 0 ? (
             <div className="p-8 text-center bg-white rounded-3xl border border-slate-200 shadow-xs space-y-3">
-              <div className="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
+              <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
               <p className="text-xs font-bold text-slate-500">Memuat data keputusan resmi Kepala Desa...</p>
             </div>
           ) : skList.length === 0 ? (
@@ -446,13 +446,13 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
               {skList.map((sk) => (
                 <div
                   key={sk.id}
-                  className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-all space-y-3"
+                  className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:border-blue-300 transition-all space-y-3"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="font-mono text-xs font-black text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                    <span className="font-mono text-xs font-black text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
                       {sk.nomor_sk}
                     </span>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-900 border border-emerald-200">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-900 border border-blue-200">
                       {sk.status || 'Berlaku'}
                     </span>
                   </div>
@@ -558,7 +558,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                     <div className="flex"><span className="w-28 text-slate-500 shrink-0">Tempat</span><span className="font-bold uppercase">: {selectedAnnouncement.tiket?.tempat || selectedAnnouncement.tiket?.lokasi || 'PENDOPO BALAI DESA DOKO'}</span></div>
                     <div className="flex items-start">
                       <span className="w-28 text-slate-500 shrink-0">Keperluan</span>
-                      <span className="font-bold text-emerald-900 leading-snug">
+                      <span className="font-bold text-blue-900 leading-snug">
                         : {selectedAnnouncement.tiket?.keperluan || selectedAnnouncement.isi}
                       </span>
                     </div>
@@ -638,7 +638,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                   <button
                     type="button"
                     onClick={() => handleShareWhatsApp(selectedAnnouncement)}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-xs transition-all press-down cursor-pointer"
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-xs transition-all press-down cursor-pointer"
                   >
                     <span>Kirim WhatsApp</span>
                   </button>
@@ -656,8 +656,8 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                   >
                     {copiedWaText ? (
                       <>
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-700 font-bold">Tersalin!</span>
+                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+                        <span className="text-blue-700 font-bold">Tersalin!</span>
                       </>
                     ) : (
                       <>
@@ -867,7 +867,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                     value={newJudul}
                     onChange={(e) => setNewJudul(e.target.value)}
                     placeholder="Contoh: Jadwal Posyandu Balita & Lansia Dusun Krajan"
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-emerald-600 font-medium"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-blue-600 font-medium"
                   />
                 </div>
 
@@ -877,7 +877,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                     <select
                       value={newKategori}
                       onChange={(e) => setNewKategori(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-emerald-600 font-medium bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-blue-600 font-medium bg-white"
                     >
                       <option value="Pemberitahuan">Pemberitahuan</option>
                       <option value="Bansos">Bantuan Sosial</option>
@@ -892,7 +892,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                     <select
                       value={newLevelTarget}
                       onChange={(e) => setNewLevelTarget(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-emerald-600 font-medium bg-white"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-blue-600 font-medium bg-white"
                     >
                       <option value="Semua">Seluruh Desa</option>
                       <option value="Dusun">Tingkat Dusun</option>
@@ -910,7 +910,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                       required
                       value={newTanggalMulai}
                       onChange={(e) => setNewTanggalMulai(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-emerald-600 font-medium"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-blue-600 font-medium"
                     />
                   </div>
                   <div>
@@ -919,7 +919,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                       type="date"
                       value={newTanggalSelesai}
                       onChange={(e) => setNewTanggalSelesai(e.target.value)}
-                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-emerald-600 font-medium"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-blue-600 font-medium"
                     />
                   </div>
                 </div>
@@ -932,7 +932,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                     value={newIsi}
                     onChange={(e) => setNewIsi(e.target.value)}
                     placeholder="Tuliskan keterangan lengkap kegiatan, persyaratan warga, atau instruksi terkait..."
-                    className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-emerald-600 font-medium"
+                    className="w-full px-3 py-2 rounded-xl border border-slate-300 focus:outline-blue-600 font-medium"
                   />
                 </div>
               </div>
@@ -949,7 +949,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
                 <button
                   type="submit"
                   disabled={submittingPengumuman}
-                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs cursor-pointer shadow-xs"
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold text-xs cursor-pointer shadow-xs"
                 >
                   {submittingPengumuman ? 'Menyimpan...' : 'Ajukan Pengumuman'}
                 </button>
@@ -1337,12 +1337,12 @@ export const AgendaDesaView: React.FC = () => {
 
   const getCategoryIcon = (tipe: string) => {
     const t = (tipe || '').toLowerCase();
-    if (t.includes('kesehatan') || t.includes('posyandu')) return <HeartPulse className="w-5 h-5 text-emerald-700" />;
-    if (t.includes('pemerintahan') || t.includes('musrenbang') || t.includes('rembug')) return <Building2 className="w-5 h-5 text-emerald-700" />;
-    if (t.includes('sosial') || t.includes('blt') || t.includes('bansos')) return <HandHeart className="w-5 h-5 text-emerald-700" />;
-    if (t.includes('lingkungan') || t.includes('kerja bakti')) return <Users className="w-5 h-5 text-emerald-700" />;
-    if (t.includes('keamanan') || t.includes('ronda')) return <ShieldCheck className="w-5 h-5 text-emerald-700" />;
-    return <Calendar className="w-5 h-5 text-emerald-700" />;
+    if (t.includes('kesehatan') || t.includes('posyandu')) return <HeartPulse className="w-5 h-5 text-blue-700" />;
+    if (t.includes('pemerintahan') || t.includes('musrenbang') || t.includes('rembug')) return <Building2 className="w-5 h-5 text-blue-700" />;
+    if (t.includes('sosial') || t.includes('blt') || t.includes('bansos')) return <HandHeart className="w-5 h-5 text-blue-700" />;
+    if (t.includes('lingkungan') || t.includes('kerja bakti')) return <Users className="w-5 h-5 text-blue-700" />;
+    if (t.includes('keamanan') || t.includes('ronda')) return <ShieldCheck className="w-5 h-5 text-blue-700" />;
+    return <Calendar className="w-5 h-5 text-blue-700" />;
   };
 
   const getAudienceBadge = (peserta: string) => {
@@ -1357,9 +1357,9 @@ export const AgendaDesaView: React.FC = () => {
       return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-300">RT & RW</span>;
     }
     if (p === 'Warga') {
-      return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-100 text-teal-800 border border-teal-300">Warga</span>;
+      return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800 border border-indigo-300">Warga</span>;
     }
-    return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">Semua Warga</span>;
+    return <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-300">Semua Warga</span>;
   };
 
   // AUDIENCE FILTER ENFORCEMENT
@@ -1432,7 +1432,7 @@ export const AgendaDesaView: React.FC = () => {
           <button
             type="button"
             onClick={handleOpenCreate}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition-all press-down cursor-pointer shrink-0"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md transition-all press-down cursor-pointer shrink-0"
           >
             <Plus className="w-4 h-4" />
             <span>Buat Agenda Baru</span>
@@ -1450,7 +1450,7 @@ export const AgendaDesaView: React.FC = () => {
               onClick={() => setAudienceFilter('all')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 audienceFilter === 'all'
-                  ? 'bg-emerald-700 text-white shadow-2xs'
+                  ? 'bg-blue-700 text-white shadow-2xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -1461,7 +1461,7 @@ export const AgendaDesaView: React.FC = () => {
               onClick={() => setAudienceFilter('Semuanya')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 audienceFilter === 'Semuanya'
-                  ? 'bg-emerald-700 text-white shadow-2xs'
+                  ? 'bg-blue-700 text-white shadow-2xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -1494,8 +1494,8 @@ export const AgendaDesaView: React.FC = () => {
               onClick={() => setAudienceFilter('Warga')}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                 audienceFilter === 'Warga'
-                  ? 'bg-teal-700 text-white shadow-2xs'
-                  : 'bg-teal-50 text-teal-800 hover:bg-teal-100'
+                  ? 'bg-indigo-700 text-white shadow-2xs'
+                  : 'bg-indigo-50 text-indigo-800 hover:bg-indigo-100'
               }`}
             >
               Warga Umum
@@ -1503,7 +1503,7 @@ export const AgendaDesaView: React.FC = () => {
           </div>
         ) : (
           <div className="text-xs text-slate-500 font-semibold flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="w-2 h-2 rounded-full bg-blue-500"></span>
             <span>Menampilkan {visibleEvents.length} agenda untuk Anda</span>
           </div>
         )}
@@ -1524,7 +1524,7 @@ export const AgendaDesaView: React.FC = () => {
               type="button"
               onClick={() => setTimeFilter('upcoming')}
               className={`px-2.5 py-1 rounded-lg transition cursor-pointer ${
-                timeFilter === 'upcoming' ? 'bg-emerald-600 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+                timeFilter === 'upcoming' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-800'
               }`}
             >
               Mendatang
@@ -1548,7 +1548,7 @@ export const AgendaDesaView: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Cari agenda/lokasi..."
-              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-emerald-600 bg-slate-50/60"
+              className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-blue-600 bg-slate-50/60"
             />
           </div>
         </div>
@@ -1557,7 +1557,7 @@ export const AgendaDesaView: React.FC = () => {
       {/* Loading Skeleton */}
       {loading && events.length === 0 && (
         <div className="p-12 text-center bg-white rounded-3xl border border-slate-200 shadow-xs space-y-3">
-          <div className="w-8 h-8 border-3 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto" />
+          <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto" />
           <p className="text-xs font-bold text-slate-500">Memuat data agenda desa dari database...</p>
         </div>
       )}
@@ -1589,7 +1589,7 @@ export const AgendaDesaView: React.FC = () => {
             className={`bg-white p-6 rounded-3xl border shadow-xs flex flex-col justify-between transition-all hover:shadow-md h-full space-y-4 relative group cursor-pointer ${
               isItemPast
                 ? 'border-slate-200/60 bg-slate-50/30 opacity-90'
-                : 'border-slate-200/80 hover:border-emerald-300'
+                : 'border-slate-200/80 hover:border-blue-300'
             }`}
           >
             {/* Quick Actions (Update & Delete) for authorized officers */}
@@ -1602,7 +1602,7 @@ export const AgendaDesaView: React.FC = () => {
                   type="button"
                   onClick={() => handleOpenEdit(ev)}
                   title="Ubah agenda ini"
-                  className="p-1.5 rounded-xl text-slate-400 hover:text-emerald-700 hover:bg-emerald-50 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-xl text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors cursor-pointer"
                 >
                   <Edit className="w-4 h-4" />
                 </button>
@@ -1619,7 +1619,7 @@ export const AgendaDesaView: React.FC = () => {
 
             <div className="space-y-4 flex-1 flex flex-col">
               {/* Green Icon Box with Category Logo */}
-              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-100/70 flex items-center justify-center font-bold shrink-0">
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 border border-blue-100/70 flex items-center justify-center font-bold shrink-0">
                 {getCategoryIcon(ev.tipe)}
               </div>
 
@@ -1634,18 +1634,18 @@ export const AgendaDesaView: React.FC = () => {
                       Riwayat Selesai
                     </span>
                   ) : (
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-200">
+                    <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold border border-blue-200">
                       Mendatang
                     </span>
                   )}
                   {ev.is_custom && (
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">
+                    <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[10px] font-bold">
                       Baru
                     </span>
                   )}
                 </div>
                 {/* min-h-[3rem] ensures 1-line titles match 2-line titles in vertical height */}
-                <h3 className="text-base font-black text-slate-900 leading-snug pt-1 min-h-[3rem] flex items-start group-hover:text-emerald-800 transition-colors">
+                <h3 className="text-base font-black text-slate-900 leading-snug pt-1 min-h-[3rem] flex items-start group-hover:text-blue-800 transition-colors">
                   {ev.judul}
                 </h3>
               </div>
@@ -1654,7 +1654,7 @@ export const AgendaDesaView: React.FC = () => {
             {/* Bottom Details Section aligned horizontally with mt-auto */}
             <div className="space-y-1.5 text-xs text-slate-600 pt-3 border-t border-slate-100 font-medium mt-auto">
               <div className="flex items-center gap-2 text-slate-800 font-bold">
-                <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <Clock className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                 <span className="truncate">{ev.waktu}</span>
               </div>
               <div className="flex items-center gap-2">
@@ -1687,7 +1687,7 @@ export const AgendaDesaView: React.FC = () => {
           >
             <div className="flex items-center justify-between border-b pb-3 border-gray-100">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
                   {getCategoryIcon(selectedDetail.tipe)}
                 </div>
                 <div>
@@ -1716,7 +1716,7 @@ export const AgendaDesaView: React.FC = () => {
 
               <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 space-y-2.5 text-xs">
                 <div className="flex items-start gap-2.5">
-                  <Clock className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <Clock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-slate-400 block text-[10px] font-bold">Waktu & Tanggal:</span>
                     <span className="font-bold text-slate-800 text-xs sm:text-sm">{selectedDetail.waktu}</span>
@@ -1724,7 +1724,7 @@ export const AgendaDesaView: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <MapPin className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-slate-400 block text-[10px] font-bold">Lokasi / Tempat Pelaksanaan:</span>
                     <span className="font-bold text-slate-800 text-xs sm:text-sm">{selectedDetail.tempat}</span>
@@ -1732,7 +1732,7 @@ export const AgendaDesaView: React.FC = () => {
                 </div>
 
                 <div className="flex items-start gap-2.5">
-                  <Users className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <Users className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                   <div>
                     <span className="text-slate-400 block text-[10px] font-bold">Sasaran Peserta / Undangan:</span>
                     <span className="font-bold text-slate-800 text-xs sm:text-sm">{selectedDetail.peserta || 'Semua Warga Desa'}</span>
@@ -1755,7 +1755,7 @@ export const AgendaDesaView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => handleOpenEdit(selectedDetail)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl cursor-pointer"
                   >
                     <Edit className="w-3.5 h-3.5" />
                     <span>Ubah Agenda</span>
@@ -1827,7 +1827,7 @@ export const AgendaDesaView: React.FC = () => {
                   value={form.judul}
                   onChange={(e) => setForm({ ...form, judul: e.target.value })}
                   placeholder="Contoh: Musyawarah Perencanaan Pembangunan Desa (Musrenbangdes)"
-                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white text-slate-900 opacity-100 font-medium"
+                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 opacity-100 font-medium"
                   style={{ backgroundColor: '#ffffff', color: '#0f172a', opacity: 1 }}
                   required
                 />
@@ -1842,7 +1842,7 @@ export const AgendaDesaView: React.FC = () => {
                   <select
                     value={form.tipe}
                     onChange={(e) => setForm({ ...form, tipe: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white text-slate-900 opacity-100 min-h-[44px] font-medium"
+                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 opacity-100 min-h-[44px] font-medium"
                     style={{ backgroundColor: '#ffffff', color: '#0f172a', opacity: 1 }}
                   >
                     <option value="Pemerintahan">Pemerintahan</option>
@@ -1861,7 +1861,7 @@ export const AgendaDesaView: React.FC = () => {
                   <select
                     value={form.peserta}
                     onChange={(e) => setForm({ ...form, peserta: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white text-slate-900 opacity-100 min-h-[44px] font-medium"
+                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 opacity-100 min-h-[44px] font-medium"
                     style={{ backgroundColor: '#ffffff', color: '#0f172a', opacity: 1 }}
                   >
                     {isExecutive && (
@@ -1901,7 +1901,7 @@ export const AgendaDesaView: React.FC = () => {
                     type="date"
                     value={form.tanggal}
                     onChange={(e) => setForm({ ...form, tanggal: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white text-slate-900 opacity-100 min-h-[44px] box-border block font-medium"
+                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 opacity-100 min-h-[44px] box-border block font-medium"
                     style={{ backgroundColor: '#ffffff', color: '#0f172a', opacity: 1, WebkitAppearance: 'none' }}
                     required
                   />
@@ -1914,7 +1914,7 @@ export const AgendaDesaView: React.FC = () => {
                     type="time"
                     value={form.waktu}
                     onChange={(e) => setForm({ ...form, waktu: e.target.value })}
-                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white text-slate-900 opacity-100 min-h-[44px] box-border block font-medium"
+                    className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 opacity-100 min-h-[44px] box-border block font-medium"
                     style={{ backgroundColor: '#ffffff', color: '#0f172a', opacity: 1, WebkitAppearance: 'none' }}
                     required
                   />
@@ -1930,7 +1930,7 @@ export const AgendaDesaView: React.FC = () => {
                   value={form.tempat}
                   onChange={(e) => setForm({ ...form, tempat: e.target.value })}
                   placeholder="Pendopo Balai Desa Doko"
-                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white text-slate-900 opacity-100 font-medium"
+                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 opacity-100 font-medium"
                   style={{ backgroundColor: '#ffffff', color: '#0f172a', opacity: 1 }}
                   required
                 />
@@ -1952,7 +1952,7 @@ export const AgendaDesaView: React.FC = () => {
                   value={form.keterangan}
                   onChange={(e) => setForm({ ...form, keterangan: e.target.value })}
                   placeholder="Instruksi tambahan, perlengkapan yang perlu dibawa, dll..."
-                  className="w-full px-3.5 py-2 text-xs border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 bg-white text-slate-900 opacity-100 font-medium"
+                  className="w-full px-3.5 py-2 text-xs border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 bg-white text-slate-900 opacity-100 font-medium"
                   style={{ backgroundColor: '#ffffff', color: '#0f172a', opacity: 1 }}
                 />
               </div>
@@ -1971,7 +1971,7 @@ export const AgendaDesaView: React.FC = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-4 py-2 text-xs text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 rounded-xl font-medium cursor-pointer shadow-xs"
+                  className="px-4 py-2 text-xs text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl font-medium cursor-pointer shadow-xs"
                 >
                   {submitting ? 'Menyimpan...' : (editingAgenda ? 'Simpan Perubahan' : 'Tambah Agenda')}
                 </button>
@@ -2091,11 +2091,11 @@ export const AgendaDesaView: React.FC = () => {
             {/* Alert Icon with Ping/Ring */}
             <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto shadow-sm ring-8 ${
               feedbackAlert.type === 'success'
-                ? 'bg-emerald-100 text-emerald-600 ring-emerald-50'
+                ? 'bg-blue-100 text-blue-600 ring-blue-50'
                 : 'bg-rose-100 text-rose-600 ring-rose-50'
             }`}>
               {feedbackAlert.type === 'success' ? (
-                <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                <CheckCircle2 className="w-8 h-8 text-blue-600" />
               ) : (
                 <XCircle className="w-8 h-8 text-rose-600" />
               )}
@@ -2105,7 +2105,7 @@ export const AgendaDesaView: React.FC = () => {
             <div className="space-y-1.5">
               <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full border inline-block ${
                 feedbackAlert.type === 'success'
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                  ? 'bg-blue-50 text-blue-800 border-blue-200'
                   : 'bg-rose-50 text-rose-800 border-rose-200'
               }`}>
                 {feedbackAlert.type === 'success' ? 'Status: Berhasil' : 'Status: Gagal'}
@@ -2125,7 +2125,7 @@ export const AgendaDesaView: React.FC = () => {
                 onClick={() => setFeedbackAlert(null)}
                 className={`w-full py-2.5 px-4 rounded-xl text-xs font-bold text-white shadow-sm transition-all cursor-pointer ${
                   feedbackAlert.type === 'success'
-                    ? 'bg-emerald-600 hover:bg-emerald-700'
+                    ? 'bg-blue-600 hover:bg-blue-700'
                     : 'bg-rose-600 hover:bg-rose-700'
                 }`}
               >
@@ -2399,8 +2399,8 @@ export const ProfileSayaView: React.FC = () => {
               <UserAvatar
                 src={avatar}
                 name={name || user?.name}
-                className="w-20 h-20 rounded-3xl object-cover border-2 border-emerald-500 shadow-md ring-4 ring-emerald-50"
-                fallbackClassName="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white flex items-center justify-center font-black text-3xl shadow-md ring-4 ring-emerald-50"
+                className="w-20 h-20 rounded-3xl object-cover border-2 border-blue-500 shadow-md ring-4 ring-blue-50"
+                fallbackClassName="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center font-black text-3xl shadow-md ring-4 ring-blue-50"
               />
             </div>
 
@@ -2409,14 +2409,14 @@ export const ProfileSayaView: React.FC = () => {
                 <h3 className="text-lg sm:text-xl font-black text-slate-900 leading-tight">
                   {name || user?.name}
                 </h3>
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800">
                   <ShieldCheck className="w-3 h-3" />
                   <span>Akun Terverifikasi</span>
                 </span>
               </div>
 
-              <div className="text-xs text-emerald-800 font-extrabold flex items-center gap-1.5">
-                <Building2 className="w-3.5 h-3.5 text-emerald-600" />
+              <div className="text-xs text-blue-800 font-extrabold flex items-center gap-1.5">
+                <Building2 className="w-3.5 h-3.5 text-blue-600" />
                 <span>{roleName}</span>
                 <span className="text-slate-300">•</span>
                 <span className="text-slate-500 font-normal">{wilayahDisplay}</span>
@@ -2433,7 +2433,7 @@ export const ProfileSayaView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsAvatarCameraOpen(true)}
-                  className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-2xs flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105 active:scale-95"
+                  className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-2xs flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105 active:scale-95"
                   title="Ambil foto profil langsung menggunakan kamera HP / Webcam laptop"
                 >
                   <Camera className="w-3.5 h-3.5" />
@@ -2478,7 +2478,7 @@ export const ProfileSayaView: React.FC = () => {
             onClick={() => setActiveTab('profil')}
             className={`pb-3 px-4 text-xs font-extrabold transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
               activeTab === 'profil'
-                ? 'border-emerald-600 text-emerald-800'
+                ? 'border-blue-600 text-blue-800'
                 : 'border-transparent text-slate-400 hover:text-slate-600'
             }`}
           >
@@ -2491,7 +2491,7 @@ export const ProfileSayaView: React.FC = () => {
             onClick={() => setActiveTab('keamanan')}
             className={`pb-3 px-4 text-xs font-extrabold transition-all border-b-2 flex items-center gap-2 cursor-pointer ${
               activeTab === 'keamanan'
-                ? 'border-emerald-600 text-emerald-800'
+                ? 'border-blue-600 text-blue-800'
                 : 'border-transparent text-slate-400 hover:text-slate-600'
             }`}
           >
@@ -2504,8 +2504,8 @@ export const ProfileSayaView: React.FC = () => {
         {activeTab === 'profil' && (
           <form onSubmit={handleSaveProfile} className="space-y-6">
             {profileSuccess && (
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2.5 animate-fade-in">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold flex items-center gap-2.5 animate-fade-in">
+                <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                 <span>{profileSuccess}</span>
               </div>
             )}
@@ -2535,7 +2535,7 @@ export const ProfileSayaView: React.FC = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Masukkan nama lengkap"
-                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-semibold text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                   />
                 </div>
 
@@ -2549,7 +2549,7 @@ export const ProfileSayaView: React.FC = () => {
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       placeholder="username"
-                      className="w-full pl-8 pr-3 py-3 rounded-2xl bg-white border border-slate-200 font-mono font-semibold text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                      className="w-full pl-8 pr-3 py-3 rounded-2xl bg-white border border-slate-200 font-mono font-semibold text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                     />
                   </div>
                 </div>
@@ -2562,7 +2562,7 @@ export const ProfileSayaView: React.FC = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="nama@email.com"
-                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                   />
                 </div>
 
@@ -2574,7 +2574,7 @@ export const ProfileSayaView: React.FC = () => {
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     placeholder="08123456789"
-                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                   />
                 </div>
               </div>
@@ -2586,7 +2586,7 @@ export const ProfileSayaView: React.FC = () => {
                 <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">
                   Data Kependudukan & Domisili Resmi
                 </h4>
-                <span className="text-[11px] text-emerald-800 font-bold">Terverifikasi Dukcapil</span>
+                <span className="text-[11px] text-blue-800 font-bold">Terverifikasi Dukcapil</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -2623,7 +2623,7 @@ export const ProfileSayaView: React.FC = () => {
                     value={pekerjaan}
                     onChange={(e) => setPekerjaan(e.target.value)}
                     placeholder="Pekerjaan atau profesi"
-                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                   />
                 </div>
 
@@ -2634,7 +2634,7 @@ export const ProfileSayaView: React.FC = () => {
                     value={alamatKtp}
                     onChange={(e) => setAlamatKtp(e.target.value)}
                     placeholder="Alamat domisili"
-                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                    className="w-full p-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                   />
                 </div>
               </div>
@@ -2651,7 +2651,7 @@ export const ProfileSayaView: React.FC = () => {
                     Berkas identitas kependudukan resmi untuk syarat surat desa (arsip master kependudukan).
                   </p>
                 </div>
-                <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 flex items-center gap-1">
+                <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 flex items-center gap-1">
                   <Camera className="w-3 h-3" />
                   <span>Kamera & Upload</span>
                 </span>
@@ -2659,18 +2659,18 @@ export const ProfileSayaView: React.FC = () => {
 
               {fotoKtp ? (
                 /* Card Preview e-KTP */
-                <div className="p-4 rounded-3xl bg-emerald-50/80 border border-emerald-300 space-y-3">
+                <div className="p-4 rounded-3xl bg-blue-50/80 border border-blue-300 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <span className="text-xs font-black text-blue-900 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-blue-600" />
                       <span>Foto e-KTP Terlampir & Terverifikasi</span>
                     </span>
-                    <span className="text-[10px] font-bold text-emerald-700 bg-white px-2.5 py-0.5 rounded-full border border-emerald-200">
+                    <span className="text-[10px] font-bold text-blue-700 bg-white px-2.5 py-0.5 rounded-full border border-blue-200">
                       Resmi Desa Doko
                     </span>
                   </div>
 
-                  <div className="relative rounded-2xl overflow-hidden border border-emerald-300 bg-slate-950 aspect-16/10 max-h-56 flex items-center justify-center group shadow-xs">
+                  <div className="relative rounded-2xl overflow-hidden border border-blue-300 bg-slate-950 aspect-16/10 max-h-56 flex items-center justify-center group shadow-xs">
                     <img
                       src={fotoKtp}
                       alt="Foto e-KTP Terverifikasi"
@@ -2692,7 +2692,7 @@ export const ProfileSayaView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsKtpCameraOpen(true)}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-white hover:bg-emerald-100/70 border border-emerald-300 text-emerald-900 text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-white hover:bg-blue-100/70 border border-blue-300 text-blue-900 text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
                     >
                       <Camera className="w-4 h-4" />
                       <span>Foto Ulang via Kamera</span>
@@ -2703,7 +2703,7 @@ export const ProfileSayaView: React.FC = () => {
                         setAvatar(fotoKtp);
                         handleSaveAvatarOnly(fotoKtp);
                       }}
-                      className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                      className="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
                       title="Gunakan foto ini sebagai foto profil / avatar akun"
                     >
                       <User className="w-4 h-4" />
@@ -2722,8 +2722,8 @@ export const ProfileSayaView: React.FC = () => {
                 </div>
               ) : (
                 /* Trigger Buttons to Capture or Upload KTP */
-                <div className="p-5 rounded-3xl border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-slate-50/80 transition-all text-center space-y-3">
-                  <div className="w-12 h-12 rounded-2xl bg-white text-emerald-600 shadow-xs flex items-center justify-center mx-auto">
+                <div className="p-5 rounded-3xl border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/80 transition-all text-center space-y-3">
+                  <div className="w-12 h-12 rounded-2xl bg-white text-blue-600 shadow-xs flex items-center justify-center mx-auto">
                     <CreditCard className="w-6 h-6" />
                   </div>
                   <div>
@@ -2739,7 +2739,7 @@ export const ProfileSayaView: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setIsKtpCameraOpen(true)}
-                      className="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition-all flex items-center gap-2 shadow-xs cursor-pointer press-down"
+                      className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all flex items-center gap-2 shadow-xs cursor-pointer press-down"
                     >
                       <Camera className="w-4 h-4" />
                       <span>Buka Kamera Sekarang</span>
@@ -2758,7 +2758,7 @@ export const ProfileSayaView: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSavingProfile}
-                className="px-6 py-3 rounded-2xl bg-slate-900 hover:bg-emerald-700 text-white font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer press-down"
+                className="px-6 py-3 rounded-2xl bg-slate-900 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer press-down"
               >
                 {isSavingProfile ? (
                   <>
@@ -2780,8 +2780,8 @@ export const ProfileSayaView: React.FC = () => {
         {activeTab === 'keamanan' && (
           <form onSubmit={handleSavePassword} className="space-y-6">
             {passwordSuccess && (
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2.5 animate-fade-in">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-800 text-xs font-bold flex items-center gap-2.5 animate-fade-in">
+                <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                 <span>{passwordSuccess}</span>
               </div>
             )}
@@ -2811,7 +2811,7 @@ export const ProfileSayaView: React.FC = () => {
                       value={currentPassword}
                       onChange={(e) => setCurrentPassword(e.target.value)}
                       placeholder="Masukkan kata sandi lama"
-                      className="w-full pr-10 pl-3 py-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                      className="w-full pr-10 pl-3 py-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                     />
                     <button
                       type="button"
@@ -2832,7 +2832,7 @@ export const ProfileSayaView: React.FC = () => {
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
                       placeholder="Minimal 6 karakter"
-                      className="w-full pr-10 pl-3 py-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                      className="w-full pr-10 pl-3 py-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                     />
                     <button
                       type="button"
@@ -2853,7 +2853,7 @@ export const ProfileSayaView: React.FC = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="Ulangi kata sandi baru"
-                      className="w-full pr-10 pl-3 py-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 shadow-2xs transition-all"
+                      className="w-full pr-10 pl-3 py-3 rounded-2xl bg-white border border-slate-200 font-medium text-slate-800 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 shadow-2xs transition-all"
                     />
                     <button
                       type="button"
@@ -2876,7 +2876,7 @@ export const ProfileSayaView: React.FC = () => {
               <button
                 type="submit"
                 disabled={isSavingPassword}
-                className="px-6 py-3 rounded-2xl bg-slate-900 hover:bg-emerald-700 text-white font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer press-down"
+                className="px-6 py-3 rounded-2xl bg-slate-900 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer press-down"
               >
                 {isSavingPassword ? (
                   <>
@@ -2935,7 +2935,7 @@ export const ProfileSayaView: React.FC = () => {
           >
             <div className="flex items-center justify-between text-slate-900 pb-3 border-b border-slate-100">
               <span className="text-xs font-bold flex items-center gap-2 text-slate-800">
-                <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center">
                   <CreditCard className="w-4 h-4" />
                 </div>
                 <span>Foto Fisik e-KTP Terverifikasi</span>
@@ -3044,7 +3044,7 @@ export const NotifikasiView: React.FC<{
             Pemberitahuan perubahan status surat pengantar dan instruksi sistem desa.
           </p>
         </div>
-        <span className="text-xs font-extrabold text-emerald-800 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200 shadow-2xs w-fit">
+        <span className="text-xs font-extrabold text-blue-800 bg-blue-50 px-3.5 py-1.5 rounded-full border border-blue-200 shadow-2xs w-fit">
           {notifs.filter(n => n.unread).length} Belum Dibaca
         </span>
       </div>
@@ -3058,25 +3058,25 @@ export const NotifikasiView: React.FC<{
             onClick={() => onSelectNotification?.(n)}
             className={`p-5 rounded-3xl border transition-all cursor-pointer hover:scale-[1.01] hover:shadow-md ${
               n.unread 
-                ? 'bg-emerald-50/80 border-emerald-300 shadow-xs ring-1 ring-emerald-400/20' 
-                : 'bg-white border-slate-200/80 shadow-xs hover:border-emerald-300'
+                ? 'bg-blue-50/80 border-blue-300 shadow-xs ring-1 ring-blue-400/20' 
+                : 'bg-white border-slate-200/80 shadow-xs hover:border-blue-300'
             }`}
           >
             <div className="flex items-start justify-between gap-3">
               <div className="space-y-1.5 min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <span className={`px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider ${
-                    n.category === 'surat' ? 'bg-emerald-700 text-white' :
+                    n.category === 'surat' ? 'bg-blue-700 text-white' :
                     n.category === 'bansos' ? 'bg-amber-100 text-amber-900' : 'bg-slate-100 text-slate-700'
                   }`}>
                     {n.category}
                   </span>
                   <h3 className="font-black text-sm text-slate-900 truncate">{n.title}</h3>
-                  {n.unread && <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" />}
+                  {n.unread && <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0" />}
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">{n.desc}</p>
                 {n.meta?.nomorResi && (
-                  <div className="text-[11px] font-mono text-emerald-800 font-bold">
+                  <div className="text-[11px] font-mono text-blue-800 font-bold">
                     Resi: {n.meta.nomorResi}
                   </div>
                 )}
@@ -3084,7 +3084,7 @@ export const NotifikasiView: React.FC<{
 
               <div className="text-right shrink-0 space-y-2">
                 <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap">{n.time}</span>
-                <div className="text-[11px] font-extrabold text-emerald-700 hover:underline flex items-center justify-end gap-1">
+                <div className="text-[11px] font-extrabold text-blue-700 hover:underline flex items-center justify-end gap-1">
                   <span>Lihat Detail</span>
                 </div>
               </div>

@@ -145,8 +145,8 @@ export const PenomoranSuratSetting: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+            <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
               Modul Penomoran & Persyaratan Surat Desa
             </span>
           </div>
@@ -172,7 +172,7 @@ export const PenomoranSuratSetting: React.FC = () => {
       {message && (
         <div className={`p-4 rounded-2xl border text-xs font-medium flex items-center justify-between gap-3 animate-fade-in ${
           message.type === 'success' 
-            ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
+            ? 'bg-blue-50 border-blue-200 text-blue-800' 
             : 'bg-rose-50 border-rose-200 text-rose-800'
         }`}>
           <div className="flex items-center gap-2">
@@ -189,12 +189,12 @@ export const PenomoranSuratSetting: React.FC = () => {
       <div className="p-5 sm:p-6 rounded-2xl bg-white text-slate-900 shadow-2xs border border-slate-200/80 relative overflow-hidden">
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0 shadow-2xs">
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center shrink-0 shadow-2xs">
               <Calendar className="w-6 h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-200">
+                <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded border border-blue-200">
                   API Kalender Resmi Terhubung
                 </span>
                 <span className="text-[10px] text-slate-500 font-mono font-bold">Real-time Auto Sync</span>
@@ -233,7 +233,7 @@ export const PenomoranSuratSetting: React.FC = () => {
               Klik &ldquo;Edit Format & Syarat&rdquo; untuk mengubah nomor, format penomoran, atau daftar berkas persyaratan warga.
             </p>
           </div>
-          <span className="text-xs font-black text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+          <span className="text-xs font-black text-blue-800 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
             {types.length} Jenis Surat Aktif
           </span>
         </div>
@@ -242,11 +242,11 @@ export const PenomoranSuratSetting: React.FC = () => {
           {types.map((st) => (
             <div 
               key={st.id} 
-              className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-300 hover:shadow-md transition-all flex flex-col justify-between space-y-3 group"
+              className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md transition-all flex flex-col justify-between space-y-3 group"
             >
               <div className="space-y-2">
                 <div className="flex items-start justify-between gap-2">
-                  <span className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-900 border border-emerald-200">
+                  <span className="px-2.5 py-1 rounded-xl text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-900 border border-blue-200">
                     {st.kode_surat}
                   </span>
                   <span className="text-[10px] font-mono font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
@@ -255,7 +255,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-black text-sm text-slate-900 group-hover:text-emerald-800 transition-colors leading-snug">
+                  <h4 className="font-black text-sm text-slate-900 group-hover:text-blue-800 transition-colors leading-snug">
                     {st.nama_surat}
                   </h4>
                   <p className="text-[10px] text-slate-400 font-mono mt-1 truncate" title={st.format_nomor}>
@@ -281,7 +281,7 @@ export const PenomoranSuratSetting: React.FC = () => {
 
                 {/* Preview Box */}
                 <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/90 space-y-1">
-                  <span className="text-[9px] font-black uppercase text-emerald-800 tracking-wider flex items-center gap-1">
+                  <span className="text-[9px] font-black uppercase text-blue-800 tracking-wider flex items-center gap-1">
                     <span>Preview Terbitan Berikutnya:</span>
                   </span>
                   <div className="font-mono font-black text-xs text-slate-900 break-all bg-white p-1.5 rounded-lg border border-slate-200">
@@ -294,7 +294,7 @@ export const PenomoranSuratSetting: React.FC = () => {
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                 <div>
                   <span className="text-[10px] text-slate-400 block font-semibold">Urutan Terakhir:</span>
-                  <span className="font-mono font-black text-emerald-800 text-sm">
+                  <span className="font-mono font-black text-blue-800 text-sm">
                     #{st.nomor_terakhir}
                   </span>
                   <span className="text-[10px] text-slate-500 ml-1">
@@ -305,7 +305,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => handleEdit(st)}
-                  className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-emerald-700 text-white font-bold text-xs transition-colors flex items-center gap-1 cursor-pointer shadow-xs press-down"
+                  className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-blue-700 text-white font-bold text-xs transition-colors flex items-center gap-1 cursor-pointer shadow-xs press-down"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
                   <span>Edit Format</span>
@@ -328,7 +328,7 @@ export const PenomoranSuratSetting: React.FC = () => {
           >
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
                   {editingType.kode_surat}
                 </span>
                 <h3 className="text-base font-black text-slate-900 mt-1">
@@ -355,7 +355,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                   value={formNamaSurat}
                   onChange={(e) => setFormNamaSurat(e.target.value)}
                   placeholder="Contoh: Surat Keterangan Domisili Warga"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -366,7 +366,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                   <label className="font-bold text-slate-800 uppercase tracking-wide block">
                     Persyaratan Berkas Warga (Dinamis):
                   </label>
-                  <span className="text-[10px] text-emerald-800 font-bold bg-emerald-100 px-2 py-0.5 rounded-full">
+                  <span className="text-[10px] text-blue-800 font-bold bg-blue-100 px-2 py-0.5 rounded-full">
                     {formPersyaratan.length} Syarat
                   </span>
                 </div>
@@ -382,7 +382,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                     formPersyaratan.map((syarat, sIdx) => (
                       <span 
                         key={sIdx} 
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-900 text-[11px] font-semibold border border-emerald-200"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-900 text-[11px] font-semibold border border-blue-200"
                       >
                         <span>{syarat}</span>
                         <button
@@ -411,12 +411,12 @@ export const PenomoranSuratSetting: React.FC = () => {
                       }
                     }}
                     placeholder="Ketik nama berkas (contoh: Pas Foto 4x6)..."
-                    className="flex-1 px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="flex-1 px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <button
                     type="button"
                     onClick={handleAddSyarat}
-                    className="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shrink-0 cursor-pointer transition-colors shadow-2xs"
+                    className="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shrink-0 cursor-pointer transition-colors shadow-2xs"
                   >
                     + Tambah
                   </button>
@@ -437,7 +437,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                     value={formKlasifikasi}
                     onChange={(e) => setFormKlasifikasi(e.target.value)}
                     placeholder="Contoh: 401 atau 470"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -457,17 +457,17 @@ export const PenomoranSuratSetting: React.FC = () => {
                     value={formFormat}
                     onChange={(e) => setFormFormat(e.target.value)}
                     placeholder="Contoh: {KLASIFIKASI}/{NO}/418.66.04/{BULAN_ROMAWI}/{TAHUN}"
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
                 <div className="flex flex-wrap gap-1 pt-1 text-[10px] text-slate-500 font-mono">
                   <span>Token:</span>
-                  <code className="bg-slate-100 px-1 py-0.5 rounded text-emerald-800 font-bold">&#123;NO&#125;</code>
-                  <code className="bg-slate-100 px-1 py-0.5 rounded text-emerald-800 font-bold">&#123;KLASIFIKASI&#125;</code>
-                  <code className="bg-slate-100 px-1 py-0.5 rounded text-emerald-800 font-bold">&#123;BULAN_ROMAWI&#125;</code>
-                  <code className="bg-slate-100 px-1 py-0.5 rounded text-emerald-800 font-bold">&#123;BULAN&#125;</code>
-                  <code className="bg-slate-100 px-1 py-0.5 rounded text-emerald-800 font-bold">&#123;TAHUN&#125;</code>
+                  <code className="bg-slate-100 px-1 py-0.5 rounded text-blue-800 font-bold">&#123;NO&#125;</code>
+                  <code className="bg-slate-100 px-1 py-0.5 rounded text-blue-800 font-bold">&#123;KLASIFIKASI&#125;</code>
+                  <code className="bg-slate-100 px-1 py-0.5 rounded text-blue-800 font-bold">&#123;BULAN_ROMAWI&#125;</code>
+                  <code className="bg-slate-100 px-1 py-0.5 rounded text-blue-800 font-bold">&#123;BULAN&#125;</code>
+                  <code className="bg-slate-100 px-1 py-0.5 rounded text-blue-800 font-bold">&#123;TAHUN&#125;</code>
                 </div>
               </div>
 
@@ -485,7 +485,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                     min={0}
                     value={formNomorTerakhir}
                     onChange={(e) => setFormNomorTerakhir(Number(e.target.value))}
-                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -495,15 +495,15 @@ export const PenomoranSuratSetting: React.FC = () => {
               </div>
 
               {/* Live Preview Box */}
-              <div className="p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-200 space-y-1.5">
-                <div className="flex items-center justify-between text-[10px] font-black uppercase text-emerald-900">
+              <div className="p-3.5 rounded-2xl bg-blue-50/80 border border-blue-200 space-y-1.5">
+                <div className="flex items-center justify-between text-[10px] font-black uppercase text-blue-900">
                   <span>Hasil Generate No. Surat Berikutnya:</span>
-                  <span className="text-emerald-700 font-mono">Live Preview</span>
+                  <span className="text-blue-700 font-mono">Live Preview</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-white border border-emerald-300 font-mono font-black text-xs text-emerald-950 break-all text-center">
+                <div className="p-2.5 rounded-xl bg-white border border-blue-300 font-mono font-black text-xs text-blue-950 break-all text-center">
                   {computeLivePreview()}
                 </div>
-                <p className="text-[10px] text-emerald-800/80 italic">
+                <p className="text-[10px] text-blue-800/80 italic">
                   * Tanggal, bulan Romawi ({calendar?.bulan_romawi || 'X'}), dan tahun ({calendar?.tahun || '2026'}) diambil otomatis dari kalender hari ini.
                 </p>
               </div>
@@ -519,7 +519,7 @@ export const PenomoranSuratSetting: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
                   <span>{isSaving ? 'Menyimpan...' : 'Simpan Pengaturan'}</span>

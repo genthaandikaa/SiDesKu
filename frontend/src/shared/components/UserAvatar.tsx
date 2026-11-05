@@ -14,8 +14,8 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   src,
   name,
   alt = 'Avatar Pengguna',
-  className = 'w-8 h-8 rounded-full object-cover border border-emerald-500 shadow-xs',
-  fallbackClassName = 'w-8 h-8 rounded-full bg-emerald-700 text-white font-black flex items-center justify-center text-xs shadow-xs',
+  className = 'w-8 h-8 rounded-full object-cover border border-blue-500 shadow-xs',
+  fallbackClassName = 'w-8 h-8 rounded-full bg-blue-700 text-white font-black flex items-center justify-center text-xs shadow-xs',
   onClick,
 }) => {
   const [hasError, setHasError] = useState(false);

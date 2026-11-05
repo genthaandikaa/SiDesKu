@@ -151,7 +151,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
-        <div className="bg-white border-b border-emerald-100 p-5 sm:p-6 relative shrink-0">
+        <div className="bg-white border-b border-blue-100 p-5 sm:p-6 relative shrink-0">
           <button
             type="button"
             onClick={onClose}
@@ -163,17 +163,17 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pr-10">
             <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-xl sm:text-2xl font-black shrink-0 ${
-              warga.jenis_kelamin === 'L' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+              warga.jenis_kelamin === 'L' ? 'bg-blue-100 text-blue-800 border border-blue-200' : 'bg-blue-50 text-blue-800 border border-blue-200'
             }`}>
               {warga.nama_lengkap.charAt(0).toUpperCase()}
             </div>
 
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-50 text-blue-800 border border-blue-200">
                   {warga.status_kependudukan || 'Warga Tetap'}
                 </span>
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 border border-emerald-300">
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-300">
                   RT {warga.rt?.nomor_rt || '01'} / RW {warga.rt?.rw?.nomor_rw || '01'}
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200">
@@ -185,7 +185,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
                 {warga.nama_lengkap}
               </h2>
 
-              <div className="flex flex-wrap items-center gap-3 text-xs text-emerald-800 font-mono">
+              <div className="flex flex-wrap items-center gap-3 text-xs text-blue-800 font-mono">
                 <span>NIK: <strong className="text-slate-900">{warga.nik}</strong></span>
                 {warga.kartu_keluarga?.no_kk && (
                   <span>• No KK: <strong className="text-slate-900">{warga.kartu_keluarga.no_kk}</strong></span>
@@ -201,7 +201,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
           {/* Section 1: Identitas Pribadi */}
           <div className="space-y-2.5">
             <div className="flex items-center gap-2 text-slate-800 font-black text-sm pb-1.5 border-b border-slate-100">
-              <Shield className="w-4 h-4 text-emerald-600" />
+              <Shield className="w-4 h-4 text-blue-600" />
               <span>Identitas & Biodata Kependudukan</span>
             </div>
 
@@ -209,7 +209,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block">Tempat, Tgl Lahir</span>
                 <span className="font-extrabold text-slate-900 block mt-0.5">{warga.tempat_lahir}, {dobFormatted}</span>
-                <span className="text-[10px] text-emerald-700 font-bold">Usia: {age} Tahun</span>
+                <span className="text-[10px] text-blue-700 font-bold">Usia: {age} Tahun</span>
               </div>
 
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
@@ -252,7 +252,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
 
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100">
                 <span className="text-[10px] text-slate-400 font-bold uppercase block">Kedudukan Keluarga</span>
-                <span className="font-extrabold text-emerald-800 block mt-0.5">{warga.status_keluarga || 'Anggota'}</span>
+                <span className="font-extrabold text-blue-800 block mt-0.5">{warga.status_keluarga || 'Anggota'}</span>
               </div>
             </div>
           </div>
@@ -260,7 +260,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
           {/* Section 2: Alamat Domisili & Kontak */}
           <div className="space-y-2.5">
             <div className="flex items-center gap-2 text-slate-800 font-black text-sm pb-1.5 border-b border-slate-100">
-              <MapPin className="w-4 h-4 text-emerald-600" />
+              <MapPin className="w-4 h-4 text-blue-600" />
               <span>Alamat Domisili & Kontak Warga</span>
             </div>
 
@@ -270,8 +270,8 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
                 <p className="font-bold text-slate-900 text-xs leading-relaxed">
                   {warga.alamat_ktp}
                 </p>
-                <div className="pt-1 text-[11px] text-emerald-800 font-semibold flex items-center gap-1.5">
-                  <span className="px-2 py-0.5 bg-emerald-100 rounded text-[10px] font-bold">
+                <div className="pt-1 text-[11px] text-blue-800 font-semibold flex items-center gap-1.5">
+                  <span className="px-2 py-0.5 bg-blue-100 rounded text-[10px] font-bold">
                     RT {warga.rt?.nomor_rt || '01'} / RW {warga.rt?.rw?.nomor_rw || '01'}
                   </span>
                   <span>{warga.rt?.rw?.dusun?.nama_dusun || 'Dusun Doko Krajan'}</span>
@@ -293,7 +293,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors self-start"
+                    className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors self-start"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
                     <span>Hubungi via WhatsApp</span>
@@ -307,11 +307,11 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
           <div className="space-y-2.5">
             <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
               <div className="flex items-center gap-2 text-slate-800 font-black text-sm">
-                <Home className="w-4 h-4 text-emerald-600" />
+                <Home className="w-4 h-4 text-blue-600" />
                 <span>Kartu Keluarga (KK) & Anggota Terdaftar</span>
               </div>
               {warga.kartu_keluarga?.no_kk && (
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-900 font-mono font-bold text-[10px] border border-emerald-200">
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-900 font-mono font-bold text-[10px] border border-blue-200">
                   No. KK: {warga.kartu_keluarga.no_kk}
                 </span>
               )}
@@ -319,18 +319,18 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
 
             {warga.kartu_keluarga ? (
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-3.5 rounded-xl bg-blue-50/70 border border-blue-200 grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <span className="text-[10px] text-emerald-800 font-bold uppercase block">Nomor Kartu Keluarga:</span>
-                    <strong className="font-mono text-emerald-950 text-xs">{warga.kartu_keluarga.no_kk}</strong>
+                    <span className="text-[10px] text-blue-800 font-bold uppercase block">Nomor Kartu Keluarga:</span>
+                    <strong className="font-mono text-blue-950 text-xs">{warga.kartu_keluarga.no_kk}</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-emerald-800 font-bold uppercase block">Kepala Keluarga:</span>
-                    <strong className="text-emerald-950 text-xs">{warga.kartu_keluarga.nama_kepala_keluarga}</strong>
+                    <span className="text-[10px] text-blue-800 font-bold uppercase block">Kepala Keluarga:</span>
+                    <strong className="text-blue-950 text-xs">{warga.kartu_keluarga.nama_kepala_keluarga}</strong>
                   </div>
                   <div>
-                    <span className="text-[10px] text-emerald-800 font-bold uppercase block">Kedudukan Warga Ini:</span>
-                    <strong className="text-emerald-950 text-xs">{warga.status_keluarga || 'Anggota'}</strong>
+                    <span className="text-[10px] text-blue-800 font-bold uppercase block">Kedudukan Warga Ini:</span>
+                    <strong className="text-blue-950 text-xs">{warga.status_keluarga || 'Anggota'}</strong>
                   </div>
                 </div>
 
@@ -357,12 +357,12 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
                           {anggotaKeluarga.map((ang) => {
                             const isCurrent = ang.id === warga.id || ang.nik === warga.nik;
                             return (
-                              <tr key={ang.id} className={isCurrent ? 'bg-emerald-50/80 font-bold' : 'hover:bg-slate-50'}>
+                              <tr key={ang.id} className={isCurrent ? 'bg-blue-50/80 font-bold' : 'hover:bg-slate-50'}>
                                 <td className="py-2 px-3">
                                   <div className="flex items-center gap-1.5">
                                     <span>{ang.nama_lengkap}</span>
                                     {isCurrent && (
-                                      <span className="px-1.5 py-0.2 rounded text-[9px] bg-emerald-600 text-white uppercase font-black">
+                                      <span className="px-1.5 py-0.2 rounded text-[9px] bg-blue-600 text-white uppercase font-black">
                                         Warga Ini
                                       </span>
                                     )}
@@ -401,19 +401,19 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
           {/* Section 4: Akun & Kredensial Login Mandiri */}
           <div className="space-y-2.5">
             <div className="flex items-center gap-2 text-slate-800 font-black text-sm pb-1.5 border-b border-slate-100">
-              <Lock className="w-4 h-4 text-emerald-600" />
+              <Lock className="w-4 h-4 text-blue-600" />
               <span>Akses Portal Mandiri Warga</span>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200/90 text-slate-800 space-y-3 shadow-2xs">
+            <div className="p-4 sm:p-5 rounded-2xl bg-blue-50/70 border border-blue-200/90 text-slate-800 space-y-3 shadow-2xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <span className="text-[10px] text-emerald-800 font-bold uppercase tracking-wider block">Kredensial Login SiDesKu:</span>
+                  <span className="text-[10px] text-blue-800 font-bold uppercase tracking-wider block">Kredensial Login SiDesKu:</span>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="px-2.5 py-1 rounded-lg bg-white text-slate-800 font-mono font-bold text-xs border border-emerald-200 shadow-2xs">
+                    <span className="px-2.5 py-1 rounded-lg bg-white text-slate-800 font-mono font-bold text-xs border border-blue-200 shadow-2xs">
                       ID: {warga.nik}
                     </span>
-                    <span className="px-2.5 py-1 rounded-lg bg-white text-emerald-900 font-mono font-bold text-xs border border-emerald-200 shadow-2xs">
+                    <span className="px-2.5 py-1 rounded-lg bg-white text-blue-900 font-mono font-bold text-xs border border-blue-200 shadow-2xs">
                       PW: {pw}
                     </span>
                   </div>
@@ -427,8 +427,8 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
                   >
                     {copiedId === warga.id ? (
                       <>
-                        <Check className="w-3.5 h-3.5 text-emerald-600" />
-                        <span className="text-emerald-700">Tersalin!</span>
+                        <Check className="w-3.5 h-3.5 text-blue-600" />
+                        <span className="text-blue-700">Tersalin!</span>
                       </>
                     ) : (
                       <>
@@ -445,7 +445,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-xs"
+                      className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-xs"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
                       <span>Kirim WA</span>
@@ -728,8 +728,8 @@ export const PendaftaranWargaDesa: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+            <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
               Registrasi Kependudukan Desa
             </span>
           </div>
@@ -747,7 +747,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
             setShowAddModal(true);
             setFormError('');
           }}
-          className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs shadow-md shadow-emerald-700/20 transition-all press-down flex items-center gap-2 cursor-pointer self-start sm:self-auto"
+          className="px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-black text-xs shadow-md shadow-blue-700/20 transition-all press-down flex items-center gap-2 cursor-pointer self-start sm:self-auto"
         >
           <UserPlus className="w-4 h-4" />
           <span>+ Daftarkan Warga Baru</span>
@@ -758,8 +758,8 @@ export const PendaftaranWargaDesa: React.FC = () => {
       {lastRegistered && (
         <div className="p-4 sm:p-5 rounded-2xl bg-white border border-slate-200/90 text-slate-800 space-y-3 animate-fade-in shadow-xs">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-emerald-950 font-black text-sm">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+            <div className="flex items-center gap-2 text-blue-950 font-black text-sm">
+              <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
               <span>Warga Baru Berhasil Terdaftar di Database Desa!</span>
             </div>
             <button
@@ -770,20 +770,20 @@ export const PendaftaranWargaDesa: React.FC = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-white p-3.5 rounded-xl border border-emerald-200">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-white p-3.5 rounded-xl border border-blue-200">
             <div>
               <span className="text-[10px] text-slate-400 font-bold uppercase block">Nama & NIK:</span>
               <strong className="text-slate-900 text-sm block">{lastRegistered.warga.nama_lengkap}</strong>
-              <span className="font-mono text-emerald-900 font-bold">NIK: {lastRegistered.warga.nik}</span>
+              <span className="font-mono text-blue-900 font-bold">NIK: {lastRegistered.warga.nik}</span>
             </div>
 
             <div className="space-y-1">
               <span className="text-[10px] text-slate-400 font-bold uppercase block">Kredensial Login Otomatis Warga:</span>
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-mono font-bold text-xs">
+                <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-900 font-mono font-bold text-xs">
                   ID: {lastRegistered.warga.nik}
                 </span>
-                <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 font-mono font-bold text-xs">
+                <span className="px-2 py-0.5 rounded bg-blue-100 text-blue-900 font-mono font-bold text-xs">
                   PW: Tanggal Lahir
                 </span>
               </div>
@@ -809,7 +809,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs"
+                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs"
               >
                 <MessageCircle className="w-3.5 h-3.5" />
                 <span>Kirim via WhatsApp</span>
@@ -831,7 +831,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cari nama lengkap, NIK, atau KK..."
-              className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full pl-9 pr-8 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {searchTerm && (
               <button
@@ -846,7 +846,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
 
           <div className="flex flex-wrap items-center gap-2 text-xs">
             <span className="text-slate-500">Total Terdata:</span>
-            <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 font-black">
+            <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-900 font-black">
               {filteredWargas.length} dari {wargas.length} Jiwa
             </span>
             <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono font-bold text-[11px] border border-slate-200">
@@ -858,7 +858,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
         {/* TOOLBAR FILTER: PER RW, PER RT, PER KK */}
         <div className="p-3 sm:p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-wrap items-center gap-3 text-xs">
           <div className="flex items-center gap-1.5 text-slate-700 font-bold shrink-0">
-            <Filter className="w-4 h-4 text-emerald-700" />
+            <Filter className="w-4 h-4 text-blue-700" />
             <span>Filter Kependudukan:</span>
           </div>
 
@@ -871,7 +871,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                 setSelectedRw(e.target.value);
                 setSelectedRt('all'); // Reset RT saat RW berubah
               }}
-              className="p-1.5 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="p-1.5 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">Semua RW</option>
               {availableRws.map((rwNo) => (
@@ -888,7 +888,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
             <select
               value={selectedRt}
               onChange={(e) => setSelectedRt(e.target.value)}
-              className="p-1.5 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="p-1.5 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">Semua RT</option>
               {availableRts.map((rtNo) => (
@@ -905,7 +905,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
             <select
               value={selectedKkFilter}
               onChange={(e) => setSelectedKkFilter(e.target.value)}
-              className="p-1.5 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 max-w-[200px] truncate"
+              className="p-1.5 px-2.5 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[200px] truncate"
             >
               <option value="all">Semua Warga & KK</option>
               <option value="kepala_keluarga">Kepala Keluarga Saja</option>
@@ -940,7 +940,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
         <div className="block md:hidden space-y-3">
           {loading ? (
             <div className="p-8 text-center text-slate-400 bg-white rounded-2xl border border-slate-200">
-              <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-1 text-emerald-600" />
+              <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-1 text-blue-600" />
               <span>Memuat data register warga...</span>
             </div>
           ) : filteredWargas.length === 0 ? (
@@ -955,7 +955,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                 <div key={w.id} className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs space-y-3">
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-mono font-bold text-slate-800 text-xs">NIK: {w.nik}</span>
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-200 font-bold text-[10px]">
+                    <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-900 border border-blue-200 font-bold text-[10px]">
                       RT {w.rt?.nomor_rt || '01'} / RW {w.rt?.rw?.nomor_rw || '01'}
                     </span>
                   </div>
@@ -963,7 +963,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                   <div>
                     <h4 className="font-extrabold text-slate-900 text-sm">{w.nama_lengkap}</h4>
                     <div className="text-[11px] text-slate-500 mt-0.5">
-                      <span className={w.status_keluarga === 'Kepala Keluarga' ? 'font-bold text-emerald-800' : ''}>
+                      <span className={w.status_keluarga === 'Kepala Keluarga' ? 'font-bold text-blue-800' : ''}>
                         {w.status_keluarga || 'Anggota'}
                       </span>
                       {' • '}{w.pekerjaan || 'Wiraswasta'}
@@ -978,7 +978,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                   <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between text-xs">
                     <div>
                       <span className="text-[10px] text-slate-400 block font-semibold">Tgl Lahir (Password)</span>
-                      <span className="font-mono text-emerald-800 font-bold">PW: {pw}</span>
+                      <span className="font-mono text-blue-800 font-bold">PW: {pw}</span>
                     </div>
                     {w.no_hp_wa && (
                       <div className="text-right">
@@ -992,9 +992,9 @@ export const PendaftaranWargaDesa: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setSelectedDetailWarga(w)}
-                      className="flex-1 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="flex-1 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold text-xs border border-blue-200 transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <Eye className="w-3.5 h-3.5 text-emerald-700" />
+                      <Eye className="w-3.5 h-3.5 text-blue-700" />
                       <span>Detail Lengkap</span>
                     </button>
                     <button
@@ -1004,7 +1004,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                       title="Salin NIK & Password"
                     >
                       {copiedId === w.id ? (
-                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <Check className="w-3.5 h-3.5 text-blue-600" />
                       ) : (
                         <Copy className="w-3.5 h-3.5 text-slate-600" />
                       )}
@@ -1033,7 +1033,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
               {loading ? (
                 <tr>
                   <td colSpan={6} className="p-8 text-center text-slate-400">
-                    <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-1 text-emerald-600" />
+                    <RefreshCw className="w-5 h-5 animate-spin mx-auto mb-1 text-blue-600" />
                     <span>Memuat data register warga...</span>
                   </td>
                 </tr>
@@ -1046,7 +1046,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                         <button
                           type="button"
                           onClick={handleResetFilters}
-                          className="px-3 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-900 font-bold text-xs inline-flex items-center gap-1 cursor-pointer"
+                          className="px-3 py-1 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-900 font-bold text-xs inline-flex items-center gap-1 cursor-pointer"
                         >
                           <RotateCcw className="w-3 h-3" />
                           <span>Hapus Filter</span>
@@ -1067,15 +1067,15 @@ export const PendaftaranWargaDesa: React.FC = () => {
                       </td>
                       <td className="py-3 px-3.5">
                         <div 
-                          className="font-extrabold text-slate-900 text-xs sm:text-sm hover:text-emerald-700 cursor-pointer flex items-center gap-1 group"
+                          className="font-extrabold text-slate-900 text-xs sm:text-sm hover:text-blue-700 cursor-pointer flex items-center gap-1 group"
                           onClick={() => setSelectedDetailWarga(w)}
                           title="Klik untuk melihat detail warga"
                         >
                           <span>{w.nama_lengkap}</span>
-                          <Eye className="w-3.5 h-3.5 text-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <Eye className="w-3.5 h-3.5 text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                         <div className="text-[10px] text-slate-500 mt-0.5">
-                          <span className={w.status_keluarga === 'Kepala Keluarga' ? 'font-bold text-emerald-800' : ''}>
+                          <span className={w.status_keluarga === 'Kepala Keluarga' ? 'font-bold text-blue-800' : ''}>
                             {w.status_keluarga || 'Anggota'}
                           </span>
                           {' • '}{w.pekerjaan || 'Warga'}
@@ -1090,12 +1090,12 @@ export const PendaftaranWargaDesa: React.FC = () => {
                         <div className="font-medium text-slate-700">
                           {dob.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </div>
-                        <div className="text-[10px] font-mono text-emerald-700 font-bold">
+                        <div className="text-[10px] font-mono text-blue-700 font-bold">
                           PW: {pw}
                         </div>
                       </td>
                       <td className="py-3 px-3.5">
-                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-900 border border-emerald-200 font-bold text-[10px]">
+                        <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-900 border border-blue-200 font-bold text-[10px]">
                           RT {w.rt?.nomor_rt || '01'} / RW {w.rt?.rw?.nomor_rw || '01'}
                         </span>
                       </td>
@@ -1108,10 +1108,10 @@ export const PendaftaranWargaDesa: React.FC = () => {
                           <button
                             type="button"
                             onClick={() => setSelectedDetailWarga(w)}
-                            className="px-2.5 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-[10px] border border-emerald-200 transition-colors cursor-pointer inline-flex items-center gap-1"
+                            className="px-2.5 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold text-[10px] border border-blue-200 transition-colors cursor-pointer inline-flex items-center gap-1"
                             title="Buka Detail Lengkap Warga & Kartu Keluarga"
                           >
-                            <Eye className="w-3 h-3 text-emerald-700" />
+                            <Eye className="w-3 h-3 text-blue-700" />
                             <span>Detail</span>
                           </button>
 
@@ -1124,8 +1124,8 @@ export const PendaftaranWargaDesa: React.FC = () => {
                           >
                             {copiedId === w.id ? (
                               <>
-                                <Check className="w-3 h-3 text-emerald-600" />
-                                <span className="text-emerald-700">Tersalin</span>
+                                <Check className="w-3 h-3 text-blue-600" />
+                                <span className="text-blue-700">Tersalin</span>
                               </>
                             ) : (
                               <>
@@ -1176,11 +1176,11 @@ export const PendaftaranWargaDesa: React.FC = () => {
           >
             <div className="px-6 py-4.5 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
                   <UserPlus className="w-5 h-5" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-black uppercase text-emerald-700 block">Formulir Desa</span>
+                  <span className="text-[10px] font-black uppercase text-blue-700 block">Formulir Desa</span>
                   <h3 className="text-base font-black text-slate-900 leading-tight">
                     Pendaftaran Warga Baru ke Database Desa
                   </h3>
@@ -1215,7 +1215,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                     value={formData.nik}
                     onChange={(e) => setFormData({ ...formData, nik: e.target.value.replace(/\D/g, '') })}
                     placeholder="Contoh: 3506041505840001"
-                    className="w-full p-2.5 rounded-xl border border-slate-200 font-mono text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 font-mono text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -1228,7 +1228,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                     value={formData.no_kk}
                     onChange={(e) => setFormData({ ...formData, no_kk: e.target.value.replace(/\D/g, '') })}
                     placeholder="Contoh: 3506041208010001"
-                    className="w-full p-2.5 rounded-xl border border-slate-200 font-mono text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 font-mono text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -1241,7 +1241,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                   value={formData.nama_lengkap}
                   onChange={(e) => setFormData({ ...formData, nama_lengkap: e.target.value })}
                   placeholder="Contoh: Bambang Utomo"
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -1258,7 +1258,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                     value={formData.nama_kepala_keluarga}
                     onChange={(e) => setFormData({ ...formData, nama_kepala_keluarga: e.target.value })}
                     placeholder={`Default: ${formData.nama_lengkap || 'Nama Kepala Keluarga'}`}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               )}
@@ -1272,7 +1272,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                     value={formData.tempat_lahir}
                     onChange={(e) => setFormData({ ...formData, tempat_lahir: e.target.value })}
                     placeholder="Contoh: Kediri"
-                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -1280,13 +1280,13 @@ export const PendaftaranWargaDesa: React.FC = () => {
                 <div className="space-y-1">
                   <label className="font-bold text-slate-700 flex items-center justify-between">
                     <span>Tanggal Lahir (Password Warga) *</span>
-                    <span className="text-[10px] text-emerald-700 font-mono font-bold">Auto-Password</span>
+                    <span className="text-[10px] text-blue-700 font-mono font-bold">Auto-Password</span>
                   </label>
                   <input
                     type="date"
                     value={formData.tanggal_lahir}
                     onChange={(e) => setFormData({ ...formData, tanggal_lahir: e.target.value })}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   />
                 </div>
@@ -1299,7 +1299,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                   <select
                     value={formData.jenis_kelamin}
                     onChange={(e) => setFormData({ ...formData, jenis_kelamin: e.target.value })}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="L">Laki-Laki</option>
                     <option value="P">Perempuan</option>
@@ -1311,7 +1311,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                   <select
                     value={formData.rt_id}
                     onChange={(e) => setFormData({ ...formData, rt_id: Number(e.target.value) })}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold"
                   >
                     <option value={1}>RT 01 / RW 01 (Krajan)</option>
                     <option value={2}>RT 02 / RW 01</option>
@@ -1325,7 +1325,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                     value={formData.no_hp_wa}
                     onChange={(e) => setFormData({ ...formData, no_hp_wa: e.target.value })}
                     placeholder="Contoh: 085712345678"
-                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs font-mono text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -1338,14 +1338,14 @@ export const PendaftaranWargaDesa: React.FC = () => {
                   value={formData.alamat_ktp}
                   onChange={(e) => setFormData({ ...formData, alamat_ktp: e.target.value })}
                   placeholder="Contoh: Jl. Kenanga No. 14, RT 01 / RW 01 Desa Doko"
-                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="w-full p-2.5 rounded-xl border border-slate-200 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
 
               {/* Helper Notice */}
-              <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-950 flex items-start gap-2">
-                <Lock className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
+              <div className="p-3 rounded-2xl bg-blue-50 border border-blue-200 text-[11px] text-blue-950 flex items-start gap-2">
+                <Lock className="w-4 h-4 text-blue-700 shrink-0 mt-0.5" />
                 <p>
                   <strong>Sistem Otomatisasi:</strong> Akun portal desa akan langsung aktif seketika setelah formulir ini disimpan. Warga dapat login di portal mandiri menggunakan <strong>NIK</strong> dan <strong>Tanggal Lahir</strong> (format: DDMMYYYY atau YYYY-MM-DD).
                 </p>
@@ -1362,7 +1362,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black shadow-md flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                 >
                   <UserPlus className="w-4 h-4" />
                   <span>{isSubmitting ? 'Mendaftarkan...' : 'Daftarkan Warga & Buat Akun'}</span>

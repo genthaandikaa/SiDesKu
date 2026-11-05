@@ -1,26 +1,26 @@
-﻿import React from 'react';
+import React from 'react';
 
 interface DonutGaugeProps {
   percentage: number;
   size?: number;
   strokeWidth?: number;
-  color?: 'emerald' | 'amber' | 'sky' | 'rose' | 'teal' | 'indigo';
+  color?: 'blue' | 'amber' | 'sky' | 'rose' | 'indigo';
   label?: string;
   sublabel?: string;
   icon?: React.ReactNode;
 }
 
 const colorMap = {
-  emerald: {
-    stroke: '#10b981',
-    bg: '#ecfdf5',
-    text: 'text-emerald-700',
+  blue: {
+    stroke: '#3b82f6',
+    bg: '#eff6ff',
+    text: 'text-blue-700',
     track: '#f1f5f9',
   },
-  teal: {
-    stroke: '#14b8a6',
+  indigo_alt: {
+    stroke: '#6366f1',
     bg: '#f0fdfa',
-    text: 'text-teal-700',
+    text: 'text-indigo-700',
     track: '#f1f5f9',
   },
   amber: {
@@ -53,7 +53,7 @@ export const DonutGauge: React.FC<DonutGaugeProps> = ({
   percentage,
   size = 68,
   strokeWidth = 6.5,
-  color = 'emerald',
+  color = 'blue',
   label,
   sublabel,
   icon,
@@ -62,7 +62,7 @@ export const DonutGauge: React.FC<DonutGaugeProps> = ({
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (safePercentage / 100) * circumference;
-  const theme = colorMap[color] || colorMap.emerald;
+  const theme = colorMap[color] || colorMap.blue;
 
   return (
     <div className="flex items-center gap-3">

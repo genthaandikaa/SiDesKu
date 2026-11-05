@@ -62,7 +62,7 @@ export const PushNotificationBanner: React.FC<PushNotificationBannerProps> = ({ 
   }
 
   return (
-    <div className={`mb-4 sm:mb-6 rounded-2xl bg-gradient-to-r from-emerald-600 via-emerald-700 to-teal-700 text-white p-3.5 sm:p-4 shadow-md border border-emerald-500/40 relative animate-in fade-in slide-in-from-top-3 ${className}`}>
+    <div className={`mb-4 sm:mb-6 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white p-3.5 sm:p-4 shadow-md border border-blue-500/40 relative animate-in fade-in slide-in-from-top-3 ${className}`}>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-start sm:items-center gap-3 min-w-0 pr-6 sm:pr-0">
           <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center shrink-0 shadow-inner">
@@ -73,11 +73,11 @@ export const PushNotificationBanner: React.FC<PushNotificationBannerProps> = ({ 
               <span className="text-xs sm:text-sm font-extrabold tracking-tight">
                 Aktifkan Notifikasi SiDesKu di HP
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/50 text-[10px] font-bold uppercase tracking-wider text-emerald-100 border border-emerald-400/30">
+              <span className="px-2 py-0.5 rounded-full bg-blue-500/50 text-[10px] font-bold uppercase tracking-wider text-blue-100 border border-blue-400/30">
                 Penting
               </span>
             </div>
-            <p className="text-[11px] sm:text-xs text-emerald-100 mt-0.5 leading-snug">
+            <p className="text-[11px] sm:text-xs text-blue-100 mt-0.5 leading-snug">
               {successMsg || errorMsg || 'Dapatkan notifikasi instan saat surat Anda selesai, disetujui RT/Kades, atau ada pesan baru dari desa.'}
             </p>
           </div>
@@ -86,7 +86,7 @@ export const PushNotificationBanner: React.FC<PushNotificationBannerProps> = ({ 
         <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
           {successMsg ? (
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/20 text-white text-xs font-bold">
-              <CheckCircle2 className="w-4 h-4 text-emerald-300" />
+              <CheckCircle2 className="w-4 h-4 text-blue-300" />
               <span>Aktif</span>
             </div>
           ) : (
@@ -94,16 +94,16 @@ export const PushNotificationBanner: React.FC<PushNotificationBannerProps> = ({ 
               type="button"
               disabled={actionLoading}
               onClick={handleActivate}
-              className="px-4 py-2 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 active:scale-95 text-xs font-extrabold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
+              className="px-4 py-2 rounded-xl bg-white text-blue-800 hover:bg-blue-50 active:scale-95 text-xs font-extrabold shadow-sm transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
             >
               {actionLoading ? (
                 <>
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-800" />
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-800" />
                   <span>Menghubungkan...</span>
                 </>
               ) : (
                 <>
-                  <Smartphone className="w-3.5 h-3.5 text-emerald-700" />
+                  <Smartphone className="w-3.5 h-3.5 text-blue-700" />
                   <span>Aktifkan Sekarang</span>
                 </>
               )}
@@ -114,7 +114,7 @@ export const PushNotificationBanner: React.FC<PushNotificationBannerProps> = ({ 
             type="button"
             onClick={handleDismiss}
             aria-label="Tutup pemberitahuan"
-            className="w-7 h-7 rounded-lg hover:bg-white/10 text-emerald-200 hover:text-white flex items-center justify-center transition cursor-pointer"
+            className="w-7 h-7 rounded-lg hover:bg-white/10 text-blue-200 hover:text-white flex items-center justify-center transition cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>

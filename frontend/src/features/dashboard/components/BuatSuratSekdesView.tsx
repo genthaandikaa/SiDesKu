@@ -126,8 +126,8 @@ export const BuatSuratSekdesView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+            <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
               Loket Pelayanan Mandiri Desa
             </span>
           </div>
@@ -139,8 +139,8 @@ export const BuatSuratSekdesView: React.FC = () => {
           </p>
         </div>
 
-        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-emerald-100 text-emerald-900 font-extrabold text-xs border border-emerald-200 self-start sm:self-auto">
-          <Zap className="w-3.5 h-3.5 text-emerald-700" />
+        <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-extrabold text-xs border border-blue-200 self-start sm:self-auto">
+          <Zap className="w-3.5 h-3.5 text-blue-700" />
           <span>Penerbitan Instan & Nomor Otomatis</span>
         </span>
       </div>
@@ -156,11 +156,11 @@ export const BuatSuratSekdesView: React.FC = () => {
       {createdSurat ? (
         <div className="card-surface p-6 sm:p-8 space-y-6 bg-white border border-slate-200/90 rounded-3xl animate-fade-up shadow-xs">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm">
+            <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-sm">
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <div>
-              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-100 px-2 py-0.5 rounded">
+              <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-100 px-2 py-0.5 rounded">
                 Surat Resmi Berhasil Diterbitkan
               </span>
               <h3 className="text-lg sm:text-xl font-black text-slate-900 mt-0.5">
@@ -172,32 +172,32 @@ export const BuatSuratSekdesView: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-emerald-100 text-xs">
-            <div className="p-4 rounded-2xl bg-white border border-emerald-100 space-y-1">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-blue-100 text-xs">
+            <div className="p-4 rounded-2xl bg-white border border-blue-100 space-y-1">
               <span className="text-[10px] font-extrabold text-slate-400 uppercase">Nomor Surat Resmi</span>
-              <div className="font-mono font-black text-sm text-emerald-900">
+              <div className="font-mono font-black text-sm text-blue-900">
                 {createdSurat.nomor_surat_resmi}
               </div>
             </div>
-            <div className="p-4 rounded-2xl bg-white border border-emerald-100 space-y-1">
+            <div className="p-4 rounded-2xl bg-white border border-blue-100 space-y-1">
               <span className="text-[10px] font-extrabold text-slate-400 uppercase">Pemohon / NIK</span>
               <div className="font-bold text-slate-900">{createdSurat.warga_profile?.nama_lengkap}</div>
               <div className="font-mono text-slate-500">{createdSurat.warga_profile?.nik}</div>
             </div>
-            <div className="p-4 rounded-2xl bg-white border border-emerald-100 space-y-1">
+            <div className="p-4 rounded-2xl bg-white border border-blue-100 space-y-1">
               <span className="text-[10px] font-extrabold text-slate-400 uppercase">Keabsahan TTE QR</span>
-              <div className="flex items-center gap-1.5 font-bold text-emerald-700">
-                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <div className="flex items-center gap-1.5 font-bold text-blue-700">
+                <ShieldCheck className="w-4 h-4 text-blue-600" />
                 <span>Terdaftar & Berstempel Sah</span>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-emerald-100">
+          <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-blue-100">
             <button
               type="button"
               onClick={() => setPrintSurat(createdSurat)}
-              className="px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs transition-all shadow-sm flex items-center gap-2 cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs transition-all shadow-sm flex items-center gap-2 cursor-pointer"
             >
               <Printer className="w-4 h-4" />
               <span>Cetak Lembar Surat A4 Sekarang</span>
@@ -218,7 +218,7 @@ export const BuatSuratSekdesView: React.FC = () => {
             {/* Step 1: Pilih Warga Pemohon */}
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-black text-xs flex items-center justify-center">1</span>
+                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-black text-xs flex items-center justify-center">1</span>
                 <h4 className="text-sm font-black text-slate-900">Pilih Warga Pemohon (Buku Induk)</h4>
               </div>
 
@@ -231,7 +231,7 @@ export const BuatSuratSekdesView: React.FC = () => {
                     value={wargaSearch}
                     onChange={(e) => setWargaSearch(e.target.value)}
                     placeholder="Ketik NIK 16 digit atau nama warga..."
-                    className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:bg-white focus:border-emerald-500 transition-all"
+                    className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium focus:bg-white focus:border-blue-500 transition-all"
                   />
                 </div>
               </div>
@@ -242,7 +242,7 @@ export const BuatSuratSekdesView: React.FC = () => {
                   value={selectedWargaId}
                   onChange={(e) => setSelectedWargaId(e.target.value ? Number(e.target.value) : '')}
                   required
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:border-emerald-500 transition-all cursor-pointer"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:border-blue-500 transition-all cursor-pointer"
                 >
                   <option value="">-- Pilih Warga Desa Doko --</option>
                   {filteredWargaOptions.map((w) => (
@@ -254,9 +254,9 @@ export const BuatSuratSekdesView: React.FC = () => {
               </div>
 
               {selectedWarga && (
-                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/70 text-xs space-y-1 animate-fade-in">
-                  <div className="font-black text-emerald-950">{selectedWarga.nama_lengkap}</div>
-                  <div className="font-mono text-emerald-800 text-[11px]">NIK: {selectedWarga.nik}</div>
+                <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/70 text-xs space-y-1 animate-fade-in">
+                  <div className="font-black text-blue-950">{selectedWarga.nama_lengkap}</div>
+                  <div className="font-mono text-blue-800 text-[11px]">NIK: {selectedWarga.nik}</div>
                   <div className="text-slate-600 text-[11px]">Alamat: {selectedWarga.alamat_ktp}</div>
                 </div>
               )}
@@ -265,7 +265,7 @@ export const BuatSuratSekdesView: React.FC = () => {
             {/* Step 2: Pilih Jenis Surat */}
             <div className="space-y-4">
               <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
-                <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 font-black text-xs flex items-center justify-center">2</span>
+                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 font-black text-xs flex items-center justify-center">2</span>
                 <h4 className="text-sm font-black text-slate-900">Jenis Dokumen Surat Resmi</h4>
               </div>
 
@@ -275,7 +275,7 @@ export const BuatSuratSekdesView: React.FC = () => {
                   value={selectedTypeId}
                   onChange={(e) => setSelectedTypeId(e.target.value ? Number(e.target.value) : '')}
                   required
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:border-emerald-500 transition-all cursor-pointer"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold focus:border-blue-500 transition-all cursor-pointer"
                 >
                   <option value="">-- Pilih Jenis Surat Resmi --</option>
                   {types.map((t) => (
@@ -290,7 +290,7 @@ export const BuatSuratSekdesView: React.FC = () => {
                 <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-1 animate-fade-in">
                   <div className="flex items-center justify-between">
                     <span className="font-extrabold text-slate-900">{selectedType.nama_surat}</span>
-                    <span className="font-mono text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded">
+                    <span className="font-mono text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded">
                       Klasifikasi: {selectedType.kode_klasifikasi || '470'}
                     </span>
                   </div>
@@ -306,7 +306,7 @@ export const BuatSuratSekdesView: React.FC = () => {
                   required
                   rows={3}
                   placeholder="Contoh: Kelengkapan permohonan beasiswa kuliah, perpanjangan KTP-el, atau persyaratan administrasi perbankan..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:bg-white focus:border-emerald-500 transition-all"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:bg-white focus:border-blue-500 transition-all"
                 />
               </div>
 
@@ -316,7 +316,7 @@ export const BuatSuratSekdesView: React.FC = () => {
                   type="text"
                   value={keteranganLoket}
                   onChange={(e) => setKeteranganLoket(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:bg-white focus:border-emerald-500 transition-all"
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:bg-white focus:border-blue-500 transition-all"
                 />
               </div>
             </div>
@@ -329,7 +329,7 @@ export const BuatSuratSekdesView: React.FC = () => {
             <button
               type="submit"
               disabled={isSubmitting || !selectedWargaId || !selectedTypeId}
-              className="px-6 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white font-extrabold text-xs transition-all shadow-sm flex items-center gap-2 cursor-pointer"
+              className="px-6 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 disabled:opacity-50 text-white font-extrabold text-xs transition-all shadow-sm flex items-center gap-2 cursor-pointer"
             >
               <ShieldCheck className="w-4 h-4" />
               <span>{isSubmitting ? 'Menerbitkan...' : 'Terbitkan & Sahkan Surat QR'}</span>

@@ -14,7 +14,6 @@ import {
   X, 
   Filter, 
   ArrowUpDown, 
-  SlidersHorizontal,
   Globe,
   Building2,
   HardHat,
@@ -100,16 +99,16 @@ const defaultBeritas: Berita[] = [
 ];
 
 const categoryConfigs = [
-  { id: 'Semua', label: 'Semua Kategori Warta', shortLabel: 'Semua', icon: Globe, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+  { id: 'Semua', label: 'Semua Kategori Warta', shortLabel: 'Semua', icon: Globe, color: 'text-blue-600', bg: 'bg-blue-50' },
   { id: 'Pemerintahan', label: 'Pemerintahan Desa', shortLabel: 'Pemerintahan', icon: Building2, color: 'text-blue-600', bg: 'bg-blue-50' },
   { id: 'Pembangunan', label: 'Pembangunan & Sarpras', shortLabel: 'Pembangunan', icon: HardHat, color: 'text-amber-600', bg: 'bg-amber-50' },
   { id: 'Kesehatan', label: 'Kesehatan & Posyandu', shortLabel: 'Kesehatan', icon: HeartPulse, color: 'text-rose-600', bg: 'bg-rose-50' },
   { id: 'UMKM', label: 'UMKM & Ekonomi Kreatif', shortLabel: 'UMKM', icon: ShoppingBag, color: 'text-purple-600', bg: 'bg-purple-50' },
-  { id: 'Sosial', label: 'Sosial & Kemasyarakatan', shortLabel: 'Sosial', icon: Users, color: 'text-teal-600', bg: 'bg-teal-50' },
+  { id: 'Sosial', label: 'Sosial & Kemasyarakatan', shortLabel: 'Sosial', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
 ];
 
 const sortConfigs = [
-  { id: 'terbaru', label: 'Terbaru (Terkini)', desc: 'Publikasi warta paling anyar', icon: ArrowUpDown, color: 'text-emerald-600' },
+  { id: 'terbaru', label: 'Terbaru (Terkini)', desc: 'Publikasi warta paling anyar', icon: ArrowUpDown, color: 'text-blue-600' },
   { id: 'terpopuler', label: 'Paling Banyak Dibaca', desc: 'Artikel paling diminati warga', icon: TrendingUp, color: 'text-amber-600' },
   { id: 'terlama', label: 'Terlama (Arsip)', desc: 'Arsip publikasi terdahulu', icon: Clock, color: 'text-slate-500' },
 ];
@@ -235,62 +234,68 @@ export const BeritaPage: React.FC = () => {
   const paginatedBeritas = filteredBeritas.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
-    <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800">
+    <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800 bg-white">
       
       {/* Div 1: Clean Ambient Hero Section with SVG Vectors (Canvas Mint) */}
-      <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6 pb-16 sm:pb-20 overflow-hidden">
+      <section className="relative isolate w-full px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-10 text-center overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-blue-500/15 via-sky-400/10 to-transparent blur-3xl pointer-events-none -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-gradient-to-tr from-blue-500/20 via-sky-400/15 to-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
         {/* SVG Ambient Concentric Watermark Vectors */}
-        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-emerald-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-blue-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
           <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="2" strokeDasharray="6 6" />
           <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.5" />
           <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" />
           <circle cx="200" cy="200" r="40" stroke="currentColor" strokeWidth="1" />
         </svg>
-        <svg className="absolute -left-20 top-1/4 w-[420px] h-[420px] text-teal-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
+        <svg className="absolute -left-20 top-1/4 w-[420px] h-[420px] text-indigo-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
           <path d="M 0,200 Q 100,70 200,200 T 400,200" stroke="currentColor" strokeWidth="2" fill="none" />
           <path d="M 0,230 Q 100,100 200,230 T 400,230" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.6" />
         </svg>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+        <div className="relative z-10 mx-auto max-w-4xl">
           
           {/* Left Column (60% Fibonacci): Title and Description */}
-          <div className="lg:col-span-7 space-y-3 text-left">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.12]">
+          <div className="space-y-4 text-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs animate-fade-in">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <span>Warta Desa Doko</span>
+            </div>
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.08] max-w-4xl mx-auto">
               Warta &{' '}
-              <span className="relative whitespace-nowrap text-emerald-700 inline-block">
+              <span className="relative whitespace-nowrap text-blue-700 inline-block">
                 Kabar Terkini
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-emerald-400" viewBox="0 0 100 20" preserveAspectRatio="none">
+                <svg className="absolute -bottom-2 left-0 w-full h-3 text-blue-400" viewBox="0 0 100 20" preserveAspectRatio="none">
                   <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
                 </svg>
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium max-w-xl">
+            <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl mx-auto">
               Kabar terkini, agenda pembangunan, dan pengumuman resmi Desa Doko.
             </p>
           </div>
 
           {/* Right Column (40% Fibonacci): Featured News Card Preview */}
-          <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
+          <div className="hidden">
             <div className="w-full max-w-md animate-float-gentle">
               <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
                 
                 {/* Top Bar with Badge */}
                 <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-black">
+                    <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-black">
                       <Newspaper className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="font-black text-xs text-slate-900 leading-tight">
                         Liputan Khusus
                       </div>
-                      <div className="text-[10px] text-emerald-600 font-bold">
+                      <div className="text-[10px] text-blue-600 font-bold">
                         Desa Doko, Kediri
                       </div>
                     </div>
                   </div>
-                  <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] border border-emerald-200">
+                  <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 font-extrabold text-[10px] border border-blue-200">
                     Terbit Hari Ini
                   </span>
                 </div>
@@ -298,7 +303,7 @@ export const BeritaPage: React.FC = () => {
                 {/* Featured Snippet */}
                 <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2 text-xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Pembangunan</span>
+                    <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">Pembangunan</span>
                     <span className="text-[10px] text-slate-400 font-medium">Bulan Ini</span>
                   </div>
                   <h4 className="font-black text-slate-900 leading-snug">
@@ -312,7 +317,7 @@ export const BeritaPage: React.FC = () => {
                 {/* Trust Badge */}
                 <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
                   <span className="flex items-center gap-1.5 font-medium">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                     <span>Arsip Publik Transparan</span>
                   </span>
                   <span className="font-bold text-slate-700">100% Akurat</span>
@@ -324,7 +329,7 @@ export const BeritaPage: React.FC = () => {
       </section>
 
       {/* Floating Filter Bar - Straddling Seam Line (Fibonacci Golden Ratio) */}
-      <div className="relative z-30 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full -mb-[48px] sm:-mb-[54px]">
+      <div className="relative z-30 mt-6 sm:mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="bg-white/95 backdrop-blur-xl rounded-[2rem] border border-slate-200/90 p-4 sm:p-5 shadow-xl shadow-slate-900/10 space-y-3.5">
           
           {/* Main Filter Controls Row */}
@@ -338,7 +343,7 @@ export const BeritaPage: React.FC = () => {
                 placeholder="Cari judul warta atau topik..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all shadow-2xs"
+                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-2xs"
               />
               {searchQuery && (
                 <button
@@ -362,7 +367,7 @@ export const BeritaPage: React.FC = () => {
                 }}
                 className={`w-full flex items-center justify-between pl-3.5 pr-3 py-2.5 bg-slate-50 hover:bg-slate-100/90 rounded-2xl border transition-all cursor-pointer shadow-2xs ${
                   isCategoryOpen 
-                    ? 'border-emerald-500 ring-4 ring-emerald-500/10 bg-white' 
+                    ? 'border-blue-500 ring-4 ring-blue-500/10 bg-white' 
                     : 'border-slate-200 text-slate-800'
                 }`}
               >
@@ -378,7 +383,7 @@ export const BeritaPage: React.FC = () => {
                       ? beritas.length 
                       : beritas.filter(b => b.kategori?.toLowerCase() === selectedKategori.toLowerCase()).length}
                   </span>
-                  <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 flex-shrink-0 ${isCategoryOpen ? 'rotate-180 text-emerald-600' : ''}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 flex-shrink-0 ${isCategoryOpen ? 'rotate-180 text-blue-600' : ''}`} />
                 </div>
               </button>
 
@@ -387,7 +392,7 @@ export const BeritaPage: React.FC = () => {
                 <div className="absolute left-0 top-full mt-2 w-72 max-w-[90vw] bg-white/98 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 p-2 z-50 ring-1 ring-slate-900/5 animate-in fade-in zoom-in-95 duration-150">
                   <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-1 flex items-center justify-between">
                     <span>Pilih Kategori Warta</span>
-                    <span className="text-emerald-700 font-bold">{beritas.length} Total</span>
+                    <span className="text-blue-700 font-bold">{beritas.length} Total</span>
                   </div>
                   <div className="space-y-1">
                     {categoryConfigs.map((cat) => {
@@ -406,7 +411,7 @@ export const BeritaPage: React.FC = () => {
                           }}
                           className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-emerald-50 text-emerald-950 font-black border border-emerald-200/70 shadow-2xs'
+                              ? 'bg-blue-50 text-blue-950 font-black border border-blue-200/70 shadow-2xs'
                               : 'text-slate-700 hover:bg-slate-100/80 font-bold'
                           }`}
                         >
@@ -418,11 +423,11 @@ export const BeritaPage: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-1.5">
                             <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold ${
-                              isSelected ? 'bg-emerald-200/80 text-emerald-900' : 'bg-slate-100 text-slate-500'
+                              isSelected ? 'bg-blue-200/80 text-blue-900' : 'bg-slate-100 text-slate-500'
                             }`}>
                               {count}
                             </span>
-                            {isSelected && <Check className="w-3.5 h-3.5 text-emerald-600" />}
+                            {isSelected && <Check className="w-3.5 h-3.5 text-blue-600" />}
                           </div>
                         </button>
                       );
@@ -442,7 +447,7 @@ export const BeritaPage: React.FC = () => {
                 }}
                 className={`w-full flex items-center justify-between pl-3.5 pr-3 py-2.5 bg-slate-50 hover:bg-slate-100/90 rounded-2xl border transition-all cursor-pointer shadow-2xs ${
                   isSortOpen 
-                    ? 'border-emerald-500 ring-4 ring-emerald-500/10 bg-white' 
+                    ? 'border-blue-500 ring-4 ring-blue-500/10 bg-white' 
                     : 'border-slate-200 text-slate-800'
                 }`}
               >
@@ -452,13 +457,13 @@ export const BeritaPage: React.FC = () => {
                       className: `w-3.5 h-3.5 flex-shrink-0 ${activeSort.color}`
                     })
                   ) : (
-                    <ArrowUpDown className={`w-3.5 h-3.5 flex-shrink-0 ${activeSort?.color || 'text-emerald-600'}`} />
+                    <ArrowUpDown className={`w-3.5 h-3.5 flex-shrink-0 ${activeSort?.color || 'text-blue-600'}`} />
                   )}
                   <span className="text-xs font-bold truncate">
                     {activeSort?.label}
                   </span>
                 </div>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 flex-shrink-0 ml-1 ${isSortOpen ? 'rotate-180 text-emerald-600' : ''}`} />
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 flex-shrink-0 ml-1 ${isSortOpen ? 'rotate-180 text-blue-600' : ''}`} />
               </button>
 
               {/* Custom Popover Menu */}
@@ -481,7 +486,7 @@ export const BeritaPage: React.FC = () => {
                           }}
                           className={`w-full flex items-start justify-between p-2.5 rounded-xl text-left transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-emerald-50 text-emerald-950 border border-emerald-200/70 shadow-2xs'
+                              ? 'bg-blue-50 text-blue-950 border border-blue-200/70 shadow-2xs'
                               : 'text-slate-700 hover:bg-slate-100/80'
                           }`}
                         >
@@ -494,7 +499,7 @@ export const BeritaPage: React.FC = () => {
                               )}
                             </div>
                             <div>
-                              <div className={`text-xs ${isSelected ? 'font-black text-emerald-950' : 'font-bold text-slate-800'}`}>
+                              <div className={`text-xs ${isSelected ? 'font-black text-blue-950' : 'font-bold text-slate-800'}`}>
                                 {item.label}
                               </div>
                               <div className="text-[10px] text-slate-500 leading-tight mt-0.5">
@@ -502,7 +507,7 @@ export const BeritaPage: React.FC = () => {
                               </div>
                             </div>
                           </div>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5 ml-1" />}
+                          {isSelected && <Check className="w-3.5 h-3.5 text-blue-600 flex-shrink-0 mt-0.5 ml-1" />}
                         </button>
                       );
                     })}
@@ -513,43 +518,9 @@ export const BeritaPage: React.FC = () => {
 
           </div>
 
-          {/* Quick Category Chips & Active Status Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-2.5 pt-2.5 border-t border-slate-100">
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 max-w-full">
-              <span className="text-[11px] font-bold text-slate-400 mr-1 flex items-center gap-1 flex-shrink-0">
-                <SlidersHorizontal className="w-3 h-3 text-emerald-600" />
-                <span>Kategori Cepat:</span>
-              </span>
-              {categoryConfigs.map((cat) => {
-                const count = cat.id === 'Semua' ? beritas.length : beritas.filter(b => b.kategori?.toLowerCase() === cat.id.toLowerCase()).length;
-                const isSelected = selectedKategori.toLowerCase() === cat.id.toLowerCase();
-                const Icon = cat.icon;
-                return (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setSelectedKategori(cat.id)}
-                    className={`px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 flex-shrink-0 whitespace-nowrap ${
-                      isSelected
-                        ? 'bg-emerald-700 text-white shadow-xs'
-                        : 'bg-slate-100/90 text-slate-600 hover:bg-emerald-50 hover:text-emerald-800 border border-slate-200/60'
-                    }`}
-                  >
-                    <Icon className={`w-3 h-3 ${isSelected ? 'text-emerald-200' : 'text-slate-400'}`} />
-                    <span>{cat.shortLabel}</span>
-                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      isSelected ? 'bg-emerald-800 text-emerald-100' : 'bg-white text-slate-500 font-extrabold'
-                    }`}>
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Right Actions: Reset Button (only shown when filters active) */}
+          {/* Reset Button (only shown when filters are active) */}
             {(selectedKategori !== 'Semua' || searchQuery || sortBy !== 'terbaru') && (
-              <div className="flex items-center gap-2 ml-auto flex-shrink-0">
+              <div className="flex justify-end pt-2.5 border-t border-slate-100">
                 <button
                   type="button"
                   onClick={() => {
@@ -564,13 +535,12 @@ export const BeritaPage: React.FC = () => {
                 </button>
               </div>
             )}
-          </div>
 
         </div>
       </div>
 
       {/* Div 2: Berita Grid & Headline (Full-Width Pure White Band) */}
-      <section className="w-full bg-white pt-20 sm:pt-24 pb-16 sm:pb-24 border-y border-slate-200/80 relative z-20">
+      <section className="w-full bg-white pt-10 sm:pt-12 pb-16 sm:pb-24 border-b border-slate-200/80 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           
           {/* Active Filter Results Counter & Single Mode Icon Toggle */}
@@ -579,10 +549,10 @@ export const BeritaPage: React.FC = () => {
               <span>
                 Menampilkan <strong className="text-slate-900 font-black">{filteredBeritas.length}</strong> warta{' '}
                 {selectedKategori !== 'Semua' && (
-                  <>kategori <span className="text-emerald-700 font-bold">"{selectedKategori}"</span></>
+                  <>kategori <span className="text-blue-700 font-bold">"{selectedKategori}"</span></>
                 )}
                 {searchQuery && (
-                  <> dengan kata kunci <span className="text-emerald-700 font-bold">"{searchQuery}"</span></>
+                  <> dengan kata kunci <span className="text-blue-700 font-bold">"{searchQuery}"</span></>
                 )}
               </span>
             </div>
@@ -599,13 +569,13 @@ export const BeritaPage: React.FC = () => {
                   onClick={() => setViewMode('grid')}
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     viewMode === 'grid'
-                      ? 'bg-white text-emerald-800 shadow-2xs'
+                      ? 'bg-white text-blue-800 shadow-2xs'
                       : 'text-slate-500 hover:text-slate-800'
                   }`}
                   title="Tampilan Grid Kartu"
                   aria-label="Tampilan Grid Kartu"
                 >
-                  <LayoutGrid className="w-3.5 h-3.5 text-emerald-700" />
+                  <LayoutGrid className="w-3.5 h-3.5 text-blue-700" />
                   <span className="hidden xs:inline text-[11px]">Grid</span>
                 </button>
                 <button
@@ -613,13 +583,13 @@ export const BeritaPage: React.FC = () => {
                   onClick={() => setViewMode('list')}
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     viewMode === 'list'
-                      ? 'bg-white text-emerald-800 shadow-2xs'
+                      ? 'bg-white text-blue-800 shadow-2xs'
                       : 'text-slate-500 hover:text-slate-800'
                   }`}
                   title="Tampilan List Warta"
                   aria-label="Tampilan List Warta"
                 >
-                  <List className="w-3.5 h-3.5 text-emerald-700" />
+                  <List className="w-3.5 h-3.5 text-blue-700" />
                   <span className="hidden xs:inline text-[11px]">List</span>
                 </button>
               </div>
@@ -659,7 +629,7 @@ export const BeritaPage: React.FC = () => {
                             <span className={`inline-block px-2 sm:px-2.5 py-0.5 rounded-md font-bold text-[10px] sm:text-xs tracking-wide ${
                               isRekomendasi 
                                 ? 'bg-sky-50 text-sky-700' 
-                                : 'bg-emerald-50 text-emerald-700'
+                                : 'bg-blue-50 text-blue-700'
                             }`}>
                               {isRekomendasi ? 'Rekomendasi' : b.kategori}
                             </span>
@@ -669,7 +639,7 @@ export const BeritaPage: React.FC = () => {
                           </div>
 
                           {/* Title: 2 lines clamp, crisp bold font */}
-                          <h3 className="font-bold text-xs xs:text-sm sm:text-lg text-slate-900 group-hover:text-emerald-700 transition-colors leading-snug line-clamp-2">
+                          <h3 className="font-bold text-xs xs:text-sm sm:text-lg text-slate-900 group-hover:text-blue-700 transition-colors leading-snug line-clamp-2">
                             {b.judul}
                           </h3>
 
@@ -714,14 +684,14 @@ export const BeritaPage: React.FC = () => {
             <>
               {/* Featured Headline Article (Only when on 'Semua' without search query and on first page) */}
               {selectedKategori === 'Semua' && !searchQuery && filteredBeritas.length > 0 && currentPage === 1 && (
-                <div className="bg-slate-50/80 rounded-3xl overflow-hidden border border-slate-200/80 shadow-md hover:border-emerald-300 transition-all grid grid-cols-1 lg:grid-cols-12 gap-0 group">
+                <div className="bg-slate-50/80 rounded-3xl overflow-hidden border border-slate-200/80 shadow-md hover:border-blue-300 transition-all grid grid-cols-1 lg:grid-cols-12 gap-0 group">
                   <div className="lg:col-span-7 relative h-64 sm:h-80 lg:h-full overflow-hidden bg-slate-900">
                     <img
                       src="/images/event.jpg"
                       alt={filteredBeritas[0].judul}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute top-4 left-4 bg-emerald-600 text-white text-[11px] font-black uppercase px-3.5 py-1 rounded-full shadow-md">
+                    <div className="absolute top-4 left-4 bg-blue-600 text-white text-[11px] font-black uppercase px-3.5 py-1 rounded-full shadow-md">
                       Berita Utama Terkini
                     </div>
                   </div>
@@ -729,14 +699,14 @@ export const BeritaPage: React.FC = () => {
                   <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between space-y-4">
                     <div className="space-y-3">
                       <div className="flex items-center gap-3 text-xs text-slate-400">
-                        <span className="font-mono text-emerald-700 font-bold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                        <span className="font-mono text-blue-700 font-bold bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
                           {filteredBeritas[0].kategori}
                         </span>
                         <span>•</span>
                         <span>{formatBeritaDate(filteredBeritas[0].published_at)}</span>
                       </div>
 
-                      <h2 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-emerald-700 transition-colors leading-tight">
+                      <h2 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-blue-700 transition-colors leading-tight">
                         {filteredBeritas[0].judul}
                       </h2>
 
@@ -748,7 +718,7 @@ export const BeritaPage: React.FC = () => {
                     <div className="pt-4 border-t border-slate-200/60">
                       <button
                         onClick={() => setSelectedBerita(filteredBeritas[0])}
-                        className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-emerald-700 text-white font-extrabold text-xs transition-all shadow-xs press-down flex items-center gap-2 cursor-pointer"
+                        className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-xs press-down flex items-center gap-2 cursor-pointer"
                       >
                         <span>Baca selengkapnya</span>
                         <ChevronRight className="w-4 h-4" />
@@ -764,14 +734,14 @@ export const BeritaPage: React.FC = () => {
                   {paginatedBeritas.map((b, idx) => {
                     const thumb = idx % 3 === 0 ? '/images/event.jpg' : idx % 3 === 1 ? '/images/kursus.jpg' : '/images/landing/about_img.webp';
                     return (
-                      <div key={b.id} className="bg-slate-50/60 hover:bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:border-emerald-300 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                      <div key={b.id} className="bg-slate-50/60 hover:bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
                         <div className="h-48 w-full overflow-hidden bg-gray-100 relative">
                           <img
                             src={thumb}
                             alt={b.judul}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
-                          <span className="absolute top-3 left-3 text-[10px] font-black text-emerald-950 bg-white/95 px-2.5 py-1 rounded-full shadow-2xs">
+                          <span className="absolute top-3 left-3 text-[10px] font-black text-blue-950 bg-white/95 px-2.5 py-1 rounded-full shadow-2xs">
                             {b.kategori}
                           </span>
                         </div>
@@ -779,7 +749,7 @@ export const BeritaPage: React.FC = () => {
                         <div className="p-5 space-y-3 flex-1">
                           <div className="flex items-center justify-between text-[11px] text-slate-400">
                             <span className="flex items-center gap-1">
-                              <Calendar className="w-3.5 h-3.5 text-emerald-600" />
+                              <Calendar className="w-3.5 h-3.5 text-blue-600" />
                               {formatBeritaDate(b.published_at)}
                             </span>
                             <span className="flex items-center gap-1">
@@ -788,7 +758,7 @@ export const BeritaPage: React.FC = () => {
                             </span>
                           </div>
 
-                          <h3 className="font-black text-base text-gray-900 group-hover:text-emerald-700 transition-colors line-clamp-2 leading-snug">
+                          <h3 className="font-black text-base text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-2 leading-snug">
                             {b.judul}
                           </h3>
                           <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
@@ -799,7 +769,7 @@ export const BeritaPage: React.FC = () => {
                         <div className="p-5 pt-0">
                           <button
                             onClick={() => setSelectedBerita(b)}
-                            className="w-full py-2.5 rounded-2xl bg-white hover:bg-emerald-50 text-emerald-800 text-xs font-black transition-colors flex items-center justify-center gap-1 border border-slate-200/80 cursor-pointer shadow-2xs"
+                            className="w-full py-2.5 rounded-2xl bg-white hover:bg-blue-50 text-blue-800 text-xs font-black transition-colors flex items-center justify-center gap-1 border border-slate-200/80 cursor-pointer shadow-2xs"
                           >
                             Baca selengkapnya <ChevronRight className="w-3.5 h-3.5" />
                           </button>
@@ -822,7 +792,7 @@ export const BeritaPage: React.FC = () => {
                       setSearchQuery('');
                       setSortBy('terbaru');
                     }}
-                    className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-xs hover:bg-emerald-700 transition-colors cursor-pointer"
+                    className="px-4 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-xs hover:bg-blue-700 transition-colors cursor-pointer"
                   >
                     Reset filter
                   </button>
@@ -844,21 +814,21 @@ export const BeritaPage: React.FC = () => {
       </section>
 
       {/* Div 3: Pengumuman Resmi & Agenda Warga (Full-Width Emerald Background Banner Band) */}
-      <section className="w-full bg-gradient-to-b from-[#065f46] via-[#047857] to-[#064e3b] py-16 sm:py-24 text-white relative overflow-hidden">
+      <section className="w-full bg-gradient-to-b from-[#1e3a5f] via-[#1d4ed8] to-[#172554] py-16 sm:py-24 text-white relative overflow-hidden">
         {/* Concentric Circle Orbit Watermark */}
         <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full border border-white/10 pointer-events-none" />
         <div className="absolute -left-20 bottom-0 w-80 h-80 rounded-full border border-white/10 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-emerald-200 text-xs font-black border border-white/20">
-              <BellRing className="w-3.5 h-3.5 text-emerald-300" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-blue-200 text-xs font-black border border-white/20">
+              <BellRing className="w-3.5 h-3.5 text-blue-300" />
               <span>AGENDA & PENGUMUMAN RESMI</span>
             </div>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
               Pengumuman Pemerintah Desa Doko
             </h2>
-            <p className="text-xs sm:text-sm text-emerald-100/90 font-medium">
+            <p className="text-xs sm:text-sm text-blue-100/90 font-medium">
               Agenda penting masyarakat desa, kerja bakti lingkungan RT/RW, dan jadwal pelayanan terpadu.
             </p>
           </div>
@@ -868,15 +838,15 @@ export const BeritaPage: React.FC = () => {
               pengumumans.map((p) => (
                 <div key={p.id} className="p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 space-y-3 shadow-xl">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-emerald-950 bg-emerald-200/90 px-3 py-1 rounded-full shadow-xs">
+                    <span className="text-[10px] font-black text-blue-950 bg-blue-200/90 px-3 py-1 rounded-full shadow-xs">
                       {p.level_target || 'Seluruh Warga'}
                     </span>
-                    <span className="text-[11px] text-emerald-200/90 font-mono font-medium">
+                    <span className="text-[11px] text-blue-200/90 font-mono font-medium">
                       {new Date(p.tanggal_mulai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                   </div>
                   <h4 className="font-extrabold text-base text-white">{p.judul}</h4>
-                  <p className="text-xs text-emerald-100/85 leading-relaxed">{p.isi}</p>
+                  <p className="text-xs text-blue-100/85 leading-relaxed">{p.isi}</p>
                 </div>
               ))
             ) : (
@@ -884,29 +854,29 @@ export const BeritaPage: React.FC = () => {
               <>
                 <div className="p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 space-y-3 shadow-xl">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-emerald-950 bg-emerald-200/90 px-3 py-1 rounded-full shadow-xs">
+                    <span className="text-[10px] font-black text-blue-950 bg-blue-200/90 px-3 py-1 rounded-full shadow-xs">
                       Seluruh Warga
                     </span>
-                    <span className="text-[11px] text-emerald-200/90 font-mono font-medium">
+                    <span className="text-[11px] text-blue-200/90 font-mono font-medium">
                       Agustus 2026
                     </span>
                   </div>
                   <h4 className="font-extrabold text-base text-white">Jadwal Pelayanan Posyandu Balita & Pemeriksaan Lansia Gratis</h4>
-                  <p className="text-xs text-emerald-100/85 leading-relaxed">
+                  <p className="text-xs text-blue-100/85 leading-relaxed">
                     Pelaksanaan posyandu serentak di 8 titik balai RW Desa Doko dimulai setiap tanggal 10 pukul 08.00 WIB. Diharapkan kehadiran ibu dan balita.
                   </p>
                 </div>
                 <div className="p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 space-y-3 shadow-xl">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-emerald-950 bg-emerald-200/90 px-3 py-1 rounded-full shadow-xs">
+                    <span className="text-[10px] font-black text-blue-950 bg-blue-200/90 px-3 py-1 rounded-full shadow-xs">
                       Pengurus RT/RW
                     </span>
-                    <span className="text-[11px] text-emerald-200/90 font-mono font-medium">
+                    <span className="text-[11px] text-blue-200/90 font-mono font-medium">
                       Agustus 2026
                     </span>
                   </div>
                   <h4 className="font-extrabold text-base text-white">Sosialisasi Pelayanan Digital Mandiri SiDesKu</h4>
-                  <p className="text-xs text-emerald-100/85 leading-relaxed">
+                  <p className="text-xs text-blue-100/85 leading-relaxed">
                     Bimtek verifikasi permohonan surat online bagi seluruh ketua RT di Balai Desa Doko guna percepatan pelayanan warga.
                   </p>
                 </div>
@@ -929,7 +899,7 @@ export const BeritaPage: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-start pb-3 border-b border-gray-100">
-              <span className="text-[10px] font-black text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
+              <span className="text-[10px] font-black text-blue-800 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
                 {selectedBerita.kategori}
               </span>
               <button 
@@ -968,7 +938,7 @@ export const BeritaPage: React.FC = () => {
             <div className="pt-4 border-t border-slate-100 flex justify-end">
               <button
                 onClick={() => setSelectedBerita(null)}
-                className="px-6 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-black text-xs transition-colors cursor-pointer shadow-xs"
+                className="px-6 py-2.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-black text-xs transition-colors cursor-pointer shadow-xs"
               >
                 Tutup
               </button>

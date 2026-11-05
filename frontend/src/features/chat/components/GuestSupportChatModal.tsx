@@ -133,13 +133,13 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
         {/* Header */}
         <div className="bg-white border-b border-slate-100 p-4 sm:p-5 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center font-bold">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center font-bold">
               <HelpCircle className="w-5 h-5" />
             </div>
             <div>
               <h3 className="font-bold text-sm sm:text-base text-slate-900 tracking-tight">Pusat Bantuan Desa</h3>
               <p className="text-xs text-slate-500 flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
                 <span>Saluran resmi bantuan akun & pelayanan warga</span>
               </p>
             </div>
@@ -186,7 +186,7 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
                   placeholder="16 digit NIK sesuai KTP"
                   value={nik}
                   onChange={(e) => setNik(e.target.value.replace(/\D/g, ''))}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
                 />
               </div>
             </div>
@@ -203,7 +203,7 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
                   placeholder="Contoh: Budi Santoso"
                   value={nama}
                   onChange={(e) => setNama(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
                 />
               </div>
             </div>
@@ -219,7 +219,7 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
                   placeholder="081234567890"
                   value={noHp}
                   onChange={(e) => setNoHp(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                  className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
                 />
               </div>
             </div>
@@ -234,7 +234,7 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
                 placeholder="Contoh: Saya lupa kata sandi akun saya, atau ingin konfirmasi jadwal bantuan sosial..."
                 value={initialKeluhan}
                 onChange={(e) => setInitialKeluhan(e.target.value)}
-                className="w-full p-3 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                className="w-full p-3 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
               />
             </div>
 
@@ -249,7 +249,7 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
               >
                 <MessageSquare className="w-4 h-4" />
                 {loading ? 'Menghubungkan...' : 'Mulai Obrolan Bantuan'}
@@ -262,7 +262,7 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
             {/* Ticket Info */}
             <div className="bg-slate-50 px-4 py-2.5 border-b border-slate-200/80 flex items-center justify-between text-xs text-slate-700">
               <span className="flex items-center gap-1.5 font-medium">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                 <span>Tiket Bantuan:</span>
                 <strong className="font-mono text-slate-900 bg-white px-2 py-0.5 rounded border border-slate-200">{ticketNumber}</strong>
               </span>
@@ -293,14 +293,14 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
                     <div
                       className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-xs break-words shadow-xs ${
                         isGuest
-                          ? 'bg-emerald-600 text-white rounded-tr-xs'
+                          ? 'bg-blue-600 text-white rounded-tr-xs'
                           : 'bg-white border border-slate-200 text-slate-800 rounded-tl-xs'
                       }`}
                     >
                       <p className="leading-relaxed whitespace-pre-wrap">{m.message_encrypted}</p>
                       <span
                         className={`text-[9px] block text-right mt-1 ${
-                          isGuest ? 'text-emerald-100' : 'text-slate-400'
+                          isGuest ? 'text-blue-100' : 'text-slate-400'
                         }`}
                       >
                         {new Date(m.created_at).toLocaleTimeString([], {
@@ -325,12 +325,12 @@ export const GuestSupportChatModal: React.FC<GuestSupportChatModalProps> = ({
                 placeholder="Tulis balasan untuk petugas..."
                 value={replyInput}
                 onChange={(e) => setReplyInput(e.target.value)}
-                className="flex-1 px-3.5 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition bg-slate-50 focus:bg-white"
+                className="flex-1 px-3.5 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition bg-slate-50 focus:bg-white"
               />
               <button
                 type="submit"
                 disabled={!replyInput.trim()}
-                className="w-9 h-9 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 text-white flex items-center justify-center transition shadow-xs cursor-pointer shrink-0"
+                className="w-9 h-9 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white flex items-center justify-center transition shadow-xs cursor-pointer shrink-0"
               >
                 <Send className="w-4 h-4" />
               </button>

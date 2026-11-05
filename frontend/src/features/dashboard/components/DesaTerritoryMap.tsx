@@ -98,8 +98,8 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
       totalRt: 6,
       totalKk: 225,
       totalWarga: 828,
-      color: '#10b981', // Emerald
-      borderColor: '#047857',
+      color: '#3b82f6', // Emerald
+      borderColor: '#1d4ed8',
       center: [-7.81830, 112.04300],
       polygonCoords: [
         [-7.81570, 112.03960],
@@ -115,7 +115,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           ketua: 'Supriyadi',
           kk: 42,
           warga: 156,
-          color: '#10b981',
+          color: '#3b82f6',
           center: [-7.81690, 112.04105],
           polygonCoords: [
             [-7.81580, 112.03980],
@@ -587,8 +587,8 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
         <div class="font-sans text-xs space-y-0.5 text-left">
           <div class="font-black text-slate-900">${rw.nama}</div>
           <div class="text-[10px] text-slate-600">Ketua: <strong>${rw.ketuaRw}</strong></div>
-          <div class="text-[10px] text-emerald-800 font-bold">${rw.totalRt} RT • ${rw.totalKk} KK • ${rw.totalWarga} Jiwa</div>
-          <div class="text-[9px] text-emerald-600 font-medium mt-1">Klik untuk melihat rincian RT</div>
+          <div class="text-[10px] text-blue-800 font-bold">${rw.totalRt} RT • ${rw.totalKk} KK • ${rw.totalWarga} Jiwa</div>
+          <div class="text-[9px] text-blue-600 font-medium mt-1">Klik untuk melihat rincian RT</div>
         </div>
       `, { sticky: true, className: 'modern-leaflet-tooltip' });
 
@@ -604,7 +604,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
         const rwBadgeIcon = L.divIcon({
           className: 'custom-rw-compact-badge',
           html: `
-            <div class="cursor-pointer select-none px-3 py-1.5 rounded-full shadow-md border-2 bg-white/95 text-slate-900 border-slate-300 hover:border-emerald-600 backdrop-blur-xs flex items-center gap-1.5 transition-transform hover:scale-105 active:scale-95">
+            <div class="cursor-pointer select-none px-3 py-1.5 rounded-full shadow-md border-2 bg-white/95 text-slate-900 border-slate-300 hover:border-blue-600 backdrop-blur-xs flex items-center gap-1.5 transition-transform hover:scale-105 active:scale-95">
               <span class="w-2.5 h-2.5 rounded-full shrink-0 shadow-2xs" style="background-color: ${rw.color};"></span>
               <span class="font-black text-xs text-slate-900 whitespace-nowrap">RW ${rw.nomorRw}</span>
               <span class="text-[10px] font-bold text-slate-500 whitespace-nowrap hidden sm:inline">${rw.dusun.replace('Dusun ', '')}</span>
@@ -655,7 +655,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           <div class="font-sans text-[11px] space-y-0.5 text-left">
             <div class="font-black text-slate-900">${rt.nama}</div>
             <div class="text-[10px] text-slate-600">Ketua RT: <strong>${rt.ketua}</strong></div>
-            <div class="text-[10px] text-emerald-800 font-bold">${rt.kk} KK • ${rt.warga} Jiwa</div>
+            <div class="text-[10px] text-blue-800 font-bold">${rt.kk} KK • ${rt.warga} Jiwa</div>
           </div>
         `, { sticky: true });
 
@@ -722,7 +722,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
             <span class="text-base">${fac.icon}</span>
             <div>
               <div class="font-black text-xs text-slate-900 leading-tight">${fac.nama}</div>
-              <div class="text-[10px] text-emerald-700 font-bold">${fac.tipe}</div>
+              <div class="text-[10px] text-blue-700 font-bold">${fac.tipe}</div>
             </div>
           </div>
           <div class="text-[11px] text-slate-600 leading-snug">${fac.desc}</div>
@@ -749,7 +749,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
       <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-2 sm:p-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
           <span className="text-xs font-black text-slate-700 mr-1 hidden md:flex items-center gap-1 shrink-0">
-            <Compass className="w-3.5 h-3.5 text-emerald-700" />
+            <Compass className="w-3.5 h-3.5 text-blue-700" />
             <span>Fokus Wilayah:</span>
           </span>
 
@@ -800,12 +800,12 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
             onClick={() => setShowFasumLayer(!showFasumLayer)}
             className={`px-2.5 py-1 rounded-xl text-[11px] font-bold transition-all border flex items-center gap-1.5 cursor-pointer ${
               showFasumLayer
-                ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                ? 'bg-blue-50 text-blue-800 border-blue-300'
                 : 'bg-white text-slate-400 border-slate-200'
             }`}
           >
             <span>Fasilitas Desa</span>
-            <span className={`w-2 h-2 rounded-full ${showFasumLayer ? 'bg-emerald-600' : 'bg-slate-300'}`}></span>
+            <span className={`w-2 h-2 rounded-full ${showFasumLayer ? 'bg-blue-600' : 'bg-slate-300'}`}></span>
           </button>
         </div>
       </div>
@@ -827,7 +827,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               onClick={() => setActiveLayer('streets')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 activeLayer === 'streets'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -840,7 +840,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               onClick={() => setActiveLayer('satellite')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 activeLayer === 'satellite'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -853,7 +853,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               onClick={() => setActiveLayer('voyager')}
               className={`hidden md:flex px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all items-center gap-1 cursor-pointer ${
                 activeLayer === 'voyager'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
             >
@@ -875,7 +875,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               className={`px-3 py-1.5 rounded-2xl backdrop-blur-md shadow-md border text-[11px] sm:text-xs font-bold flex items-center gap-1.5 transition cursor-pointer ${
                 isDrawingMode
                   ? 'bg-amber-600 text-white border-amber-500 ring-2 ring-amber-400/40 animate-pulse'
-                  : 'bg-white/95 text-slate-700 hover:text-emerald-700 border-slate-200/80 hover:bg-slate-50'
+                  : 'bg-white/95 text-slate-700 hover:text-blue-700 border-slate-200/80 hover:bg-slate-50'
               }`}
               title="Alat Gambar Batas Wilayah RT/RW untuk Non-IT"
             >
@@ -886,7 +886,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
             <button
               type="button"
               onClick={handleResetToDesa}
-              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-blue-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
               title="Pusatkan ke Seluruh Desa Doko"
             >
               <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -895,7 +895,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
             <button
               type="button"
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-blue-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
               title={isFullscreen ? 'Kecilkan Peta' : 'Layar Penuh Peta'}
             >
               {isFullscreen ? <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
@@ -929,7 +929,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
                     );
                   }
                 }}
-                className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] flex items-center gap-1 cursor-pointer"
+                className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] flex items-center gap-1 cursor-pointer"
                 title="Ambil koordinat GPS perangkat Anda saat ini"
               >
                 <MapPin className="w-3 h-3" />
@@ -975,7 +975,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
 
         {/* Success Alert */}
         {drawSuccessAlert && (
-          <div className="absolute top-16 left-1/2 -translate-x-1/2 z-[1000] bg-emerald-600 text-white px-4 py-2 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-in fade-in">
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 z-[1000] bg-blue-600 text-white px-4 py-2 rounded-2xl shadow-xl text-xs font-bold flex items-center gap-2 animate-in fade-in">
             <CheckCircle2 className="w-4 h-4" />
             <span>{drawSuccessAlert}</span>
           </div>
@@ -1001,7 +1001,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
         {/* Bottom Floating Legend / Mobile Helper */}
         <div className="absolute bottom-2.5 left-2.5 z-[1000] flex items-center gap-2 pointer-events-none">
           <div className="hidden sm:flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-mono px-2.5 sm:px-3 py-1.5 rounded-xl shadow-md border border-white/10">
-            <MapPin className="w-3 h-3 text-emerald-400" />
+            <MapPin className="w-3 h-3 text-blue-400" />
             <span>Peta Geospasial Desa Doko • {selectedRw ? selectedRw.nama : '3 RW & 13 RT'}</span>
           </div>
 
@@ -1025,7 +1025,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                  <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
                     {selectedRw?.nama}
                   </span>
                   <span className="text-[11px] text-slate-500 font-medium">Batas Wilayah RT</span>
@@ -1042,7 +1042,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               </div>
               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-2 sm:p-2.5 px-3.5 text-center flex-1 sm:flex-initial">
                 <div className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500">Total Warga</div>
-                <div className="text-sm sm:text-base font-black text-emerald-700">{selectedRt.warga} Jiwa</div>
+                <div className="text-sm sm:text-base font-black text-blue-700">{selectedRt.warga} Jiwa</div>
               </div>
 
               <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -1070,7 +1070,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                  <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
                     {selectedRw.dusun}
                   </span>
                 </div>
@@ -1090,7 +1090,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               </div>
               <div className="bg-slate-50 border border-slate-100 rounded-2xl p-2 sm:p-2.5 px-3.5 text-center flex-1 sm:flex-initial">
                 <div className="text-[9px] sm:text-[10px] font-bold uppercase text-slate-500">Total Warga</div>
-                <div className="text-sm sm:text-base font-black text-emerald-700">{selectedRw.totalWarga} Jiwa</div>
+                <div className="text-sm sm:text-base font-black text-blue-700">{selectedRw.totalWarga} Jiwa</div>
               </div>
             </div>
           </div>
@@ -1106,7 +1106,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
                   key={rt.id}
                   type="button"
                   onClick={() => handleSelectRt(selectedRw.id, rt.id)}
-                  className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-300 text-slate-800 text-xs font-black transition-all shrink-0 flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-800 text-xs font-black transition-all shrink-0 flex items-center gap-1.5 cursor-pointer active:scale-95"
                 >
                   <span className="w-2 h-2 rounded-full" style={{ backgroundColor: rt.color }}></span>
                   <span>RT {rt.nomorRt}</span>
@@ -1124,21 +1124,21 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
               <div
                 key={rw.id}
                 onClick={() => handleSelectRw(rw.id)}
-                className="bg-white rounded-2xl border border-slate-200/90 p-3.5 shadow-2xs hover:shadow-md hover:border-emerald-300 transition-all cursor-pointer group"
+                className="bg-white rounded-2xl border border-slate-200/90 p-3.5 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer group"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="w-3 h-3 rounded-full" style={{ backgroundColor: rw.color }}></span>
-                    <h4 className="text-sm font-black text-slate-900 group-hover:text-emerald-700 transition-colors">
+                    <h4 className="text-sm font-black text-slate-900 group-hover:text-blue-700 transition-colors">
                       {rw.nama}
                     </h4>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 transition-transform group-hover:translate-x-0.5" />
+                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-transform group-hover:translate-x-0.5" />
                 </div>
                 <p className="text-[11px] text-slate-500 font-medium mt-1">{rw.ketuaRw}</p>
                 <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-700">
                   <span>{rw.totalRt} Rukun Tetangga</span>
-                  <span className="text-emerald-700">{rw.totalWarga} Jiwa</span>
+                  <span className="text-blue-700">{rw.totalWarga} Jiwa</span>
                 </div>
               </div>
             ))}
@@ -1146,7 +1146,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
 
           <div className="bg-slate-50 rounded-2xl border border-slate-200/70 p-3 flex items-center justify-between text-xs text-slate-600 font-medium">
             <div className="flex items-center gap-2">
-              <Info className="w-4 h-4 text-emerald-700 shrink-0" />
+              <Info className="w-4 h-4 text-blue-700 shrink-0" />
               <span>
                 <strong>Tips Peta:</strong> Ketuk salah satu RW di atas atau di peta untuk memperbesar dan melihat kotak RT di dalamnya.
               </span>

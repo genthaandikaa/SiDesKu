@@ -11,7 +11,7 @@ export const ProtectedDashboardRoute: React.FC = () => {
     return (
       <div className="min-h-screen bg-[#f6f9f8] flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-700 text-white font-black text-xl flex items-center justify-center mx-auto shadow-md animate-pulse">
+          <div className="w-12 h-12 rounded-2xl bg-blue-700 text-white font-black text-xl flex items-center justify-center mx-auto shadow-md animate-pulse">
             S
           </div>
           <div className="text-xs font-bold text-gray-500 font-mono">

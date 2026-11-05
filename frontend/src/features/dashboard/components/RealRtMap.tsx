@@ -106,15 +106,15 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
 
       // Add RT 01 Spatial Boundary Polygon
       const boundary = L.polygon(rtBoundaryCoords, {
-        color: '#10b981',
+        color: '#3b82f6',
         weight: 3,
         dashArray: '6, 8',
-        fillColor: '#10b981',
+        fillColor: '#3b82f6',
         fillOpacity: 0.12,
       }).addTo(map);
 
       boundary.bindTooltip(
-        '<div class="font-sans font-bold text-xs text-emerald-900">Batas Teritorial Wilayah RT 01 Krajan (Desa Doko)</div>',
+        '<div class="font-sans font-bold text-xs text-blue-900">Batas Teritorial Wilayah RT 01 Krajan (Desa Doko)</div>',
         { sticky: true, className: 'custom-leaflet-tooltip' }
       );
 
@@ -152,7 +152,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
 
     if (boundaryLayerRef.current) {
       boundaryLayerRef.current.setStyle({
-        color: activeLayer === 'satellite' ? '#34d399' : '#10b981',
+        color: activeLayer === 'satellite' ? '#60a5fa' : '#3b82f6',
         weight: activeLayer === 'satellite' ? 3.5 : 3,
         fillOpacity: activeLayer === 'satellite' ? 0.2 : 0.12,
       });
@@ -185,7 +185,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
           icon: 'home',
           lat: coord.lat + (idx * 0.00008),
           lng: coord.lng + (idx * 0.00007),
-          bg: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+          bg: 'bg-blue-50 border-blue-200 text-blue-800',
           desc: `Unit tempat tinggal resmi warga di ${w.alamat_ktp || 'RT 01 / RW 01 Dusun Krajan'}. Hubungan: ${w.status_keluarga || 'Warga'}.`,
           isHouse: true,
         });
@@ -217,18 +217,18 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
           <div class="relative group cursor-pointer transition-transform duration-300 ${isSelected ? 'scale-125 z-50' : 'hover:scale-110'}">
             <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-2xl flex items-center justify-center text-xs sm:text-sm shadow-md border-2 ${
               isSelected 
-                ? 'bg-emerald-600 border-white text-white ring-4 ring-emerald-400/50' 
+                ? 'bg-blue-600 border-white text-white ring-4 ring-blue-400/50' 
                 : isHouse
-                ? 'bg-white border-teal-600 text-teal-700'
-                : 'bg-white border-emerald-600 text-emerald-800'
+                ? 'bg-white border-indigo-600 text-indigo-700'
+                : 'bg-white border-blue-600 text-blue-800'
             }">
               <span>${item.icon}</span>
             </div>
             
             <div class="w-2 h-2 mx-auto -mt-1 rotate-45 border-r border-b ${
               isSelected 
-                ? 'bg-emerald-600 border-white' 
-                : 'bg-white border-emerald-600'
+                ? 'bg-blue-600 border-white' 
+                : 'bg-white border-blue-600'
             }"></div>
 
             <div class="absolute -bottom-5 sm:-bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-slate-900/90 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow-xs pointer-events-none opacity-90 group-hover:opacity-100">
@@ -249,7 +249,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
             <span class="text-base">${item.icon}</span>
             <div>
               <div class="font-black text-xs text-slate-900 leading-tight">${item.nama}</div>
-              <div class="text-[10px] text-emerald-700 font-bold">${item.tipe}</div>
+              <div class="text-[10px] text-blue-700 font-bold">${item.tipe}</div>
             </div>
           </div>
           <div class="text-[11px] text-slate-600 leading-snug">
@@ -261,7 +261,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
           </div>
           <button 
             id="popup-btn-${item.id}"
-            class="w-full mt-1 py-1.5 px-3 rounded-lg bg-emerald-600 text-white font-black text-[11px] hover:bg-emerald-700 transition-colors shadow-2xs cursor-pointer flex items-center justify-center gap-1"
+            class="w-full mt-1 py-1.5 px-3 rounded-lg bg-blue-600 text-white font-black text-[11px] hover:bg-blue-700 transition-colors shadow-2xs cursor-pointer flex items-center justify-center gap-1"
           >
             <span>Pilih & Buka Rincian</span>
           </button>
@@ -309,7 +309,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
       <div className="bg-slate-50 border border-slate-200/90 rounded-2xl p-2 sm:p-2.5 flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full sm:w-auto">
           <span className="text-xs font-black text-slate-700 mr-1 hidden sm:flex items-center gap-1 shrink-0">
-            <Filter className="w-3.5 h-3.5 text-emerald-700" />
+            <Filter className="w-3.5 h-3.5 text-blue-700" />
             <span>Tampilkan:</span>
           </span>
 
@@ -347,13 +347,13 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
                 : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
             }`}
           >
-            <Home className="w-3 h-3 text-emerald-600" />
+            <Home className="w-3 h-3 text-blue-600" />
             <span>Hunian Warga ({allMapItems.filter(i => i.isHouse).length})</span>
           </button>
         </div>
 
         <div className="hidden lg:flex items-center gap-2 text-xs font-bold text-slate-500 shrink-0">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
           <span>Wilayah Aktif RT 01 Dusun Krajan</span>
         </div>
       </div>
@@ -371,7 +371,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
               onClick={() => setActiveLayer('streets')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 activeLayer === 'streets' 
-                  ? 'bg-emerald-700 text-white shadow-xs' 
+                  ? 'bg-blue-700 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
               title="Peta Jalan Terstruktur"
@@ -385,7 +385,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
               onClick={() => setActiveLayer('satellite')}
               className={`px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 cursor-pointer ${
                 activeLayer === 'satellite' 
-                  ? 'bg-emerald-700 text-white shadow-xs' 
+                  ? 'bg-blue-700 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
               title="Foto Satelit Asli"
@@ -399,7 +399,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
               onClick={() => setActiveLayer('voyager')}
               className={`hidden md:flex px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-bold transition-all items-center gap-1 cursor-pointer ${
                 activeLayer === 'voyager' 
-                  ? 'bg-emerald-700 text-white shadow-xs' 
+                  ? 'bg-blue-700 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-100'
               }`}
               title="Peta Bersih Minimalis"
@@ -414,7 +414,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
             <button
               type="button"
               onClick={handleResetView}
-              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-blue-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
               title="Pusatkan Kembali ke RT 01 Krajan"
             >
               <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -423,7 +423,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
             <button
               type="button"
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-emerald-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="p-2 rounded-2xl bg-white/95 backdrop-blur-md text-slate-700 hover:text-blue-700 shadow-md border border-slate-200/80 hover:bg-slate-50 transition-colors cursor-pointer"
               title={isFullscreen ? 'Kecilkan Peta' : 'Layar Penuh Peta'}
             >
               {isFullscreen ? <Minimize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> : <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
@@ -437,13 +437,13 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
         {/* Bottom Coordinates & Mobile Touch Guide */}
         <div className="absolute bottom-2.5 left-2.5 z-[1000] flex items-center gap-2 pointer-events-none">
           <div className="hidden sm:flex items-center gap-1.5 bg-slate-900/85 backdrop-blur-md text-white text-[10px] sm:text-[11px] font-mono px-2.5 sm:px-3 py-1.5 rounded-xl shadow-md border border-white/10">
-            <MapPin className="w-3 h-3 text-emerald-400" />
+            <MapPin className="w-3 h-3 text-blue-400" />
             <span>7°49'05"S 112°02'33"E • RT 01 Dusun Krajan</span>
           </div>
 
           {/* Mobile gesture helper badge */}
           <div className="flex sm:hidden items-center gap-1 bg-slate-900/85 backdrop-blur-md text-white text-[9px] font-medium px-2 py-1 rounded-lg border border-white/10">
-            <Hand className="w-2.5 h-2.5 text-emerald-400" />
+            <Hand className="w-2.5 h-2.5 text-blue-400" />
             <span>Gunakan 2 jari untuk geser peta</span>
           </div>
         </div>

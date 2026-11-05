@@ -26,7 +26,7 @@ export const getBaseApiUrl = (): string => {
     const clean = envUrl.trim().replace(/\/+$/, '');
     return clean.endsWith('/api') ? clean : clean + '/api';
   }
-  return 'https://api-sides.smkkartanegara.sch.id/api';
+  return 'http://localhost:8000/api';
 };
 
 const api = axios.create({

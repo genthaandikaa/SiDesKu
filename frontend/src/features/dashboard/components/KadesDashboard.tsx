@@ -389,7 +389,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         >
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center">
                 <Megaphone size={20} />
               </div>
               <div>
@@ -408,7 +408,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
 
           <form onSubmit={handleApprovePengumuman} className="space-y-4 text-xs font-semibold">
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-              <span className="text-[10px] font-black uppercase text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              <span className="text-[10px] font-black uppercase text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
                 {selectedPengumumanForApprove.kategori || 'Umum'}
               </span>
               <h4 className="font-black text-sm text-slate-900">{selectedPengumumanForApprove.judul}</h4>
@@ -433,7 +433,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               <button
                 type="submit"
                 disabled={actionLoading}
-                className="flex-1 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="flex-1 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
               >
                 {actionLoading ? (
                   <>
@@ -631,7 +631,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         >
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center">
                 <ShieldCheck size={20} />
               </div>
               <div>
@@ -652,7 +652,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
               <div className="flex items-center justify-between text-[11px] text-slate-500">
                 <span>Nomor Resi: <strong className="font-mono text-slate-900">{selectedSuratForApprove.nomor_resi}</strong></span>
-                <span className="text-emerald-800 font-bold bg-emerald-100 px-2 py-0.5 rounded-md">
+                <span className="text-blue-800 font-bold bg-blue-100 px-2 py-0.5 rounded-md">
                   {selectedSuratForApprove.surat_type?.nama_surat}
                 </span>
               </div>
@@ -703,7 +703,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               <button
                 type="submit"
                 disabled={actionLoading}
-                className="flex-1 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="flex-1 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
               >
                 {actionLoading ? (
                   <>
@@ -846,7 +846,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                 <span className="font-bold text-slate-900 text-sm">{selectedSuratDetail.warga_profile?.nama_lengkap}</span>
                 <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                   selectedSuratDetail.status === 'completed'
-                    ? 'bg-emerald-100 text-emerald-800'
+                    ? 'bg-blue-100 text-blue-800'
                     : selectedSuratDetail.status === 'pending_kades'
                     ? 'bg-purple-100 text-purple-800'
                     : selectedSuratDetail.status === 'rejected_kades' || selectedSuratDetail.status === 'rejected'
@@ -870,9 +870,9 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             {/* Jenis Surat */}
             <div className="space-y-1">
               <span className="text-slate-500 font-bold">Jenis Surat:</span>
-              <div className="font-bold text-emerald-900 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 flex items-center justify-between">
+              <div className="font-bold text-blue-900 bg-blue-50 p-2.5 rounded-xl border border-blue-200 flex items-center justify-between">
                 <span>{selectedSuratDetail.surat_type?.nama_surat}</span>
-                <span className="font-mono text-[11px] text-emerald-700">{selectedSuratDetail.surat_type?.kode_surat}</span>
+                <span className="font-mono text-[11px] text-blue-700">{selectedSuratDetail.surat_type?.kode_surat}</span>
               </div>
             </div>
 
@@ -888,7 +888,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             {selectedSuratDetail.nomor_surat_resmi && (
               <div className="space-y-1">
                 <span className="text-slate-500 font-bold">Nomor Surat Resmi Sah:</span>
-                <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 font-mono font-bold">
+                <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 font-mono font-bold">
                   {selectedSuratDetail.nomor_surat_resmi}
                 </div>
               </div>
@@ -910,7 +910,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                       : '#'}
                     target="_blank"
                     rel="noreferrer"
-                    className="px-2.5 py-1 rounded-lg bg-emerald-100 hover:bg-emerald-200 text-emerald-800 font-bold text-[11px] flex items-center gap-1"
+                    className="px-2.5 py-1 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-800 font-bold text-[11px] flex items-center gap-1"
                   >
                     <ExternalLink size={12} />
                     <span>Lihat Berkas</span>
@@ -920,9 +920,9 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             )}
 
             {/* Status Persetujuan RT */}
-            <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-[11px] space-y-1">
+            <div className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-900 text-[11px] space-y-1">
               <div className="font-bold flex items-center gap-1">
-                <CheckCircle2 size={13} className="text-emerald-600" />
+                <CheckCircle2 size={13} className="text-blue-600" />
                 <span>Persetujuan Ketua RT Setempat (Sah):</span>
               </div>
               <p>{(selectedSuratDetail as any).catatan_rt || selectedSuratDetail.verification_notes || 'Permohonan warga telah diverifikasi dan disetujui resmi oleh Ketua RT. Siap diterbitkan TTD QR oleh Kepala Desa.'}</p>
@@ -969,7 +969,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                     setNomorSuratInput(s.nomor_surat_resmi || '');
                     setApproveCatatan('');
                   }}
-                  className="flex-1 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
+                  className="flex-1 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-1 cursor-pointer"
                 >
                   <ShieldCheck size={14} />
                   <span>Setujui & Sahkan</span>
@@ -1031,7 +1031,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                   if (skModalError) setSkModalError('');
                 }}
                 placeholder="Kosongkan jika ingin nomor otomatis (Contoh: 188.45/05/418.66.04/2026)"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-mono text-xs focus:border-emerald-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-mono text-xs focus:border-blue-500"
               />
               <span className="text-[10px] text-slate-400 block font-normal">
                 Jika dikosongkan, sistem akan mengenerate nomor SK urut resmi tahun 2026 secara otomatis.
@@ -1085,7 +1085,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               </button>
               <button
                 type="submit"
-                className="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white transition-colors font-bold shadow-xs cursor-pointer"
+                className="px-5 py-2 rounded-xl bg-blue-700 hover:bg-blue-800 text-white transition-colors font-bold shadow-xs cursor-pointer"
               >
                 Tetapkan & Sahkan
               </button>
@@ -1110,7 +1110,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         >
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div>
-              <span className="text-[10px] font-black uppercase text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              <span className="text-[10px] font-black uppercase text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
                 Disposisi Kepala Desa
               </span>
               <h3 className="text-base font-black text-slate-900 mt-1">
@@ -1130,11 +1130,11 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
           </div>
 
           {selectedPengaduanForResponse.status === 'Selesai' && (
-            <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs flex items-center gap-2.5">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+            <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-blue-900 text-xs flex items-center gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
               <div>
                 <span className="font-extrabold block">Aspirasi Ini Telah Tuntas Ditangani</span>
-                <span className="text-[11px] text-emerald-700">Catatan baru akan dicatat sebagai riwayat koordinasi pelengkap tanpa membuka ulang status pengaduan.</span>
+                <span className="text-[11px] text-blue-700">Catatan baru akan dicatat sebagai riwayat koordinasi pelengkap tanpa membuka ulang status pengaduan.</span>
               </div>
             </div>
           )}
@@ -1148,7 +1148,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               {selectedPengaduanForResponse.riwayat_tanggapan.map((item: any, idx: number) => (
                 <div key={idx} className="p-2.5 rounded-xl bg-white border border-slate-200/80 text-[11px] space-y-1">
                   <div className="flex items-center justify-between text-slate-400 text-[10px]">
-                    <span className="font-bold text-emerald-800">{item.petugas || 'Pemerintah Desa'} ({item.role || 'kades'})</span>
+                    <span className="font-bold text-blue-800">{item.petugas || 'Pemerintah Desa'} ({item.role || 'kades'})</span>
                     <span>{item.waktu ? new Date(item.waktu).toLocaleString('id-ID') : '-'}</span>
                   </div>
                   <p className="text-slate-800 leading-snug">{item.tanggapan}</p>
@@ -1171,9 +1171,9 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                     setTanggapanText('Masalah telah ditindaklanjuti dan diselesaikan secara tuntas oleh Pemerintah Desa Doko.');
                   }
                 }}
-                className="w-full py-2.5 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 text-emerald-800 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
+                className="w-full py-2.5 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 border border-blue-300 text-blue-800 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <CheckCircle2 size={15} className="text-emerald-700" />
+                <CheckCircle2 size={15} className="text-blue-700" />
                 <span>Tandai Langsung Tuntas & Selesai Ditangani</span>
               </button>
             )}
@@ -1228,7 +1228,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               <button
                 type="submit"
                 disabled={isSubmittingResponse}
-                className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
               >
                 {isSubmittingResponse ? (
                   <>
@@ -1260,7 +1260,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         >
           <div className="flex items-center justify-between pb-2 border-b border-slate-100">
             <span className="text-xs font-black text-slate-900 flex items-center gap-1.5">
-              <Eye className="w-4 h-4 text-emerald-600" />
+              <Eye className="w-4 h-4 text-blue-600" />
               <span>Foto Lampiran Pengaduan</span>
             </span>
             <button
@@ -1287,7 +1287,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <div
           className={`p-4 rounded-2xl shadow-2xl border flex items-start gap-3 transition-all ${
             notification.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-950 shadow-emerald-950/15'
+              ? 'bg-blue-50 border-blue-300 text-blue-950 shadow-blue-950/15'
               : notification.type === 'warning'
               ? 'bg-amber-50 border-amber-300 text-amber-950 shadow-amber-950/15'
               : 'bg-rose-50 border-rose-300 text-rose-950 shadow-rose-950/15'
@@ -1295,7 +1295,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         >
           <div className="mt-0.5 shrink-0">
             {notification.type === 'success' ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+              <CheckCircle2 className="w-5 h-5 text-blue-600" />
             ) : notification.type === 'warning' ? (
               <AlertTriangle className="w-5 h-5 text-amber-600" />
             ) : (
@@ -1351,8 +1351,8 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                 Pimpinan Eksekutif Desa
               </span>
             </div>
@@ -1365,7 +1365,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
           </div>
           <button
             onClick={() => setShowAddSkModal(true)}
-            className="px-4 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-all cursor-pointer press-down"
+            className="px-4 py-2.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs flex items-center gap-2 shadow-xs transition-all cursor-pointer press-down"
           >
             <Plus size={16} />
             <span>Terbitkan Keputusan Kades Baru</span>
@@ -1382,13 +1382,13 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                 {paginatedSk.map((sk) => (
                   <div
                     key={sk.id}
-                    className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:border-emerald-300 transition-all space-y-3"
+                    className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs hover:border-blue-300 transition-all space-y-3"
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono text-xs font-black text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                      <span className="font-mono text-xs font-black text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200">
                         {sk.nomor_sk}
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-900">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-900">
                         {sk.status}
                       </span>
                     </div>
@@ -1433,8 +1433,8 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                 Pengawasan Keuangan Desa (PKPKD)
               </span>
             </div>
@@ -1445,7 +1445,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               Pengawasan tertinggi terhadap penerimaan pendapatan dan realisasi belanja desa yang dikelola Kaur Keuangan dan diverifikasi Sekdes.
             </p>
           </div>
-          <span className="px-3.5 py-1.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-200">
+          <span className="px-3.5 py-1.5 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-200">
             Audit Siskeudes 100% WTP
           </span>
         </div>
@@ -1457,7 +1457,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <div className="text-xl sm:text-2xl font-black text-slate-900">
               Rp {(totalAnggaran / 1000000).toLocaleString('id-ID')} Juta
             </div>
-            <div className="text-xs text-emerald-700 font-semibold flex items-center gap-1">
+            <div className="text-xs text-blue-700 font-semibold flex items-center gap-1">
               <CheckCircle2 size={13} />
               <span>Realisasi: Rp {(totalRealisasi / 1000000).toLocaleString('id-ID')} Juta ({Math.round((totalRealisasi/totalAnggaran)*100)}%)</span>
             </div>
@@ -1468,7 +1468,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <div className="text-xl sm:text-2xl font-black text-slate-900">
               Rp {(belanjaAnggaran / 1000000).toLocaleString('id-ID')} Juta
             </div>
-            <div className="text-xs text-teal-700 font-semibold flex items-center gap-1">
+            <div className="text-xs text-indigo-700 font-semibold flex items-center gap-1">
               <TrendingUp size={13} />
               <span>Serapan: Rp {(belanjaRealisasi / 1000000).toLocaleString('id-ID')} Juta ({Math.round((belanjaRealisasi/belanjaAnggaran)*100)}%)</span>
             </div>
@@ -1476,7 +1476,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
 
           <div className="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 sm:space-y-2">
             <span className="text-[11px] sm:text-xs font-bold text-slate-500">Sisa Saldo Kas Rekening Desa</span>
-            <div className="text-xl sm:text-2xl font-black text-emerald-800">
+            <div className="text-xl sm:text-2xl font-black text-blue-800">
               Rp {((totalRealisasi - belanjaRealisasi) / 1000000).toLocaleString('id-ID')} Juta
             </div>
             <div className="text-xs text-slate-500 font-semibold">
@@ -1503,12 +1503,12 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                   return (
                     <div key={r.id} className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] font-black uppercase text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 truncate max-w-[200px]">
+                        <span className="text-[10px] font-black uppercase text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-200 truncate max-w-[200px]">
                           {r.category?.nama_kategori || 'Bidang APBDes'}
                         </span>
                         <span className={`px-2 py-0.5 rounded-full text-[10px] font-black shrink-0 ${
-                          pct >= 90 ? 'bg-emerald-100 text-emerald-900 border border-emerald-200' :
-                          pct >= 50 ? 'bg-teal-100 text-teal-900 border border-teal-200' :
+                          pct >= 90 ? 'bg-blue-100 text-blue-900 border border-blue-200' :
+                          pct >= 50 ? 'bg-indigo-100 text-indigo-900 border border-indigo-200' :
                           'bg-amber-100 text-amber-900 border border-amber-200'
                         }`}>
                           Serapan {pct}%
@@ -1523,7 +1523,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                       <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                         <div 
                           className={`h-full rounded-full transition-all duration-500 ${
-                            pct >= 90 ? 'bg-emerald-600' : pct >= 50 ? 'bg-teal-600' : 'bg-amber-500'
+                            pct >= 90 ? 'bg-blue-600' : pct >= 50 ? 'bg-indigo-600' : 'bg-amber-500'
                           }`}
                           style={{ width: `${Math.min(pct, 100)}%` }}
                         />
@@ -1537,9 +1537,9 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                             Rp {Number(r.anggaran).toLocaleString('id-ID')}
                           </span>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-100">
-                          <span className="text-[10px] font-bold text-emerald-700 block mb-0.5">Realisasi Belanja</span>
-                          <span className="font-mono font-black text-emerald-900 text-[11px] block">
+                        <div className="p-2.5 rounded-xl bg-blue-50/70 border border-blue-100">
+                          <span className="text-[10px] font-bold text-blue-700 block mb-0.5">Realisasi Belanja</span>
+                          <span className="font-mono font-black text-blue-900 text-[11px] block">
                             Rp {Number(r.realisasi).toLocaleString('id-ID')}
                           </span>
                         </div>
@@ -1571,11 +1571,11 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                           <td className="py-3 px-3.5 text-right font-mono font-bold text-slate-900">
                             Rp {Number(r.anggaran).toLocaleString('id-ID')}
                           </td>
-                          <td className="py-3 px-3.5 text-right font-mono font-bold text-emerald-800">
+                          <td className="py-3 px-3.5 text-right font-mono font-bold text-blue-800">
                             Rp {Number(r.realisasi).toLocaleString('id-ID')}
                           </td>
                           <td className="py-3 px-3.5 text-center">
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-900">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-900">
                               {pct}%
                             </span>
                           </td>
@@ -1641,7 +1641,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                 {pendingKadesSurats.length} Menunggu persetujuan
               </span>
             )}
-            <span className="px-3.5 py-1.5 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-200">
+            <span className="px-3.5 py-1.5 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-200">
               {completedSurats.length} Surat sah
             </span>
           </div>
@@ -1653,7 +1653,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             onClick={() => setSuratTab('pending')}
             className={`px-3.5 sm:px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 cursor-pointer ${
               suratTab === 'pending'
-                ? 'bg-emerald-700 text-white shadow-xs'
+                ? 'bg-blue-700 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
@@ -1661,7 +1661,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <span className="hidden sm:inline">Antrean Persetujuan Kades</span>
             <span className="sm:hidden">Antrean</span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
-              suratTab === 'pending' ? 'bg-emerald-800 text-emerald-100' : 'bg-slate-100 text-slate-700'
+              suratTab === 'pending' ? 'bg-blue-800 text-blue-100' : 'bg-slate-100 text-slate-700'
             }`}>
               {pendingKadesSurats.length}
             </span>
@@ -1671,7 +1671,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             onClick={() => setSuratTab('completed')}
             className={`px-3.5 sm:px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 cursor-pointer ${
               suratTab === 'completed'
-                ? 'bg-emerald-700 text-white shadow-xs'
+                ? 'bg-blue-700 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
@@ -1679,7 +1679,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <span className="hidden sm:inline">Surat Selesai Sah (Terbit)</span>
             <span className="sm:hidden">Sah Terbit</span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
-              suratTab === 'completed' ? 'bg-emerald-800 text-emerald-100' : 'bg-slate-100 text-slate-700'
+              suratTab === 'completed' ? 'bg-blue-800 text-blue-100' : 'bg-slate-100 text-slate-700'
             }`}>
               {completedSurats.length}
             </span>
@@ -1713,7 +1713,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                 placeholder="Cari nama warga, nomor resi, atau jenis surat..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:border-emerald-500"
+                className="w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 text-xs focus:border-blue-500"
               />
             </div>
           </div>
@@ -1733,8 +1733,8 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                       {/* Top Bar: Resi & Status Persetujuan RT */}
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-mono font-bold text-slate-700 text-xs">{s.nomor_resi}</span>
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-200">
-                          <CheckCircle2 size={11} className="text-emerald-600" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900 border border-blue-200">
+                          <CheckCircle2 size={11} className="text-blue-600" />
                           <span>Disetujui Ketua RT</span>
                         </span>
                       </div>
@@ -1745,7 +1745,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                         <div className="text-[11px] text-slate-500 font-mono flex items-center gap-1.5 mt-0.5">
                           <span>NIK: {s.warga_profile?.nik}</span>
                           <span>•</span>
-                          <span className="font-bold text-emerald-800">
+                          <span className="font-bold text-blue-800">
                             RT {s.warga_profile?.rt?.nomor_rt || '01'} / RW {s.warga_profile?.rt?.rw?.nomor_rw || '01'}
                           </span>
                         </div>
@@ -1753,8 +1753,8 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
 
                       {/* Box Jenis Surat & Keperluan */}
                       <div className="p-3 bg-slate-50 rounded-xl border border-slate-100 text-xs space-y-1">
-                        <div className="font-bold text-emerald-900 flex items-center gap-1.5">
-                          <FileText size={13} className="text-emerald-700 shrink-0" />
+                        <div className="font-bold text-blue-900 flex items-center gap-1.5">
+                          <FileText size={13} className="text-blue-700 shrink-0" />
                           <span>{s.surat_type?.nama_surat}</span>
                         </div>
                         <div className="text-slate-600 text-xs leading-relaxed pl-4">
@@ -1772,7 +1772,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                             setNomorSuratInput(s.nomor_surat_resmi || '');
                             setApproveCatatan('');
                           }}
-                          className="w-full py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 active:scale-[0.98] select-none text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+                          className="w-full py-2.5 px-3 rounded-xl bg-blue-700 hover:bg-blue-800 active:scale-[0.98] select-none text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                         >
                           <ShieldCheck size={16} />
                           <span>Terbitkan</span>
@@ -1835,17 +1835,17 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                         <td className="py-3 px-3.5">
                           <div className="font-bold text-slate-900">{s.warga_profile?.nama_lengkap}</div>
                           <div className="text-[11px] font-mono text-slate-400">NIK: {s.warga_profile?.nik}</div>
-                          <div className="text-[10px] text-emerald-800 font-medium">
+                          <div className="text-[10px] text-blue-800 font-medium">
                             RT {s.warga_profile?.rt?.nomor_rt || '01'} / RW {s.warga_profile?.rt?.rw?.nomor_rw || '01'}
                           </div>
                         </td>
-                        <td className="py-3 px-3.5 font-bold text-emerald-900">{s.surat_type?.nama_surat}</td>
+                        <td className="py-3 px-3.5 font-bold text-blue-900">{s.surat_type?.nama_surat}</td>
                         <td className="py-3 px-3.5 text-slate-600 max-w-[180px] truncate" title={s.keperluan}>
                           {s.keperluan}
                         </td>
                         <td className="py-3 px-3.5">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-900 border border-emerald-200">
-                            <CheckCircle2 size={11} className="text-emerald-600" />
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900 border border-blue-200">
+                            <CheckCircle2 size={11} className="text-blue-600" />
                             <span>Disetujui Ketua RT</span>
                           </span>
                         </td>
@@ -1879,7 +1879,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                                 setNomorSuratInput(s.nomor_surat_resmi || '');
                                 setApproveCatatan('');
                               }}
-                              className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1 cursor-pointer"
+                              className="px-3 py-1.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs shadow-xs transition-all flex items-center gap-1 cursor-pointer"
                               title="Setujui dan Sahkan Surat Secara Digital"
                             >
                               <ShieldCheck size={14} />
@@ -1917,7 +1917,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                   paginatedCompleted.map((s) => (
                     <div key={s.id} className="p-4 bg-white rounded-2xl border border-slate-200/90 shadow-2xs space-y-2.5">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="font-mono font-bold text-emerald-800 text-xs">{s.nomor_surat_resmi || '-'}</span>
+                        <span className="font-mono font-bold text-blue-800 text-xs">{s.nomor_surat_resmi || '-'}</span>
                         <span className="text-[10px] text-slate-400">{new Date(s.created_at).toLocaleDateString('id-ID')}</span>
                       </div>
                       <div>
@@ -1925,13 +1925,13 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                         <div className="text-[11px] font-mono text-slate-400">NIK: {s.warga_profile?.nik}</div>
                       </div>
                       <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs">
-                        <div className="font-bold text-emerald-900">{s.surat_type?.nama_surat}</div>
+                        <div className="font-bold text-blue-900">{s.surat_type?.nama_surat}</div>
                         <div className="text-slate-600 text-[11px] mt-0.5">{s.keperluan}</div>
                       </div>
                       <div className="pt-1 border-t border-slate-100 flex justify-end">
                         <button
                           onClick={() => setPrintSurat(s)}
-                          className="w-full py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-200 flex items-center justify-center gap-1.5 cursor-pointer"
+                          className="w-full py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold text-xs border border-blue-200 flex items-center justify-center gap-1.5 cursor-pointer"
                         >
                           <Printer size={13} />
                           <span>Pratinjau Cetak</span>
@@ -1965,7 +1965,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                     ) : (
                       paginatedCompleted.map((s) => (
                         <tr key={s.id} className="hover:bg-slate-50 transition-colors">
-                          <td className="py-3 px-3.5 font-mono font-bold text-emerald-800 whitespace-nowrap">
+                          <td className="py-3 px-3.5 font-mono font-bold text-blue-800 whitespace-nowrap">
                             {s.nomor_surat_resmi || '-'}
                           </td>
                           <td className="py-3 px-3.5">
@@ -1978,7 +1978,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                           <td className="py-3 px-3.5 text-right">
                             <button
                               onClick={() => setPrintSurat(s)}
-                              className="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-200 flex items-center gap-1.5 ml-auto cursor-pointer"
+                              className="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-800 font-bold text-xs border border-blue-200 flex items-center gap-1.5 ml-auto cursor-pointer"
                             >
                               <Printer size={13} />
                               <span>Pratinjau Cetak</span>
@@ -2097,8 +2097,8 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                 Pimpinan Eksekutif Desa
               </span>
             </div>
@@ -2115,7 +2115,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                 {pendingPengumumans.length} Draf Menunggu
               </span>
             )}
-            <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-200">
+            <span className="px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-200">
               {publishedPengumumans.length} Pengumuman Terbit Sah
             </span>
           </div>
@@ -2128,7 +2128,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             onClick={() => setPengumumanTab('pending')}
             className={`px-3.5 sm:px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 cursor-pointer active:scale-[0.98] select-none ${
               pengumumanTab === 'pending'
-                ? 'bg-emerald-700 text-white shadow-xs'
+                ? 'bg-blue-700 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
@@ -2136,7 +2136,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <span className="hidden sm:inline">Menunggu Persetujuan</span>
             <span className="sm:hidden">Menunggu</span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
-              pengumumanTab === 'pending' ? 'bg-emerald-800 text-emerald-100' : 'bg-slate-100 text-slate-700'
+              pengumumanTab === 'pending' ? 'bg-blue-800 text-blue-100' : 'bg-slate-100 text-slate-700'
             }`}>
               {pendingPengumumans.length}
             </span>
@@ -2147,7 +2147,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             onClick={() => setPengumumanTab('published')}
             className={`px-3.5 sm:px-4 py-2 rounded-2xl text-xs font-black transition-all flex items-center gap-1.5 sm:gap-2 shrink-0 cursor-pointer active:scale-[0.98] select-none ${
               pengumumanTab === 'published'
-                ? 'bg-emerald-700 text-white shadow-xs'
+                ? 'bg-blue-700 text-white shadow-xs'
                 : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
             }`}
           >
@@ -2155,7 +2155,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <span className="hidden sm:inline">Pengumuman Aktif</span>
             <span className="sm:hidden">Aktif Tayang</span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
-              pengumumanTab === 'published' ? 'bg-emerald-800 text-emerald-100' : 'bg-slate-100 text-slate-700'
+              pengumumanTab === 'published' ? 'bg-blue-800 text-blue-100' : 'bg-slate-100 text-slate-700'
             }`}>
               {publishedPengumumans.length}
             </span>
@@ -2191,7 +2191,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {activePengumumanList.length === 0 ? (
                   <div className="col-span-2 p-8 sm:p-12 text-center bg-white border border-slate-200/90 rounded-3xl shadow-2xs space-y-3">
-                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-700 mx-auto flex items-center justify-center border border-emerald-100">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 mx-auto flex items-center justify-center border border-blue-100">
                       <Megaphone size={24} />
                     </div>
                     <div>
@@ -2214,11 +2214,11 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                     <div key={p.id} className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3 flex flex-col justify-between">
                       <div className="space-y-3">
                         <div className="flex items-center justify-between gap-2">
-                          <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-lg border border-emerald-200">
+                          <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-200">
                             {p.kategori || 'Warta Desa'}
                           </span>
                           <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black ${
-                            p.status === 'published' ? 'bg-emerald-100 text-emerald-900 border border-emerald-200' :
+                            p.status === 'published' ? 'bg-blue-100 text-blue-900 border border-blue-200' :
                             p.status === 'rejected' ? 'bg-rose-100 text-rose-900 border border-rose-200' :
                             'bg-amber-100 text-amber-900 border border-amber-300 animate-pulse'
                           }`}>
@@ -2247,7 +2247,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                           <button
                             type="button"
                             onClick={() => setSelectedPengumumanForApprove(p)}
-                            className="w-full py-2.5 px-3 rounded-xl bg-emerald-700 hover:bg-emerald-800 active:scale-[0.98] select-none text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                            className="w-full py-2.5 px-3 rounded-xl bg-blue-700 hover:bg-blue-800 active:scale-[0.98] select-none text-white font-extrabold text-xs shadow-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                           >
                             <CheckCircle2 size={15} />
                             <span>Setujui & Publikasikan Warta</span>
@@ -2329,8 +2329,8 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
                 Pusat Pengawasan Aspirasi Wilayah
               </span>
             </div>
@@ -2341,7 +2341,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               Pilah keluhan masyarakat berdasarkan batas wilayah RT/RW dan berikan arahan disposisi tindak lanjut.
             </p>
           </div>
-          <span className="px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-900 border border-emerald-200 shrink-0">
+          <span className="px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-200 shrink-0">
             {filteredPengaduans.length} dari {pengaduans.length} Pengaduan
           </span>
         </div>
@@ -2349,7 +2349,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         {/* Filter Bar Wilayah RT / RW, Status, & Kategori */}
         <div className="p-4 sm:p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3">
           <div className="flex items-center gap-2 text-xs font-black text-slate-700">
-            <Filter className="w-4 h-4 text-emerald-600" />
+            <Filter className="w-4 h-4 text-blue-600" />
             <span>Pilah Berdasarkan Wilayah RT / RW & Kategori:</span>
           </div>
 
@@ -2429,7 +2429,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
 
           {(selectedRwFilter !== 'all' || selectedRtFilter !== 'all' || selectedStatusFilter !== 'all' || selectedKategoriFilter !== 'all') && (
             <div className="pt-1 flex items-center justify-between text-xs">
-              <span className="text-[11px] text-emerald-700 font-bold">
+              <span className="text-[11px] text-blue-700 font-bold">
                 Filter aktif: {selectedRwFilter !== 'all' ? `RW ${selectedRwFilter} ` : ''}{selectedRtFilter !== 'all' ? `RT ${selectedRtFilter} ` : ''}{selectedStatusFilter !== 'all' ? `Status: ${selectedStatusFilter} ` : ''}
               </span>
               <button
@@ -2465,14 +2465,14 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               return (
                 <div
                   key={p.id}
-                  className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3.5 flex flex-col justify-between hover:border-emerald-300 transition-all"
+                  className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-3.5 flex flex-col justify-between hover:border-blue-300 transition-all"
                 >
                   <div className="space-y-3">
                     {/* Header: Wilayah RT/RW Badge & Status */}
                     <div className="flex items-center justify-between gap-2 flex-wrap">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="px-2.5 py-0.5 rounded-md text-[10px] font-black bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-emerald-600" />
+                        <span className="px-2.5 py-0.5 rounded-md text-[10px] font-black bg-blue-50 text-blue-800 border border-blue-200 flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-blue-600" />
                           <span>RT {rtNum} / RW {rwNum}</span>
                         </span>
                         <span className="text-[10px] font-bold text-slate-400">
@@ -2482,7 +2482,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
 
                       <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
                         p.status === 'Selesai' || p.disposisi_ke === 'Selesai Ditangani'
-                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                          ? 'bg-blue-100 text-blue-800 border border-blue-200'
                           : p.disposisi_ke
                           ? 'bg-blue-100 text-blue-900 border border-blue-200'
                           : 'bg-amber-100 text-amber-800 border border-amber-200'
@@ -2533,9 +2533,9 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
 
                     {/* Tanggapan Resmi jika ada */}
                     {p.tanggapan && (
-                      <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/90 text-xs space-y-1">
-                        <span className="font-bold text-emerald-800 block text-[10px] uppercase flex items-center gap-1">
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/90 text-xs space-y-1">
+                        <span className="font-bold text-blue-800 block text-[10px] uppercase flex items-center gap-1">
+                          <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
                           <span>Tanggapan / Arahan Disposisi:</span>
                         </span>
                         <p className="text-slate-700 leading-relaxed">{p.tanggapan}</p>
@@ -2551,8 +2551,8 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
 
                     {p.status === 'Selesai' ? (
                       <div className="flex items-center gap-2">
-                        <span className="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-800 font-black text-[11px] flex items-center gap-1 border border-emerald-200">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="px-2.5 py-1 rounded-xl bg-blue-100 text-blue-800 font-black text-[11px] flex items-center gap-1 border border-blue-200">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                           <span>Tuntas Ditangani</span>
                         </span>
                         <button
@@ -2577,7 +2577,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                           setTanggapanDisposisiKe(p.disposisi_ke || 'Kaur Perencanaan & Pembangunan');
                           setTanggapanStatus(p.status === 'Selesai' ? 'Selesai' : 'Didisposisikan');
                         }}
-                        className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-emerald-700 text-white font-extrabold text-xs transition-colors cursor-pointer shadow-2xs flex items-center gap-1.5"
+                        className="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-blue-700 text-white font-extrabold text-xs transition-colors cursor-pointer shadow-2xs flex items-center gap-1.5"
                       >
                         <MessageSquare className="w-3.5 h-3.5" />
                         <span>{p.tanggapan ? 'Perbarui Disposisi' : 'Disposisikan ke Perangkat'}</span>
@@ -2654,26 +2654,26 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
           Dashboard Kepala Desa
         </h1>
         <p className="text-xs sm:text-sm text-slate-500">
-          Ringkasan tata kelola, permohonan surat, dan anggaran desa.
+          Ringkasan surat dan anggaran desa.
         </p>
       </div>
 
       {/* Banner Akses Cepat Struktur Pamong & Visi Misi */}
-      <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 text-white rounded-3xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-blue-800 via-blue-700 to-indigo-800 text-white rounded-3xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-xs font-bold text-emerald-200 uppercase tracking-wider">
-            <span>Tata Kelola Pemerintahan & Profil Publik</span>
+          <div className="flex items-center gap-2 text-xs font-bold text-blue-200 uppercase tracking-wider">
+            <span>Profil Desa</span>
           </div>
-          <h3 className="text-base sm:text-lg font-black tracking-tight">Struktur Hierarki Pamong & Visi Misi Desa</h3>
-          <p className="text-xs text-emerald-100 max-w-xl leading-relaxed">
-            Kelola rumusan Visi & Misi Kepala Desa dan hierarki pengawasan keuangan APBDes (Kades dan Bendahara) yang terhubung langsung ke Landing Page.
+          <h3 className="text-base sm:text-lg font-black tracking-tight">Struktur & Visi Misi</h3>
+          <p className="text-xs text-blue-100 max-w-xl leading-relaxed">
+            Atur visi, misi, dan struktur pemerintahan desa.
           </p>
         </div>
         <button
           onClick={() => onNavigate && onNavigate('struktur_pemerintahan')}
-          className="px-5 py-2.5 rounded-2xl bg-white text-emerald-900 font-bold text-xs hover:bg-emerald-50 transition shadow-sm shrink-0 cursor-pointer self-start sm:self-auto"
+          className="px-5 py-2.5 rounded-2xl bg-white text-blue-900 font-bold text-xs hover:bg-blue-50 transition shadow-sm shrink-0 cursor-pointer self-start sm:self-auto"
         >
-          Kelola Struktur & Visi Misi
+          Atur Profil Desa
         </button>
       </div>
 
@@ -2682,13 +2682,13 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5 sm:space-y-3">
           <div className="flex items-center justify-between gap-1">
             <span className="text-[11px] sm:text-xs font-bold text-slate-500 truncate">Pagu APBDes 2026</span>
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center shrink-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center shrink-0">
               <DollarSign size={16} />
             </div>
           </div>
           <div>
             <div className="text-lg sm:text-2xl font-black text-slate-900">Rp 1,11 Miliar</div>
-            <div className="text-[11px] sm:text-xs font-semibold text-emerald-700 mt-0.5 truncate">Serapan Belanja: 92.5%</div>
+            <div className="text-[11px] sm:text-xs font-semibold text-blue-700 mt-0.5 truncate">Serapan Belanja: 92.5%</div>
           </div>
           <div className="text-[10px] sm:text-[11px] text-slate-400 truncate">PKPKD Berjalan Lancar</div>
         </div>
@@ -2754,15 +2754,15 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <div className="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-5">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
                 <FileCheck2 size={18} />
               </div>
               <div>
-                <h3 className="text-sm font-black text-slate-900">Efisiensi & Alur Pelayanan Surat</h3>
-                <p className="text-[11px] text-slate-500">Statistik real-time pengajuan surat warga</p>
+              <h3 className="text-sm font-black text-slate-900">Status Surat</h3>
+                <p className="text-[11px] text-slate-500">Status pengajuan warga</p>
               </div>
             </div>
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 font-mono">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 font-mono">
               {surats.length} Total Surat
             </span>
           </div>
@@ -2783,19 +2783,19 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             return (
               <div className="space-y-4">
                 <div className="w-full h-3 rounded-full bg-slate-100 overflow-hidden flex shadow-inner">
-                  <div style={{ width: `${pSah}%` }} className="bg-emerald-600 transition-all duration-700" title={`Sah & Terbit: ${pSah}%`} />
+                  <div style={{ width: `${pSah}%` }} className="bg-blue-600 transition-all duration-700" title={`Sah & Terbit: ${pSah}%`} />
                   <div style={{ width: `${pKades}%` }} className="bg-amber-500 transition-all duration-700" title={`Menunggu Kades: ${pKades}%`} />
                   <div style={{ width: `${pRt}%` }} className="bg-blue-400 transition-all duration-700" title={`Menunggu RT: ${pRt}%`} />
                   <div style={{ width: `${pTolak}%` }} className="bg-rose-500 transition-all duration-700" title={`Ditolak: ${pTolak}%`} />
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-semibold">
-                  <div className="p-3 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex flex-col justify-between">
-                    <div className="flex items-center gap-1.5 text-emerald-800 text-[11px]">
-                      <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                  <div className="p-3 rounded-2xl bg-blue-50/70 border border-blue-200 flex flex-col justify-between">
+                    <div className="flex items-center gap-1.5 text-blue-800 text-[11px]">
+                      <span className="w-2 h-2 rounded-full bg-blue-600" />
                       <span>Selesai & Sah</span>
                     </div>
-                    <div className="text-lg font-black text-emerald-950 mt-1 font-mono">{nSah} <span className="text-[10px] font-normal text-emerald-700">({pSah}%)</span></div>
+                    <div className="text-lg font-black text-blue-950 mt-1 font-mono">{nSah} <span className="text-[10px] font-normal text-blue-700">({pSah}%)</span></div>
                   </div>
 
                   <div className="p-3 rounded-2xl bg-amber-50/70 border border-amber-200 flex flex-col justify-between">
@@ -2831,23 +2831,23 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <div className="p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-100">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
                 <DollarSign size={18} />
               </div>
               <div>
-                <h3 className="text-sm font-black text-slate-900">Serapan Belanja APBDes 5 Bidang</h3>
-                <p className="text-[11px] text-slate-500">Kinerja realisasi anggaran tahun berjalan</p>
+              <h3 className="text-sm font-black text-slate-900">Serapan APBDes</h3>
+                <p className="text-[11px] text-slate-500">Realisasi tahun berjalan</p>
               </div>
             </div>
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-teal-100 text-teal-800">
+            <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-indigo-100 text-indigo-800">
               Total Realisasi 92.5%
             </span>
           </div>
 
           <div className="space-y-3 text-xs">
             {[
-              { bidang: '1. Penyelenggaraan Pemerintahan', pagu: 'Rp 320 Jt', real: 'Rp 294.4 Jt', pct: 92, color: 'bg-emerald-600' },
-              { bidang: '2. Pelaksanaan Pembangunan', pagu: 'Rp 450 Jt', real: 'Rp 396.0 Jt', pct: 88, color: 'bg-teal-600' },
+              { bidang: '1. Penyelenggaraan Pemerintahan', pagu: 'Rp 320 Jt', real: 'Rp 294.4 Jt', pct: 92, color: 'bg-blue-600' },
+              { bidang: '2. Pelaksanaan Pembangunan', pagu: 'Rp 450 Jt', real: 'Rp 396.0 Jt', pct: 88, color: 'bg-indigo-600' },
               { bidang: '3. Pembinaan Kemasyarakatan', pagu: 'Rp 95 Jt', real: 'Rp 71.2 Jt', pct: 75, color: 'bg-sky-600' },
               { bidang: '4. Pemberdayaan Masyarakat', pagu: 'Rp 180 Jt', real: 'Rp 147.6 Jt', pct: 82, color: 'bg-indigo-600' },
               { bidang: '5. Penanggulangan Darurat & Bencana', pagu: 'Rp 65 Jt', real: 'Rp 65.0 Jt', pct: 100, color: 'bg-amber-600' },
@@ -2895,7 +2895,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="font-mono text-xs font-black text-slate-800">{s.nomor_resi}</span>
-                        <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                        <span className="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
                           {s.surat_type?.nama_surat}
                         </span>
                       </div>
@@ -2921,7 +2921,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                           setNomorSuratInput(s.nomor_surat_resmi || '');
                           setApproveCatatan('');
                         }}
-                        className="px-3 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1 cursor-pointer"
                       >
                         <ShieldCheck size={13} />
                         <span>Setujui & Sahkan</span>
@@ -2939,7 +2939,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                 <h3 className="text-base font-black text-slate-900">Program Kerja Prioritas Desa 2026</h3>
                 <p className="text-xs text-slate-500">Realisasi program fisik & pemberdayaan masyarakat desa</p>
               </div>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
                 100% On-Track
               </span>
             </div>
@@ -2948,10 +2948,10 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
                 <div className="flex items-center justify-between text-xs font-bold">
                   <span className="text-slate-900">1. Rabat Beton Jalan Usaha Tani Lingkungan Krajan</span>
-                  <span className="text-emerald-700 font-mono">100% Selesai</span>
+                  <span className="text-blue-700 font-mono">100% Selesai</span>
                 </div>
                 <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-                  <div className="bg-emerald-600 h-full w-full rounded-full" />
+                  <div className="bg-blue-600 h-full w-full rounded-full" />
                 </div>
                 <div className="text-[11px] text-slate-500">Pagu: Rp 45.000.000 (Dana Desa Tahap I) • Skema Padat Karya Tunai</div>
               </div>
@@ -2959,10 +2959,10 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
                 <div className="flex items-center justify-between text-xs font-bold">
                   <span className="text-slate-900">2. Normalisasi & Pembangunan Drainase RW 01</span>
-                  <span className="text-teal-700 font-mono">85% Berjalan</span>
+                  <span className="text-indigo-700 font-mono">85% Berjalan</span>
                 </div>
                 <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-                  <div className="bg-teal-600 h-full w-[85%] rounded-full" />
+                  <div className="bg-indigo-600 h-full w-[85%] rounded-full" />
                 </div>
                 <div className="text-[11px] text-slate-500">Pagu: Rp 35.000.000 • Mencegah genangan air musim hujan</div>
               </div>
@@ -2992,7 +2992,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                   if (onNavigate) onNavigate('persetujuan_surat');
                   else setSuratTab('pending');
                 }}
-                className="w-full p-3 sm:p-3.5 rounded-2xl bg-slate-50 hover:bg-emerald-50 text-slate-800 hover:text-emerald-900 border border-slate-200/80 hover:border-emerald-300 transition-all text-left flex items-center justify-between cursor-pointer active:scale-[0.98] select-none"
+                className="w-full p-3 sm:p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50 text-slate-800 hover:text-blue-900 border border-slate-200/80 hover:border-blue-300 transition-all text-left flex items-center justify-between cursor-pointer active:scale-[0.98] select-none"
               >
                 <span>Persetujuan Surat ({pendingKadesSurats.length})</span>
                 <ChevronRight size={15} />
@@ -3013,7 +3013,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
               <button
                 type="button"
                 onClick={() => setShowAddSkModal(true)}
-                className="w-full p-3 sm:p-3.5 rounded-2xl bg-slate-50 hover:bg-emerald-50 text-slate-800 hover:text-emerald-900 border border-slate-200/80 hover:border-emerald-300 transition-all text-left flex items-center justify-between cursor-pointer active:scale-[0.98] select-none"
+                className="w-full p-3 sm:p-3.5 rounded-2xl bg-slate-50 hover:bg-blue-50 text-slate-800 hover:text-blue-900 border border-slate-200/80 hover:border-blue-300 transition-all text-left flex items-center justify-between cursor-pointer active:scale-[0.98] select-none"
               >
                 <span>Terbitkan SK Kades Baru</span>
                 <ChevronRight size={15} />
@@ -3025,7 +3025,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
                   if (onNavigate) onNavigate('pengawasan_apbdes');
                   else window.location.href = '/dashboard?tab=pengawasan-apbdes';
                 }}
-                className="w-full p-3 sm:p-3.5 rounded-2xl bg-slate-50 hover:bg-teal-50 text-slate-800 hover:text-teal-900 border border-slate-200/80 hover:border-teal-300 transition-all text-left flex items-center justify-between cursor-pointer active:scale-[0.98] select-none"
+                className="w-full p-3 sm:p-3.5 rounded-2xl bg-slate-50 hover:bg-indigo-50 text-slate-800 hover:text-indigo-900 border border-slate-200/80 hover:border-indigo-300 transition-all text-left flex items-center justify-between cursor-pointer active:scale-[0.98] select-none"
               >
                 <span>Audit & Serapan APBDes</span>
                 <ChevronRight size={15} />

@@ -37,7 +37,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
       {/* Top Header Action Bar (Hidden when printing) */}
       <header className="w-full bg-white text-slate-900 border-b border-slate-200 shadow-xs px-3 sm:px-8 py-2.5 sm:py-3.5 flex items-center justify-between z-30 shrink-0 print:hidden">
         <div className="flex items-center gap-2 sm:gap-3 min-w-0 pr-2">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100/80 flex items-center justify-center font-bold shrink-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center font-bold shrink-0">
             <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0 truncate">
@@ -56,7 +56,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={handlePrint}
-            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-xs transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap"
           >
             <Printer className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> 
             <span>Cetak / Unduh</span>
@@ -108,7 +108,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
 
             <div className="w-16 sm:w-20 shrink-0 flex justify-end">
               <div className="w-12 h-12 rounded-xl border border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-[9px] text-slate-500 font-bold p-1 text-center">
-                <Building2 className="w-4 h-4 text-emerald-700 mb-0.5" />
+                <Building2 className="w-4 h-4 text-blue-700 mb-0.5" />
                 <span>SiDesKu</span>
               </div>
             </div>
@@ -144,11 +144,11 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
               </thead>
               <tbody>
                 {/* 1. PENDAPATAN */}
-                <tr className="bg-emerald-50/70 font-black text-slate-900">
+                <tr className="bg-blue-50/70 font-black text-slate-900">
                   <td className="border border-slate-800 p-2 font-mono">4.</td>
                   <td className="border border-slate-800 p-2 uppercase">1. PENDAPATAN DESA</td>
                   <td className="border border-slate-800 p-2 text-right font-mono">Rp {Number(s?.pendapatan?.anggaran || 1110000000).toLocaleString('id-ID')}</td>
-                  <td className="border border-slate-800 p-2 text-right font-mono text-emerald-900">Rp {totPendapatan.toLocaleString('id-ID')}</td>
+                  <td className="border border-slate-800 p-2 text-right font-mono text-blue-900">Rp {totPendapatan.toLocaleString('id-ID')}</td>
                   <td className="border border-slate-800 p-2 text-right font-mono">{s?.pendapatan?.persen || 60.8}%</td>
                 </tr>
                 <tr>
@@ -174,11 +174,11 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
                 </tr>
 
                 {/* 2. BELANJA */}
-                <tr className="bg-teal-50/70 font-black text-slate-900 border-t-2 border-slate-800">
+                <tr className="bg-indigo-50/70 font-black text-slate-900 border-t-2 border-slate-800">
                   <td className="border border-slate-800 p-2 font-mono">5.</td>
                   <td className="border border-slate-800 p-2 uppercase">2. BELANJA DESA</td>
                   <td className="border border-slate-800 p-2 text-right font-mono">Rp {Number(s?.belanja?.anggaran || 235000000).toLocaleString('id-ID')}</td>
-                  <td className="border border-slate-800 p-2 text-right font-mono text-teal-900">Rp {totBelanja.toLocaleString('id-ID')}</td>
+                  <td className="border border-slate-800 p-2 text-right font-mono text-indigo-900">Rp {totBelanja.toLocaleString('id-ID')}</td>
                   <td className="border border-slate-800 p-2 text-right font-mono">{s?.belanja?.persen || 92.6}%</td>
                 </tr>
                 <tr>
@@ -218,7 +218,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
                   <td className="border border-slate-800 p-2 text-right font-mono">
                     Rp {(Number(s?.pendapatan?.anggaran || 1110000000) - Number(s?.belanja?.anggaran || 235000000)).toLocaleString('id-ID')}
                   </td>
-                  <td className="border border-slate-800 p-2 text-right font-mono text-emerald-900">
+                  <td className="border border-slate-800 p-2 text-right font-mono text-blue-900">
                     Rp {surplus.toLocaleString('id-ID')}
                   </td>
                   <td className="border border-slate-800 p-2 text-right font-mono">Surplus</td>
@@ -245,7 +245,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
                     className="w-14 h-14 object-contain"
                   />
                   <div className="text-left text-[9px] text-slate-500 font-mono">
-                    <p className="font-black text-emerald-800">TERVALIDASI RESMI</p>
+                    <p className="font-black text-blue-800">TERVALIDASI RESMI</p>
                     <p>SK Kades No. 14/2026</p>
                     <p>Desa Doko, Kediri</p>
                   </div>
@@ -266,7 +266,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
                     className="w-14 h-14 object-contain"
                   />
                   <div className="text-left text-[9px] text-slate-500 font-mono">
-                    <p className="font-black text-teal-800">BUKU KAS UMUM</p>
+                    <p className="font-black text-indigo-800">BUKU KAS UMUM</p>
                     <p>BKU-2026/DOKO</p>
                     <p>Ratna Dewi Kusuma</p>
                   </div>

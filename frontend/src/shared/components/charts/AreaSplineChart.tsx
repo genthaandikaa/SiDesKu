@@ -28,7 +28,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
   highlightValue = '96.75%',
   highlightLabel = 'Kecepatan Penerbitan & Kepuasan Warga',
   trendText = '+12.8% vs bulan lalu',
-  color = '#10b981',
+  color = '#3b82f6',
 }) => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [selectedRange, setSelectedRange] = useState<'month' | 'halfYear' | 'year'>('halfYear');
@@ -74,13 +74,13 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
 
   // Donut / Pie Slice Calculations (Curated Cohesive Emerald-Teal Palette)
   const sliceColors = [
-    '#059669', // Emerald 600
-    '#0d9488', // Teal 600
-    '#10b981', // Emerald 500
-    '#14b8a6', // Teal 500
-    '#34d399', // Emerald 400
+    '#2563eb', // Emerald 600
+    '#4f46e5', // Teal 600
+    '#3b82f6', // Emerald 500
+    '#6366f1', // Teal 500
+    '#60a5fa', // Emerald 400
     '#2dd4bf', // Teal 400
-    '#047857', // Emerald 700
+    '#1d4ed8', // Emerald 700
     '#0f766e', // Teal 700
   ];
 
@@ -146,7 +146,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+            <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
               {subtitle}
             </span>
           </div>
@@ -156,12 +156,12 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
         {/* Filter Controls Row: Chart Type Switcher + Timeframe Selector */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Chart Mode Switcher */}
-          <div className="flex items-center gap-1 bg-emerald-50/90 p-1 rounded-xl border border-emerald-200/70 text-[11px] font-extrabold">
+          <div className="flex items-center gap-1 bg-blue-50/90 p-1 rounded-xl border border-blue-200/70 text-[11px] font-extrabold">
             <button
               type="button"
               onClick={() => setChartType('bar')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
-                chartType === 'bar' ? 'bg-emerald-600 text-white shadow-2xs' : 'text-emerald-800 hover:bg-emerald-100/70'
+                chartType === 'bar' ? 'bg-blue-600 text-white shadow-2xs' : 'text-blue-800 hover:bg-blue-100/70'
               }`}
               title="Tampilan Grafik Batang (Bar)"
             >
@@ -173,7 +173,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
               type="button"
               onClick={() => setChartType('spline')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
-                chartType === 'spline' ? 'bg-emerald-600 text-white shadow-2xs' : 'text-emerald-800 hover:bg-emerald-100/70'
+                chartType === 'spline' ? 'bg-blue-600 text-white shadow-2xs' : 'text-blue-800 hover:bg-blue-100/70'
               }`}
               title="Tampilan Grafik Garis (Spline Area)"
             >
@@ -185,7 +185,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
               type="button"
               onClick={() => setChartType('combo')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
-                chartType === 'combo' ? 'bg-emerald-600 text-white shadow-2xs' : 'text-emerald-800 hover:bg-emerald-100/70'
+                chartType === 'combo' ? 'bg-blue-600 text-white shadow-2xs' : 'text-blue-800 hover:bg-blue-100/70'
               }`}
               title="Tampilan Kombinasi Batang + Garis"
             >
@@ -197,7 +197,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
               type="button"
               onClick={() => setChartType('pie')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer flex items-center gap-1 ${
-                chartType === 'pie' ? 'bg-emerald-600 text-white shadow-2xs' : 'text-emerald-800 hover:bg-emerald-100/70'
+                chartType === 'pie' ? 'bg-blue-600 text-white shadow-2xs' : 'text-blue-800 hover:bg-blue-100/70'
               }`}
               title="Tampilan Grafik Bulat (Donut/Pie Chart)"
             >
@@ -212,7 +212,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
               type="button"
               onClick={() => setSelectedRange('month')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                selectedRange === 'month' ? 'bg-white text-emerald-800 shadow-2xs' : 'text-slate-500 hover:text-slate-900'
+                selectedRange === 'month' ? 'bg-white text-blue-800 shadow-2xs' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
               Bulan Ini
@@ -221,7 +221,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
               type="button"
               onClick={() => setSelectedRange('halfYear')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                selectedRange === 'halfYear' ? 'bg-white text-emerald-800 shadow-2xs' : 'text-slate-500 hover:text-slate-900'
+                selectedRange === 'halfYear' ? 'bg-white text-blue-800 shadow-2xs' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
               6 Bulan
@@ -230,7 +230,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
               type="button"
               onClick={() => setSelectedRange('year')}
               className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                selectedRange === 'year' ? 'bg-white text-emerald-800 shadow-2xs' : 'text-slate-500 hover:text-slate-900'
+                selectedRange === 'year' ? 'bg-white text-blue-800 shadow-2xs' : 'text-slate-500 hover:text-slate-900'
               }`}
             >
               1 Tahun
@@ -244,7 +244,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
         <span className="text-3xl sm:text-4xl font-black text-slate-950 tracking-tight">
           {highlightValue}
         </span>
-        <div className="flex items-center gap-1.5 text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-xl">
+        <div className="flex items-center gap-1.5 text-xs font-black text-blue-700 bg-blue-50 border border-blue-200/80 px-2.5 py-1 rounded-xl">
           <TrendingUp className="w-3.5 h-3.5" />
           <span>{trendText}</span>
         </div>
@@ -296,7 +296,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
                   onMouseLeave={() => setHoveredIdx(null)}
                   className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2 ${
                     isHovered
-                      ? 'bg-emerald-50/90 border-emerald-300 shadow-xs scale-102'
+                      ? 'bg-blue-50/90 border-blue-300 shadow-xs scale-102'
                       : 'bg-slate-50/80 border-slate-200/80 hover:bg-slate-100/80'
                   }`}
                 >
@@ -330,17 +330,17 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
           >
             <defs>
               <linearGradient id="barGradientEmerald" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" />
-                <stop offset="100%" stopColor="#059669" />
+                <stop offset="0%" stopColor="#3b82f6" />
+                <stop offset="100%" stopColor="#2563eb" />
               </linearGradient>
               <linearGradient id="barGradientHover" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#34d399" />
-                <stop offset="100%" stopColor="#10b981" />
+                <stop offset="0%" stopColor="#60a5fa" />
+                <stop offset="100%" stopColor="#3b82f6" />
               </linearGradient>
               <linearGradient id="areaGradientEmerald" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#10b981" stopOpacity="0.32" />
-                <stop offset="65%" stopColor="#10b981" stopOpacity="0.08" />
-                <stop offset="100%" stopColor="#10b981" stopOpacity="0.00" />
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.32" />
+                <stop offset="65%" stopColor="#3b82f6" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.00" />
               </linearGradient>
               <filter id="barGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="blur" />
@@ -391,7 +391,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
                       fill="#f8fafc"
                       stroke="#f1f5f9"
                       strokeWidth="1"
-                      className="transition-colors duration-200 group-hover:fill-emerald-50/50"
+                      className="transition-colors duration-200 group-hover:fill-blue-50/50"
                     />
 
                     {/* Filled Gradient Bar */}
@@ -414,7 +414,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
                         cy={computedY}
                         r={isHovered ? 6.5 : 4.5}
                         fill="#ffffff"
-                        stroke="#059669"
+                        stroke="#2563eb"
                         strokeWidth={isHovered ? 3 : 2.5}
                         className="transition-all duration-200 drop-shadow-xs"
                       />
@@ -472,7 +472,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
                   x={b.x + barWidth / 2}
                   y={computedY - 10}
                   textAnchor="middle"
-                  fill="#047857"
+                  fill="#1d4ed8"
                   fontSize="11"
                   fontWeight="800"
                   className="animate-fade-in"
@@ -495,7 +495,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
               <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                 {activePoint.label} {activePoint.fullDate ? `(${activePoint.fullDate})` : ''}
               </div>
-              <div className="text-sm font-black text-emerald-400 mt-0.5">
+              <div className="text-sm font-black text-blue-400 mt-0.5">
                 {activePoint.value} {activePoint.tooltipText || 'Surat'}
               </div>
               {activePoint.secondaryValue !== undefined && (
@@ -512,7 +512,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
               <span
                 key={i}
                 className={`transition-colors cursor-pointer text-center flex-1 ${
-                  hoveredIdx === i ? 'text-emerald-700 font-black scale-110' : 'hover:text-slate-700'
+                  hoveredIdx === i ? 'text-blue-700 font-black scale-110' : 'hover:text-slate-700'
                 }`}
                 onMouseEnter={() => setHoveredIdx(i)}
                 onMouseLeave={() => setHoveredIdx(null)}

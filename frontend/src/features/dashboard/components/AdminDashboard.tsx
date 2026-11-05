@@ -595,11 +595,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
       case 'sekdes':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">Sekretaris Desa</span>;
       case 'bendahara_desa':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Bendahara Desa</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">Bendahara Desa</span>;
       case 'rw':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">Ketua RW</span>;
       case 'rt':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 border border-teal-200">Ketua RT</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">Ketua RT</span>;
       default:
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">Warga</span>;
     }
@@ -612,12 +612,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
         <div
           className={`fixed top-4 right-4 z-50 flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border text-sm font-medium transition-all transform animate-bounce-subtle ${
             notificationMsg.type === 'success'
-              ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
+              ? 'bg-blue-50 border-blue-300 text-blue-900'
               : 'bg-rose-50 border-rose-300 text-rose-900'
           }`}
         >
           {notificationMsg.type === 'success' ? (
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
           ) : (
             <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
           )}
@@ -625,14 +625,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
         </div>
       )}
 
-      {/* TOP HEADER BAR (Clean White Surface with subtle emerald trim, Responsive Mobile) */}
+      {/* TOP HEADER BAR (Clean White Surface with subtle blue trim, Responsive Mobile) */}
       <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
             Dashboard Admin
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Kelola pengguna, keamanan, dan pemantauan sistem desa.
+            Pengguna, keamanan, dan sistem desa.
           </p>
         </div>
 
@@ -648,16 +648,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
           </button>
           <button
             onClick={() => setShowAddUserModal(true)}
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition shadow-xs cursor-pointer"
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold transition shadow-xs cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Tambah akun</span>
           </button>
           <button
             onClick={handleDownloadBackup}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs sm:text-sm font-semibold transition shadow-2xs cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs sm:text-sm font-semibold transition shadow-2xs cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-700" />
+            <Download className="w-3.5 h-3.5 text-blue-700" />
             <span>Backup</span>
           </button>
         </div>
@@ -672,20 +672,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-500">
                   Total Pengguna
                 </span>
-                <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-emerald-50 flex items-center justify-center border border-emerald-100 shrink-0">
-                  <Users className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
+                <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-xl bg-blue-50 flex items-center justify-center border border-blue-100 shrink-0">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 </div>
               </div>
               <div className="mt-2 sm:mt-3 flex items-baseline gap-1.5 sm:gap-2 flex-wrap">
                 <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
                   {stats?.users.total ?? users.length}
                 </span>
-                <span className="text-[10px] sm:text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] sm:text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
                   {stats?.users.active ?? 0} Aktif
                 </span>
               </div>
               <p className="text-[10px] sm:text-xs text-slate-400 mt-1.5 truncate">
-                Tersebar di {roles.length} hak akses resmi
+                {roles.length} peran
               </p>
             </div>
 
@@ -724,7 +724,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
                   {stats?.surats.total ?? 0}
                 </span>
-                <span className="text-[10px] sm:text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] sm:text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">
                   {stats?.surats.completed ?? 0} Sah
                 </span>
               </div>
@@ -746,12 +746,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <span className="text-xl sm:text-3xl font-extrabold text-slate-900">
                   100%
                 </span>
-                <span className="text-[10px] sm:text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] sm:text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
                   OPTIMAL
                 </span>
               </div>
               <p className="text-[10px] sm:text-xs text-slate-400 mt-1.5 truncate">
-                Sanctum Token: {stats?.server.active_tokens_count ?? 1} sesi aktif
+                {stats?.server.active_tokens_count ?? 1} sesi aktif
               </p>
             </div>
           </div>
@@ -762,26 +762,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             <div className="lg:col-span-2 bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                  Pintasan Tata Kelola Administrator
+                  Pintasan Admin
                 </h2>
-                <span className="text-xs text-slate-400 hidden sm:inline">Aksi Cepat Tanggap</span>
+                <span className="text-xs text-slate-400 hidden sm:inline">Aksi cepat</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div
                   onClick={() => setShowAddUserModal(true)}
-                  className="p-3.5 sm:p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/30 transition cursor-pointer group"
+                  className="p-3.5 sm:p-4 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/30 transition cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:scale-105 transition-transform shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 group-hover:scale-105 transition-transform shrink-0">
                       <Plus className="w-5 h-5" />
                     </div>
                     <div>
-                      <h3 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-emerald-700 transition">
-                        Tambah Akun Pejabat / Warga
+                      <h3 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-700 transition">
+                        Tambah Akun
                       </h3>
                       <p className="text-[11px] text-slate-500">
-                        Buat akses baru untuk RT, RW, Kades, atau Staf Desa
+                        Buat akun pengguna desa
                       </p>
                     </div>
                   </div>
@@ -797,10 +797,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                     </div>
                     <div>
                       <h3 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-700 transition">
-                        Unduh Snapshot Database
+                        Unduh Backup
                       </h3>
                       <p className="text-[11px] text-slate-500">
-                        Ekspor cadangan JSON seluruh data desa terkini
+                        Simpan cadangan data desa
                       </p>
                     </div>
                   </div>
@@ -862,7 +862,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                         key={r.id}
                         className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-50 border border-slate-200 text-slate-700"
                       >
-                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                         {r.name}: <strong className="text-slate-900">{cnt}</strong>
                       </span>
                     );
@@ -876,11 +876,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
               <div>
                 <div className="flex items-center justify-between mb-3.5">
                   <h2 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                    <Server className="w-4 h-4 text-emerald-600" />
+                    <Server className="w-4 h-4 text-blue-600" />
                     Status Server
                   </h2>
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-800">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
                     ONLINE
                   </span>
                 </div>
@@ -906,19 +906,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   </div>
                   <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
                     <span className="text-slate-500">Protokol Keamanan</span>
-                    <span className="font-semibold text-emerald-700">
+                    <span className="font-semibold text-blue-700">
                       Sanctum Token Auth
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-1.5 border-b border-slate-100">
                     <span className="text-slate-500">Alur Persetujuan</span>
-                    <span className="font-semibold text-emerald-700">
+                    <span className="font-semibold text-blue-700">
                       Direct RT ke Kantor Desa
                     </span>
                   </div>
                   <div className="flex items-center justify-between py-1.5">
                     <span className="text-slate-500">Stempel Sah Digital</span>
-                    <span className="font-semibold text-emerald-700">
+                    <span className="font-semibold text-blue-700">
                       QR Code 
                     </span>
                   </div>
@@ -927,7 +927,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
 
               <div className="pt-3 border-t border-slate-100 mt-3">
                 <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                  <HardDrive className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <HardDrive className="w-4 h-4 text-blue-600 shrink-0" />
                   <span>Kapasitas penyimpanan media privat aman</span>
                 </div>
               </div>
@@ -939,14 +939,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-emerald-600" />
+                  <Clock className="w-4 h-4 text-blue-600" />
                   Rekam Jejak Log Aktivitas Terkini
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
                   Audit trail transaksi sistem dan perubahan hak akses terkini
                 </p>
               </div>
-              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg w-fit">
+              <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg w-fit">
                 Audit Trail Aktif
               </span>
             </div>
@@ -960,7 +960,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 >
                   <div className="flex items-center justify-between gap-2 text-xs">
                     <div className="flex items-center gap-2">
-                      <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-[10px]">
+                      <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center font-bold text-[10px]">
                         {(log.user?.name || 'S').charAt(0)}
                       </span>
                       <span className="font-bold text-slate-900">{log.user?.name || 'Sistem'}</span>
@@ -1056,7 +1056,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             {/* User Breakdown by Role */}
             <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-6 md:col-span-2">
               <h2 className="text-sm sm:text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
-                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-600" />
+                <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 Sebaran Akun Berdasarkan Hak Akses (RBAC)
               </h2>
               <p className="text-xs text-slate-500 mb-4 sm:mb-6">
@@ -1080,7 +1080,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                       </div>
                       <div className="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
                         <div
-                          className="h-full bg-emerald-600 rounded-full transition-all duration-500"
+                          className="h-full bg-blue-600 rounded-full transition-all duration-500"
                           style={{ width: `${percent}%` }}
                         ></div>
                       </div>
@@ -1144,12 +1144,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <p className="text-[10px] text-blue-700/80">pending_kades</p>
               </div>
 
-              <div className="p-3 sm:p-4 rounded-2xl border border-emerald-200 bg-emerald-50/40 space-y-1">
-                <span className="text-[10px] sm:text-xs font-semibold text-emerald-800">Selesai & Sah (QR)</span>
-                <div className="text-lg sm:text-2xl font-black text-emerald-900 font-mono">
+              <div className="p-3 sm:p-4 rounded-2xl border border-blue-200 bg-blue-50/40 space-y-1">
+                <span className="text-[10px] sm:text-xs font-semibold text-blue-800">Selesai & Sah (QR)</span>
+                <div className="text-lg sm:text-2xl font-black text-blue-900 font-mono">
                   {stats?.surats.completed ?? 0}
                 </div>
-                <p className="text-[10px] text-emerald-700/80">completed</p>
+                <p className="text-[10px] text-blue-700/80">completed</p>
               </div>
 
               <div className="p-3 sm:p-4 rounded-2xl border border-rose-200 bg-rose-50/40 space-y-1">
@@ -1180,7 +1180,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   placeholder="Cari nama, username, email, NIK..."
                   value={userSearch}
                   onChange={(e) => setUserSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition"
                 />
               </div>
 
@@ -1190,7 +1190,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   <select
                     value={roleFilter}
                     onChange={(e) => setRoleFilter(e.target.value)}
-                    className="w-full px-3 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:border-emerald-600 transition"
+                    className="w-full px-3 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:border-blue-600 transition"
                   >
                     <option value="all">Semua Peran ({users.length})</option>
                     {roles.map((r) => (
@@ -1203,7 +1203,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full px-3 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:border-emerald-600 transition"
+                    className="w-full px-3 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:border-blue-600 transition"
                   >
                     <option value="all">Semua Status</option>
                     <option value="active">Aktif</option>
@@ -1213,7 +1213,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
 
                 <button
                   onClick={() => setShowAddUserModal(true)}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Tambah Akun Baru</span>
@@ -1270,7 +1270,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                     <div className="flex items-center justify-between text-slate-600 gap-2">
                       <span className="text-[10px] text-slate-400 uppercase font-semibold shrink-0">Wilayah:</span>
                       {item.warga_profile?.rt ? (
-                        <span className="font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 text-[11px]">
+                        <span className="font-semibold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 text-[11px]">
                           RT {item.warga_profile.rt.nomor_rt} / RW {item.warga_profile.rt.rw?.nomor_rw || '01'}
                         </span>
                       ) : (
@@ -1286,14 +1286,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                       disabled={item.id === currentAdmin?.id}
                       className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                         item.is_active
-                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
+                          ? 'bg-blue-50 text-blue-800 border border-blue-200 hover:bg-blue-100'
                           : 'bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100'
                       }`}
                       title={item.is_active ? 'Klik untuk menonaktifkan' : 'Klik untuk mengaktifkan'}
                     >
                       {item.is_active ? (
                         <>
-                          <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
+                          <UserCheck className="w-3.5 h-3.5 text-blue-600" />
                           <span>Status: Aktif</span>
                         </>
                       ) : (
@@ -1382,14 +1382,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                           disabled={item.id === currentAdmin?.id}
                           className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 ${
                             item.is_active
-                              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 hover:bg-emerald-100'
+                              ? 'bg-blue-50 text-blue-800 border border-blue-200 hover:bg-blue-100'
                               : 'bg-rose-50 text-rose-800 border border-rose-200 hover:bg-rose-100'
                           }`}
                           title={item.is_active ? 'Klik untuk menonaktifkan' : 'Klik untuk mengaktifkan'}
                         >
                           {item.is_active ? (
                             <>
-                              <UserCheck className="w-3.5 h-3.5 text-emerald-600" /> Aktif
+                              <UserCheck className="w-3.5 h-3.5 text-blue-600" /> Aktif
                             </>
                           ) : (
                             <>
@@ -1450,7 +1450,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
-                  <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0" />
                   <span>Matriks Hak Akses & Peran Sistem (Dynamic RBAC SiDesKu)</span>
                 </h2>
                 <p className="text-xs text-slate-500">
@@ -1469,7 +1469,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <button
                   type="button"
                   onClick={handleSaveRbac}
-                  className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 cursor-pointer"
                 >
                   <Check className="w-4 h-4" />
                   <span>Simpan Hak Akses</span>
@@ -1478,15 +1478,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             </div>
 
             {rbacSaveAlert && (
-              <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-semibold flex items-center gap-2.5 animate-in fade-in">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+              <div className="p-4 rounded-2xl bg-blue-50 border border-blue-300 text-blue-900 text-xs font-semibold flex items-center gap-2.5 animate-in fade-in">
+                <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
                 <span>{rbacSaveAlert}</span>
               </div>
             )}
 
             {/* Mobile Scroll Hint */}
             <div className="sm:hidden mb-2 px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-[11px] text-slate-600 flex items-center gap-1.5">
-              <ArrowRight className="w-4 h-4 text-emerald-600 inline" />
+              <ArrowRight className="w-4 h-4 text-blue-600 inline" />
               <span>Centang atau batalkan izin pada kolom peran yang diinginkan, lalu klik Simpan.</span>
             </div>
 
@@ -1527,7 +1527,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                                 type="checkbox"
                                 checked={isChecked}
                                 onChange={() => handleToggleRbac(row.key, roleKey)}
-                                className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300 transition cursor-pointer"
+                                className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 transition cursor-pointer"
                               />
                             </label>
                           </td>
@@ -1539,9 +1539,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
               </table>
             </div>
 
-            <div className="mt-4 p-4 rounded-2xl border border-emerald-200 bg-emerald-50/50 flex items-start gap-3">
-              <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-              <div className="text-xs text-emerald-900 leading-relaxed">
+            <div className="mt-4 p-4 rounded-2xl border border-blue-200 bg-blue-50/50 flex items-start gap-3">
+              <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+              <div className="text-xs text-blue-900 leading-relaxed">
                 <strong>Panduan Admin Non-IT:</strong> Anda bebas mengubah hak akses peran di atas dengan mencentang kotak. Setelah disimpan, wewenang akses akan langsung aktif pada saat peran terkait membuka sistem tanpa perlu memodifikasi kode program.
               </div>
             </div>
@@ -1563,7 +1563,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   placeholder="Cari deskripsi, username, IP..."
                   value={logSearch}
                   onChange={(e) => setLogSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition"
                 />
               </div>
 
@@ -1571,7 +1571,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <select
                   value={logActionFilter}
                   onChange={(e) => setLogActionFilter(e.target.value)}
-                  className="flex-1 sm:flex-none px-3 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:border-emerald-600 transition"
+                  className="flex-1 sm:flex-none px-3 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:border-blue-600 transition"
                 >
                   <option value="all">Semua Tipe Aksi</option>
                   <option value="ADMIN_LOGIN">ADMIN_LOGIN</option>
@@ -1733,13 +1733,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   placeholder="Cari nama lengkap, NIK..."
                   value={wargaSearch}
                   onChange={(e) => setWargaSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition"
                 />
               </div>
 
               <div className="flex items-center justify-between sm:justify-end gap-2 text-xs font-semibold text-slate-600 bg-slate-50 sm:bg-transparent p-2 sm:p-0 rounded-xl border border-slate-100 sm:border-0">
                 <span>Total Terdata:</span>
-                <span className="text-emerald-700 font-bold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">{wargaTotal} Warga</span>
+                <span className="text-blue-700 font-bold bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">{wargaTotal} Warga</span>
               </div>
             </div>
           </div>
@@ -1763,9 +1763,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <span className="font-bold text-slate-900 text-sm block truncate">{w.nama_lengkap}</span>
-                      <span className="font-mono text-xs font-semibold text-emerald-800">NIK: {w.nik}</span>
+                      <span className="font-mono text-xs font-semibold text-blue-800">NIK: {w.nik}</span>
                     </div>
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 shrink-0">
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-800 border border-blue-200 shrink-0">
                       {w.status_kependudukan || 'Tetap'}
                     </span>
                   </div>
@@ -1820,7 +1820,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                       <td className="py-3.5 px-4">{w.jenis_kelamin || '-'}</td>
                       <td className="py-3.5 px-4">{w.pekerjaan || '-'}</td>
                       <td className="py-3.5 px-4">
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-800 border border-blue-200">
                           {w.status_kependudukan || 'Tetap'}
                         </span>
                       </td>
@@ -1867,14 +1867,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             </div>
 
             <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-3.5 sm:p-5 space-y-1.5 sm:space-y-2">
-              <div className="flex items-center justify-between text-[11px] sm:text-xs text-emerald-700 font-bold">
+              <div className="flex items-center justify-between text-[11px] sm:text-xs text-blue-700 font-bold">
                 <span>Sah & Selesai</span>
-                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-600" />
+                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
               </div>
-              <div className="text-lg sm:text-2xl font-black text-emerald-950 font-mono">
+              <div className="text-lg sm:text-2xl font-black text-blue-950 font-mono">
                 {surats.filter(s => s.status === 'completed').length} Surat
               </div>
-              <div className="text-[10px] sm:text-[11px] text-emerald-700 font-semibold truncate">
+              <div className="text-[10px] sm:text-[11px] text-blue-700 font-semibold truncate">
                 {surats.length > 0 ? Math.round((surats.filter(s => s.status === 'completed').length / surats.length) * 100) : 0}% Penyelesaian
               </div>
             </div>
@@ -1926,13 +1926,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
               return (
                 <div className="space-y-2">
                   <div className="w-full h-3 rounded-full bg-slate-100 overflow-hidden flex shadow-inner">
-                    <div style={{ width: `${pSah}%` }} className="bg-emerald-600 transition-all duration-500" title={`Sah & Selesai: ${pSah}%`} />
+                    <div style={{ width: `${pSah}%` }} className="bg-blue-600 transition-all duration-500" title={`Sah & Selesai: ${pSah}%`} />
                     <div style={{ width: `${pDesa}%` }} className="bg-blue-500 transition-all duration-500" title={`Kantor Desa: ${pDesa}%`} />
                     <div style={{ width: `${pRt}%` }} className="bg-amber-500 transition-all duration-500" title={`Menunggu RT: ${pRt}%`} />
                     <div style={{ width: `${pTolak}%` }} className="bg-rose-500 transition-all duration-500" title={`Ditolak: ${pTolak}%`} />
                   </div>
                   <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-[11px] sm:text-xs font-semibold text-slate-600 pt-1">
-                    <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-600" /> Sah & Selesai ({pSah}%)</span>
+                    <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-600" /> Sah & Selesai ({pSah}%)</span>
                     <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-blue-500" /> Balai Desa ({pDesa}%)</span>
                     <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Menunggu RT ({pRt}%)</span>
                     <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Ditolak ({pTolak}%)</span>
@@ -1951,14 +1951,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   placeholder="Cari nomor surat, nama pemohon, jenis surat..."
                   value={suratSearch}
                   onChange={(e) => setSuratSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition"
+                  className="w-full pl-10 pr-4 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition"
                 />
               </div>
 
               <select
                 value={suratStatusFilter}
                 onChange={(e) => setSuratStatusFilter(e.target.value)}
-                className="px-3 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:border-emerald-600 transition"
+                className="px-3 py-2.5 sm:py-2 rounded-xl border border-slate-200 text-xs font-medium bg-white text-slate-700 focus:outline-none focus:border-blue-600 transition"
               >
                 <option value="all">Semua Status Persuratan</option>
                 <option value="pending_rt">Menunggu RT (pending_rt)</option>
@@ -1996,7 +1996,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                     </div>
                     <div className="shrink-0">
                       {s.status === 'completed' && (
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
                           Sah & Selesai
                         </span>
                       )}
@@ -2067,7 +2067,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                       </td>
                       <td className="py-3.5 px-4">
                         {s.status === 'completed' && (
-                          <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                          <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200">
                             Sah & Selesai
                           </span>
                         )}
@@ -2120,7 +2120,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
         <div className="space-y-4 sm:space-y-6">
           <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 shrink-0">
                 <DollarSign className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
               <div>
@@ -2134,12 +2134,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 my-4 sm:my-6">
-              <div className="p-3.5 sm:p-4 rounded-xl border border-emerald-200 bg-emerald-50/40">
-                <span className="text-xs font-semibold text-emerald-800">Total Pendapatan Desa</span>
-                <div className="mt-1 sm:mt-2 text-xl sm:text-2xl font-bold text-emerald-900">
+              <div className="p-3.5 sm:p-4 rounded-xl border border-blue-200 bg-blue-50/40">
+                <span className="text-xs font-semibold text-blue-800">Total Pendapatan Desa</span>
+                <div className="mt-1 sm:mt-2 text-xl sm:text-2xl font-bold text-blue-900">
                   Rp {(apbdesData?.summary?.pendapatan?.realisasi || 675000000).toLocaleString('id-ID')}
                 </div>
-                <p className="text-[11px] sm:text-xs text-emerald-700/80 mt-1">
+                <p className="text-[11px] sm:text-xs text-blue-700/80 mt-1">
                   Anggaran: Rp {(apbdesData?.summary?.pendapatan?.anggaran || 1110000000).toLocaleString('id-ID')}
                 </p>
               </div>
@@ -2165,7 +2165,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
 
             <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-500 gap-2">
               <span>Pengelolaan teknis pembukuan harian dijalankan oleh Kaur Keuangan / Bendahara Desa.</span>
-              <span className="font-semibold text-emerald-700">Tersinkronisasi dengan Portal APBDes</span>
+              <span className="font-semibold text-blue-700">Tersinkronisasi dengan Portal APBDes</span>
             </div>
           </div>
         </div>
@@ -2211,7 +2211,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
               </div>
               <div className="p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-slate-50/50">
                 <span className="text-[11px] sm:text-xs text-slate-500 block">Status Integritas Data</span>
-                <span className="text-xs sm:text-sm font-bold text-emerald-700 mt-1 block">Tersinkronisasi 100%</span>
+                <span className="text-xs sm:text-sm font-bold text-blue-700 mt-1 block">Tersinkronisasi 100%</span>
               </div>
             </div>
           </div>
@@ -2222,7 +2222,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             <div className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 shadow-xs p-4 sm:p-6 flex flex-col justify-between space-y-5">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 border-b border-slate-100 pb-3">
-                  <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shrink-0 border border-emerald-100">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold shrink-0 border border-blue-100">
                     <Download className="w-5 h-5" />
                   </div>
                   <div>
@@ -2241,8 +2241,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   </ul>
                 </div>
 
-                <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-100 text-xs text-emerald-900 flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="p-3 rounded-xl bg-blue-50/70 border border-blue-100 text-xs text-blue-900 flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                   <span>Snapshot dibuat secara langsung (real-time) dari basis data aktif tanpa mengganggu operasional sistem.</span>
                 </div>
               </div>
@@ -2251,7 +2251,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <button
                   type="button"
                   onClick={handleDownloadBackup}
-                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-xs sm:text-sm transition shadow-xs cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs sm:text-sm transition shadow-xs cursor-pointer"
                 >
                   <Download className="w-4 h-4" />
                   <span>Unduh Backup Basis Data (.json)</span>
@@ -2374,7 +2374,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             {/* Security Posture Check */}
             <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xs p-4 sm:p-6">
               <h2 className="text-sm sm:text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
-                <Lock className="w-5 h-5 text-emerald-600" />
+                <Lock className="w-5 h-5 text-blue-600" />
                 <span>Parameter Keamanan & Kriptografi</span>
               </h2>
               <p className="text-xs text-slate-500 mb-4 sm:mb-6">
@@ -2382,36 +2382,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
               </p>
 
               <div className="space-y-2.5 sm:space-y-3.5 text-xs">
-                <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50/60 border border-emerald-200">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/60 border border-blue-200">
                   <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-emerald-950">Autentikasi Token Kriptografis</span>
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="font-semibold text-blue-950">Autentikasi Token Kriptografis</span>
                   </div>
-                  <span className="font-bold text-emerald-800 text-[11px] sm:text-xs">Sanctum Active</span>
+                  <span className="font-bold text-blue-800 text-[11px] sm:text-xs">Sanctum Active</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50/60 border border-emerald-200">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/60 border border-blue-200">
                   <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-emerald-950">Algoritma Hashing Kata Sandi</span>
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="font-semibold text-blue-950">Algoritma Hashing Kata Sandi</span>
                   </div>
-                  <span className="font-bold text-emerald-800 text-[11px] sm:text-xs">bcrypt (Cost: 12)</span>
+                  <span className="font-bold text-blue-800 text-[11px] sm:text-xs">bcrypt (Cost: 12)</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50/60 border border-emerald-200">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/60 border border-blue-200">
                   <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-emerald-950">Integritas Dokumen Sah</span>
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="font-semibold text-blue-950">Integritas Dokumen Sah</span>
                   </div>
-                  <span className="font-bold text-emerald-800 text-[11px] sm:text-xs">SHA-256 QR</span>
+                  <span className="font-bold text-blue-800 text-[11px] sm:text-xs">SHA-256 QR</span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-50/60 border border-emerald-200">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/60 border border-blue-200">
                   <div className="flex items-center gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span className="font-semibold text-emerald-950">Perlindungan Berkas Privat</span>
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="font-semibold text-blue-950">Perlindungan Berkas Privat</span>
                   </div>
-                  <span className="font-bold text-emerald-800 text-[11px] sm:text-xs">UU PDP Strict</span>
+                  <span className="font-bold text-blue-800 text-[11px] sm:text-xs">UU PDP Strict</span>
                 </div>
               </div>
             </div>
@@ -2430,7 +2430,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <div className="p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-slate-50 mb-4">
                   <div className="flex items-center justify-between text-xs font-semibold text-slate-700">
                     <span>Sesi Token Aktif Sistem:</span>
-                    <span className="text-emerald-700 font-bold font-mono">
+                    <span className="text-blue-700 font-bold font-mono">
                       {stats?.server.active_tokens_count ?? 1} Token Terverifikasi
                     </span>
                   </div>
@@ -2471,7 +2471,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             </button>
 
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-700 shrink-0">
+              <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700 shrink-0">
                 <Plus className="w-5 h-5" />
               </div>
               <div>
@@ -2491,7 +2491,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   placeholder="Contoh: Budi Santoso, S.Sos."
                   value={newUserForm.name}
                   onChange={(e) => setNewUserForm({ ...newUserForm, name: e.target.value })}
-                  className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                  className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
                 />
               </div>
 
@@ -2506,7 +2506,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                     placeholder="Contoh: rt01_doko"
                     value={newUserForm.username}
                     onChange={(e) => setNewUserForm({ ...newUserForm, username: e.target.value.toLowerCase().replace(/\s/g, '') })}
-                    className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
                   />
                 </div>
 
@@ -2518,7 +2518,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                     required
                     value={newUserForm.role_id}
                     onChange={(e) => setNewUserForm({ ...newUserForm, role_id: e.target.value })}
-                    className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition bg-white"
+                    className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition bg-white"
                   >
                     <option value="">Pilih Peran...</option>
                     {roles
@@ -2546,7 +2546,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                     placeholder="nama@sidesku.desa.id"
                     value={newUserForm.email}
                     onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })}
-                    className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
                   />
                 </div>
 
@@ -2557,7 +2557,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                     placeholder="0812xxxxxxxx"
                     value={newUserForm.phone_number}
                     onChange={(e) => setNewUserForm({ ...newUserForm, phone_number: e.target.value })}
-                    className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition"
+                    className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
                   />
                 </div>
               </div>
@@ -2573,7 +2573,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                     placeholder="Minimal 6 karakter"
                     value={newUserForm.password}
                     onChange={(e) => setNewUserForm({ ...newUserForm, password: e.target.value })}
-                    className="flex-1 px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 transition font-mono"
+                    className="flex-1 px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition font-mono"
                   />
                   <button
                     type="button"
@@ -2599,7 +2599,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 sm:py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-xs disabled:opacity-60 cursor-pointer"
+                  className="px-5 py-2.5 sm:py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold transition shadow-xs disabled:opacity-60 cursor-pointer"
                 >
                   {isSubmitting ? 'Menyimpan...' : 'Simpan Akun'}
                 </button>

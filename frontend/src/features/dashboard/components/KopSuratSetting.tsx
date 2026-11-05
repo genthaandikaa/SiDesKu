@@ -77,7 +77,7 @@ export const KopSuratSetting: React.FC = () => {
           </p>
         </div>
         {savedSuccess && (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold animate-fade-in">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold animate-fade-in">
             <Check className="w-4 h-4" /> Tersimpan & Aktif pada Seluruh Surat
           </span>
         )}
@@ -87,7 +87,7 @@ export const KopSuratSetting: React.FC = () => {
       <div className="bg-white rounded-2xl border border-[#d8e3dc] p-6 sm:p-8 shadow-sm space-y-4">
         <div className="flex items-center justify-between text-xs font-bold text-gray-400 uppercase tracking-wider pb-2 border-b border-gray-100">
           <span>Live Document Header Preview</span>
-          <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-mono">Format Baku</span>
+          <span className="text-blue-700 bg-blue-50 px-2 py-0.5 rounded font-mono">Format Baku</span>
         </div>
 
         {/* The Letterhead Frame */}
@@ -133,9 +133,9 @@ export const KopSuratSetting: React.FC = () => {
       {/* Editor Form matching Reference Screenshot */}
       <form onSubmit={handleSave} className="bg-white rounded-2xl border border-[#d8e3dc] p-6 sm:p-8 shadow-sm space-y-6">
         {/* Logo Configuration Strip */}
-        <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3.5">
-            <div className="w-14 h-14 bg-white p-1.5 rounded-xl border border-emerald-300 shadow-2xs flex items-center justify-center shrink-0">
+            <div className="w-14 h-14 bg-white p-1.5 rounded-xl border border-blue-300 shadow-2xs flex items-center justify-center shrink-0">
               <img 
                 src={logoUrl || '/images/logo-kediri.png'} 
                 alt="Logo Preview" 
@@ -143,7 +143,7 @@ export const KopSuratSetting: React.FC = () => {
               />
             </div>
             <div>
-              <div className="text-xs font-black text-emerald-900">Logo Lambang Resmi Kop Surat</div>
+              <div className="text-xs font-black text-blue-900">Logo Lambang Resmi Kop Surat</div>
               <div className="text-[11px] text-slate-500 mt-0.5">
                 Format resmi: Lambang Daerah Kabupaten Kediri (PNG Transparan / High-Res)
               </div>
@@ -151,7 +151,7 @@ export const KopSuratSetting: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <label className="cursor-pointer px-3.5 py-2 rounded-xl bg-white border border-emerald-300 hover:bg-emerald-50 text-emerald-800 text-xs font-bold shadow-2xs transition-colors flex items-center gap-1.5">
+            <label className="cursor-pointer px-3.5 py-2 rounded-xl bg-white border border-blue-300 hover:bg-blue-50 text-blue-800 text-xs font-bold shadow-2xs transition-colors flex items-center gap-1.5">
               <ImageIcon className="w-3.5 h-3.5" />
               <span>Ganti Logo</span>
               <input 
@@ -183,7 +183,7 @@ export const KopSuratSetting: React.FC = () => {
               placeholder="Masukkan kop atas (cth: PEMERINTAH KABUPATEN KEDIRI)"
               value={formData.kop_atas || ''}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
 
@@ -198,7 +198,7 @@ export const KopSuratSetting: React.FC = () => {
               placeholder="Masukkan kop tengah (cth: KECAMATAN NGASEM)"
               value={formData.kop_tengah || ''}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
 
@@ -213,7 +213,7 @@ export const KopSuratSetting: React.FC = () => {
               placeholder="Masukkan kop bawah (cth: KANTOR KEPALA DESA DOKO)"
               value={formData.kop_bawah || ''}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
 
@@ -228,7 +228,7 @@ export const KopSuratSetting: React.FC = () => {
               placeholder="Masukkan footer alamat & kontak desa"
               value={formData.kop_footer || ''}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
         </div>
@@ -243,7 +243,7 @@ export const KopSuratSetting: React.FC = () => {
               name="nama_kades"
               value={formData.nama_kades || ''}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
 
@@ -256,7 +256,7 @@ export const KopSuratSetting: React.FC = () => {
               name="nama_sekdes"
               value={formData.nama_sekdes || ''}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             />
           </div>
         </div>
@@ -264,7 +264,7 @@ export const KopSuratSetting: React.FC = () => {
         {/* Visi & Misi Desa Dinamis */}
         <div className="pt-4 border-t border-gray-100 space-y-4">
           <div className="flex items-center gap-2">
-            <Target className="w-5 h-5 text-emerald-600" />
+            <Target className="w-5 h-5 text-blue-600" />
             <div>
               <h3 className="text-sm font-bold text-gray-900">Visi & Misi Pembangunan Desa (RPJMDes)</h3>
               <p className="text-xs text-gray-500">Tampil otomatis pada portal profil desa dan transparansi publik</p>
@@ -280,7 +280,7 @@ export const KopSuratSetting: React.FC = () => {
               placeholder="Masukkan visi pembangunan desa..."
               value={formData.visi || ''}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm leading-relaxed"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm leading-relaxed"
             />
           </div>
           <div>
@@ -293,7 +293,7 @@ export const KopSuratSetting: React.FC = () => {
               placeholder="Masukkan butir-butir misi pembangunan desa..."
               value={formData.misi || ''}
               onChange={handleChange}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm leading-relaxed font-mono"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm leading-relaxed font-mono"
             />
           </div>
         </div>
@@ -302,7 +302,7 @@ export const KopSuratSetting: React.FC = () => {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition-all flex items-center gap-2 disabled:opacity-50"
+            className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-sm transition-all flex items-center gap-2 disabled:opacity-50"
           >
             <Save className="w-4 h-4" />
             {loading ? 'Menyimpan...' : 'Simpan Perubahan'}

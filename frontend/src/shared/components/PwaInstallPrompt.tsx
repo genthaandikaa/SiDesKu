@@ -77,15 +77,15 @@ export const PwaInstallPrompt: React.FC = () => {
 
       {/* PWA Floating Install Prompt */}
       {showPrompt && !isInstalled && (
-        <div className="fixed bottom-20 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-40 max-w-sm bg-white border border-emerald-100 rounded-2xl shadow-2xl p-4 transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
+        <div className="fixed bottom-20 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 z-40 max-w-sm bg-white border border-blue-100 rounded-2xl shadow-2xl p-4 transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shrink-0 shadow-md text-white">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shrink-0 shadow-md text-white">
               <Smartphone className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                 Pasang SiDesKu di HP
-                <span className="px-1.5 py-0.5 text-[9px] bg-emerald-100 text-emerald-800 rounded font-semibold">PWA</span>
+                <span className="px-1.5 py-0.5 text-[9px] bg-blue-100 text-blue-800 rounded font-semibold">PWA</span>
               </h4>
               <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
                 Pasang aplikasi di layar beranda untuk akses cepat, notifikasi instan, dan hemat kuota.
@@ -93,7 +93,7 @@ export const PwaInstallPrompt: React.FC = () => {
               <div className="mt-3 flex items-center gap-2">
                 <button
                   onClick={handleInstallClick}
-                  className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
                   Pasang Aplikasi

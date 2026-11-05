@@ -456,7 +456,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
       icon: 'landmark',
       lat: -7.81792,
       lng: 112.04255,
-      bg: 'bg-emerald-50 border-emerald-200 text-emerald-800',
+      bg: 'bg-blue-50 border-blue-200 text-blue-800',
       desc: 'Pusat musyawarah warga RW 01, mediasi lingkungan, dan layanan administrasi terpadu tingkat RW.'
     },
     {
@@ -505,7 +505,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1.5 rounded-2xl bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-200 shadow-2xs">
+            <span className="px-3 py-1.5 rounded-2xl bg-blue-50 text-blue-800 font-extrabold text-xs border border-blue-200 shadow-2xs">
               {completedSurats.length} Selesai
             </span>
           </div>
@@ -529,7 +529,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3.5 py-1.5 rounded-2xl bg-emerald-100 text-emerald-900 font-black text-xs border border-emerald-300">
+            <span className="px-3.5 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-black text-xs border border-blue-300">
               {completedSurats.length} Surat selesai
             </span>
           </div>
@@ -553,7 +553,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1.5 rounded-2xl bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-200">
+            <span className="px-3 py-1.5 rounded-2xl bg-blue-50 text-blue-800 font-extrabold text-xs border border-blue-200">
               6 RT
             </span>
           </div>
@@ -577,7 +577,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1.5 rounded-2xl bg-emerald-100 text-emerald-900 font-black text-xs border border-emerald-300">
+            <span className="px-3 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-black text-xs border border-blue-300">
               {wargas.length} Jiwa
             </span>
           </div>
@@ -601,7 +601,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3 py-1.5 rounded-2xl bg-emerald-100 text-emerald-900 font-black text-xs border border-emerald-300">
+            <span className="px-3 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-black text-xs border border-blue-300">
               {effectiveKkList.length} KK
             </span>
           </div>
@@ -620,8 +620,8 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span className="text-[11px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md">
                 Geospasial Koordinasi RW
               </span>
             </div>
@@ -631,7 +631,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="px-3.5 py-1.5 rounded-2xl bg-emerald-50 text-emerald-800 font-extrabold text-xs border border-emerald-200 shadow-2xs">
+            <span className="px-3.5 py-1.5 rounded-2xl bg-blue-50 text-blue-800 font-extrabold text-xs border border-blue-200 shadow-2xs">
               Dusun Doko Krajan (RW 01)
             </span>
             <span className="px-3.5 py-1.5 rounded-2xl bg-slate-900 text-white font-extrabold text-xs shadow-2xs">
@@ -661,7 +661,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
       <div className="space-y-6 page-enter font-sans">
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
+            <span className="text-[11px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md">
               Akuntabilitas Finansial Wilayah
             </span>
             <h2 className="text-xl font-black text-slate-900 mt-1">Pembukuan Kas & Iuran RW 01</h2>
@@ -672,7 +672,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
           <button
             type="button"
             onClick={() => setShowKasModal(true)}
-            className="px-4 py-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs shadow-xs transition-all flex items-center gap-2 cursor-pointer press-down"
+            className="px-4 py-2.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs shadow-xs transition-all flex items-center gap-2 cursor-pointer press-down"
           >
             <Plus className="w-4 h-4" />
             <span>Catat Mutasi Kas RW</span>
@@ -691,7 +691,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
       <div className="space-y-6 page-enter font-sans">
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-md">
+            <span className="text-[11px] font-black uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md">
               Demografi & Kependudukan
             </span>
             <h2 className="text-xl font-black text-slate-900 mt-1">Rekap Statistik Wilayah RW 01</h2>
@@ -716,21 +716,21 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
       {/* 4 Metric Stat Cards (2x2 Grid di Mobile, 4-Col di Desktop) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         <MetricStatCard
-          title="Monitoring Layanan Surat"
+          title="Surat"
           value={`${surats.length} Surat`}
-          subvalue="Direct RT ke Desa"
+          subvalue="Alur langsung"
           percentage={100}
-          color="emerald"
-          trend="Bypass RW Sesuai SOP"
+          color="blue"
+          trend="Sesuai alur"
           isPositiveTrend={true}
         />
         <MetricStatCard
-          title="RT Terkoordinasi"
+          title="RT Aktif"
           value={`${rtsData.length || 2} RT Aktif`}
-          subvalue="Wilayah RW 01"
+          subvalue="RW 01"
           percentage={100}
-          color="emerald"
-          trend="RT 01 & RT 02 Sinkron"
+          color="blue"
+          trend="Terkoordinasi"
           isPositiveTrend={true}
         />
         <MetricStatCard
@@ -738,8 +738,8 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
           value={`${wargas.length || 980} Jiwa`}
           subvalue={`${effectiveKkList.length || 320} KK`}
           percentage={96}
-          color="teal"
-          trend="Buku Induk Sah"
+          color="indigo"
+          trend="Data terverifikasi"
           isPositiveTrend={true}
         />
         <MetricStatCard
@@ -748,7 +748,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
           subvalue="Balai Desa"
           percentage={100}
           color="sky"
-          trend="100% Sah Ber-QR"
+          trend="Sah & ber-QR"
           isPositiveTrend={true}
         />
       </div>
@@ -759,8 +759,8 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         <div className="xl:col-span-8 space-y-5">
           <div className="hidden lg:block space-y-5">
             <AreaSplineChart
-              title="Efisiensi Verifikasi & Pelayanan RW 01"
-              subtitle="Volume Pengantar RT Masuk & Diteruskan ke Kantor Desa"
+              title="Verifikasi Surat RW"
+              subtitle="Pengantar RT ke desa"
               data={[
                 { label: 'Jan', value: 20, secondaryValue: 20, tooltipText: 'Pengantar Sah' },
                 { label: 'Feb', value: 32, secondaryValue: 30, tooltipText: 'Pengantar Sah' },
@@ -772,7 +772,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                 { label: 'Agu', value: Math.max(72, surats.length * 4), secondaryValue: completedSurats.length, tooltipText: 'Pengantar Sah' },
               ]}
               highlightValue="99.5%"
-              highlightLabel="Kecepatan Koordinasi RT-RW"
+              highlightLabel="Koordinasi RT-RW"
               trendText="+14.2% vs bulan lalu"
             />
           </div>
@@ -781,8 +781,8 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="hidden lg:block">
               <BarActivityChart
-                title="Aktivitas Disposisi Mingguan"
-                subtitle="Tingkat Responsif Pelayanan RW 01"
+                title="Aktivitas Disposisi"
+                subtitle="Minggu ini"
                 data={[
                   { label: 'Sen', value: 18 },
                   { label: 'Sel', value: 28 },
@@ -793,25 +793,24 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   { label: 'Min', value: 8 },
                 ]}
                 mainValue="42 Jam"
-                mainLabel="Waktu Disposisi Aktif Minggu Ini"
+                mainLabel="Waktu disposisi"
               />
             </div>
 
             {/* Quick Action Box */}
             <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4 flex flex-col justify-between">
               <div>
-                <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
-                  Aksi Koordinasi Wilayah
+                <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
+                  Pintasan
                 </span>
-                <h4 className="text-sm font-black text-slate-900 mt-1">Pintasan Ketua RW 01</h4>
-                <p className="text-xs text-slate-500 mt-0.5">Tindakan cepat administrasi dan pemantauan wilayah.</p>
+                <h4 className="text-sm font-black text-slate-900 mt-1">Aksi RW 01</h4>
               </div>
 
               <div className="space-y-2">
                 <button
                   type="button"
                   onClick={handlePintasanKas}
-                  className="w-full p-2.5 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs shadow-xs transition-all active:scale-[0.98] select-none flex items-center justify-between cursor-pointer"
+                  className="w-full p-2.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs shadow-xs transition-all active:scale-[0.98] select-none flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
                     <Plus className="w-4 h-4" />
@@ -828,10 +827,10 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   className="w-full p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 active:scale-[0.98] select-none border border-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    <CheckCircle2 className="w-4 h-4 text-blue-600" />
                     <span>Monitoring Surat ({surats.length})</span>
                   </span>
-                  <span className="text-emerald-700 font-extrabold text-[11px]">
+                  <span className="text-blue-700 font-extrabold text-[11px]">
                     Direct RT-Desa
                   </span>
                 </button>
@@ -842,7 +841,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   className="w-full p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 active:scale-[0.98] select-none border border-slate-200 text-slate-700 text-xs font-bold transition-all flex items-center justify-between cursor-pointer"
                 >
                   <span className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-teal-600" />
+                    <Users className="w-4 h-4 text-indigo-600" />
                     <span>Buku Induk Kependudukan RW</span>
                   </span>
                   <span className="text-slate-500 text-[11px] font-mono">
@@ -859,10 +858,10 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
           {/* Ketua RW Profile Card */}
           <div className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase text-emerald-700 tracking-wider bg-emerald-50 px-2 py-0.5 rounded-md">
+              <span className="text-[10px] font-black uppercase text-blue-700 tracking-wider bg-blue-50 px-2 py-0.5 rounded-md">
                 Profil Pimpinan Wilayah
               </span>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800 border border-emerald-200">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-800 border border-blue-200">
                 ● Aktif Menjabat
               </span>
             </div>
@@ -871,14 +870,14 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               <UserAvatar
                 src={user?.avatar}
                 name={user?.name}
-                className="w-14 h-14 rounded-2xl object-cover border-2 border-emerald-400 shadow-xs shrink-0"
-                fallbackClassName="w-14 h-14 rounded-2xl bg-emerald-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
+                className="w-14 h-14 rounded-2xl object-cover border-2 border-blue-400 shadow-xs shrink-0"
+                fallbackClassName="w-14 h-14 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0"
               />
               <div className="min-w-0 flex-1">
                 <h4 className="text-sm font-black text-slate-900 leading-snug break-words">
                   {user?.name || 'Suryanto (Ketua RW 01)'}
                 </h4>
-                <div className="text-[11px] text-emerald-700 font-extrabold mt-0.5">
+                <div className="text-[11px] text-blue-700 font-extrabold mt-0.5">
                   Ketua Rukun Warga (RW 01)
                 </div>
                 <div className="text-[10px] font-mono text-slate-400 truncate">
@@ -894,7 +893,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               </div>
               <div className="flex justify-between items-center text-[11px]">
                 <span className="text-slate-400 font-bold">Otoritas Validasi:</span>
-                <span className="text-emerald-700 font-black">Level 2 (Tembusan / Verifikasi RW)</span>
+                <span className="text-blue-700 font-black">Level 2 (Tembusan / Verifikasi RW)</span>
               </div>
               <div className="flex justify-between items-center text-[11px]">
                 <span className="text-slate-400 font-bold">Terusan Resmi:</span>
@@ -918,7 +917,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               onClick={() => setActiveTab('rt')}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'rt'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'bg-slate-100/90 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -931,7 +930,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               onClick={() => setActiveTab('warga')}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'warga'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'bg-slate-100/90 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -944,7 +943,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               onClick={() => setActiveTab('surat')}
               className={`px-3.5 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                 activeTab === 'surat'
-                  ? 'bg-emerald-700 text-white shadow-xs'
+                  ? 'bg-blue-700 text-white shadow-xs'
                   : 'bg-slate-100/90 text-slate-600 hover:bg-slate-200'
               }`}
             >
@@ -958,7 +957,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                 onClick={() => setActiveTab('kas')}
                 className={`px-3.5 py-2 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
                   activeTab === 'kas'
-                    ? 'bg-emerald-700 text-white shadow-xs'
+                    ? 'bg-blue-700 text-white shadow-xs'
                     : 'bg-slate-100/90 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -974,7 +973,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             <select
               value={selectedRtFilter}
               onChange={(e) => setSelectedRtFilter(e.target.value)}
-              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-500"
             >
               <option value="all">Semua RT (RW 01)</option>
               <option value="01">RT 01 Krajan Timur</option>
@@ -1042,8 +1041,8 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   onClick={() => setSelectedStatusFilter('completed')}
                   className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     selectedStatusFilter === 'completed'
-                      ? 'bg-emerald-700 text-white shadow-xs'
-                      : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                      ? 'bg-blue-700 text-white shadow-xs'
+                      : 'bg-blue-50 text-blue-800 hover:bg-blue-100'
                   }`}
                 >
                   Selesai & Sah ({completedSurats.length})
@@ -1071,7 +1070,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Cari pemohon, NIK, jenis surat..."
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-emerald-500"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-blue-500"
             />
           </div>
         </div>
@@ -1091,7 +1090,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                     s.status === 'pending_rt' ? 'bg-amber-100 text-amber-900 border border-amber-200' :
                     s.status === 'processed_sekdes' ? 'bg-indigo-100 text-indigo-900 border border-indigo-200' :
                     s.status === 'pending_kades' ? 'bg-purple-100 text-purple-900 border border-purple-200' :
-                    s.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
+                    s.status === 'completed' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
                     s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
                     'bg-slate-100 text-slate-800'
                   }`}>
@@ -1107,7 +1106,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   <div className="text-[11px] text-slate-400 font-mono mt-0.5">NIK: {s.warga_profile?.nik} • RT {s.warga_profile?.rt?.nomor_rt || '01'}</div>
                 </div>
                 <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100 text-xs">
-                  <div className="font-bold text-emerald-900">{s.surat_type?.nama_surat}</div>
+                  <div className="font-bold text-blue-900">{s.surat_type?.nama_surat}</div>
                   <div className="text-slate-600 text-[11px] mt-0.5">{s.keperluan}</div>
                 </div>
                 <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
@@ -1116,7 +1115,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                     onClick={() => setPreviewSurat(s)}
                     className="w-full py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                    <Eye className="w-3.5 h-3.5 text-blue-600" />
                     <span>Lihat Detail & Tracking Progres</span>
                   </button>
                 </div>
@@ -1160,11 +1159,11 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                       <div className="text-[10px] text-slate-400 font-mono mt-0.5 flex items-center gap-1.5">
                         <span>NIK: {s.warga_profile?.nik}</span>
                         <span>•</span>
-                        <span className="font-bold text-emerald-700">RT {s.warga_profile?.rt?.nomor_rt || '01'}</span>
+                        <span className="font-bold text-blue-700">RT {s.warga_profile?.rt?.nomor_rt || '01'}</span>
                       </div>
                     </td>
                     <td className="py-3 px-3.5">
-                      <div className="font-bold text-emerald-900 text-xs leading-snug max-w-[170px] line-clamp-2">
+                      <div className="font-bold text-blue-900 text-xs leading-snug max-w-[170px] line-clamp-2">
                         {s.surat_type?.nama_surat}
                       </div>
                     </td>
@@ -1176,7 +1175,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                         s.status === 'pending_rt' ? 'bg-amber-100 text-amber-900 border border-amber-200' :
                         s.status === 'processed_sekdes' ? 'bg-indigo-100 text-indigo-900 border border-indigo-200' :
                         s.status === 'pending_kades' ? 'bg-purple-100 text-purple-900 border border-purple-200' :
-                        s.status === 'completed' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' :
+                        s.status === 'completed' ? 'bg-blue-100 text-blue-800 border border-blue-200' :
                         s.status === 'rejected' ? 'bg-rose-100 text-rose-800 border border-rose-200' :
                         'bg-slate-100 text-slate-800'
                       }`}>
@@ -1195,12 +1194,12 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                           className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors press-down flex items-center gap-1 cursor-pointer shadow-2xs"
                           title="Lihat Detail & Tracking Progres Surat"
                         >
-                          <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                          <Eye className="w-3.5 h-3.5 text-blue-600" />
                           <span>Detail</span>
                         </button>
 
                         {s.status === 'completed' ? (
-                          <span className="text-emerald-700 font-bold text-xs bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200 whitespace-nowrap">
+                          <span className="text-blue-700 font-bold text-xs bg-blue-50 px-2.5 py-1 rounded-xl border border-blue-200 whitespace-nowrap">
                             Sah
                           </span>
                         ) : s.status === 'rejected' ? (
@@ -1293,13 +1292,13 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {listRt.map((rt) => (
-          <div key={rt.nomor_rt} className="p-5 rounded-3xl bg-slate-50/70 border border-slate-200/90 hover:border-emerald-300 transition-all shadow-2xs space-y-3.5 flex flex-col justify-between">
+          <div key={rt.nomor_rt} className="p-5 rounded-3xl bg-slate-50/70 border border-slate-200/90 hover:border-blue-300 transition-all shadow-2xs space-y-3.5 flex flex-col justify-between">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded-xl bg-emerald-700 text-white font-black text-xs shadow-2xs">
+                <span className="px-3 py-1 rounded-xl bg-blue-700 text-white font-black text-xs shadow-2xs">
                   RT {rt.nomor_rt}
                 </span>
-                <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                <span className="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
                   ● {rt.status}
                 </span>
               </div>
@@ -1326,7 +1325,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                 href={`https://wa.me/${rt.telp.replace(/[^0-9]/g, '')}`} 
                 target="_blank" 
                 rel="noreferrer"
-                className="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 shrink-0"
+                className="font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1 shrink-0"
               >
                 <Phone className="w-3 h-3" />
                 <span>Kontak</span>
@@ -1336,9 +1335,9 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             <button
               type="button"
               onClick={() => setSelectedRtDetail(rt)}
-              className="w-full mt-2 py-2 px-3 rounded-xl bg-slate-900 hover:bg-emerald-700 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs press-down"
+              className="w-full mt-2 py-2 px-3 rounded-xl bg-slate-900 hover:bg-blue-700 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-xs press-down"
             >
-              <Eye className="w-3.5 h-3.5 text-emerald-400" />
+              <Eye className="w-3.5 h-3.5 text-blue-400" />
               <span>Data Warga RT</span>
             </button>
           </div>
@@ -1369,9 +1368,9 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             <span className="text-[10px] font-bold text-rose-700 uppercase block">Perempuan</span>
             <span className="text-base sm:text-lg font-black text-rose-900">{countP} Jiwa</span>
           </div>
-          <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80">
-            <span className="text-[10px] font-bold text-emerald-700 uppercase block">Kepala Keluarga</span>
-            <span className="text-base sm:text-lg font-black text-emerald-900">{countKK} KK</span>
+          <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/80">
+            <span className="text-[10px] font-bold text-blue-700 uppercase block">Kepala Keluarga</span>
+            <span className="text-base sm:text-lg font-black text-blue-900">{countKK} KK</span>
           </div>
         </div>
 
@@ -1383,7 +1382,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               <select
                 value={selectedRtFilter}
                 onChange={(e) => setSelectedRtFilter(e.target.value)}
-                className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-500"
+                className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-blue-500"
               >
                 <option value="all">Semua RT di RW 01</option>
                 <option value="01">RT 01 Krajan Timur</option>
@@ -1400,7 +1399,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               <select
                 value={wargaGenderFilter}
                 onChange={(e) => setWargaGenderFilter(e.target.value as any)}
-                className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-emerald-500"
+                className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 focus:bg-white focus:outline-none focus:border-blue-500"
               >
                 <option value="all">Semua Gender</option>
                 <option value="L">Laki-laki</option>
@@ -1416,7 +1415,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               value={wargaSearch}
               onChange={(e) => setWargaSearch(e.target.value)}
               placeholder="Cari NIK, nama warga, pekerjaan..."
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-emerald-500"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-blue-500"
             />
           </div>
         </div>
@@ -1444,7 +1443,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="p-2 bg-slate-50 rounded-xl">
                     <span className="text-[10px] text-slate-400 block font-semibold">Wilayah</span>
-                    <span className="font-bold text-emerald-800">RT {w.rt?.nomor_rt || '01'} / RW 01</span>
+                    <span className="font-bold text-blue-800">RT {w.rt?.nomor_rt || '01'} / RW 01</span>
                   </div>
                   <div className="p-2 bg-slate-50 rounded-xl">
                     <span className="text-[10px] text-slate-400 block font-semibold">Pekerjaan</span>
@@ -1456,7 +1455,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   <button
                     type="button"
                     onClick={() => setSelectedWargaDetail(w)}
-                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-800 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
                   >
                     Detail Profil
                   </button>
@@ -1494,7 +1493,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                       <div className="text-[10px] text-slate-400 font-mono mt-0.5">NIK: {w.nik}</div>
                     </td>
                     <td className="py-3 px-3.5">
-                      <span className="font-bold text-emerald-800">
+                      <span className="font-bold text-blue-800">
                         RT {w.rt?.nomor_rt || '01'} / RW 01
                       </span>
                     </td>
@@ -1515,7 +1514,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                       <button
                         type="button"
                         onClick={() => setSelectedWargaDetail(w)}
-                        className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                        className="px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-800 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
                       >
                         Detail Profil
                       </button>
@@ -1552,7 +1551,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               value={kkSearch}
               onChange={(e) => setKkSearch(e.target.value)}
               placeholder="Cari No KK, kepala keluarga..."
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-emerald-500"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:outline-none focus:border-blue-500"
             />
           </div>
         </div>
@@ -1560,13 +1559,13 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         {/* KK Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {paginatedKk.map((kk) => (
-            <div key={kk.id} className="p-5 rounded-3xl bg-slate-50/70 border border-slate-200/90 hover:border-emerald-300 transition-all shadow-2xs space-y-3.5 flex flex-col justify-between">
+            <div key={kk.id} className="p-5 rounded-3xl bg-slate-50/70 border border-slate-200/90 hover:border-blue-300 transition-all shadow-2xs space-y-3.5 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-mono font-bold text-xs text-slate-900 bg-white px-2.5 py-1 rounded-xl border border-slate-200 shadow-2xs">
                     No KK: {kk.no_kk}
                   </span>
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">
                     RT {kk.nomor_rt || '01'}
                   </span>
                 </div>
@@ -1578,13 +1577,13 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
 
               <div className="p-3 rounded-2xl bg-white border border-slate-100 flex items-center justify-between text-xs">
                 <span className="text-slate-500 font-medium">Anggota Terdaftar:</span>
-                <span className="font-black text-emerald-800">{kk.anggotaKeluarga?.length || 1} Jiwa</span>
+                <span className="font-black text-blue-800">{kk.anggotaKeluarga?.length || 1} Jiwa</span>
               </div>
 
               <button
                 type="button"
                 onClick={() => setSelectedKkDetail(kk)}
-                className="w-full py-2 rounded-xl bg-slate-900 hover:bg-emerald-700 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer press-down"
+                className="w-full py-2 rounded-xl bg-slate-900 hover:bg-blue-700 text-white font-extrabold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer press-down"
               >
                 <span>Lihat Anggota Keluarga</span>
                 <ChevronRight className="w-3.5 h-3.5" />
@@ -1628,7 +1627,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               <button
                 type="button"
                 onClick={() => setShowAktivasiModal(true)}
-                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition-all press-down cursor-pointer shrink-0"
+                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs shadow-md transition-all press-down cursor-pointer shrink-0"
               >
                 Ajukan Aktivasi Kas RW
               </button>
@@ -1648,9 +1647,9 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                 <li>Setelah aktif, RW dapat mencatat iuran swadaya warga, kas kebersihan, dan pemeliharaan lingkungan.</li>
               </ul>
             </div>
-            <div className="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200/70 space-y-2">
-              <span className="text-xs font-bold text-emerald-900 block">Akuntabilitas & Transparansi</span>
-              <p className="text-xs text-emerald-800 leading-relaxed">
+            <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200/70 space-y-2">
+              <span className="text-xs font-bold text-blue-900 block">Akuntabilitas & Transparansi</span>
+              <p className="text-xs text-blue-800 leading-relaxed">
                 Setiap penerimaan dan pengeluaran kas yang disetujui dapat dipantau oleh pengurus RT dan Balai Desa untuk mencegah iuran ganda atau pembebanan yang memberatkan warga.
               </p>
             </div>
@@ -1669,13 +1668,13 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
       <div className="space-y-5">
         {/* Kas Metric Highlights */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-5 rounded-3xl bg-emerald-700 text-white shadow-xs space-y-1.5">
-            <div className="text-xs font-bold text-emerald-200 uppercase">Total Saldo Kas RW 01</div>
+          <div className="p-5 rounded-3xl bg-blue-700 text-white shadow-xs space-y-1.5">
+            <div className="text-xs font-bold text-blue-200 uppercase">Total Saldo Kas RW 01</div>
             <div className="text-2xl font-black">Rp {saldo.toLocaleString('id-ID')}</div>
-            <div className="text-[10px] text-emerald-100">Akumulasi Iuran & Rekapitulasi Kas Lingkungan</div>
+            <div className="text-[10px] text-blue-100">Akumulasi Iuran & Rekapitulasi Kas Lingkungan</div>
           </div>
           <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-1.5">
-            <div className="text-xs font-bold text-emerald-700 uppercase">Total Pemasukan</div>
+            <div className="text-xs font-bold text-blue-700 uppercase">Total Pemasukan</div>
             <div className="text-2xl font-black text-slate-900">Rp {totalMasuk.toLocaleString('id-ID')}</div>
             <div className="text-[10px] text-slate-400">Iuran Sampah, Siskamling & Sumbangan</div>
           </div>
@@ -1712,7 +1711,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                     </td>
                     <td className="py-3 px-3.5">
                       <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                        t.tipe === 'Pemasukan' ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'
+                        t.tipe === 'Pemasukan' ? 'bg-blue-50 text-blue-800' : 'bg-rose-50 text-rose-800'
                       }`}>
                         {t.tipe}
                       </span>
@@ -1722,7 +1721,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                       {t.keterangan}
                     </td>
                     <td className={`py-3 px-3.5 text-right font-black whitespace-nowrap ${
-                      t.tipe === 'Pemasukan' ? 'text-emerald-700' : 'text-rose-600'
+                      t.tipe === 'Pemasukan' ? 'text-blue-700' : 'text-rose-600'
                     }`}>
                       {t.tipe === 'Pemasukan' ? '+' : '-'} Rp {Number(t.jumlah).toLocaleString('id-ID')}
                     </td>
@@ -1752,8 +1751,8 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
     const pctWanita = 100 - pctPria;
 
     const rtDistribution = [
-      { rt: 'RT 01', ketua: 'Supriyadi', jiwa: wargas.filter(w => w.rt?.nomor_rt === '01').length || 185, kk: 62, color: 'bg-emerald-600' },
-      { rt: 'RT 02', ketua: 'Budi Santoso', jiwa: wargas.filter(w => w.rt?.nomor_rt === '02').length || 160, kk: 54, color: 'bg-teal-600' },
+      { rt: 'RT 01', ketua: 'Supriyadi', jiwa: wargas.filter(w => w.rt?.nomor_rt === '01').length || 185, kk: 62, color: 'bg-blue-600' },
+      { rt: 'RT 02', ketua: 'Budi Santoso', jiwa: wargas.filter(w => w.rt?.nomor_rt === '02').length || 160, kk: 54, color: 'bg-indigo-600' },
       { rt: 'RT 03', ketua: 'Wahyudi Pratama', jiwa: 172, kk: 58, color: 'bg-sky-600' },
       { rt: 'RT 04', ketua: 'Slamet Riyadi', jiwa: 154, kk: 50, color: 'bg-indigo-600' },
       { rt: 'RT 05', ketua: 'Agus Setiawan', jiwa: 168, kk: 56, color: 'bg-violet-600' },
@@ -1763,12 +1762,12 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
 
     const usiaDistribution = [
       { label: 'Balita & Anak (0-17 Thn)', count: Math.round(totalWarga * 0.24), pct: 24, color: 'bg-amber-500' },
-      { label: 'Usia Produktif (18-59 Thn)', count: Math.round(totalWarga * 0.62), pct: 62, color: 'bg-emerald-600' },
+      { label: 'Usia Produktif (18-59 Thn)', count: Math.round(totalWarga * 0.62), pct: 62, color: 'bg-blue-600' },
       { label: 'Lansia (60+ Thn)', count: Math.round(totalWarga * 0.14), pct: 14, color: 'bg-indigo-500' },
     ];
 
     const statusEkonomi = [
-      { label: 'Keluarga Mandiri', count: Math.round(effectiveKkList.length * 0.72) || 230, pct: 72, color: 'bg-emerald-600' },
+      { label: 'Keluarga Mandiri', count: Math.round(effectiveKkList.length * 0.72) || 230, pct: 72, color: 'bg-blue-600' },
       { label: 'KPM Bansos PKH/BPNT', count: Math.round(effectiveKkList.length * 0.22) || 70, pct: 22, color: 'bg-amber-500' },
       { label: 'Prasejahtera Ekstrem', count: Math.round(effectiveKkList.length * 0.06) || 20, pct: 6, color: 'bg-rose-500' },
     ];
@@ -1780,14 +1779,14 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Total Jiwa Terdata</span>
             <div className="text-2xl sm:text-3xl font-black text-slate-900">{totalWarga} Jiwa</div>
-            <div className="text-xs text-emerald-700 font-bold flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+            <div className="text-xs text-blue-700 font-bold flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-blue-500 inline-block" />
               100% NIK Sinkron Dukcapil
             </div>
           </div>
           <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Total Kepala Keluarga</span>
-            <div className="text-2xl sm:text-3xl font-black text-emerald-800">{effectiveKkList.length || 328} KK</div>
+            <div className="text-2xl sm:text-3xl font-black text-blue-800">{effectiveKkList.length || 328} KK</div>
             <div className="text-xs text-slate-500 font-medium">Rata-rata 3.0 Jiwa / KK</div>
           </div>
           <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
@@ -1798,7 +1797,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
           <div className="p-5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-2">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Tingkat Mobilitas</span>
             <div className="text-2xl sm:text-3xl font-black text-indigo-900">99.1%</div>
-            <div className="text-xs text-emerald-700 font-bold">Wilayah Sangat Kondusif</div>
+            <div className="text-xs text-blue-700 font-bold">Wilayah Sangat Kondusif</div>
           </div>
         </div>
 
@@ -1848,7 +1847,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   <h4 className="text-sm sm:text-base font-black text-slate-900">Komposisi Gender Penduduk</h4>
                   <p className="text-xs text-slate-500">Perbandingan jumlah laki-laki dan perempuan di RW 01</p>
                 </div>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-blue-800 border border-blue-200">
                   Rasio Seimbang
                 </span>
               </div>
@@ -1963,7 +1962,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             >
               <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-black text-sm shadow-xs">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center font-black text-sm shadow-xs">
                     RT {selectedRtDetail.nomor_rt}
                   </div>
                   <div>
@@ -1992,7 +1991,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                       href={`https://wa.me/${selectedRtDetail.telp?.replace(/[^0-9]/g, '')}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1"
+                      className="font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1"
                     >
                       <Phone className="w-3.5 h-3.5" />
                       <span>{selectedRtDetail.telp}</span>
@@ -2001,20 +2000,20 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100 space-y-1">
-                    <span className="text-[10px] uppercase font-bold text-emerald-700">Total Warga Terdata</span>
-                    <span className="font-black text-emerald-950 text-base block">{selectedRtDetail.total_warga} Jiwa</span>
+                  <div className="p-3 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-blue-700">Total Warga Terdata</span>
+                    <span className="font-black text-blue-950 text-base block">{selectedRtDetail.total_warga} Jiwa</span>
                   </div>
-                  <div className="p-3 rounded-2xl bg-teal-50/60 border border-teal-100 space-y-1">
-                    <span className="text-[10px] uppercase font-bold text-teal-700">Total Kepala Keluarga</span>
-                    <span className="font-black text-teal-950 text-base block">{selectedRtDetail.total_kk} KK</span>
+                  <div className="p-3 rounded-2xl bg-indigo-50/60 border border-indigo-100 space-y-1">
+                    <span className="text-[10px] uppercase font-bold text-indigo-700">Total Kepala Keluarga</span>
+                    <span className="font-black text-indigo-950 text-base block">{selectedRtDetail.total_kk} KK</span>
                   </div>
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 space-y-1.5">
                   <span className="text-[10px] uppercase font-bold text-slate-400">Status Koordinasi & Lingkungan</span>
                   <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
                     <span className="font-bold text-slate-800">{selectedRtDetail.status || 'Aktif Berkoordinasi'}</span>
                   </div>
                   <p className="text-[11px] text-slate-500 leading-relaxed mt-1">
@@ -2072,8 +2071,8 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                 )}
 
                 {aktivasiSuccess && (
-                  <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                     <span>{aktivasiSuccess}</span>
                   </div>
                 )}
@@ -2084,7 +2083,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                       Alasan & Tujuan Pengelolaan Kas RW *
                     </label>
                     <span className={`text-[11px] font-mono ${
-                      alasanAktivasi.trim().length >= 10 ? 'text-emerald-600 font-bold' : 'text-slate-400'
+                      alasanAktivasi.trim().length >= 10 ? 'text-blue-600 font-bold' : 'text-slate-400'
                     }`}>
                       {alasanAktivasi.trim().length} / min 10
                     </span>
@@ -2098,7 +2097,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                       if (aktivasiError) setAktivasiError('');
                     }}
                     placeholder="Contoh: Pengelolaan swadaya iuran kebersihan jalan lingkungan antar-RT dan operasional pos ronda malam RW 01..."
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:outline-emerald-600 resize-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:outline-blue-600 resize-none"
                   />
                   <p className="text-[11px] text-slate-400 mt-1">
                     Permohonan akan ditinjau oleh Sekretaris Desa atau Kepala Desa sebelum modul kas diaktifkan.
@@ -2120,7 +2119,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   <button
                     type="submit"
                     disabled={submittingAktivasi || alasanAktivasi.trim().length < 10}
-                    className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md cursor-pointer disabled:opacity-50"
+                    className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md cursor-pointer disabled:opacity-50"
                   >
                     {submittingAktivasi ? 'Mengirim...' : 'Kirim Permohonan'}
                   </button>
@@ -2145,7 +2144,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             >
               <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-xs">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold shadow-xs">
                     <Users className="w-5 h-5" />
                   </div>
                   <div>
@@ -2226,7 +2225,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             >
               <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-xs">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold shadow-xs">
                     <Building2 className="w-5 h-5" />
                   </div>
                   <div>
@@ -2301,7 +2300,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
             >
               <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80 shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold shadow-xs">
+                  <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold shadow-xs">
                     <DollarSign className="w-5 h-5" />
                   </div>
                   <div>
@@ -2326,7 +2325,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   </div>
                 )}
                 {kasSuccess && (
-                  <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold flex items-center gap-2">
+                  <div className="p-3 rounded-2xl bg-blue-50 border border-blue-200 text-blue-800 font-bold flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
                     <span>{kasSuccess}</span>
                   </div>
@@ -2340,7 +2339,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                       onClick={() => setKasTipe('Pemasukan')}
                       className={`py-2.5 rounded-xl font-black text-xs transition-all cursor-pointer ${
                         kasTipe === 'Pemasukan'
-                          ? 'bg-emerald-700 text-white shadow-xs'
+                          ? 'bg-blue-700 text-white shadow-xs'
                           : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                       }`}
                     >
@@ -2368,7 +2367,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                     value={kasJumlah}
                     onChange={(e) => setKasJumlah(e.target.value ? Number(e.target.value) : '')}
                     placeholder="Contoh: 150000"
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-bold text-slate-900 focus:bg-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-bold text-slate-900 focus:bg-white focus:outline-none focus:border-blue-500"
                     required
                   />
                 </div>
@@ -2379,7 +2378,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                     type="date"
                     value={kasTanggal}
                     onChange={(e) => setKasTanggal(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-medium text-slate-900 focus:bg-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-medium text-slate-900 focus:bg-white focus:outline-none focus:border-blue-500"
                     required
                   />
                 </div>
@@ -2391,7 +2390,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                     value={kasKeterangan}
                     onChange={(e) => setKasKeterangan(e.target.value)}
                     placeholder="Contoh: Iuran kegiatan kerja bakti RW 01..."
-                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-medium text-slate-900 focus:bg-white focus:outline-none focus:border-emerald-500"
+                    className="w-full px-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 font-medium text-slate-900 focus:bg-white focus:outline-none focus:border-blue-500"
                     required
                   />
                 </div>
@@ -2400,7 +2399,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
                   <button
                     type="submit"
                     disabled={isProcessing}
-                    className="w-full py-3 rounded-2xl bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs shadow-xs transition-all cursor-pointer press-down"
+                    className="w-full py-3 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-extrabold text-xs shadow-xs transition-all cursor-pointer press-down"
                   >
                     {isProcessing ? 'Menyimpan...' : 'Simpan Transaksi Kas RW'}
                   </button>

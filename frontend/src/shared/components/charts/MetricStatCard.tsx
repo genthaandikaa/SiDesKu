@@ -7,7 +7,7 @@ interface MetricStatCardProps {
   value: string | number;
   subvalue?: string;
   percentage?: number;
-  color?: 'emerald' | 'amber' | 'sky' | 'rose' | 'teal' | 'indigo';
+  color?: 'blue' | 'amber' | 'sky' | 'rose' | 'indigo';
   trend?: string;
   isPositiveTrend?: boolean;
   icon?: React.ReactNode;
@@ -18,13 +18,13 @@ export const MetricStatCard: React.FC<MetricStatCardProps> = ({
   value,
   subvalue,
   percentage,
-  color = 'emerald',
+  color = 'blue',
   trend,
   isPositiveTrend = true,
   icon,
 }) => {
   return (
-    <div className="p-3.5 sm:p-4.5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-2.5 sm:gap-3 transition-all hover:shadow-xs hover:border-emerald-300 min-w-0 h-full">
+    <div className="p-3.5 sm:p-4.5 rounded-3xl bg-white border border-slate-200/90 shadow-2xs flex items-center justify-between gap-2.5 sm:gap-3 transition-all hover:shadow-xs hover:border-blue-300 min-w-0 h-full">
       {/* Left Text Block */}
       <div className="space-y-1.5 min-w-0 flex-1 flex flex-col justify-between h-full">
         {/* Title Slot: Fixed min-height (2.25rem = 36px) so 1-line and 2-line titles take identical vertical height */}
@@ -52,7 +52,7 @@ export const MetricStatCard: React.FC<MetricStatCardProps> = ({
             <div
               className={`inline-flex items-center gap-1 text-[10px] font-black px-2 py-0.5 rounded-md ${
                 isPositiveTrend
-                  ? 'text-emerald-700 bg-emerald-50/90 border border-emerald-200/70'
+                  ? 'text-blue-700 bg-blue-50/90 border border-blue-200/70'
                   : 'text-rose-700 bg-rose-50/90 border border-rose-200/70'
               }`}
             >
