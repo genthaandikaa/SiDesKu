@@ -9,8 +9,8 @@ import {
   CheckCheck,
   FileSpreadsheet,
   AlertCircle,
-  Maximize2,
-  ArrowRight
+  ArrowRight,
+  ArrowLeft
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { useAuth } from '@/providers';
@@ -260,30 +260,20 @@ export const ChatWidget: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-1 shrink-0">
-              {activeRoom && (
-                <button
-                  type="button"
-                  onClick={() => setActiveRoom(null)}
-                  className="px-2 py-1 text-xs bg-slate-100 hover:bg-slate-200 rounded-lg text-slate-600 transition mr-1 cursor-pointer"
-                >
-                  Kembali
-                </button>
-              )}
               <button
                 type="button"
-                onClick={handleOpenFullPage}
-                className="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition cursor-pointer"
-                title="Buka Layar Penuh"
+                onClick={() => {
+                  if (activeRoom) {
+                    setActiveRoom(null);
+                  } else {
+                    setIsOpen(false);
+                  }
+                }}
+                className="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-500 hover:text-slate-800 transition cursor-pointer"
+                title="Kembali"
+                aria-label="Kembali"
               >
-                <Maximize2 className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-700 transition cursor-pointer"
-                title="Tutup Widget"
-              >
-                <X className="w-4 h-4" />
+                <ArrowLeft className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -329,7 +319,6 @@ export const ChatWidget: React.FC = () => {
                 {messages.length === 0 ? (
                   <div className="text-center py-12 text-slate-400 text-xs">
                     <p className="font-semibold text-slate-600">Belum ada pesan</p>
-                    <p className="text-[11px] mt-1">Kirim pesan pertama Anda dengan aman.</p>
                   </div>
                 ) : (
                   messages.map((m) => {

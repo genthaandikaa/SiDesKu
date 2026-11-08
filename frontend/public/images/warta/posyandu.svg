@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EDF2F7"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#EAECF0" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="800" height="450" fill="url(#bgGrad)"/>
+  <rect width="800" height="450" fill="url(#grid)" opacity="0.8"/>
+
+  <!-- Subtle Ambient Glow -->
+  <circle cx="400" cy="225" r="200" fill="#E11D48" opacity="0.04" filter="blur(40px)"/>
+
+  <!-- Content Container Card -->
+  <rect x="50" y="45" width="700" height="360" rx="16" fill="#FFFFFF" stroke="#EAECF0" stroke-width="1.5"/>
+
+  <!-- Top Decorative Header Bar -->
+  <rect x="50" y="45" width="700" height="6" fill="#E11D48"/>
+
+  <!-- Category Badge -->
+  <g transform="translate(90, 85)">
+    <rect width="130" height="28" rx="6" fill="#E11D48" opacity="0.1"/>
+    <text x="65" y="19" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#E11D48" text-anchor="middle" letter-spacing="0.5">KESEHATAN</text>
+  </g>
+
+  <!-- Title & Subtitle -->
+  <text x="90" y="150" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="800" fill="#101828">Posyandu Rutin Ibu &amp; Balita</text>
+  <text x="90" y="180" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="500" fill="#475467">Pemeriksaan Tumbuh Kembang, Imunisasi &amp; PMT Zero Stunting</text>
+
+  <!-- Center Decorative Icon Illustration Area -->
+  <g transform="translate(90, 215)">
+    <rect width="620" height="145" rx="12" fill="#F8FAFC" stroke="#EAECF0" stroke-width="1"/>
+    <!-- Icon Circle -->
+    <circle cx="70" cy="72" r="38" fill="#FFFFFF" stroke="#EAECF0" stroke-width="1.5"/>
+    <g transform="translate(48, 50)" stroke="#E11D48" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M12 8v4M10 10h4"/>
+    </g>
+    <!-- Descriptive Label inside preview -->
+    <text x="135" y="65" font-family="Plus Jakarta Sans, sans-serif" font-size="15" font-weight="700" fill="#101828">Dokumentasi Resmi Desa Doko</text>
+    <text x="135" y="90" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="500" fill="#667085">Kecamatan Ngasem, Kabupaten Kediri • Arsip Publik Terverifikasi</text>
+  </g>
+
+  <!-- Bottom Right Seal Stamp -->
+  <g transform="translate(640, 75)" opacity="0.9">
+    <circle cx="50" cy="30" r="26" fill="none" stroke="#E11D48" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <text x="50" y="34" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="800" fill="#E11D48" text-anchor="middle">siDes DOKO</text>
+  </g>
+</svg>

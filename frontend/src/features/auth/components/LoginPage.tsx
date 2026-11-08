@@ -15,12 +15,10 @@ import {
   CreditCard,
   Building2,
   Star,
-  ArrowRight,
-  ArrowLeft,
-  HelpCircle
+  ArrowRight
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
-import { BrandLogo } from '@/shared/components/BrandLogo';
+import { PublicNavbar } from '@/features/landing/components/PublicNavbar';
 import { GuestSupportChatModal } from '@/features/chat/components/GuestSupportChatModal';
 
 interface AuthPageProps {
@@ -127,7 +125,7 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
   };
 
   return (
-    <div className="h-screen h-[100dvh] max-h-screen w-full bg-[#f8fcf9] font-sans text-slate-800 flex flex-col justify-between relative overflow-hidden select-none">
+    <div className="min-h-screen min-h-[100dvh] w-full bg-[#f8fcf9] font-sans text-slate-800 flex flex-col justify-between relative overflow-x-hidden select-none">
       
       {/* Background Ornaments */}
       {/* 1. Subtle Dot Grid Matrix */}
@@ -175,60 +173,11 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
         className="absolute bottom-16 left-1/4 w-6 h-6 opacity-35 pointer-events-none animate-float-gentle -z-10 hidden sm:block" 
       />
 
-      {/* Header */}
-      <header className="relative z-30 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-3 sm:py-4 flex items-center justify-between shrink-0">
-        <Link to="/" className="hover:opacity-95 transition-opacity shrink-0 outline-none focus:outline-none">
-          <BrandLogo size="md" />
-        </Link>
-
-        {/* Center Nav Links - Pill Capsule with Image 1 Items */}
-        <nav className="hidden lg:flex items-center gap-1 bg-white/95 backdrop-blur-md p-1.5 rounded-full border border-slate-200/80 shadow-md shadow-blue-950/5">
-          <Link
-            to="/"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Beranda</span>
-          </Link>
-          <Link
-            to="/profil"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Direktori Desa</span>
-          </Link>
-          <Link
-            to="/layanan-surat"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Layanan Surat</span>
-          </Link>
-          <Link
-            to="/lacak"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Lacak Surat</span>
-          </Link>
-          <Link
-            to="/berita"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Warta</span>
-          </Link>
-        </nav>
-
-        {/* Right Action */}
-        <div className="flex items-center gap-2 shrink-0">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-blue-800 bg-white hover:bg-blue-50 border border-slate-200/80 transition-all shadow-2xs whitespace-nowrap outline-none"
-          >
-            <ArrowLeft size={13} />
-            <span>Kembali ke Beranda</span>
-          </Link>
-        </div>
-      </header>
+      {/* Public Navbar (Sesuai Foto No 1) */}
+      <PublicNavbar />
 
       {/* Main Content */}
-      <main className="relative z-20 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 lg:px-12 py-1 sm:py-2 flex items-center justify-center overflow-visible my-auto">
+      <main className="relative z-20 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 lg:px-12 pt-20 sm:pt-24 pb-8 flex items-center justify-center overflow-visible my-auto">
         
         {/* Background Aura */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 w-full overflow-visible">
@@ -256,19 +205,142 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
             
             {/* Form Panel */}
             <div 
-              className="w-full lg:w-1/2 p-1 sm:p-3 lg:p-4 flex items-center justify-center z-20"
+              className="w-full lg:w-1/2 p-1 sm:p-3 lg:p-4 flex items-center justify-center z-20 relative"
             >
-              <div className="w-full max-w-md bg-white p-5 sm:p-6 rounded-3xl shadow-xl shadow-slate-900/5 border border-slate-100/90 space-y-3">
-              
-              {/* Header Title & Information */}
-              <div className="space-y-1 border-b border-slate-100 pb-2">
-                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                  Masuk ke Akun
-                </h1>
-                <p className="text-xs text-slate-500">
-                  Gunakan NIK atau username terdaftar Anda.
-                </p>
+              {/* Rich Floating Geometric Vectors behind the Login Card */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-visible">
+                {/* 1. Concentric Geometric Orbit Radar Rings */}
+                <svg className="w-[380px] sm:w-[480px] h-[380px] sm:h-[480px] text-blue-500/20" viewBox="0 0 400 400" fill="none">
+                  <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="1.5" strokeDasharray="6 6" />
+                  <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.2" />
+                  <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
+                  <line x1="200" y1="5" x2="200" y2="395" stroke="currentColor" strokeWidth="0.8" strokeDasharray="4 8" opacity="0.6" />
+                  <line x1="5" y1="200" x2="395" y2="200" stroke="currentColor" strokeWidth="0.8" strokeDasharray="4 8" opacity="0.6" />
+                  <circle cx="200" cy="10" r="3" fill="#2563eb" fillOpacity="0.5" />
+                  <circle cx="390" cy="200" r="3" fill="#2563eb" fillOpacity="0.5" />
+                  <circle cx="10" cy="200" r="3" fill="#2563eb" fillOpacity="0.5" />
+                  <circle cx="200" cy="390" r="3" fill="#2563eb" fillOpacity="0.5" />
+                </svg>
+
+                {/* 2. Geometric Organic Vector Wave 1 (Top Left) */}
+                <svg 
+                  className="absolute -top-14 -left-14 w-56 sm:w-64 h-auto text-blue-400/30 pointer-events-none" 
+                  viewBox="0 0 229 73" 
+                  fill="none"
+                >
+                  <path 
+                    d="M211.26 72.0986C139.885 56.3466 96.1906 64.7453 4.78946 61.6528C1.46577 61.0612 -0.611907 58.2501 0.161365 55.3864C3.62557 41.9843 6.23939 29.1989 8.00076 17.03C8.27791 14.5322 11.0804 12.4866 14.241 12.4635C80.1121 10.9578 78.7541 -8.73034 169.917 4.61604C179.156 5.20641 222.822 -5.03963 228.08 16.8566C229.198 29.7428 214.959 54.348 216.581 66.951C216.916 69.5925 214.541 71.8881 211.271 72.0993" 
+                    fill="currentColor" 
+                  />
+                </svg>
+
+                {/* 3. Geometric Organic Vector Ribbon 2 (Bottom Right) */}
+                <svg 
+                  className="absolute -bottom-12 -right-12 w-60 sm:w-68 h-auto text-indigo-400/25 pointer-events-none" 
+                  viewBox="0 0 228 63" 
+                  fill="none"
+                >
+                  <path 
+                    d="M5.50045 1.34712C76.7075 -2.39386 148.921 1.65722 222.141 13.5004C225.638 14.12 227.883 16.9515 227.141 19.8124C223.831 33.2024 221.397 45.9818 219.842 58.1511C219.611 60.6497 216.723 62.6747 213.411 62.6719C144.411 63.6387 77.1072 59.5847 11.4982 50.51C8.3157 50.0662 5.53067 47.4928 5.26751 44.7714C3.78788 31.8603 2.04739 19.0889 0.0460319 6.45727C-0.368077 3.80978 2.0661 1.53086 5.48838 1.34624" 
+                    fill="currentColor" 
+                  />
+                </svg>
+
+                {/* 4. Geometric Dot Grid Matrix (Top Right) */}
+                <div className="absolute top-2 -right-6 sm:top-4 sm:-right-8 grid grid-cols-4 gap-2 opacity-30 pointer-events-none">
+                  {[...Array(16)].map((_, i) => (
+                    <div key={i} className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                  ))}
+                </div>
+
+                {/* 5. Geometric Dot Grid Matrix (Bottom Left) */}
+                <div className="absolute -bottom-6 -left-4 sm:-bottom-8 sm:-left-6 grid grid-cols-4 gap-2 opacity-25 pointer-events-none">
+                  {[...Array(16)].map((_, i) => (
+                    <div key={i} className="w-1.5 h-1.5 rounded-full bg-indigo-600" />
+                  ))}
+                </div>
+
+                {/* 6. Geometric Dashed Wave Trajectory (Top Right) */}
+                <svg className="absolute -top-8 right-12 w-32 h-16 text-sky-500/35 pointer-events-none" viewBox="0 0 120 60" fill="none">
+                  <path d="M 5 50 Q 55 10 115 25" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
+                  <path d="M 110 20 L 118 25 L 110 30 Z" fill="currentColor" />
+                </svg>
+
+                {/* 7. Floating 4-point Sparkle Stars */}
+                <div className="absolute -top-3 left-6 w-5 h-5 text-blue-500/70 pointer-events-none animate-float">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" />
+                  </svg>
+                </div>
+                <div className="absolute top-1/2 -right-6 w-6 h-6 text-indigo-500/70 pointer-events-none animate-float-gentle">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" />
+                  </svg>
+                </div>
+                <div className="absolute -bottom-4 right-1/4 w-4 h-4 text-sky-500/80 pointer-events-none animate-pulse">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" />
+                  </svg>
+                </div>
+                <div className="absolute bottom-1/4 -left-6 w-4 h-4 text-blue-600/60 pointer-events-none animate-float">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0 L14.5 9.5 L24 12 L14.5 14.5 L12 24 L9.5 14.5 L0 12 L9.5 9.5 Z" />
+                  </svg>
+                </div>
               </div>
+
+              <div className="w-full max-w-md bg-white p-5 sm:p-6 rounded-3xl shadow-xl shadow-slate-900/5 border border-slate-100/90 space-y-3 relative overflow-hidden">
+                {/* Subtle Geometric Watermark inside top of card */}
+                <div className="absolute -top-10 -right-10 w-36 h-36 pointer-events-none -z-10">
+                  <svg className="w-full h-full text-blue-500/10" viewBox="0 0 120 120" fill="none">
+                    <circle cx="60" cy="60" r="50" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 4" />
+                    <circle cx="60" cy="60" r="32" stroke="currentColor" strokeWidth="1" />
+                    <circle cx="60" cy="60" r="15" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2" />
+                  </svg>
+                </div>
+                <div className="absolute -top-6 -left-6 w-28 h-28 pointer-events-none -z-10">
+                  <svg className="w-full h-full text-indigo-500/10" viewBox="0 0 100 100" fill="none">
+                    <path d="M 10 90 Q 50 10 90 90" stroke="currentColor" strokeWidth="1.5" fill="none" strokeDasharray="3 3" />
+                    <path d="M 20 90 Q 50 25 80 90" stroke="currentColor" strokeWidth="1" fill="none" />
+                  </svg>
+                </div>
+
+                {/* Header Title with Prominent Geometric Vector Backdrop */}
+                <div className="relative text-center pb-3 pt-2 flex flex-col items-center justify-center">
+                  {/* Geometric Vector Graphic directly behind "Masuk ke Akun" */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-visible">
+                    {/* Glowing ambient radial light */}
+                    <div className="w-56 h-14 bg-gradient-to-r from-blue-400/25 via-sky-300/30 to-indigo-400/25 rounded-full blur-xl" />
+                    
+                    {/* SVG Geometric Vector Ribbon & Arc */}
+                    <svg 
+                      className="w-64 sm:w-72 h-16 sm:h-20 text-blue-600/40 pointer-events-none overflow-visible" 
+                      viewBox="0 0 260 70" 
+                      fill="none" 
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      {/* Geometric Background Pill Ribbon */}
+                      <rect x="25" y="8" width="210" height="46" rx="23" fill="#3b82f6" fillOpacity="0.08" stroke="#3b82f6" strokeWidth="1" strokeDasharray="4 4" strokeOpacity="0.35" />
+                      
+                      {/* Concentric Geometric Orbit Arcs */}
+                      <path d="M 15 31 C 45 10, 215 10, 245 31" stroke="#2563eb" strokeWidth="1.5" strokeDasharray="3 3" strokeOpacity="0.4" />
+                      <path d="M 20 40 C 60 62, 200 62, 240 40" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.45" />
+                      
+                      {/* 4-point Geometric Sparkle Stars */}
+                      <path d="M 12 31 L 15 23 L 23 20 L 15 17 L 12 9 L 9 17 L 1 20 L 9 23 Z" fill="#2563eb" fillOpacity="0.5" />
+                      <path d="M 248 31 L 251 25 L 257 22 L 251 19 L 248 13 L 245 19 L 239 22 L 245 25 Z" fill="#4f46e5" fillOpacity="0.5" />
+                      
+                      {/* Accent Circles & Crosshairs */}
+                      <circle cx="35" cy="50" r="2.5" fill="#3b82f6" fillOpacity="0.6" />
+                      <circle cx="225" cy="50" r="2.5" fill="#3b82f6" fillOpacity="0.6" />
+                      <path d="M 130 5 L 130 11 M 127 8 L 133 8" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.5" />
+                    </svg>
+                  </div>
+
+                  <h1 className="relative z-10 text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                    Masuk ke Akun
+                  </h1>
+                </div>
 
               {/* Informative notice if came from /register */}
               {location.pathname === '/register' && (
@@ -340,25 +412,14 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                   </div>
                 </div>
 
-                {/* Forgot Password & Submit Button Row */}
+                {/* Action Row */}
                 <div className="flex items-center justify-between pt-1">
-                  <div className="flex items-center gap-3">
-                    <Link
-                      to="/lacak"
-                      className="text-[11px] font-medium text-slate-400 hover:text-blue-700 transition-colors"
-                    >
-                      Lacak berkas
-                    </Link>
-                    <span className="text-slate-300">•</span>
-                    <button
-                      type="button"
-                      onClick={() => setShowSupportChat(true)}
-                      className="text-[11px] font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1 transition-colors cursor-pointer"
-                    >
-                      <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Bantuan / Lupa Akun</span>
-                    </button>
-                  </div>
+                  <Link
+                    to="/lacak"
+                    className="text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors"
+                  >
+                    Lacak berkas
+                  </Link>
 
                   <button
                     type="submit"
@@ -379,8 +440,15 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                   </button>
                 </div>
 
-                <div className="text-[10px] text-center text-slate-400 pt-1">
-                  Belum memiliki akun? Hubungi kantor desa.
+                <div className="text-xs text-center text-slate-500 pt-2 flex items-center justify-center gap-1">
+                  <span>Punya masalah?</span>
+                  <button
+                    type="button"
+                    onClick={() => setShowSupportChat(true)}
+                    className="font-bold text-blue-600 hover:text-blue-700 hover:underline cursor-pointer transition-colors"
+                  >
+                    Bantuan
+                  </button>
                 </div>
               </form>
 

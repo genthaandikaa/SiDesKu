@@ -379,18 +379,18 @@ export const AspirasiPengaduanWargaView: React.FC = () => {
               )}
 
               <div className="space-y-1.5">
-                <label className="text-slate-700">Kategori Masalah / Aspirasi *</label>
+                <label className="text-slate-700">Kategori Aspirasi / Aduan *</label>
                 <select
                   value={kategori}
                   onChange={(e) => setKategori(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800"
                 >
-                  <option value="Infrastruktur & Jalan">Infrastruktur & Jalan (Jalan rusak, lampu mati, jembatan)</option>
-                  <option value="Kebersihan & Lingkungan">Kebersihan & Lingkungan (Sampah, selokan mampet, pohon rawan)</option>
-                  <option value="Keamanan & Ketertiban">Keamanan & Ketertiban (Pos ronda, ketertiban lingkungan)</option>
-                  <option value="Bantuan Sosial & Kesejahteraan">Bantuan Sosial & Kesejahteraan (Data bansos, warga rentan)</option>
-                  <option value="Pelayanan Administrasi Desa">Pelayanan Administrasi Desa (Pelayanan surat, kantor desa)</option>
-                  <option value="Lainnya">Lainnya (Saran umum & masukan pembangunan)</option>
+                  <option value="Infrastruktur & Jalan">Infrastruktur & Jalan</option>
+                  <option value="Kebersihan & Lingkungan">Kebersihan & Lingkungan</option>
+                  <option value="Keamanan & Ketertiban">Keamanan & Ketertiban</option>
+                  <option value="Bantuan Sosial & Kesejahteraan">Bantuan Sosial & Kesejahteraan</option>
+                  <option value="Pelayanan Administrasi Desa">Pelayanan Administrasi Desa</option>
+                  <option value="Lainnya">Lainnya</option>
                 </select>
               </div>
 
@@ -399,7 +399,6 @@ export const AspirasiPengaduanWargaView: React.FC = () => {
                 <input
                   type="text"
                   required
-                  placeholder="Contoh: Lampu Penerangan Jalan Gang Mawar Padam Sejak 3 Hari"
                   value={judul}
                   onChange={(e) => setJudul(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-800"
@@ -407,20 +406,19 @@ export const AspirasiPengaduanWargaView: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-slate-700">Penjelasan Lengkap & Lokasi Kejadian *</label>
+                <label className="text-slate-700">Penjelasan Lengkap *</label>
                 <textarea
                   required
                   rows={4}
-                  placeholder="Jelaskan secara rinci kondisi lapangan, titik lokasi spesifik, dan harapan warga..."
                   value={deskripsi}
                   onChange={(e) => setDeskripsi(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-800"
                 />
               </div>
 
-              {/* Unggah Foto Bukti / Kondisi Lapangan */}
+              {/* Unggah Foto Bukti */}
               <div className="space-y-1.5">
-                <label className="text-slate-700">Foto Bukti / Kondisi Lapangan (Opsional)</label>
+                <label className="text-slate-700">Unggah (Opsional)</label>
                 {fotoLampiran ? (
                   <div className="relative rounded-2xl overflow-hidden border border-blue-300 bg-blue-50/50 aspect-video max-h-40 flex items-center justify-center">
                     <img src={fotoLampiran} alt="Foto Bukti" className="w-full h-full object-cover" />
@@ -437,11 +435,10 @@ export const AspirasiPengaduanWargaView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowCameraModal(true)}
-                    className="w-full py-4 border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-2xl text-center space-y-1 transition-colors bg-slate-50 cursor-pointer block"
+                    className="w-full py-4 border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-2xl text-center transition-colors bg-slate-50 cursor-pointer block"
                   >
-                    <Camera className="w-6 h-6 text-blue-600 mx-auto" />
-                    <span className="text-xs font-bold text-slate-700 block">Ambil / Unggah Foto Bukti</span>
-                    <span className="text-[10px] text-slate-400 block">Foto kondisi lapangan untuk mempermudah verifikasi RT & Desa</span>
+                    <Camera className="w-6 h-6 text-blue-600 mx-auto mb-1" />
+                    <span className="text-xs font-bold text-slate-700 block">Unggah</span>
                   </button>
                 )}
               </div>

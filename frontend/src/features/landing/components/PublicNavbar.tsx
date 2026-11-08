@@ -4,6 +4,7 @@ import {
   Menu, 
   X, 
   ArrowRight, 
+  ArrowLeft,
   LayoutDashboard, 
   Search, 
   LogOut,
@@ -93,6 +94,18 @@ export const PublicNavbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between gap-4 min-h-[44px]">
 
+          {/* SISI KIRI (MOBILE ONLY): Tombol Hamburger di sebelah kiri persis Foto No 2 */}
+          <div className="flex lg:hidden items-center">
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menu navigasi"
+              className="w-10 h-10 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 flex items-center justify-center transition-all cursor-pointer shadow-xs active:scale-95"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5 stroke-[2.2]" /> : <Menu className="w-5 h-5 stroke-[2.2]" />}
+            </button>
+          </div>
+
           {/* Desktop Navigation Links (Unboxed, Seamless with Navbar Background, Hover-Lift Animated) */}
           <nav className="hidden lg:flex items-center justify-center gap-1.5 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             {activeLinks.map((item) => {
@@ -121,14 +134,14 @@ export const PublicNavbar: React.FC = () => {
             })}
           </nav>
 
-          {/* Right Action: Dual Mode (Pre-login = Login/Register, Post-login = User Profile Card) */}
-          <div className="hidden sm:flex items-center gap-2.5 shrink-0 ml-auto">
+          {/* Right Action: Dual Mode (Pre-login = Masuk ke Akun, Post-login = User Profile Card) */}
+          <div className="flex items-center gap-2.5 shrink-0 ml-auto">
             {user ? (
               <div className="relative" ref={profileRef}>
                 <button
                   type="button"
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-600/25 transition-all press-down outline-none focus:outline-none cursor-pointer"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 sm:px-5 sm:py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-600/25 transition-all press-down outline-none focus:outline-none cursor-pointer"
                 >
                   <span>Layanan Utama</span>
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${profileDropdownOpen ? 'rotate-180' : ''}`} />
@@ -174,28 +187,28 @@ export const PublicNavbar: React.FC = () => {
                   </div>
                 )}
               </div>
+            ) : location.pathname.startsWith('/login') ? (
+              <div className="flex items-center gap-2">
+                <Link
+                  to="/"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-blue-800 bg-white hover:bg-slate-50 border border-slate-200/90 transition-all shadow-2xs whitespace-nowrap outline-none focus:outline-none"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Kembali</span>
+                </Link>
+              </div>
             ) : (
               <div className="flex items-center gap-2">
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-xs shadow-md shadow-blue-600/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
+                  className="inline-flex items-center gap-1.5 sm:gap-2 px-3.5 py-1.5 sm:px-5 sm:py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-xs shadow-md shadow-blue-600/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
                 >
                   <LogIn className="w-3.5 h-3.5" />
-                  <span>Login</span>
+                  <span>Masuk</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             )}
-          </div>
-
-          {/* Mobile Hamburger Toggle */}
-          <div className="flex lg:hidden items-center gap-2">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
           </div>
 
         </div>
@@ -235,19 +248,6 @@ export const PublicNavbar: React.FC = () => {
                 </Link>
               ))}
             </div>
-
-            {!user && (
-              <div className="pt-2 border-t border-slate-100">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 text-center text-xs font-black rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/20 flex items-center justify-center gap-1.5"
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Login</span>
-                </Link>
-              </div>
-            )}
           </div>
         )}
 

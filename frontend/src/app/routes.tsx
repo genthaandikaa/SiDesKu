@@ -78,7 +78,7 @@ export const AppRoutes: React.FC = () => {
     <ErrorBoundary>
       <Suspense fallback={<PageLoadingFallback />}>
       <Routes>
-        {/* Public Pages with Dedicated URLs */}
+        {/* Public Pages with Dedicated URLs (Semua Halaman Publik Menggunakan Layout yang Sama) */}
         <Route element={<PublicLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/profil" element={<ProfilDesaPage />} />
@@ -88,6 +88,7 @@ export const AppRoutes: React.FC = () => {
           <Route path="/transparansi-apbdes" element={<Navigate to="/transparansi" replace />} />
           <Route path="/bansos" element={<BansosPage />} />
           <Route path="/berita" element={<BeritaPage />} />
+          <Route path="/warta" element={<Navigate to="/berita" replace />} />
         </Route>
 
         {/* Auth Routes */}

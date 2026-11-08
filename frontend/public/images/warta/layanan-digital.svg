@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#EDF2F7"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#EAECF0" stroke-width="1.2"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Base -->
+  <rect width="800" height="450" fill="url(#bgGrad)"/>
+  <rect width="800" height="450" fill="url(#grid)" opacity="0.8"/>
+
+  <!-- Subtle Ambient Glow -->
+  <circle cx="400" cy="225" r="200" fill="#003B95" opacity="0.04" filter="blur(40px)"/>
+
+  <!-- Content Container Card -->
+  <rect x="50" y="45" width="700" height="360" rx="16" fill="#FFFFFF" stroke="#EAECF0" stroke-width="1.5"/>
+
+  <!-- Top Decorative Header Bar -->
+  <rect x="50" y="45" width="700" height="6" fill="#003B95"/>
+
+  <!-- Category Badge -->
+  <g transform="translate(90, 85)">
+    <rect width="130" height="28" rx="6" fill="#003B95" opacity="0.1"/>
+    <text x="65" y="19" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#003B95" text-anchor="middle" letter-spacing="0.5">LAYANAN</text>
+  </g>
+
+  <!-- Title & Subtitle -->
+  <text x="90" y="150" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="800" fill="#101828">Layanan Administrasi Digital siDes</text>
+  <text x="90" y="180" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="500" fill="#475467">Permohonan Surat Kependudukan Online &amp; TTE Mandiri</text>
+
+  <!-- Center Decorative Icon Illustration Area -->
+  <g transform="translate(90, 215)">
+    <rect width="620" height="145" rx="12" fill="#F8FAFC" stroke="#EAECF0" stroke-width="1"/>
+    <!-- Icon Circle -->
+    <circle cx="70" cy="72" r="38" fill="#FFFFFF" stroke="#EAECF0" stroke-width="1.5"/>
+    <g transform="translate(48, 50)" stroke="#003B95" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/><circle cx="12" cy="10" r="2"/>
+    </g>
+    <!-- Descriptive Label inside preview -->
+    <text x="135" y="65" font-family="Plus Jakarta Sans, sans-serif" font-size="15" font-weight="700" fill="#101828">Dokumentasi Resmi Desa Doko</text>
+    <text x="135" y="90" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="500" fill="#667085">Kecamatan Ngasem, Kabupaten Kediri • Arsip Publik Terverifikasi</text>
+  </g>
+
+  <!-- Bottom Right Seal Stamp -->
+  <g transform="translate(640, 75)" opacity="0.9">
+    <circle cx="50" cy="30" r="26" fill="none" stroke="#003B95" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <text x="50" y="34" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="800" fill="#003B95" text-anchor="middle">siDes DOKO</text>
+  </g>
+</svg>

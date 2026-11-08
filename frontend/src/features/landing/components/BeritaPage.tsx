@@ -1,952 +1,666 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { 
-  Newspaper, 
-  Search, 
-  Calendar, 
-  Eye, 
-  ChevronRight, 
-  ChevronDown,
-  BellRing, 
-  ShieldCheck, 
-  CheckCircle2, 
-  Check,
-  X, 
-  Filter, 
-  ArrowUpDown, 
-  Globe,
-  Building2,
-  HardHat,
-  HeartPulse,
-  ShoppingBag,
-  Users,
-  TrendingUp,
-  Clock,
-  LayoutGrid,
-  List
+import { Link } from 'react-router-dom';
+import {
+  Search,
+  X,
+  ChevronRight,
+  Share2,
+  Check
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
-import { Berita, Pengumuman } from '@/shared/types';
-import { Pagination } from '@/shared/components/Pagination';
+import { Berita } from '@/shared/types';
 
-const defaultBeritas: Berita[] = [
+// Mock Data Editorial Desa Doko yang Realistis & Sesuai Spesifikasi
+const fallbackBeritas: Berita[] = [
   {
-    id: 1,
-    judul: 'Desa Doko Ngasem Luncurkan Sistem Pelayanan Publik Digital Terpadu SIDes',
-    slug: 'desa-doko-luncurkan-sistem-pelayanan-publik-digital-sides',
-    kategori: 'Pemerintahan',
-    ringkasan: 'Sebagai upaya meningkatkan efisiensi dan transparansi, Pemerintah Desa Doko resmi mengadopsi platform digital desa terintegrasi dari tingkat RT hingga Kantor Desa.',
-    konten: 'Pemerintah Desa Doko, Kecamatan Ngasem, Kabupaten Kediri melakukan inovasi pelayanan birokrasi masyarakat berbasis digital. Melalui platform SiDesKu, warga tidak lagi perlu membawa berkas fisik. Seluruh permohonan surat dari persetujuan RT hingga legalisasi Kepala Desa diproses secara online dan sah diakui.',
-    view_count: 342,
-    is_published: true,
-    published_at: '2026-08-15T08:00:00.000000Z',
-  },
-  {
-    id: 2,
-    judul: 'Penyelesaian Drainase & Rabat Beton Dusun Krajan Menuju Ketahanan Iklim',
-    slug: 'penyelesaian-drainase-rabat-beton-dusun-krajan',
+    id: 1001,
+    judul: 'Pembangunan Jalan Lingkungan Desa Doko Mulai Dilaksanakan',
+    slug: 'pembangunan-jalan-lingkungan-desa-doko-mulai-dilaksanakan',
     kategori: 'Pembangunan',
-    ringkasan: 'Pemerintah Desa Doko menuntaskan revitalisasi saluran air dan drainase lingkungan sepanjang 450 meter dengan dana desa mandiri tahun 2026.',
-    konten: 'Dusun Krajan, Desa Doko resmi merampungkan proyek infrastruktur drainase dan rabat beton jalan gang. Proyek ini bertujuan mencegah genangan air saat curah hujan tinggi serta memperlancar akses mobilitas warga ke jalan utama desa. Pembangunan dikerjakan secara swakelola dengan melibatkan tenaga kerja warga setempat.',
-    view_count: 256,
+    ringkasan: 'Pemerintah Desa Doko merealisasikan peningkatan infrastruktur jalan lingkungan sepanjang 850 meter dengan rabat beton berkualitas untuk kelancaran mobilitas warga.',
+    konten: `Pemerintah Desa Doko, Kecamatan Ngasem, Kabupaten Kediri secara resmi memulai pengerjaan revitalisasi dan pembangunan jalan lingkungan di Dusun Krajan dan Dusun Doko. Proyek infrastruktur ini bersumber dari alokasi Dana Desa Tahun Anggaran 2026.
+
+Kepala Desa Doko menyampaikan bahwa peningkatan jalan lingkungan ini difokuskan pada pengecoran rabat beton dengan ketebalan standar guna memastikan ketahanan terhadap beban kendaraan dan curah hujan tinggi. Selain itu, pengerjaan turut mengikutsertakan tenaga kerja lokal warga desa melalui skema Padat Karya Tunai Desa (PKTD).
+
+"Dengan jalan yang mulus dan saluran pembuangan yang tertata, akses petani menuju lahan pertanian serta mobilitas harian anak sekolah menjadi jauh lebih aman dan nyaman," tutur Kepala Desa. Pengerjaan ditargetkan rampung dalam kurun waktu 30 hari kalender.`,
+    gambar_cover: '/images/warta/jalan.svg',
+    view_count: 512,
     is_published: true,
-    published_at: '2026-08-14T09:30:00.000000Z',
+    published_at: '2026-11-08T08:00:00.000000Z',
   },
   {
-    id: 3,
-    judul: 'Pemeriksaan Kesehatan Gratis & Penyaluran PMT Balita Posyandu Desa Doko',
-    slug: 'pemeriksaan-kesehatan-gratis-pmt-balita',
+    id: 1002,
+    judul: 'Sosialisasi Program Ketahanan Pangan di Desa Doko',
+    slug: 'sosialisasi-program-ketahanan-pangan-desa-doko',
+    kategori: 'Kegiatan Desa',
+    ringkasan: 'Pelatihan pemanfaatan pekarangan rumah untuk budidaya sayuran organik dan kolam terpal keluarga bersama kelompok tani desa.',
+    konten: `Bertempat di Balai Pertemuan Desa Doko, diselenggarakan sosialisasi dan bimbingan teknis Gerakan Ketahanan Pangan Mandiri. Kegiatan ini diikuti oleh 60 perwakilan kelompok tani (Poktan), ibu-ibu PKK, serta pemuda karang taruna se-Desa Doko.
+
+Program ini menghadirkan narasumber dari Dinas Pertanian dan Perkebunan Kabupaten Kediri. Materi yang diberikan meliputi teknik pembibitan hortikultura ramah lingkungan, pembuatan pupuk organik padat dan cair dari limbah rumah tangga, serta sistem budidaya ikan lele dalam ember (budikdamber).
+
+Melalui inisiatif ini, setiap rukun warga (RW) ditargetkan memiliki demplot percontohan kebun gizi mandiri yang dapat menekan pengeluaran belanja harian keluarga sekaligus mencukupi kebutuhan gizi seimbang.`,
+    gambar_cover: '/images/warta/ketahanan-pangan.svg',
+    view_count: 328,
+    is_published: true,
+    published_at: '2026-11-06T10:15:00.000000Z',
+  },
+  {
+    id: 1003,
+    judul: 'Kegiatan Posyandu Rutin, Dukung Kesehatan Ibu dan Anak',
+    slug: 'kegiatan-posyandu-rutin-dukung-kesehatan-ibu-dan-anak',
     kategori: 'Kesehatan',
-    ringkasan: 'Pelaksanaan posyandu serentak di 8 pos pelayanan Desa Doko mencatat kehadiran 140 balita dan 85 lansia dengan pemberian asupan gizi lengkap.',
-    konten: 'Dalam rangka mendukung program zero stunting Kabupaten Kediri, Kader Kesehatan Desa Doko bekerja sama dengan Puskesmas Ngasem menggelar posyandu terpadu. Selain timbang berat dan ukur tinggi badan, dibagikan susu formula, telur, dan buah segar untuk balita serta cek tensi dan gula darah gratis bagi lansia.',
-    view_count: 412,
+    ringkasan: 'Pelayanan penimbangan balita, pemantauan status gizi, vaksinasi lengkap, serta pembagian makanan tambahan (PMT) kaya protein hewani di Balai RW 02.',
+    konten: `Kader Posyandu Terpadu Desa Doko bekerja sama dengan Puskesmas Ngasem menggelar pos pelayanan terpadu (Posyandu) rutin bulanan. Sebanyak 85 balita dan 30 ibu hamil hadir mendapatkan pemeriksaan kesehatan berkala.
+
+Fasilitas layanan mencakup pengukuran berat badan, tinggi badan, lingkar kepala, imunisasi dasar lengkap, serta konsultasi gizi pencegahan stunting. Pada kesempatan ini, Pemdes Doko menyalurkan bantuan Pemberian Makanan Tambahan (PMT) berupa telur, susu segar, dan bubur kacang hijau.
+
+Ketua Tim Penggerak PKK Desa Doko menegaskan komitmen desa dalam mewujudkan Zero Stunting di wilayah Desa Doko melalui pengawasan intensif seribu hari pertama kehidupan.`,
+    gambar_cover: '/images/warta/posyandu.svg',
+    view_count: 440,
     is_published: true,
-    published_at: '2026-08-12T07:45:00.000000Z',
+    published_at: '2026-11-04T09:00:00.000000Z',
   },
   {
-    id: 4,
-    judul: 'Gelar Bazar Produk Unggulan BUMDes Doko Makmur Tembus Pasar Digital',
-    slug: 'bazar-produk-unggulan-bumdes-doko-makmur',
-    kategori: 'UMKM',
-    ringkasan: 'Produk anyaman bambu, olahan pangan kedelai, dan kerajinan mebel khas Desa Doko dipamerkan dalam bazar dan mulai dipasarkan secara online.',
-    konten: 'BUMDes Doko Makmur sukses menyelenggarakan expo UMKM di pelataran Balai Desa Doko. Puluhan perajin lokal memamerkan karya terbaik mereka, didukung dengan fasilitasi barcode pembayaran QRIS dan etalase digital SIDes untuk memperluas jangkauan pasar hingga luar Kabupaten Kediri.',
-    view_count: 520,
+    id: 1004,
+    judul: 'Gotong Royong Bersihkan Lingkungan Desa',
+    slug: 'gotong-royong-bersihkan-lingkungan-desa',
+    kategori: 'Masyarakat',
+    ringkasan: 'Ratusan warga di tiga dusun serentak membersihkan saluran drainase dan bahu jalan guna mengantisipasi genangan air musim penghujan.',
+    konten: `Tradisi kegotongroyongan kembali ditunjukkan oleh masyarakat Desa Doko dalam aksi kerja bakti serentak di lingkungan RT dan RW. Kegiatan difokuskan pada pembersihan endapan sedimen di selokan utama, pemangkasan dahan pohon yang menghalangi penerangan jalan umum, serta pemilahan sampah anorganik.
+
+Sekretaris Desa Doko mengapresiasi tingginya antusiasme masyarakat yang bahu-membahu membawa peralatan swadaya. Semangat guyub rukun ini menjadi modal sosial utama dalam menjaga kebersihan, kesehatan lingkungan, serta mempererat tali silaturahmi antarwarga.`,
+    gambar_cover: '/images/warta/gotong-royong.svg',
+    view_count: 275,
     is_published: true,
-    published_at: '2026-08-10T10:00:00.000000Z',
+    published_at: '2026-11-02T07:30:00.000000Z',
   },
   {
-    id: 5,
-    judul: 'Gotong Royong Bersih Saluran Air & Tradisi Sambut Musim Tanam 2026',
-    slug: 'gotong-royong-bersih-saluran-air-musim-tanam',
-    kategori: 'Sosial',
-    ringkasan: 'Ratusan warga di 3 dusun turun ke sawah dan saluran irigasi menggelar kerja bakti massal menjaga kebersihan lingkungan desa.',
-    konten: 'Semangat kebersamaan dan kegotongroyongan terus hidup di Desa Doko. Menyambut musim tanam padi tahun 2026, warga bersama jajaran pamong desa membersihkan gulma saluran tersier demi kelancaran pengairan 140 hektar sawah produktif.',
-    view_count: 310,
+    id: 1005,
+    judul: 'Pelayanan Administrasi Kependudukan Terpadu Berbasis Digital',
+    slug: 'pelayanan-administrasi-kependudukan-terpadu-digital',
+    kategori: 'Layanan',
+    ringkasan: 'Kantor Desa Doko menerapkan layanan permohonan surat pengantar, SKCK, dan keterangan domisili secara online tanpa antre berlama-lama.',
+    konten: `Untuk meningkatkan kecepatan dan transparansi birokrasi, Kantor Desa Doko kini mengoptimalkan loket pelayanan digital siDes. Warga desa dapat mengajukan permohonan surat keterangan usaha, surat pengantar nikah, surat kematian, maupun keterangan tidak mampu secara daring dari ponsel masing-masing.
+
+Dokumen yang telah diverifikasi oleh Ketua RT dan Sekdes langsung ditandatangani secara digital (TTE) oleh Kepala Desa dan dilengkapi barcode keabsahan resmi. Warga cukup mengunduh berkas PDF yang telah selesai atau mengambil salinan cetak di balai desa.`,
+    gambar_cover: '/images/warta/layanan-digital.svg',
+    view_count: 618,
     is_published: true,
-    published_at: '2026-08-08T06:30:00.000000Z',
+    published_at: '2026-10-29T11:00:00.000000Z',
   },
   {
-    id: 6,
+    id: 1006,
     judul: 'Musyawarah Rencana Pembangunan Desa (Musrenbangdes) 2027 Resmi Dibuka',
-    slug: 'musrenbangdes-doko-2027-resmi-dibuka',
+    slug: 'musrenbangdes-desa-doko-2027-resmi-dibuka',
     kategori: 'Pemerintahan',
-    ringkasan: 'Kepala Desa bersama BPD dan delegasi RT/RW merumuskan prioritas usulan pembangunan dan transformasi ekonomi desa tahun anggaran mendatang.',
-    konten: 'Musrenbangdes Doko menetapkan fokus kerja utama pada penguatan ketahanan pangan lokal, beasiswa pendidikan bagi keluarga pra-sejahtera, serta perluasan akses internet gratis di seluruh balai RW desa.',
-    view_count: 184,
+    ringkasan: 'BPD bersama Pemdes dan tokoh masyarakat merumuskan skala prioritas pembangunan infrastruktur, ekonomi, dan pendidikan tahun depan.',
+    konten: `Musrenbangdes Desa Doko dihadiri oleh jajaran Forkopimcam Ngasem, Kepala Desa, BPD, pengurus RT/RW, LPMD, serta perwakilan kelompok perempuan dan disabilitas.
+
+Agenda utama musyawarah ini adalah menetapkan daftar usulan prioritas Rencana Kerja Pemerintah Desa (RKPDes) tahun 2027. Tiga pilar utama yang disepakati bersama mencakup percepatan infrastruktur sanitasi lingkungan, bantuan permodalan bagi pelaku UMKM desa, serta insentif bagi guru PAUD dan kader kesehatan.`,
+    gambar_cover: '/images/warta/musrenbang.svg',
+    view_count: 390,
     is_published: true,
-    published_at: '2026-08-16T13:00:00.000000Z',
+    published_at: '2026-10-25T14:00:00.000000Z',
+  },
+  {
+    id: 1007,
+    judul: 'Gelar Bazar Produk Unggulan BUMDes Doko Makmur Tembus Pasar Digital',
+    slug: 'gelar-bazar-produk-unggulan-bumdes-doko-makmur',
+    kategori: 'Masyarakat',
+    ringkasan: 'Olahan sambal pecel khas, kerajinan anyaman bambu, dan madu klanceng lokal dipamerkan dengan fasilitas pembayaran nontunai QRIS.',
+    konten: `Pelataran Balai Desa Doko dipadati warga dalam gelaran Bazar UMKM BUMDes Doko Makmur. Puluhan pelaku usaha mikro desa menampilkan produk kuliner tradisional dan kerajinan tangan bernilai ekonomis tinggi.
+
+Dalam acara ini, BUMDes memfasilitasi sertifikasi halal gratis serta integrasi toko online agar produk unggulan Desa Doko dapat dipesan oleh masyarakat luas di luar wilayah Kediri.`,
+    gambar_cover: '/images/warta/bumdes.svg',
+    view_count: 489,
+    is_published: true,
+    published_at: '2026-10-20T10:00:00.000000Z',
   },
 ];
 
-const categoryConfigs = [
-  { id: 'Semua', label: 'Semua Kategori Warta', shortLabel: 'Semua', icon: Globe, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { id: 'Pemerintahan', label: 'Pemerintahan Desa', shortLabel: 'Pemerintahan', icon: Building2, color: 'text-blue-600', bg: 'bg-blue-50' },
-  { id: 'Pembangunan', label: 'Pembangunan & Sarpras', shortLabel: 'Pembangunan', icon: HardHat, color: 'text-amber-600', bg: 'bg-amber-50' },
-  { id: 'Kesehatan', label: 'Kesehatan & Posyandu', shortLabel: 'Kesehatan', icon: HeartPulse, color: 'text-rose-600', bg: 'bg-rose-50' },
-  { id: 'UMKM', label: 'UMKM & Ekonomi Kreatif', shortLabel: 'UMKM', icon: ShoppingBag, color: 'text-purple-600', bg: 'bg-purple-50' },
-  { id: 'Sosial', label: 'Sosial & Kemasyarakatan', shortLabel: 'Sosial', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
-];
 
-const sortConfigs = [
-  { id: 'terbaru', label: 'Terbaru (Terkini)', desc: 'Publikasi warta paling anyar', icon: ArrowUpDown, color: 'text-blue-600' },
-  { id: 'terpopuler', label: 'Paling Banyak Dibaca', desc: 'Artikel paling diminati warga', icon: TrendingUp, color: 'text-amber-600' },
-  { id: 'terlama', label: 'Terlama (Arsip)', desc: 'Arsip publikasi terdahulu', icon: Clock, color: 'text-slate-500' },
+// Helper gambar dokumentasi asli desa yang realistis dan konsisten per kategori
+const CATEGORY_DOCUMENTARY_IMAGES: Record<string, string> = {
+  pembangunan: '/images/warta/jalan.svg',
+  kesehatan: '/images/warta/posyandu.svg',
+  'kegiatan desa': '/images/warta/ketahanan-pangan.svg',
+  masyarakat: '/images/warta/gotong-royong.svg',
+  layanan: '/images/warta/layanan-digital.svg',
+  pemerintahan: '/images/warta/musrenbang.svg',
+  umkm: '/images/warta/bumdes.svg',
+};
+
+export const resolveBeritaImage = (berita?: Berita | null): string => {
+  if (!berita) return '/images/warta/jalan.svg';
+  // Jika gambar bukan stock photo event.jpg/kursus.jpg/about_img.webp, gunakan
+  if (
+    berita.gambar_cover &&
+    !berita.gambar_cover.includes('event.jpg') &&
+    !berita.gambar_cover.includes('kursus.jpg') &&
+    !berita.gambar_cover.includes('about_img.webp')
+  ) {
+    return berita.gambar_cover;
+  }
+  const cat = (berita.kategori || '').toLowerCase();
+  for (const [key, url] of Object.entries(CATEGORY_DOCUMENTARY_IMAGES)) {
+    if (cat.includes(key) || key.includes(cat)) {
+      return url;
+    }
+  }
+  return '/images/warta/jalan.svg';
+};
+
+const KATEGORI_OPTIONS = [
+  'Semua Berita',
+  'Pemerintahan',
+  'Pembangunan',
+  'Kegiatan Desa',
+  'Kesehatan',
+  'Layanan',
+  'Masyarakat',
 ];
 
 export const BeritaPage: React.FC = () => {
-  const [beritas, setBeritas] = useState<Berita[]>(defaultBeritas);
-  const [pengumumans, setPengumumans] = useState<Pengumuman[]>([]);
-  const [selectedKategori, setSelectedKategori] = useState('Semua');
-  const [sortBy, setSortBy] = useState('terbaru');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [beritas, setBeritas] = useState<Berita[]>(fallbackBeritas);
+  const [selectedKategori, setSelectedKategori] = useState<string>('Semua Berita');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedBerita, setSelectedBerita] = useState<Berita | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [currentPage, setCurrentPage] = useState(1);
+  const [copiedLink, setCopiedLink] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [visibleCount, setVisibleCount] = useState<number>(6);
 
+  const categoryScrollRef = useRef<HTMLDivElement>(null);
+
+  // Fetch dari backend API terintegrasi
   useEffect(() => {
-    setCurrentPage(1);
-  }, [selectedKategori, searchQuery, sortBy]);
+    let isMounted = true;
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const beritaRes = await api.get('/public/beritas').catch(() => null);
 
-  // Custom Dropdown Popover States & Click Outside
-  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
-  const [isSortOpen, setIsSortOpen] = useState(false);
-  const categoryRef = useRef<HTMLDivElement>(null);
-  const sortRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (categoryRef.current && !categoryRef.current.contains(event.target as Node)) {
-        setIsCategoryOpen(false);
-      }
-      if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
-        setIsSortOpen(false);
+        if (isMounted) {
+          if (beritaRes?.data?.success && Array.isArray(beritaRes.data.data) && beritaRes.data.data.length > 0) {
+            const fetched = beritaRes.data.data;
+            // Utamakan daftar editorial resmi desa di awal, gabungkan data backend lainnya
+            const merged = [...fallbackBeritas];
+            fetched.forEach((f: Berita) => {
+              if (!merged.some((m) => m.judul.trim().toLowerCase() === f.judul.trim().toLowerCase())) {
+                merged.push(f);
+              }
+            });
+            setBeritas(merged);
+          }
+        }
+      } catch {
+        // Fallback sudah aktif
+      } finally {
+        if (isMounted) setIsLoading(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    fetchData();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // Lock body scroll and handle ESC key when modal is open
+  // Lock scroll saat modal terbuka
   useEffect(() => {
     if (selectedBerita) {
       document.body.style.overflow = 'hidden';
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape') setSelectedBerita(null);
-      };
-      window.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.body.style.overflow = '';
-        window.removeEventListener('keydown', handleKeyDown);
-      };
+    } else {
+      document.body.style.overflow = '';
     }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [selectedBerita]);
 
-  const categories = ['Semua', 'Pemerintahan', 'Pembangunan', 'Kesehatan', 'UMKM', 'Sosial'];
-  const activeCategory = categoryConfigs.find(c => c.id.toLowerCase() === selectedKategori.toLowerCase()) || categoryConfigs[0];
-  const activeSort = sortConfigs.find(s => s.id === sortBy) || sortConfigs[0];
-
+  // Handle ESC untuk menutup modal
   useEffect(() => {
-    const fetchBerita = async () => {
-      try {
-        const [beritaRes, pengumumanRes] = await Promise.all([
-          api.get('/public/beritas'),
-          api.get('/public/pengumumans'),
-        ]);
-
-        if (beritaRes.data?.success && Array.isArray(beritaRes.data.data) && beritaRes.data.data.length > 0) {
-          // Merge with default list to guarantee rich coverage across all categories
-          const fetched: Berita[] = beritaRes.data.data;
-          const merged = [...fetched];
-          defaultBeritas.forEach((db) => {
-            if (!merged.some(m => m.id === db.id || m.slug === db.slug)) {
-              merged.push(db);
-            }
-          });
-          setBeritas(merged);
-        }
-        if (pengumumanRes.data?.success && Array.isArray(pengumumanRes.data.data)) {
-          setPengumumans(pengumumanRes.data.data);
-        }
-      } catch {
-        // Fallback to rich defaults
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedBerita(null);
       }
     };
-    fetchBerita();
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const formatBeritaDate = (dateStr?: string | null): string => {
+  // Format tanggal bergaya editorial Indonesia dengan bulan 3 huruf (contoh: 8 Nov 2026, 15 Jan 2026)
+  const formatDate = (dateStr?: string | null): string => {
     if (!dateStr) return 'Terkini';
     try {
       const d = new Date(dateStr);
       if (isNaN(d.getTime())) return 'Terkini';
-      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+      const day = d.getDate();
+      const month = months[d.getMonth()];
+      const year = d.getFullYear();
+      return `${day} ${month} ${year}`;
     } catch {
       return 'Terkini';
     }
   };
 
-  const filteredBeritas = (beritas || [])
-    .filter((b) => {
-      if (!b) return false;
-      const cat = b.kategori || 'Pemerintahan';
-      const judul = b.judul || '';
-      const ringkasan = b.ringkasan || '';
-      const konten = b.konten || '';
-      const matchCat = selectedKategori === 'Semua' || cat.toLowerCase() === selectedKategori.toLowerCase();
-      const matchSearch = judul.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (ringkasan || konten).toLowerCase().includes(searchQuery.toLowerCase());
-      return matchCat && matchSearch;
-    })
-    .sort((a, b) => {
-      if (sortBy === 'terpopuler') {
-        return (b?.view_count || 0) - (a?.view_count || 0);
-      }
-      const timeA = a?.published_at ? new Date(a.published_at).getTime() : 0;
-      const timeB = b?.published_at ? new Date(b.published_at).getTime() : 0;
-      if (sortBy === 'terlama') {
-        return (isNaN(timeA) ? 0 : timeA) - (isNaN(timeB) ? 0 : timeB);
-      }
-      // default: terbaru
-      return (isNaN(timeB) ? 0 : timeB) - (isNaN(timeA) ? 0 : timeA);
-    });
+  // Filter warta berdasarkan kategori dan pencarian
+  const filteredBeritas = useMemo(() => {
+    return beritas.filter((item) => {
+      const matchKategori =
+        selectedKategori === 'Semua Berita' ||
+        (item.kategori && item.kategori.toLowerCase() === selectedKategori.toLowerCase());
 
-  const pageSize = 6;
-  const paginatedBeritas = filteredBeritas.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return matchKategori;
+
+      const judul = (item.judul || '').toLowerCase();
+      const ringkasan = (item.ringkasan || '').toLowerCase();
+      const konten = (item.konten || '').toLowerCase();
+
+      return matchKategori && (judul.includes(query) || ringkasan.includes(query) || konten.includes(query));
+    });
+  }, [beritas, selectedKategori, searchQuery]);
+
+  // Berita paling atas (Lead Story): Pilihan pertama yang relevan
+  const topNews = useMemo(() => {
+    if (filteredBeritas.length === 0) return null;
+    if (selectedKategori === 'Semua Berita' && !searchQuery) {
+      const premier = filteredBeritas.find((b) => b.kategori?.toLowerCase() === 'pembangunan');
+      if (premier) return premier;
+    }
+    return filteredBeritas[0];
+  }, [filteredBeritas, selectedKategori, searchQuery]);
+
+  // Berita kedua dan ketiga: Hanya tulisan, hook berita, dan tanggal upload (Tanpa foto)
+  const secondaryNews = useMemo(() => {
+    if (!topNews) return [];
+    const list = filteredBeritas.filter((b) => b.id !== topNews.id);
+    return list.slice(0, 2);
+  }, [filteredBeritas, topNews]);
+
+  // Berita lainnya (item ke-4 dan seterusnya)
+  const remainingNews = useMemo(() => {
+    if (!topNews) return [];
+    const list = filteredBeritas.filter((b) => b.id !== topNews.id);
+    return list.slice(2, visibleCount);
+  }, [filteredBeritas, topNews, visibleCount]);
+
+  const handleShare = async (berita: Berita) => {
+    const shareData = {
+      title: berita.judul,
+      text: berita.ringkasan || berita.judul,
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch {
+        // Fallback to clipboard
+      }
+    }
+    navigator.clipboard?.writeText(window.location.href);
+    setCopiedLink(true);
+    setTimeout(() => setCopiedLink(false), 2500);
+  };
+
+  const handleResetFilter = () => {
+    setSelectedKategori('Semua Berita');
+    setSearchQuery('');
+    setVisibleCount(6);
+  };
+
+  const scrollToCategories = () => {
+    categoryScrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   return (
-    <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800 bg-white">
-      
-      {/* Div 1: Clean Ambient Hero Section with SVG Vectors (Canvas Mint) */}
-      <section className="relative isolate w-full px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-10 text-center overflow-hidden">
-        <div className="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-blue-500/15 via-sky-400/10 to-transparent blur-3xl pointer-events-none -z-10" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-gradient-to-tr from-blue-500/20 via-sky-400/15 to-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-        {/* SVG Ambient Concentric Watermark Vectors */}
-        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-blue-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
-          <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="2" strokeDasharray="6 6" />
-          <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" />
-          <circle cx="200" cy="200" r="40" stroke="currentColor" strokeWidth="1" />
-        </svg>
-        <svg className="absolute -left-20 top-1/4 w-[420px] h-[420px] text-indigo-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
-          <path d="M 0,200 Q 100,70 200,200 T 400,200" stroke="currentColor" strokeWidth="2" fill="none" />
-          <path d="M 0,230 Q 100,100 200,230 T 400,230" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.6" />
-        </svg>
+    <div className="page-enter relative w-full overflow-hidden flex flex-col min-h-[60vh] text-[#101828] font-sans antialiased selection:bg-[#155EEF]/10 selection:text-[#155EEF]">
 
-        <div className="relative z-10 mx-auto max-w-4xl">
-          
-          {/* Left Column (60% Fibonacci): Title and Description */}
-          <div className="space-y-4 text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs animate-fade-in">
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span>Warta Desa Doko</span>
+      {/* ========================================================================= */}
+      {/* 4.B HERO SECTION: Judul "Warta dan Informasi" (Tanpa Deskripsi)           */}
+      {/* ========================================================================= */}
+      <section className="relative w-full overflow-hidden pt-7 pb-8 sm:pt-11 sm:pb-12 border-b-2 border-slate-200/80 bg-gradient-to-b from-[#cfe6fc] via-[#e6f2fd] to-white">
+        {/* Soft radial glow ambient light persis Foto No 1 */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full bg-gradient-to-b from-blue-400/25 via-sky-300/20 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 w-[480px] h-[200px] bg-gradient-to-tr from-blue-500/20 via-sky-400/25 to-indigo-400/15 rounded-full blur-2xl pointer-events-none" />
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
+          {/* Pill Badge persis Foto No 1 & No 3 */}
+          <div className="flex justify-center mb-3 sm:mb-3.5">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-blue-200 text-blue-700 text-xs font-bold shadow-xs">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse" />
+              <span>Warta dan Informasi</span>
             </div>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.08] max-w-4xl mx-auto">
-              Warta &{' '}
-              <span className="relative whitespace-nowrap text-blue-700 inline-block">
-                Kabar Terkini
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-blue-400" viewBox="0 0 100 20" preserveAspectRatio="none">
-                  <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
-                </svg>
-              </span>
-            </h1>
-
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl mx-auto">
-              Kabar terkini, agenda pembangunan, dan pengumuman resmi Desa Doko.
-            </p>
           </div>
 
-          {/* Right Column (40% Fibonacci): Featured News Card Preview */}
-          <div className="hidden">
-            <div className="w-full max-w-md animate-float-gentle">
-              <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
-                
-                {/* Top Bar with Badge */}
-                <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center font-black">
-                      <Newspaper className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="font-black text-xs text-slate-900 leading-tight">
-                        Liputan Khusus
-                      </div>
-                      <div className="text-[10px] text-blue-600 font-bold">
-                        Desa Doko, Kediri
-                      </div>
-                    </div>
-                  </div>
-                  <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 font-extrabold text-[10px] border border-blue-200">
-                    Terbit Hari Ini
-                  </span>
-                </div>
-
-                {/* Featured Snippet */}
-                <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2 text-xs">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">Pembangunan</span>
-                    <span className="text-[10px] text-slate-400 font-medium">Bulan Ini</span>
-                  </div>
-                  <h4 className="font-black text-slate-900 leading-snug">
-                    Penyelesaian Drainase Dusun Krajan Menuju Ketahanan Iklim
-                  </h4>
-                  <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">
-                    Pemerintah Desa Doko menuntaskan revitalisasi saluran air sepanjang 450 meter dengan dana desa mandiri.
-                  </p>
-                </div>
-
-                {/* Trust Badge */}
-                <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Arsip Publik Transparan</span>
-                  </span>
-                  <span className="font-bold text-slate-700">100% Akurat</span>
-                </div>
-              </div>
-            </div>
+          {/* Headline: Warta dan Informasi (Tanpa Deskripsi) */}
+          <div className="max-w-2xl mx-auto">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#101828] tracking-tight leading-tight">
+              Warta dan <span className="text-blue-600">Informasi</span>
+            </h1>
           </div>
         </div>
       </section>
 
-      {/* Floating Filter Bar - Straddling Seam Line (Fibonacci Golden Ratio) */}
-      <div className="relative z-30 mt-6 sm:mt-8 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <div className="bg-white/95 backdrop-blur-xl rounded-[2rem] border border-slate-200/90 p-4 sm:p-5 shadow-xl shadow-slate-900/10 space-y-3.5">
-          
-          {/* Main Filter Controls Row */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-            
-            {/* Search Box (5 cols) */}
-            <div className="md:col-span-5 relative">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Cari judul warta atau topik..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-9 py-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-2xs"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
-                  title="Hapus pencarian"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
-            </div>
+      {/* Main Content Area */}
+      <div className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6 space-y-6 sm:space-y-8">
 
-            {/* Custom Category Dropdown Popover (4 cols) */}
-            <div className="md:col-span-4 relative" ref={categoryRef}>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsCategoryOpen(prev => !prev);
-                  setIsSortOpen(false);
-                }}
-                className={`w-full flex items-center justify-between pl-3.5 pr-3 py-2.5 bg-slate-50 hover:bg-slate-100/90 rounded-2xl border transition-all cursor-pointer shadow-2xs ${
-                  isCategoryOpen 
-                    ? 'border-blue-500 ring-4 ring-blue-500/10 bg-white' 
-                    : 'border-slate-200 text-slate-800'
-                }`}
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  <activeCategory.icon className={`w-3.5 h-3.5 flex-shrink-0 ${activeCategory.color}`} />
-                  <span className="text-xs font-bold truncate">
-                    {activeCategory.label}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 flex-shrink-0 ml-1">
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-200/80 text-slate-600 font-extrabold">
-                    {selectedKategori === 'Semua' 
-                      ? beritas.length 
-                      : beritas.filter(b => b.kategori?.toLowerCase() === selectedKategori.toLowerCase()).length}
-                  </span>
-                  <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 flex-shrink-0 ${isCategoryOpen ? 'rotate-180 text-blue-600' : ''}`} />
-                </div>
-              </button>
-
-              {/* Custom Popover Menu */}
-              {isCategoryOpen && (
-                <div className="absolute left-0 top-full mt-2 w-72 max-w-[90vw] bg-white/98 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 p-2 z-50 ring-1 ring-slate-900/5 animate-in fade-in zoom-in-95 duration-150">
-                  <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-1 flex items-center justify-between">
-                    <span>Pilih Kategori Warta</span>
-                    <span className="text-blue-700 font-bold">{beritas.length} Total</span>
-                  </div>
-                  <div className="space-y-1">
-                    {categoryConfigs.map((cat) => {
-                      const count = cat.id === 'Semua' 
-                        ? beritas.length 
-                        : beritas.filter(b => b.kategori?.toLowerCase() === cat.id.toLowerCase()).length;
-                      const isSelected = selectedKategori.toLowerCase() === cat.id.toLowerCase();
-                      const Icon = cat.icon;
-                      return (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          onClick={() => {
-                            setSelectedKategori(cat.id);
-                            setIsCategoryOpen(false);
-                          }}
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-blue-50 text-blue-950 font-black border border-blue-200/70 shadow-2xs'
-                              : 'text-slate-700 hover:bg-slate-100/80 font-bold'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5">
-                            <div className={`w-6 h-6 rounded-lg ${cat.bg} flex items-center justify-center`}>
-                              <Icon className={`w-3.5 h-3.5 ${cat.color}`} />
-                            </div>
-                            <span>{cat.label}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold ${
-                              isSelected ? 'bg-blue-200/80 text-blue-900' : 'bg-slate-100 text-slate-500'
-                            }`}>
-                              {count}
-                            </span>
-                            {isSelected && <Check className="w-3.5 h-3.5 text-blue-600" />}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Custom Sort Dropdown Popover (3 cols) */}
-            <div className="md:col-span-3 relative" ref={sortRef}>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsSortOpen(prev => !prev);
-                  setIsCategoryOpen(false);
-                }}
-                className={`w-full flex items-center justify-between pl-3.5 pr-3 py-2.5 bg-slate-50 hover:bg-slate-100/90 rounded-2xl border transition-all cursor-pointer shadow-2xs ${
-                  isSortOpen 
-                    ? 'border-blue-500 ring-4 ring-blue-500/10 bg-white' 
-                    : 'border-slate-200 text-slate-800'
-                }`}
-              >
-                <div className="flex items-center gap-2 min-w-0">
-                  {activeSort?.icon ? (
-                    React.createElement(activeSort.icon as any, {
-                      className: `w-3.5 h-3.5 flex-shrink-0 ${activeSort.color}`
-                    })
-                  ) : (
-                    <ArrowUpDown className={`w-3.5 h-3.5 flex-shrink-0 ${activeSort?.color || 'text-blue-600'}`} />
-                  )}
-                  <span className="text-xs font-bold truncate">
-                    {activeSort?.label}
-                  </span>
-                </div>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 flex-shrink-0 ml-1 ${isSortOpen ? 'rotate-180 text-blue-600' : ''}`} />
-              </button>
-
-              {/* Custom Popover Menu */}
-              {isSortOpen && (
-                <div className="absolute right-0 top-full mt-2 w-64 max-w-[90vw] bg-white/98 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200/90 p-2 z-50 ring-1 ring-slate-900/5 animate-in fade-in zoom-in-95 duration-150">
-                  <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-1">
-                    Urutkan Berdasarkan
-                  </div>
-                  <div className="space-y-1">
-                    {sortConfigs.map((item) => {
-                      const isSelected = sortBy === item.id;
-                      const Icon = item.icon as any;
-                      return (
-                        <button
-                          key={item.id}
-                          type="button"
-                          onClick={() => {
-                            setSortBy(item.id);
-                            setIsSortOpen(false);
-                          }}
-                          className={`w-full flex items-start justify-between p-2.5 rounded-xl text-left transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-blue-50 text-blue-950 border border-blue-200/70 shadow-2xs'
-                              : 'text-slate-700 hover:bg-slate-100/80'
-                          }`}
-                        >
-                          <div className="flex items-start gap-2.5">
-                            <div className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center mt-0.5 flex-shrink-0">
-                              {Icon ? (
-                                <Icon className={`w-3.5 h-3.5 ${item.color}`} />
-                              ) : (
-                                <ArrowUpDown className={`w-3.5 h-3.5 ${item.color}`} />
-                              )}
-                            </div>
-                            <div>
-                              <div className={`text-xs ${isSelected ? 'font-black text-blue-950' : 'font-bold text-slate-800'}`}>
-                                {item.label}
-                              </div>
-                              <div className="text-[10px] text-slate-500 leading-tight mt-0.5">
-                                {item.desc}
-                              </div>
-                            </div>
-                          </div>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-blue-600 flex-shrink-0 mt-0.5 ml-1" />}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-
+        {/* ========================================================================= */}
+        {/* 4.F KATEGORI BERITA (Horizontal Scrollable Pill Bar)                      */}
+        {/* ========================================================================= */}
+        <section ref={categoryScrollRef} id="kategori-warta" className="space-y-3 pt-1">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs font-semibold text-[#667085] uppercase tracking-wider">
+              Kategori Warta
+            </span>
+            {searchQuery && (
+              <span className="text-xs text-[#155EEF] font-medium">
+                Pencarian: "{searchQuery}" ({filteredBeritas.length} warta)
+              </span>
+            )}
           </div>
 
-          {/* Reset Button (only shown when filters are active) */}
-            {(selectedKategori !== 'Semua' || searchQuery || sortBy !== 'terbaru') && (
-              <div className="flex justify-end pt-2.5 border-t border-slate-100">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5 -mx-4 px-4 sm:mx-0 sm:px-0">
+            {KATEGORI_OPTIONS.map((cat) => {
+              const isActive = selectedKategori.toLowerCase() === cat.toLowerCase();
+              return (
                 <button
+                  key={cat}
                   type="button"
                   onClick={() => {
-                    setSelectedKategori('Semua');
-                    setSearchQuery('');
-                    setSortBy('terbaru');
+                    setSelectedKategori(cat);
+                    setVisibleCount(6);
                   }}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-extrabold text-[11px] border border-rose-200 transition-colors cursor-pointer shadow-2xs"
+                  className={`px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-[#155EEF] text-white shadow-xs font-semibold'
+                      : 'bg-[#F8FAFC] text-[#475467] hover:bg-slate-100 hover:text-[#101828] border border-[#EAECF0]'
+                  }`}
                 >
-                  <X className="w-3 h-3" />
-                  <span>Reset Filter</span>
+                  {cat}
                 </button>
-              </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className="py-12 flex flex-col items-center justify-center space-y-3">
+            <div className="w-8 h-8 border-2 border-[#155EEF]/20 border-t-[#155EEF] rounded-full animate-spin" />
+            <span className="text-xs text-[#667085] font-medium">Memuat warta Desa Doko...</span>
+          </div>
+        )}
+
+        {/* Empty State jika tidak ada warta sesuai filter/pencarian */}
+        {!isLoading && filteredBeritas.length === 0 && (
+          <div className="bg-[#F8FAFC] rounded-xl border border-[#EAECF0] p-8 text-center space-y-3 max-w-md mx-auto">
+            <Search className="w-8 h-8 text-[#667085] mx-auto opacity-50" />
+            <h3 className="text-sm font-semibold text-[#101828]">Warta Tidak Ditemukan</h3>
+            <p className="text-xs text-[#667085] leading-relaxed">
+              Tidak ada berita yang cocok dengan kata kunci atau filter kategori yang dipilih.
+            </p>
+            <button
+              type="button"
+              onClick={handleResetFilter}
+              className="px-4 py-2 rounded-lg bg-[#155EEF] text-white text-xs font-semibold hover:bg-[#003B95] transition-colors cursor-pointer"
+            >
+              Reset Semua Filter
+            </button>
+          </div>
+        )}
+
+        {/* Konten Berita Terpadu (Editorial Layout Sesuai Arahan) */}
+        {!isLoading && filteredBeritas.length > 0 && (
+          <div className="space-y-6 sm:space-y-8">
+            
+            {/* ========================================================================= */}
+            {/* 1. BERITA PALING ATAS: FOTO -> JUDUL BERITA -> HOOK BERITA                 */}
+            {/* ========================================================================= */}
+            {topNews && (
+              <section aria-label="Berita Utama Paling Atas">
+                <article
+                  onClick={() => setSelectedBerita(topNews)}
+                  className="group block cursor-pointer bg-white border border-[#EAECF0] rounded-2xl overflow-hidden hover:border-[#155EEF]/50 transition-all shadow-xs p-3.5 sm:p-5 space-y-3.5"
+                >
+                  {/* URUTAN 1: FOTO */}
+                  <div className="relative aspect-[16/9] w-full bg-slate-100 rounded-xl overflow-hidden">
+                    <img
+                      src={resolveBeritaImage(topNews)}
+                      alt={topNews.judul}
+                      loading="eager"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = '/images/warta/jalan.svg';
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span className="px-3 py-1 rounded-full bg-[#155EEF] text-white font-bold text-xs shadow-xs">
+                        {topNews.kategori || 'Pembangunan'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* URUTAN 2: JUDUL BERITA */}
+                  <h2 className="text-lg sm:text-2xl lg:text-3xl font-black text-[#101828] leading-snug group-hover:text-[#155EEF] transition-colors">
+                    {topNews.judul}
+                  </h2>
+
+                  {/* URUTAN 3: HOOK BERITA (Ringkasan / Hook) */}
+                  {topNews.ringkasan && (
+                    <p className="text-xs sm:text-sm md:text-base text-[#475467] leading-relaxed font-normal">
+                      {topNews.ringkasan}
+                    </p>
+                  )}
+
+                  {/* Footer Tanggal Upload & Aksi Baca */}
+                  <div className="pt-2 border-t border-[#EAECF0] flex items-center justify-between text-xs text-[#667085]">
+                    <span>{formatDate(topNews.published_at)}</span>
+                    <div className="flex items-center gap-1 font-semibold text-[#155EEF]">
+                      <span>Baca</span>
+                      <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                  </div>
+                </article>
+              </section>
             )}
 
-        </div>
-      </div>
-
-      {/* Div 2: Berita Grid & Headline (Full-Width Pure White Band) */}
-      <section className="w-full bg-white pt-10 sm:pt-12 pb-16 sm:pb-24 border-b border-slate-200/80 relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-          
-          {/* Active Filter Results Counter & Single Mode Icon Toggle */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3 text-xs text-slate-500 font-medium">
-            <div className="flex items-center gap-2">
-              <span>
-                Menampilkan <strong className="text-slate-900 font-black">{filteredBeritas.length}</strong> warta{' '}
-                {selectedKategori !== 'Semua' && (
-                  <>kategori <span className="text-blue-700 font-bold">"{selectedKategori}"</span></>
-                )}
-                {searchQuery && (
-                  <> dengan kata kunci <span className="text-blue-700 font-bold">"{searchQuery}"</span></>
-                )}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="text-[11px] text-slate-400 hidden sm:block">
-                Urutan: <span className="text-slate-700 font-bold">{sortBy === 'terpopuler' ? 'Paling Populer' : sortBy === 'terlama' ? 'Terlama' : 'Terkini'}</span>
-              </div>
-
-              {/* Segmented View Mode Toggle: Grid vs List */}
-              <div className="flex items-center p-0.5 bg-slate-100 rounded-xl border border-slate-200/80 shadow-2xs">
-                <button
-                  type="button"
-                  onClick={() => setViewMode('grid')}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    viewMode === 'grid'
-                      ? 'bg-white text-blue-800 shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-800'
-                  }`}
-                  title="Tampilan Grid Kartu"
-                  aria-label="Tampilan Grid Kartu"
-                >
-                  <LayoutGrid className="w-3.5 h-3.5 text-blue-700" />
-                  <span className="hidden xs:inline text-[11px]">Grid</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setViewMode('list')}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    viewMode === 'list'
-                      ? 'bg-white text-blue-800 shadow-2xs'
-                      : 'text-slate-500 hover:text-slate-800'
-                  }`}
-                  title="Tampilan List Warta"
-                  aria-label="Tampilan List Warta"
-                >
-                  <List className="w-3.5 h-3.5 text-blue-700" />
-                  <span className="hidden xs:inline text-[11px]">List</span>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Conditional Layout: List View vs Grid Kartu */}
-          {viewMode === 'list' ? (
-            filteredBeritas.length > 0 ? (
-              <div className="max-w-4xl mx-auto divide-y divide-slate-100">
-                {paginatedBeritas.map((b, idx) => {
-                  const thumb = idx % 3 === 0 ? '/images/event.jpg' : idx % 3 === 1 ? '/images/kursus.jpg' : '/images/landing/about_img.webp';
-                  const relativeTimes = ['12 menit lalu', '50 menit lalu', '53 menit lalu', '2 jam lalu', '5 jam lalu', '1 hari lalu'];
-                  const relTime = relativeTimes[idx % relativeTimes.length];
-                  const isRekomendasi = idx % 2 === 0;
-
-                  return (
+            {/* ========================================================================= */}
+            {/* 2. BERITA KEDUA DAN KETIGA: CUKUP TULISAN, HOOK BERITA, DAN TANGGAL UPLOAD */}
+            {/* ========================================================================= */}
+            {secondaryNews.length > 0 && (
+              <section aria-label="Berita Kedua dan Ketiga" className="space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
+                  {secondaryNews.map((item) => (
                     <article
-                      key={b.id}
-                      onClick={() => setSelectedBerita(b)}
-                      className="group flex flex-row items-start gap-3.5 sm:gap-6 py-4 sm:py-5 cursor-pointer transition-all hover:bg-slate-50/80 p-2 sm:p-3 rounded-2xl"
+                      key={item.id}
+                      onClick={() => setSelectedBerita(item)}
+                      className="group cursor-pointer bg-white border border-[#EAECF0] hover:border-[#155EEF]/50 rounded-2xl p-4 sm:p-5 hover:bg-[#F8FAFC]/60 transition-all shadow-xs flex flex-col justify-between space-y-3"
                     >
-                      {/* Left Thumbnail: Compact square on mobile, wide on desktop */}
-                      <div className="w-24 h-24 xs:w-28 xs:h-28 sm:w-60 md:w-72 sm:h-36 rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 flex-shrink-0 shadow-2xs group-hover:shadow-md transition-all relative">
-                        <img
-                          src={thumb}
-                          alt={b.judul}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                      <div className="space-y-2">
+                        {/* Tulisan / Judul Berita */}
+                        <h3 className="text-sm sm:text-base font-bold text-[#101828] leading-snug group-hover:text-[#155EEF] transition-colors">
+                          {item.judul}
+                        </h3>
+
+                        {/* Hook Berita */}
+                        {item.ringkasan && (
+                          <p className="text-xs sm:text-sm text-[#475467] leading-relaxed line-clamp-3 font-normal">
+                            {item.ringkasan}
+                          </p>
+                        )}
                       </div>
 
-                      {/* Right Content */}
-                      <div className="flex-1 flex flex-col justify-between self-stretch py-0.5 min-w-0">
-                        <div className="space-y-1 sm:space-y-1.5">
-                          {/* Top Badge: Rekomendasi or Category & Relative Time */}
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className={`inline-block px-2 sm:px-2.5 py-0.5 rounded-md font-bold text-[10px] sm:text-xs tracking-wide ${
-                              isRekomendasi 
-                                ? 'bg-sky-50 text-sky-700' 
-                                : 'bg-blue-50 text-blue-700'
-                            }`}>
-                              {isRekomendasi ? 'Rekomendasi' : b.kategori}
-                            </span>
-                            <span className="text-[10px] sm:text-xs text-slate-400 font-medium">
-                              {relTime}
-                            </span>
-                          </div>
-
-                          {/* Title: 2 lines clamp, crisp bold font */}
-                          <h3 className="font-bold text-xs xs:text-sm sm:text-lg text-slate-900 group-hover:text-blue-700 transition-colors leading-snug line-clamp-2">
-                            {b.judul}
-                          </h3>
-
-                          {/* Desktop Excerpt */}
-                          {b.ringkasan && (
-                            <p className="hidden md:line-clamp-2 text-xs text-slate-500 leading-relaxed pt-0.5">
-                              {b.ringkasan}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* Bottom Meta: Category & Published Date */}
-                        <div className="pt-2 sm:pt-3 text-[10px] sm:text-xs text-slate-500 font-medium flex items-center justify-between">
-                          <div className="flex items-center gap-2 text-slate-400">
-                            <span className="font-semibold text-slate-700">
-                              {b.kategori}
-                            </span>
-                            <span>•</span>
-                            <span>{formatBeritaDate(b.published_at)}</span>
-                          </div>
-                          <span className="hidden sm:flex items-center gap-1 text-slate-400">
-                            <Eye className="w-3.5 h-3.5 text-slate-400" />
-                            {b.view_count || 120} views
-                          </span>
-                        </div>
+                      {/* Tanggal Upload */}
+                      <div className="pt-2.5 border-t border-[#EAECF0] text-[11px] sm:text-xs text-[#667085] flex items-center justify-between">
+                        <span>{formatDate(item.published_at)}</span>
+                        <span className="text-[#155EEF] font-semibold group-hover:translate-x-0.5 transition-transform flex items-center gap-0.5">
+                          <span>Baca</span>
+                          <ChevronRight className="w-3 h-3" />
+                        </span>
                       </div>
                     </article>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="bg-slate-50 rounded-3xl border border-slate-200 p-12 text-center text-xs text-slate-400 space-y-3 max-w-md mx-auto">
-                <Newspaper className="w-10 h-10 mx-auto text-slate-300" />
-                <div className="font-bold text-sm text-slate-700">Tidak ada warta yang sesuai</div>
-                <p className="text-xs text-slate-500">
-                  Tidak ditemukan berita dengan kategori atau kata kunci tersebut. Silakan ubah filter atau tekan tombol reset.
-                </p>
-              </div>
-            )
-          ) : (
-            /* Grid View */
-            <>
-              {/* Featured Headline Article (Only when on 'Semua' without search query and on first page) */}
-              {selectedKategori === 'Semua' && !searchQuery && filteredBeritas.length > 0 && currentPage === 1 && (
-                <div className="bg-slate-50/80 rounded-3xl overflow-hidden border border-slate-200/80 shadow-md hover:border-blue-300 transition-all grid grid-cols-1 lg:grid-cols-12 gap-0 group">
-                  <div className="lg:col-span-7 relative h-64 sm:h-80 lg:h-full overflow-hidden bg-slate-900">
-                    <img
-                      src="/images/event.jpg"
-                      alt={filteredBeritas[0].judul}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute top-4 left-4 bg-blue-600 text-white text-[11px] font-black uppercase px-3.5 py-1 rounded-full shadow-md">
-                      Berita Utama Terkini
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between space-y-4">
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3 text-xs text-slate-400">
-                        <span className="font-mono text-blue-700 font-bold bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
-                          {filteredBeritas[0].kategori}
-                        </span>
-                        <span>•</span>
-                        <span>{formatBeritaDate(filteredBeritas[0].published_at)}</span>
-                      </div>
-
-                      <h2 className="text-xl sm:text-2xl font-black text-slate-900 group-hover:text-blue-700 transition-colors leading-tight">
-                        {filteredBeritas[0].judul}
-                      </h2>
-
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-4">
-                        {filteredBeritas[0].ringkasan || filteredBeritas[0].konten}
-                      </p>
-                    </div>
-
-                    <div className="pt-4 border-t border-slate-200/60">
-                      <button
-                        onClick={() => setSelectedBerita(filteredBeritas[0])}
-                        className="px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-blue-700 text-white font-extrabold text-xs transition-all shadow-xs press-down flex items-center gap-2 cursor-pointer"
-                      >
-                        <span>Baca selengkapnya</span>
-                        <ChevronRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
+                  ))}
                 </div>
-              )}
-
-              {/* Berita Cards Grid */}
-              {filteredBeritas.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {paginatedBeritas.map((b, idx) => {
-                    const thumb = idx % 3 === 0 ? '/images/event.jpg' : idx % 3 === 1 ? '/images/kursus.jpg' : '/images/landing/about_img.webp';
-                    return (
-                      <div key={b.id} className="bg-slate-50/60 hover:bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-                        <div className="h-48 w-full overflow-hidden bg-gray-100 relative">
-                          <img
-                            src={thumb}
-                            alt={b.judul}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          <span className="absolute top-3 left-3 text-[10px] font-black text-blue-950 bg-white/95 px-2.5 py-1 rounded-full shadow-2xs">
-                            {b.kategori}
-                          </span>
-                        </div>
-
-                        <div className="p-5 space-y-3 flex-1">
-                          <div className="flex items-center justify-between text-[11px] text-slate-400">
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-3.5 h-3.5 text-blue-600" />
-                              {formatBeritaDate(b.published_at)}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Eye className="w-3.5 h-3.5 text-slate-400" />
-                              {b.view_count || 120} views
-                            </span>
-                          </div>
-
-                          <h3 className="font-black text-base text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-2 leading-snug">
-                            {b.judul}
-                          </h3>
-                          <p className="text-xs text-slate-500 line-clamp-3 leading-relaxed">
-                            {b.ringkasan || b.konten}
-                          </p>
-                        </div>
-
-                        <div className="p-5 pt-0">
-                          <button
-                            onClick={() => setSelectedBerita(b)}
-                            className="w-full py-2.5 rounded-2xl bg-white hover:bg-blue-50 text-blue-800 text-xs font-black transition-colors flex items-center justify-center gap-1 border border-slate-200/80 cursor-pointer shadow-2xs"
-                          >
-                            Baca selengkapnya <ChevronRight className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="bg-slate-50 rounded-3xl border border-slate-200 p-10 text-center text-xs text-slate-400 space-y-3 max-w-md mx-auto">
-                  <Newspaper className="w-10 h-10 mx-auto text-slate-300" />
-                  <div className="font-bold text-sm text-slate-700">Tidak ada warta</div>
-                  <p className="text-xs text-slate-500">
-                    Tidak ditemukan berita untuk filter yang dipilih.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedKategori('Semua');
-                      setSearchQuery('');
-                      setSortBy('terbaru');
-                    }}
-                    className="px-4 py-2 rounded-xl bg-blue-600 text-white font-bold text-xs shadow-xs hover:bg-blue-700 transition-colors cursor-pointer"
-                  >
-                    Reset filter
-                  </button>
-                </div>
-              )}
-            </>
-          )}
-
-          {/* Pagination */}
-          <Pagination
-            currentPage={currentPage}
-            totalItems={filteredBeritas.length}
-            pageSize={pageSize}
-            onPageChange={setCurrentPage}
-            itemLabel="warta desa"
-            className="pt-6"
-          />
-        </div>
-      </section>
-
-      {/* Div 3: Pengumuman Resmi & Agenda Warga (Full-Width Emerald Background Banner Band) */}
-      <section className="w-full bg-gradient-to-b from-[#1e3a5f] via-[#1d4ed8] to-[#172554] py-16 sm:py-24 text-white relative overflow-hidden">
-        {/* Concentric Circle Orbit Watermark */}
-        <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full border border-white/10 pointer-events-none" />
-        <div className="absolute -left-20 bottom-0 w-80 h-80 rounded-full border border-white/10 pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-10">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-blue-200 text-xs font-black border border-white/20">
-              <BellRing className="w-3.5 h-3.5 text-blue-300" />
-              <span>AGENDA & PENGUMUMAN RESMI</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
-              Pengumuman Pemerintah Desa Doko
-            </h2>
-            <p className="text-xs sm:text-sm text-blue-100/90 font-medium">
-              Agenda penting masyarakat desa, kerja bakti lingkungan RT/RW, dan jadwal pelayanan terpadu.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {pengumumans.length > 0 ? (
-              pengumumans.map((p) => (
-                <div key={p.id} className="p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 space-y-3 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-blue-950 bg-blue-200/90 px-3 py-1 rounded-full shadow-xs">
-                      {p.level_target || 'Seluruh Warga'}
-                    </span>
-                    <span className="text-[11px] text-blue-200/90 font-mono font-medium">
-                      {new Date(p.tanggal_mulai).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
-                    </span>
-                  </div>
-                  <h4 className="font-extrabold text-base text-white">{p.judul}</h4>
-                  <p className="text-xs text-blue-100/85 leading-relaxed">{p.isi}</p>
-                </div>
-              ))
-            ) : (
-              /* Fallback Pengumuman Default */
-              <>
-                <div className="p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 space-y-3 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-blue-950 bg-blue-200/90 px-3 py-1 rounded-full shadow-xs">
-                      Seluruh Warga
-                    </span>
-                    <span className="text-[11px] text-blue-200/90 font-mono font-medium">
-                      Agustus 2026
-                    </span>
-                  </div>
-                  <h4 className="font-extrabold text-base text-white">Jadwal Pelayanan Posyandu Balita & Pemeriksaan Lansia Gratis</h4>
-                  <p className="text-xs text-blue-100/85 leading-relaxed">
-                    Pelaksanaan posyandu serentak di 8 titik balai RW Desa Doko dimulai setiap tanggal 10 pukul 08.00 WIB. Diharapkan kehadiran ibu dan balita.
-                  </p>
-                </div>
-                <div className="p-6 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 space-y-3 shadow-xl">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black text-blue-950 bg-blue-200/90 px-3 py-1 rounded-full shadow-xs">
-                      Pengurus RT/RW
-                    </span>
-                    <span className="text-[11px] text-blue-200/90 font-mono font-medium">
-                      Agustus 2026
-                    </span>
-                  </div>
-                  <h4 className="font-extrabold text-base text-white">Sosialisasi Pelayanan Digital Mandiri SiDesKu</h4>
-                  <p className="text-xs text-blue-100/85 leading-relaxed">
-                    Bimtek verifikasi permohonan surat online bagi seluruh ketua RT di Balai Desa Doko guna percepatan pelayanan warga.
-                  </p>
-                </div>
-              </>
+              </section>
             )}
+
+            {/* ========================================================================= */}
+            {/* 3. BERITA LAINNYA (Item ke-4 dan seterusnya, jika ada)                    */}
+            {/* ========================================================================= */}
+            {remainingNews.length > 0 && (
+              <section aria-label="Daftar Berita Lainnya" className="space-y-3 pt-2">
+                <div className="flex items-center justify-between pb-2 border-b border-[#EAECF0]">
+                  <h3 className="text-sm sm:text-base font-bold text-[#101828]">
+                    Berita Lainnya
+                  </h3>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                  {remainingNews.map((item) => (
+                    <article
+                      key={item.id}
+                      onClick={() => setSelectedBerita(item)}
+                      className="group cursor-pointer bg-white border border-[#EAECF0] hover:border-[#155EEF]/50 rounded-2xl p-4 hover:bg-[#F8FAFC]/60 transition-all shadow-xs flex flex-col justify-between space-y-2.5"
+                    >
+                      <div className="space-y-1.5">
+                        <h4 className="text-xs sm:text-sm font-semibold text-[#101828] leading-snug line-clamp-2 group-hover:text-[#155EEF] transition-colors">
+                          {item.judul}
+                        </h4>
+                        {item.ringkasan && (
+                          <p className="text-xs text-[#475467] leading-relaxed line-clamp-2 font-normal">
+                            {item.ringkasan}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="pt-2 border-t border-[#EAECF0] text-[11px] text-[#667085] flex items-center justify-between">
+                        <span>{formatDate(item.published_at)}</span>
+                        <span className="text-[#155EEF] font-semibold text-[11px] flex items-center gap-0.5">
+                          <span>Baca</span>
+                          <ChevronRight className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+
+                {visibleCount < filteredBeritas.length && (
+                  <div className="pt-2 text-center">
+                    <button
+                      type="button"
+                      onClick={() => setVisibleCount((prev) => prev + 6)}
+                      className="px-4 py-2 rounded-lg bg-[#F8FAFC] hover:bg-slate-100 text-[#475467] hover:text-[#101828] border border-[#EAECF0] text-xs font-semibold transition-colors cursor-pointer"
+                    >
+                      Tampilkan Berita Lainnya
+                    </button>
+                  </div>
+                )}
+              </section>
+            )}
+
           </div>
-        </div>
-      </section>
+        )}
 
-      {/* Modal Baca Artikel Lengkap - Portaled, Auto-Centered, Highest Z-Index, No Blur */}
-      {selectedBerita && createPortal(
-        <div 
-          className="fixed inset-0 z-[999999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 font-sans overflow-y-auto animate-fade-in select-none"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setSelectedBerita(null);
-          }}
-        >
-          <div 
-            className="relative bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-5 shadow-2xl modal-content my-auto max-h-[90vh] overflow-y-auto border border-slate-100 animate-scale-up"
-            onClick={(e) => e.stopPropagation()}
+      </div>
+
+      {/* ========================================================================= */}
+      {/* MODAL BACA ARTIKEL DETAIL (Editorial Typography, Responsif, Interaktif)   */}
+      {/* ========================================================================= */}
+      {selectedBerita &&
+        createPortal(
+          <div
+            className="fixed inset-0 z-[99999] bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-150"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setSelectedBerita(null);
+            }}
           >
-            <div className="flex justify-between items-start pb-3 border-b border-gray-100">
-              <span className="text-[10px] font-black text-blue-800 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
-                {selectedBerita.kategori}
-              </span>
-              <button 
-                onClick={() => setSelectedBerita(null)} 
-                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 cursor-pointer"
-                title="Tutup (ESC)"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="space-y-4">
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-tight">
-                {selectedBerita.judul}
-              </h2>
-
-              <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400 border-b border-slate-100 pb-3">
-                <span>{formatBeritaDate(selectedBerita.published_at)}</span>
-                <span>{selectedBerita.view_count || 120} pembaca</span>
-                <span>Humas Pemdes Doko</span>
+            <div
+              className="bg-white rounded-xl border border-[#EAECF0] max-w-2xl w-full max-h-[92vh] overflow-y-auto shadow-xl p-5 sm:p-7 space-y-4 my-auto animate-in zoom-in-95 duration-150"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Top Bar */}
+              <div className="flex items-center justify-between pb-3 border-b border-[#EAECF0]">
+                <span className="px-2.5 py-0.5 rounded-md text-[11px] font-semibold text-[#155EEF] bg-[#155EEF]/10">
+                  {selectedBerita.kategori || 'Warta Desa'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedBerita(null)}
+                  className="p-1 rounded-lg text-[#667085] hover:text-[#101828] hover:bg-[#F8FAFC] transition-colors cursor-pointer"
+                  title="Tutup (ESC)"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
 
-              <div className="h-64 rounded-2xl overflow-hidden bg-slate-100">
-                <img 
-                  src="/images/event.jpg" 
-                  alt="" 
+              {/* Title & Meta Header */}
+              <div className="space-y-2">
+                <h1 className="text-lg sm:text-2xl font-bold text-[#101828] leading-snug">
+                  {selectedBerita.judul}
+                </h1>
+                
+                <div className="flex flex-wrap items-center gap-3 text-xs text-[#667085] pb-1">
+                  <span>{formatDate(selectedBerita.published_at)}</span>
+                </div>
+              </div>
+
+              {/* Foto Artikel Besar */}
+              <div className="aspect-[16/9] w-full rounded-lg overflow-hidden bg-slate-100">
+                <img
+                  src={resolveBeritaImage(selectedBerita)}
+                  alt={selectedBerita.judul}
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/images/warta/jalan.svg';
+                  }}
                   className="w-full h-full object-cover"
                 />
               </div>
 
-              <div className="text-xs sm:text-sm text-slate-700 leading-relaxed space-y-3 whitespace-pre-line">
+              {/* Isi Konten Artikel Editorial */}
+              <div className="text-xs sm:text-sm text-[#475467] leading-relaxed space-y-3 pt-1 whitespace-pre-line">
                 {selectedBerita.konten}
               </div>
-            </div>
 
-            <div className="pt-4 border-t border-slate-100 flex justify-end">
-              <button
-                onClick={() => setSelectedBerita(null)}
-                className="px-6 py-2.5 rounded-2xl bg-blue-700 hover:bg-blue-800 text-white font-black text-xs transition-colors cursor-pointer shadow-xs"
-              >
-                Tutup
-              </button>
+              {/* Modal Action Buttons Footer */}
+              <div className="pt-4 border-t border-[#EAECF0] flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => handleShare(selectedBerita)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-[#EAECF0] hover:bg-[#F8FAFC] text-xs font-semibold text-[#475467] transition-colors cursor-pointer"
+                >
+                  {copiedLink ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-emerald-700">Tautan Tersalin</span>
+                    </>
+                  ) : (
+                    <>
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span>Bagikan Warta</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedBerita(null)}
+                  className="px-4 py-2 rounded-lg bg-[#155EEF] hover:bg-[#003B95] text-white text-xs font-semibold transition-colors cursor-pointer shadow-xs"
+                >
+                  Tutup Artikel
+                </button>
+              </div>
+
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body
+        )}
+
+
+
     </div>
   );
 };
