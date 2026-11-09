@@ -1670,24 +1670,6 @@ export const DashboardLayout: React.FC = () => {
               </button>
             )}
 
-            {/* Direct Chat / Pusat Pesan Button */}
-            <button
-              type="button"
-              onClick={() => handleMenuNavigate('pesan')}
-              className={`p-2.5 rounded-2xl transition-colors relative cursor-pointer ${
-                activeMenu === 'pesan' ? 'bg-blue-50 text-blue-700' : 'text-slate-500 hover:bg-slate-100'
-              }`}
-              title="Pusat Pesan & Chat Desa"
-              aria-label="Pusat Pesan & Chat"
-            >
-              <MessageSquare size={18} />
-              {chatUnreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 bg-blue-600 text-white text-[10px] font-black rounded-full flex items-center justify-center ring-2 ring-white">
-                  {chatUnreadCount > 9 ? '9+' : chatUnreadCount}
-                </span>
-              )}
-            </button>
-
             {/* Notification Bell & Dropdown */}
             <div className="relative" ref={notificationRef}>
               <button 

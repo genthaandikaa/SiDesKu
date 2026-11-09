@@ -666,9 +666,6 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Persetujuan Surat RT
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Verifikasi dan berikan persetujuan RT untuk permohonan warga.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-900 border border-amber-200">
@@ -1085,9 +1082,6 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Riwayat Seluruh Pengajuan Surat
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Arsip berkas permohonan warga yang telah disetujui RT, diteruskan ke Kantor Desa, maupun yang ditolak.
-            </p>
           </div>
 
           {/* Filter Status Riwayat */}

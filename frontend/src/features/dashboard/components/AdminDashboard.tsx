@@ -1975,9 +1975,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <h3 className="text-sm font-bold text-slate-900">
                   Daftar Seluruh Pengajuan Surat ({filteredSurats.length})
                 </h3>
-                <p className="text-xs text-slate-400">
-                  Rekapitulasi lengkap berkas permohonan surat warga Desa Doko
-                </p>
               </div>
             </div>
 

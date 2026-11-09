@@ -1631,9 +1631,6 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Persetujuan Surat Desa
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Otorisasi final dan penerbitan tanda tangan QR untuk surat warga.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             {pendingKadesSurats.length > 0 && (

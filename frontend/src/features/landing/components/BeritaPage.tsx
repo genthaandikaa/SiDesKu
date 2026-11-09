@@ -24,7 +24,7 @@ const fallbackBeritas: Berita[] = [
 Kepala Desa Doko menyampaikan bahwa peningkatan jalan lingkungan ini difokuskan pada pengecoran rabat beton dengan ketebalan standar guna memastikan ketahanan terhadap beban kendaraan dan curah hujan tinggi. Selain itu, pengerjaan turut mengikutsertakan tenaga kerja lokal warga desa melalui skema Padat Karya Tunai Desa (PKTD).
 
 "Dengan jalan yang mulus dan saluran pembuangan yang tertata, akses petani menuju lahan pertanian serta mobilitas harian anak sekolah menjadi jauh lebih aman dan nyaman," tutur Kepala Desa. Pengerjaan ditargetkan rampung dalam kurun waktu 30 hari kalender.`,
-    gambar_cover: '/images/warta/jalan.svg',
+    gambar_cover: '/images/warta/jalan.jpg',
     view_count: 512,
     is_published: true,
     published_at: '2026-11-08T08:00:00.000000Z',
@@ -40,7 +40,7 @@ Kepala Desa Doko menyampaikan bahwa peningkatan jalan lingkungan ini difokuskan 
 Program ini menghadirkan narasumber dari Dinas Pertanian dan Perkebunan Kabupaten Kediri. Materi yang diberikan meliputi teknik pembibitan hortikultura ramah lingkungan, pembuatan pupuk organik padat dan cair dari limbah rumah tangga, serta sistem budidaya ikan lele dalam ember (budikdamber).
 
 Melalui inisiatif ini, setiap rukun warga (RW) ditargetkan memiliki demplot percontohan kebun gizi mandiri yang dapat menekan pengeluaran belanja harian keluarga sekaligus mencukupi kebutuhan gizi seimbang.`,
-    gambar_cover: '/images/warta/ketahanan-pangan.svg',
+    gambar_cover: '/images/warta/ketahanan-pangan.jpg',
     view_count: 328,
     is_published: true,
     published_at: '2026-11-06T10:15:00.000000Z',
@@ -56,7 +56,7 @@ Melalui inisiatif ini, setiap rukun warga (RW) ditargetkan memiliki demplot perc
 Fasilitas layanan mencakup pengukuran berat badan, tinggi badan, lingkar kepala, imunisasi dasar lengkap, serta konsultasi gizi pencegahan stunting. Pada kesempatan ini, Pemdes Doko menyalurkan bantuan Pemberian Makanan Tambahan (PMT) berupa telur, susu segar, dan bubur kacang hijau.
 
 Ketua Tim Penggerak PKK Desa Doko menegaskan komitmen desa dalam mewujudkan Zero Stunting di wilayah Desa Doko melalui pengawasan intensif seribu hari pertama kehidupan.`,
-    gambar_cover: '/images/warta/posyandu.svg',
+    gambar_cover: '/images/warta/posyandu.jpg',
     view_count: 440,
     is_published: true,
     published_at: '2026-11-04T09:00:00.000000Z',
@@ -70,7 +70,7 @@ Ketua Tim Penggerak PKK Desa Doko menegaskan komitmen desa dalam mewujudkan Zero
     konten: `Tradisi kegotongroyongan kembali ditunjukkan oleh masyarakat Desa Doko dalam aksi kerja bakti serentak di lingkungan RT dan RW. Kegiatan difokuskan pada pembersihan endapan sedimen di selokan utama, pemangkasan dahan pohon yang menghalangi penerangan jalan umum, serta pemilahan sampah anorganik.
 
 Sekretaris Desa Doko mengapresiasi tingginya antusiasme masyarakat yang bahu-membahu membawa peralatan swadaya. Semangat guyub rukun ini menjadi modal sosial utama dalam menjaga kebersihan, kesehatan lingkungan, serta mempererat tali silaturahmi antarwarga.`,
-    gambar_cover: '/images/warta/gotong-royong.svg',
+    gambar_cover: '/images/warta/gotong-royong.jpg',
     view_count: 275,
     is_published: true,
     published_at: '2026-11-02T07:30:00.000000Z',
@@ -84,7 +84,7 @@ Sekretaris Desa Doko mengapresiasi tingginya antusiasme masyarakat yang bahu-mem
     konten: `Untuk meningkatkan kecepatan dan transparansi birokrasi, Kantor Desa Doko kini mengoptimalkan loket pelayanan digital siDes. Warga desa dapat mengajukan permohonan surat keterangan usaha, surat pengantar nikah, surat kematian, maupun keterangan tidak mampu secara daring dari ponsel masing-masing.
 
 Dokumen yang telah diverifikasi oleh Ketua RT dan Sekdes langsung ditandatangani secara digital (TTE) oleh Kepala Desa dan dilengkapi barcode keabsahan resmi. Warga cukup mengunduh berkas PDF yang telah selesai atau mengambil salinan cetak di balai desa.`,
-    gambar_cover: '/images/warta/layanan-digital.svg',
+    gambar_cover: '/images/warta/layanan-digital.jpg',
     view_count: 618,
     is_published: true,
     published_at: '2026-10-29T11:00:00.000000Z',
@@ -98,7 +98,7 @@ Dokumen yang telah diverifikasi oleh Ketua RT dan Sekdes langsung ditandatangani
     konten: `Musrenbangdes Desa Doko dihadiri oleh jajaran Forkopimcam Ngasem, Kepala Desa, BPD, pengurus RT/RW, LPMD, serta perwakilan kelompok perempuan dan disabilitas.
 
 Agenda utama musyawarah ini adalah menetapkan daftar usulan prioritas Rencana Kerja Pemerintah Desa (RKPDes) tahun 2027. Tiga pilar utama yang disepakati bersama mencakup percepatan infrastruktur sanitasi lingkungan, bantuan permodalan bagi pelaku UMKM desa, serta insentif bagi guru PAUD dan kader kesehatan.`,
-    gambar_cover: '/images/warta/musrenbang.svg',
+    gambar_cover: '/images/warta/musrenbang.jpg',
     view_count: 390,
     is_published: true,
     published_at: '2026-10-25T14:00:00.000000Z',
@@ -112,7 +112,7 @@ Agenda utama musyawarah ini adalah menetapkan daftar usulan prioritas Rencana Ke
     konten: `Pelataran Balai Desa Doko dipadati warga dalam gelaran Bazar UMKM BUMDes Doko Makmur. Puluhan pelaku usaha mikro desa menampilkan produk kuliner tradisional dan kerajinan tangan bernilai ekonomis tinggi.
 
 Dalam acara ini, BUMDes memfasilitasi sertifikasi halal gratis serta integrasi toko online agar produk unggulan Desa Doko dapat dipesan oleh masyarakat luas di luar wilayah Kediri.`,
-    gambar_cover: '/images/warta/bumdes.svg',
+    gambar_cover: '/images/warta/bumdes.jpg',
     view_count: 489,
     is_published: true,
     published_at: '2026-10-20T10:00:00.000000Z',
@@ -122,23 +122,24 @@ Dalam acara ini, BUMDes memfasilitasi sertifikasi halal gratis serta integrasi t
 
 // Helper gambar dokumentasi asli desa yang realistis dan konsisten per kategori
 const CATEGORY_DOCUMENTARY_IMAGES: Record<string, string> = {
-  pembangunan: '/images/warta/jalan.svg',
-  kesehatan: '/images/warta/posyandu.svg',
-  'kegiatan desa': '/images/warta/ketahanan-pangan.svg',
-  masyarakat: '/images/warta/gotong-royong.svg',
-  layanan: '/images/warta/layanan-digital.svg',
-  pemerintahan: '/images/warta/musrenbang.svg',
-  umkm: '/images/warta/bumdes.svg',
+  pembangunan: '/images/warta/jalan.jpg',
+  kesehatan: '/images/warta/posyandu.jpg',
+  'kegiatan desa': '/images/warta/ketahanan-pangan.jpg',
+  masyarakat: '/images/warta/gotong-royong.jpg',
+  layanan: '/images/warta/layanan-digital.jpg',
+  pemerintahan: '/images/warta/musrenbang.jpg',
+  umkm: '/images/warta/bumdes.jpg',
 };
 
 export const resolveBeritaImage = (berita?: Berita | null): string => {
-  if (!berita) return '/images/warta/jalan.svg';
-  // Jika gambar bukan stock photo event.jpg/kursus.jpg/about_img.webp, gunakan
+  if (!berita) return '/images/warta/jalan.jpg';
+  // Jika gambar bukan stock photo event.jpg/kursus.jpg/about_img.webp dan bukan placeholder svg
   if (
     berita.gambar_cover &&
     !berita.gambar_cover.includes('event.jpg') &&
     !berita.gambar_cover.includes('kursus.jpg') &&
-    !berita.gambar_cover.includes('about_img.webp')
+    !berita.gambar_cover.includes('about_img.webp') &&
+    !berita.gambar_cover.endsWith('.svg')
   ) {
     return berita.gambar_cover;
   }
@@ -148,7 +149,7 @@ export const resolveBeritaImage = (berita?: Berita | null): string => {
       return url;
     }
   }
-  return '/images/warta/jalan.svg';
+  return '/images/warta/jalan.jpg';
 };
 
 const KATEGORI_OPTIONS = [
@@ -433,7 +434,7 @@ export const BeritaPage: React.FC = () => {
                       alt={topNews.judul}
                       loading="eager"
                       onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = '/images/warta/jalan.svg';
+                        (e.currentTarget as HTMLImageElement).src = '/images/warta/jalan.jpg';
                       }}
                       className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500"
                     />
@@ -614,7 +615,7 @@ export const BeritaPage: React.FC = () => {
                   src={resolveBeritaImage(selectedBerita)}
                   alt={selectedBerita.judul}
                   onError={(e) => {
-                    (e.currentTarget as HTMLImageElement).src = '/images/warta/jalan.svg';
+                    (e.currentTarget as HTMLImageElement).src = '/images/warta/jalan.jpg';
                   }}
                   className="w-full h-full object-cover"
                 />

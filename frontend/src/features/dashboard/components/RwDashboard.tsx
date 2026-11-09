@@ -500,9 +500,6 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-black text-slate-900">Monitoring Surat RW</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Pemantauan status pelayanan surat warga di lingkungan RW.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1.5 rounded-2xl bg-blue-50 text-blue-800 font-extrabold text-xs border border-blue-200 shadow-2xs">
@@ -524,9 +521,6 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-black text-slate-900">Riwayat Surat Selesai</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Arsip surat warga yang telah sah dan terbit.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-3.5 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-black text-xs border border-blue-300">

@@ -134,9 +134,6 @@ export const BuatSuratSekdesView: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
             Penerbitan Surat Resmi Mandiri di Balai Desa
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Fasilitas bagi warga yang hadir langsung di kantor desa (lansia/tanpa gawai) untuk penerbitan surat seketika berstempel QR resmi.
-          </p>
         </div>
 
         <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-extrabold text-xs border border-blue-200 self-start sm:self-auto">
@@ -322,10 +319,7 @@ export const BuatSuratSekdesView: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-[11px] text-slate-400 font-medium">
-              Surat akan langsung diterbitkan dengan Nomor Resmi & Tanda Tangan QR sah Sekdes.
-            </span>
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-end">
             <button
               type="submit"
               disabled={isSubmitting || !selectedWargaId || !selectedTypeId}

@@ -1050,9 +1050,6 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                 Katalog Layanan Surat Digital
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500">
-                Pilih jenis surat resmi yang Anda butuhkan (KTP, KK, SKTM, Domisili, SKU, Akta, dll) untuk pengurusan cepat online.
-              </p>
             </div>
             <div className="relative w-full md:w-80 shrink-0">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -1205,9 +1202,6 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Status Surat
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Pantau progres persetujuan RT hingga penerbitan oleh Kepala Desa.
-          </p>
         </div>
 
         {pendingSurats.length === 0 ? (
@@ -1420,9 +1414,6 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Surat Selesai
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Dokumen resmi yang telah disahkan dan siap dicetak.
-          </p>
         </div>
 
         {completedSurats.length === 0 ? (
@@ -1482,9 +1473,6 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Riwayat Surat
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Riwayat status seluruh permohonan surat warga.
-            </p>
           </div>
 
           <div className="relative max-w-xs w-full">

@@ -166,9 +166,6 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Arsip Surat Desa
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Buku register dan arsip dokumen resmi yang telah disahkan.
-            </p>
           </div>
           <span className="px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-200">
             {completedCount} Surat terbit
@@ -667,7 +664,6 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div>
                 <h2 className="text-sm font-bold text-gray-800 uppercase tracking-wide">Buku Register & Arsip Surat Sah Desa</h2>
-                <p className="text-xs text-slate-500 mt-0.5">Seluruh surat resmi yang telah disahkan langsung oleh Kepala Desa dengan TTD QR.</p>
               </div>
 
               <div className="relative w-full sm:w-64">
