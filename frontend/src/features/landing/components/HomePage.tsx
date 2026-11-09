@@ -136,7 +136,6 @@ export const HomePage: React.FC = () => {
     {
       id: "surat",
       title: "Layanan Surat",
-      desc: "Pengajuan surat mandiri 24/7.",
       icon: FileText,
       link: "/layanan-surat",
       x: -150,
@@ -145,7 +144,6 @@ export const HomePage: React.FC = () => {
     {
       id: "validasi",
       title: "Persetujuan Langsung",
-      desc: "Disposisi RT ke Kepala Desa.",
       icon: Users,
       link: "/login",
       x: 150,
@@ -154,7 +152,6 @@ export const HomePage: React.FC = () => {
     {
       id: "legalitas",
       title: "Legalitas QR Code",
-      desc: "Stempel digital resmi desa.",
       icon: ShieldCheck,
       link: "/lacak-surat",
       x: 310,
@@ -163,7 +160,6 @@ export const HomePage: React.FC = () => {
     {
       id: "bansos",
       title: "Bantuan Sosial",
-      desc: "Jadwal dan antrean bansos.",
       icon: Zap,
       link: "/bansos",
       x: 250,
@@ -172,7 +168,6 @@ export const HomePage: React.FC = () => {
     {
       id: "apbdes",
       title: "Transparansi APBDes",
-      desc: "Publikasi anggaran desa.",
       icon: TrendingUp,
       link: "/apbdes",
       x: 0,
@@ -181,7 +176,6 @@ export const HomePage: React.FC = () => {
     {
       id: "aduan",
       title: "Aspirasi Warga",
-      desc: "Kanal pengaduan warga.",
       icon: MessageSquare,
       link: "/layanan-surat",
       x: -250,
@@ -190,7 +184,6 @@ export const HomePage: React.FC = () => {
     {
       id: "pelacak",
       title: "Pelacak Berkas",
-      desc: "Lacak status surat realtime.",
       icon: Search,
       link: "/lacak-surat",
       x: -310,
@@ -201,32 +194,26 @@ export const HomePage: React.FC = () => {
   const capabilitiesList = [
     {
       title: "Surat Online",
-      desc: "Pengajuan mandiri dari rumah tanpa antre ke balai desa.",
       icon: FileText,
     },
     {
       title: "Legalitas QR Sah",
-      desc: "Tanda tangan elektronik standar DPMPD.",
       icon: ShieldCheck,
     },
     {
       title: "Pelacak Realtime",
-      desc: "Pantau posisi dan tahapan berkas secara transparan.",
       icon: Search,
     },
     {
       title: "Otomasi Cepat",
-      desc: "Penerbitan surat dengan rata-rata < 15 menit.",
       icon: Zap,
     },
     {
       title: "APBDes Terbuka",
-      desc: "Realisasi anggaran pendapatan & belanja desa akuntabel.",
       icon: TrendingUp,
     },
     {
       title: "Integrasi Bansos",
-      desc: "Cek NIK penerima Bansos dan verifikasi antrean.",
       icon: Users,
     },
   ];
@@ -473,9 +460,6 @@ export const HomePage: React.FC = () => {
                   <h3 className="font-extrabold text-sm text-slate-900 leading-snug group-hover:text-blue-700 transition-colors">
                     {cap.title}
                   </h3>
-                  <p className="text-[11px] text-slate-500 leading-relaxed mt-1">
-                    {cap.desc}
-                  </p>
                 </div>
               );
             })}
@@ -567,9 +551,6 @@ export const HomePage: React.FC = () => {
                             <h4 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-blue-700 transition-colors whitespace-nowrap">
                               {item.title}
                             </h4>
-                            <p className="text-slate-500 text-[11px] leading-snug mt-0.5">
-                              {item.desc}
-                            </p>
                           </div>
                         </Link>
                       </div>
@@ -610,9 +591,6 @@ export const HomePage: React.FC = () => {
                         <h4 className="font-bold text-slate-900 text-sm">
                           {item.title}
                         </h4>
-                        <p className="text-xs text-slate-500 leading-relaxed">
-                          {item.desc}
-                        </p>
                       </div>
                     </Link>
                   );
@@ -631,9 +609,6 @@ export const HomePage: React.FC = () => {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
               Pengurusan Surat Mandiri & Cepat
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
-              Permohonan surat diproses digital dari ponsel tanpa perlu antre fisik di kantor desa.
-            </p>
           </div>
 
           {/* Foto Layanan Utama Mockup Moved Directly Below Title & Description */}

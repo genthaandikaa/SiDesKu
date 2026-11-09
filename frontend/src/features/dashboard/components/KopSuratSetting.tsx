@@ -72,9 +72,6 @@ export const KopSuratSetting: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-xl font-bold text-[#0f241d]">Pengaturan Kop Surat Desa Dinamis</h2>
-          <p className="text-xs text-gray-500">
-            Sesuaikan identitas, logo resmi, teks kop, dan footer yang otomatis dicetak pada seluruh surat resmi desa.
-          </p>
         </div>
         {savedSuccess && (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-bold animate-fade-in">

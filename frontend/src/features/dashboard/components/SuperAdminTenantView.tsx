@@ -252,9 +252,6 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
               Registrasi & Provisioning Desa Baru
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed max-w-2xl">
-              Daftarkan entitas desa baru ke dalam platform SiDesKu. Sistem secara otomatis menyiapkan basis data tenant terisolasi (desa_id), kop surat default, katalog pelayanan surat, serta akun administrator desa perdana.
-            </p>
           </div>
 
           {/* Dedicated Full-Page Form */}
@@ -537,9 +534,6 @@ export const SuperAdminTenantView: React.FC<SuperAdminTenantViewProps> = ({ init
               <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mt-2">
                 Manajemen Tenant & Registrasi Desa
               </h1>
-              <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Kelola seluruh entitas desa terdaftar, provisioning tenant baru, dan pantau operasional antar desa secara aman.
-              </p>
             </div>
 
             <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">

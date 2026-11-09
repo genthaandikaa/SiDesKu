@@ -206,7 +206,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
 
   return (
     <div className="w-full space-y-6 animate-fade-in font-sans pb-12">
-      
+
       {/* 1. Header Card Transparansi APBDes: Ramah, Bersih, Tidak Membingungkan */}
       <div className="bg-white p-5 sm:p-7 rounded-3xl border border-slate-200/90 shadow-2xs space-y-3">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -219,9 +219,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
               Publikasi Keuangan Desa & Penggunaan Anggaran
             </h1>
 
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
-              Setiap rupiah dana desa digunakan terbuka untuk kemajuan bersama. Warga dapat melihat langsung uang yang masuk, realisasi pembangunan jalan/fasilitas, dan sisa kas kasda desa.
-            </p>
+
           </div>
 
           <div className="flex flex-wrap md:flex-col items-start md:items-end gap-2 shrink-0">
@@ -238,7 +236,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
 
       {/* 2. Ringkasan 3 Pilar: Uang Masuk, Uang Keluar, Sisa Kas Desa */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-4">
-        
+
         {/* Pilar 1: Uang Masuk (Pendapatan) */}
         <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-2xs space-y-3">
           <div className="flex items-center justify-between">
@@ -395,7 +393,7 @@ export const KeuanganDesaWargaView: React.FC = () => {
 
       {/* 4. Rincian Pos Anggaran: Mobile Card View + Desktop Table View (ANTI-SLOP & RAMAH WARGA) */}
       <div className="bg-white p-5 sm:p-7 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4">
-        
+
         {/* Title & Filter Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-slate-100">
           <div>

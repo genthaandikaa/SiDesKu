@@ -177,9 +177,6 @@ export const AspirasiPengaduanWargaView: React.FC = () => {
             <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Aspirasi & Pengaduan
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Sampaikan aspirasi atau keluhan ke pengurus RT dan pemerintah desa.
-            </p>
           </div>
 
           <button

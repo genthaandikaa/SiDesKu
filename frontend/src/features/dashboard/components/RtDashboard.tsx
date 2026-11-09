@@ -1413,9 +1413,6 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Buku Induk Kependudukan & Data Warga RT 01
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Database personal seluruh warga yang berdomisili di RT 01: NIK, status keluarga, kontak WhatsApp aktif, dan klasifikasi ekonomi.
-            </p>
           </div>
         </div>
 
@@ -2084,9 +2081,6 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Buku Register Kartu Keluarga (KK) RT 01
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Rekapitulasi unit rumah tangga, nama kepala keluarga, alamat hunian, jumlah jiwa per KK, dan status bantuan keluarga.
-            </p>
           </div>
         </div>
 
@@ -2436,9 +2430,6 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Peta Wilayah, Denah Lingkungan & Sebaran Hunian RT 01
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Visualisasi tata ruang dan teritorial RT 01 Dusun Krajan: sebaran blok hunian warga, titik fasilitas umum, dan batas wilayah administrasi.
-            </p>
           </div>
         </div>
 
@@ -2731,9 +2722,6 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Pembukuan Kas & Iuran Warga RT 01
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Pencatatan iuran kebersihan, keamanan, serta rekapitulasi pengeluaran kegiatan RT.
-            </p>
           </div>
 
           <button

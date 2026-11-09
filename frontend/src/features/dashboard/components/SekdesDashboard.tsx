@@ -387,9 +387,6 @@ export const SekdesDashboard: React.FC<SekdesDashboardProps> = ({ activeSubmenu 
               </span>
             </div>
             <h2 className="text-xl font-black text-slate-900 mt-1">Peta Wilayah Terpadu Desa Doko</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Pemetaan teritorial berjenjang tingkat Desa: pembagian blok RW, kotak-kotak teritorial RT binaan, dan fasilitas umum desa.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-3.5 py-1.5 rounded-2xl bg-blue-50 text-blue-800 font-extrabold text-xs border border-blue-200 shadow-2xs">

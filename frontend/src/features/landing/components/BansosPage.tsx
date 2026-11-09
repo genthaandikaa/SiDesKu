@@ -140,7 +140,7 @@ export const BansosPage: React.FC = () => {
 
   return (
     <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800 bg-white">
-      
+
       {/* Div 1: Clean Ambient Hero Section with SVG Vectors (Canvas Mint) */}
       <section className="relative isolate w-full px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-10 text-center overflow-hidden">
         <div className="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-blue-500/15 via-sky-400/10 to-transparent blur-3xl pointer-events-none -z-10" />
@@ -158,7 +158,7 @@ export const BansosPage: React.FC = () => {
         </svg>
 
         <div className="relative z-10 mx-auto max-w-4xl">
-          
+
           {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
           <div className="space-y-4 text-center">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/90 text-blue-800 text-xs font-black border border-blue-200 shadow-2xs">
@@ -176,9 +176,7 @@ export const BansosPage: React.FC = () => {
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl mx-auto">
-              Cek status penerima, jadwal, dan besaran bantuan.
-            </p>
+
 
             <div className="flex flex-wrap items-center justify-center gap-4 pt-1 text-xs text-slate-500 font-medium">
               <span className="flex items-center gap-1.5">
@@ -196,7 +194,7 @@ export const BansosPage: React.FC = () => {
           <div className="hidden">
             <div className="w-full max-w-md animate-float-gentle">
               <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
-                
+
                 {/* Top Bar with Badge */}
                 <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
                   <div className="flex items-center gap-3">
@@ -253,9 +251,6 @@ export const BansosPage: React.FC = () => {
             <h2 className="text-xl font-black text-slate-900">
               Cek Kepesertaan Bansos
             </h2>
-            <p className="text-xs text-slate-500">
-              Masukkan NIK 16 digit.
-            </p>
           </div>
 
           <form onSubmit={handleCekNik} className="flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto">
@@ -310,7 +305,7 @@ export const BansosPage: React.FC = () => {
       {/* Div 2: Hasil Pencarian & Daftar Program Bansos (Full-Width Pure White Band) */}
       <section className="w-full bg-white pt-10 sm:pt-12 pb-16 sm:pb-24 border-b border-slate-200/80 relative z-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          
+
           {/* Hasil Pengecekan NIK */}
           {hasSearched && !isSearching && (
             <div className="animate-fade-in max-w-4xl mx-auto">
@@ -506,9 +501,6 @@ export const BansosPage: React.FC = () => {
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                 Program Bansos Desa Doko
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500">
-                Jadwal, penerima, dan manfaat bantuan.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -557,18 +549,17 @@ export const BansosPage: React.FC = () => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            
+
             {/* Left Column: Information */}
             <div className="lg:col-span-7 space-y-5">
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-blue-200 text-xs font-black border border-white/20">
                 <BellRing className="w-3.5 h-3.5 text-blue-300" />
                 <span>INOVASI AKSESIBILITAS INKLUSIF (DUAL-MODE)</span>
               </span>
-              
+
               <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
                 Notifikasi WhatsApp Otomatis: Pilihan QR Code & Teks Manual
               </h2>
-              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-xs">
                 <div className="p-5 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/15 space-y-2 shadow-xl">
                   <div className="font-extrabold text-white flex items-center gap-1.5">

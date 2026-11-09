@@ -217,11 +217,6 @@ export const BansosManager: React.FC<BansosManagerProps> = ({ isKades = false })
           <h2 className="text-xl font-bold text-[#0f241d]">
             {isKades ? 'Evaluasi & Penetapan Kebijakan Bantuan Sosial' : 'Manajemen Bantuan Sosial & Broadcast WhatsApp'}
           </h2>
-          <p className="text-xs text-gray-500">
-            {isKades 
-              ? 'Otorisasi penetapan Keluarga Penerima Manfaat (KPM) Bansos PKH, BPNT, dan BLT Dana Desa serta monitoring penyaluran.' 
-              : 'Penyaluran PKH, BLT Dana Desa, dan siaran pesan notifikasi otomatis langsung ke nomor HP/WA warga terdaftar.'}
-          </p>
         </div>
 
         <div className="flex items-center gap-2">

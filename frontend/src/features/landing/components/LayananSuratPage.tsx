@@ -68,7 +68,6 @@ export const LayananSuratPage: React.FC = () => {
         'Surat Pengantar dari Ketua RT setempat (otomatis via SIDes)',
         'Foto kondisi rumah / surat pernyataan penghasilan orang tua (bila diminta)',
       ],
-      kegunaan: 'Beasiswa, KIP, layanan kesehatan, atau bansos.',
     },
     {
       id: 2,
@@ -82,7 +81,6 @@ export const LayananSuratPage: React.FC = () => {
         'Kartu Keluarga (KK)',
         'Persetujuan Ketua RT & Ketua RW sesuai alamat tinggal',
       ],
-      kegunaan: 'Bukti alamat untuk keperluan bank atau kerja.',
     },
     {
       id: 3,
@@ -97,7 +95,6 @@ export const LayananSuratPage: React.FC = () => {
         'Foto tempat usaha / kegiatan dagang',
         'Verifikasi pengurus RT bahwa usaha aktif beroperasi di Desa Doko',
       ],
-      kegunaan: 'KUR, izin usaha, atau bantuan modal UMKM.',
     },
     {
       id: 4,
@@ -112,7 +109,6 @@ export const LayananSuratPage: React.FC = () => {
         'Pas foto 4x6 background merah',
         'Surat pengantar RT yang menyatakan berkelakuan baik',
       ],
-      kegunaan: 'Pengantar SKCK untuk kerja atau keperluan lain.',
     },
     {
       id: 5,
@@ -127,7 +123,6 @@ export const LayananSuratPage: React.FC = () => {
         'Surat Keterangan Kematian dari RS / Puskesmas / Bidan Desa (jika ada)',
         'Keterangan saksi dari RT setempat',
       ],
-      kegunaan: 'Akta kematian, klaim, dan pembaruan data warga.',
     },
     {
       id: 6,
@@ -142,7 +137,6 @@ export const LayananSuratPage: React.FC = () => {
         'Buku Nikah / Akta Perkawinan Orang Tua',
         'Kartu Keluarga (KK)',
       ],
-      kegunaan: 'Akta kelahiran dan pembaruan Kartu Keluarga.',
     },
     {
       id: 7,
@@ -157,7 +151,6 @@ export const LayananSuratPage: React.FC = () => {
         'Surat pernyataan belum pernah menikah bermaterai Rp 10.000',
         'Persetujuan Ketua RT & RW',
       ],
-      kegunaan: 'Pernikahan, beasiswa, atau persyaratan kerja.',
     },
     {
       id: 8,
@@ -172,15 +165,13 @@ export const LayananSuratPage: React.FC = () => {
         'Alasan kepindahan',
         'Surat bebas tanggungan kas RT',
       ],
-      kegunaan: 'Pengurusan surat pindah di Dispendukcapil.',
     },
   ];
 
   const filteredSuratTypes = suratTypes.filter((s) => {
     const matchCategory = selectedCategory === 'Semua' || s.kategori.toLowerCase().includes(selectedCategory.toLowerCase());
     const matchSearch = s.nama.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                        s.kode.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                        s.kegunaan.toLowerCase().includes(searchQuery.toLowerCase());
+                        s.kode.toLowerCase().includes(searchQuery.toLowerCase());
     return matchCategory && matchSearch;
   });
 
@@ -205,7 +196,7 @@ export const LayananSuratPage: React.FC = () => {
 
   return (
     <div className="page-enter relative w-full overflow-hidden flex flex-col">
-      
+
       {/* Div 1: Clean Ambient Hero Section with SVG Vectors (Canvas Mint) */}
       <section className="relative isolate w-full px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 pb-12 sm:pb-16 text-center">
         <div className="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-blue-500/15 via-sky-400/10 to-transparent blur-3xl pointer-events-none -z-10" />
@@ -223,7 +214,7 @@ export const LayananSuratPage: React.FC = () => {
         </svg>
 
         <div className="relative z-10 mx-auto max-w-4xl">
-          
+
           {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
           <div className="space-y-4 text-center">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs animate-fade-in">
@@ -240,9 +231,7 @@ export const LayananSuratPage: React.FC = () => {
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl mx-auto">
-              Pilih surat, cek syarat, lalu ajukan secara online.
-            </p>
+
 
             <div className="flex justify-center pt-1">
               <Link
@@ -259,7 +248,7 @@ export const LayananSuratPage: React.FC = () => {
           <div className="hidden">
             <div className="w-full max-w-md animate-float-gentle">
               <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
-                
+
                 {/* Top Bar with Kediri Emblem */}
                 <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
                   <div className="flex items-center gap-3">
@@ -386,9 +375,6 @@ export const LayananSuratPage: React.FC = () => {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
               Alur Pelayanan Surat 4 Tahap
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 font-medium">
-              Empat langkah dari pengajuan hingga surat terbit.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -572,9 +558,6 @@ export const LayananSuratPage: React.FC = () => {
                   <h3 className="font-black text-base text-gray-900 group-hover:text-blue-700 transition-colors leading-snug">
                     {s.nama}
                   </h3>
-                  <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
-                    {s.kegunaan}
-                  </p>
                 </div>
 
                 <div className="pt-4 border-t border-gray-100 mt-5 flex items-center justify-between gap-2">
@@ -701,13 +684,6 @@ export const LayananSuratPage: React.FC = () => {
             </div>
 
             <div className="space-y-4 text-xs">
-              <div>
-                <div className="font-bold text-gray-800 uppercase tracking-wider mb-2">Kegunaan / Peruntukan:</div>
-                <p className="text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-xl">
-                  {selectedSurat.kegunaan}
-                </p>
-              </div>
-
               <div>
                 <div className="font-bold text-gray-800 uppercase tracking-wider mb-2">Persyaratan Dokumen:</div>
                 <ul className="space-y-2">

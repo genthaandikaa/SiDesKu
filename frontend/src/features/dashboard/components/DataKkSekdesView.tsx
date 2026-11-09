@@ -129,9 +129,6 @@ export const DataKkSekdesView: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
             Buku Register Kartu Keluarga (KK) Desa Doko
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Pencatatan resmi seluruh kepala keluarga dan susunan anggota keluarga di seluruh lingkungan RW dan RT Desa Doko.
-          </p>
         </div>
 
         <span className="px-3.5 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-extrabold text-xs border border-blue-200 self-start sm:self-auto">

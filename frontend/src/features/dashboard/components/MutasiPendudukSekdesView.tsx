@@ -196,9 +196,6 @@ export const MutasiPendudukSekdesView: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
             Buku Mutasi Penduduk Desa Doko
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Pencatatan resmi dinamika kependudukan: perpindahan domisili (masuk/keluar), kelahiran baru, dan peristiwa kematian warga.
-          </p>
         </div>
 
         <button

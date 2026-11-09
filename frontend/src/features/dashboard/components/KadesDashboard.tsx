@@ -1359,9 +1359,6 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Buku Keputusan & Peraturan Kepala Desa
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Pengesahan resmi produk hukum desa (SK Kepala Desa, Peraturan Desa, dan Surat Edaran Kebijakan).
-            </p>
           </div>
           <button
             onClick={() => setShowAddSkModal(true)}
@@ -1441,9 +1438,6 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Pengawasan & Otorisasi APBDes Tahun Anggaran 2026
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Pengawasan tertinggi terhadap penerimaan pendapatan dan realisasi belanja desa yang dikelola Kaur Keuangan dan diverifikasi Sekdes.
-            </p>
           </div>
           <span className="px-3.5 py-1.5 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-200">
             Audit Siskeudes 100% WTP
@@ -2102,9 +2096,6 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Persetujuan & Publikasi Pengumuman Desa
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Setujui draf pengumuman dan surat undangan yang disiapkan Sekretaris Desa sebelum disebarluaskan ke publik.
-            </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             {pendingPengumumans.length > 0 && (
@@ -2334,9 +2325,6 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Rekap Aspirasi & Pengaduan Warga Desa Doko
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Pilah keluhan masyarakat berdasarkan batas wilayah RT/RW dan berikan arahan disposisi tindak lanjut.
-            </p>
           </div>
           <span className="px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-900 border border-blue-200 shrink-0">
             {filteredPengaduans.length} dari {pengaduans.length} Pengaduan
@@ -2650,9 +2638,6 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
         <h1 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
           Dashboard Kepala Desa
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500">
-          Ringkasan surat dan anggaran desa.
-        </p>
       </div>
 
       {/* Banner Akses Cepat Struktur Pamong & Visi Misi */}

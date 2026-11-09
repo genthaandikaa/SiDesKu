@@ -332,9 +332,6 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
               Buku Kas Umum (BKU)
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Pencatatan penerimaan dan pengeluaran kas desa.
-            </p>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
@@ -580,9 +577,6 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
             Pencatatan Buku Kas Umum Terpadu
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Catat penerimaan pendapatan atau pengeluaran belanja APBDes dengan validasi saldo kas otomatis.
-          </p>
         </div>
 
         <div className="card-surface p-6 rounded-3xl shadow-sm space-y-5">
@@ -769,9 +763,6 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Matriks Realisasi APBDes Per Bidang
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Rasio serapan pagu anggaran per bidang sesuai Standar Akuntansi Keuangan Desa (Siskeudes).
-            </p>
           </div>
           <button
             onClick={handleExportCsv}
@@ -971,9 +962,6 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Laporan Pertanggungjawaban (LPJ) Kas
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Dokumen resmi pertanggungjawaban realisasi kas APBDes Tahun Anggaran 2026.
-            </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             <button
@@ -1126,9 +1114,6 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
               Publikasi APBDes Portal Warga
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500">
-              Saklar kendali transparansi anggaran desa untuk halaman portal warga dan publik.
-            </p>
           </div>
         </div>
 
@@ -1215,9 +1200,6 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
             Ekspor & Cetak Rekapitulasi Kas Desa
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Unduh data pembukuan Buku Kas Umum (BKU) dalam format spreadsheet Excel/CSV atau cetak dokumen resmi.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">

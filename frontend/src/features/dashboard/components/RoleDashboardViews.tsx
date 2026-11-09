@@ -38,13 +38,12 @@ import {
   Upload,
   X,
   Paperclip,
-  CreditCard,
   QrCode,
   Copy
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
-import { CameraUploadModal } from '@/shared/components/CameraUploadModal';
 import { UserAvatar } from '@/shared/components/UserAvatar';
+import { CameraUploadModal } from '@/shared/components/CameraUploadModal';
 
 // Shared views (Pengumuman, Agenda, Profil, Notifikasi)
 
@@ -287,9 +286,6 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Pengumuman Desa
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Kabar resmi, instruksi bupati, jadwal bansos beras Bulog, dan tiket antrean kegiatan warga.
-          </p>
         </div>
 
         {canCreate && (
@@ -1419,13 +1415,6 @@ export const AgendaDesaView: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             {isRt ? 'Agenda Kegiatan & Jadwal Rapat RT 01' : isRw ? 'Agenda Kegiatan & Koordinasi Wilayah RW 01' : 'Agenda Kegiatan & Jadwal Rapat Desa'}
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            {isRt 
-              ? 'Kalender kegiatan musyawarah warga RT 01 Krajan, jadwal posyandu, kerja bakti, siskamling, dan koordinasi tingkat desa.'
-              : isRw
-              ? 'Kalender kegiatan koordinasi antar RT di lingkungan RW 01 Dusun Krajan, rapat teritorial, dan musyawarah desa.'
-              : 'Kalender kegiatan musyawarah, pelayanan kesehatan, dan aktivitas sosial warga.'}
-          </p>
         </div>
 
         {canCreate && (
@@ -2155,7 +2144,6 @@ export const ProfileSayaView: React.FC = () => {
   const [fotoKtp, setFotoKtp] = useState(user?.warga_profile?.foto_ktp || '');
   const [isKtpCameraOpen, setIsKtpCameraOpen] = useState(false);
   const [isAvatarCameraOpen, setIsAvatarCameraOpen] = useState(false);
-  const [zoomKtpImage, setZoomKtpImage] = useState<string | null>(null);
 
   // Profile feedback
   const [isSavingProfile, setIsSavingProfile] = useState(false);
@@ -2189,7 +2177,6 @@ export const ProfileSayaView: React.FC = () => {
     }
   }, [user]);
 
-  // Helper function to compress images client-side using Canvas API
   const compressImageFile = (file: File, maxDimension = 200, quality = 0.65): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -2201,7 +2188,6 @@ export const ProfileSayaView: React.FC = () => {
           let width = img.width;
           let height = img.height;
 
-          // Always optimize dimensions for avatar badge (200x200 is 2.5x retina for 80px avatar)
           if (width > maxDimension || height > maxDimension) {
             if (width > height) {
               height = Math.round((height * maxDimension) / width);
@@ -2215,7 +2201,6 @@ export const ProfileSayaView: React.FC = () => {
           const canvas = document.createElement('canvas');
           canvas.width = width;
           canvas.height = height;
-
           const ctx = canvas.getContext('2d');
           if (!ctx) {
             resolve(event.target?.result as string);
@@ -2225,14 +2210,11 @@ export const ProfileSayaView: React.FC = () => {
           ctx.imageSmoothingEnabled = true;
           ctx.imageSmoothingQuality = 'high';
           ctx.drawImage(img, 0, 0, width, height);
-
-          // Compress to JPEG format with lightweight footprint (~5-8KB)
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
-          resolve(compressedDataUrl);
+          resolve(canvas.toDataURL('image/jpeg', quality));
         };
-        img.onerror = (err) => reject(err);
+        img.onerror = reject;
       };
-      reader.onerror = (err) => reject(err);
+      reader.onerror = reject;
     });
   };
 
@@ -2267,23 +2249,23 @@ export const ProfileSayaView: React.FC = () => {
     }
   };
 
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setProfileError(null);
-      try {
-        const compressedBase64 = await compressImageFile(file, 200, 0.65);
-        setAvatar(compressedBase64);
-        await handleSaveAvatarOnly(compressedBase64);
-      } catch {
-        setProfileError('Gagal memproses dan mengompres foto profil.');
-      }
-    }
-  };
-
   const handleRemoveAvatar = async () => {
     setAvatar('');
     await handleSaveAvatarOnly('');
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setProfileError(null);
+    try {
+      const compressedAvatar = await compressImageFile(file);
+      setAvatar(compressedAvatar);
+      await handleSaveAvatarOnly(compressedAvatar);
+    } catch {
+      setProfileError('Gagal memproses dan mengompres foto profil.');
+    }
   };
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -2372,9 +2354,6 @@ export const ProfileSayaView: React.FC = () => {
   const roleSlug = user?.role?.slug || 'warga';
   const nikDisplay = user?.warga_profile?.nik || (roleSlug === 'warga' ? '3506041505840001' : '3506041203800008');
   const kkDisplay = user?.warga_profile?.kartu_keluarga?.no_kk || '3506041208010001';
-  const wilayahDisplay = user?.warga_profile?.rt 
-    ? `RT ${user.warga_profile.rt.nomor_rt} / RW ${user.warga_profile.rt.rw?.nomor_rw || '01'} • Dusun Doko Krajan` 
-    : 'Wilayah Pemerintahan Desa Doko';
 
   return (
     <div className="w-full space-y-6 animate-fade-in font-sans pb-12">
@@ -2384,9 +2363,6 @@ export const ProfileSayaView: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Profil & Pengaturan Akun
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Kelola identitas diri, data kependudukan resmi, kontak aktif, dan keamanan kredensial login.
-          </p>
         </div>
       </div>
 
@@ -2418,8 +2394,6 @@ export const ProfileSayaView: React.FC = () => {
               <div className="text-xs text-blue-800 font-extrabold flex items-center gap-1.5">
                 <Building2 className="w-3.5 h-3.5 text-blue-600" />
                 <span>{roleName}</span>
-                <span className="text-slate-300">•</span>
-                <span className="text-slate-500 font-normal">{wilayahDisplay}</span>
               </div>
 
               <div className="flex items-center gap-3 text-xs text-slate-400 font-mono pt-0.5">
@@ -2434,7 +2408,6 @@ export const ProfileSayaView: React.FC = () => {
                   type="button"
                   onClick={() => setIsAvatarCameraOpen(true)}
                   className="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-2xs flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105 active:scale-95"
-                  title="Ambil foto profil langsung menggunakan kamera HP / Webcam laptop"
                 >
                   <Camera className="w-3.5 h-3.5" />
                   <span>Ambil Foto via Kamera</span>
@@ -2443,7 +2416,6 @@ export const ProfileSayaView: React.FC = () => {
                 <label
                   htmlFor="avatar-upload"
                   className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 shadow-2xs flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105 active:scale-95"
-                  title="Pilih berkas foto dari komputer / galeri HP"
                 >
                   <Upload className="w-3.5 h-3.5 text-slate-500" />
                   <span>Pilih Berkas</span>
@@ -2523,7 +2495,6 @@ export const ProfileSayaView: React.FC = () => {
                 <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">
                   Informasi Akun & Kontak
                 </h4>
-                <span className="text-[11px] text-slate-400 font-medium">*Dapat diedit langsung</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
@@ -2640,111 +2611,45 @@ export const ProfileSayaView: React.FC = () => {
               </div>
             </div>
 
-            {/* Section 3: Verifikasi Fisik e-KTP & Foto Identitas Warga (e-KYC Desa) */}
             <div className="space-y-4 pt-4 border-t border-slate-100">
               <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">
-                    Verifikasi Berkas Fisik e-KTP (e-KYC Resmi Kependudukan)
-                  </h4>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
-                    Berkas identitas kependudukan resmi untuk syarat surat desa (arsip master kependudukan).
-                  </p>
-                </div>
-                <span className="text-[10px] font-black px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 flex items-center gap-1">
-                  <Camera className="w-3 h-3" />
-                  <span>Kamera & Upload</span>
-                </span>
+                <h4 className="text-xs font-black uppercase text-slate-400 tracking-wider">
+                  Verifikasi Berkas Fisik e-KTP (e-KYC Resmi Kependudukan)
+                </h4>
               </div>
 
               {fotoKtp ? (
-                /* Card Preview e-KTP */
-                <div className="p-4 rounded-3xl bg-blue-50/80 border border-blue-300 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-black text-blue-900 flex items-center gap-1.5">
-                      <CheckCircle2 className="w-4 h-4 text-blue-600" />
-                      <span>Foto e-KTP Terlampir & Terverifikasi</span>
-                    </span>
-                    <span className="text-[10px] font-bold text-blue-700 bg-white px-2.5 py-0.5 rounded-full border border-blue-200">
-                      Resmi Desa Doko
-                    </span>
-                  </div>
-
-                  <div className="relative rounded-2xl overflow-hidden border border-blue-300 bg-slate-950 aspect-16/10 max-h-56 flex items-center justify-center group shadow-xs">
-                    <img
-                      src={fotoKtp}
-                      alt="Foto e-KTP Terverifikasi"
-                      className="w-full h-full object-contain"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setZoomKtpImage(fotoKtp)}
-                        className="px-3.5 py-2 rounded-xl bg-white text-slate-900 text-xs font-black shadow-md hover:bg-slate-100 transition-all flex items-center gap-1.5 cursor-pointer"
-                      >
-                        <Eye className="w-4 h-4" />
-                        <span>Lihat Ukuran Asli</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-1 flex-wrap">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-3xl bg-blue-50/80 border border-blue-200">
+                  <img src={fotoKtp} alt="Foto e-KTP terlampir" className="w-full sm:w-48 rounded-2xl border border-blue-200 object-contain" />
+                  <div className="flex items-center gap-2 flex-wrap">
                     <button
                       type="button"
                       onClick={() => setIsKtpCameraOpen(true)}
-                      className="flex-1 py-2.5 px-3 rounded-xl bg-white hover:bg-blue-100/70 border border-blue-300 text-blue-900 text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+                      className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all flex items-center gap-2 shadow-xs cursor-pointer"
                     >
                       <Camera className="w-4 h-4" />
-                      <span>Foto Ulang via Kamera</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setAvatar(fotoKtp);
-                        handleSaveAvatarOnly(fotoKtp);
-                      }}
-                      className="py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
-                      title="Gunakan foto ini sebagai foto profil / avatar akun"
-                    >
-                      <User className="w-4 h-4" />
-                      <span>Jadikan Foto Profil</span>
+                      <span>Ganti Foto / Unggah</span>
                     </button>
                     <button
                       type="button"
                       onClick={() => setFotoKtp('')}
-                      className="py-2.5 px-3 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-700 text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
-                      title="Hapus Foto KTP"
+                      className="px-4 py-2.5 rounded-xl bg-white hover:bg-rose-50 border border-rose-200 text-rose-700 text-xs font-black transition-all cursor-pointer"
                     >
-                      <Trash2 className="w-4 h-4" />
-                      <span>Hapus</span>
+                      Hapus Foto
                     </button>
                   </div>
                 </div>
               ) : (
-                /* Trigger Buttons to Capture or Upload KTP */
-                <div className="p-5 rounded-3xl border-2 border-dashed border-slate-300 hover:border-blue-500 bg-slate-50/80 transition-all text-center space-y-3">
-                  <div className="w-12 h-12 rounded-2xl bg-white text-blue-600 shadow-xs flex items-center justify-center mx-auto">
-                    <CreditCard className="w-6 h-6" />
-                  </div>
-                  <div>
-                    <h5 className="text-xs font-black text-slate-800">
-                      Foto Fisik e-KTP Belum Dilampirkan
-                    </h5>
-                    <p className="text-[11px] text-slate-500 mt-0.5">
-                      Ambil foto langsung dengan kamera atau unggah berkas dari galeri perangkat Anda.
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
-                    <button
-                      type="button"
-                      onClick={() => setIsKtpCameraOpen(true)}
-                      className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all flex items-center gap-2 shadow-xs cursor-pointer press-down"
-                    >
-                      <Camera className="w-4 h-4" />
-                      <span>Buka Kamera Sekarang</span>
-                    </button>
-                  </div>
+                <div className="p-5 rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50/80 text-center space-y-3">
+                  <p className="text-xs font-bold text-slate-600">Foto e-KTP belum dilampirkan.</p>
+                  <button
+                    type="button"
+                    onClick={() => setIsKtpCameraOpen(true)}
+                    className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer mx-auto"
+                  >
+                    <Camera className="w-4 h-4" />
+                    <span>Ambil Foto / Pilih Berkas</span>
+                  </button>
                 </div>
               )}
             </div>
@@ -2895,19 +2800,14 @@ export const ProfileSayaView: React.FC = () => {
         )}
       </div>
 
-      {/* Camera Modal for e-KTP */}
       <CameraUploadModal
         isOpen={isKtpCameraOpen}
         onClose={() => setIsKtpCameraOpen(false)}
-        onCapture={(base64) => {
-          setFotoKtp(base64);
-        }}
+        onCapture={(base64) => setFotoKtp(base64)}
         title="Ambil Foto Fisik e-KTP"
-        description="Posisikan e-KTP Anda di dalam bingkai garis panduan agar 16 digit NIK dan identitas terbaca jelas."
         guideType="ktp"
       />
 
-      {/* Camera Modal for Foto Profil / Avatar */}
       <CameraUploadModal
         isOpen={isAvatarCameraOpen}
         onClose={() => setIsAvatarCameraOpen(false)}
@@ -2921,45 +2821,6 @@ export const ProfileSayaView: React.FC = () => {
         guideType="bebas"
       />
 
-      {/* Lightbox Modal for Zooming KTP - Portaled, Auto-Centered, Highest Z-Index, No Blur */}
-      {zoomKtpImage && createPortal(
-        <div 
-          className="fixed inset-0 z-[999999] bg-slate-950/90 flex items-center justify-center p-4 animate-fade-in font-sans overflow-y-auto select-none"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setZoomKtpImage(null);
-          }}
-        >
-          <div 
-            className="relative max-w-2xl w-full bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-2xl space-y-3 p-4 my-auto max-h-[92vh]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between text-slate-900 pb-3 border-b border-slate-100">
-              <span className="text-xs font-bold flex items-center gap-2 text-slate-800">
-                <div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 border border-blue-100/80 flex items-center justify-center">
-                  <CreditCard className="w-4 h-4" />
-                </div>
-                <span>Foto Fisik e-KTP Terverifikasi</span>
-              </span>
-              <button
-                type="button"
-                onClick={() => setZoomKtpImage(null)}
-                className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
-                title="Tutup (ESC)"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 flex items-center justify-center max-h-[70vh]">
-              <img
-                src={zoomKtpImage}
-                alt="Foto e-KTP Zoom"
-                className="w-full h-full object-contain"
-              />
-            </div>
-          </div>
-        </div>,
-        document.body
-      )}
     </div>
   );
 };
@@ -3040,9 +2901,6 @@ export const NotifikasiView: React.FC<{
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Pusat Notifikasi & Riwayat Alert
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Pemberitahuan perubahan status surat pengantar dan instruksi sistem desa.
-          </p>
         </div>
         <span className="text-xs font-extrabold text-blue-800 bg-blue-50 px-3.5 py-1.5 rounded-full border border-blue-200 shadow-2xs w-fit">
           {notifs.filter(n => n.unread).length} Belum Dibaca

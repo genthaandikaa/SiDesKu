@@ -298,9 +298,6 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
             <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
               Cukup Upload Sekali, Otomatis untuk Semua Surat Desa
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 leading-relaxed font-normal">
-              Foto KTP, Kartu Keluarga, dan berkas identitas Anda tersimpan aman di database arsip Desa Doko. Setiap kali Anda mengajukan surat apapun (SKTM, Domisili, SKU, dll.), sistem <strong className="text-slate-800 font-extrabold">otomatis melampirkan berkas resmi Anda</strong> tanpa perlu repot upload berulang kali.
-            </p>
           </div>
 
           {/* Quick stats & verification badge */}

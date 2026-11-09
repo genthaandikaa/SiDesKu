@@ -736,9 +736,6 @@ export const PendaftaranWargaDesa: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
             Pendaftaran & Buku Register Warga
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Warga didaftarkan langsung oleh Desa. Warga yang terdaftar dapat langsung login menggunakan NIK dan password Tanggal Lahir (DDMMYYYY).
-          </p>
         </div>
 
         <button

@@ -542,9 +542,6 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-black text-slate-900">Daftar RT RW 01</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Daftar ketua RT dan demografi lingkungan RW 01.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1.5 rounded-2xl bg-blue-50 text-blue-800 font-extrabold text-xs border border-blue-200">
@@ -566,9 +563,6 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-black text-slate-900">Data Warga RW 01</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Daftar penduduk terdata di lingkungan RW 01.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-black text-xs border border-blue-300">
@@ -590,9 +584,6 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-2xs flex flex-wrap items-center justify-between gap-4">
           <div>
             <h2 className="text-xl font-black text-slate-900">Data Kartu Keluarga RW 01</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Daftar kepala keluarga dan anggota KK di wilayah RW 01.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-3 py-1.5 rounded-2xl bg-blue-100 text-blue-900 font-black text-xs border border-blue-300">
@@ -620,9 +611,6 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               </span>
             </div>
             <h2 className="text-xl font-black text-slate-900 mt-1">Peta Wilayah Lingkungan RW 01 (6 Kotak RT)</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Peta geospasial terbagi dalam kotak-kotak teritorial per RT binaan (RT 01 s/d RT 06), batas wilayah, serta fasilitas umum RW.
-            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-3.5 py-1.5 rounded-2xl bg-blue-50 text-blue-800 font-extrabold text-xs border border-blue-200 shadow-2xs">
@@ -659,9 +647,6 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               Akuntabilitas Finansial Wilayah
             </span>
             <h2 className="text-xl font-black text-slate-900 mt-1">Pembukuan Kas & Iuran RW 01</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Catatan mutasi kas koordinasi lingkungan RW, iuran kegiatan warga, dan rekapitulasi transparan.
-            </p>
           </div>
           <button
             type="button"
@@ -689,9 +674,6 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
               Demografi & Kependudukan
             </span>
             <h2 className="text-xl font-black text-slate-900 mt-1">Rekap Statistik Wilayah RW 01</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Distribusi komposisi penduduk, piramida gender, dan indikator pelayanan di Dusun Krajan.
-            </p>
           </div>
         </div>
 

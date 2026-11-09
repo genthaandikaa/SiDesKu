@@ -631,9 +631,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900">
             Dashboard Admin
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Pengguna, keamanan, dan sistem desa.
-          </p>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
@@ -942,9 +939,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   <Clock className="w-4 h-4 text-blue-600" />
                   Rekam Jejak Log Aktivitas Terkini
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Audit trail transaksi sistem dan perubahan hak akses terkini
-                </p>
               </div>
               <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg w-fit">
                 Audit Trail Aktif
@@ -1059,9 +1053,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 Sebaran Akun Berdasarkan Hak Akses (RBAC)
               </h2>
-              <p className="text-xs text-slate-500 mb-4 sm:mb-6">
-                Komposisi peran pengguna yang terdaftar di database SiDesKu
-              </p>
 
               <div className="space-y-3.5">
                 {roles.filter((r) => r.slug !== 'super_admin').map((r) => {
@@ -1096,9 +1087,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <Database className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                 Matriks Tabel Basis Data
               </h2>
-              <p className="text-xs text-slate-500 mb-4">
-                Jumlah baris data entitas utama
-              </p>
 
               <div className="divide-y divide-slate-100 text-xs">
                 {stats?.database ? (
@@ -1123,9 +1111,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
               <FileCheck2 className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600" />
               Siklus Alur Persuratan Resmi (Direct RT ke Kepala Desa)
             </h2>
-            <p className="text-xs text-slate-500 mb-4 sm:mb-6">
-              Status pengajuan surat di seluruh wilayah Desa Doko
-            </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
               <div className="p-3 sm:p-4 rounded-2xl border border-amber-200 bg-amber-50/40 space-y-1">
@@ -1453,9 +1438,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0" />
                   <span>Matriks Hak Akses & Peran Sistem (Dynamic RBAC SiDesKu)</span>
                 </h2>
-                <p className="text-xs text-slate-500">
-                  Ubah hak akses dan wewenang fitur tanpa perlu mengedit kode program (Cocok untuk staf Non-IT).
-                </p>
               </div>
 
               <div className="flex items-center gap-2">
@@ -2124,9 +2106,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <h2 className="text-base sm:text-lg font-bold text-slate-900">
                   Pengawasan APBDes & Transparansi Keuangan Desa
                 </h2>
-                <p className="text-xs text-slate-500">
-                  Ringkasan realisasi APBDes dan ikhtisar kas desa yang dikelola oleh Bendahara Desa
-                </p>
               </div>
             </div>
 
@@ -2191,9 +2170,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <h2 className="text-base sm:text-xl font-bold text-slate-900 mt-1">
                   Pencadangan & Pemulihan Basis Data (Backup & Restore)
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                  Amankan data warga, transaksi kas, dan arsip persuratan dalam satu berkas terenkripsi, serta pulihkan kembali kapanpun dibutuhkan.
-                </p>
               </div>
             </div>
 
@@ -2374,9 +2350,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                 <Lock className="w-5 h-5 text-blue-600" />
                 <span>Parameter Keamanan & Kriptografi</span>
               </h2>
-              <p className="text-xs text-slate-500 mb-4 sm:mb-6">
-                Standar pengamanan akses data sensitif warga dan arsip legal
-              </p>
 
               <div className="space-y-2.5 sm:space-y-3.5 text-xs">
                 <div className="flex items-center justify-between p-3 rounded-xl bg-blue-50/60 border border-blue-200">
@@ -2420,9 +2393,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   <Key className="w-5 h-5 text-amber-600" />
                   <span>Sesi Pengguna & Revokasi Akses</span>
                 </h2>
-                <p className="text-xs text-slate-500 mb-4 sm:mb-6">
-                  Manajemen kredensial aktif untuk mitigasi insiden siber
-                </p>
 
                 <div className="p-3.5 sm:p-4 rounded-xl border border-slate-200 bg-slate-50 mb-4">
                   <div className="flex items-center justify-between text-xs font-semibold text-slate-700">

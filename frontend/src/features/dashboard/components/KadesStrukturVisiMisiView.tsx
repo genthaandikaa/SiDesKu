@@ -200,9 +200,6 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Visi, Misi & Struktur Pemerintahan Desa
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Perbarui rumusan resmi Visi dan butir Misi desa yang langsung tampil di halaman profil publik, transparansi warga, dan portal resmi desa.
-          </p>
         </div>
 
         <a

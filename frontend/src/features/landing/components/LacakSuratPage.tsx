@@ -95,7 +95,7 @@ export const LacakSuratPage: React.FC = () => {
 
   return (
     <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800 bg-white">
-      
+
       {/* Div 1: Clean Ambient Hero Section with SVG Vectors (Canvas Mint) */}
       <section className="relative isolate w-full px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-8 sm:pb-10 text-center overflow-hidden">
         <div className="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-blue-500/15 via-sky-400/10 to-transparent blur-3xl pointer-events-none -z-10" />
@@ -113,7 +113,7 @@ export const LacakSuratPage: React.FC = () => {
         </svg>
 
         <div className="relative z-10 mx-auto max-w-4xl">
-          
+
           {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
           <div className="space-y-4 text-center">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs animate-fade-in">
@@ -130,16 +130,14 @@ export const LacakSuratPage: React.FC = () => {
               </span>
             </h1>
 
-            <p className="text-base sm:text-lg lg:text-xl text-slate-600 leading-relaxed font-medium max-w-2xl mx-auto">
-              Lacak proses surat atau cek keaslian QR.
-            </p>
+
           </div>
 
           {/* Right Column (40% Fibonacci): QR Validation Card Preview */}
           <div className="hidden">
             <div className="w-full max-w-md animate-float-gentle">
               <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
-                
+
                 {/* Top Bar with QR Scanner Badge */}
                 <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
                   <div className="flex items-center gap-3">
@@ -195,9 +193,6 @@ export const LacakSuratPage: React.FC = () => {
             <h2 className="text-xl font-black text-slate-900">
               Cek Posisi Dokumen Anda
             </h2>
-            <p className="text-xs text-slate-500">
-              Masukkan nomor resi, contoh REQ-20260818-001.
-            </p>
           </div>
 
           <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 max-w-2xl mx-auto">
@@ -267,7 +262,7 @@ export const LacakSuratPage: React.FC = () => {
       {/* Div 2: Hasil Pelacakan & Rincian Berkas (Full-Width Pure White Band) */}
       <section className="w-full bg-white pt-10 sm:pt-12 pb-16 sm:pb-24 border-b border-slate-200/80 relative z-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-8">
-          
+
           {/* Tracking Results Case */}
           {hasSearched && trackingResults && trackingResults.length > 0 ? (
             <div className="space-y-6 animate-fade-in">
@@ -280,7 +275,7 @@ export const LacakSuratPage: React.FC = () => {
 
               {trackingResults.map((item) => {
                 const isExpanded = expandedTrackings[item.id] ?? true;
-                
+
                 // Calculate current active step index (1 to 4: Pengajuan -> RT -> Desa -> Selesai)
                 let currentStep = 1;
                 if (item.status === 'completed') currentStep = 4;
