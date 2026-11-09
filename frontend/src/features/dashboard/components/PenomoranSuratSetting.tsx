@@ -153,9 +153,6 @@ export const PenomoranSuratSetting: React.FC = () => {
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1">
             Pengaturan Format, Urutan & Persyaratan Surat
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500">
-            Setiap jenis surat (SKTM, KTP, KK, Domisili, dll.) memiliki format klasifikasi nomor urut dan persyaratan dokumen yang dapat diatur secara dinamis oleh kantor desa tanpa hardcode.
-          </p>
         </div>
 
         <button
@@ -229,9 +226,6 @@ export const PenomoranSuratSetting: React.FC = () => {
             <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
               Master Format, Urutan & Persyaratan Surat Desa
             </h3>
-            <p className="text-xs text-slate-500">
-              Klik &ldquo;Edit Format & Syarat&rdquo; untuk mengubah nomor, format penomoran, atau daftar berkas persyaratan warga.
-            </p>
           </div>
           <span className="text-xs font-black text-blue-800 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
             {types.length} Jenis Surat Aktif
