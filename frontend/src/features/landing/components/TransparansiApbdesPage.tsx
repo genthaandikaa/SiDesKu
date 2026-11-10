@@ -187,7 +187,6 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
       sumber: 'Bapanas & Bulog',
       nominal: '30 Kg Beras',
       tahap: 'Juli–September 2026',
-      kriteria: 'Keluarga terdaftar di basis data PBP Bapanas pusat.',
       jadwal: 'Selasa, 18 Agustus 2026 (08.30 WIB)',
       lokasi: 'Balai Kelurahan Setempat',
     },
@@ -196,7 +195,6 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
       sumber: 'Kemensos RI',
       nominal: 'Rp 750.000 / Tahap',
       tahap: 'Tahap III 2026',
-      kriteria: 'Keluarga DTKS dengan anak sekolah, balita, atau lansia.',
       jadwal: '25 Agustus 2026 (08.30 WIB)',
       lokasi: 'Pendopo Kecamatan / Balai Kelurahan',
     },
@@ -205,7 +203,6 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
       sumber: 'APBD Kota Kediri',
       nominal: 'Rp 300.000 / Bulan',
       tahap: 'Alokasi Berjalan 2026',
-      kriteria: 'Keluarga rentan non-penerima PKH/BPNT terverifikasi lurah.',
       jadwal: '28 Agustus 2026 (09.00 WIB)',
       lokasi: 'Loket Layanan Kelurahan',
     },
@@ -286,12 +283,9 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
 
       {/* HERO SECTION */}
       <section className="text-center max-w-3xl mx-auto space-y-4">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">
+        <h4 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">
           Transparansi Anggaran & Tata Kelola
-        </h1>
-        <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
-          Publikasi realisasi Anggaran Pendapatan & Belanja Daerah (APBD), visualisasi distribusi dana, serta repositori dokumen resmi yang dapat diakses seluruh warga.
-        </p>
+        </h4>
 
         {/* Segmented Switcher */}
         <div className="pt-2">
@@ -648,11 +642,6 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
                   Unduh berkas resmi hasil audit, rancangan peraturan daerah, dan indikator kinerja tanpa perantara.
                 </p>
               </div>
-
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium shrink-0 pt-1">
-                <Lock className="w-3.5 h-3.5 text-slate-400" />
-                <span>Integritas Terenkripsi SHA-256</span>
-              </div>
             </div>
 
             {/* Filter & Search Bar */}
@@ -731,7 +720,7 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
 
                         <div className="text-[11px] text-emerald-700 font-mono font-medium flex items-center gap-1.5 pt-0.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                          <span>{doc.hash} (Tersertifikasi Balai Sertifikasi Elektronik)</span>
+                          <span>{doc.hash}</span>
                         </div>
                       </div>
                     </div>
@@ -773,8 +762,7 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
           {/* NIK Checker Console */}
           <div className="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-7 shadow-2xs space-y-4">
             <div className="text-center space-y-1 mb-2">
-              <h3 className="font-black text-lg text-slate-900">Pengecekan Mandiri Kepesertaan Bansos (DTKS)</h3>
-              <p className="text-xs text-slate-500">Masukkan 16 digit NIK KTP Anda untuk melihat status jadwal dan antrean.</p>
+              <h6 className="text-slate-800">Masukkan 16 digit NIK KTP Anda untuk melihat status jadwal dan antrean.</h6>
             </div>
 
             <form onSubmit={handleCekNik} className="flex flex-col sm:flex-row gap-2.5">
@@ -963,10 +951,6 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
                       <div className="text-[10px] text-slate-400 font-bold">Nominal / Alokasi</div>
                       <div className="font-black text-sm text-blue-600">{b.nominal}</div>
                     </div>
-
-                    <p className="text-xs text-slate-500 leading-relaxed">
-                      {b.kriteria}
-                    </p>
                   </div>
 
                   <div className="pt-2.5 border-t border-slate-100 text-xs space-y-1 text-slate-500">

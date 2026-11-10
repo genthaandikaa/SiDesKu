@@ -97,6 +97,14 @@ export const PublicNavbar: React.FC = () => {
   const activeLinks = user ? postLoginLinks : preLoginLinks;
   const isActive = (path: string) => {
     if (path === '/' && location.pathname === '/') return true;
+    if (path === '/smart-city' && (
+      location.pathname.startsWith('/smart-city') ||
+      location.pathname.startsWith('/umkm') ||
+      location.pathname.startsWith('/pasar') ||
+      location.pathname.startsWith('/kos') ||
+      location.pathname.startsWith('/hunian') ||
+      location.pathname.startsWith('/loker')
+    )) return true;
     if (path !== '/' && location.pathname.startsWith(path)) return true;
     return false;
   };

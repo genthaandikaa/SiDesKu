@@ -10,7 +10,10 @@ const LacakSuratPage = React.lazy(() => import('@/features/landing/components/La
 const TransparansiApbdesPage = React.lazy(() => import('@/features/landing/components/TransparansiApbdesPage').then(m => ({ default: m.TransparansiApbdesPage })));
 const BansosPage = React.lazy(() => import('@/features/landing/components/BansosPage').then(m => ({ default: m.BansosPage })));
 const BeritaPage = React.lazy(() => import('@/features/landing/components/BeritaPage').then(m => ({ default: m.BeritaPage })));
-const SmartCityHubPage = React.lazy(() => import('@/features/landing/components/SmartCityHubPage').then(m => ({ default: m.SmartCityHubPage })));
+const SmartCityHubPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.SmartCityHubPage })));
+const UmkmPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.UmkmPage })));
+const KosPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.KosPage })));
+const LokerPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.LokerPage })));
 const LoginPage = React.lazy(() => import('@/features/auth/components/LoginPage').then(m => ({ default: m.LoginPage })));
 const RegisterPage = React.lazy(() => import('@/features/auth/components/RegisterPage').then(m => ({ default: m.RegisterPage })));
 
@@ -89,10 +92,19 @@ export const AppRoutes: React.FC = () => {
           <Route path="/transparansi-apbdes" element={<Navigate to="/transparansi" replace />} />
           <Route path="/bansos" element={<TransparansiApbdesPage initialTab="bansos" />} />
           <Route path="/berita" element={<BeritaPage />} />
+
+          {/* Smart City Pages (Dedicated URLs & Pages) */}
           <Route path="/smart-city" element={<SmartCityHubPage />} />
-          <Route path="/hunian" element={<Navigate to="/smart-city?tab=hunian" replace />} />
-          <Route path="/pasar" element={<Navigate to="/smart-city?tab=pasar" replace />} />
-          <Route path="/loker" element={<Navigate to="/smart-city?tab=loker" replace />} />
+          <Route path="/smart-city/umkm" element={<UmkmPage />} />
+          <Route path="/smart-city/kos" element={<KosPage />} />
+          <Route path="/smart-city/loker" element={<LokerPage />} />
+
+          {/* Convenient Direct Aliases */}
+          <Route path="/umkm" element={<UmkmPage />} />
+          <Route path="/pasar" element={<UmkmPage />} />
+          <Route path="/kos" element={<KosPage />} />
+          <Route path="/hunian" element={<KosPage />} />
+          <Route path="/loker" element={<LokerPage />} />
         </Route>
 
         {/* Auth Routes */}

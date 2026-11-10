@@ -44,6 +44,8 @@ import {
   FileSpreadsheet,
   MessageSquare,
   Megaphone,
+  ShoppingBag,
+  Briefcase,
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { useAuth } from '@/shared/context/AuthContext';
@@ -63,6 +65,7 @@ const BansosManager = React.lazy(() => import('./BansosManager').then((m) => ({ 
 const KopSuratSetting = React.lazy(() => import('./KopSuratSetting').then((m) => ({ default: m.KopSuratSetting })));
 const KadesStrukturVisiMisiView = React.lazy(() => import('./KadesStrukturVisiMisiView').then((m) => ({ default: m.KadesStrukturVisiMisiView })));
 const PusatPesanView = React.lazy(() => import('./PusatPesanView').then((m) => ({ default: m.PusatPesanView })));
+const WargaSmartCityManager = React.lazy(() => import('@/features/smart-city').then((m) => ({ default: m.WargaSmartCityManager })));
 
 import { KeuanganDesaWargaView } from './KeuanganDesaWargaView';
 import { AspirasiPengaduanWargaView } from './AspirasiPengaduanWargaView';
@@ -789,6 +792,14 @@ export const DashboardLayout: React.FC = () => {
             ],
           },
           {
+            title: 'Smart City Warga',
+            items: [
+              { id: 'smart_city_umkm', label: 'Toko & UMKM Saya', icon: ShoppingBag },
+              { id: 'smart_city_kos', label: 'Kelola Kos & Hunian', icon: Home },
+              { id: 'smart_city_loker', label: 'Bursa Kerja & Loker', icon: Briefcase },
+            ],
+          },
+          {
             title: 'Akun & Komunikasi',
             items: [
               { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
@@ -1083,6 +1094,9 @@ export const DashboardLayout: React.FC = () => {
       pengawasan_apbdes: ['pengawasan', 'apbdes', 'pkpkd', 'anggaran', 'realisasi', 'keuangan'],
       kebijakan_bansos: ['bansos', 'bantuan', 'blt', 'pkh', 'otorisasi', 'kades'],
       bansos_manager: ['bansos', 'bantuan', 'whatsapp', 'penerima', 'blt', 'pkh'],
+      smart_city_umkm: ['umkm', 'toko', 'dagang', 'jual', 'pasar', 'qris', 'cod', 'produk', 'jualan'],
+      smart_city_kos: ['kos', 'hunian', 'kamar', 'sewa', 'kontrakan', 'kost', 'kamar kosong'],
+      smart_city_loker: ['loker', 'kerja', 'lowongan', 'karir', 'cv', 'pelamar', 'pekerjaan'],
       daftar_transaksi: ['transaksi', 'bku', 'buku kas umum', 'kas', 'pembukuan'],
       input_transaksi: ['input', 'transaksi', 'tambah', 'pemasukan', 'pengeluaran', 'kas'],
       realisasi_apbdes: ['realisasi', 'apbdes', 'persentase', 'anggaran', 'keuangan'],
@@ -1201,6 +1215,14 @@ export const DashboardLayout: React.FC = () => {
     }
     if (activeMenu === 'aspirasi_warga' || activeMenu === 'pengaduan') {
       if (roleSlug === 'warga') return <AspirasiPengaduanWargaView />;
+    }
+    if (activeMenu.startsWith('smart_city_')) {
+      const initialTab = activeMenu.replace('smart_city_', '') as 'umkm' | 'kos' | 'loker';
+      return (
+        <React.Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Memuat Smart City Warga...</div>}>
+          <WargaSmartCityManager initialTab={initialTab} />
+        </React.Suspense>
+      );
     }
 
     // 3. Primary Role Dashboards

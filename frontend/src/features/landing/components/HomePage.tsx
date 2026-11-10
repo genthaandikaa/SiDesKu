@@ -174,7 +174,7 @@ export const HomePage: React.FC = () => {
       desc: "Titik lokasi akurat di peta GIS, kontak pemilik terverifikasi RT, dan bebas penipuan sewa hunian.",
       icon: Home,
       iconBg: "bg-sky-50 text-sky-600 border border-sky-100",
-      link: "/smart-city?tab=hunian",
+      link: "/smart-city/kos",
     },
     {
       id: "pasar-loker",
@@ -183,7 +183,7 @@ export const HomePage: React.FC = () => {
       desc: "Filter produk UMKM radius terdekat tanpa potongan dan portal bursa kerja resmi terverifikasi Disnaker.",
       icon: Briefcase,
       iconBg: "bg-blue-50 text-blue-600 border border-blue-100",
-      link: "/smart-city?tab=pasar",
+      link: "/smart-city/umkm",
     },
   ];
 
