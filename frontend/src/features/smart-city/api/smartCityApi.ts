@@ -180,4 +180,32 @@ export const smartCityApi = {
     saveStoredUmkmItem(fallbackItem);
     return fallbackItem;
   },
+
+  /**
+   * Get UMKM products owned by the authenticated citizen
+   */
+  getMyUmkmList: async (): Promise<UmkmItem[]> => {
+    try {
+      const res = await api.get('/my-umkms');
+      if (res.data?.success && Array.isArray(res.data?.data)) {
+        return res.data.data.map(transformUmkmFromBackend);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch citizen personal UMKMs:', err);
+    }
+    return [];
+  },
+
+  /**
+   * Delete UMKM product owned by the authenticated citizen
+   */
+  deleteMyUmkm: async (id: string): Promise<boolean> => {
+    try {
+      const res = await api.delete(`/my-umkms/${id}`);
+      return res.data?.success ?? true;
+    } catch (err) {
+      console.warn('Failed to delete citizen personal UMKM:', err);
+      return false;
+    }
+  },
 };

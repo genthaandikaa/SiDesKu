@@ -87,6 +87,8 @@ Route::middleware(['auth:sanctum', 'tenant', 'regional.readonly'])->group(functi
     Route::match(['put', 'post'], '/auth/password', [AuthController::class, 'updatePassword']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     // Smart City UMKM & Review (Khusus Warga Terdaftar)
+    Route::get('/my-umkms', [PublicUmkmController::class, 'myUmkms']);
+    Route::delete('/my-umkms/{id}', [PublicUmkmController::class, 'destroy']);
     Route::post('/umkms', [PublicUmkmController::class, 'store']);
     Route::post('/umkms/{id}/reviews', [PublicUmkmController::class, 'storeReview']);
     Route::get('/regional/overview', [\App\Http\Controllers\Api\Regional\RegionalOverviewController::class, '__invoke']);

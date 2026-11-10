@@ -316,6 +316,67 @@ class PublicUmkmController extends Controller
     }
 
     /**
+     * Get UMKM items owned by authenticated citizen.
+     */
+    public function myUmkms(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated',
+                'data' => []
+            ], 401);
+        }
+
+        $items = Umkm::where('user_id', $user->id)
+            ->with('reviews')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $items
+        ]);
+    }
+
+    /**
+     * Delete an UMKM item owned by authenticated citizen.
+     */
+    public function destroy(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
+        $umkm = Umkm::where('id', $id)->first();
+        if (!$umkm) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Produk tidak ditemukan.'
+            ], 404);
+        }
+
+        if ($umkm->user_id && (int) $umkm->user_id !== (int) $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki hak akses untuk menghapus produk ini.'
+            ], 403);
+        }
+
+        $umkm->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Produk berhasil dihapus.'
+        ]);
+    }
+
+    /**
      * Haversine formula calculation in kilometers.
      */
     private function calculateDistance(float $lat1, float $lon1, float $lat2, float $lon2): float
