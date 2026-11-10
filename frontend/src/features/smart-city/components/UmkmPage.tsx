@@ -111,6 +111,29 @@ export const UmkmPage: React.FC = () => {
   const [uploadEstimasi, setUploadEstimasi] = useState('15 - 30 Menit (Fresh Cook)');
   const [publishSuccessToast, setPublishSuccessToast] = useState(false);
 
+  // Mobile / Tablet Filter Accordion State (Collapsed by default on mobile)
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (selectedCategory !== 'Semua') count++;
+    if (distanceMode !== 'all') count++;
+    if (deliveryFilter !== 'all') count++;
+    if (paymentFilter !== 'all') count++;
+    if (ratingFilter !== 'all') count++;
+    if (sortBy !== 'distance') count++;
+    return count;
+  }, [selectedCategory, distanceMode, deliveryFilter, paymentFilter, ratingFilter, sortBy]);
+
+  const CATEGORY_TABS = [
+    { id: 'Semua', label: 'Semua' },
+    { id: 'Kuliner & Kudapan', label: '🍜 Kuliner' },
+    { id: 'Bahan Pokok & Sembako', label: '🌾 Sembako' },
+    { id: 'Kriya & Kerajinan', label: '🧺 Kriya' },
+    { id: 'Jasa Panggilan', label: '🔧 Jasa' },
+    { id: 'Fashion & Batik', label: '👕 Fashion' }
+  ];
+
   // Initial Fetch & Sync from Backend API
   useEffect(() => {
     let isMounted = true;
@@ -294,14 +317,14 @@ export const UmkmPage: React.FC = () => {
     <div className="space-y-8 font-sans pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
 
       {/* =========================================================================
-          HERO BANNER
+          HERO BANNER (Responsive & Balanced for Mobile, Tablet & Desktop)
           ========================================================================= */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-2xs relative overflow-hidden">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      <section className="bg-white rounded-3xl p-5 sm:p-7 lg:p-8 border border-slate-200/90 shadow-2xs relative overflow-hidden">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5 sm:gap-6">
           
           {/* Left Title & Subtitle */}
-          <div className="space-y-3 max-w-2xl">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          <div className="space-y-2 sm:space-y-3 max-w-2xl">
+            <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
               Belanja Langsung dari Tetangga & UMKM Sekitar
             </h1>
 
@@ -311,13 +334,13 @@ export const UmkmPage: React.FC = () => {
           </div>
 
           {/* Right Action: Geolocation Card & CTA Button */}
-          <div className="w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col gap-3">
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-slate-700">
+          <div className="w-full lg:w-auto shrink-0 flex flex-col sm:flex-row lg:flex-col gap-2.5 sm:gap-3">
+            <div className="p-3 sm:p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2 text-slate-700 min-w-0">
                 <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
-                <div>
+                <div className="min-w-0">
                   <span className="text-[10px] text-slate-400 block font-medium">Lokasi Terdeteksi</span>
-                  <span className="font-bold text-slate-900 text-xs">{locationLabel}</span>
+                  <span className="font-bold text-slate-900 text-xs truncate block">{locationLabel}</span>
                 </div>
               </div>
               <button
@@ -332,7 +355,7 @@ export const UmkmPage: React.FC = () => {
             <button
               type="button"
               onClick={handleOpenStoreClick}
-              className="w-full px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95"
+              className="w-full px-5 py-2.5 sm:py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95"
             >
               <Store className="w-4 h-4" />
               <span>+ Buka Toko / Upload Produk Saya</span>
@@ -343,46 +366,69 @@ export const UmkmPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          SEARCH BAR & DROPDOWN FILTER SECTION (Strictly Dropdowns with Custom Distance)
+          SEARCH BAR & DROPDOWN FILTER SECTION (Mobile & Tablet Optimized)
           ========================================================================= */}
-      <section className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs space-y-4">
-        {/* Search Input */}
-        <div className="flex flex-col sm:flex-row gap-2.5">
+      <section className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/90 shadow-2xs space-y-3.5">
+        
+        {/* Search Input (Inline on all screen sizes, compact & neat) */}
+        <div className="flex items-center gap-2">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Cari kuliner, produk sembako, servis tukang, kriya lokal..."
+              placeholder="Cari kuliner, sembako, servis tukang, kriya..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none transition-all"
+              className="w-full pl-9 sm:pl-10 pr-8 py-2.5 sm:py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 text-xs font-medium text-slate-800 placeholder-slate-400 outline-none transition-all shadow-2xs"
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
               >
-                <X className="w-4 h-4" />
+                <X className="w-3.5 h-3.5" />
               </button>
             )}
           </div>
           <button
             type="button"
-            className="px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs transition-all cursor-pointer shrink-0"
+            className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs transition-all cursor-pointer shrink-0"
           >
             Cari
           </button>
         </div>
 
-        {/* Popular Tags */}
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          <span className="text-slate-400 font-medium">Populer:</span>
+        {/* Quick Category Pills (One-Tap Filter for Orang Awam) */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 -mx-1 px-1">
+          {CATEGORY_TABS.map((cat) => {
+            const isActive = selectedCategory === cat.id;
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1 ${
+                  isActive
+                    ? 'bg-blue-600 text-white shadow-xs'
+                    : 'bg-slate-100/80 hover:bg-slate-200/70 text-slate-700 border border-slate-200/60'
+                }`}
+              >
+                <span>{cat.label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Popular Tags (Horizontal smooth scroll) */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar text-xs text-slate-500 pt-0.5">
+          <span className="text-[11px] text-slate-400 font-medium shrink-0">Populer:</span>
           {popularKeywords.map((tag) => (
             <button
               key={tag}
               type="button"
               onClick={() => setSearchQuery(tag)}
-              className="px-2.5 py-1 rounded-full bg-slate-100 hover:bg-blue-50 hover:text-blue-700 border border-slate-200/60 text-slate-600 text-[11px] font-semibold transition-colors cursor-pointer"
+              className="px-2.5 py-0.5 rounded-full bg-slate-50 hover:bg-blue-50 hover:text-blue-700 border border-slate-200/80 text-slate-600 text-[10px] font-semibold transition-colors cursor-pointer shrink-0"
             >
               {tag}
             </button>
@@ -390,13 +436,69 @@ export const UmkmPage: React.FC = () => {
         </div>
 
         {/* =====================================================================
-            UNIFIED DROPDOWN FILTER BAR (Kategori, Jarak, Pengiriman, Metode, Rating, Urutkan)
+            COLLAPSIBLE FILTER BAR (Compact Accordion on Mobile/Tablet)
             ===================================================================== */}
-        <div className="pt-3 border-t border-slate-100 space-y-3">
-          <div className="flex items-center justify-between">
+        <div className="pt-2 border-t border-slate-100 space-y-3">
+          
+          {/* Mobile & Tablet Accordion Header (Compact Toggle Bar) */}
+          <div className="lg:hidden">
+            <button
+              type="button"
+              onClick={() => setIsMobileFilterOpen(!isMobileFilterOpen)}
+              className="w-full flex items-center justify-between p-2.5 sm:p-3 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 transition-all cursor-pointer text-xs"
+            >
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-7 h-7 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                </div>
+                <div className="text-left min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-extrabold text-slate-900 text-xs">Filter Lengkap & Jarak</span>
+                    {activeFilterCount > 0 && (
+                      <span className="px-1.5 py-0.2 rounded-full bg-blue-600 text-white text-[10px] font-black">
+                        {activeFilterCount} Aktif
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[10px] text-slate-500 truncate">
+                    {distanceMode === 'all' ? 'Semua Jarak' : `${distanceMode} km`} • {deliveryFilter === 'all' ? 'Semua Pengantaran' : deliveryFilter.toUpperCase()} • {sortBy === 'distance' ? 'Jarak Terdekat' : sortBy}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                {hasActiveFilters && (
+                  <span
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleResetFilters();
+                    }}
+                    className="text-[11px] font-bold text-rose-600 hover:underline px-1.5 py-0.5"
+                  >
+                    Reset
+                  </span>
+                )}
+                <div className="w-6 h-6 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-500">
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      isMobileFilterOpen ? 'rotate-180' : ''
+                    }`}
+                  />
+                </div>
+              </div>
+            </button>
+          </div>
+
+          {/* Desktop Filter Title Header */}
+          <div className="hidden lg:flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-xs font-black text-slate-800 uppercase tracking-wider">
               <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
               <span>Filter Produk & Pengiriman</span>
+              {activeFilterCount > 0 && (
+                <span className="ml-1 px-1.5 py-0.2 rounded-full bg-blue-600 text-white text-[10px] font-black">
+                  {activeFilterCount} Aktif
+                </span>
+              )}
             </div>
             {hasActiveFilters && (
               <button
@@ -410,211 +512,215 @@ export const UmkmPage: React.FC = () => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
-            
-            {/* 1. Dropdown Kategori */}
-            <div>
-              <label className="text-[10px] font-bold text-slate-400 block mb-1">Kategori</label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
-              >
-                <option value="Semua">Semua Kategori</option>
-                <option value="Kuliner & Kudapan">Kuliner & Kudapan</option>
-                <option value="Bahan Pokok & Sembako">Bahan Pokok & Sembako</option>
-                <option value="Kriya & Kerajinan">Kriya & Kerajinan</option>
-                <option value="Jasa Panggilan">Jasa Panggilan</option>
-                <option value="Fashion & Batik">Fashion & Batik</option>
-              </select>
-            </div>
+          {/* Filter Grid (Collapsible on Mobile/Tablet, Always Open on Desktop) */}
+          <div className={`${isMobileFilterOpen ? 'block animate-fade-in' : 'hidden lg:block'}`}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs pt-1">
+              
+              {/* 1. Dropdown Kategori */}
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 block mb-1">Kategori</label>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+                >
+                  <option value="Semua">Semua Kategori</option>
+                  <option value="Kuliner & Kudapan">Kuliner & Kudapan</option>
+                  <option value="Bahan Pokok & Sembako">Bahan Pokok & Sembako</option>
+                  <option value="Kriya & Kerajinan">Kriya & Kerajinan</option>
+                  <option value="Jasa Panggilan">Jasa Panggilan</option>
+                  <option value="Fashion & Batik">Fashion & Batik</option>
+                </select>
+              </div>
 
-            {/* 2. Dropdown Jarak dengan Pilihan Kustom Langsung di Dropdown */}
-            <div className="relative">
-              <label className="text-[10px] font-bold text-slate-400 block mb-1">Jarak Radius</label>
-              <button
-                type="button"
-                onClick={() => setIsDistanceDropdownOpen(!isDistanceDropdownOpen)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer flex items-center justify-between gap-1 text-left"
-              >
-                <span className="truncate">
-                  {distanceMode === 'all'
-                    ? 'Semua Jarak'
-                    : distanceMode === 'custom'
-                    ? `Maks. ${customDistanceKm || '0'} km`
-                    : `Maks. ${distanceMode} km`}
-                </span>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-              </button>
+              {/* 2. Dropdown Jarak dengan Pilihan Kustom Langsung di Dropdown */}
+              <div className="relative">
+                <label className="text-[10px] font-bold text-slate-400 block mb-1">Jarak Radius</label>
+                <button
+                  type="button"
+                  onClick={() => setIsDistanceDropdownOpen(!isDistanceDropdownOpen)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer flex items-center justify-between gap-1 text-left"
+                >
+                  <span className="truncate">
+                    {distanceMode === 'all'
+                      ? 'Semua Jarak'
+                      : distanceMode === 'custom'
+                      ? `Maks. ${customDistanceKm || '0'} km`
+                      : `Maks. ${distanceMode} km`}
+                  </span>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                </button>
 
-              {isDistanceDropdownOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-20"
-                    onClick={() => setIsDistanceDropdownOpen(false)}
-                  />
-                  <div className="absolute top-full left-0 mt-1.5 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 p-3 space-y-2.5 z-30 animate-fade-in text-xs">
-                    <div className="font-bold text-slate-800 text-[11px] pb-1 border-b border-slate-100 flex items-center justify-between">
-                      <span>Pilih Radius Maksimal</span>
-                      {distanceMode !== 'all' && (
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setDistanceMode('all');
-                            setIsDistanceDropdownOpen(false);
-                          }}
-                          className="text-[10px] text-blue-600 hover:underline font-semibold cursor-pointer"
-                        >
-                          Reset Jarak
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Quick Preset Buttons */}
-                    <div className="space-y-0.5">
-                      {[
-                        { id: 'all', label: 'Semua Jarak (Default)' },
-                        { id: '1', label: 'Maksimal 1 km (Sangat Dekat)' },
-                        { id: '3', label: 'Maksimal 3 km (Area Sekitar)' },
-                        { id: '5', label: 'Maksimal 5 km (Kecamatan)' },
-                        { id: '10', label: 'Maksimal 10 km (Kota Kediri)' },
-                      ].map((opt) => (
-                        <button
-                          key={opt.id}
-                          type="button"
-                          onClick={() => {
-                            setDistanceMode(opt.id);
-                            setIsDistanceDropdownOpen(false);
-                          }}
-                          className={`w-full text-left px-2.5 py-1.5 rounded-lg font-medium transition-colors flex items-center justify-between cursor-pointer ${
-                            distanceMode === opt.id
-                              ? 'bg-blue-50 text-blue-700 font-bold'
-                              : 'text-slate-700 hover:bg-slate-50'
-                          }`}
-                        >
-                          <span>{opt.label}</span>
-                          {distanceMode === opt.id && <Check className="w-3.5 h-3.5 text-blue-600" />}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Inline Custom Distance Form */}
-                    <div className="border-t border-slate-100 pt-2.5 space-y-2">
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
-                        Atur Jarak Kustom:
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <input
-                          type="number"
-                          min="0.1"
-                          max="50"
-                          step="0.5"
-                          value={customDistanceKm}
-                          onChange={(e) => setCustomDistanceKm(e.target.value)}
-                          placeholder="Contoh: 2.5"
-                          className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white"
-                        />
-                        <span className="text-[11px] font-bold text-slate-500">km</span>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            if (customDistanceKm && !isNaN(Number(customDistanceKm))) {
-                              setDistanceMode('custom');
-                              setIsDistanceDropdownOpen(false);
-                            }
-                          }}
-                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] shadow-2xs transition-colors shrink-0 cursor-pointer"
-                        >
-                          Terapkan
-                        </button>
-                      </div>
-
-                      {/* Quick Pills Inside Dropdown */}
-                      <div className="flex flex-wrap gap-1 pt-0.5">
-                        {['1.5', '2.5', '7.0', '15.0'].map((val) => (
+                {isDistanceDropdownOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-20"
+                      onClick={() => setIsDistanceDropdownOpen(false)}
+                    />
+                    <div className="absolute top-full left-0 mt-1.5 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 p-3 space-y-2.5 z-30 animate-fade-in text-xs">
+                      <div className="font-bold text-slate-800 text-[11px] pb-1 border-b border-slate-100 flex items-center justify-between">
+                        <span>Pilih Radius Maksimal</span>
+                        {distanceMode !== 'all' && (
                           <button
-                            key={val}
                             type="button"
                             onClick={() => {
-                              setCustomDistanceKm(val);
-                              setDistanceMode('custom');
+                              setDistanceMode('all');
                               setIsDistanceDropdownOpen(false);
                             }}
-                            className={`px-2 py-0.5 rounded text-[10px] font-semibold border cursor-pointer ${
-                              distanceMode === 'custom' && customDistanceKm === val
-                                ? 'bg-blue-600 text-white border-blue-600'
-                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-blue-50 hover:text-blue-700'
+                            className="text-[10px] text-blue-600 hover:underline font-semibold cursor-pointer"
+                          >
+                            Reset Jarak
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Quick Preset Buttons */}
+                      <div className="space-y-0.5">
+                        {[
+                          { id: 'all', label: 'Semua Jarak (Default)' },
+                          { id: '1', label: 'Maksimal 1 km (Sangat Dekat)' },
+                          { id: '3', label: 'Maksimal 3 km (Area Sekitar)' },
+                          { id: '5', label: 'Maksimal 5 km (Kecamatan)' },
+                          { id: '10', label: 'Maksimal 10 km (Kota Kediri)' },
+                        ].map((opt) => (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => {
+                              setDistanceMode(opt.id);
+                              setIsDistanceDropdownOpen(false);
+                            }}
+                            className={`w-full text-left px-2.5 py-1.5 rounded-lg font-medium transition-colors flex items-center justify-between cursor-pointer ${
+                              distanceMode === opt.id
+                                ? 'bg-blue-50 text-blue-700 font-bold'
+                                : 'text-slate-700 hover:bg-slate-50'
                             }`}
                           >
-                            {val} km
+                            <span>{opt.label}</span>
+                            {distanceMode === opt.id && <Check className="w-3.5 h-3.5 text-blue-600" />}
                           </button>
                         ))}
                       </div>
+
+                      {/* Inline Custom Distance Form */}
+                      <div className="border-t border-slate-100 pt-2.5 space-y-2">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                          Atur Jarak Kustom:
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <input
+                            type="number"
+                            min="0.1"
+                            max="50"
+                            step="0.5"
+                            value={customDistanceKm}
+                            onChange={(e) => setCustomDistanceKm(e.target.value)}
+                            placeholder="Contoh: 2.5"
+                            className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white"
+                          />
+                          <span className="text-[11px] font-bold text-slate-500">km</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (customDistanceKm && !isNaN(Number(customDistanceKm))) {
+                                setDistanceMode('custom');
+                                setIsDistanceDropdownOpen(false);
+                              }
+                            }}
+                            className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] shadow-2xs transition-colors shrink-0 cursor-pointer"
+                          >
+                            Terapkan
+                          </button>
+                        </div>
+
+                        {/* Quick Pills Inside Dropdown */}
+                        <div className="flex flex-wrap gap-1 pt-0.5">
+                          {['1.5', '2.5', '7.0', '15.0'].map((val) => (
+                            <button
+                              key={val}
+                              type="button"
+                              onClick={() => {
+                                setCustomDistanceKm(val);
+                                setDistanceMode('custom');
+                                setIsDistanceDropdownOpen(false);
+                              }}
+                              className={`px-2 py-0.5 rounded text-[10px] font-semibold border cursor-pointer ${
+                                distanceMode === 'custom' && customDistanceKm === val
+                                  ? 'bg-blue-600 text-white border-blue-600'
+                                  : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-blue-50 hover:text-blue-700'
+                              }`}
+                            >
+                              {val} km
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </>
-              )}
-            </div>
+                  </>
+                )}
+              </div>
 
-            {/* 3. Dropdown Pengiriman (Murni Penjual-Pembeli) */}
-            <div>
-              <label className="text-[10px] font-bold text-slate-400 block mb-1">Metode Pengantaran</label>
-              <select
-                value={deliveryFilter}
-                onChange={(e) => setDeliveryFilter(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
-              >
-                <option value="all">Semua Pengiriman</option>
-                <option value="cod">Diantar Langsung Penjual (COD)</option>
-                <option value="ambil">Ambil Sendiri di Lapak</option>
-              </select>
-            </div>
+              {/* 3. Dropdown Pengiriman (Murni Penjual-Pembeli) */}
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 block mb-1">Metode Pengantaran</label>
+                <select
+                  value={deliveryFilter}
+                  onChange={(e) => setDeliveryFilter(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+                >
+                  <option value="all">Semua Pengiriman</option>
+                  <option value="cod">Diantar Langsung Penjual (COD)</option>
+                  <option value="ambil">Ambil Sendiri di Lapak</option>
+                </select>
+              </div>
 
-            {/* 4. Dropdown Metode Bayar */}
-            <div>
-              <label className="text-[10px] font-bold text-slate-400 block mb-1">Metode Pembayaran</label>
-              <select
-                value={paymentFilter}
-                onChange={(e) => setPaymentFilter(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
-              >
-                <option value="all">Semua Metode</option>
-                <option value="qris">QRIS Penjual Langsung</option>
-                <option value="cod">Tunai / Bayar di Tempat</option>
-              </select>
-            </div>
+              {/* 4. Dropdown Metode Bayar */}
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 block mb-1">Metode Pembayaran</label>
+                <select
+                  value={paymentFilter}
+                  onChange={(e) => setPaymentFilter(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+                >
+                  <option value="all">Semua Metode</option>
+                  <option value="qris">QRIS Penjual Langsung</option>
+                  <option value="cod">Tunai / Bayar di Tempat</option>
+                </select>
+              </div>
 
-            {/* 5. Dropdown Rating */}
-            <div>
-              <label className="text-[10px] font-bold text-slate-400 block mb-1">Rating Penilaian</label>
-              <select
-                value={ratingFilter}
-                onChange={(e) => setRatingFilter(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
-              >
-                <option value="all">Semua Rating</option>
-                <option value="4.5">★ 4.5 Ke Atas</option>
-                <option value="4.8">★ 4.8 Ke Atas</option>
-                <option value="5.0">★ 5.0 Sempurna</option>
-              </select>
-            </div>
+              {/* 5. Dropdown Rating */}
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 block mb-1">Rating Penilaian</label>
+                <select
+                  value={ratingFilter}
+                  onChange={(e) => setRatingFilter(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+                >
+                  <option value="all">Semua Rating</option>
+                  <option value="4.5">★ 4.5 Ke Atas</option>
+                  <option value="4.8">★ 4.8 Ke Atas</option>
+                  <option value="5.0">★ 5.0 Sempurna</option>
+                </select>
+              </div>
 
-            {/* 6. Dropdown Urutkan */}
-            <div>
-              <label className="text-[10px] font-bold text-slate-400 block mb-1">Urutkan Hasil</label>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-blue-50/60 border border-blue-200 text-blue-900 text-xs font-bold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
-              >
-                <option value="distance">Jarak Terdekat (GPS)</option>
-                <option value="rating">Rating Tertinggi</option>
-                <option value="price">Harga Termurah</option>
-                <option value="popular">Paling Banyak Terjual</option>
-              </select>
-            </div>
+              {/* 6. Dropdown Urutkan */}
+              <div>
+                <label className="text-[10px] font-bold text-slate-400 block mb-1">Urutkan Hasil</label>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as any)}
+                  className="w-full px-3 py-2 rounded-xl bg-blue-50/60 border border-blue-200 text-blue-900 text-xs font-bold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+                >
+                  <option value="distance">Jarak Terdekat (GPS)</option>
+                  <option value="rating">Rating Tertinggi</option>
+                  <option value="price">Harga Termurah</option>
+                  <option value="popular">Paling Banyak Terjual</option>
+                </select>
+              </div>
 
+            </div>
           </div>
+
         </div>
       </section>
 
