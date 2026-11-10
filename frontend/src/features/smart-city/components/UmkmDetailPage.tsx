@@ -80,6 +80,23 @@ export const UmkmDetailPage: React.FC = () => {
   const [jasaSesi, setJasaSesi] = useState<'pagi' | 'siang'>('pagi');
   const [jasaPaymentMethod, setJasaPaymentMethod] = useState<'tunai' | 'qris'>('tunai');
 
+  // Checkout & Delivery Form State (Solves: Data Pembeli, Alamat Lengkap, dan Konfirmasi QRIS)
+  const [showCheckoutModal, setShowCheckoutModal] = useState<boolean>(false);
+  const [checkoutPaymentMethod, setCheckoutPaymentMethod] = useState<'qris' | 'cod'>('qris');
+  const [buyerName, setBuyerName] = useState<string>('');
+  const [buyerPhone, setBuyerPhone] = useState<string>('');
+  const [buyerAddress, setBuyerAddress] = useState<string>('');
+  const [buyerPatokan, setBuyerPatokan] = useState<string>('');
+  const [buyerNotes, setBuyerNotes] = useState<string>('');
+  const [formValidationNotice, setFormValidationNotice] = useState<string | null>(null);
+
+  // Auto-fill buyer information from logged-in user profile
+  useEffect(() => {
+    if (user?.name && !buyerName) setBuyerName(user.name);
+    const phone = (user as any)?.phone || (user as any)?.no_hp;
+    if (phone && !buyerPhone) setBuyerPhone(phone);
+  }, [user]);
+
   // Citizen Review Form State
   const [reviewRating, setReviewRating] = useState<number>(5);
   const [reviewHoverRating, setReviewHoverRating] = useState<number>(0);
@@ -266,30 +283,72 @@ export const UmkmDetailPage: React.FC = () => {
   const activeJasa = currentItem.pilihanLayananJasa?.find((s) => s.id === selectedJasaServiceId) || currentItem.pilihanLayananJasa?.[0];
   const totalJasaPrice = activeJasa ? activeJasa.harga * jasaUnitQty : currentItem.harga;
 
-  // Send WhatsApp Order Handler (Strictly Direct Seller Delivery)
-  const handleSendWaOrder = () => {
+  // Handle Submit Order & Send WhatsApp Confirmation (Strictly Direct Seller Delivery with Full Buyer & Delivery Details)
+  const handleConfirmOrder = () => {
+    if (!currentItem) return;
+
+    if (!buyerName.trim()) {
+      setFormValidationNotice('Mohon isi nama lengkap Anda.');
+      return;
+    }
+    if (!buyerPhone.trim()) {
+      setFormValidationNotice('Mohon isi nomor WhatsApp Anda agar penjual dapat menghubungi Anda.');
+      return;
+    }
+    if ((orderDeliveryType === 'penjual' || currentItem.isJasa) && !buyerAddress.trim()) {
+      setFormValidationNotice('Mohon isi alamat rumah pengantaran Anda.');
+      return;
+    }
+
+    setFormValidationNotice(null);
+
+    const orderCode = `#ORD-${Math.floor(10000 + Math.random() * 90000)}`;
     let message = '';
+
     if (currentItem.isJasa) {
       message =
         `Halo *${currentItem.tokoNama}*, saya ingin memesan jasa kunjungan teknisi melalui SiDesKu Smart City Kediri:\n\n` +
+        `📦 *RINCIAN LAYANAN (${orderCode})*\n` +
         `• *Layanan:* ${activeJasa?.nama || currentItem.nama}\n` +
         `• *Jumlah:* ${jasaUnitQty} unit\n` +
         `• *Jadwal Kunjungan:* Sesi ${jasaSesi === 'pagi' ? 'Pagi (09:00 - 12:00 WIB)' : 'Siang (13:00 - 16:00 WIB)'}\n` +
-        `• *Metode Bayar:* ${jasaPaymentMethod === 'tunai' ? 'Tunai / COD usai servis' : 'QRIS Mas Agus'}\n` +
-        `• *Estimasi Total:* Rp ${totalJasaPrice.toLocaleString('id-ID')}\n\n` +
-        `Mohon konfirmasi ketersediaan jadwal. Terima kasih!`;
+        `• *Metode Bayar:* ${checkoutPaymentMethod === 'qris' ? 'QRIS Langsung Toko (Lunas via Transfer)' : 'Tunai / COD usai servis'}\n` +
+        `• *Estimasi Biaya:* Rp ${totalJasaPrice.toLocaleString('id-ID')}\n\n` +
+        `📍 *DATA PEMESAN & ALAMAT KUNJUNGAN*\n` +
+        `• *Nama Pemesan:* ${buyerName.trim()}\n` +
+        `• *No. WhatsApp:* ${buyerPhone.trim()}\n` +
+        `• *Alamat Rumah:* ${buyerAddress.trim()}\n` +
+        (buyerPatokan.trim() ? `• *Patokan Lokasi:* ${buyerPatokan.trim()}\n` : '') +
+        (buyerNotes.trim() ? `• *Keluhan / Catatan:* ${buyerNotes.trim()}\n` : '') +
+        `\n` +
+        (checkoutPaymentMethod === 'qris'
+          ? `(Bukti transfer pembayaran QRIS saya lampirkan di chat ini).\n\nMohon konfirmasi ketersediaan teknisi dan jadwal kedatangannya. Terima kasih!`
+          : `Mohon konfirmasi ketersediaan teknisinya ya. Terima kasih!`);
     } else {
       message =
-        `Halo *${currentItem.tokoNama}*, saya ingin memesan dari etalase SiDesKu Smart City Kediri:\n\n` +
+        `Halo *${currentItem.tokoNama}*, saya ingin memesan produk dari etalase SiDesKu Smart City Kediri:\n\n` +
+        `📦 *RINCIAN PESANAN (${orderCode})*\n` +
         `• *Produk:* ${currentItem.nama}\n` +
         (currentItem.pilihanAyam ? `• *Pilihan Potongan:* ${orderPilihanAyam}\n` : '') +
         (currentItem.pilihanSambal ? `• *Pilihan Sambal:* ${orderPilihanSambal}\n` : '') +
         `• *Jumlah:* ${orderQty} porsi / unit\n` +
-        `• *Pengiriman:* ${orderDeliveryType === 'penjual' ? 'Diantar Langsung oleh Penjual (+Rp 5.000)' : 'Ambil Sendiri di Lapak Penjual (Gratis)'}\n` +
-        `• *Total Pembayaran:* Rp ${totalFoodPrice.toLocaleString('id-ID')}\n\n` +
-        `Apakah pesanan ini bisa segera diproses?`;
+        `• *Pengantaran:* ${orderDeliveryType === 'penjual' ? 'Diantar Langsung oleh Penjual (+Rp 5.000)' : 'Ambil Sendiri di Lapak Penjual (Gratis)'}\n` +
+        `• *Metode Bayar:* ${checkoutPaymentMethod === 'qris' ? 'QRIS Langsung Toko (Lunas via Transfer)' : 'Tunai / Bayar di Tempat (COD Mandiri)'}\n` +
+        `• *Total Tagihan:* Rp ${totalFoodPrice.toLocaleString('id-ID')}\n\n` +
+        `📍 *DATA PEMESAN & ALAMAT PENGANTARAN*\n` +
+        `• *Nama Pemesan:* ${buyerName.trim()}\n` +
+        `• *No. WhatsApp:* ${buyerPhone.trim()}\n` +
+        (orderDeliveryType === 'penjual' ? `• *Alamat Pengantaran:* ${buyerAddress.trim()}\n` : '• *Pengambilan:* Ambil Sendiri di Lapak Penjual\n') +
+        (buyerPatokan.trim() ? `• *Patokan Rumah:* ${buyerPatokan.trim()}\n` : '') +
+        (buyerNotes.trim() ? `• *Catatan Pesanan:* ${buyerNotes.trim()}\n` : '') +
+        `\n` +
+        (checkoutPaymentMethod === 'qris'
+          ? `(Bukti transfer pembayaran QRIS saya lampirkan di chat ini).\n\nMohon segera diproses dan diantar ya bu/pak. Terima kasih!`
+          : `Mohon segera diproses dan diantar ya bu/pak. Terima kasih!`);
     }
+
     window.open(`https://wa.me/${currentItem.waKontak}?text=${encodeURIComponent(message)}`, '_blank');
+    setShowCheckoutModal(false);
   };
 
   const imagesGallery = currentItem.galeri && currentItem.galeri.length > 0 ? currentItem.galeri : [currentItem.fotoUrl];
@@ -540,11 +599,14 @@ export const UmkmDetailPage: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={handleSendWaOrder}
+                    onClick={() => {
+                      setCheckoutPaymentMethod(jasaPaymentMethod === 'qris' ? 'qris' : 'cod');
+                      setShowCheckoutModal(true);
+                    }}
                     className="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
                   >
                     <Phone className="w-4 h-4" />
-                    <span>Pesan Teknisi via WhatsApp</span>
+                    <span>Lengkapi Alamat & Pesan Teknisi</span>
                   </button>
                 </div>
 
@@ -819,23 +881,22 @@ export const UmkmDetailPage: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       type="button"
-                      onClick={handleSendWaOrder}
+                      onClick={() => {
+                        setCheckoutPaymentMethod('cod');
+                        setShowCheckoutModal(true);
+                      }}
                       className="py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
                     >
                       <Phone className="w-4 h-4" />
-                      <span>Pesan via WhatsApp</span>
+                      <span>Pesan via WA (COD)</span>
                     </button>
 
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowQrisModal({
-                          tokoNama: currentItem.tokoNama,
-                          qrisUrl: currentItem.qrisUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SIDESKU_QRIS_DEMO',
-                          nmid: currentItem.qrisNmid || 'ID10293847281',
-                          nominal: totalFoodPrice,
-                        })
-                      }
+                      onClick={() => {
+                        setCheckoutPaymentMethod('qris');
+                        setShowCheckoutModal(true);
+                      }}
                       className="py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs border border-slate-200 shadow-2xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
                     >
                       <QrCode className="w-4 h-4 text-emerald-600" />
@@ -1168,8 +1229,286 @@ export const UmkmDetailPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          QRIS POPUP MODAL
+          CHECKOUT & PEMESANAN DIRECT SELLER MODAL
+          (Solves: Identitas Pembeli, Alamat Lengkap Pengantaran, & Konfirmasi QRIS)
           ========================================================================= */}
+      {showCheckoutModal && createPortal(
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-4 bg-slate-950/75 animate-fade-in font-sans">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[88vh] flex flex-col shadow-2xl border border-sky-100 overflow-hidden relative">
+            
+            {/* Sticky Header */}
+            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center shrink-0">
+                  <ShoppingBag className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900 leading-tight">Konfirmasi Pesanan Langsung</h3>
+                  <p className="text-xs text-slate-500">
+                    Lengkapi alamat rumah & rincian pesanan ke pedagang {currentItem.tokoNama}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCheckoutModal(false);
+                  setFormValidationNotice(null);
+                }}
+                className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Validation Warning Banner (Always visible if error) */}
+            {formValidationNotice && (
+              <div className="px-4 py-2.5 bg-rose-50 border-b border-rose-200 text-rose-800 text-xs flex items-center gap-2 shrink-0 animate-fade-in">
+                <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0" />
+                <span className="font-semibold">{formValidationNotice}</span>
+              </div>
+            )}
+
+            {/* Scrollable Form Body */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
+              
+              {/* Ringkasan Pesanan Card */}
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-200/80">
+                  <span className="font-extrabold text-slate-900 text-[13px]">{currentItem.nama}</span>
+                  <span className="text-blue-700 font-extrabold">
+                    Rp {(currentItem.isJasa ? totalJasaPrice : totalFoodPrice).toLocaleString('id-ID')}
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-600">
+                  <div>
+                    <span className="text-slate-400 block text-[10px]">Toko / Penjual:</span>
+                    <span className="font-semibold text-slate-800">{currentItem.tokoNama}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px]">Pilihan / Jumlah:</span>
+                    <span className="font-semibold text-slate-800">
+                      {currentItem.isJasa
+                        ? `${activeJasa?.nama || currentItem.nama} (${jasaUnitQty} Unit)`
+                        : `${orderQty} Porsi ${orderPilihanAyam ? `• ${orderPilihanAyam}` : ''}`}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px]">Metode Pengiriman:</span>
+                    <span className="font-semibold text-slate-800">
+                      {currentItem.isJasa
+                        ? 'Kunjungan Langsung ke Rumah'
+                        : orderDeliveryType === 'penjual'
+                        ? 'Diantar Penjual (COD Mandiri)'
+                        : 'Ambil Sendiri di Lapak'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px]">Status Komisi:</span>
+                    <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                      0% (100% Milik Warga)
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Selector Metode Pembayaran */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
+                  PILIH METODE PEMBAYARAN
+                </label>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setCheckoutPaymentMethod('qris')}
+                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                      checkoutPaymentMethod === 'qris'
+                        ? 'bg-blue-50/80 border-blue-500 ring-2 ring-blue-100 text-blue-900 font-bold'
+                        : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <QrCode className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span className="font-extrabold text-xs">QRIS Toko</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 mt-1 block">Semua Bank / e-Wallet</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setCheckoutPaymentMethod('cod')}
+                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                      checkoutPaymentMethod === 'cod'
+                        ? 'bg-blue-50/80 border-blue-500 ring-2 ring-blue-100 text-blue-900 font-bold'
+                        : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <Truck className="w-4 h-4 text-blue-600 shrink-0" />
+                      <span className="font-extrabold text-xs">Tunai / COD</span>
+                    </div>
+                    <span className="text-[10px] text-slate-500 mt-1 block">Bayar Pas Sampai</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Tampilan QRIS Resmi Toko jika metode QRIS dipilih */}
+              {checkoutPaymentMethod === 'qris' && (
+                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200 text-emerald-950 space-y-3 animate-fade-in text-center">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-700 block">
+                      SCAN QRIS RESMI {currentItem.tokoNama.toUpperCase()}
+                    </span>
+                    <div className="text-[11px] font-mono text-emerald-800">
+                      NMID: {currentItem.qrisNmid || 'ID10293847281'}
+                    </div>
+                  </div>
+
+                  <div className="p-3 bg-white border border-emerald-200 rounded-xl inline-block shadow-xs">
+                    <svg className="w-36 h-36 mx-auto" viewBox="0 0 100 100" fill="currentColor">
+                      <rect x="5" y="5" width="25" height="25" fill="#0f172a" rx="4" />
+                      <rect x="8" y="8" width="19" height="19" fill="#ffffff" rx="2" />
+                      <rect x="11" y="11" width="13" height="13" fill="#0f172a" rx="2" />
+
+                      <rect x="70" y="5" width="25" height="25" fill="#0f172a" rx="4" />
+                      <rect x="73" y="8" width="19" height="19" fill="#ffffff" rx="2" />
+                      <rect x="76" y="11" width="13" height="13" fill="#0f172a" rx="2" />
+
+                      <rect x="5" y="70" width="25" height="25" fill="#0f172a" rx="4" />
+                      <rect x="8" y="73" width="19" height="19" fill="#ffffff" rx="2" />
+                      <rect x="11" y="76" width="13" height="13" fill="#0f172a" rx="2" />
+
+                      <rect x="35" y="11" width="5" height="5" fill="#0f172a" />
+                      <rect x="45" y="11" width="5" height="5" fill="#0f172a" />
+                      <rect x="55" y="11" width="5" height="5" fill="#0f172a" />
+                      <rect x="11" y="35" width="5" height="5" fill="#0f172a" />
+                      <rect x="11" y="45" width="5" height="5" fill="#0f172a" />
+                      <rect x="11" y="55" width="5" height="5" fill="#0f172a" />
+                      
+                      <rect x="35" y="35" width="10" height="10" fill="#0f172a" rx="2" />
+                      <rect x="55" y="35" width="10" height="5" fill="#0f172a" />
+                      <rect x="45" y="45" width="15" height="10" fill="#0f172a" rx="2" />
+                      <rect x="35" y="60" width="10" height="10" fill="#0f172a" />
+                      <rect x="55" y="55" width="15" height="10" fill="#0f172a" />
+                      <rect x="75" y="45" width="10" height="15" fill="#0f172a" />
+                      <rect x="40" y="75" width="15" height="10" fill="#0f172a" />
+                      <rect x="65" y="75" width="10" height="15" fill="#0f172a" />
+                      <rect x="80" y="70" width="15" height="10" fill="#0f172a" />
+
+                      <rect x="42" y="42" width="16" height="16" fill="#0284c7" rx="3" />
+                      <path d="M46 50 L50 54 L54 46" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+              )}
+
+              {/* Form Data Diri & Alamat Pengantaran */}
+              <div className="space-y-3 pt-1 border-t border-slate-100">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
+                  DATA PEMESAN & ALAMAT PENGANTARAN
+                </span>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-slate-700 block">Nama Lengkap Pemesan *</label>
+                    <input
+                      type="text"
+                      placeholder="Contoh: Bpk. Bambang Sutrisno"
+                      value={buyerName}
+                      onChange={(e) => setBuyerName(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium outline-none focus:bg-white focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-slate-700 block">Nomor WhatsApp Aktif *</label>
+                    <input
+                      type="tel"
+                      placeholder="Contoh: 081234567890"
+                      value={buyerPhone}
+                      onChange={(e) => setBuyerPhone(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium outline-none focus:bg-white focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {(orderDeliveryType === 'penjual' || currentItem.isJasa) && (
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-bold text-slate-700 block">
+                      Alamat Lengkap Rumah / Lokasi Pengantaran *
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="Contoh: Jl. Dhoho No. 42, RT 03 / RW 02, Kel. Sukamaju (Samping Apotek)"
+                      value={buyerAddress}
+                      onChange={(e) => setBuyerAddress(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium outline-none focus:bg-white focus:border-blue-500"
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 block">
+                    Patokan Rumah / Lokasi Tambahan (Opsional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Pagar cat hitam, pas depan pos ronda RT 03"
+                    value={buyerPatokan}
+                    onChange={(e) => setBuyerPatokan(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium outline-none focus:bg-white focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 block">
+                    Catatan Pesanan Khusus (Opsional)
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Sambal dipisah ya bu, jangan pakai bawang goreng"
+                    value={buyerNotes}
+                    onChange={(e) => setBuyerNotes(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium outline-none focus:bg-white focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Sticky Fixed Footer */}
+            <div className="p-3.5 sm:p-4 border-t border-slate-100 flex items-center justify-end gap-2.5 bg-slate-50/90 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCheckoutModal(false);
+                  setFormValidationNotice(null);
+                }}
+                className="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-white cursor-pointer transition-colors"
+              >
+                Batal
+              </button>
+
+              <button
+                type="button"
+                onClick={handleConfirmOrder}
+                className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/20 transition-all cursor-pointer active:scale-95 flex items-center gap-2"
+              >
+                <Phone className="w-4 h-4" />
+                <span>
+                  {checkoutPaymentMethod === 'qris'
+                    ? 'Kirim Pesanan & Bukti Bayar via WA'
+                    : 'Kirim Pesanan via WhatsApp (COD)'}
+                </span>
+              </button>
+            </div>
+
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* Legacy QRIS Standalone Popup if needed */}
       {showQrisModal && createPortal(
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-fade-in">
           <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-sm w-full text-center space-y-4 shadow-2xl border border-sky-100 relative">
