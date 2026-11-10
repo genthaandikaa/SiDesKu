@@ -270,6 +270,54 @@ class PublicUmkmController extends Controller
         $id = 'umkm-' . time() . '-' . rand(100, 999);
         $tokoNama = $request->input('toko_nama') ?: ($user->name ? "Usaha {$user->name}" : 'Warung Warga');
 
+        // Process Foto Produk (dari Base64 Galeri/Kamera atau URL)
+        $fotoUrl = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80';
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = 'prod_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/umkm_produk'), $filename);
+            $fotoUrl = '/uploads/umkm_produk/' . $filename;
+        } elseif ($rawFoto = $request->input('foto_url')) {
+            if (str_starts_with($rawFoto, 'data:image/')) {
+                $uploadResult = \App\Services\FileUploadSecurityService::processBase64Upload(
+                    $rawFoto,
+                    ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
+                    5 * 1024 * 1024,
+                    'umkm_produk',
+                    'prod_' . time()
+                );
+                if (!empty($uploadResult['success']) && !empty($uploadResult['url'])) {
+                    $fotoUrl = $uploadResult['url'];
+                }
+            } else {
+                $fotoUrl = $rawFoto;
+            }
+        }
+
+        // Process QRIS Toko (dari Base64 Galeri/Kamera atau URL)
+        $qrisUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SIDESKU_QRIS_DEMO';
+        if ($request->hasFile('qris_file')) {
+            $file = $request->file('qris_file');
+            $filename = 'qris_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/umkm_qris'), $filename);
+            $qrisUrl = '/uploads/umkm_qris/' . $filename;
+        } elseif ($rawQris = $request->input('qris_url')) {
+            if (str_starts_with($rawQris, 'data:image/')) {
+                $uploadResult = \App\Services\FileUploadSecurityService::processBase64Upload(
+                    $rawQris,
+                    ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
+                    5 * 1024 * 1024,
+                    'umkm_qris',
+                    'qris_' . time()
+                );
+                if (!empty($uploadResult['success']) && !empty($uploadResult['url'])) {
+                    $qrisUrl = $uploadResult['url'];
+                }
+            } else {
+                $qrisUrl = $rawQris;
+            }
+        }
+
         $umkm = Umkm::create([
             'id' => $id,
             'desa_id' => $user->desa_id ?? 1,
@@ -284,13 +332,13 @@ class PublicUmkmController extends Controller
             'ongkir' => (float) $request->input('ongkir', 0),
             'satuan' => $request->input('satuan', 'Porsi'),
             'deskripsi' => $request->input('deskripsi', 'Produk segar olahan warga lokal tanpa bahan pengawet.'),
-            'foto_url' => $request->input('foto_url', 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'),
-            'galeri' => [$request->input('foto_url', 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80')],
+            'foto_url' => $fotoUrl,
+            'galeri' => [$fotoUrl],
             'alamat' => $request->input('alamat', 'Kota Kediri'),
             'lat' => $request->input('lat', -7.8166),
             'lng' => $request->input('lng', 112.0118),
             'wa_kontak' => $request->input('wa_kontak', '6281234567801'),
-            'qris_url' => $request->input('qris_url', 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SIDESKU_QRIS_DEMO'),
+            'qris_url' => $qrisUrl,
             'qris_nama' => 'QRIS ' . strtoupper($tokoNama),
             'qris_nmid' => 'ID10293847281',
             'metode_pembayaran' => [
