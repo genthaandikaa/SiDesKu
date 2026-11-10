@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { PublicLayout } from '@/features/landing/components/PublicLayout';
 import { ProtectedDashboardRoute } from '@/middleware';
 
@@ -78,9 +78,20 @@ const PageLoadingFallback: React.FC = () => (
   </div>
 );
 
+const ScrollToTop: React.FC = () => {
+  const { pathname, search } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, left: 0 });
+  }, [pathname, search]);
+
+  return null;
+};
+
 export const AppRoutes: React.FC = () => {
   return (
     <ErrorBoundary>
+      <ScrollToTop />
       <Suspense fallback={<PageLoadingFallback />}>
       <Routes>
         {/* Public Pages with Dedicated URLs */}
