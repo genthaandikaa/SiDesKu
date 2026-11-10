@@ -23,7 +23,8 @@ import {
   Bed,
   Car,
   ShieldCheck,
-  Check
+  Check,
+  FileText
 } from 'lucide-react';
 import { HunianItem } from '../types';
 import {
@@ -400,6 +401,12 @@ export const KosPage: React.FC = () => {
                         <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                         <span>{item.alamat}</span>
                       </p>
+
+                      {item.deskripsi && (
+                        <p className="text-[11px] text-slate-500 mt-1.5 line-clamp-2 leading-relaxed">
+                          {item.deskripsi}
+                        </p>
+                      )}
                     </div>
 
                     {/* Facilities Pills */}
@@ -558,6 +565,19 @@ export const KosPage: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Deskripsi & Aturan Kos */}
+              {selectedKos.deskripsi && (
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                  <div className="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>Deskripsi & Aturan Hunian</span>
+                  </div>
+                  <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-line">
+                    {selectedKos.deskripsi}
+                  </p>
+                </div>
+              )}
 
               {/* Owner Info & Payment */}
               <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-100 flex items-center justify-between">

@@ -288,6 +288,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
   const [kosHarga, setKosHarga] = useState<number>(650000);
   const [kosPeriode, setKosPeriode] = useState<'bulan' | 'tahun'>('bulan');
   const [kosAlamat, setKosAlamat] = useState('');
+  const [kosDeskripsi, setKosDeskripsi] = useState('');
   const [kosLat, setKosLat] = useState<number>(KEDIRI_DEFAULT_COORDS.lat);
   const [kosLng, setKosLng] = useState<number>(KEDIRI_DEFAULT_COORDS.lng);
   const [kosSisaKamar, setKosSisaKamar] = useState<number>(2);
@@ -363,6 +364,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
       harga: Number(kosHarga),
       periode: kosPeriode,
       alamat: kosAlamat.trim() || 'Kota Kediri',
+      deskripsi: kosDeskripsi.trim() || 'Hunian kos nyaman dan strategis di kawasan warga Kota Kediri.',
       lat: kosLat,
       lng: kosLng,
       sisaKamar: Number(kosSisaKamar),
@@ -382,7 +384,9 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
 
     // Reset Form
     setKosNama('');
+    setKosDeskripsi('');
     setKosFotoUrl('');
+    setKosFotoNama('');
 
     // Navigate back to list URL
     if (onNavigate) {
@@ -513,9 +517,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                   Katalog Pasar Warga
                 </span>
                 <h3 className="text-xl font-extrabold text-slate-900">Tambah Produk / Dagangan UMKM Baru</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Lengkapi data produk, harga satuan, ongkir pengantaran, dan foto dagangan Anda untuk langsung tayang di katalog pasar warga.
-                </p>
               </div>
 
               <form onSubmit={handleSaveUmkm} className="space-y-5 text-xs">
@@ -680,9 +681,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                       </button>
                     </div>
                   </div>
-                  <p className="text-[10px] text-slate-500">
-                    * Bebas menentukan ongkir pengantaran mandiri. Tetapkan Rp 0 jika gratis antar untuk tetangga sekitar.
-                  </p>
                 </div>
 
                 {/* Upload Foto Produk dari Galeri / Kamera */}
@@ -875,10 +873,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                 <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md inline-block mb-1">
                   Peta Hunian Spasial
                 </span>
-                <h3 className="text-xl font-extrabold text-slate-900">Tambah Unit Kos / Hunian Baru</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Lengkapi data hunian, kamar kosong, fasilitas, dan kunci titik lokasi GPS hunian Anda.
-                </p>
               </div>
 
               <form onSubmit={handleSaveKos} className="space-y-4 text-xs">
@@ -1087,9 +1081,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                       <h4 className="font-extrabold text-sm text-slate-800 mb-1">
                         Pilih Foto Kamar dari Galeri atau Ambil Foto Kamera
                       </h4>
-                      <p className="text-xs text-slate-500 max-w-md mx-auto mb-3.5 leading-relaxed">
-                        Foto kamar tidur, kamar mandi, atau tampak depan hunian Anda agar calon penyewa dapat melihat kondisi nyata. Tidak perlu link URL!
-                      </p>
 
                       <div className="flex flex-wrap items-center justify-center gap-2.5">
                         <button
@@ -1099,7 +1090,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                           className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
                         >
                           <Camera className="w-4 h-4" />
-                          <span>Ambil Foto Langsung (Kamera)</span>
+                          <span>Ambil Foto</span>
                         </button>
 
                         <button
@@ -1109,15 +1100,31 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                           className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-2xs cursor-pointer transition-all active:scale-95 disabled:opacity-50"
                         >
                           <ImageIcon className="w-4 h-4 text-blue-600" />
-                          <span>Pilih File dari Galeri HP / PC</span>
+                          <span>Pilih File</span>
                         </button>
-                      </div>
-
-                      <div className="mt-2.5 text-[10px] text-slate-400">
-                        Format: JPG, PNG, WEBP • Otomatis dioptimalkan untuk web
                       </div>
                     </div>
                   )}
+                </div>
+
+                {/* Deskripsi Kos & Aturan Tambahan */}
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-blue-600" />
+                      <span>Deskripsi Hunian & Aturan Kos</span>
+                    </span>
+                    <span className="text-[11px] font-normal text-slate-400">
+                      Opsional tapi disarankan
+                    </span>
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Jelaskan kenyamanan kos, aturan jam malam, akses kunci gerbang, dekat kampus apa, sistem listrik token/gratis, dan keunggulan hunian Anda..."
+                    value={kosDeskripsi}
+                    onChange={(e) => setKosDeskripsi(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800 text-xs"
+                  />
                 </div>
 
                 {/* Fasilitas Checkbox */}
@@ -1594,6 +1601,12 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                               Sisa {item.sisaKamar} Kamar
                             </span>
                           </div>
+
+                          {item.deskripsi && (
+                            <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed pt-1 border-t border-slate-100/80">
+                              {item.deskripsi}
+                            </p>
+                          )}
                         </div>
                       </div>
 

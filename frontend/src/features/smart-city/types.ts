@@ -67,6 +67,7 @@ export interface HunianItem {
   harga: number;
   periode: 'bulan' | 'tahun';
   alamat: string;
+  deskripsi?: string;
   dusun?: string;
   rtRw?: string;
   lat: number;
