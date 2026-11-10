@@ -40,7 +40,6 @@ interface DokumenLaporan {
   ukuran: string;
   tahun: number;
   judul: string;
-  deskripsi: string;
   hash: string;
   diunduh: number;
   fileUrl: string;
@@ -56,7 +55,6 @@ const DOKUMEN_DATA: DokumenLaporan[] = [
     ukuran: '14.8 MB',
     tahun: 2025,
     judul: 'Buku Induk Anggaran Pendapatan dan Belanja Daerah (APBD) Tahun 2025',
-    deskripsi: 'Peraturan Daerah Nomor 04 Tahun 2024 tentang Anggaran Pendapatan dan Belanja Daerah Beserta Lampiran Penjabaran.',
     hash: 'SHA256: 8f4e2b0...1c93a',
     diunduh: 1428,
     fileUrl: '#'
@@ -70,7 +68,6 @@ const DOKUMEN_DATA: DokumenLaporan[] = [
     ukuran: '8.2 MB',
     tahun: 2024,
     judul: 'Laporan Hasil Pemeriksaan (LHP) atas Laporan Keuangan Pemerintah Daerah TA 2024',
-    deskripsi: 'Opini Wajar Tanpa Pengecualian (WTP) oleh Badan Pemeriksa Keuangan Republik Indonesia Perwakilan Provinsi.',
     hash: 'SHA256: 4a91f0c...99e71',
     diunduh: 912,
     fileUrl: '#'
@@ -84,7 +81,6 @@ const DOKUMEN_DATA: DokumenLaporan[] = [
     ukuran: '6.4 MB',
     tahun: 2024,
     judul: 'Laporan Kinerja Instansi Pemerintah (LAKIP) Kota',
-    deskripsi: 'Pengukuran capaian indikator kinerja utama daerah terhadap target rencana strategis tahunan seluruh Organisasi Perangkat Daerah.',
     hash: 'SHA256: d227ab1...65aa0',
     diunduh: 640,
     fileUrl: '#'
@@ -98,7 +94,6 @@ const DOKUMEN_DATA: DokumenLaporan[] = [
     ukuran: '22.1 MB',
     tahun: 2025,
     judul: 'Rencana Pembangunan Jangka Menengah Daerah (RPJMD) Pemkot',
-    deskripsi: 'Dokumen panduan strategis 5 tahunan arah pembangunan infrastruktur fisik, ekonomi mandiri, dan integrasi digital kota.',
     hash: 'SHA256: 77f9801...ee029',
     diunduh: 3810,
     fileUrl: '#'
@@ -178,7 +173,6 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
       const q = searchDocQuery.toLowerCase().trim();
       const matchSearch = !q || 
         doc.judul.toLowerCase().includes(q) || 
-        doc.deskripsi.toLowerCase().includes(q) || 
         doc.kategori.toLowerCase().includes(q) ||
         doc.hash.toLowerCase().includes(q);
       const matchYear = selectedDocYear === 'Semua' || selectedDocYear === '2025' || doc.tahun.toString() === selectedDocYear;
@@ -735,11 +729,7 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
                           {doc.judul}
                         </h4>
 
-                        <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">
-                          {doc.deskripsi}
-                        </p>
-
-                        <div className="text-[11px] text-emerald-700 font-mono font-medium flex items-center gap-1.5 pt-1">
+                        <div className="text-[11px] text-emerald-700 font-mono font-medium flex items-center gap-1.5 pt-0.5">
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                           <span>{doc.hash} (Tersertifikasi Balai Sertifikasi Elektronik)</span>
                         </div>
