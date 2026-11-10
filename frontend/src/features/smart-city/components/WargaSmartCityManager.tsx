@@ -1552,9 +1552,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                     <h3 className="text-base sm:text-lg font-extrabold text-slate-800">
                       Anda Belum Memiliki Unit Kos atau Kontrakan Terdaftar
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                      Promosikan kamar kos atau rumah kontrakan Anda langsung ke warga dan mahasiswa sekitar tanpa perantara makelar.
-                    </p>
                   </div>
                   <button
                     type="button"
@@ -1689,9 +1686,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                     <h3 className="text-base sm:text-lg font-extrabold text-slate-800">
                       Anda Belum Membuka Lowongan Kerja
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
-                      Butuh karyawan toko, asisten, barista, atau teknisi? Pasang lowongan kerja lokal agar warga sekitar dapat melamar langsung.
-                    </p>
                   </div>
                   <button
                     type="button"
@@ -1699,7 +1693,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>+ Pasang Lowongan Kerja Pertama</span>
+                    <span>Pasang Lowongan Kerja Pertama</span>
                   </button>
                 </div>
               ) : (

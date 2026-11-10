@@ -10,17 +10,9 @@ export interface DetectedLocationResult {
   gpsErrorMessage?: string;
 }
 
-/**
- * Robust, resilient location detection for browser, desktop, and localhost environments.
- * 1. Attempts High-Accuracy Browser Geolocation first (up to 10s so user can accept prompt).
- * 2. Attempts Standard Geolocation (Wi-Fi/Cellular).
- * 3. If blocked or unavailable, falls back to IP Geolocation.
- * 4. Provides clear diagnostics on why IP fallback was used.
- */
 export async function detectSmartCityLocation(): Promise<DetectedLocationResult> {
   let gpsDeniedReason: string | undefined;
 
-  // Step 1: Try browser geolocation with High Accuracy first
   if (typeof window !== 'undefined' && 'geolocation' in navigator) {
     try {
       const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
@@ -48,7 +40,6 @@ export async function detectSmartCityLocation(): Promise<DetectedLocationResult>
         gpsDeniedReason = 'Izin akses lokasi ditolak di browser/macOS Anda.';
       }
 
-      // Step 1b: Try standard accuracy if high-accuracy timed out
       if (err1?.code !== 1) {
         try {
           const pos2 = await new Promise<GeolocationPosition>((resolve, reject) => {
@@ -80,7 +71,6 @@ export async function detectSmartCityLocation(): Promise<DetectedLocationResult>
     }
   }
 
-  // Step 2: Fallback to fast, free IP Geolocation (via geojs.io)
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 4000);
@@ -111,7 +101,6 @@ export async function detectSmartCityLocation(): Promise<DetectedLocationResult>
     console.warn('IP Geolocation unavailable, falling back to default city center:', ipErr);
   }
 
-  // Step 3: Graceful fallback to Kediri Center
   return {
     lat: KEDIRI_DEFAULT_COORDS.lat,
     lng: KEDIRI_DEFAULT_COORDS.lng,
@@ -122,9 +111,6 @@ export async function detectSmartCityLocation(): Promise<DetectedLocationResult>
   };
 }
 
-/**
- * Geocode any custom city or street name in Indonesia using OpenStreetMap Nominatim.
- */
 export async function geocodeAddressQuery(
   query: string
 ): Promise<{ lat: number; lng: number; displayName: string } | null> {

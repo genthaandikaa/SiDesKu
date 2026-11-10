@@ -357,27 +357,80 @@ export const UmkmDetailPage: React.FC = () => {
   const imagesGallery = currentItem.galeri && currentItem.galeri.length > 0 ? currentItem.galeri : [currentItem.fotoUrl];
   const activeImage = imagesGallery[activeGalleryIndex] || currentItem.fotoUrl;
 
+  const sellerProfileCard = (
+    <div className="p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-slate-50/80 border border-slate-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3.5 sm:gap-4">
+      <div className="flex items-center gap-3 sm:gap-3.5">
+        <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-blue-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
+          {currentItem.tokoNama.slice(0, 2).toUpperCase()}
+        </div>
+        <div className="min-w-0">
+          <h3 className="font-extrabold text-slate-900 text-sm leading-snug truncate">
+            {currentItem.tokoNama}
+          </h3>
+          <div className="text-slate-500 text-xs flex items-center gap-1.5 sm:gap-2 mt-0.5">
+            <span className="truncate">{currentItem.rtRw || 'RT 03 / RW 04'} • {currentItem.kelurahan || 'Sukamaju'}</span>
+            <span>•</span>
+            <span className="text-amber-500 font-bold flex items-center gap-0.5 shrink-0">
+              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+              <span>{currentItem.rating.toFixed(1)}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
+        <button
+          type="button"
+          onClick={() => alert(`Lapak ${currentItem.tokoNama} siap melayani warga secara langsung.`)}
+          className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors cursor-pointer text-center"
+        >
+          Kunjungi Lapak
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            const text = encodeURIComponent(`Halo *${currentItem.tokoNama}*, saya ingin bertanya seputar produk Anda.`);
+            window.open(`https://wa.me/${currentItem.waKontak}?text=${text}`, '_blank');
+          }}
+          className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold hover:bg-blue-100 transition-colors cursor-pointer flex items-center justify-center gap-1 text-center"
+        >
+          <MessageSquare className="w-3.5 h-3.5" />
+          <span>Tanya Penjual</span>
+        </button>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="font-sans pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-8">
+    <div className="font-sans pb-28 sm:pb-32 lg:pb-16 max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-2 sm:pt-4 space-y-5 sm:space-y-8">
 
       {/* =========================================================================
-          TOP BREADCRUMB & VERIFIED BADGE
+          TOP NAVIGATION BAR & VERIFIED BADGE (Mobile-Optimized)
           ========================================================================= */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2">
-        <div className="flex items-center gap-2 text-xs text-slate-500">
-          <Link to="/smart-city/umkm" className="hover:text-blue-600 transition-colors flex items-center gap-1 font-semibold">
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Katalog Pasar UMKM</span>
-          </Link>
-          <span>/</span>
-          <span className="font-medium text-slate-400">{currentItem.kategori}</span>
-          <span>/</span>
-          <span className="font-bold text-slate-900 truncate max-w-xs">{currentItem.nama}</span>
-        </div>
+      <div className="flex items-center justify-between gap-2 pt-1 pb-0.5">
+        <Link
+          to="/smart-city/umkm"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-blue-700 font-bold text-xs transition-colors shrink-0"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span className="hidden sm:inline">Katalog Pasar UMKM</span>
+          <span className="sm:hidden">Kembali</span>
+        </Link>
 
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[11px] font-bold text-emerald-800">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Lapak Terverifikasi {currentItem.kelurahan || 'Kota Kediri'}</span>
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="hidden md:flex items-center gap-1.5 text-xs text-slate-400 font-medium truncate">
+            <span>/</span>
+            <span className="text-slate-500">{currentItem.kategori}</span>
+            <span>/</span>
+            <span className="font-bold text-slate-800 truncate max-w-[200px]">{currentItem.nama}</span>
+          </div>
+
+          <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[10px] sm:text-[11px] font-extrabold text-emerald-800 shrink-0">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <span className="truncate max-w-[150px] sm:max-w-none">
+              Lapak Terverifikasi {currentItem.kelurahan || 'Kota Kediri'}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -385,45 +438,52 @@ export const UmkmDetailPage: React.FC = () => {
           SCREEN 4: JASA DETAIL VIEW
           ========================================================================= */}
       {currentItem.isJasa ? (
-        <div className="space-y-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="space-y-6 sm:space-y-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
             
             {/* Left Column: Tech Hero & SOP */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="relative aspect-16/10 rounded-3xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-sm">
+            <div className="lg:col-span-7 space-y-5 sm:space-y-6">
+              <div className="relative aspect-[16/10] sm:aspect-video lg:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-sm">
                 <img
                   src={currentItem.fotoUrl}
                   alt={currentItem.nama}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-4 left-4 px-3.5 py-1.5 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-sm flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>{currentItem.rtRw ? `Terverifikasi ${currentItem.rtRw}` : 'Terverifikasi RT 02 / RW 05'}</span>
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-emerald-600/95 backdrop-blur-xs text-white text-[10px] sm:text-xs font-bold shadow-sm flex items-center gap-1 sm:gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{currentItem.rtRw ? `Terverifikasi ${currentItem.rtRw}` : 'Terverifikasi RT 02 / RW 01'}</span>
                 </div>
-                <div className="absolute bottom-4 right-4 px-3.5 py-1.5 rounded-full bg-slate-900/90 text-white text-xs font-bold shadow-sm flex items-center gap-1.5">
-                  <Award className="w-4 h-4 text-amber-400" />
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-slate-900/90 backdrop-blur-xs text-white text-[10px] sm:text-xs font-bold shadow-sm flex items-center gap-1 sm:gap-1.5">
+                  <Award className="w-3.5 h-3.5 text-amber-400" />
                   <span>Sertifikasi BNSP Resmi</span>
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+              <div className="space-y-2.5 sm:space-y-3">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 leading-tight">
                   {currentItem.tokoNama}
                 </h1>
-                <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                  <span className="font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md border border-blue-100">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs">
+                  <span className="font-extrabold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 text-[11px]">
                     SiDesKu Verified
                   </span>
-                  <span>★ {currentItem.rating.toFixed(1)} ({reviews.length} ulasan)</span>
-                  <span>•</span>
-                  <span>Respon cepat ~10 menit</span>
-                  <span>•</span>
-                  <span>Radius panggilan max 7 km</span>
+                  <span className="inline-flex items-center gap-1 font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60 text-[11px]">
+                    <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                    <span>{currentItem.rating.toFixed(1)} ({reviews.length} ulasan)</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
+                    <Clock className="w-3 h-3 text-slate-400" />
+                    <span>Respon ~10 menit</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[11px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md">
+                    <MapPin className="w-3 h-3 text-slate-400" />
+                    <span>Radius max 7 km</span>
+                  </span>
                 </div>
               </div>
 
               {/* Cakupan Kerja Layanan (STANDAR SOP) */}
-              <div className="p-6 rounded-3xl bg-slate-50/80 border border-slate-200/90 space-y-4">
+              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-50/80 border border-slate-200/90 space-y-3.5 sm:space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-black uppercase tracking-wider text-slate-800">Cakupan Kerja Layanan</h3>
                   <span className="text-[10px] font-extrabold text-blue-700 bg-blue-100/60 px-2.5 py-0.5 rounded">STANDAR SOP</span>
@@ -454,11 +514,11 @@ export const UmkmDetailPage: React.FC = () => {
               </div>
 
               {/* Green Garansi Banner */}
-              <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-start gap-3.5 text-xs text-emerald-950">
+              <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-start gap-3 text-xs text-emerald-950">
                 <Award className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
                 <div>
                   <strong className="block text-emerald-950 font-black text-xs">Garansi Dingin 30 Hari Penuh (RESMI)</strong>
-                  <span className="text-emerald-800 leading-relaxed">Bila AC kembali bocor atau kurang dingin dalam 30 hari pasca pengerjaan, teknisi hadir kembali tanpa biaya jasa tambahan.</span>
+                  <span className="text-emerald-800 leading-relaxed text-[11px] sm:text-xs">Bila AC kembali bocor atau kurang dingin dalam 30 hari pasca pengerjaan, teknisi hadir kembali tanpa biaya jasa tambahan.</span>
                 </div>
               </div>
 
@@ -469,11 +529,11 @@ export const UmkmDetailPage: React.FC = () => {
             </div>
 
             {/* Right Column: Order Form Card */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className="p-6 sm:p-7 rounded-3xl bg-slate-50/70 border border-slate-200/90 space-y-5">
+            <div id="order-form-jasa" className="lg:col-span-5 space-y-5 sm:space-y-6">
+              <div className="p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-slate-50/70 border border-slate-200/90 space-y-4 sm:space-y-5 shadow-2xs">
                 <div>
-                  <h3 className="text-base font-black text-slate-900">Pesan Jasa Kunjungan Teknisi</h3>
-                  <p className="text-[11px] text-slate-500">Pilih tipe penanganan, atur jadwal, dan teknisi langsung berangkat.</p>
+                  <h3 className="text-sm sm:text-base font-black text-slate-900">Pesan Jasa Kunjungan Teknisi</h3>
+                  <p className="text-[11px] text-slate-500 mt-0.5">Pilih tipe penanganan, atur jadwal, dan teknisi langsung berangkat.</p>
                 </div>
 
                 {/* Service Options */}
@@ -622,37 +682,37 @@ export const UmkmDetailPage: React.FC = () => {
         /* =========================================================================
             SCREEN 2: FOOD / PHYSICAL PRODUCT DETAIL VIEW
             ========================================================================= */
-        <div className="space-y-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="space-y-6 sm:space-y-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
             
-            {/* Left Column: Image Gallery & Seller Profile Card */}
-            <div className="lg:col-span-6 space-y-5">
+            {/* Left Column: Image Gallery & Desktop Seller Profile Card */}
+            <div className="lg:col-span-6 space-y-4 sm:space-y-5">
               
               {/* Main Big Photo */}
-              <div className="relative aspect-4/3 rounded-3xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-2xs group">
+              <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 border border-slate-200/90 shadow-2xs group">
                 <img
                   src={activeImage}
                   alt={currentItem.nama}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute top-4 left-4 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-[11px] font-black text-slate-800 shadow-2xs flex items-center gap-1.5">
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 px-2.5 sm:px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-[10px] sm:text-[11px] font-black text-slate-800 shadow-2xs flex items-center gap-1.5">
                   <MapPin className="w-3.5 h-3.5 text-rose-500" />
-                  <span>{distLabel} dari Lokasi Anda</span>
+                  <span>{distLabel} dari Anda</span>
                 </div>
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider shadow-2xs">
+                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 px-2.5 sm:px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider shadow-2xs">
                   {currentItem.badgeTag || 'DIANTAR PENJUAL'}
                 </div>
               </div>
 
               {/* Thumbnail Bar */}
               {imagesGallery.length > 1 && (
-                <div className="grid grid-cols-4 gap-3">
+                <div className="grid grid-cols-4 gap-2 sm:gap-3">
                   {imagesGallery.map((img, idx) => (
                     <button
                       key={idx}
                       type="button"
                       onClick={() => setActiveGalleryIndex(idx)}
-                      className={`relative aspect-4/3 rounded-2xl overflow-hidden border-2 transition-all cursor-pointer ${
+                      className={`relative aspect-[4/3] rounded-xl sm:rounded-2xl overflow-hidden border-2 transition-all cursor-pointer ${
                         activeGalleryIndex === idx
                           ? 'border-blue-600 ring-2 ring-blue-100'
                           : 'border-slate-200 opacity-70 hover:opacity-100'
@@ -664,66 +724,28 @@ export const UmkmDetailPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Seller Profile Card (Matching Screen 2 Bottom Left) */}
-              <div className="p-5 rounded-3xl bg-slate-50/80 border border-slate-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white font-black flex items-center justify-center text-sm shadow-xs shrink-0">
-                    {currentItem.tokoNama.slice(0, 2).toUpperCase()}
-                  </div>
-                  <div>
-                    <h3 className="font-extrabold text-slate-900 text-sm leading-snug">
-                      {currentItem.tokoNama}
-                    </h3>
-                    <div className="text-slate-500 text-xs flex items-center gap-2 mt-0.5">
-                      <span>{currentItem.rtRw || 'RT 03 / RW 04'} • {currentItem.kelurahan || 'Sukamaju'}</span>
-                      <span>•</span>
-                      <span className="text-amber-500 font-bold flex items-center gap-0.5">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                        <span>{currentItem.rating.toFixed(1)}</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 w-full sm:w-auto">
-                  <button
-                    type="button"
-                    onClick={() => alert(`Lapak ${currentItem.tokoNama} siap melayani warga secara langsung.`)}
-                    className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 transition-colors cursor-pointer"
-                  >
-                    Kunjungi Lapak
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const text = encodeURIComponent(`Halo *${currentItem.tokoNama}*, saya ingin bertanya seputar produk Anda.`);
-                      window.open(`https://wa.me/${currentItem.waKontak}?text=${text}`, '_blank');
-                    }}
-                    className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold hover:bg-blue-100 transition-colors cursor-pointer flex items-center justify-center gap-1"
-                  >
-                    <MessageSquare className="w-3.5 h-3.5" />
-                    <span>Tanya Penjual</span>
-                  </button>
-                </div>
+              {/* Seller Profile Card (Desktop Only: In left column below images) */}
+              <div className="hidden lg:block">
+                {sellerProfileCard}
               </div>
 
             </div>
 
             {/* Right Column: Title, Options & Order Box */}
-            <div className="lg:col-span-6 space-y-6">
+            <div className="lg:col-span-6 space-y-4 sm:space-y-6">
               
-              <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-5">
+              <div className="p-4 sm:p-6 lg:p-7 rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 shadow-2xs space-y-4 sm:space-y-5">
                 
                 {/* Header Tag & Title */}
-                <div className="space-y-2">
+                <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex items-center gap-2 text-xs">
-                    <span className="font-extrabold uppercase text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
+                    <span className="font-extrabold uppercase text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100 text-[11px]">
                       {currentItem.kategori}
                     </span>
                     <span className="text-slate-400">•</span>
-                    <span className="text-slate-500 font-medium">{reviews.length} Ulasan Warga</span>
+                    <span className="text-slate-500 font-medium text-xs">{reviews.length} Ulasan Warga</span>
                   </div>
-                  <h1 className="text-2xl sm:text-3xl font-black text-slate-900 leading-tight">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-slate-900 leading-tight">
                     {currentItem.nama}
                   </h1>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
@@ -732,12 +754,12 @@ export const UmkmDetailPage: React.FC = () => {
                 </div>
 
                 {/* Big Price Box */}
-                <div className="p-4 sm:p-5 rounded-2xl bg-blue-50/60 border border-blue-100 flex items-baseline justify-between">
+                <div className="p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-blue-50/60 border border-blue-100 flex items-center justify-between">
                   <div>
-                    <span className="text-2xl sm:text-3xl font-black text-blue-700">Rp {currentItem.harga.toLocaleString('id-ID')}</span>
+                    <span className="text-xl sm:text-2xl lg:text-3xl font-black text-blue-700">Rp {currentItem.harga.toLocaleString('id-ID')}</span>
                     <span className="text-xs font-semibold text-slate-500 ml-1.5">/ {currentItem.satuan || 'porsi'}</span>
                   </div>
-                  <span className="text-xs font-extrabold text-emerald-700 bg-emerald-100/70 px-3 py-1 rounded-lg">
+                  <span className="text-[11px] sm:text-xs font-extrabold text-emerald-700 bg-emerald-100/70 px-2.5 sm:px-3 py-1 rounded-lg">
                     ✓ Tanpa Biaya Admin
                   </span>
                 </div>
@@ -749,7 +771,7 @@ export const UmkmDetailPage: React.FC = () => {
                       <span className="font-extrabold text-slate-800">Pilihan Potongan Ayam</span>
                       <span className="text-[10px] text-slate-400">{orderPilihanAyam}</span>
                     </div>
-                    <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                       {currentItem.pilihanAyam.map((opt: any, idx) => {
                         const optName = typeof opt === 'string' ? opt : (opt.nama || String(opt));
                         const optKey = typeof opt === 'string' ? opt : (opt.id || opt.nama || idx);
@@ -759,7 +781,7 @@ export const UmkmDetailPage: React.FC = () => {
                             key={optKey}
                             type="button"
                             onClick={() => setOrderPilihanAyam(optName)}
-                            className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
+                            className={`p-2.5 sm:p-3 rounded-xl border text-center transition-all cursor-pointer ${
                               isSelected
                                 ? 'bg-blue-50 border-blue-500 font-bold text-blue-800 ring-2 ring-blue-100'
                                 : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
@@ -780,7 +802,7 @@ export const UmkmDetailPage: React.FC = () => {
                       <span className="font-extrabold text-slate-800">Pilihan Sambal</span>
                       <span className="text-[10px] text-slate-400">{orderPilihanSambal}</span>
                     </div>
-                    <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
                       {currentItem.pilihanSambal.map((smb: any, idx) => {
                         const smbName = typeof smb === 'string' ? smb : (smb.nama || String(smb));
                         const smbKey = typeof smb === 'string' ? smb : (smb.id || smb.nama || idx);
@@ -790,7 +812,7 @@ export const UmkmDetailPage: React.FC = () => {
                             key={smbKey}
                             type="button"
                             onClick={() => setOrderPilihanSambal(smbName)}
-                            className={`p-3 rounded-xl border text-center transition-all cursor-pointer ${
+                            className={`p-2.5 sm:p-3 rounded-xl border text-center transition-all cursor-pointer ${
                               isSelected
                                 ? 'bg-blue-50 border-blue-500 font-bold text-blue-800 ring-2 ring-blue-100'
                                 : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
@@ -805,13 +827,13 @@ export const UmkmDetailPage: React.FC = () => {
                 )}
 
                 {/* Qty Counter */}
-                <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+                <div className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
                   <span className="font-bold text-slate-700">Jumlah Pesanan</span>
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
                       onClick={() => setOrderQty(Math.max(1, orderQty - 1))}
-                      className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center font-black text-sm text-slate-700"
+                      className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center font-black text-sm text-slate-700 cursor-pointer"
                     >
                       -
                     </button>
@@ -819,7 +841,7 @@ export const UmkmDetailPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => setOrderQty(orderQty + 1)}
-                      className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center font-black text-sm text-slate-700"
+                      className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center font-black text-sm text-slate-700 cursor-pointer"
                     >
                       +
                     </button>
@@ -829,33 +851,33 @@ export const UmkmDetailPage: React.FC = () => {
                 {/* Delivery Radio Options: Direct Seller Only */}
                 <div className="space-y-2">
                   <label
-                    className={`flex items-center justify-between p-3.5 rounded-xl border text-xs cursor-pointer transition-all ${
+                    className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border text-xs cursor-pointer transition-all ${
                       orderDeliveryType === 'penjual'
                         ? 'bg-blue-50/50 border-blue-500 ring-2 ring-blue-100 font-bold'
                         : 'bg-white border-slate-200 text-slate-700'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <input
                         type="radio"
                         name="detail_order_delivery"
                         checked={orderDeliveryType === 'penjual'}
                         onChange={() => setOrderDeliveryType('penjual')}
-                        className="w-4 h-4 text-blue-600"
+                        className="w-4 h-4 text-blue-600 shrink-0"
                       />
-                      <div>
-                        <span className="block font-bold">Diantar Langsung oleh Penjual (COD Mandiri)</span>
-                        <span className="block text-[10px] text-slate-500 font-normal mt-0.5">
+                      <div className="min-w-0">
+                        <span className="block font-bold truncate">Diantar Langsung oleh Penjual (COD)</span>
+                        <span className="block text-[10px] text-slate-500 font-normal mt-0.5 truncate">
                           {sellerOngkir === 0
                             ? '✨ Penjual menggratiskan ongkir untuk pesanan ini'
                             : `* Ongkir Rp ${sellerOngkir.toLocaleString('id-ID')} diatur langsung oleh penjual`}
                         </span>
                       </div>
                     </div>
-                    <div>
+                    <div className="shrink-0 ml-2">
                       {sellerOngkir === 0 ? (
-                        <span className="text-emerald-700 font-extrabold uppercase text-[10px] bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
-                          GRATIS ONGKIR
+                        <span className="text-emerald-700 font-extrabold uppercase text-[10px] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                          GRATIS
                         </span>
                       ) : (
                         <span className="text-blue-700 font-bold text-xs">
@@ -866,57 +888,57 @@ export const UmkmDetailPage: React.FC = () => {
                   </label>
 
                   <label
-                    className={`flex items-center justify-between p-3.5 rounded-xl border text-xs cursor-pointer transition-all ${
+                    className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border text-xs cursor-pointer transition-all ${
                       orderDeliveryType === 'ambil'
                         ? 'bg-blue-50/50 border-blue-500 ring-2 ring-blue-100 font-bold'
                         : 'bg-white border-slate-200 text-slate-700'
                     }`}
                   >
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <input
                         type="radio"
                         name="detail_order_delivery"
                         checked={orderDeliveryType === 'ambil'}
                         onChange={() => setOrderDeliveryType('ambil')}
-                        className="w-4 h-4 text-blue-600"
+                        className="w-4 h-4 text-blue-600 shrink-0"
                       />
-                      <div>
-                        <span className="block font-bold">Ambil Sendiri di Lapak / Warung Penjual</span>
-                        <span className="block text-[10px] text-slate-500 font-normal mt-0.5">
+                      <div className="min-w-0">
+                        <span className="block font-bold truncate">Ambil Sendiri di Lapak / Warung Penjual</span>
+                        <span className="block text-[10px] text-slate-500 font-normal mt-0.5 truncate">
                           Ambil langsung ke alamat penjual (bebas biaya)
                         </span>
                       </div>
                     </div>
-                    <span className="text-emerald-700 font-extrabold uppercase text-[10px] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                    <span className="text-emerald-700 font-extrabold uppercase text-[10px] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md shrink-0 ml-2">
                       GRATIS
                     </span>
                   </label>
                 </div>
 
                 {/* Total & Action CTAs */}
-                <div className="pt-4 border-t border-slate-100 space-y-3">
+                <div className="pt-3 sm:pt-4 border-t border-slate-100 space-y-3">
                   <div className="flex items-baseline justify-between">
                     <span className="text-xs text-slate-500">Total Pembayaran:</span>
                     <div>
-                      <span className="text-2xl font-black text-blue-700">Rp {totalFoodPrice.toLocaleString('id-ID')}</span>
+                      <span className="text-xl sm:text-2xl font-black text-blue-700">Rp {totalFoodPrice.toLocaleString('id-ID')}</span>
                       {orderDeliveryType === 'penjual' && (
                         <span className="text-[10px] text-slate-500 block text-right font-medium">
                           {sellerOngkir === 0
-                            ? '(Gratis ongkir langsung diantar oleh penjual)'
+                            ? '(Gratis ongkir langsung diantar penjual)'
                             : `(termasuk ongkir penjual Rp ${sellerOngkir.toLocaleString('id-ID')})`}
                         </span>
                       )}
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                     <button
                       type="button"
                       onClick={() => {
                         setCheckoutPaymentMethod('cod');
                         setShowCheckoutModal(true);
                       }}
-                      className="py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
+                      className="py-3 sm:py-3.5 rounded-xl sm:rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95"
                     >
                       <Phone className="w-4 h-4" />
                       <span>Pesan via WA (COD)</span>
@@ -928,7 +950,7 @@ export const UmkmDetailPage: React.FC = () => {
                         setCheckoutPaymentMethod('qris');
                         setShowCheckoutModal(true);
                       }}
-                      className="py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs border border-slate-200 shadow-2xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                      className="py-3 sm:py-3.5 rounded-xl sm:rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs border border-slate-200 shadow-2xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
                     >
                       <QrCode className="w-4 h-4 text-emerald-600" />
                       <span>Bayar QRIS Langsung</span>
@@ -938,17 +960,22 @@ export const UmkmDetailPage: React.FC = () => {
 
               </div>
 
+              {/* Seller Profile Card (Mobile Only: Below the Order Box) */}
+              <div className="lg:hidden">
+                {sellerProfileCard}
+              </div>
+
             </div>
 
           </div>
 
           {/* Product Tabs: Deskripsi, Lokasi, Ulasan */}
-          <div className="pt-4 space-y-6">
-            <div className="flex items-center gap-8 border-b border-slate-200 text-xs font-bold">
+          <div className="pt-2 sm:pt-4 space-y-4 sm:space-y-6">
+            <div className="flex items-center gap-4 sm:gap-8 border-b border-slate-200 text-xs font-bold overflow-x-auto no-scrollbar">
               <button
                 type="button"
                 onClick={() => setActiveTabDetail('deskripsi')}
-                className={`pb-3.5 border-b-2 text-sm transition-all ${
+                className={`pb-3 border-b-2 text-xs sm:text-sm whitespace-nowrap transition-all cursor-pointer ${
                   activeTabDetail === 'deskripsi'
                     ? 'border-blue-600 text-blue-700 font-black'
                     : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -959,7 +986,7 @@ export const UmkmDetailPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveTabDetail('lokasi')}
-                className={`pb-3.5 border-b-2 text-sm transition-all ${
+                className={`pb-3 border-b-2 text-xs sm:text-sm whitespace-nowrap transition-all cursor-pointer ${
                   activeTabDetail === 'lokasi'
                     ? 'border-blue-600 text-blue-700 font-black'
                     : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -970,7 +997,7 @@ export const UmkmDetailPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setActiveTabDetail('ulasan')}
-                className={`pb-3.5 border-b-2 text-sm transition-all ${
+                className={`pb-3 border-b-2 text-xs sm:text-sm whitespace-nowrap transition-all cursor-pointer ${
                   activeTabDetail === 'ulasan'
                     ? 'border-blue-600 text-blue-700 font-black'
                     : 'border-transparent text-slate-500 hover:text-slate-800'
@@ -981,15 +1008,15 @@ export const UmkmDetailPage: React.FC = () => {
             </div>
 
             {activeTabDetail === 'deskripsi' && (
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 text-xs text-slate-700">
-                <div className="md:col-span-8 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 text-xs text-slate-700">
+                <div className="md:col-span-8 space-y-3 sm:space-y-4">
                   <h4 className="font-extrabold text-slate-900 text-sm sm:text-base">Warisan Resep Tradisional Sunda-Jawa</h4>
                   <p className="leading-relaxed text-slate-600 text-xs sm:text-sm">
                     {currentItem.deskripsi} Diproduksi langsung dari dapur warga setempat dengan bumbu rempah asli alami tanpa bahan pengawet sintesis.
                   </p>
                   <div className="space-y-2 pt-2">
                     <span className="font-bold text-slate-900 block text-xs">Isi Paket Lengkap:</span>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-slate-600">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-600">
                       <span className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-600 shrink-0" /> Olahan Higienis Standar Dapur Rumah</span>
                       <span className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-600 shrink-0" /> Bumbu Rempah Alami Petani Binaan</span>
                       <span className="flex items-center gap-2"><Check className="w-4 h-4 text-emerald-600 shrink-0" /> Lalapan Segar Petik Pagi</span>
@@ -1000,9 +1027,9 @@ export const UmkmDetailPage: React.FC = () => {
                 </div>
 
                 {/* Keterangan Produk Box */}
-                <div className="md:col-span-4 p-5 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
+                <div className="md:col-span-4 p-4 sm:p-5 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
                   <h5 className="font-black text-slate-900 uppercase text-[10px] tracking-wider">KETERANGAN PRODUK</h5>
-                  <div className="space-y-2.5 text-xs">
+                  <div className="space-y-2 text-xs">
                     <div className="flex justify-between py-1.5 border-b border-slate-200/60">
                       <span className="text-slate-400">Sertifikat Halal</span>
                       <span className="font-bold text-slate-800">{currentItem.keteranganHalal || 'ID02170000189231'}</span>
@@ -1021,13 +1048,13 @@ export const UmkmDetailPage: React.FC = () => {
             )}
 
             {activeTabDetail === 'lokasi' && (
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200 text-xs space-y-3">
+              <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-50 border border-slate-200 text-xs space-y-3">
                 <div className="flex items-center gap-2 font-bold text-slate-900">
                   <MapPin className="w-4 h-4 text-rose-500" />
                   <span>Titik Lokasi Lapak / Dapur Warga</span>
                 </div>
                 <p className="text-slate-600 text-xs">{currentItem.alamat}</p>
-                <div className="p-3.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-900 text-xs space-y-1">
+                <div className="p-3 sm:p-3.5 rounded-xl bg-blue-50 border border-blue-100 text-blue-900 text-xs space-y-1">
                   <div className="font-bold">Pengantaran Langsung oleh Penjual:</div>
                   <p className="text-[11px] text-blue-700 leading-relaxed">
                     Pengiriman dilakukan langsung oleh pedagang/penjual ke alamat Anda tanpa melibatkan pihak ketiga atau kurir perantara. Pembayaran dapat dilakukan tunai di tempat (COD) atau scan QRIS kasir.
@@ -1042,23 +1069,23 @@ export const UmkmDetailPage: React.FC = () => {
       {/* =========================================================================
           REVIEWS & COMMENTS SECTION (Accessible for both Food & Jasa)
           ========================================================================= */}
-      <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-2xs space-y-8">
+      <section className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-slate-200/90 shadow-2xs space-y-5 sm:space-y-8">
         
         {/* Review Section Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 pb-4 border-b border-slate-100">
           <div>
-            <div className="flex items-center gap-2 text-xs font-black uppercase text-blue-600 tracking-wider">
+            <div className="flex items-center gap-1.5 text-xs font-black uppercase text-blue-600 tracking-wider">
               <MessageSquare className="w-4 h-4" />
               <span>ULASAN & TESTIMONI WARGA</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-slate-900 mt-1">
               Pengalaman Warga Menggunakan Produk / Jasa Ini
             </h2>
           </div>
 
-          <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
-            <div className="text-2xl font-black text-amber-500 flex items-center gap-1">
-              <Star className="w-6 h-6 fill-amber-400 text-amber-400" />
+          <div className="flex items-center gap-3 p-2.5 sm:p-3 rounded-2xl bg-slate-50 border border-slate-200/80 w-full sm:w-auto justify-between sm:justify-start">
+            <div className="text-xl sm:text-2xl font-black text-amber-500 flex items-center gap-1">
+              <Star className="w-5 h-5 sm:w-6 sm:h-6 fill-amber-400 text-amber-400" />
               <span>{currentItem.rating.toFixed(1)}</span>
             </div>
             <div className="text-xs text-slate-500 leading-tight">
@@ -1069,7 +1096,7 @@ export const UmkmDetailPage: React.FC = () => {
         </div>
 
         {reviewSuccessToast && (
-          <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 animate-fade-in">
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 animate-fade-in">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
             <span>Terima kasih! Ulasan Anda telah berhasil disimpan dan kini tampil di ulasan publik.</span>
           </div>
@@ -1080,10 +1107,10 @@ export const UmkmDetailPage: React.FC = () => {
             ===================================================================== */}
         {user ? (
           /* AUTHENTICATED CITIZEN REVIEW FORM */
-          <form onSubmit={handleSubmitReview} className="p-6 rounded-3xl bg-slate-50/80 border border-slate-200/90 space-y-4">
-            <div className="flex items-center justify-between">
+          <form onSubmit={handleSubmitReview} className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-slate-50/80 border border-slate-200/90 space-y-3.5 sm:space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-600 text-white font-black flex items-center justify-center text-xs">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-600 text-white font-black flex items-center justify-center text-xs">
                   {user.name.slice(0, 2).toUpperCase()}
                 </div>
                 <div>
@@ -1121,18 +1148,18 @@ export const UmkmDetailPage: React.FC = () => {
               placeholder="Ceritakan pengalaman Anda membeli produk / memesan jasa ini secara jujur..."
               value={reviewKomentar}
               onChange={(e) => setReviewKomentar(e.target.value)}
-              className="w-full p-4 rounded-2xl bg-white border border-slate-200 text-xs text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all resize-none"
+              className="w-full p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200 text-xs sm:text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all resize-none"
               required
             />
 
-            <div className="flex items-center justify-between pt-1">
-              <span className="text-[11px] text-slate-400">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
+              <span className="text-[10px] sm:text-[11px] text-slate-400">
                 Ulasan warga membantu menjaga transparansi dan kualitas UMKM tetangga kita.
               </span>
               <button
                 type="submit"
                 disabled={isSubmittingReview}
-                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{isSubmittingReview ? 'Mengirim...' : 'Kirim Ulasan Warga'}</span>
@@ -1141,14 +1168,14 @@ export const UmkmDetailPage: React.FC = () => {
           </form>
         ) : (
           /* GUEST NOTICE BANNER (CAN STILL BUY / CHECKOUT, REVIEW BLOCKED) */
-          <div className="p-5 sm:p-6 rounded-3xl bg-amber-50/60 border border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-amber-50/60 border border-amber-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
             <div className="flex items-start gap-3 text-xs">
               <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <strong className="block text-amber-950 font-black">
                   Ingin Memberikan Ulasan atau Rating?
                 </strong>
-                <p className="text-amber-800 leading-relaxed">
+                <p className="text-amber-800 leading-relaxed text-[11px] sm:text-xs">
                   Anda dapat bebas memesan atau membeli produk tanpa login. Namun untuk menulis review, Anda harus masuk / login sebagai warga terdaftar terlebih dahulu guna mencegah ulasan palsu.
                 </p>
               </div>
@@ -1156,7 +1183,7 @@ export const UmkmDetailPage: React.FC = () => {
 
             <Link
               to="/login"
-              className="px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs shadow-xs shrink-0 flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-xs shadow-xs shrink-0 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
               <LogIn className="w-4 h-4" />
               <span>Masuk / Login untuk Review</span>
@@ -1165,27 +1192,27 @@ export const UmkmDetailPage: React.FC = () => {
         )}
 
         {/* Review Comments List */}
-        <div className="space-y-4">
+        <div className="space-y-3.5 sm:space-y-4">
           <div className="font-extrabold text-slate-800 text-xs">
             Daftar Ulasan Warga ({reviews.length})
           </div>
 
           {reviews.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
               {reviews.map((rev) => (
                 <div
                   key={rev.id}
-                  className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5 flex flex-col justify-between"
+                  className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5 flex flex-col justify-between"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-800 font-black text-xs flex items-center justify-center">
+                        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-800 font-black text-xs flex items-center justify-center shrink-0">
                           {rev.reviewerName.slice(0, 1).toUpperCase()}
                         </div>
-                        <div>
-                          <div className="font-bold text-slate-900 text-xs">{rev.reviewerName}</div>
-                          <div className="text-[10px] text-slate-400">
+                        <div className="min-w-0">
+                          <div className="font-bold text-slate-900 text-xs truncate">{rev.reviewerName}</div>
+                          <div className="text-[10px] text-slate-400 truncate">
                             {rev.reviewerRtRw && (rev.reviewerRtRw.includes('{') || rev.reviewerRtRw.includes('desa_id'))
                               ? 'RT 01 / RW 01'
                               : (rev.reviewerRtRw || 'Warga Setempat')}
@@ -1193,7 +1220,7 @@ export const UmkmDetailPage: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-0.5 text-amber-400">
+                      <div className="flex items-center gap-0.5 text-amber-400 shrink-0">
                         {Array.from({ length: 5 }).map((_, i) => (
                           <Star
                             key={i}
@@ -1229,23 +1256,23 @@ export const UmkmDetailPage: React.FC = () => {
       {/* =========================================================================
           PRODUK SERUPA DARI PENJUAL SEKITAR
           ========================================================================= */}
-      <section className="space-y-4 pt-2">
+      <section className="space-y-3.5 sm:space-y-4 pt-1 sm:pt-2">
         <div className="flex items-center justify-between">
           <div>
             <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 block">PRODUK SEJENIS DI SEKITAR ANDA</span>
-            <h3 className="text-lg font-black text-slate-900">Pilihan Produk Lainnya</h3>
+            <h3 className="text-base sm:text-lg font-black text-slate-900">Pilihan Produk Lainnya</h3>
           </div>
           <Link to="/smart-city/umkm" className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
-            <span>Lihat Semua Produk</span>
+            <span>Lihat Semua</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
           {umkmList.filter(u => u.id !== currentItem.id).slice(0, 4).map((rel) => (
-            <div key={rel.id} className="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-2 flex flex-col justify-between">
-              <div className="space-y-2">
-                <div className="aspect-4/3 rounded-xl overflow-hidden bg-slate-100">
+            <div key={rel.id} className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-2 flex flex-col justify-between">
+              <div className="space-y-1.5 sm:space-y-2">
+                <div className="aspect-[4/3] rounded-lg sm:rounded-xl overflow-hidden bg-slate-100">
                   <img src={rel.fotoUrl} alt={rel.nama} className="w-full h-full object-cover" />
                 </div>
                 <div className="font-extrabold text-slate-900 text-xs truncate">{rel.nama}</div>
@@ -1637,6 +1664,60 @@ export const UmkmDetailPage: React.FC = () => {
         </div>,
         document.body
       )}
+
+      {/* =========================================================================
+          MOBILE & TABLET STICKY BOTTOM ACTION BAR (Modern E-Commerce UX)
+          ========================================================================= */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-4 py-2.5 sm:py-3 shadow-lg lg:hidden font-sans">
+        <div className="max-w-lg mx-auto flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <span className="text-[10px] text-slate-500 font-medium block truncate">
+              {currentItem.isJasa ? 'Estimasi Biaya' : 'Total Tagihan'}
+            </span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-lg sm:text-xl font-black text-blue-700">
+                Rp {(currentItem.isJasa ? totalJasaPrice : totalFoodPrice).toLocaleString('id-ID')}
+              </span>
+              <span className="text-[10px] text-slate-400 hidden xs:inline font-medium">
+                (Tanpa Admin)
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {!currentItem.isJasa && (
+              <button
+                type="button"
+                onClick={() => {
+                  setCheckoutPaymentMethod('qris');
+                  setShowCheckoutModal(true);
+                }}
+                className="p-2.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200/70 transition-all flex items-center gap-1 cursor-pointer active:scale-95"
+                title="Bayar QRIS Langsung"
+              >
+                <QrCode className="w-4 h-4 text-emerald-600" />
+                <span className="hidden sm:inline">QRIS</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => {
+                if (currentItem.isJasa) {
+                  setCheckoutPaymentMethod(jasaPaymentMethod === 'qris' ? 'qris' : 'cod');
+                } else {
+                  setCheckoutPaymentMethod('cod');
+                }
+                setShowCheckoutModal(true);
+              }}
+              className="px-4 sm:px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-600/25 flex items-center gap-1.5 sm:gap-2 cursor-pointer transition-all active:scale-95"
+            >
+              <Phone className="w-4 h-4 shrink-0" />
+              <span>{currentItem.isJasa ? 'Pesan Teknisi' : 'Pesan Sekarang'}</span>
+            </button>
+          </div>
+        </div>
+      </div>
 
     </div>
   );
