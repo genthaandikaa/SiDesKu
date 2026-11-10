@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Menu, 
   X, 
+  ArrowLeft,
   ArrowRight, 
   LayoutDashboard, 
   Search, 
@@ -108,6 +109,7 @@ export const PublicNavbar: React.FC = () => {
   ];
 
   const activeLinks = user ? postLoginLinks : preLoginLinks;
+  const isAuthEntryPage = location.pathname === '/login' || location.pathname === '/register';
 
   const smartCitySubItems = [
     {
@@ -364,11 +366,11 @@ export const PublicNavbar: React.FC = () => {
             ) : (
               <div className="flex items-center gap-2">
                 <Link
-                  to="/login"
-                  className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
+                  to={isAuthEntryPage ? '/' : '/login'}
+                  className={`inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full font-extrabold text-xs shadow-md transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none ${isAuthEntryPage ? 'border border-slate-200 bg-white text-slate-700 shadow-slate-900/5 hover:border-sky-200 hover:bg-slate-50 hover:text-sky-700' : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-sky-500/25 hover:from-sky-600 hover:to-blue-700'}`}
                 >
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Login</span>
+                  {isAuthEntryPage ? <ArrowLeft className="w-3.5 h-3.5" /> : <LogIn className="w-3.5 h-3.5" />}
+                  <span>{isAuthEntryPage ? 'Kembali' : 'Login'}</span>
                 </Link>
               </div>
             )}
@@ -488,12 +490,12 @@ export const PublicNavbar: React.FC = () => {
             {!user && (
               <div className="pt-2 border-t border-slate-100">
                 <Link
-                  to="/login"
+                  to={isAuthEntryPage ? '/' : '/login'}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full py-2.5 text-center text-xs font-bold rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white shadow-md shadow-sky-500/20 flex items-center justify-center gap-1.5"
+                  className={`w-full py-2.5 text-center text-xs font-bold rounded-2xl flex items-center justify-center gap-1.5 ${isAuthEntryPage ? 'border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50' : 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md shadow-sky-500/20 hover:from-sky-600 hover:to-blue-700'}`}
                 >
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Login</span>
+                  {isAuthEntryPage ? <ArrowLeft className="w-3.5 h-3.5" /> : <LogIn className="w-3.5 h-3.5" />}
+                  <span>{isAuthEntryPage ? 'Kembali' : 'Login'}</span>
                 </Link>
               </div>
             )}

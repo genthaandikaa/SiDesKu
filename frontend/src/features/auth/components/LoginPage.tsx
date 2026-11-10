@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Building2, CheckCircle2, Clock3, Eye, EyeOff, HelpCircle, Loader2, Lock, ShieldCheck, User } from 'lucide-react';
+import { ArrowRight, Building2, CheckCircle2, Clock3, Eye, EyeOff, HelpCircle, Loader2, Lock, ShieldCheck, User } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { GuestSupportChatModal } from '@/features/chat/components/GuestSupportChatModal';
+import { PublicNavbar } from '@/features/landing/components/PublicNavbar';
 
 interface AuthPageProps {
   initialMode?: 'login' | 'register';
@@ -154,23 +155,9 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
 
   return (
     <div className="font-sans text-[#102653]">
+      <PublicNavbar />
       <div className="relative flex min-h-screen min-h-[100dvh] flex-col overflow-hidden bg-white lg:hidden">
-      <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-2 px-5 py-5 max-[380px]:px-3 sm:gap-4 sm:px-8 sm:py-7">
-        <Link to="/" className="flex min-w-0 items-center gap-2.5 rounded-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:gap-3.5" aria-label="Beranda Pemerintah Kabupaten Kediri">
-          <img src="/images/logo-kediri.png" alt="Lambang Kabupaten Kediri" className="h-10 w-10 shrink-0 object-contain sm:h-14 sm:w-14" />
-          <span className="h-12 w-px shrink-0 bg-[#17376f]/35 sm:h-14" />
-          <span className="min-w-0 leading-tight">
-            <span className="block text-xs font-extrabold tracking-tight text-[#102653] sm:text-xl">Kabupaten <span className="text-blue-600">Kediri</span></span>
-            <span className="mt-1 block text-[10px] font-medium text-slate-500 sm:text-base">Pemerintah Kabupaten Kediri</span>
-          </span>
-        </Link>
-        <Link to="/" className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-blue-100 bg-white px-3 py-2.5 text-xs font-bold text-[#102653] shadow-[0_5px_18px_rgba(20,74,160,0.10)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:gap-2.5 sm:px-5 sm:py-3 sm:text-sm">
-          <ArrowLeft className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
-          <span>Kembali</span>
-        </Link>
-      </header>
-
-      <main className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-5 pb-10 pt-8 sm:px-8 sm:pt-10 lg:pt-12">
+      <main className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-5 pb-10 pt-24 sm:px-8 sm:pt-28 lg:pt-12">
         <section className="relative z-10 pb-28 pt-2 sm:pb-32 sm:pt-4 lg:pb-36">
           <div className="mb-5 h-2 w-16 rounded-full bg-blue-600 sm:mb-7 sm:w-20" />
           <h1 className="max-w-3xl text-[1.7rem] font-black leading-[1.12] tracking-tight text-[#102653] sm:text-5xl lg:text-[3.25rem]">
@@ -230,28 +217,7 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_62%_68%,rgba(59,130,246,0.13),transparent_39%),radial-gradient(ellipse_at_52%_39%,rgba(191,219,254,0.23),transparent_32%)]" />
         <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-[18%] h-[42rem] w-[42rem] -translate-x-1/2 rounded-full border border-blue-200/60" />
 
-        <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-6 px-8 py-4">
-          <Link to="/" className="flex shrink-0 items-center gap-3 rounded-xl" aria-label="Beranda Kabupaten Kediri">
-            <img src="/images/logo-kediri.png" alt="Lambang Kabupaten Kediri" className="h-10 w-10 object-contain" />
-            <span className="h-10 w-px bg-slate-300" />
-            <span className="leading-tight">
-              <span className="block text-sm font-extrabold text-slate-900">Kabupaten <span className="text-blue-600">Kediri</span></span>
-              <span className="mt-1 block text-[11px] font-medium text-slate-500">Pemerintah Kabupaten Kediri</span>
-            </span>
-          </Link>
-          <nav aria-label="Navigasi utama" className="flex items-center gap-1 rounded-full border border-slate-200/80 bg-white/90 p-1 shadow-[0_2px_6px_rgba(15,35,75,0.06)]">
-            <Link to="/" className="rounded-full px-3.5 py-2 text-[11px] font-bold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700">Beranda</Link>
-            <Link to="/layanan-surat" className="rounded-full px-3.5 py-2 text-[11px] font-bold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700">Layanan Surat</Link>
-            <Link to="/transparansi" className="rounded-full px-3.5 py-2 text-[11px] font-bold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700">Transparansi</Link>
-            <Link to="/berita" className="rounded-full px-3.5 py-2 text-[11px] font-bold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700">Warta</Link>
-            <Link to="/profil" className="rounded-full px-3.5 py-2 text-[11px] font-bold text-slate-700 transition hover:bg-blue-50 hover:text-blue-700">Profil Desa</Link>
-          </nav>
-          <Link to="/" className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-2 text-[11px] font-semibold text-slate-700 shadow-sm transition hover:border-blue-200 hover:text-blue-700">
-            <ArrowLeft className="h-3.5 w-3.5" /> Kembali ke Beranda
-          </Link>
-        </header>
-
-        <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 items-center justify-center px-8 py-10">
+        <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-1 items-center justify-center px-8 pb-10 pt-28">
           <div className="grid min-h-[38rem] w-full max-w-[60rem] grid-cols-[0.96fr_1.04fr] items-center gap-8 overflow-hidden rounded-[2.25rem] border border-blue-100 bg-[linear-gradient(135deg,rgba(255,255,255,0.97)_28%,rgba(242,247,255,0.95)_100%)] px-10 py-10 shadow-[0_30px_90px_rgba(34,76,139,0.10)] xl:px-11">
             <div className="relative z-10">{renderLoginCard('desktop')}</div>
 
