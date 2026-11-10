@@ -27,6 +27,7 @@ export const PublicNavbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
+  const navbarRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,15 +37,43 @@ export const PublicNavbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdown on click outside
+  // Close mobile menu & profile dropdown on click/tap outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      const target = event.target as Node;
+      if (navbarRef.current && !navbarRef.current.contains(target)) {
+        setMobileMenuOpen(false);
         setProfileDropdownOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    if (mobileMenuOpen || profileDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [mobileMenuOpen, profileDropdownOpen]);
+
+  // Close mobile menu & dropdown on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+    setProfileDropdownOpen(false);
+  }, [location.pathname]);
+
+  // Close on ESC key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setProfileDropdownOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const preLoginLinks: NavItem[] = [
@@ -81,12 +110,25 @@ export const PublicNavbar: React.FC = () => {
   const displayName = user?.warga_profile?.nama_lengkap || user?.name || user?.username || 'Warga';
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 select-none pt-2 sm:pt-3 pb-2 px-3 sm:px-6 lg:px-8 pointer-events-none">
-      <div className={`max-w-7xl mx-auto rounded-4xl transition-all duration-300 pointer-events-auto ${
-        isScrolled 
-          ? 'bg-white/95 backdrop-blur-xl border-sky-200/90 shadow-lg shadow-sky-950/8 py-2 px-4 sm:px-6' 
-          : 'bg-white/92 backdrop-blur-lg border-slate-200/80 shadow-md shadow-slate-900/5 py-2 sm:py-2.5 px-4 sm:px-6'
-      }`}>
+    <>
+      {/* Backdrop for auto-close when clicking outside mobile menu */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-slate-950/20 backdrop-blur-[2px] lg:hidden animate-fade-in pointer-events-auto"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
+      <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 select-none pt-2 sm:pt-3 pb-2 px-3 sm:px-6 lg:px-8 pointer-events-none">
+        <div 
+          ref={navbarRef}
+          className={`max-w-7xl mx-auto rounded-4xl transition-all duration-300 pointer-events-auto ${
+            isScrolled 
+              ? 'bg-white/95 backdrop-blur-xl border-sky-200/90 shadow-lg shadow-sky-950/8 py-2 px-4 sm:px-6' 
+              : 'bg-white/92 backdrop-blur-lg border-slate-200/80 shadow-md shadow-slate-900/5 py-2 sm:py-2.5 px-4 sm:px-6'
+          }`}
+        >
         <div className="grid grid-cols-2 lg:grid-cols-[auto_1fr_auto] items-center gap-2 sm:gap-4 w-full">
 
           {/* Left Brand Identity - Vertically Centered & Balanced */}
@@ -212,11 +254,17 @@ export const PublicNavbar: React.FC = () => {
             {/* Mobile Hamburger Toggle */}
             <div className="flex lg:hidden items-center ml-1">
               <button
+                type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 rounded-xl bg-sky-50 hover:bg-sky-100 border border-sky-200/70 text-sky-700"
-                aria-label="Toggle navigation menu"
+                aria-expanded={mobileMenuOpen}
+                aria-label={mobileMenuOpen ? 'Tutup navigasi' : 'Buka navigasi'}
+                className={`p-2 rounded-xl border transition-all duration-200 cursor-pointer outline-none focus:outline-none flex items-center justify-center ${
+                  mobileMenuOpen
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-600/30'
+                    : 'bg-sky-50 hover:bg-sky-100 border-sky-200/70 text-sky-700 active:scale-95'
+                }`}
               >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {mobileMenuOpen ? <X className="w-5 h-5 transition-transform duration-200 rotate-90" /> : <Menu className="w-5 h-5 transition-transform duration-200" />}
               </button>
             </div>
           </div>
@@ -280,5 +328,6 @@ export const PublicNavbar: React.FC = () => {
 
       </div>
     </header>
-  );
+  </>
+);
 };
