@@ -114,7 +114,7 @@ export const PublicNavbar: React.FC = () => {
       {/* Backdrop for auto-close when clicking outside mobile menu */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-slate-950/20 backdrop-blur-[2px] lg:hidden animate-fade-in pointer-events-auto"
+          className="fixed inset-0 z-40 bg-slate-950/20 lg:hidden animate-fade-in pointer-events-auto"
           onClick={() => setMobileMenuOpen(false)}
           aria-hidden="true"
         />
@@ -273,7 +273,7 @@ export const PublicNavbar: React.FC = () => {
 
         {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
-          <div className="lg:hidden mt-3 p-4 bg-white/95 backdrop-blur-xl rounded-3xl border border-sky-100 shadow-xl space-y-3 animate-fade-in">
+          <div className="lg:hidden mt-3 p-4 bg-white/95 rounded-3xl border border-sky-100 shadow-xl space-y-3 animate-fade-in">
             {user && (
               <div className="p-3 rounded-2xl bg-sky-50/80 border border-sky-100 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
