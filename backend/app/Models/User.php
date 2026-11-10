@@ -134,4 +134,14 @@ class User extends Authenticatable
 
         return null;
     }
+
+    public function umkms(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Umkm::class);
+    }
+
+    public function umkmReviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(UmkmReview::class);
+    }
 }

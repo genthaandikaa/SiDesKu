@@ -83,4 +83,9 @@ class Desa extends Model
     {
         return $this->hasMany(Pengumuman::class, 'desa_id');
     }
+
+    public function umkms(): HasMany
+    {
+        return $this->hasMany(Umkm::class, 'desa_id');
+    }
 }
