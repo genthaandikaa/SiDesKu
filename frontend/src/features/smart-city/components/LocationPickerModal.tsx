@@ -186,10 +186,10 @@ export const LocationPickerModal: React.FC<LocationPickerModalProps> = ({
 
       if (loc.method === 'ip') {
         setGpsNotice(
-          `GPS browser tidak aktif, lokasi otomatis disinkronkan melalui jaringan internet (${loc.city || 'Wilayah Anda'}).`
+          `Lokasi terdeteksi via jaringan internet Wi-Fi (${loc.city || 'Regional'}). IP provider internet bisa berbeda beberapa km dari rumah Anda. Silakan geser pin pada peta atau ketik nama jalan/kelurahan Anda di bawah untuk titik 100% pas!`
         );
       } else if (loc.method === 'gps') {
-        setGpsNotice('Titik GPS perangkat Anda berhasil dikunci secara akurat!');
+        setGpsNotice('Titik GPS perangkat Anda berhasil dikunci secara presisi!');
       }
     } catch (err) {
       console.warn('Location detection failed:', err);

@@ -6,37 +6,77 @@ export interface DetectedLocationResult {
   label: string;
   method: 'gps' | 'ip' | 'default';
   city?: string;
+  accuracyMeters?: number;
+  gpsErrorMessage?: string;
 }
 
 /**
  * Robust, resilient location detection for browser, desktop, and localhost environments.
- * 1. Attempts standard browser geolocation.
- * 2. If blocked by macOS/browser permissions or timeout, automatically falls back to IP Geolocation.
- * 3. Never throws a blocking error to the user.
+ * 1. Attempts High-Accuracy Browser Geolocation first (up to 10s so user can accept prompt).
+ * 2. Attempts Standard Geolocation (Wi-Fi/Cellular).
+ * 3. If blocked or unavailable, falls back to IP Geolocation.
+ * 4. Provides clear diagnostics on why IP fallback was used.
  */
 export async function detectSmartCityLocation(): Promise<DetectedLocationResult> {
-  // Step 1: Try browser geolocation with standard accuracy (avoids GPS hardware freeze on laptops)
+  let gpsDeniedReason: string | undefined;
+
+  // Step 1: Try browser geolocation with High Accuracy first
   if (typeof window !== 'undefined' && 'geolocation' in navigator) {
     try {
       const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: false,
-          timeout: 4500,
-          maximumAge: 300000
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
         });
       });
 
       const lat = Math.round(pos.coords.latitude * 10000) / 10000;
       const lng = Math.round(pos.coords.longitude * 10000) / 10000;
+      const acc = Math.round(pos.coords.accuracy);
 
       return {
         lat,
         lng,
-        label: 'GPS Perangkat Terdeteksi',
+        label: `GPS Perangkat Akurat (±${acc}m)`,
+        accuracyMeters: acc,
         method: 'gps'
       };
-    } catch (browserErr) {
-      console.warn('Browser GPS permission/timeout, falling back to IP Geolocation:', browserErr);
+    } catch (err1: any) {
+      console.warn('High accuracy GPS failed or timed out, trying standard accuracy:', err1);
+      if (err1?.code === 1) {
+        gpsDeniedReason = 'Izin akses lokasi ditolak di browser/macOS Anda.';
+      }
+
+      // Step 1b: Try standard accuracy if high-accuracy timed out
+      if (err1?.code !== 1) {
+        try {
+          const pos2 = await new Promise<GeolocationPosition>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: false,
+              timeout: 6000,
+              maximumAge: 60000
+            });
+          });
+
+          const lat = Math.round(pos2.coords.latitude * 10000) / 10000;
+          const lng = Math.round(pos2.coords.longitude * 10000) / 10000;
+          const acc = Math.round(pos2.coords.accuracy);
+
+          return {
+            lat,
+            lng,
+            label: `GPS Jaringan (±${acc}m)`,
+            accuracyMeters: acc,
+            method: 'gps'
+          };
+        } catch (err2: any) {
+          console.warn('Standard geolocation also failed:', err2);
+          if (err2?.code === 1) {
+            gpsDeniedReason = 'Izin akses lokasi ditolak di browser/macOS Anda.';
+          }
+        }
+      }
     }
   }
 
@@ -62,7 +102,8 @@ export async function detectSmartCityLocation(): Promise<DetectedLocationResult>
           lng,
           label: `Lokasi Jaringan (${cityName})`,
           city: cityName,
-          method: 'ip'
+          method: 'ip',
+          gpsErrorMessage: gpsDeniedReason
         };
       }
     }
@@ -76,7 +117,8 @@ export async function detectSmartCityLocation(): Promise<DetectedLocationResult>
     lng: KEDIRI_DEFAULT_COORDS.lng,
     label: 'Balai Kota / Pusat Kediri',
     city: 'Kediri',
-    method: 'default'
+    method: 'default',
+    gpsErrorMessage: gpsDeniedReason
   };
 }
 
@@ -94,7 +136,7 @@ export async function geocodeAddressQuery(
     const timeoutId = setTimeout(() => controller.abort(), 5000);
 
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-      clean + ', Indonesia'
+      clean + ', Jawa Timur, Indonesia'
     )}&limit=1`;
 
     const res = await fetch(url, {

@@ -275,10 +275,11 @@ export const UmkmDetailPage: React.FC = () => {
   const distanceKm = calculateDistanceKm(userLocation.lat, userLocation.lng, currentItem.lat, currentItem.lng);
   const distLabel = formatDistance(distanceKm);
 
-  // Price calculations for Food
+  // Price calculations for Food (Ongkir ditentukan oleh Penjual)
   const extraChickenPrice = orderPilihanAyam.includes('Ayam Kampung') ? 7000 : 0;
   const foodBasePrice = currentItem.harga + extraChickenPrice;
-  const foodDeliveryFee = orderDeliveryType === 'penjual' ? 5000 : 0;
+  const sellerOngkir = Math.max(0, Number(currentItem.ongkir ?? 0));
+  const foodDeliveryFee = orderDeliveryType === 'penjual' ? sellerOngkir : 0;
   const totalFoodPrice = foodBasePrice * orderQty + foodDeliveryFee;
 
   // Price calculations for Jasa
@@ -334,7 +335,7 @@ export const UmkmDetailPage: React.FC = () => {
         (currentItem.pilihanAyam ? `• *Pilihan Potongan:* ${orderPilihanAyam}\n` : '') +
         (currentItem.pilihanSambal ? `• *Pilihan Sambal:* ${orderPilihanSambal}\n` : '') +
         `• *Jumlah:* ${orderQty} porsi / unit\n` +
-        `• *Pengantaran:* ${orderDeliveryType === 'penjual' ? 'Diantar Langsung oleh Penjual (+Rp 5.000)' : 'Ambil Sendiri di Lapak Penjual (Gratis)'}\n` +
+        `• *Pengantaran:* ${orderDeliveryType === 'penjual' ? (sellerOngkir === 0 ? 'Diantar Langsung oleh Penjual (Gratis Ongkir / Rp 0)' : `Diantar Langsung oleh Penjual (+Rp ${sellerOngkir.toLocaleString('id-ID')})`) : 'Ambil Sendiri di Lapak Penjual (Gratis)'}\n` +
         `• *Metode Bayar:* ${checkoutPaymentMethod === 'qris' ? 'QRIS Langsung Toko (Lunas via Transfer)' : 'Tunai / Bayar di Tempat (COD Mandiri)'}\n` +
         `• *Total Tagihan:* Rp ${totalFoodPrice.toLocaleString('id-ID')}\n\n` +
         `📍 *DATA PEMESAN & ALAMAT PENGANTARAN*\n` +
@@ -842,9 +843,26 @@ export const UmkmDetailPage: React.FC = () => {
                         onChange={() => setOrderDeliveryType('penjual')}
                         className="w-4 h-4 text-blue-600"
                       />
-                      <span>Diantar Langsung oleh Penjual (COD Mandiri)</span>
+                      <div>
+                        <span className="block font-bold">Diantar Langsung oleh Penjual (COD Mandiri)</span>
+                        <span className="block text-[10px] text-slate-500 font-normal mt-0.5">
+                          {sellerOngkir === 0
+                            ? '✨ Penjual menggratiskan ongkir untuk pesanan ini'
+                            : `* Ongkir Rp ${sellerOngkir.toLocaleString('id-ID')} diatur langsung oleh penjual`}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-blue-700 font-bold">Rp 5.000</span>
+                    <div>
+                      {sellerOngkir === 0 ? (
+                        <span className="text-emerald-700 font-extrabold uppercase text-[10px] bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
+                          GRATIS ONGKIR
+                        </span>
+                      ) : (
+                        <span className="text-blue-700 font-bold text-xs">
+                          Rp {sellerOngkir.toLocaleString('id-ID')}
+                        </span>
+                      )}
+                    </div>
                   </label>
 
                   <label
@@ -862,9 +880,16 @@ export const UmkmDetailPage: React.FC = () => {
                         onChange={() => setOrderDeliveryType('ambil')}
                         className="w-4 h-4 text-blue-600"
                       />
-                      <span>Ambil Sendiri di Lapak / Warung Penjual</span>
+                      <div>
+                        <span className="block font-bold">Ambil Sendiri di Lapak / Warung Penjual</span>
+                        <span className="block text-[10px] text-slate-500 font-normal mt-0.5">
+                          Ambil langsung ke alamat penjual (bebas biaya)
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-emerald-700 font-extrabold uppercase text-[10px]">GRATIS</span>
+                    <span className="text-emerald-700 font-extrabold uppercase text-[10px] bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                      GRATIS
+                    </span>
                   </label>
                 </div>
 
@@ -875,7 +900,11 @@ export const UmkmDetailPage: React.FC = () => {
                     <div>
                       <span className="text-2xl font-black text-blue-700">Rp {totalFoodPrice.toLocaleString('id-ID')}</span>
                       {orderDeliveryType === 'penjual' && (
-                        <span className="text-[10px] text-slate-400 block text-right">(termasuk antar penjual Rp 5.000)</span>
+                        <span className="text-[10px] text-slate-500 block text-right font-medium">
+                          {sellerOngkir === 0
+                            ? '(Gratis ongkir langsung diantar oleh penjual)'
+                            : `(termasuk ongkir penjual Rp ${sellerOngkir.toLocaleString('id-ID')})`}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -1303,6 +1332,16 @@ export const UmkmDetailPage: React.FC = () => {
                         : orderDeliveryType === 'penjual'
                         ? 'Diantar Penjual (COD Mandiri)'
                         : 'Ambil Sendiri di Lapak'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-slate-400 block text-[10px]">Ongkir Penjual:</span>
+                    <span className="font-semibold text-slate-800">
+                      {currentItem.isJasa
+                        ? 'Gratis Kunjungan'
+                        : orderDeliveryType === 'penjual'
+                        ? (sellerOngkir === 0 ? 'Gratis (Rp 0)' : `Rp ${sellerOngkir.toLocaleString('id-ID')}`)
+                        : 'Gratis (Ambil Sendiri)'}
                     </span>
                   </div>
                   <div>

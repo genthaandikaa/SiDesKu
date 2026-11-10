@@ -9,6 +9,7 @@ export interface UmkmItem {
   kategori: 'Kuliner & Kudapan' | 'Bahan Pokok & Sembako' | 'Kriya & Kerajinan' | 'Jasa Panggilan' | 'Fashion & Batik' | string;
   badgeTag?: string; // e.g. 'SIAP ANTAR (COD)', 'KEBUTUHAN POKOK', 'KRIYA WARGA', 'JASA KILAT', 'PRODUKSI SENDIRI', 'KUDAPAN HANGAT'
   harga: number;
+  ongkir?: number;
   satuan?: string;
   deskripsi: string;
   fotoUrl: string;

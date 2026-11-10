@@ -103,6 +103,7 @@ export const UmkmPage: React.FC = () => {
   const [uploadNama, setUploadNama] = useState('');
   const [uploadKategori, setUploadKategori] = useState('Kuliner & Kudapan');
   const [uploadHarga, setUploadHarga] = useState<number>(25000);
+  const [uploadOngkir, setUploadOngkir] = useState<number>(0);
   const [uploadSatuan, setUploadSatuan] = useState('Porsi');
   const [uploadDeskripsi, setUploadDeskripsi] = useState('');
   const [uploadFotoUrl, setUploadFotoUrl] = useState('');
@@ -289,6 +290,7 @@ export const UmkmPage: React.FC = () => {
       kategori: uploadKategori,
       badgeTag: 'PRODUKSI SENDIRI',
       harga: Number(uploadHarga) || 25000,
+      ongkir: Number(uploadOngkir) || 0,
       satuan: uploadSatuan || 'Porsi',
       deskripsi: uploadDeskripsi.trim() || 'Produk segar olahan warga lokal tanpa bahan pengawet. Pengantaran langsung oleh penjual.',
       fotoUrl: uploadFotoUrl.trim() || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
@@ -811,6 +813,17 @@ export const UmkmPage: React.FC = () => {
                             Diantar Langsung Penjual (COD)
                           </span>
                         )}
+                        {!item.isJasa && (
+                          Number(item.ongkir ?? 0) === 0 ? (
+                            <span className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-700 font-extrabold text-[10px]">
+                              🛵 Gratis Ongkir
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded-md bg-slate-100 border border-slate-200 text-slate-700 font-bold text-[10px]">
+                              🛵 Ongkir Rp {Number(item.ongkir).toLocaleString('id-ID')}
+                            </span>
+                          )
+                        )}
                         {item.metodePembayaran?.qris && (
                           <span className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-100 text-emerald-700 font-bold text-[10px]">
                             QRIS Penjual Langsung
@@ -1177,6 +1190,73 @@ export const UmkmPage: React.FC = () => {
                           className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-bold outline-none"
                         />
                       </div>
+                    </div>
+
+                    {/* Biaya Pengantaran / Ongkir Ditentukan Penjual */}
+                    <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-slate-700 block">
+                          BIAYA ONGKIR PENGANTARAN (DITENTUKAN OLEH ANDA SEBAGAI PENJUAL)
+                        </label>
+                        <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
+                          Atur Sendiri
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                        <div className="relative flex-1">
+                          <span className="absolute left-3.5 top-2.5 text-xs font-bold text-slate-400">Rp</span>
+                          <input
+                            type="number"
+                            min={0}
+                            step={1000}
+                            value={uploadOngkir}
+                            onChange={(e) => setUploadOngkir(Number(e.target.value) || 0)}
+                            className="w-full pl-9 pr-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-black text-slate-900 outline-none focus:bg-white focus:border-blue-500"
+                            placeholder="0"
+                          />
+                        </div>
+
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <button
+                            type="button"
+                            onClick={() => setUploadOngkir(0)}
+                            className={`px-3 py-2 text-[11px] font-bold rounded-xl border transition-all cursor-pointer ${
+                              uploadOngkir === 0
+                                ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                            }`}
+                          >
+                            Gratis (Rp 0)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setUploadOngkir(2000)}
+                            className={`px-3 py-2 text-[11px] font-bold rounded-xl border transition-all cursor-pointer ${
+                              uploadOngkir === 2000
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                            }`}
+                          >
+                            Rp 2.000
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setUploadOngkir(5000)}
+                            className={`px-3 py-2 text-[11px] font-bold rounded-xl border transition-all cursor-pointer ${
+                              uploadOngkir === 5000
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                            }`}
+                          >
+                            Rp 5.000
+                          </button>
+                        </div>
+                      </div>
+
+                      <p className="text-[10px] text-slate-500">
+                        * Penjual bebas menggratiskan ongkir (Rp 0) untuk pengantaran tetangga dekat, atau menetapkan tarif pengantaran sendiri.
+                      </p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">

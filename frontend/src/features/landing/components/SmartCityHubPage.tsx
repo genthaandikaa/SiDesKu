@@ -57,6 +57,7 @@ export interface UmkmItem {
   nama: string;
   kategori: 'Kuliner' | 'Pertanian' | 'Kerajinan' | 'Jasa & Servis' | 'Sembako';
   harga: number;
+  ongkir?: number;
   tokoNama: string;
   alamat: string;
   jarakMeter: number; // Jarak real dalam meter

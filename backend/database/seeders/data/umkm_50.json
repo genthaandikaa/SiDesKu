@@ -33,7 +33,7 @@
       "status_toko": "Buka",
       "rating": 4.9,
       "reviews_count": 42,
-      "terjual_text": "120+ terjual \u2022 Buka Hari Ini",
+      "terjual_text": "120+ terjual • Buka Hari Ini",
       "terjual": 120,
       "buka_jam_text": "Buka Hari Ini (08.00 - 20.00)",
       "is_jasa": false,
@@ -61,7 +61,7 @@
         },
         {
           "id": "korek",
-          "nama": "Bawang Korek \ud83d\udd25"
+          "nama": "Bawang Korek 🔥"
         },
         {
           "id": "tomat",
@@ -69,7 +69,8 @@
         }
       ],
       "keterangan_halal": "ID02170000189231",
-      "keterangan_higienis": "Lolos Uji Puskesmas Sukamaju"
+      "keterangan_higienis": "Lolos Uji Puskesmas Sukamaju",
+      "ongkir": 0
     },
     {
       "id": "umkm-2",
@@ -103,7 +104,7 @@
       "status_toko": "Buka",
       "rating": 5.0,
       "reviews_count": 89,
-      "terjual_text": "340+ terjual \u2022 Laris Manis",
+      "terjual_text": "340+ terjual • Laris Manis",
       "terjual": 340,
       "buka_jam_text": "Buka Pagi & Malam (06.00 - 22.00)",
       "is_jasa": false,
@@ -122,7 +123,8 @@
         }
       ],
       "keterangan_halal": "ID02170000441290",
-      "keterangan_higienis": "Higienis & Segar Setiap Hari"
+      "keterangan_higienis": "Higienis & Segar Setiap Hari",
+      "ongkir": 3000
     },
     {
       "id": "umkm-3",
@@ -161,7 +163,8 @@
       "buka_jam_text": "Buka 07.00 - 19.00 WIB",
       "is_jasa": false,
       "keterangan_halal": "ID02170000311284",
-      "keterangan_higienis": "Sertifikasi Dinkes Kota Kediri"
+      "keterangan_higienis": "Sertifikasi Dinkes Kota Kediri",
+      "ongkir": 0
     },
     {
       "id": "umkm-4",
@@ -195,10 +198,11 @@
       "status_toko": "Buka",
       "rating": 4.8,
       "reviews_count": 31,
-      "terjual_text": "95+ terjual \u2022 Goreng Dadakan",
+      "terjual_text": "95+ terjual • Goreng Dadakan",
       "terjual": 95,
       "buka_jam_text": "Buka Siang - Malam (13.00 - 21.00)",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-5",
@@ -235,7 +239,8 @@
       "terjual_text": "180+ porsi terjual",
       "terjual": 180,
       "buka_jam_text": "Buka 07.00 - 21.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 2000
     },
     {
       "id": "umkm-6",
@@ -272,7 +277,8 @@
       "terjual_text": "75+ porsi terjual",
       "terjual": 75,
       "buka_jam_text": "Buka 10.00 - 21.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-7",
@@ -309,7 +315,8 @@
       "terjual_text": "160+ lonjor terjual",
       "terjual": 160,
       "buka_jam_text": "Buka 08.00 - 18.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-8",
@@ -346,7 +353,8 @@
       "terjual_text": "115+ mangkok terjual",
       "terjual": 115,
       "buka_jam_text": "Buka 11.00 - 21.30 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 2000
     },
     {
       "id": "umkm-9",
@@ -380,10 +388,11 @@
       "status_toko": "Buka",
       "rating": 4.9,
       "reviews_count": 34,
-      "terjual_text": "140+ box \u2022 Goreng Dadakan",
+      "terjual_text": "140+ box • Goreng Dadakan",
       "terjual": 140,
       "buka_jam_text": "Buka 07.00 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-10",
@@ -420,7 +429,8 @@
       "terjual_text": "300+ batang terjual",
       "terjual": 300,
       "buka_jam_text": "Buka 09.00 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-11",
@@ -457,7 +467,8 @@
       "terjual_text": "240+ gelas terjual",
       "terjual": 240,
       "buka_jam_text": "Buka 09.30 - 16.30 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 2000
     },
     {
       "id": "umkm-12",
@@ -494,7 +505,8 @@
       "terjual_text": "88+ porsi terjual",
       "terjual": 88,
       "buka_jam_text": "Buka Sore - Tengah Malam (17.00 - 00.00)",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-13",
@@ -531,7 +543,8 @@
       "terjual_text": "110+ loyang terjual",
       "terjual": 110,
       "buka_jam_text": "Buka 16.00 - 22.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-14",
@@ -568,7 +581,8 @@
       "terjual_text": "130+ porsi terjual",
       "terjual": 130,
       "buka_jam_text": "Buka 06.00 - 14.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 2000
     },
     {
       "id": "umkm-15",
@@ -605,7 +619,8 @@
       "terjual_text": "90+ box terjual",
       "terjual": 90,
       "buka_jam_text": "Buka 13.00 - 21.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-16",
@@ -639,10 +654,11 @@
       "status_toko": "Buka",
       "rating": 4.8,
       "reviews_count": 18,
-      "terjual_text": "65+ terjual \u2022 Stok Banyak",
+      "terjual_text": "65+ terjual • Stok Banyak",
       "terjual": 65,
       "buka_jam_text": "Stok Banyak Ready",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-17",
@@ -679,7 +695,8 @@
       "terjual_text": "80+ pouch terjual",
       "terjual": 80,
       "buka_jam_text": "Buka 07.00 - 21.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     },
     {
       "id": "umkm-18",
@@ -716,7 +733,8 @@
       "terjual_text": "140+ kg terjual",
       "terjual": 140,
       "buka_jam_text": "Buka 06.00 - 20.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-19",
@@ -753,7 +771,8 @@
       "terjual_text": "55+ kg terjual",
       "terjual": 55,
       "buka_jam_text": "Buka 06.30 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-20",
@@ -790,7 +809,8 @@
       "terjual_text": "70+ kantong terjual",
       "terjual": 70,
       "buka_jam_text": "Buka 05.30 - 16.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     },
     {
       "id": "umkm-21",
@@ -827,7 +847,8 @@
       "terjual_text": "45+ kantong terjual",
       "terjual": 45,
       "buka_jam_text": "Buka 06.00 - 15.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-22",
@@ -864,7 +885,8 @@
       "terjual_text": "90+ pack terjual",
       "terjual": 90,
       "buka_jam_text": "Buka 06.00 - 18.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-23",
@@ -901,7 +923,8 @@
       "terjual_text": "60+ pack terjual",
       "terjual": 60,
       "buka_jam_text": "Buka 08.00 - 20.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     },
     {
       "id": "umkm-24",
@@ -938,7 +961,8 @@
       "terjual_text": "150+ tabung terjual",
       "terjual": 150,
       "buka_jam_text": "Buka 07.00 - 18.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-25",
@@ -975,7 +999,8 @@
       "terjual_text": "40+ paket terjual",
       "terjual": 40,
       "buka_jam_text": "Buka 08.00 - 20.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-26",
@@ -1009,10 +1034,11 @@
       "status_toko": "Buka",
       "rating": 5.0,
       "reviews_count": 24,
-      "terjual_text": "34 terjual \u2022 Handmade",
+      "terjual_text": "34 terjual • Handmade",
       "terjual": 34,
       "buka_jam_text": "Pre-order & Ready Stock",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     },
     {
       "id": "umkm-27",
@@ -1049,7 +1075,8 @@
       "terjual_text": "78 terjual",
       "terjual": 78,
       "buka_jam_text": "Buka 08.00 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 5000
     },
     {
       "id": "umkm-28",
@@ -1086,7 +1113,8 @@
       "terjual_text": "22 unit terjual",
       "terjual": 22,
       "buka_jam_text": "Buka 09.00 - 18.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-29",
@@ -1123,7 +1151,8 @@
       "terjual_text": "54 terjual",
       "terjual": 54,
       "buka_jam_text": "Buka 08.30 - 17.30 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     },
     {
       "id": "umkm-30",
@@ -1160,7 +1189,8 @@
       "terjual_text": "60 lusin terjual",
       "terjual": 60,
       "buka_jam_text": "Buka 08.00 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 5000
     },
     {
       "id": "umkm-31",
@@ -1197,7 +1227,8 @@
       "terjual_text": "45 unit terjual",
       "terjual": 45,
       "buka_jam_text": "Buka 09.00 - 20.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-32",
@@ -1234,7 +1265,8 @@
       "terjual_text": "38 pcs terjual",
       "terjual": 38,
       "buka_jam_text": "Buka 08.00 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     },
     {
       "id": "umkm-33",
@@ -1271,7 +1303,8 @@
       "terjual_text": "29 unit terjual",
       "terjual": 29,
       "buka_jam_text": "Buka 09.00 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 5000
     },
     {
       "id": "umkm-34",
@@ -1308,7 +1341,8 @@
       "terjual_text": "110 pcs terjual",
       "terjual": 110,
       "buka_jam_text": "Buka 09.00 - 21.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-35",
@@ -1342,7 +1376,7 @@
       "status_toko": "Buka",
       "rating": 4.9,
       "reviews_count": 112,
-      "terjual_text": "112+ panggilan \u2022 Garansi 30 Hari",
+      "terjual_text": "112+ panggilan • Garansi 30 Hari",
       "terjual": 112,
       "buka_jam_text": "Siap Datang ke Rumah (08.00 - 17.00)",
       "is_jasa": true,
@@ -1367,7 +1401,8 @@
           "nama": "Perbaikan Kelistrikan / Bocor Air",
           "tarif": 50000
         }
-      ]
+      ],
+      "ongkir": 0
     },
     {
       "id": "umkm-36",
@@ -1404,7 +1439,8 @@
       "terjual_text": "65+ panggilan selesai",
       "terjual": 65,
       "buka_jam_text": "Siaga 07.00 - 20.00 WIB",
-      "is_jasa": true
+      "is_jasa": true,
+      "ongkir": 0
     },
     {
       "id": "umkm-37",
@@ -1441,7 +1477,8 @@
       "terjual_text": "85+ sesi selesai",
       "terjual": 85,
       "buka_jam_text": "Panggilan 08.00 - 21.00 WIB",
-      "is_jasa": true
+      "is_jasa": true,
+      "ongkir": 0
     },
     {
       "id": "umkm-38",
@@ -1478,7 +1515,8 @@
       "terjual_text": "55+ perbaikan selesai",
       "terjual": 55,
       "buka_jam_text": "Buka 08.00 - 17.30 WIB",
-      "is_jasa": true
+      "is_jasa": true,
+      "ongkir": 0
     },
     {
       "id": "umkm-39",
@@ -1515,7 +1553,8 @@
       "terjual_text": "45+ halaman rapi",
       "terjual": 45,
       "buka_jam_text": "Buka 06.30 - 16.30 WIB",
-      "is_jasa": true
+      "is_jasa": true,
+      "ongkir": 0
     },
     {
       "id": "umkm-40",
@@ -1552,7 +1591,8 @@
       "terjual_text": "98+ rumah bersih",
       "terjual": 98,
       "buka_jam_text": "Jadwal 08.00 - 16.00 WIB",
-      "is_jasa": true
+      "is_jasa": true,
+      "ongkir": 0
     },
     {
       "id": "umkm-41",
@@ -1589,7 +1629,8 @@
       "terjual_text": "50+ panggilan selesai",
       "terjual": 50,
       "buka_jam_text": "Buka 07.30 - 21.00 WIB",
-      "is_jasa": true
+      "is_jasa": true,
+      "ongkir": 0
     },
     {
       "id": "umkm-42",
@@ -1626,7 +1667,8 @@
       "terjual_text": "70+ septic tank tuntas",
       "terjual": 70,
       "buka_jam_text": "Siaga 24 Jam Panggilan",
-      "is_jasa": true
+      "is_jasa": true,
+      "ongkir": 0
     },
     {
       "id": "umkm-43",
@@ -1660,10 +1702,11 @@
       "status_toko": "Buka",
       "rating": 4.8,
       "reviews_count": 29,
-      "terjual_text": "65+ terjual \u2022 Jahitan Halus",
+      "terjual_text": "65+ terjual • Jahitan Halus",
       "terjual": 65,
       "buka_jam_text": "Buka 08.00 - 19.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-44",
@@ -1700,7 +1743,8 @@
       "terjual_text": "120 helai terjual",
       "terjual": 120,
       "buka_jam_text": "Buka 08.00 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     },
     {
       "id": "umkm-45",
@@ -1737,7 +1781,8 @@
       "terjual_text": "135 pcs terjual",
       "terjual": 135,
       "buka_jam_text": "Buka 08.00 - 20.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 5000
     },
     {
       "id": "umkm-46",
@@ -1774,7 +1819,8 @@
       "terjual_text": "40 pcs terjual",
       "terjual": 40,
       "buka_jam_text": "Buka 09.00 - 18.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-47",
@@ -1811,7 +1857,8 @@
       "terjual_text": "160 pcs terjual",
       "terjual": 160,
       "buka_jam_text": "Buka 10.00 - 21.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     },
     {
       "id": "umkm-48",
@@ -1848,7 +1895,8 @@
       "terjual_text": "95 helai terjual",
       "terjual": 95,
       "buka_jam_text": "Buka 08.30 - 20.30 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 5000
     },
     {
       "id": "umkm-49",
@@ -1885,7 +1933,8 @@
       "terjual_text": "72 pcs terjual",
       "terjual": 72,
       "buka_jam_text": "Buka 08.00 - 17.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 0
     },
     {
       "id": "umkm-50",
@@ -1922,7 +1971,8 @@
       "terjual_text": "88 pasang terjual",
       "terjual": 88,
       "buka_jam_text": "Buka 09.00 - 20.00 WIB",
-      "is_jasa": false
+      "is_jasa": false,
+      "ongkir": 3000
     }
   ],
   "reviews": [
