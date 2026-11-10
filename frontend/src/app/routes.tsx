@@ -12,6 +12,7 @@ const BansosPage = React.lazy(() => import('@/features/landing/components/Bansos
 const BeritaPage = React.lazy(() => import('@/features/landing/components/BeritaPage').then(m => ({ default: m.BeritaPage })));
 const SmartCityHubPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.SmartCityHubPage })));
 const UmkmPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.UmkmPage })));
+const UmkmDetailPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.UmkmDetailPage })));
 const KosPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.KosPage })));
 const LokerPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.LokerPage })));
 const LoginPage = React.lazy(() => import('@/features/auth/components/LoginPage').then(m => ({ default: m.LoginPage })));
@@ -96,11 +97,13 @@ export const AppRoutes: React.FC = () => {
           {/* Smart City Pages (Dedicated URLs & Pages) */}
           <Route path="/smart-city" element={<SmartCityHubPage />} />
           <Route path="/smart-city/umkm" element={<UmkmPage />} />
+          <Route path="/smart-city/umkm/:id" element={<UmkmDetailPage />} />
           <Route path="/smart-city/kos" element={<KosPage />} />
           <Route path="/smart-city/loker" element={<LokerPage />} />
 
           {/* Convenient Direct Aliases */}
           <Route path="/umkm" element={<UmkmPage />} />
+          <Route path="/umkm/:id" element={<UmkmDetailPage />} />
           <Route path="/pasar" element={<UmkmPage />} />
           <Route path="/kos" element={<KosPage />} />
           <Route path="/hunian" element={<KosPage />} />
