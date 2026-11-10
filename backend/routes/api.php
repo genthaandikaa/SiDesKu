@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\Kades\KadesKeputusanController;
 use App\Http\Controllers\Api\PengumumanController;
 use App\Http\Controllers\Api\Public\PublicInfoController;
 use App\Http\Controllers\Api\Public\PublicSuratController;
+use App\Http\Controllers\Api\Public\PublicUmkmController;
 use App\Http\Controllers\Api\Rt\KasRtController;
 use App\Http\Controllers\Api\Rt\RtPengaduanController;
 use App\Http\Controllers\Api\Rt\RtSuratController;
@@ -54,6 +55,11 @@ Route::post('/chat/support/initiate', [\App\Http\Controllers\Api\ChatController:
 Route::get('/chat/support/{ticket}/messages', [\App\Http\Controllers\Api\ChatController::class, 'getGuestSupportMessages']);
 Route::post('/chat/support/{ticket}/messages', [\App\Http\Controllers\Api\ChatController::class, 'sendGuestSupportMessage']);
 
+// Smart City: Hyperlocal UMKM Pasar Digital & Ulasan Warga (Publik)
+Route::get('/public/umkms', [PublicUmkmController::class, 'index']);
+Route::get('/public/umkms/{id}', [PublicUmkmController::class, 'show']);
+Route::get('/public/umkms/{id}/reviews', [PublicUmkmController::class, 'reviews']);
+
 // Dokumen Kependudukan (UU PDP)
 Route::get('/warga/dokumen/file/{userId}/{filename}', [\App\Http\Controllers\Api\Warga\WargaDokumenController::class, 'serveFile'])->name('api.warga.dokumen.file');
 
@@ -80,6 +86,10 @@ Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
     Route::match(['put', 'post'], '/auth/profile', [AuthController::class, 'updateProfile']);
     Route::match(['put', 'post'], '/auth/password', [AuthController::class, 'updatePassword']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+
+    // Smart City UMKM & Review (Khusus Warga Terdaftar)
+    Route::post('/umkms', [PublicUmkmController::class, 'store']);
+    Route::post('/umkms/{id}/reviews', [PublicUmkmController::class, 'storeReview']);
     Route::get('/notifikasi-logs', [PublicInfoController::class, 'getNotifikasiLogs']);
     Route::get('/pengumumans', [PengumumanController::class, 'index']);
     Route::get('/pengumumans/{id}', [PengumumanController::class, 'show']);

@@ -9,55 +9,84 @@ import {
   Phone,
   QrCode,
   Truck,
-  ExternalLink,
   ChevronRight,
-  ArrowLeft,
-  Navigation,
+  ChevronDown,
   Store,
-  PlusCircle,
   X,
-  Share2,
-  Clock,
   Star,
-  Check,
   ShieldCheck,
-  Award,
-  Wrench,
-  Info,
-  Calendar,
-  ThumbsUp,
-  Percent,
-  Users,
+  ShieldAlert,
+  LogIn,
+  UserPlus,
   BadgeCheck,
+  Info,
+  SlidersHorizontal,
+  RotateCcw,
+  Navigation,
+  Compass,
+  Check,
   Image as ImageIcon
 } from 'lucide-react';
+import { useAuth } from '@/shared/context/AuthContext';
+import { Pagination } from '@/shared/components/Pagination';
 import { UmkmItem } from '../types';
 import {
+  smartCityApi
+} from '../api/smartCityApi';
+import {
   getStoredUmkmList,
-  saveStoredUmkmItem,
   KEDIRI_DEFAULT_COORDS,
   calculateDistanceKm,
   formatDistance
 } from '../smartCityStorage';
+import { LocationPickerModal } from './LocationPickerModal';
 
 export const UmkmPage: React.FC = () => {
+  const { user } = useAuth();
+
   const [umkmList, setUmkmList] = useState<UmkmItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Search & Filter State (All Dropdowns)
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
-  const [distanceFilter, setDistanceFilter] = useState<'all' | '1' | '3' | '5' | '10'>('all');
+  const [distanceMode, setDistanceMode] = useState<string>('all'); // 'all', '1', '3', '5', '10', 'custom'
+  const [customDistanceKm, setCustomDistanceKm] = useState<string>('2.5');
+  const [isDistanceDropdownOpen, setIsDistanceDropdownOpen] = useState(false);
   const [deliveryFilter, setDeliveryFilter] = useState<string>('all');
   const [paymentFilter, setPaymentFilter] = useState<string>('all');
-  const [minRatingFilter, setMinRatingFilter] = useState<boolean>(false);
+  const [ratingFilter, setRatingFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'distance' | 'rating' | 'price' | 'popular'>('distance');
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const PAGE_SIZE = 6;
+
   // User Geolocation State
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>(KEDIRI_DEFAULT_COORDS);
-  const [isLocating, setIsLocating] = useState(false);
-  const [locationLabel, setLocationLabel] = useState<string>('Kelurahan Sukamaju (Akurasi Tinggi)');
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>(() => {
+    try {
+      const saved = localStorage.getItem('sidesku_user_smartcity_location');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.lat && parsed?.lng) return { lat: parsed.lat, lng: parsed.lng };
+      }
+    } catch {}
+    return KEDIRI_DEFAULT_COORDS;
+  });
+  const [locationLabel, setLocationLabel] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('sidesku_user_smartcity_location');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.label) return parsed.label;
+      }
+    } catch {}
+    return 'Kelurahan Sukamaju (Akurasi Tinggi)';
+  });
 
   // Modals
-  const [selectedDetailItem, setSelectedDetailItem] = useState<UmkmItem | null>(null);
-  const [activeGalleryIndex, setActiveGalleryIndex] = useState<number>(0);
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [showAuthAlertModal, setShowAuthAlertModal] = useState(false);
   const [showStoreManagerModal, setShowStoreManagerModal] = useState(false);
   const [showQrisModal, setShowQrisModal] = useState<{
     tokoNama: string;
@@ -65,19 +94,6 @@ export const UmkmPage: React.FC = () => {
     nmid?: string;
     nominal?: number;
   } | null>(null);
-
-  // Detail Modal Interactive Order Form State
-  const [orderPilihanAyam, setOrderPilihanAyam] = useState<string>('Paha Rempah');
-  const [orderPilihanSambal, setOrderPilihanSambal] = useState<string>('Sambal Terasi');
-  const [orderQty, setOrderQty] = useState<number>(1);
-  const [orderDeliveryType, setOrderDeliveryType] = useState<'kurir' | 'ambil'>('kurir');
-  const [activeTabDetail, setActiveTabDetail] = useState<'deskripsi' | 'lokasi' | 'ulasan'>('deskripsi');
-
-  // Jasa Detail Interactive State
-  const [selectedJasaServiceId, setSelectedJasaServiceId] = useState<string>('j-1');
-  const [jasaUnitQty, setJasaUnitQty] = useState<number>(1);
-  const [jasaSesi, setJasaSesi] = useState<'pagi' | 'siang'>('pagi');
-  const [jasaPaymentMethod, setJasaPaymentMethod] = useState<'tunai' | 'qris'>('tunai');
 
   // Toko Manager Form State
   const [uploadNama, setUploadNama] = useState('');
@@ -91,57 +107,35 @@ export const UmkmPage: React.FC = () => {
   const [uploadEstimasi, setUploadEstimasi] = useState('15 - 30 Menit (Fresh Cook)');
   const [publishSuccessToast, setPublishSuccessToast] = useState(false);
 
+  // Initial Fetch & Sync from Backend API
   useEffect(() => {
-    setUmkmList(getStoredUmkmList());
-  }, []);
-
-  // Reset detail selections when item changes
-  useEffect(() => {
-    if (selectedDetailItem) {
-      setActiveGalleryIndex(0);
-      setOrderQty(1);
-      setOrderPilihanAyam('Paha Rempah');
-      setOrderPilihanSambal('Sambal Terasi');
-      setOrderDeliveryType('kurir');
-      setActiveTabDetail('deskripsi');
-      if (selectedDetailItem.isJasa && selectedDetailItem.pilihanLayananJasa?.length) {
-        setSelectedJasaServiceId(selectedDetailItem.pilihanLayananJasa[0].id);
-        setJasaUnitQty(1);
-        setJasaSesi('pagi');
-        setJasaPaymentMethod('tunai');
+    let isMounted = true;
+    const loadData = async () => {
+      setIsLoading(true);
+      const data = await smartCityApi.getUmkmList({
+        user_lat: userLocation.lat,
+        user_lng: userLocation.lng,
+      });
+      if (isMounted) {
+        setUmkmList(data);
+        setIsLoading(false);
       }
-    }
-  }, [selectedDetailItem]);
+    };
+    loadData();
+    return () => {
+      isMounted = false;
+    };
+  }, [userLocation]);
 
-  // Handle GPS detection
-  const handleDetectLocation = () => {
-    if (!navigator.geolocation) {
-      alert('Browser Anda tidak mendukung deteksi lokasi otomatis.');
-      return;
-    }
-    setIsLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setUserLocation({
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        });
-        setLocationLabel('GPS Riil Terdeteksi (Akurasi Tinggi)');
-        setIsLocating(false);
-      },
-      (err) => {
-        setIsLocating(false);
-        setLocationLabel('Kelurahan Sukamaju / Kota Kediri');
-        console.warn('Geolocation fallback:', err);
-      },
-      { timeout: 8000, enableHighAccuracy: true }
-    );
-  };
+  // Reset to first page when search/filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, distanceMode, customDistanceKm, deliveryFilter, paymentFilter, ratingFilter, sortBy]);
 
   // Filter & Sort Logic
   const filteredList = useMemo(() => {
     let result = umkmList.filter((item) => {
-      // 1. Search Query: instant fuzzy match (even single character)
+      // 1. Search Query: instant search
       const q = searchQuery.toLowerCase().trim();
       if (q) {
         const matchTitle = item.nama.toLowerCase().includes(q);
@@ -159,23 +153,33 @@ export const UmkmPage: React.FC = () => {
         return false;
       }
 
-      // 3. Distance Filter
+      // 3. Distance Filter (Dropdown & Custom Input)
       const dist = calculateDistanceKm(userLocation.lat, userLocation.lng, item.lat, item.lng);
-      if (distanceFilter === '1' && dist > 1) return false;
-      if (distanceFilter === '3' && dist > 3) return false;
-      if (distanceFilter === '5' && dist > 5) return false;
-      if (distanceFilter === '10' && dist > 10) return false;
+      let maxDistLimit: number | null = null;
+      if (distanceMode === '1') maxDistLimit = 1;
+      else if (distanceMode === '3') maxDistLimit = 3;
+      else if (distanceMode === '5') maxDistLimit = 5;
+      else if (distanceMode === '10') maxDistLimit = 10;
+      else if (distanceMode === 'custom' && customDistanceKm && !isNaN(Number(customDistanceKm))) {
+        maxDistLimit = Number(customDistanceKm);
+      }
 
-      // 4. Delivery Filter
+      if (maxDistLimit !== null && dist > maxDistLimit) {
+        return false;
+      }
+
+      // 4. Delivery Filter: Direct Seller Only
       if (deliveryFilter === 'cod' && !item.metodePembayaran?.cod) return false;
-      if (deliveryFilter === 'do' && !item.metodePembayaran?.do) return false;
+      if (deliveryFilter === 'ambil' && !item.metodePembayaran?.do) return false;
 
       // 5. Payment Filter
       if (paymentFilter === 'qris' && !item.metodePembayaran?.qris) return false;
       if (paymentFilter === 'cod' && !item.metodePembayaran?.cod) return false;
 
       // 6. Rating Filter
-      if (minRatingFilter && item.rating < 4.5) return false;
+      if (ratingFilter === '4.5' && item.rating < 4.5) return false;
+      if (ratingFilter === '4.8' && item.rating < 4.8) return false;
+      if (ratingFilter === '5.0' && item.rating < 5.0) return false;
 
       return true;
     });
@@ -192,107 +196,90 @@ export const UmkmPage: React.FC = () => {
     });
 
     return result;
-  }, [umkmList, searchQuery, selectedCategory, distanceFilter, deliveryFilter, paymentFilter, minRatingFilter, sortBy, userLocation]);
+  }, [umkmList, searchQuery, selectedCategory, distanceMode, customDistanceKm, deliveryFilter, paymentFilter, ratingFilter, sortBy, userLocation]);
+
+  // Paginated List
+  const paginatedList = useMemo(() => {
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    return filteredList.slice(startIndex, startIndex + PAGE_SIZE);
+  }, [filteredList, currentPage]);
 
   // Popular search chips
   const popularKeywords = ['Nasi Liwet', 'Beras Rojolele', 'Servis AC', 'Batik'];
 
-  // Categories list
-  const categoryPills = [
-    'Semua',
-    'Kuliner & Kudapan',
-    'Bahan Pokok & Sembako',
-    'Kriya & Kerajinan',
-    'Jasa Panggilan',
-    'Fashion & Batik'
-  ];
+  // Check if any filter is active
+  const hasActiveFilters = Boolean(
+    searchQuery ||
+    selectedCategory !== 'Semua' ||
+    distanceMode !== 'all' ||
+    deliveryFilter !== 'all' ||
+    paymentFilter !== 'all' ||
+    ratingFilter !== 'all'
+  );
 
-  // Price calculations for Detail Modal (Food)
-  const detailExtraChicken = orderPilihanAyam.includes('Ayam Kampung') ? 7000 : 0;
-  const detailItemBasePrice = selectedDetailItem ? selectedDetailItem.harga + detailExtraChicken : 0;
-  const detailDeliveryFee = orderDeliveryType === 'kurir' ? 5000 : 0;
-  const detailTotalPrice = detailItemBasePrice * orderQty + detailDeliveryFee;
-
-  // Price calculations for Jasa
-  const activeJasaService = selectedDetailItem?.pilihanLayananJasa?.find(s => s.id === selectedJasaServiceId) || selectedDetailItem?.pilihanLayananJasa?.[0];
-  const jasaTotalPrice = activeJasaService ? activeJasaService.harga * jasaUnitQty : (selectedDetailItem?.harga || 0);
-
-  // Send Order via WA
-  const handleSendWaOrder = () => {
-    if (!selectedDetailItem) return;
-    let message = '';
-    if (selectedDetailItem.isJasa) {
-      message = `Halo *${selectedDetailItem.tokoNama}*, saya ingin memesan jasa kunjungan teknisi melalui SiDesKu Smart City:\n\n` +
-        `• *Layanan:* ${activeJasaService?.nama || selectedDetailItem.nama}\n` +
-        `• *Jumlah:* ${jasaUnitQty} unit\n` +
-        `• *Jadwal Kunjungan:* Sesi ${jasaSesi === 'pagi' ? 'Pagi (09:00 - 12:00 WIB)' : 'Siang (13:00 - 16:00 WIB)'}\n` +
-        `• *Metode Bayar:* ${jasaPaymentMethod === 'tunai' ? 'Tunai / COD' : 'QRIS Mas Agus'}\n` +
-        `• *Estimasi Total:* Rp ${jasaTotalPrice.toLocaleString('id-ID')}\n\n` +
-        `Mohon konfirmasi ketersediaan jadwal. Terima kasih!`;
-    } else {
-      message = `Halo *${selectedDetailItem.tokoNama}*, saya ingin memesan dari etalase SiDesKu Smart City:\n\n` +
-        `• *Produk:* ${selectedDetailItem.nama}\n` +
-        (selectedDetailItem.pilihanAyam ? `• *Pilihan Potongan:* ${orderPilihanAyam}\n` : '') +
-        (selectedDetailItem.pilihanSambal ? `• *Pilihan Sambal:* ${orderPilihanSambal}\n` : '') +
-        `• *Jumlah:* ${orderQty} porsi / unit\n` +
-        `• *Opsi Pengiriman:* ${orderDeliveryType === 'kurir' ? 'Diantar Kurir Komunitas Warga (+Rp 5.000)' : 'Ambil Sendiri di Warung (Gratis)'}\n` +
-        `• *Total Pembayaran:* Rp ${detailTotalPrice.toLocaleString('id-ID')}\n\n` +
-        `Apakah pesanan ini bisa segera diproses?`;
-    }
-    window.open(`https://wa.me/${selectedDetailItem.waKontak}?text=${encodeURIComponent(message)}`, '_blank');
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setSelectedCategory('Semua');
+    setDistanceMode('all');
+    setCustomDistanceKm('2.5');
+    setIsDistanceDropdownOpen(false);
+    setDeliveryFilter('all');
+    setPaymentFilter('all');
+    setRatingFilter('all');
+    setSortBy('distance');
   };
 
   // Direct Quick WA Order from Grid Card
   const handleQuickWa = (item: UmkmItem) => {
     const text = encodeURIComponent(
-      `Halo *${item.tokoNama}*, saya melihat produk *"${item.nama}"* (Rp ${item.harga.toLocaleString('id-ID')}) di SiDesKu Smart City Kediri. Apakah stok masih tersedia?`
+      `Halo *${item.tokoNama}*, saya melihat produk *"${item.nama}"* (Rp ${item.harga.toLocaleString('id-ID')}) di SiDesKu Smart City Kediri. Pengiriman langsung oleh penjual ya? Apakah stok masih tersedia?`
     );
     window.open(`https://wa.me/${item.waKontak}?text=${text}`, '_blank');
   };
 
-  // Handle Publish New Product from Store Manager
-  const handlePublishProduct = (e: React.FormEvent) => {
+  // Click Handler for "Buka Toko / Upload Produk Saya"
+  const handleOpenStoreClick = () => {
+    if (!user) {
+      setShowAuthAlertModal(true);
+    } else {
+      setShowStoreManagerModal(true);
+    }
+  };
+
+  // Handle Publish New Product from Store Manager (Calls Backend API)
+  const handlePublishProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!uploadNama.trim()) {
       alert('Silakan masukkan nama produk.');
       return;
     }
-    const newItem: UmkmItem = {
-      id: `umkm-${Date.now()}`,
+
+    const newItemPayload: Partial<UmkmItem> = {
       nama: uploadNama.trim(),
-      tokoNama: 'Warung Bu Dewi Sukamaju',
+      tokoNama: user?.name ? `Usaha ${user.name}` : 'Warung Bu Dewi Sukamaju',
       kelurahan: 'Kel. Sukamaju',
       rtRw: 'RT 03 / RW 04',
       kategori: uploadKategori,
       badgeTag: 'PRODUKSI SENDIRI',
       harga: Number(uploadHarga) || 25000,
       satuan: uploadSatuan || 'Porsi',
-      deskripsi: uploadDeskripsi.trim() || 'Produk segar olahan warga lokal tanpa bahan pengawet.',
+      deskripsi: uploadDeskripsi.trim() || 'Produk segar olahan warga lokal tanpa bahan pengawet. Pengantaran langsung oleh penjual.',
       fotoUrl: uploadFotoUrl.trim() || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
-      galeri: [uploadFotoUrl.trim() || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'],
       alamat: 'Jl. Kaliurang Gg. Mawar No. 4, Kel. Sukamaju',
       lat: userLocation.lat + (Math.random() - 0.5) * 0.005,
       lng: userLocation.lng + (Math.random() - 0.5) * 0.005,
       waKontak: '6281234567801',
-      qrisUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126570014ID.LINKAJA.WWW01189360091100213192025204581253033605802ID5918WARUNG_BU_DEWI6006KEDIRI62070703A016304E1F2',
-      qrisNama: 'QRIS WARUNG BU DEWI',
-      qrisNmid: 'ID10293847281',
       metodePembayaran: {
         qris: uploadQris,
         cod: uploadCod,
         do: true,
         transfer: true
       },
-      statusToko: 'Buka',
-      rating: 5.0,
-      terjualText: 'Baru • Fresh Cook',
-      terjual: 1,
       bukaJamText: uploadEstimasi,
-      createdAt: new Date().toISOString()
     };
 
-    const updated = saveStoredUmkmItem(newItem);
-    setUmkmList(updated);
+    const saved = await smartCityApi.createUmkmProduct(newItemPayload);
+    setUmkmList(prev => [saved, ...prev.filter(p => p.id !== saved.id)]);
     setUploadNama('');
     setUploadDeskripsi('');
     setPublishSuccessToast(true);
@@ -303,24 +290,19 @@ export const UmkmPage: React.FC = () => {
     <div className="space-y-8 font-sans pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
 
       {/* =========================================================================
-          HERO BANNER (Matching Stitch Mockup 1)
+          HERO BANNER
           ========================================================================= */}
       <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-2xs relative overflow-hidden">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           
           {/* Left Title & Subtitle */}
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[11px] font-extrabold text-emerald-800">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>PASAR HYPERLOCAL WARGA • 0% KOMISI PLATFORM</span>
-            </div>
-
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
               Belanja Langsung dari Tetangga & UMKM Sekitar
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Dukung usaha mikro kota tanpa biaya perantara. Deteksi jarak real-time GPS, pembayaran QRIS langsung atau COD/DO antar mandiri.
+              Dukung usaha mikro kota tanpa biaya perantara. Deteksi jarak real-time GPS, pembayaran QRIS langsung atau COD diantar langsung oleh penjual secara mandiri.
             </p>
           </div>
 
@@ -336,17 +318,16 @@ export const UmkmPage: React.FC = () => {
               </div>
               <button
                 type="button"
-                onClick={handleDetectLocation}
-                disabled={isLocating}
-                className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 text-[11px] font-bold text-blue-700 transition-all cursor-pointer shadow-2xs"
+                onClick={() => setShowLocationModal(true)}
+                className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 text-[11px] font-bold text-blue-700 transition-all cursor-pointer shadow-2xs shrink-0"
               >
-                {isLocating ? 'Mendeteksi...' : 'Ubah Titik Lokasi'}
+                Ubah Titik Lokasi
               </button>
             </div>
 
             <button
               type="button"
-              onClick={() => setShowStoreManagerModal(true)}
+              onClick={handleOpenStoreClick}
               className="w-full px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 transition-all cursor-pointer active:scale-95"
             >
               <Store className="w-4 h-4" />
@@ -358,10 +339,10 @@ export const UmkmPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          SEARCH BAR & POPULAR KEYWORDS
+          SEARCH BAR & DROPDOWN FILTER SECTION (Strictly Dropdowns with Custom Distance)
           ========================================================================= */}
       <section className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs space-y-4">
-        {/* Input */}
+        {/* Search Input */}
         <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="relative flex-1">
             <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -404,113 +385,239 @@ export const UmkmPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Category Pills */}
-        <div className="pt-2 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-          {categoryPills.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            return (
+        {/* =====================================================================
+            UNIFIED DROPDOWN FILTER BAR (Kategori, Jarak, Pengiriman, Metode, Rating, Urutkan)
+            ===================================================================== */}
+        <div className="pt-3 border-t border-slate-100 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs font-black text-slate-800 uppercase tracking-wider">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
+              <span>Filter Produk & Pengiriman</span>
+            </div>
+            {hasActiveFilters && (
               <button
-                key={cat}
                 type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                  isSelected
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/80'
-                }`}
+                onClick={handleResetFilters}
+                className="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 hover:underline cursor-pointer"
               >
-                {cat}
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset Semua Filter</span>
               </button>
-            );
-          })}
-        </div>
-
-        {/* Filter Bar (Jarak, Pengiriman, Metode Bayar, Rating, Urutkan) */}
-        <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
-          
-          {/* Left Filters */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-slate-500 font-bold text-[11px] mr-1">Jarak:</span>
-            {[
-              { id: 'all', label: 'Semua Jarak' },
-              { id: '1', label: '1 km' },
-              { id: '3', label: '3 km' },
-              { id: '5', label: '5 km' },
-              { id: '10', label: '10 km' }
-            ].map((d) => (
-              <button
-                key={d.id}
-                type="button"
-                onClick={() => setDistanceFilter(d.id as any)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  distanceFilter === d.id
-                    ? 'bg-blue-50 text-blue-700 border border-blue-300 font-bold'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300'
-                }`}
-              >
-                {d.label}
-              </button>
-            ))}
-
-            {/* Dropdown Pengiriman */}
-            <select
-              value={deliveryFilter}
-              onChange={(e) => setDeliveryFilter(e.target.value)}
-              className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-semibold outline-none cursor-pointer"
-            >
-              <option value="all">Semua Pengiriman</option>
-              <option value="cod">Siap Antar (COD)</option>
-              <option value="do">Delivery Order (DO)</option>
-            </select>
-
-            {/* Dropdown Metode Bayar */}
-            <select
-              value={paymentFilter}
-              onChange={(e) => setPaymentFilter(e.target.value)}
-              className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-semibold outline-none cursor-pointer"
-            >
-              <option value="all">Metode Bayar</option>
-              <option value="qris">QRIS Pedagang</option>
-              <option value="cod">Tunai / COD</option>
-            </select>
-
-            {/* Rating Filter Button */}
-            <button
-              type="button"
-              onClick={() => setMinRatingFilter(!minRatingFilter)}
-              className={`px-3 py-1.5 rounded-lg border text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
-                minRatingFilter
-                  ? 'bg-amber-50 border-amber-300 text-amber-800'
-                  : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
-              }`}
-            >
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>4.5+</span>
-            </button>
+            )}
           </div>
 
-          {/* Right Sort Dropdown */}
-          <div className="flex items-center gap-2">
-            <span className="text-slate-400 text-xs">Urutkan:</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold outline-none cursor-pointer"
-            >
-              <option value="distance">Jarak Terdekat (GPS)</option>
-              <option value="rating">Rating Tertinggi</option>
-              <option value="price">Harga Termurah</option>
-              <option value="popular">Paling Banyak Terjual</option>
-            </select>
-          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
+            
+            {/* 1. Dropdown Kategori */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Kategori</label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="Semua">Semua Kategori</option>
+                <option value="Kuliner & Kudapan">Kuliner & Kudapan</option>
+                <option value="Bahan Pokok & Sembako">Bahan Pokok & Sembako</option>
+                <option value="Kriya & Kerajinan">Kriya & Kerajinan</option>
+                <option value="Jasa Panggilan">Jasa Panggilan</option>
+                <option value="Fashion & Batik">Fashion & Batik</option>
+              </select>
+            </div>
 
+            {/* 2. Dropdown Jarak dengan Pilihan Kustom Langsung di Dropdown */}
+            <div className="relative">
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Jarak Radius</label>
+              <button
+                type="button"
+                onClick={() => setIsDistanceDropdownOpen(!isDistanceDropdownOpen)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer flex items-center justify-between gap-1 text-left"
+              >
+                <span className="truncate">
+                  {distanceMode === 'all'
+                    ? 'Semua Jarak'
+                    : distanceMode === 'custom'
+                    ? `Maks. ${customDistanceKm || '0'} km`
+                    : `Maks. ${distanceMode} km`}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              </button>
+
+              {isDistanceDropdownOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-20"
+                    onClick={() => setIsDistanceDropdownOpen(false)}
+                  />
+                  <div className="absolute top-full left-0 mt-1.5 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 p-3 space-y-2.5 z-30 animate-fade-in text-xs">
+                    <div className="font-bold text-slate-800 text-[11px] pb-1 border-b border-slate-100 flex items-center justify-between">
+                      <span>Pilih Radius Maksimal</span>
+                      {distanceMode !== 'all' && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDistanceMode('all');
+                            setIsDistanceDropdownOpen(false);
+                          }}
+                          className="text-[10px] text-blue-600 hover:underline font-semibold cursor-pointer"
+                        >
+                          Reset Jarak
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Quick Preset Buttons */}
+                    <div className="space-y-0.5">
+                      {[
+                        { id: 'all', label: 'Semua Jarak (Default)' },
+                        { id: '1', label: 'Maksimal 1 km (Sangat Dekat)' },
+                        { id: '3', label: 'Maksimal 3 km (Area Sekitar)' },
+                        { id: '5', label: 'Maksimal 5 km (Kecamatan)' },
+                        { id: '10', label: 'Maksimal 10 km (Kota Kediri)' },
+                      ].map((opt) => (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => {
+                            setDistanceMode(opt.id);
+                            setIsDistanceDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-2.5 py-1.5 rounded-lg font-medium transition-colors flex items-center justify-between cursor-pointer ${
+                            distanceMode === opt.id
+                              ? 'bg-blue-50 text-blue-700 font-bold'
+                              : 'text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          <span>{opt.label}</span>
+                          {distanceMode === opt.id && <Check className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Inline Custom Distance Form */}
+                    <div className="border-t border-slate-100 pt-2.5 space-y-2">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                        Atur Jarak Kustom:
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="number"
+                          min="0.1"
+                          max="50"
+                          step="0.5"
+                          value={customDistanceKm}
+                          onChange={(e) => setCustomDistanceKm(e.target.value)}
+                          placeholder="Contoh: 2.5"
+                          className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white"
+                        />
+                        <span className="text-[11px] font-bold text-slate-500">km</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (customDistanceKm && !isNaN(Number(customDistanceKm))) {
+                              setDistanceMode('custom');
+                              setIsDistanceDropdownOpen(false);
+                            }
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] shadow-2xs transition-colors shrink-0 cursor-pointer"
+                        >
+                          Terapkan
+                        </button>
+                      </div>
+
+                      {/* Quick Pills Inside Dropdown */}
+                      <div className="flex flex-wrap gap-1 pt-0.5">
+                        {['1.5', '2.5', '7.0', '15.0'].map((val) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => {
+                              setCustomDistanceKm(val);
+                              setDistanceMode('custom');
+                              setIsDistanceDropdownOpen(false);
+                            }}
+                            className={`px-2 py-0.5 rounded text-[10px] font-semibold border cursor-pointer ${
+                              distanceMode === 'custom' && customDistanceKm === val
+                                ? 'bg-blue-600 text-white border-blue-600'
+                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-blue-50 hover:text-blue-700'
+                            }`}
+                          >
+                            {val} km
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* 3. Dropdown Pengiriman (Murni Penjual-Pembeli) */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Metode Pengantaran</label>
+              <select
+                value={deliveryFilter}
+                onChange={(e) => setDeliveryFilter(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="all">Semua Pengiriman</option>
+                <option value="cod">Diantar Langsung Penjual (COD)</option>
+                <option value="ambil">Ambil Sendiri di Lapak</option>
+              </select>
+            </div>
+
+            {/* 4. Dropdown Metode Bayar */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Metode Pembayaran</label>
+              <select
+                value={paymentFilter}
+                onChange={(e) => setPaymentFilter(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="all">Semua Metode</option>
+                <option value="qris">QRIS Penjual Langsung</option>
+                <option value="cod">Tunai / Bayar di Tempat</option>
+              </select>
+            </div>
+
+            {/* 5. Dropdown Rating */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Rating Penilaian</label>
+              <select
+                value={ratingFilter}
+                onChange={(e) => setRatingFilter(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="all">Semua Rating</option>
+                <option value="4.5">★ 4.5 Ke Atas</option>
+                <option value="4.8">★ 4.8 Ke Atas</option>
+                <option value="5.0">★ 5.0 Sempurna</option>
+              </select>
+            </div>
+
+            {/* 6. Dropdown Urutkan */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Urutkan Hasil</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="w-full px-3 py-2 rounded-xl bg-blue-50/60 border border-blue-200 text-blue-900 text-xs font-bold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="distance">Jarak Terdekat (GPS)</option>
+                <option value="rating">Rating Tertinggi</option>
+                <option value="price">Harga Termurah</option>
+                <option value="popular">Paling Banyak Terjual</option>
+              </select>
+            </div>
+
+          </div>
         </div>
       </section>
 
       {/* =========================================================================
           RESULT HEADER
           ========================================================================= */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-1 text-xs">
+      <div id="umkm-catalog-section" className="flex flex-wrap items-center justify-between gap-3 px-1 text-xs">
         <div className="flex items-center gap-2 font-bold text-slate-800">
           <span className="w-2 h-2 rounded-full bg-emerald-500" />
           <span className="uppercase tracking-wider text-[11px] text-slate-600">PRODUK & LAYANAN SIAP DIPESAN:</span>
@@ -524,121 +631,141 @@ export const UmkmPage: React.FC = () => {
       </div>
 
       {/* =========================================================================
-          3-COLUMN PRODUCT CARDS GRID (Matching Screen 1)
+          3-COLUMN PRODUCT CARDS GRID
           ========================================================================= */}
-      {filteredList.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredList.map((item) => {
-            const distanceKm = calculateDistanceKm(userLocation.lat, userLocation.lng, item.lat, item.lng);
-            const distLabel = formatDistance(distanceKm);
+      {paginatedList.length > 0 ? (
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {paginatedList.map((item) => {
+              const distanceKm = calculateDistanceKm(userLocation.lat, userLocation.lng, item.lat, item.lng);
+              const distLabel = formatDistance(distanceKm);
 
-            return (
-              <div
-                key={item.id}
-                className="bg-white rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group"
-              >
-                {/* Image & Top Badges */}
-                <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
-                  <img
-                    src={item.fotoUrl}
-                    alt={item.nama}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    loading="lazy"
-                  />
-                  {/* Distance Chip (Left) */}
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/80 text-[11px] font-extrabold text-slate-800 shadow-2xs flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-rose-500" />
-                    <span>{distLabel} dari Anda</span>
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-3xl border border-slate-200/90 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between overflow-hidden group"
+                >
+                  {/* Image & Top Badges */}
+                  <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
+                    <img
+                      src={item.fotoUrl}
+                      alt={item.nama}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      loading="lazy"
+                    />
+                    {/* Distance Chip (Left) */}
+                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/80 text-[11px] font-extrabold text-slate-800 shadow-2xs flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-rose-500" />
+                      <span>{distLabel} dari Anda</span>
+                    </div>
+
+                    {/* Status / Category Tag (Right) */}
+                    <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black tracking-wider uppercase shadow-2xs">
+                      {item.badgeTag || (item.isJasa ? 'JASA KILAT' : 'DIANTAR PENJUAL')}
+                    </div>
                   </div>
 
-                  {/* Status / Category Tag (Right) */}
-                  <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black tracking-wider uppercase shadow-2xs">
-                    {item.badgeTag || (item.isJasa ? 'JASA KILAT' : 'SIAP ANTAR')}
-                  </div>
-                </div>
+                  {/* Card Body */}
+                  <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                    <div className="space-y-2">
+                      {/* Store Title & Kelurahan */}
+                      <div className="flex items-center justify-between text-xs text-slate-500">
+                        <span className="font-bold text-slate-700 hover:text-blue-600 transition-colors flex items-center gap-1">
+                          {item.tokoNama}
+                          <Info className="w-3 h-3 text-slate-400" />
+                        </span>
+                        <span className="text-[11px] text-slate-400 font-medium">{item.kelurahan || item.rtRw || 'Kota Kediri'}</span>
+                      </div>
 
-                {/* Card Body */}
-                <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
-                  <div className="space-y-2">
-                    {/* Store Title & Kelurahan */}
-                    <div className="flex items-center justify-between text-xs text-slate-500">
-                      <span className="font-bold text-slate-700 hover:text-blue-600 transition-colors flex items-center gap-1">
-                        {item.tokoNama}
-                        <Info className="w-3 h-3 text-slate-400" />
+                      {/* Product Name */}
+                      <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug group-hover:text-blue-600 transition-colors">
+                        {item.nama}
+                      </h3>
+
+                      {/* Rating & Terjual */}
+                      <div className="flex items-center gap-2 text-xs text-slate-500 pt-0.5">
+                        <div className="flex items-center gap-1 text-amber-500 font-bold">
+                          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                          <span>{item.rating.toFixed(1)}</span>
+                        </div>
+                        <span>•</span>
+                        <span className="text-slate-600 font-medium">{item.terjualText || `${item.terjual || 0}+ terjual`}</span>
+                        <span>•</span>
+                        <span className="text-emerald-700 font-semibold">{item.bukaJamText || 'Buka Hari Ini'}</span>
+                      </div>
+
+                      {/* Direct Seller Payment & Delivery Tags */}
+                      <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                        {item.metodePembayaran?.cod && (
+                          <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-blue-700 font-bold text-[10px]">
+                            Diantar Langsung Penjual (COD)
+                          </span>
+                        )}
+                        {item.metodePembayaran?.qris && (
+                          <span className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-100 text-emerald-700 font-bold text-[10px]">
+                            QRIS Penjual Langsung
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Price & Unit Row */}
+                    <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] text-slate-400 block font-medium">Harga Satuan</span>
+                        <div className="text-base font-black text-slate-900">
+                          Rp {item.harga.toLocaleString('id-ID')}
+                        </div>
+                      </div>
+                      <span className="text-xs font-semibold text-slate-500">
+                        {item.satuan || 'Porsi'}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-medium">{item.kelurahan || item.rtRw || 'Kota Kediri'}</span>
-                    </div>
-
-                    {/* Product Name */}
-                    <h3 className="font-extrabold text-slate-900 text-sm sm:text-base leading-snug group-hover:text-blue-600 transition-colors">
-                      {item.nama}
-                    </h3>
-
-                    {/* Rating & Terjual */}
-                    <div className="flex items-center gap-2 text-xs text-slate-500 pt-0.5">
-                      <div className="flex items-center gap-1 text-amber-500 font-bold">
-                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                        <span>{item.rating.toFixed(1)}</span>
-                      </div>
-                      <span>•</span>
-                      <span className="text-slate-600 font-medium">{item.terjualText || `${item.terjual || 0}+ terjual`}</span>
-                      <span>•</span>
-                      <span className="text-emerald-700 font-semibold">{item.bukaJamText || 'Buka Hari Ini'}</span>
-                    </div>
-
-                    {/* Payment Tags */}
-                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                      {item.metodePembayaran?.cod && (
-                        <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-blue-700 font-bold text-[10px]">
-                          Bisa COD / DO
-                        </span>
-                      )}
-                      {item.metodePembayaran?.qris && (
-                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-100 text-emerald-700 font-bold text-[10px]">
-                          QRIS Pedagang
-                        </span>
-                      )}
                     </div>
                   </div>
 
-                  {/* Price & Unit Row */}
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] text-slate-400 block font-medium">Harga Satuan</span>
-                      <div className="text-base font-black text-slate-900">
-                        Rp {item.harga.toLocaleString('id-ID')}
-                      </div>
-                    </div>
-                    <span className="text-xs font-semibold text-slate-500">
-                      {item.satuan || 'Porsi'}
-                    </span>
+                  {/* Card Action Footer */}
+                  <div className="px-5 pb-5 pt-1 flex items-center gap-2">
+                    <Link
+                      to={`/smart-city/umkm/${item.id}`}
+                      className="flex-1 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs transition-colors flex items-center justify-center gap-1 cursor-pointer border border-slate-200"
+                    >
+                      <span>Lihat Detail</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={() => handleQuickWa(item)}
+                      className="flex-1 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                    >
+                      <Phone className="w-3.5 h-3.5" />
+                      <span>Beli via WA</span>
+                    </button>
                   </div>
+
                 </div>
+              );
+            })}
+          </div>
 
-                {/* Card Action Footer */}
-                <div className="px-5 pb-5 pt-1 flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedDetailItem(item)}
-                    className="flex-1 py-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs transition-colors flex items-center justify-center gap-1 cursor-pointer border border-slate-200"
-                  >
-                    <span>Lihat Detail</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleQuickWa(item)}
-                    className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
-                  >
-                    <Phone className="w-3.5 h-3.5" />
-                    <span>Beli via WA</span>
-                  </button>
-                </div>
-
-              </div>
-            );
-          })}
+          {/* Pagination Controls */}
+          {filteredList.length > PAGE_SIZE && (
+            <div className="pt-2">
+              <Pagination
+                currentPage={currentPage}
+                totalItems={filteredList.length}
+                pageSize={PAGE_SIZE}
+                onPageChange={(page) => {
+                  setCurrentPage(page);
+                  const el = document.getElementById('umkm-catalog-section');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                itemLabel="produk & layanan"
+              />
+            </div>
+          )}
         </div>
       ) : (
         <div className="p-12 text-center bg-white rounded-3xl border border-slate-200/90 space-y-3">
@@ -651,14 +778,7 @@ export const UmkmPage: React.FC = () => {
           </p>
           <button
             type="button"
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedCategory('Semua');
-              setDistanceFilter('all');
-              setDeliveryFilter('all');
-              setPaymentFilter('all');
-              setMinRatingFilter(false);
-            }}
+            onClick={handleResetFilters}
             className="px-4 py-2 rounded-xl bg-blue-50 text-blue-700 font-bold text-xs hover:bg-blue-100 transition-colors"
           >
             Reset Semua Filter
@@ -667,7 +787,8 @@ export const UmkmPage: React.FC = () => {
       )}
 
       {/* =========================================================================
-          TRANSPARANSI & KEBERPIHAKAN BANNER (Matching Stitch Mockup 1 Bottom)
+          TRANSPARANSI & KEBERPIHAKAN BANNER
+          (Pengiriman murni penjual-pembeli mandiri, tanpa perantara pihak ketiga)
           ========================================================================= */}
       <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-2xs space-y-6">
         <div className="text-center space-y-1">
@@ -700,629 +821,94 @@ export const UmkmPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Card 3 */}
+          {/* Card 3: Pure Direct Seller Delivery */}
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
             <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center font-black text-sm">
               <Truck className="w-5 h-5" />
             </div>
-            <h4 className="text-sm font-extrabold text-slate-900">Pengantaran Antar RW Cepat</h4>
+            <h4 className="text-sm font-extrabold text-slate-900">Pengantaran Langsung Penjual</h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Dukungan pengantaran mandiri langsung antar gang, titip di pos ronda terdekat, atau COD hangat tanpa batas pesanan minimum.
+              Transaksi dan pengantaran dilakukan langsung oleh penjual kepada pembeli secara mandiri atau COD tanpa perantara pihak ketiga, aman dan bebas biaya perantara.
             </p>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          PRODUCT DETAIL MODAL (Matching Screen 2 for Food / Screen 4 for Jasa)
+          MODAL: UBAH TITIK LOKASI ANDA (Leaflet Map + Presets + GPS Tanpa Alert)
           ========================================================================= */}
-      {selectedDetailItem && createPortal(
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-slate-950/70 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-sky-100 overflow-hidden my-auto max-h-[92vh] flex flex-col">
-            
-            {/* Modal Top Bar */}
-            <div className="p-4 sm:px-6 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
-              <div className="flex items-center gap-2 text-xs text-slate-500">
-                <span className="font-semibold text-slate-400">Pasar UMKM</span>
-                <span>/</span>
-                <span className="font-bold text-slate-800 truncate max-w-xs sm:max-w-md">{selectedDetailItem.nama}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>UMKM Terverifikasi {selectedDetailItem.kelurahan || 'Sukamaju'}</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedDetailItem(null)}
-                  className="p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+      <LocationPickerModal
+        isOpen={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+        currentCoords={userLocation}
+        currentLabel={locationLabel}
+        onSaveLocation={(coords, label) => {
+          setUserLocation(coords);
+          setLocationLabel(label);
+          try {
+            localStorage.setItem(
+              'sidesku_user_smartcity_location',
+              JSON.stringify({ ...coords, label })
+            );
+          } catch {}
+        }}
+      />
+
+      {/* =========================================================================
+          RESTRICTED CITIZEN AUTHENTICATION ALERT MODAL
+          ========================================================================= */}
+      {showAuthAlertModal && createPortal(
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 animate-fade-in">
+          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full space-y-5 shadow-2xl border border-sky-100 relative">
+            <button
+              type="button"
+              onClick={() => setShowAuthAlertModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200/80 text-amber-600 flex items-center justify-center mx-auto shadow-xs">
+              <ShieldAlert className="w-7 h-7" />
             </div>
 
-            {/* Modal Scrollable Content */}
-            <div className="p-5 sm:p-7 overflow-y-auto space-y-8 flex-1">
-              
-              {/* Screen 4: JASA DETAIL VIEW */}
-              {selectedDetailItem.isJasa ? (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                  {/* Left Column: Tech Hero & SOP */}
-                  <div className="lg:col-span-7 space-y-6">
-                    <div className="relative aspect-16/10 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200">
-                      <img
-                        src={selectedDetailItem.fotoUrl}
-                        alt={selectedDetailItem.nama}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-bold shadow-sm flex items-center gap-1.5">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Terverifikasi RT 02 / RW 05</span>
-                      </div>
-                      <div className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-slate-900/90 text-white text-[11px] font-bold shadow-sm flex items-center gap-1.5">
-                        <Award className="w-3.5 h-3.5 text-amber-400" />
-                        <span>Sertifikasi BNSP Resmi</span>
-                      </div>
-                    </div>
+            <div className="text-center space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/60 border border-amber-200 text-amber-800 text-[11px] font-extrabold uppercase tracking-wider">
+                <span>Akses Khusus Warga Setempat</span>
+              </div>
+              <h3 className="text-lg font-black text-slate-900 leading-tight">
+                Wajib Masuk / Terdaftar Sebagai Warga Kota
+              </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Layanan buka lapak dagang dan upload produk UMKM di SiDesKu hanya diperuntukkan bagi warga terverifikasi domisili RT/RW setempat. Warga dari luar daerah tidak diizinkan berjualan demi menjaga ekosistem ekonomi tetangga yang adil, jujur, dan aman.
+              </p>
+            </div>
 
-                    <div className="space-y-3">
-                      <h2 className="text-2xl font-black text-slate-900 leading-tight">
-                        {selectedDetailItem.tokoNama}
-                      </h2>
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600">
-                        <span className="font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
-                          SiDesKu Verified
-                        </span>
-                        <span>★ {selectedDetailItem.rating} (112 panggilan selesai)</span>
-                        <span>•</span>
-                        <span>Respon cepat ~10 menit</span>
-                        <span>•</span>
-                        <span>Radius max 7 km</span>
-                      </div>
-                    </div>
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 text-xs text-slate-600">
+              <div className="flex items-center gap-2 text-slate-800 font-bold">
+                <BadgeCheck className="w-4 h-4 text-emerald-600" />
+                <span>Verifikasi NIK & Wilayah RT/RW</span>
+              </div>
+              <p className="text-[11px] text-slate-500 pl-6 leading-relaxed">
+                Silakan masuk dengan akun warga Anda atau daftarkan diri Anda dengan melampirkan data kependudukan resmi.
+              </p>
+            </div>
 
-                    {/* Cakupan Kerja Layanan (STANDAR SOP) */}
-                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-black uppercase tracking-wider text-slate-800">Cakupan Kerja Layanan</h4>
-                        <span className="text-[10px] font-extrabold text-blue-700 bg-blue-100/60 px-2 py-0.5 rounded">STANDAR SOP</span>
-                      </div>
-                      <div className="space-y-2.5 text-xs text-slate-700">
-                        <div className="flex items-start gap-2.5">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                          <div>
-                            <strong className="block text-slate-900">Cuci & Pembersihan Komprehensif</strong>
-                            <span className="text-slate-500 text-[11px]">Pembersihan total filter evaporator unit indoor, talang air pembuangan, dan kisi kondensor outdoor.</span>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-2.5">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                          <div>
-                            <strong className="block text-slate-900">Ukur Tekanan Freon & Deteksi Kebocoran</strong>
-                            <span className="text-slate-500 text-[11px]">Pengujian manifold pressure pada jalur R32 / R410A serta pendeteksian dini sambungan flare pipa.</span>
-                          </div>
-                        </div>
-                        <div className="flex items-start gap-2.5">
-                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                          <div>
-                            <strong className="block text-slate-900">Pengecekan Arus Kelistrikan & Ampere</strong>
-                            <span className="text-slate-500 text-[11px]">Inspeksi kapasitor starting kompresor, kondisi motor fan, dan kestabilan grounding kelistrikan rumah.</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Green Garansi Banner */}
-                    <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-start gap-3 text-xs text-emerald-900">
-                      <Award className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="block text-emerald-950 font-black">Garansi Dingin 30 Hari Penuh (RESMI)</strong>
-                        <span>Bila AC kembali bocor atau kurang dingin dalam 30 hari pasca pengerjaan, teknisi hadir kembali tanpa biaya jasa tambahan.</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Order Service Form */}
-                  <div className="lg:col-span-5 space-y-5">
-                    <div className="p-6 rounded-3xl bg-slate-50/70 border border-slate-200/90 space-y-4">
-                      <div>
-                        <h3 className="text-base font-black text-slate-900">Pesan Jasa Kunjungan Teknisi</h3>
-                        <p className="text-[11px] text-slate-500">Pilih tipe penanganan, atur jadwal, dan teknisi langsung berangkat.</p>
-                      </div>
-
-                      {/* Service Options */}
-                      <div className="space-y-2">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">PILIH LAYANAN</span>
-                        {selectedDetailItem.pilihanLayananJasa?.map((svc) => (
-                          <label
-                            key={svc.id}
-                            className={`flex items-center justify-between p-3 rounded-xl border text-xs cursor-pointer transition-all ${
-                              selectedJasaServiceId === svc.id
-                                ? 'bg-white border-blue-500 shadow-xs ring-2 ring-blue-100 font-bold'
-                                : 'bg-white/80 border-slate-200 hover:border-slate-300'
-                            }`}
-                          >
-                            <div className="flex items-center gap-2.5">
-                              <input
-                                type="radio"
-                                name="jasa_service"
-                                checked={selectedJasaServiceId === svc.id}
-                                onChange={() => setSelectedJasaServiceId(svc.id)}
-                                className="w-3.5 h-3.5 text-blue-600"
-                              />
-                              <span className="text-slate-800">{svc.nama}</span>
-                            </div>
-                            <span className="font-extrabold text-blue-700">Rp {svc.harga.toLocaleString('id-ID')}</span>
-                          </label>
-                        ))}
-                      </div>
-
-                      {/* Quantity Units */}
-                      <div className="space-y-1.5">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">JUMLAH UNIT AC</span>
-                        <div className="flex items-center justify-between p-2 rounded-xl bg-white border border-slate-200">
-                          <span className="text-xs font-medium text-slate-600">Sesuaikan unit AC yang diservis</span>
-                          <div className="flex items-center gap-2.5">
-                            <button
-                              type="button"
-                              onClick={() => setJasaUnitQty(Math.max(1, jasaUnitQty - 1))}
-                              className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-black text-sm text-slate-700"
-                            >
-                              -
-                            </button>
-                            <span className="text-xs font-black text-slate-900 w-5 text-center">{jasaUnitQty}</span>
-                            <button
-                              type="button"
-                              onClick={() => setJasaUnitQty(jasaUnitQty + 1)}
-                              className="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center font-black text-sm text-slate-700"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Jadwal Kunjungan */}
-                      <div className="space-y-1.5">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">JADWAL KUNJUNGAN</span>
-                        <div className="grid grid-cols-2 gap-2 text-xs">
-                          <button
-                            type="button"
-                            onClick={() => setJasaSesi('pagi')}
-                            className={`p-2.5 rounded-xl border text-left transition-all ${
-                              jasaSesi === 'pagi'
-                                ? 'bg-white border-blue-500 ring-2 ring-blue-100 font-bold'
-                                : 'bg-white border-slate-200 text-slate-600'
-                            }`}
-                          >
-                            <div className="font-black text-slate-900 text-xs">Sesi Pagi</div>
-                            <div className="text-[10px] text-slate-500 mt-0.5">09:00 - 12:00 WIB</div>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setJasaSesi('siang')}
-                            className={`p-2.5 rounded-xl border text-left transition-all ${
-                              jasaSesi === 'siang'
-                                ? 'bg-white border-blue-500 ring-2 ring-blue-100 font-bold'
-                                : 'bg-white border-slate-200 text-slate-600'
-                            }`}
-                          >
-                            <div className="font-black text-slate-900 text-xs">Sesi Siang</div>
-                            <div className="text-[10px] text-slate-500 mt-0.5">13:00 - 16:00 WIB</div>
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Total & Action */}
-                      <div className="pt-3 border-t border-slate-200 space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-slate-500">Estimasi Biaya Bersih</span>
-                          <span className="text-lg font-black text-blue-700">Rp {jasaTotalPrice.toLocaleString('id-ID')}</span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={handleSendWaOrder}
-                          className="w-full py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-                        >
-                          <Phone className="w-4 h-4" />
-                          <span>Pesan Teknisi via WhatsApp</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                /* Screen 2: FOOD / RETAIL PRODUCT DETAIL VIEW */
-                <div className="space-y-8">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    {/* Left Column: Gallery & Store Card */}
-                    <div className="lg:col-span-6 space-y-4">
-                      {/* Main Photo */}
-                      <div className="relative aspect-4/3 rounded-3xl overflow-hidden bg-slate-100 border border-slate-200">
-                        <img
-                          src={selectedDetailItem.galeri?.[activeGalleryIndex] || selectedDetailItem.fotoUrl}
-                          alt={selectedDetailItem.nama}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md text-slate-800 text-[11px] font-extrabold shadow-sm">
-                          Wajar Dapur Mandiri
-                        </div>
-                      </div>
-
-                      {/* Thumbnails */}
-                      {selectedDetailItem.galeri && selectedDetailItem.galeri.length > 1 && (
-                        <div className="grid grid-cols-4 gap-2.5">
-                          {selectedDetailItem.galeri.map((img, idx) => (
-                            <button
-                              key={idx}
-                              type="button"
-                              onClick={() => setActiveGalleryIndex(idx)}
-                              className={`aspect-square rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-                                activeGalleryIndex === idx
-                                  ? 'border-blue-600 ring-2 ring-blue-100'
-                                  : 'border-transparent opacity-70 hover:opacity-100'
-                              }`}
-                            >
-                              <img src={img} alt="thumb" className="w-full h-full object-cover" />
-                            </button>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Seller Profile Card */}
-                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center font-black text-xs shrink-0">
-                            {selectedDetailItem.tokoNama.slice(0, 2).toUpperCase()}
-                          </div>
-                          <div>
-                            <div className="text-xs font-black text-slate-900">{selectedDetailItem.tokoNama}</div>
-                            <div className="text-[10px] text-slate-500 mt-0.5">
-                              {selectedDetailItem.rtRw || 'RT 03 / RW 04'} {selectedDetailItem.kelurahan} • Radius 650m
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            type="button"
-                            onClick={() => handleQuickWa(selectedDetailItem)}
-                            className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-blue-600 transition-colors shadow-2xs"
-                          >
-                            Tanya Penjual
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right Column: Title, Options & Order Box */}
-                    <div className="lg:col-span-6 space-y-5">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-xs">
-                          <span className="px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 font-black text-[10px] tracking-wider uppercase">
-                            {selectedDetailItem.kategori}
-                          </span>
-                          <span className="text-slate-400 font-medium">• 42 Ulasan Warga</span>
-                        </div>
-                        <h2 className="text-xl sm:text-2xl font-black text-slate-900 leading-tight">
-                          {selectedDetailItem.nama}
-                        </h2>
-                        <p className="text-xs text-slate-600 leading-relaxed">
-                          {selectedDetailItem.deskripsi}
-                        </p>
-                      </div>
-
-                      {/* Price */}
-                      <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100 flex items-baseline justify-between">
-                        <div>
-                          <span className="text-2xl font-black text-blue-700">Rp {selectedDetailItem.harga.toLocaleString('id-ID')}</span>
-                          <span className="text-xs font-semibold text-slate-500 ml-1.5">/ {selectedDetailItem.satuan || 'porsi'}</span>
-                        </div>
-                        <span className="text-[11px] font-extrabold text-emerald-700 bg-emerald-100/60 px-2.5 py-1 rounded-md">
-                          ✓ Tanpa Biaya Admin
-                        </span>
-                      </div>
-
-                      {/* Food Options: Pilihan Ayam */}
-                      {selectedDetailItem.pilihanAyam && (
-                        <div className="space-y-1.5">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-extrabold text-slate-800">Pilihan Potongan Ayam</span>
-                            <span className="text-[10px] text-slate-400">Paha Rempah</span>
-                          </div>
-                          <div className="grid grid-cols-3 gap-2 text-xs">
-                            {selectedDetailItem.pilihanAyam.map((opt) => (
-                              <button
-                                key={opt.nama}
-                                type="button"
-                                onClick={() => setOrderPilihanAyam(opt.nama)}
-                                className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
-                                  orderPilihanAyam === opt.nama
-                                    ? 'bg-blue-50 border-blue-500 font-bold text-blue-800 ring-2 ring-blue-100'
-                                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
-                                }`}
-                              >
-                                {opt.nama}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Food Options: Pilihan Sambal */}
-                      {selectedDetailItem.pilihanSambal && (
-                        <div className="space-y-1.5">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-extrabold text-slate-800">Pilihan Sambal</span>
-                            <span className="text-[10px] text-slate-400">Sambal Terasi Segar</span>
-                          </div>
-                          <div className="grid grid-cols-3 gap-2 text-xs">
-                            {selectedDetailItem.pilihanSambal.map((smb) => (
-                              <button
-                                key={smb}
-                                type="button"
-                                onClick={() => setOrderPilihanSambal(smb)}
-                                className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
-                                  orderPilihanSambal === smb
-                                    ? 'bg-blue-50 border-blue-500 font-bold text-blue-800 ring-2 ring-blue-100'
-                                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
-                                }`}
-                              >
-                                {smb}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Qty Counter */}
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-                        <span className="font-bold text-slate-700">Jumlah Pesanan</span>
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={() => setOrderQty(Math.max(1, orderQty - 1))}
-                            className="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center font-black text-sm"
-                          >
-                            -
-                          </button>
-                          <span className="font-black text-slate-900 w-6 text-center">{orderQty}</span>
-                          <button
-                            type="button"
-                            onClick={() => setOrderQty(orderQty + 1)}
-                            className="w-7 h-7 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 flex items-center justify-center font-black text-sm"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Delivery Radio Options */}
-                      <div className="space-y-2">
-                        <label
-                          className={`flex items-center justify-between p-3 rounded-xl border text-xs cursor-pointer transition-all ${
-                            orderDeliveryType === 'kurir'
-                              ? 'bg-blue-50/50 border-blue-500 ring-2 ring-blue-100 font-bold'
-                              : 'bg-white border-slate-200 text-slate-700'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="radio"
-                              name="order_delivery"
-                              checked={orderDeliveryType === 'kurir'}
-                              onChange={() => setOrderDeliveryType('kurir')}
-                              className="w-3.5 h-3.5 text-blue-600"
-                            />
-                            <span>Diantar Kurir Komunitas Warga</span>
-                          </div>
-                          <span className="text-blue-700 font-bold">Rp 5.000</span>
-                        </label>
-
-                        <label
-                          className={`flex items-center justify-between p-3 rounded-xl border text-xs cursor-pointer transition-all ${
-                            orderDeliveryType === 'ambil'
-                              ? 'bg-blue-50/50 border-blue-500 ring-2 ring-blue-100 font-bold'
-                              : 'bg-white border-slate-200 text-slate-700'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2">
-                            <input
-                              type="radio"
-                              name="order_delivery"
-                              checked={orderDeliveryType === 'ambil'}
-                              onChange={() => setOrderDeliveryType('ambil')}
-                              className="w-3.5 h-3.5 text-blue-600"
-                            />
-                            <span>Ambil Sendiri di Warung</span>
-                          </div>
-                          <span className="text-emerald-700 font-extrabold uppercase text-[10px]">GRATIS</span>
-                        </label>
-                      </div>
-
-                      {/* Total & Action CTAs */}
-                      <div className="pt-4 border-t border-slate-100 space-y-3">
-                        <div className="flex items-baseline justify-between">
-                          <span className="text-xs text-slate-500">Total Pembayaran:</span>
-                          <div>
-                            <span className="text-xl font-black text-blue-700">Rp {detailTotalPrice.toLocaleString('id-ID')}</span>
-                            {orderDeliveryType === 'kurir' && (
-                              <span className="text-[10px] text-slate-400 block text-right">(termasuk kurir Rp 5.000)</span>
-                            )}
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-2.5">
-                          <button
-                            type="button"
-                            onClick={handleSendWaOrder}
-                            className="py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
-                          >
-                            <Phone className="w-4 h-4" />
-                            <span>Pesan via WhatsApp</span>
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => setShowQrisModal({
-                              tokoNama: selectedDetailItem.tokoNama,
-                              qrisUrl: selectedDetailItem.qrisUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SIDESKU_QRIS_DEMO',
-                              nmid: selectedDetailItem.qrisNmid || 'ID10293847281',
-                              nominal: detailTotalPrice
-                            })}
-                            className="py-3.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-xs border border-slate-200 shadow-2xs flex items-center justify-center gap-2 cursor-pointer"
-                          >
-                            <QrCode className="w-4 h-4 text-emerald-600" />
-                            <span>Bayar QRIS</span>
-                          </button>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  {/* Tabs Section (Deskripsi, Lokasi, Ulasan) */}
-                  <div className="pt-6 border-t border-slate-200 space-y-4">
-                    <div className="flex items-center gap-6 border-b border-slate-200 text-xs font-bold">
-                      <button
-                        type="button"
-                        onClick={() => setActiveTabDetail('deskripsi')}
-                        className={`pb-3 border-b-2 transition-all ${
-                          activeTabDetail === 'deskripsi'
-                            ? 'border-blue-600 text-blue-700'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
-                        }`}
-                      >
-                        Deskripsi & Komposisi
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setActiveTabDetail('lokasi')}
-                        className={`pb-3 border-b-2 transition-all ${
-                          activeTabDetail === 'lokasi'
-                            ? 'border-blue-600 text-blue-700'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
-                        }`}
-                      >
-                        Lokasi & Pengiriman
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setActiveTabDetail('ulasan')}
-                        className={`pb-3 border-b-2 transition-all ${
-                          activeTabDetail === 'ulasan'
-                            ? 'border-blue-600 text-blue-700'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
-                        }`}
-                      >
-                        Ulasan Warga (42)
-                      </button>
-                    </div>
-
-                    {activeTabDetail === 'deskripsi' && (
-                      <div className="grid grid-cols-1 md:grid-cols-12 gap-6 text-xs text-slate-700">
-                        <div className="md:col-span-8 space-y-3">
-                          <h4 className="font-extrabold text-slate-900 text-sm">Warisan Resep Tradisional Sunda-Jawa</h4>
-                          <p className="leading-relaxed text-slate-600">
-                            Paket Nasi Liwet Komplit Bu Dewi diolah dari beras pilihan petani binaan dengan ayam goreng rempah kuning, tahu tempe bacem, lalapan timun kemangi segar, dan sambal khas Sunda-Jawa.
-                          </p>
-                          <div className="space-y-1.5 pt-2">
-                            <span className="font-bold text-slate-900 block">Isi Paket Lengkap:</span>
-                            <div className="grid grid-cols-2 gap-2 text-slate-600">
-                              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-600" /> Nasi Liwet Gurih Bawang Renyah</span>
-                              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-600" /> Ayam Goreng Rempah Lengkuas</span>
-                              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-600" /> Tahu Kuning & Tempe Bacem</span>
-                              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-600" /> Sambal Pilihan Segar</span>
-                              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-600" /> Lalapan Mentimun & Kemangi</span>
-                              <span className="flex items-center gap-1.5"><Check className="w-3.5 h-3.5 text-emerald-600" /> Wadah Daun Pisang Ramah Lingkungan</span>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Keterangan Produk Box */}
-                        <div className="md:col-span-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5">
-                          <h5 className="font-black text-slate-900 uppercase text-[10px] tracking-wider">KETERANGAN PRODUK</h5>
-                          <div className="space-y-2 text-[11px]">
-                            <div className="flex justify-between py-1 border-b border-slate-200/60">
-                              <span className="text-slate-400">Sertifikat Halal</span>
-                              <span className="font-bold text-slate-800">{selectedDetailItem.keteranganHalal || 'ID02170000189231'}</span>
-                            </div>
-                            <div className="flex justify-between py-1 border-b border-slate-200/60">
-                              <span className="text-slate-400">Higienitas</span>
-                              <span className="font-bold text-emerald-700">{selectedDetailItem.keteranganHigienis || 'Lolos Uji Puskesmas'}</span>
-                            </div>
-                            <div className="flex justify-between py-1">
-                              <span className="text-slate-400">Dapur</span>
-                              <span className="font-bold text-slate-800">{selectedDetailItem.kelurahan || 'Kelurahan Sukamaju'}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {activeTabDetail === 'lokasi' && (
-                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
-                        <strong className="block text-slate-900 font-bold">Alamat Lapak:</strong>
-                        <p className="text-slate-600">{selectedDetailItem.alamat}</p>
-                        <span className="text-[11px] text-blue-700 block">Jarak tempuh estimasi ~5-10 menit dengan pengantaran kurir warga RW.</span>
-                      </div>
-                    )}
-
-                    {activeTabDetail === 'ulasan' && (
-                      <div className="space-y-3 text-xs">
-                        <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-800">Pak Hendra (Warga RT 02)</span>
-                            <span className="text-amber-500 font-bold">★ 5.0</span>
-                          </div>
-                          <p className="text-slate-600 text-[11px]">
-                            Ayam gorengnya gurih banget dan sambalnya mantap. Diantar masih hangat dalam 15 menit ke rumah. Rekomended!
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Produk Serupa dari Dapur Warga */}
-                  <div className="pt-6 border-t border-slate-200 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 block">PRODUK SERUPA DARI DAPUR WARGA</span>
-                        <h4 className="text-base font-black text-slate-900">Pilihan Kuliner Terdekat Lainnya</h4>
-                      </div>
-                      <span className="text-xs font-bold text-blue-600 hover:underline cursor-pointer">Lihat Semua Kuliner &gt;</span>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-                      {[
-                        { nama: 'Tempe Mendoan Anget (Isi 5)', harga: 12000, img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=400&q=80' },
-                        { nama: 'Es Dawet Cendol Gula Aren Asli', harga: 8000, img: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=400&q=80' },
-                        { nama: 'Soto Ayam Kampung Kuah Bening', harga: 16000, img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=400&q=80' },
-                        { nama: 'Sate Ayam Bumbu Kacang (10 Tsk)', harga: 25000, img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=80' }
-                      ].map((rel, idx) => (
-                        <div key={idx} className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
-                          <div className="aspect-4/3 rounded-xl overflow-hidden bg-slate-200">
-                            <img src={rel.img} alt={rel.nama} className="w-full h-full object-cover" />
-                          </div>
-                          <div className="font-extrabold text-slate-900 text-xs truncate">{rel.nama}</div>
-                          <div className="flex items-center justify-between pt-1">
-                            <span className="text-xs font-black text-blue-700">Rp {rel.harga.toLocaleString('id-ID')}</span>
-                            <button
-                              type="button"
-                              onClick={() => handleQuickWa({ ...selectedDetailItem, nama: rel.nama, harga: rel.harga })}
-                              className="px-2.5 py-1 rounded-lg bg-blue-600 text-white font-bold text-[10px] hover:bg-blue-700 cursor-pointer"
-                            >
-                              Pesan
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                </div>
-              )}
-
+            <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
+              <Link
+                to="/login"
+                className="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 text-center transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Masuk / Login</span>
+              </Link>
+              <Link
+                to="/register"
+                className="flex-1 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold text-xs text-center transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Daftar Akun</span>
+              </Link>
             </div>
           </div>
         </div>,
@@ -1330,10 +916,10 @@ export const UmkmPage: React.FC = () => {
       )}
 
       {/* =========================================================================
-          STORE MANAGER MODAL (Matching Stitch Mockup 3: Warung Bu Dewi)
+          STORE MANAGER MODAL (Direct Seller)
           ========================================================================= */}
       {showStoreManagerModal && createPortal(
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-slate-950/70 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-slate-950/70 animate-fade-in">
           <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-sky-100 overflow-hidden my-auto max-h-[92vh] flex flex-col">
             
             {/* Store Header Banner */}
@@ -1349,96 +935,111 @@ export const UmkmPage: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pr-10">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <h2 className="text-xl sm:text-2xl font-black">Warung Bu Dewi Sukamaju</h2>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-400 text-emerald-950 text-[10px] font-black uppercase">
-                      ✓ Terverifikasi RT 03 / RW 04
+                    <h2 className="text-xl sm:text-2xl font-black">
+                      {user?.name ? `Usaha ${user.name}` : 'Warung Bu Dewi Sukamaju'}
+                    </h2>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/30 border border-emerald-400 text-emerald-200 text-[10px] font-black flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3" />
+                      <span>Terverifikasi RT 03 / RW 04</span>
                     </span>
                   </div>
-                  <div className="text-xs text-sky-100 font-medium">
-                    Kuliner & Katering Rumahan
-                  </div>
-                  <div className="text-[11px] text-sky-200 flex flex-wrap items-center gap-2 pt-1">
-                    <span>📍 Jl. Kaliurang Gg. Mawar No. 4, Sukamaju</span>
+                  <div className="text-xs text-sky-100 flex flex-wrap items-center gap-3">
+                    <span>Kuliner & Katering Rumahan</span>
                     <span>•</span>
-                    <span>★ 4.9 (42 Ulasan Warga)</span>
+                    <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Sukamaju, Kec. Doko</span>
                     <span>•</span>
-                    <span>3 Produk Aktif</span>
+                    <span>★ 4.9 (Ulasan Pelanggan)</span>
                     <span>•</span>
-                    <span>Buka 08.00 - 20.00 WIB</span>
+                    <span className="text-emerald-300 font-bold">● Buka 08:00 - 20:00 WIB</span>
                   </div>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => setShowQrisModal({
-                    tokoNama: 'Warung Bu Dewi Sukamaju',
-                    qrisUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126570014ID.LINKAJA.WWW01189360091100213192025204581253033605802ID5918WARUNG_BU_DEWI6006KEDIRI62070703A016304E1F2',
-                    nmid: 'ID10293847281'
-                  })}
-                  className="px-4 py-2 rounded-xl bg-white text-blue-800 font-bold text-xs shadow-md hover:bg-sky-50 transition-colors shrink-0 flex items-center gap-1.5"
-                >
-                  <QrCode className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Pengaturan QRIS & Profil</span>
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setShowQrisModal({
+                      tokoNama: user?.name ? `Toko ${user.name}` : 'Warung Bu Dewi',
+                      qrisUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126570014ID.LINKAJA.WWW01189360091100213192025204581253033605802ID5918WARUNG_BU_DEWI6006KEDIRI62070703A016304E1F2',
+                      nmid: 'ID10293847281'
+                    })}
+                    className="px-3 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold text-xs flex items-center gap-1.5 transition-colors"
+                  >
+                    <QrCode className="w-4 h-4" />
+                    <span>Pengaturan QRIS</span>
+                  </button>
+                </div>
               </div>
             </div>
 
-            {/* Modal Body: Upload Form & Current Catalog */}
-            <div className="p-6 overflow-y-auto space-y-8 flex-1">
+            {/* Modal Body */}
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-8 flex-1">
               
-              {/* Form: Upload Produk Berikutnya */}
-              <div className="bg-slate-50/70 rounded-3xl p-6 border border-slate-200/90 space-y-4">
-                <div>
-                  <h3 className="text-base font-black text-slate-900">Upload Produk Berikutnya</h3>
-                  <p className="text-xs text-slate-500">
-                    Produk langsung tampil di etalase toko dan katalog pasar warga secara otomatis.
-                  </p>
+              {publishSuccessToast && (
+                <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Produk baru berhasil dipublikasikan dan langsung tersinkronisasi ke katalog pasar warga!</span>
+                </div>
+              )}
+
+              {/* Upload Form Box */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-black text-slate-900">Upload Produk Berikutnya</h3>
+                    <p className="text-xs text-slate-500">Produk langsung tampil di etalase toko dan katalog pasar warga secara otomatis.</p>
+                  </div>
                 </div>
 
-                {publishSuccessToast && (
-                  <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>Produk berhasil dipublikasikan ke pasar digital warga!</span>
-                  </div>
-                )}
-
-                <form onSubmit={handlePublishProduct} className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                  {/* Left: Foto Dropzone */}
-                  <div className="md:col-span-4 space-y-2">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">FOTO PRODUK</span>
-                    <div className="aspect-square rounded-2xl border-2 border-dashed border-slate-300 hover:border-blue-400 bg-white flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-colors relative overflow-hidden group">
+                <form onSubmit={handlePublishProduct} className="grid grid-cols-1 md:grid-cols-12 gap-6 bg-slate-50/70 p-6 rounded-3xl border border-slate-200/90">
+                  
+                  {/* Left Column: Image Drop Area */}
+                  <div className="md:col-span-5 space-y-3">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
+                      FOTO PRODUK
+                    </label>
+                    <div className="border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-2xl aspect-4/3 flex flex-col items-center justify-center p-4 text-center bg-white cursor-pointer transition-colors relative overflow-hidden group">
                       {uploadFotoUrl ? (
-                        <img src={uploadFotoUrl} alt="preview" className="w-full h-full object-cover" />
+                        <img src={uploadFotoUrl} alt="Preview" className="w-full h-full object-cover rounded-xl" />
                       ) : (
-                        <div className="space-y-1.5">
-                          <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+                        <div className="space-y-2 text-slate-400">
+                          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-500">
                             <ImageIcon className="w-5 h-5" />
                           </div>
-                          <span className="font-bold text-slate-800 text-xs block">Pilih Foto Produk</span>
-                          <span className="text-[10px] text-slate-400 block">Format JPG, PNG maksimal 5 MB</span>
-                          <span className="text-[10px] font-bold text-blue-600 block pt-1">Browse Galeri</span>
+                          <div>
+                            <span className="font-bold text-slate-700 text-xs block">Pilih Foto Produk</span>
+                            <span className="text-[10px] text-slate-400">Format JPG, PNG maksimal 5 MB</span>
+                          </div>
+                          <span className="text-[10px] text-blue-600 font-bold underline block pt-1">Browse Galeri</span>
                         </div>
                       )}
                     </div>
+
+                    <input
+                      type="text"
+                      placeholder="Atau tempel URL gambar di sini..."
+                      value={uploadFotoUrl}
+                      onChange={(e) => setUploadFotoUrl(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-medium outline-none focus:border-blue-500"
+                    />
                   </div>
 
-                  {/* Right: Inputs */}
-                  <div className="md:col-span-8 space-y-3.5">
+                  {/* Right Column: Form Inputs */}
+                  <div className="md:col-span-7 space-y-4 text-xs">
                     <div>
                       <label className="text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1">
-                        NAMA PRODUK KULINER / BARANG
+                        NAMA PRODUK KULINER / LAYANAN
                       </label>
                       <input
                         type="text"
                         placeholder="Contoh: Sayur Asem Komplit Bu Dewi"
                         value={uploadNama}
                         onChange={(e) => setUploadNama(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-medium outline-none focus:border-blue-500"
                         required
-                        className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 focus:border-blue-500 text-xs font-medium outline-none"
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1">
                           KATEGORI
@@ -1448,7 +1049,7 @@ export const UmkmPage: React.FC = () => {
                           onChange={(e) => setUploadKategori(e.target.value)}
                           className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-medium outline-none"
                         >
-                          <option value="Kuliner & Kudapan">Kuliner & Masakan Siap Saji</option>
+                          <option value="Kuliner & Kudapan">Kuliner & Kudapan</option>
                           <option value="Bahan Pokok & Sembako">Bahan Pokok & Sembako</option>
                           <option value="Kriya & Kerajinan">Kriya & Kerajinan</option>
                           <option value="Jasa Panggilan">Jasa Panggilan</option>
@@ -1462,7 +1063,6 @@ export const UmkmPage: React.FC = () => {
                         </label>
                         <input
                           type="number"
-                          placeholder="25000"
                           value={uploadHarga}
                           onChange={(e) => setUploadHarga(Number(e.target.value))}
                           className="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-bold outline-none"
@@ -1470,29 +1070,29 @@ export const UmkmPage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1">
-                          METODE PEMBAYARAN
-                        </span>
-                        <div className="space-y-1.5 text-xs text-slate-700">
-                          <label className="flex items-center gap-2 cursor-pointer font-medium">
+                        <label className="text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1">
+                          METODE PENGIRIMAN & BAYAR
+                        </label>
+                        <div className="space-y-1.5 pt-1">
+                          <label className="flex items-center gap-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={uploadQris}
                               onChange={(e) => setUploadQris(e.target.checked)}
                               className="rounded text-blue-600"
                             />
-                            <span>QRIS SiDesKu Toko (Otomatis)</span>
+                            <span className="font-semibold text-slate-700">QRIS Langsung Toko</span>
                           </label>
-                          <label className="flex items-center gap-2 cursor-pointer font-medium">
+                          <label className="flex items-center gap-2 cursor-pointer">
                             <input
                               type="checkbox"
                               checked={uploadCod}
                               onChange={(e) => setUploadCod(e.target.checked)}
                               className="rounded text-blue-600"
                             />
-                            <span>Bisa COD / Bayar di Tempat</span>
+                            <span className="font-semibold text-slate-700">Diantar Langsung Penjual (COD)</span>
                           </label>
                         </div>
                       </div>
@@ -1525,54 +1125,6 @@ export const UmkmPage: React.FC = () => {
                 </form>
               </div>
 
-              {/* Katalog Produk Warung Bu Dewi */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-base font-black text-slate-900">Katalog Produk Warung Bu Dewi</h3>
-                    <p className="text-xs text-slate-500">{umkmList.length} produk aktif tayang di katalog pasar warga</p>
-                  </div>
-                  <span className="text-xs text-slate-400">Urutkan: Terbaru</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {umkmList.slice(0, 3).map((prod) => (
-                    <div key={prod.id} className="p-4 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-2xs">
-                      <div className="relative aspect-4/3 rounded-xl overflow-hidden bg-slate-100">
-                        <img src={prod.fotoUrl} alt={prod.nama} className="w-full h-full object-cover" />
-                        <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-black">
-                          ● Aktif • Stok Tersedia
-                        </span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="text-[10px] font-extrabold uppercase text-slate-400">{prod.kategori}</div>
-                        <div className="font-extrabold text-slate-900 text-xs truncate">{prod.nama}</div>
-                        <div className="text-sm font-black text-blue-700">Rp {prod.harga.toLocaleString('id-ID')}</div>
-                      </div>
-                      <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                        <button
-                          type="button"
-                          onClick={() => alert(`Fitur edit produk ${prod.nama} siap digunakan.`)}
-                          className="font-bold text-slate-600 hover:text-blue-600"
-                        >
-                          Edit Produk
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowStoreManagerModal(false);
-                            setSelectedDetailItem(prod);
-                          }}
-                          className="font-bold text-blue-600 hover:underline"
-                        >
-                          Lihat Halaman
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* Bottom QRIS Info */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-3">
@@ -1581,7 +1133,7 @@ export const UmkmPage: React.FC = () => {
                   </div>
                   <div>
                     <div className="font-extrabold text-slate-900">QRIS Resmi Terverifikasi Pemkot • NMID: ID10293847281</div>
-                    <div className="text-slate-500 text-[11px]">QRIS Siap Terima Pembayaran Langsung ke Rekening Bu Dewi (Tanpa Potongan Biaya Admin).</div>
+                    <div className="text-slate-500 text-[11px]">QRIS Siap Terima Pembayaran Langsung ke Rekening Penjual (Tanpa Potongan Biaya Admin).</div>
                   </div>
                 </div>
                 <button
@@ -1607,7 +1159,7 @@ export const UmkmPage: React.FC = () => {
           QRIS POPUP MODAL
           ========================================================================= */}
       {showQrisModal && createPortal(
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-fade-in">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 animate-fade-in">
           <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-sm w-full text-center space-y-4 shadow-2xl border border-sky-100 relative">
             <button
               onClick={() => setShowQrisModal(null)}
@@ -1635,7 +1187,6 @@ export const UmkmPage: React.FC = () => {
 
             <div className="p-4 bg-white border-2 border-slate-200 rounded-2xl inline-block shadow-inner relative">
               <svg className="w-48 h-48 mx-auto" viewBox="0 0 100 100" fill="currentColor">
-                {/* QR Finder Corners */}
                 <rect x="5" y="5" width="25" height="25" fill="#0f172a" rx="4" />
                 <rect x="8" y="8" width="19" height="19" fill="#ffffff" rx="2" />
                 <rect x="11" y="11" width="13" height="13" fill="#0f172a" rx="2" />
@@ -1648,7 +1199,6 @@ export const UmkmPage: React.FC = () => {
                 <rect x="8" y="73" width="19" height="19" fill="#ffffff" rx="2" />
                 <rect x="11" y="76" width="13" height="13" fill="#0f172a" rx="2" />
 
-                {/* Timing patterns and matrix data cells */}
                 <rect x="35" y="11" width="5" height="5" fill="#0f172a" />
                 <rect x="45" y="11" width="5" height="5" fill="#0f172a" />
                 <rect x="55" y="11" width="5" height="5" fill="#0f172a" />
@@ -1666,14 +1216,13 @@ export const UmkmPage: React.FC = () => {
                 <rect x="65" y="75" width="10" height="15" fill="#0f172a" />
                 <rect x="80" y="70" width="15" height="10" fill="#0f172a" />
 
-                {/* Center QRIS logo badge */}
                 <rect x="42" y="42" width="16" height="16" fill="#0284c7" rx="3" />
                 <path d="M46 50 L50 54 L54 46" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
 
             <p className="text-[11px] text-slate-500 leading-snug">
-              Scan menggunakan GoPay, OVO, Dana, BCA, Livin Mandiri, atau m-Banking apapun tanpa biaya admin tambahan.
+              Scan menggunakan GoPay, OVO, Dana, BCA, Livin Mandiri, atau m-Banking apapun tanpa potongan biaya admin tambahan.
             </p>
 
             <div className="pt-2">
