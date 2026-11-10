@@ -1,7 +1,26 @@
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Eye, EyeOff, HelpCircle, Loader2, Lock, User } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { 
+  User, 
+  Lock, 
+  Loader2, 
+  Eye, 
+  EyeOff,
+  ShieldCheck, 
+  CheckCircle2, 
+  Zap,
+  Globe,
+  Mail,
+  Phone,
+  CreditCard,
+  Building2,
+  Star,
+  ArrowRight,
+  ArrowLeft,
+  HelpCircle
+} from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
+import { BrandLogo } from '@/shared/components/BrandLogo';
 import { GuestSupportChatModal } from '@/features/chat/components/GuestSupportChatModal';
 
 interface AuthPageProps {
@@ -12,10 +31,13 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Login Form States
   const [loginInput, setLoginInput] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showSupportChat, setShowSupportChat] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -25,167 +47,415 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
       setError('NIK/Username/Email dan password wajib diisi.');
       return;
     }
-
+    
     setLoading(true);
     setError('');
+    
     try {
       const success = await login(loginInput.trim(), loginPassword);
       if (success) {
-        const rawReturnUrl = new URLSearchParams(location.search).get('returnUrl');
+        const searchParams = new URLSearchParams(location.search);
+        const rawReturnUrl = searchParams.get('returnUrl');
         let targetUrl = '/dashboard';
-        if (rawReturnUrl) {
+
+        if (rawReturnUrl && typeof rawReturnUrl === 'string') {
           const trimmed = rawReturnUrl.trim();
-          let isSafe = trimmed.startsWith('/') && !trimmed.startsWith('//') && !trimmed.startsWith('/\\') && !trimmed.includes('\\') && !trimmed.includes('://') && !trimmed.includes('\0');
+          let isSafe =
+            trimmed.startsWith('/') &&
+            !trimmed.startsWith('//') &&
+            !trimmed.startsWith('/\\') &&
+            !trimmed.includes('\\') &&
+            !trimmed.includes('://') &&
+            !trimmed.includes('\0');
+
           if (isSafe) {
             try {
               const decoded = decodeURIComponent(trimmed);
-              if (!decoded.startsWith('/') || decoded.startsWith('//') || decoded.startsWith('/\\') || decoded.includes('\\') || decoded.includes('://')) isSafe = false;
+              if (
+                !decoded.startsWith('/') ||
+                decoded.startsWith('//') ||
+                decoded.startsWith('/\\') ||
+                decoded.includes('\\') ||
+                decoded.includes('://')
+              ) {
+                isSafe = false;
+              }
             } catch {
               isSafe = false;
             }
           }
-          if (isSafe) targetUrl = trimmed;
+
+          if (isSafe) {
+            targetUrl = trimmed;
+          }
         }
+
         navigate(targetUrl, { replace: true });
       } else {
         setError('Kredensial tidak cocok. Periksa kembali NIK dan password (tanggal lahir) Anda.');
       }
     } catch (err: any) {
-      setError(err.response?.data?.errors?.login?.[0] || err.response?.data?.message || 'Gagal login. Pastikan server backend terhubung atau kredensial benar.');
+      const backendMsg = err.response?.data?.errors?.login?.[0] || 
+                         err.response?.data?.message || 
+                         'Gagal login. Pastikan server backend terhubung atau kredensial benar.';
+      setError(backendMsg);
     } finally {
       setLoading(false);
     }
   };
 
-  const isRegisterRoute = location.pathname === '/register';
+  const handleQuickLogin = async (u: string, p: string) => {
+    setLoginInput(u);
+    setLoginPassword(p);
+    setError('');
+    setLoading(true);
+    try {
+      const success = await login(u, p);
+      if (success) {
+        navigate('/dashboard', { replace: true });
+      } else {
+        setError('Login gagal untuk akun demo.');
+      }
+    } catch (err: any) {
+      const backendMsg = err.response?.data?.errors?.login?.[0] ||
+        err.response?.data?.message ||
+        'Gagal login. Pastikan server backend terhubung atau kredensial benar.';
+      setError(backendMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="relative flex min-h-screen min-h-[100dvh] flex-col overflow-hidden bg-white font-sans text-[#102653]">
-      <header className="relative z-20 mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 py-5 sm:px-8 sm:py-7">
-        <Link to="/" className="flex min-w-0 items-center gap-3.5 rounded-xl focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200" aria-label="Beranda Pemerintah Kabupaten Kediri">
-          <img src="/images/logo-kediri.png" alt="Lambang Kabupaten Kediri" className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14" />
-          <span className="h-12 w-px shrink-0 bg-[#17376f]/35 sm:h-14" />
-          <span className="min-w-0 leading-tight">
-            <span className="block text-sm font-extrabold tracking-tight text-[#102653] sm:text-xl">Kabupaten <span className="text-blue-600">Kediri</span></span>
-            <span className="mt-1 block text-[11px] font-medium text-slate-500 sm:text-base">Pemerintah Kabupaten Kediri</span>
-          </span>
-        </Link>
-        <Link to="/" className="inline-flex shrink-0 items-center gap-2 rounded-full border border-blue-100 bg-white px-3.5 py-2.5 text-xs font-bold text-[#102653] shadow-[0_5px_18px_rgba(20,74,160,0.10)] transition hover:-translate-y-0.5 hover:border-blue-200 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 sm:gap-2.5 sm:px-5 sm:py-3 sm:text-sm">
-          <ArrowLeft className="h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
-          <span>Kembali</span>
-        </Link>
-      </header>
+    <div className="h-screen h-[100dvh] max-h-screen w-full bg-[#f8fcf9] font-sans text-slate-800 flex flex-col justify-between relative overflow-hidden select-none">
+      
+      {/* Background Ornaments */}
+      {/* 1. Subtle Dot Grid Matrix */}
+      <div className="absolute inset-0 bg-[radial-gradient(#2563eb_1.2px,transparent_1.2px)] [background-size:28px_28px] opacity-[0.07] pointer-events-none -z-30" />
 
-      <main className="relative z-10 mx-auto w-full max-w-6xl flex-1 px-5 pb-10 pt-8 sm:px-8 sm:pt-10 lg:pt-12">
-        <section className="relative z-10 pb-28 pt-2 sm:pb-32 sm:pt-4 lg:pb-36">
-          <div className="mb-6 h-2 w-20 rounded-full bg-blue-600 sm:mb-7" />
-          <h1 className="max-w-3xl text-2xl font-black leading-[1.12] tracking-tight text-[#102653] sm:text-5xl lg:text-[3.25rem]">
-            Selamat Datang <span className="text-blue-600">Kembali</span>
-          </h1>
-          <svg aria-hidden="true" viewBox="0 0 64 64" fill="none" className="pointer-events-none absolute right-1 top-[54px] hidden h-10 w-10 text-blue-100 opacity-90 min-[360px]:block sm:right-8 sm:top-8 sm:h-20 sm:w-20">
-            <path d="M30 30C17 30 10 23 10 10C23 10 30 17 30 30Z" fill="currentColor" />
-            <path d="M34 30C34 17 41 10 54 10C54 23 47 30 34 30Z" fill="currentColor" />
-            <path d="M30 34C17 34 10 41 10 54C23 54 30 47 30 34Z" fill="currentColor" />
-            <path d="M34 34C47 34 54 41 54 54C41 54 34 47 34 34Z" fill="currentColor" />
-          </svg>
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="pointer-events-none absolute right-[3.1rem] top-0 hidden h-5 w-5 text-sky-300 opacity-90 min-[360px]:block sm:right-40 sm:top-1 sm:h-6 sm:w-6">
-            <path d="M12 1.5 14.5 9.5 22.5 12 14.5 14.5 12 22.5 9.5 14.5 1.5 12 9.5 9.5 12 1.5Z" fill="currentColor" />
-          </svg>
-          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="pointer-events-none absolute right-1 top-6 hidden h-4 w-4 text-blue-200 opacity-90 min-[360px]:block sm:right-8 sm:top-28 sm:h-5 sm:w-5">
-            <circle cx="5" cy="6" r="2" fill="currentColor" />
-            <circle cx="17" cy="4" r="1.5" fill="currentColor" />
-            <circle cx="15" cy="17" r="2.5" fill="currentColor" />
-          </svg>
-          <svg aria-hidden="true" viewBox="0 0 64 64" fill="none" className="pointer-events-none absolute right-[4.5rem] top-[78px] hidden h-10 w-10 text-sky-200 opacity-90 min-[360px]:block sm:right-40 sm:top-20 sm:h-16 sm:w-16">
-            <path d="M8 57C19 44 31 31 54 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            <path d="M17 47C8 45 5 37 8 29C17 29 23 35 22 43C21 45 19 47 17 47Z" fill="currentColor" />
-            <path d="M28 36C21 29 23 20 30 14C38 20 38 29 32 36C31 37 29 37 28 36Z" fill="currentColor" />
-            <path d="M42 22C37 14 41 7 49 4C55 11 53 19 46 23C45 24 43 23 42 22Z" fill="currentColor" />
-          </svg>
-        </section>
-
-        <div aria-hidden="true" className="absolute left-1/2 top-[115px] bottom-[-160px] -z-10 w-screen -translate-x-1/2 overflow-hidden bg-gradient-to-b from-[#0873e8] via-[#168cf2] to-[#0755c7] sm:top-[180px] lg:top-[175px]">
-          <svg className="absolute -top-px h-24 w-full sm:h-32" viewBox="0 0 1440 180" preserveAspectRatio="none" fill="none">
-            <path d="M0 0H1440V30C1200 45 1090 145 810 150C500 155 330 123 0 38V0Z" fill="#dcecff" />
-            <path d="M0 0H1440V15C1200 28 1080 126 810 133C500 139 320 108 0 23V0Z" fill="white" />
-          </svg>
-          <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#0849b7]/60 to-transparent sm:h-72" />
-          <svg aria-hidden="true" viewBox="0 0 1440 330" preserveAspectRatio="xMidYMax slice" className="absolute inset-x-0 bottom-[130px] h-48 w-full opacity-45 sm:bottom-[140px] sm:h-64 lg:bottom-[150px] lg:h-72">
-            <path d="M0 250 100 190l75 34 92-90 119 115 140-62 100 61 180-133 146 101 78-63 100 74 100-88 110 94v97H0Z" fill="#c9e5ff" />
-            <path d="M0 273 89 231l91 26 74-72 91 90 100-47 126 65 111-76 102 51 80-48 111 61 111-80 104 63 89-33 61 47v52H0Z" fill="#73b9ff" />
-            <path d="M0 294c95-41 174-29 267-10 90 19 173 13 266-14 132-38 230-30 326-1 116 36 213 14 302-20 98-37 178-24 279 3v78H0Z" fill="#0753c5" />
-            <g fill="#0758c9"><path d="M130 262h12v-35h-12zm-10-33h32l-5-15h-22zm3-18h26l-7-13h-12zm4-16h18l-9-15zM198 280h9v-27h-9zm-7-25h23l-4-12h-15zm4-15h15l-7-12zM1040 270h10v-31h-10zm-8-29h26l-5-12h-16zm4-15h18l-9-13zM1260 280h11v-32h-11zm-8-30h27l-5-13h-17zm4-16h18l-9-13z" /></g>
-            <path d="M0 296c100-30 185-25 271-7 100 20 180 15 277-11 116-31 227-34 330 0 109 36 212 20 305-13 98-34 179-18 257 6v59H0Z" fill="#0646ae" />
-          </svg>
+      {/* 2. Fullscreen Concentric Decorative Circles (Top-Left & Bottom-Right) */}
+      <div className="absolute -top-32 -left-32 w-[520px] h-[520px] rounded-full border border-blue-300/30 pointer-events-none -z-20 flex items-center justify-center">
+        <div className="w-[420px] h-[420px] rounded-full border border-blue-400/20 flex items-center justify-center">
+          <div className="w-[320px] h-[320px] rounded-full bg-blue-200/20 blur-2xl" />
         </div>
+      </div>
 
-        <section className="relative mx-auto mt-10 w-[calc(100%-0.5rem)] max-w-2xl rounded-[1.75rem] border border-white bg-white px-5 py-6 shadow-[0_25px_70px_rgba(4,39,100,0.2)] sm:w-full sm:rounded-[2rem] sm:px-10 sm:py-9 lg:px-12 lg:py-10" aria-labelledby="login-title">
-          <div className="mb-6 text-center sm:mb-8">
-            <div className="inline-flex items-center gap-2.5 sm:gap-3">
-              <span className="h-10 w-1.5 rounded-full bg-blue-600 sm:h-12 sm:w-2" />
-              <h2 id="login-title" className="text-2xl font-black tracking-tight text-[#102653] sm:text-4xl">Masuk Akun</h2>
-            </div>
-            <div className="mx-auto mt-2 h-1.5 w-28 rounded-full bg-blue-300 sm:mt-3 sm:h-2 sm:w-32" />
+      <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full border border-indigo-300/30 pointer-events-none -z-20 flex items-center justify-center">
+        <div className="w-[480px] h-[480px] rounded-full border border-indigo-400/20 flex items-center justify-center">
+          <div className="w-[360px] h-[360px] rounded-full bg-indigo-200/25 blur-3xl" />
+        </div>
+      </div>
+
+      <div className="absolute top-1/2 left-10 w-72 h-72 rounded-full border border-blue-200/40 pointer-events-none -z-20 hidden md:block" />
+      <div className="absolute top-16 right-1/4 w-48 h-48 rounded-full border border-indigo-200/40 pointer-events-none -z-20 hidden md:block" />
+
+      {/* 3. Soft Ambient Blurs & Glows */}
+      <div className="absolute -top-20 right-1/3 w-80 h-80 bg-blue-300/20 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute bottom-10 left-1/3 w-96 h-96 bg-sky-200/20 rounded-full blur-3xl pointer-events-none -z-10" />
+
+      {/* 4. Floating Geometric Vectors from public/images */}
+      <img 
+        src="/images/landing/Vector.svg" 
+        alt="" 
+        className="absolute top-6 left-12 w-44 opacity-35 pointer-events-none animate-pulse -z-10" 
+      />
+      <img 
+        src="/images/landing/Vector2.svg" 
+        alt="" 
+        className="absolute bottom-8 right-20 w-52 opacity-30 pointer-events-none -z-10" 
+      />
+      <img 
+        src="/images/landing/Component 12.svg" 
+        alt="" 
+        className="absolute top-14 right-1/4 w-8 h-8 opacity-45 pointer-events-none animate-float -z-10 hidden sm:block" 
+      />
+      <img 
+        src="/images/landing/Component 12.svg" 
+        alt="" 
+        className="absolute bottom-16 left-1/4 w-6 h-6 opacity-35 pointer-events-none animate-float-gentle -z-10 hidden sm:block" 
+      />
+
+      {/* Header - Symmetrical Centered Bar */}
+      <header className="relative z-30 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-3 sm:py-4">
+        <div className="grid grid-cols-2 lg:grid-cols-[auto_1fr_auto] items-center gap-4 w-full">
+          <div className="flex items-center justify-start shrink-0">
+            <Link to="/" className="hover:opacity-95 transition-opacity shrink-0 outline-none focus:outline-none">
+              <BrandLogo size="sm" subtitleText="Pemerintah Kota Kediri" />
+            </Link>
           </div>
 
-          {isRegisterRoute && (
-            <div className="mb-5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900">
-              <strong>Pendaftaran warga terpusat:</strong> Akun warga didaftarkan langsung oleh kantor desa. Silakan masuk dengan NIK dan tanggal lahir.
-            </div>
-          )}
-          {error && (
-            <div role="alert" className="mb-5 flex items-start gap-2.5 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm leading-relaxed text-rose-700">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rose-200 text-xs font-black">!</span>
-              <span>{error}</span>
-            </div>
-          )}
+          {/* Center Nav Links - Symmetrical Center Position */}
+          <div className="hidden lg:flex items-center justify-center px-2">
+            <nav className="inline-flex items-center justify-center gap-1 bg-white/95 backdrop-blur-md p-1.5 rounded-full border border-slate-200/80 shadow-xs">
+              <Link
+                to="/"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Beranda</span>
+              </Link>
+              <Link
+                to="/profil"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Profil</span>
+              </Link>
+              <Link
+                to="/layanan-surat"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Layanan Surat</span>
+              </Link>
+              <Link
+                to="/transparansi"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Transparansi</span>
+              </Link>
+              <Link
+                to="/smart-city"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Smart City</span>
+              </Link>
+              <Link
+                to="/berita"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Berita</span>
+              </Link>
+            </nav>
+          </div>
 
-          <form onSubmit={handleLoginSubmit} className="space-y-4 sm:space-y-5">
-            <div className="space-y-1.5">
-              <label htmlFor="login-username" className="block text-sm font-bold tracking-tight text-[#102653] sm:text-base">NIK atau Username</label>
-              <div className="relative">
-                <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-blue-600 sm:left-4"><User className="h-4 w-4 sm:h-5 sm:w-5" /></span>
-                <input id="login-username" type="text" autoComplete="username" value={loginInput} onChange={(e) => setLoginInput(e.target.value)} placeholder="Masukkan NIK atau username" className="h-12 w-full rounded-2xl border border-blue-200 bg-[#f5f8ff] pl-11 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 sm:h-13 sm:pl-12 sm:text-base" required />
+          {/* Right Action */}
+          <div className="flex items-center justify-end gap-2 shrink-0">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-blue-800 bg-white hover:bg-blue-50 border border-slate-200/80 transition-all shadow-2xs whitespace-nowrap outline-none"
+            >
+              <ArrowLeft size={13} />
+              <span>Kembali ke Beranda</span>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="relative z-20 flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 lg:px-12 py-1 sm:py-2 flex items-center justify-center overflow-visible my-auto">
+        
+        {/* Background Aura */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 w-full overflow-visible">
+          <div className="relative w-full max-w-5xl mx-auto h-full flex items-center">
+            <div className="w-full lg:w-1/2 flex items-center justify-center translate-x-0 lg:translate-x-full">
+              <div className="relative flex items-center justify-center overflow-visible">
+                <div className="w-[620px] h-[620px] rounded-full bg-gradient-to-tr from-blue-400/35 via-indigo-300/30 to-blue-100/15 blur-3xl transform scale-110" />
+                <div className="absolute w-[520px] h-[520px] rounded-full border border-blue-400/30 blur-[0.5px]" />
+                <div className="absolute w-[420px] h-[420px] rounded-full bg-gradient-to-bl from-indigo-200/40 via-blue-200/35 to-blue-100/20 blur-2xl" />
+                <div className="absolute w-[320px] h-[320px] rounded-full border border-indigo-300/35" />
+                <div className="absolute w-[240px] h-[240px] rounded-full bg-blue-300/30 blur-xl" />
               </div>
             </div>
-            <div className="space-y-1.5">
-              <label htmlFor="login-password" className="block text-sm font-bold tracking-tight text-[#102653] sm:text-base">Password</label>
-              <div className="relative">
-                <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-blue-600 sm:left-4"><Lock className="h-4 w-4 sm:h-5 sm:w-5" /></span>
-                <input id="login-password" type={showLoginPassword ? 'text' : 'password'} autoComplete="current-password" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} placeholder="Masukkan password" className="h-12 w-full rounded-2xl border border-blue-200 bg-[#f5f8ff] pl-11 pr-12 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100 sm:h-13 sm:pl-12 sm:pr-14 sm:text-base" required />
-                <button type="button" onClick={() => setShowLoginPassword(!showLoginPassword)} aria-label={showLoginPassword ? 'Sembunyikan password' : 'Tampilkan password'} className="absolute inset-y-0 right-3 flex items-center rounded-lg px-2 text-slate-500 transition hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
-                  {showLoginPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
+          </div>
+        </div>
+
+        {/* Form Container */}
+        <div className="relative w-full max-w-5xl mx-auto bg-white/80 backdrop-blur-2xl rounded-[2.5rem] p-3 sm:p-5 lg:p-6 shadow-2xl shadow-blue-950/8 border border-white/90 ring-1 ring-blue-500/10 flex items-center min-h-[490px] overflow-hidden">
+          
+          {/* Inner Corner Glows */}
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-300/20 rounded-full blur-2xl pointer-events-none -z-10" />
+          <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-300/20 rounded-full blur-2xl pointer-events-none -z-10" />
+
+          <div className="relative w-full flex items-center">
+            
+            {/* Form Panel */}
+            <div 
+              className="w-full lg:w-1/2 p-1 sm:p-3 lg:p-4 flex items-center justify-center z-20"
+            >
+              <div className="w-full max-w-md bg-white p-5 sm:p-6 rounded-3xl shadow-xl shadow-slate-900/5 border border-slate-100/90 space-y-3">
+              
+              {/* Header Title & Information */}
+              <div className="space-y-1 border-b border-slate-100 pb-2">
+                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                  Masuk ke Akun
+                </h1>
+                <p className="text-xs text-slate-500">
+                  Gunakan NIK atau username terdaftar Anda.
+                </p>
+              </div>
+
+              {/* Informative notice if came from /register */}
+              {location.pathname === '/register' && (
+                <div className="p-2.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium animate-fade-in flex items-start gap-2">
+                  <div className="text-[11px] leading-snug">
+                    <strong>Pendaftaran Warga Terpusat:</strong> Akun warga didaftarkan langsung oleh kantor desa. Silakan masuk dengan NIK dan tanggal lahir.
+                  </div>
+                </div>
+              )}
+
+              {/* Error Notice */}
+              {error && (
+                <div className="p-2.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium animate-fade-in flex items-start gap-2">
+                  <div className="w-4 h-4 rounded-full bg-rose-200 text-rose-800 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">!</div>
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {/* LOGIN FORM */}
+              <form onSubmit={handleLoginSubmit} className="space-y-3 pt-1">
+                {/* Email / Username / NIK Pill */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 block pl-1">
+                    NIK atau Username
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <div className="w-6 h-6 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200/80">
+                        <User className="w-3 h-3" />
+                      </div>
+                    </div>
+                    <input
+                      type="text"
+                      value={loginInput}
+                      onChange={(e) => setLoginInput(e.target.value)}
+                      placeholder="NIK 16 digit atau username"
+                      className="w-full pl-11 pr-4 py-2.5 sm:py-3 bg-slate-50/90 rounded-full border border-slate-200 text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-inner font-mono"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Password / Tanggal Lahir Pill */}
+                <div className="space-y-1">
+                  <label className="text-[11px] font-bold text-slate-700 block pl-1">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <div className="w-6 h-6 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200/80">
+                        <Lock className="w-3 h-3" />
+                      </div>
+                    </div>
+                    <input
+                      type={showLoginPassword ? 'text' : 'password'}
+                      value={loginPassword}
+                      onChange={(e) => setLoginPassword(e.target.value)}
+                      placeholder="Password atau tanggal lahir (DDMMYYYY)"
+                      className="w-full pl-11 pr-11 py-2.5 sm:py-3 bg-slate-50/90 rounded-full border border-slate-200 text-xs font-medium text-slate-900 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-inner font-mono"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+                    >
+                      {showLoginPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Forgot Password & Submit Button Row */}
+                <div className="flex items-center justify-between pt-1">
+                  <div className="flex items-center gap-3">
+                    <Link
+                      to="/lacak"
+                      className="text-[11px] font-medium text-slate-400 hover:text-blue-700 transition-colors"
+                    >
+                      Lacak berkas
+                    </Link>
+                    <span className="text-slate-300">•</span>
+                    <button
+                      type="button"
+                      onClick={() => setShowSupportChat(true)}
+                      className="text-[11px] font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1 transition-colors cursor-pointer"
+                    >
+                      <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Bantuan / Lupa Akun</span>
+                    </button>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-7 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/25 transition-all press-down flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed hover-glow"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Memverifikasi...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Masuk</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="text-[10px] text-center text-slate-400 pt-1">
+                  Belum memiliki akun? Hubungi kantor kelurahan / kecamatan PATEN.
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+          {/* Hero Panel */}
+          <div className="w-full lg:w-1/2 p-2 sm:p-4 items-center justify-center z-10 hidden lg:flex relative">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10 overflow-visible">
+              <div className="w-[380px] h-[380px] rounded-full bg-blue-100/50 blur-sm" />
+              <div className="absolute w-[300px] h-[300px] rounded-full bg-gradient-to-bl from-indigo-200/60 via-blue-200/50 to-blue-100/40" />
+              <div className="absolute w-[220px] h-[220px] rounded-full bg-gradient-to-bl from-indigo-300/40 via-blue-300/30 to-indigo-100/40" />
+            </div>
+
+            <div className="relative w-full max-w-md mx-auto flex flex-col items-center justify-center">
+              <img src="/images/paper-plane.svg" alt="" className="absolute -top-3 w-10 h-10 opacity-80 pointer-events-none animate-float drop-shadow-sm right-1/4 rotate-0" />
+
+              <div className="relative w-full flex items-center justify-center group scale-100 rotate-0">
+                <div className="absolute inset-0 bg-blue-300/20 rounded-full blur-2xl -z-10 group-hover:bg-blue-400/30 transition-colors" />
+                <img
+                  src="/images/landing/ilustrasi-login.svg"
+                  alt="Ilustrasi layanan administrasi kota cerdas digital"
+                  className="w-full max-w-[340px] xl:max-w-[370px] object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500 z-10"
+                />
+
+                <div className="absolute -top-2 -left-2 sm:left-2 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-blue-100 animate-float">
+                  <div className="w-6 h-6 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-black"><CheckCircle2 className="w-3.5 h-3.5" /></div>
+                  <div className="text-left text-[10px]"><div className="font-extrabold text-slate-900 leading-tight">TTE BSrE & QR Sah</div><div className="text-[8px] text-blue-600 font-semibold">Camat & Lurah Terintegrasi</div></div>
+                </div>
+
+                <div className="absolute -bottom-2 right-2 sm:right-4 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-blue-100 animate-float-gentle">
+                  <div className="w-6 h-6 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-black"><Zap className="w-3.5 h-3.5" /></div>
+                  <div className="text-left text-[10px]"><div className="font-extrabold text-slate-900 leading-tight">&lt; 15 Menit Layanan</div><div className="text-[8px] text-slate-500 font-medium">100% Bebas Pungli</div></div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-4 z-20">
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-blue-200 shadow-2xs text-[11px] font-black text-slate-800 hover:border-blue-400 transition-colors"><ShieldCheck className="w-3.5 h-3.5 text-blue-600" /><span>Legalitas Dispendukcapil & BSrE</span></div>
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-blue-200 shadow-2xs text-[11px] font-black text-slate-800 hover:border-blue-400 transition-colors"><Building2 className="w-3.5 h-3.5 text-blue-600" /><span>Pemerintah Kota Kediri</span></div>
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center sm:justify-between sm:gap-5">
-              <button type="button" onClick={() => setShowSupportChat(true)} className="inline-flex items-center gap-2 self-start text-sm font-bold text-blue-600 transition hover:text-blue-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100 sm:gap-2.5 sm:text-base">
-                <HelpCircle className="h-6 w-6 sm:h-7 sm:w-7" /> Bantuan
-              </button>
-              <button type="submit" disabled={loading} className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-blue-600 px-7 text-sm font-extrabold text-white shadow-[0_8px_18px_rgba(0,84,230,0.24)] transition hover:-translate-y-0.5 hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 disabled:cursor-not-allowed disabled:opacity-70 sm:min-w-48 sm:gap-3 sm:text-base">
-                {loading ? <><Loader2 className="h-5 w-5 animate-spin" />Memverifikasi...</> : <>Masuk <ArrowRight className="h-6 w-6" /></>}
-              </button>
-            </div>
+        </div>
+      </div>
 
-            <div className="border-t border-blue-100 pt-4 text-center text-sm text-slate-500 sm:pt-5 sm:text-base">
-              Belum memiliki akun?{' '}
-              <Link to="/register" className="font-extrabold text-blue-600 transition hover:text-blue-800 hover:underline focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-100">Daftar</Link>
-            </div>
-          </form>
-        </section>
       </main>
 
-      <footer className="relative z-10 mt-auto px-5 pb-6 pt-12 text-center text-[11px] font-medium leading-5 text-white sm:pb-8 sm:pt-16 sm:text-base">
-        <p className="drop-shadow-sm">&copy; {new Date().getFullYear()} Pemerintah Desa Doko, Kec. Ngasem, Kab. Kediri.</p>
-        <nav aria-label="Tautan informasi" className="mt-3 hidden justify-center gap-5 text-xs text-white/85 sm:flex">
-          <Link to="/" className="hover:text-white hover:underline">Privasi</Link>
-          <Link to="/" className="hover:text-white hover:underline">Syarat & Ketentuan</Link>
-          <Link to="/lacak" className="hover:text-white hover:underline">Lacak berkas</Link>
-        </nav>
+      {/* Footer */}
+      <footer className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-2.5 sm:py-3 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-slate-400 font-medium border-t border-slate-100 shrink-0">
+        <div>© {new Date().getFullYear()} Pemerintah Kota Kediri • SiDesKu Smart City & Urban Innovation Platform.</div>
+        <div className="flex items-center gap-4 mt-1 sm:mt-0 font-bold text-slate-500">
+          <Link to="/" className="hover:text-blue-700">Privasi</Link>
+          <Link to="/" className="hover:text-blue-700">Syarat & Ketentuan</Link>
+        </div>
       </footer>
+      
+      {/* Modal Bantuan Tamu (Lupa Akun / Bantuan Desa) */}
+      <GuestSupportChatModal
+        isOpen={showSupportChat}
+        onClose={() => setShowSupportChat(false)}
+      />
 
-      <GuestSupportChatModal isOpen={showSupportChat} onClose={() => setShowSupportChat(false)} />
     </div>
   );
 };

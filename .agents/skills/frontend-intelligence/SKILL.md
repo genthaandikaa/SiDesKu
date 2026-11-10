@@ -1,6 +1,6 @@
 ---
-name: Frontend Intelligence
-description: Create project-appropriate, usable, polished frontend interfaces with design system awareness.
+name: frontend-intelligence
+description: Senior product design and frontend engineering workflow for project-appropriate, polished, responsive UI/UX.
 ---
 
 # Skill: Frontend Intelligence

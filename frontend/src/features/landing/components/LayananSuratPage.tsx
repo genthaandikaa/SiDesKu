@@ -1,43 +1,318 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { 
-  X,
+  X, 
   FileText, 
-  CheckCircle2, 
   Clock, 
-  ShieldCheck, 
   ArrowRight, 
-  FileQuestion, 
-  UserCheck, 
-  Smartphone, 
-  ChevronDown, 
-  ChevronUp, 
-  FileCheck2, 
-  Search,
-  Zap,
-  Tag,
-  Lock
+  Search, 
+  Copy, 
+  Check, 
+  AlertCircle, 
+  QrCode,
+  ShieldCheck,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Layers
 } from 'lucide-react';
+import api from '@/shared/lib/axios';
 import { useAuth } from '@/shared/context/AuthContext';
+import { SuratRequest } from '@/shared/types';
+import { QrVerificationModal } from '@/features/dashboard/components/QrVerificationModal';
 
-export const LayananSuratPage: React.FC = () => {
+export interface SuratItem {
+  id: number;
+  kode: string;
+  nama: string;
+  kategori: string;
+  waktu: string;
+  biaya: string;
+  syarat: string[];
+  kegunaan?: string;
+}
+
+interface LayananSuratPageProps {
+  initialTab?: 'katalog' | 'lacak';
+}
+
+const ITEMS_PER_PAGE = 6;
+
+// Helper to determine category from kode_surat
+const getCategoryByKode = (kode: string): string => {
+  switch (kode) {
+    case 'SKTP':
+    case 'SKKK':
+    case 'SKD':
+    case 'SKP':
+    case 'SKBN':
+      return 'Kependudukan';
+    case 'SKTM':
+    case 'SKPH':
+      return 'Bantuan & Sosial';
+    case 'SKU':
+      return 'Usaha & Ekonomi';
+    case 'SKCK':
+    case 'SKIK':
+      return 'Kepolisian & Hukum';
+    case 'SKL':
+    case 'SKM':
+    case 'SKBM':
+    case 'SKAW':
+      return 'Keluarga & Catatan Sipil';
+    default:
+      return 'Kependudukan';
+  }
+};
+
+const DEFAULT_SURAT_TYPES: SuratItem[] = [
+  {
+    id: 1,
+    kode: 'SKTP',
+    nama: 'Surat Pengantar KTP-el',
+    kategori: 'Kependudukan',
+    waktu: '15 Menit',
+    biaya: 'Gratis',
+    syarat: ['Foto Kartu Keluarga (KK)', 'Surat Pengantar RT/RW', 'KTP Lama / Surat Kehilangan (bila hilang/rusak)'],
+    kegunaan: 'Permohonan penerbitan, penggantian, atau rekam biometrik KTP Elektronik di Dispendukcapil.'
+  },
+  {
+    id: 2,
+    kode: 'SKKK',
+    nama: 'Surat Pengantar Kartu Keluarga',
+    kategori: 'Kependudukan',
+    waktu: '15 Menit',
+    biaya: 'Gratis',
+    syarat: ['KK Asli Lama', 'Buku Nikah / Akta Cerai', 'Surat Keterangan Lahir / Pindah'],
+    kegunaan: 'Pembuatan KK baru, penambahan anggota keluarga, atau pemutakhiran data Kartu Keluarga.'
+  },
+  {
+    id: 3,
+    kode: 'SKTM',
+    nama: 'Surat Keterangan Tidak Mampu',
+    kategori: 'Bantuan & Sosial',
+    waktu: '15 Menit',
+    biaya: 'Gratis',
+    syarat: ['Foto KTP Pemohon', 'Foto Kartu Keluarga (KK)', 'Surat Pengantar RT'],
+    kegunaan: 'Syarat beasiswa, KIP Kuliah, keringanan biaya rumah sakit, atau subsidi bantuan sosial.'
+  },
+  {
+    id: 4,
+    kode: 'SKD',
+    nama: 'Surat Keterangan Domisili',
+    kategori: 'Kependudukan',
+    waktu: '10 Menit',
+    biaya: 'Gratis',
+    syarat: ['Foto KTP Pemohon', 'Foto Kartu Keluarga (KK)'],
+    kegunaan: 'Pembukaan rekening perbankan, kelengkapan perizinan, dan syarat lamaran pekerjaan.'
+  },
+  {
+    id: 5,
+    kode: 'SKU',
+    nama: 'Surat Keterangan Usaha',
+    kategori: 'Usaha & Ekonomi',
+    waktu: '15 Menit',
+    biaya: 'Gratis',
+    syarat: ['Foto KTP Pelaku Usaha', 'Foto Kartu Keluarga (KK)', 'Foto Tempat / Aktivitas Usaha'],
+    kegunaan: 'Pengajuan pinjaman modal KUR Bank dan pengurusan perizinan NIB OSS UMKM.'
+  },
+  {
+    id: 6,
+    kode: 'SKCK',
+    nama: 'Surat Pengantar SKCK',
+    kategori: 'Kepolisian & Hukum',
+    waktu: '10 Menit',
+    biaya: 'Gratis',
+    syarat: ['Foto KTP Pemohon', 'Foto Kartu Keluarga (KK)', 'Pas Foto 4x6 Background Merah'],
+    kegunaan: 'Pengantar permohonan SKCK di Polsek/Polres untuk seleksi kerja atau administrasi resmi.'
+  },
+  {
+    id: 7,
+    kode: 'SKL',
+    nama: 'Surat Keterangan Kelahiran',
+    kategori: 'Keluarga & Catatan Sipil',
+    waktu: '15 Menit',
+    biaya: 'Gratis',
+    syarat: ['Surat Kelahiran RS/Bidan', 'KTP Ayah & Ibu', 'Buku Nikah Asli', 'Kartu Keluarga'],
+    kegunaan: 'Penerbitan akta kelahiran bayi dan penambahan nama anggota keluarga baru di Kartu Keluarga.'
+  },
+  {
+    id: 8,
+    kode: 'SKM',
+    nama: 'Surat Keterangan Kematian',
+    kategori: 'Keluarga & Catatan Sipil',
+    waktu: 'Prioritas (10 Menit)',
+    biaya: 'Gratis',
+    syarat: ['Surat Kematian RS / Saksi RT', 'KTP & KK Almarhum/Almarhumah', 'KTP Pelapor (Ahli Waris)'],
+    kegunaan: 'Penerbitan akta kematian, klaim santunan asuransi/BPJS, dan pemutakhiran data kependudukan.'
+  },
+  {
+    id: 9,
+    kode: 'SKBM',
+    nama: 'Surat Keterangan Belum Menikah',
+    kategori: 'Keluarga & Catatan Sipil',
+    waktu: '10 Menit',
+    biaya: 'Gratis',
+    syarat: ['Foto KTP Pemohon', 'Kartu Keluarga Asli', 'Pernyataan Belum Menikah Bermaterai'],
+    kegunaan: 'Pendaftaran nikah di KUA (Model N1-N4), seleksi instansi kedinasan, atau beasiswa.'
+  },
+  {
+    id: 10,
+    kode: 'SKP',
+    nama: 'Surat Pengantar Pindah Domisili',
+    kategori: 'Kependudukan',
+    waktu: '20 Menit',
+    biaya: 'Gratis',
+    syarat: ['KTP & Kartu Keluarga Asli', 'Alamat Tujuan Pindah Lengkap', 'Surat Bebas Tanggungan RT'],
+    kegunaan: 'Penerbitan surat pindah (SKPWNI) di Dispendukcapil menuju domisili daerah lain.'
+  },
+  {
+    id: 11,
+    kode: 'SKBN',
+    nama: 'Surat Keterangan Beda Nama',
+    kategori: 'Kependudukan',
+    waktu: '15 Menit',
+    biaya: 'Gratis',
+    syarat: ['KTP & Kartu Keluarga Asli', 'Dokumen / Ijazah yang Berbeda Ejaan', 'Surat Pengantar RT'],
+    kegunaan: 'Penegasan identitas hukum bila terdapat perbedaan nama pada KTP, Ijazah, atau Paspor.'
+  },
+  {
+    id: 12,
+    kode: 'SKPH',
+    nama: 'Surat Keterangan Penghasilan',
+    kategori: 'Bantuan & Sosial',
+    waktu: '15 Menit',
+    biaya: 'Gratis',
+    syarat: ['Foto KTP Orang Tua', 'Kartu Keluarga Asli', 'Rincian Penghasilan / Slip Usaha'],
+    kegunaan: 'Keterangan penghasilan orang tua/wali untuk permohonan beasiswa kuliah atau bantuan pendidikan.'
+  },
+  {
+    id: 13,
+    kode: 'SKAW',
+    nama: 'Surat Keterangan Ahli Waris',
+    kategori: 'Keluarga & Catatan Sipil',
+    waktu: '30 Menit',
+    biaya: 'Gratis',
+    syarat: ['Surat Kematian Almarhum', 'Buku Nikah / Akta Cerai', 'KTP & KK Seluruh Ahli Waris', 'Pernyataan Ahli Waris'],
+    kegunaan: 'Penetapan susunan ahli waris yang sah untuk urusan perbankan, pertanahan, atau asuransi.'
+  },
+  {
+    id: 14,
+    kode: 'SKIK',
+    nama: 'Surat Pengantar Izin Keramaian',
+    kategori: 'Kepolisian & Hukum',
+    waktu: '15 Menit',
+    biaya: 'Gratis',
+    syarat: ['Foto KTP Tuan Rumah', 'Surat Persetujuan Tetangga Sekitar', 'Rekomendasi Ketua RT & RW'],
+    kegunaan: 'Rekomendasi izin penyelenggaraan acara hajatan atau kegiatan keramaian warga ke Polsek setempat.'
+  }
+];
+
+export const LayananSuratPage: React.FC<LayananSuratPageProps> = ({ initialTab = 'katalog' }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
-  const [selectedCategory, setSelectedCategory] = useState('Semua');
-  const [selectedSurat, setSelectedSurat] = useState<any | null>(null);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const katalogTopRef = useRef<HTMLDivElement>(null);
+
+  // Tab State: 'katalog' | 'lacak'
+  const tabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState<'katalog' | 'lacak'>(() => {
+    if (tabParam === 'lacak' || searchParams.get('keyword') || searchParams.get('hash') || initialTab === 'lacak') {
+      return 'lacak';
+    }
+    return 'katalog';
+  });
 
   useEffect(() => {
-    const q = searchParams.get('search');
-    if (q) {
-      setSearchQuery(q);
+    if (initialTab === 'lacak' || tabParam === 'lacak' || searchParams.get('keyword') || searchParams.get('hash')) {
+      setActiveTab('lacak');
+    }
+  }, [initialTab, tabParam, searchParams]);
+
+  // Data States
+  const [suratTypes, setSuratTypes] = useState<SuratItem[]>(DEFAULT_SURAT_TYPES);
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
+  const [selectedCategory, setSelectedCategory] = useState('Semua');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedSurat, setSelectedSurat] = useState<SuratItem | null>(null);
+
+  // Lacak States
+  const [trackingKeyword, setTrackingKeyword] = useState(searchParams.get('keyword') || '');
+  const [trackingResults, setTrackingResults] = useState<SuratRequest[] | null>(null);
+  const [hasSearchedTracking, setHasSearchedTracking] = useState(false);
+  const [isSearchingTracking, setIsSearchingTracking] = useState(false);
+  const [searchTrackingError, setSearchTrackingError] = useState('');
+  const [copiedResi, setCopiedResi] = useState<string | null>(null);
+  const [qrVerifyHash, setQrVerifyHash] = useState<string | null>(null);
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
+
+  // Fetch real types from backend if available
+  useEffect(() => {
+    let isMounted = true;
+    const fetchTypes = async () => {
+      try {
+        const res = await api.get('/surat-types');
+        if (isMounted && res.data?.success && Array.isArray(res.data?.data) && res.data.data.length > 0) {
+          interface BackendSuratType {
+            id: number;
+            kode_surat: string;
+            nama_surat: string;
+            persyaratan_json?: string[] | string;
+            template_body?: string;
+          }
+          const mapped: SuratItem[] = res.data.data.map((item: BackendSuratType) => {
+            let parsedSyarat: string[] = [];
+            if (Array.isArray(item.persyaratan_json)) {
+              parsedSyarat = item.persyaratan_json;
+            } else if (typeof item.persyaratan_json === 'string') {
+              try {
+                parsedSyarat = JSON.parse(item.persyaratan_json);
+              } catch {
+                parsedSyarat = [item.persyaratan_json];
+              }
+            }
+
+            return {
+              id: item.id,
+              kode: item.kode_surat,
+              nama: item.nama_surat,
+              kategori: getCategoryByKode(item.kode_surat),
+              waktu: item.kode_surat === 'SKM' ? 'Prioritas (10 Menit)' : '10-15 Menit',
+              biaya: 'Gratis',
+              syarat: parsedSyarat.length > 0 ? parsedSyarat : ['KTP Asli', 'Kartu Keluarga'],
+              kegunaan: ''
+            };
+          });
+          setSuratTypes(mapped);
+        }
+      } catch {
+        // Fallback to DEFAULT_SURAT_TYPES
+      }
+    };
+    fetchTypes();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Lacak init query params
+  useEffect(() => {
+    const initKeyword = searchParams.get('keyword');
+    const initHash = searchParams.get('hash');
+
+    if (initKeyword) {
+      setTrackingKeyword(initKeyword);
+      executeSearchTracking(initKeyword);
+    }
+    if (initHash) {
+      setQrVerifyHash(initHash);
+      setIsVerifyModalOpen(true);
     }
   }, [searchParams]);
 
-  // Lock body scroll and handle ESC key when modal is open
+  // Modal ESC & Scroll Lock
   useEffect(() => {
     if (selectedSurat) {
       document.body.style.overflow = 'hidden';
@@ -52,632 +327,565 @@ export const LayananSuratPage: React.FC = () => {
     }
   }, [selectedSurat]);
 
-  const categories = ['Semua', 'Kependudukan', 'Bantuan & Pendidikan', 'Ekonomi & Usaha', 'Kepolisian & Keamanan'];
+  // Reset page when filter or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery]);
 
-  const suratTypes = [
-    {
-      id: 1,
-      kode: 'SKTM',
-      nama: 'Surat Keterangan Tidak Mampu (SKTM)',
-      kategori: 'Bantuan & Pendidikan',
-      waktu: '10 - 20 Menit',
-      biaya: 'Gratis (Rp 0)',
-      syarat: [
-        'KTP Pemohon / Kartu Pelajar (asli/foto)',
-        'Kartu Keluarga (KK) Desa Doko',
-        'Surat Pengantar dari Ketua RT setempat (otomatis via SIDes)',
-        'Foto kondisi rumah / surat pernyataan penghasilan orang tua (bila diminta)',
-      ],
-    },
-    {
-      id: 2,
-      kode: 'SKD',
-      nama: 'Surat Keterangan Domisili',
-      kategori: 'Kependudukan',
-      waktu: '5 - 15 Menit',
-      biaya: 'Gratis (Rp 0)',
-      syarat: [
-        'KTP asli pemohon',
-        'Kartu Keluarga (KK)',
-        'Persetujuan Ketua RT & Ketua RW sesuai alamat tinggal',
-      ],
-    },
-    {
-      id: 3,
-      kode: 'SKU',
-      nama: 'Surat Keterangan Usaha (SKU)',
-      kategori: 'Ekonomi & Usaha',
-      waktu: '10 - 20 Menit',
-      biaya: 'Gratis (Rp 0)',
-      syarat: [
-        'KTP Pemilik Usaha',
-        'Kartu Keluarga (KK)',
-        'Foto tempat usaha / kegiatan dagang',
-        'Verifikasi pengurus RT bahwa usaha aktif beroperasi di Desa Doko',
-      ],
-    },
-    {
-      id: 4,
-      kode: 'SKCK',
-      nama: 'Surat Pengantar SKCK',
-      kategori: 'Kepolisian & Keamanan',
-      waktu: '5 - 15 Menit',
-      biaya: 'Gratis (Rp 0)',
-      syarat: [
-        'KTP Pemohon',
-        'Kartu Keluarga (KK)',
-        'Pas foto 4x6 background merah',
-        'Surat pengantar RT yang menyatakan berkelakuan baik',
-      ],
-    },
-    {
-      id: 5,
-      kode: 'SKM',
-      nama: 'Surat Keterangan Kematian',
-      kategori: 'Kependudukan',
-      waktu: 'Langsung Diproses',
-      biaya: 'Gratis (Rp 0)',
-      syarat: [
-        'KTP & KK Almarhum/Almarhumah',
-        'KTP Pelapor (Ahli Waris/Keluarga)',
-        'Surat Keterangan Kematian dari RS / Puskesmas / Bidan Desa (jika ada)',
-        'Keterangan saksi dari RT setempat',
-      ],
-    },
-    {
-      id: 6,
-      kode: 'SKL',
-      nama: 'Surat Keterangan Kelahiran',
-      kategori: 'Kependudukan',
-      waktu: '10 - 20 Menit',
-      biaya: 'Gratis (Rp 0)',
-      syarat: [
-        'Surat Keterangan Lahir dari Bidan / Rumah Sakit',
-        'KTP Suami & Istri',
-        'Buku Nikah / Akta Perkawinan Orang Tua',
-        'Kartu Keluarga (KK)',
-      ],
-    },
-    {
-      id: 7,
-      kode: 'SKBM',
-      nama: 'Surat Keterangan Belum Menikah',
-      kategori: 'Kependudukan',
-      waktu: '5 - 15 Menit',
-      biaya: 'Gratis (Rp 0)',
-      syarat: [
-        'KTP Pemohon',
-        'Kartu Keluarga (KK)',
-        'Surat pernyataan belum pernah menikah bermaterai Rp 10.000',
-        'Persetujuan Ketua RT & RW',
-      ],
-    },
-    {
-      id: 8,
-      kode: 'SKP',
-      nama: 'Surat Pengantar Pindah Domisili',
-      kategori: 'Kependudukan',
-      waktu: '15 - 30 Menit',
-      biaya: 'Gratis (Rp 0)',
-      syarat: [
-        'KTP dan KK Asli',
-        'Alamat lengkap tujuan pindah (RT, RW, Desa, Kec, Kab, Prov)',
-        'Alasan kepindahan',
-        'Surat bebas tanggungan kas RT',
-      ],
-    },
+  const categories = [
+    'Semua',
+    'Kependudukan',
+    'Bantuan & Sosial',
+    'Usaha & Ekonomi',
+    'Kepolisian & Hukum',
+    'Keluarga & Catatan Sipil'
   ];
 
-  const filteredSuratTypes = suratTypes.filter((s) => {
-    const matchCategory = selectedCategory === 'Semua' || s.kategori.toLowerCase().includes(selectedCategory.toLowerCase());
-    const matchSearch = s.nama.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                        s.kode.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCategory && matchSearch;
-  });
+  // Dynamic count per category
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { Semua: suratTypes.length };
+    categories.forEach(cat => {
+      if (cat !== 'Semua') {
+        counts[cat] = suratTypes.filter(s => s.kategori === cat).length;
+      }
+    });
+    return counts;
+  }, [suratTypes]);
 
-  const faqs = [
-    {
-      q: 'Apakah layanan surat berbayar?',
-      a: 'Tidak. Layanan surat desa gratis.',
-    },
-    {
-      q: 'Belum punya akun?',
-      a: 'Warga terdaftar dapat masuk dengan NIK atau username. Hubungi kantor desa jika belum memiliki akun.',
-    },
-    {
-      q: 'Berapa lama prosesnya?',
-      a: 'Waktu bergantung pada verifikasi RT/RW dan penerbitan surat.',
-    },
-    {
-      q: 'Apakah surat digital bisa diverifikasi?',
-      a: 'Bisa. Pindai QR pada surat untuk memeriksa keasliannya.',
-    },
-  ];
+  // Filtered letters
+  const filteredSuratTypes = useMemo(() => {
+    return suratTypes.filter((s) => {
+      const matchCategory = selectedCategory === 'Semua' || s.kategori.toLowerCase() === selectedCategory.toLowerCase();
+      const q = searchQuery.toLowerCase().trim();
+      const matchSearch = !q || 
+        s.nama.toLowerCase().includes(q) || 
+        s.kode.toLowerCase().includes(q) ||
+        s.syarat.some(sy => sy.toLowerCase().includes(q));
+      return matchCategory && matchSearch;
+    });
+  }, [suratTypes, selectedCategory, searchQuery]);
+
+  // Pagination calculation
+  const totalItems = filteredSuratTypes.length;
+  const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (safeCurrentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, totalItems);
+  const paginatedSuratTypes = filteredSuratTypes.slice(startIndex, endIndex);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages || newPage === safeCurrentPage) return;
+    setCurrentPage(newPage);
+    if (katalogTopRef.current) {
+      katalogTopRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  const executeSearchTracking = async (kw: string) => {
+    if (!kw.trim()) {
+      setSearchTrackingError('Masukkan nomor resi surat.');
+      return;
+    }
+
+    setIsSearchingTracking(true);
+    setSearchTrackingError('');
+    setHasSearchedTracking(true);
+
+    try {
+      const res = await api.get(`/public/surat/track?keyword=${encodeURIComponent(kw.trim())}`);
+      if (res.data.success && res.data.data.length > 0) {
+        setTrackingResults(res.data.data);
+      } else {
+        setTrackingResults([]);
+        setSearchTrackingError('Nomor resi tidak ditemukan. Pastikan nomor resi sudah sesuai.');
+      }
+    } catch {
+      setSearchTrackingError('Gagal memuat status surat. Silakan coba kembali.');
+    } finally {
+      setIsSearchingTracking(false);
+    }
+  };
+
+  const handleCopyResi = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedResi(text);
+    setTimeout(() => setCopiedResi(null), 2000);
+  };
+
+  const handleStartAjukan = () => {
+    if (user) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login?returnUrl=/dashboard');
+    }
+  };
 
   return (
-    <div className="page-enter relative w-full overflow-hidden flex flex-col">
+    <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14 font-sans text-slate-800 space-y-8 sm:space-y-12">
+      
+      {/* Clean Header */}
+      <div className="text-center max-w-2xl mx-auto space-y-3">
+        <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+          Layanan Persuratan Warga
+        </h1>
+        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          Pilih jenis permohonan surat administrasi secara online atau pantau progres berkas yang telah diajukan secara real-time.
+        </p>
 
-      {/* Div 1: Clean Ambient Hero Section with SVG Vectors (Canvas Mint) */}
-      <section className="relative isolate w-full px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 pb-12 sm:pb-16 text-center">
-        <div className="absolute inset-x-0 top-0 h-[520px] bg-gradient-to-b from-blue-500/15 via-sky-400/10 to-transparent blur-3xl pointer-events-none -z-10" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[320px] bg-gradient-to-tr from-blue-500/20 via-sky-400/15 to-indigo-500/10 rounded-full blur-3xl pointer-events-none -z-10" />
-        {/* SVG Ambient Concentric Watermark Vectors */}
-        <svg className="absolute -right-20 -top-20 w-[500px] h-[500px] text-blue-200/35 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
-          <circle cx="200" cy="200" r="190" stroke="currentColor" strokeWidth="2" strokeDasharray="6 6" />
-          <circle cx="200" cy="200" r="140" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="200" cy="200" r="90" stroke="currentColor" strokeWidth="1" />
-          <circle cx="200" cy="200" r="40" stroke="currentColor" strokeWidth="1" />
-        </svg>
-        <svg className="absolute -left-20 top-1/3 w-[420px] h-[420px] text-indigo-200/25 pointer-events-none -z-10" viewBox="0 0 400 400" fill="none">
-          <path d="M 0,200 Q 100,70 200,200 T 400,200" stroke="currentColor" strokeWidth="2" fill="none" />
-          <path d="M 0,230 Q 100,100 200,230 T 400,230" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.6" />
-        </svg>
-
-        <div className="relative z-10 mx-auto max-w-4xl">
-
-          {/* Left Column (60% Fibonacci): Title, Eyebrow, and Description */}
-          <div className="space-y-4 text-center">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-bold shadow-2xs animate-fade-in">
-              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-              <span>Layanan Digital Desa Doko</span>
-            </div>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.08] max-w-4xl mx-auto">
-              Katalog Layanan{' '}
-              <span className="relative whitespace-nowrap text-blue-700 inline-block">
-                Surat Digital
-                <svg className="absolute -bottom-2 left-0 w-full h-3 text-blue-400" viewBox="0 0 100 20" preserveAspectRatio="none">
-                  <path d="M0 15 Q 50 0, 100 12" stroke="currentColor" strokeWidth="4" strokeLinecap="round" fill="none" />
-                </svg>
-              </span>
-            </h1>
-
-
-
-            <div className="flex justify-center pt-1">
-              <Link
-                to="/login"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-700/20 transition-all press-down hover-glow"
-              >
-                <span>Ajukan surat</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Right Column (40% Fibonacci): Document Mockup Preview */}
-          <div className="hidden">
-            <div className="w-full max-w-md animate-float-gentle">
-              <div className="card-elevated-mockup p-6 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-3xl shadow-xl shadow-slate-900/5 space-y-4">
-
-                {/* Top Bar with Kediri Emblem */}
-                <div className="flex items-center justify-between pb-3.5 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <img 
-                      src="/images/logo-kediri.png" 
-                      alt="Kabupaten Kediri" 
-                      className="h-8 w-auto object-contain"
-                    />
-                    <div>
-                      <div className="font-black text-xs text-slate-900 leading-tight">
-                        Dokumen Resmi Dinas
-                      </div>
-                      <div className="text-[10px] text-blue-600 font-bold">
-                        Kop Surat Pemdes Doko
-                      </div>
-                    </div>
-                  </div>
-                  <span className="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 font-extrabold text-[10px] border border-blue-200">
-                    Gratis Rp 0,-
-                  </span>
-                </div>
-
-                {/* Document Preview Snippet */}
-                <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2.5 text-xs">
-                  <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
-                    <span className="font-black text-slate-800">Surat Keterangan Usaha (SKU)</span>
-                    <span className="text-[10px] font-mono text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded-md">
-                      503/042/.../2026
-                    </span>
-                  </div>
-                  <div className="space-y-1 text-[11px] text-slate-500">
-                    <div className="flex justify-between"><span>Pemohon:</span><strong className="text-slate-800">Bambang Utomo</strong></div>
-                    <div className="flex justify-between"><span>Verifikasi RT:</span><span className="text-blue-700 font-bold">Selesai ACC</span></div>
-                    <div className="flex justify-between"><span>Pengesahan:</span><span className="text-blue-700 font-bold">Stempel & QR TTD</span></div>
-                  </div>
-                </div>
-
-                {/* Instant Guarantee */}
-                <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1">
-                  <span className="flex items-center gap-1.5 font-medium">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
-                    <span>Diproses Rata-rata &lt; 15 Menit</span>
-                  </span>
-                  <span className="font-bold text-slate-700">100% Online</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Floating Individual Guarantee Cards - Straddling Seam Line (Fibonacci Golden Ratio) */}
-      <div className="relative z-30 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mb-[52px] sm:-mb-[58px]">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
-          {/* Card 1 */}
-          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none group-hover:scale-105 transition-transform">
-              14
-            </div>
-            <div className="text-xs sm:text-[13px] font-bold text-slate-700">
-              Jenis Surat Resmi
-            </div>
-            <div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/70">
-                Katalog Lengkap
-              </span>
-            </div>
-          </div>
-
-          {/* Card 2 */}
-          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
-            <div className="text-2xl sm:text-3xl font-black text-blue-600 tracking-tight leading-none group-hover:scale-105 transition-transform">
-              Rp 0,-
-            </div>
-            <div className="text-xs sm:text-[13px] font-bold text-slate-700">
-              Gratis Tanpa Pungli
-            </div>
-            <div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/70">
-                Anti Biaya Siluman
-              </span>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight leading-none group-hover:scale-105 transition-transform">
-              &lt; 15 Mnt
-            </div>
-            <div className="text-xs sm:text-[13px] font-bold text-slate-700">
-              Rata-rata SLA
-            </div>
-            <div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/70">
-                Disposisi Cepat
-              </span>
-            </div>
-          </div>
-
-          {/* Card 4 */}
-          <div className="bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-lg hover:shadow-2xl rounded-2xl py-4 px-4 sm:py-5 sm:px-5 text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 group">
-            <div className="text-2xl sm:text-3xl font-black text-blue-600 tracking-tight leading-none group-hover:scale-105 transition-transform">
-              100%
-            </div>
-            <div className="text-xs sm:text-[13px] font-bold text-slate-700">
-              Legalitas QR Sah
-            </div>
-            <div>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-extrabold bg-blue-50 text-blue-700 border border-blue-200/70">
-                Standar DPMPD
-              </span>
-            </div>
+        {/* Minimal Segmented Switcher */}
+        <div className="pt-2">
+          <div className="inline-flex p-1 rounded-2xl bg-slate-100 border border-slate-200/80">
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('katalog');
+                setSearchParams({});
+              }}
+              className={`py-2 px-5 sm:px-6 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                activeTab === 'katalog'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <FileText className="w-4 h-4 text-blue-600" />
+              <span>Daftar Surat ({suratTypes.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab('lacak');
+                setSearchParams({ tab: 'lacak' });
+              }}
+              className={`py-2 px-5 sm:px-6 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                activeTab === 'lacak'
+                  ? 'bg-white text-slate-900 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Search className="w-4 h-4 text-slate-600" />
+              <span>Lacak Status</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* Div 2: Alur Pelayanan Surat 4 Tahap (Full-Width Pure White Band) */}
-      <section className="w-full bg-white pt-20 sm:pt-24 pb-16 sm:pb-24 border-y border-slate-200/80 relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2 mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-200/80 uppercase tracking-widest">
-              Transparansi Proses
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
-              Alur Pelayanan Surat 4 Tahap
-            </h2>
-          </div>
+      {/* =========================================================================
+          TAB 1: DAFTAR SURAT (KATALOG DENGAN PAGINATION)
+          ========================================================================= */}
+      {activeTab === 'katalog' && (
+        <div ref={katalogTopRef} className="space-y-6 sm:space-y-8">
+          
+          {/* Controls: Search & Category Filter */}
+          <div className="space-y-4 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/80 shadow-2xs">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              {/* Search Input */}
+              <div className="relative w-full sm:w-80">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Cari nama surat, kode, atau syarat..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9.5 pr-8 py-2.5 bg-slate-50 rounded-2xl border border-slate-200/90 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
-              <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
-                1
-              </div>
-              <h3 className="font-bold text-base text-gray-900">Pengajuan Warga</h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                Pilih surat, isi formulir, lalu kirim permohonan.
-              </p>
-              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 p-2 rounded-xl">
-                ⏱ Seketika (1 Menit)
-              </div>
-            </div>
-
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
-              <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
-                2
-              </div>
-              <h3 className="font-bold text-base text-gray-900">Validasi Ketua RT</h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                RT memeriksa data dan memberi persetujuan online.
-              </p>
-              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 p-2 rounded-xl">
-                ⏱ Notifikasi Realtime
-              </div>
-            </div>
-
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
-              <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
-                3
-              </div>
-              <h3 className="font-bold text-base text-gray-900">Verifikasi Ketua RW</h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                RW memvalidasi permohonan.
-              </p>
-              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 p-2 rounded-xl">
-                ⏱ 1-Klik Verifikasi
+              {/* Status info bar */}
+              <div className="text-xs text-slate-500 flex items-center gap-1.5 self-center sm:self-auto font-medium">
+                <Layers className="w-3.5 h-3.5 text-blue-600" />
+                <span>
+                  {totalItems > 0 
+                    ? `Menampilkan ${startIndex + 1}–${endIndex} dari ${totalItems} layanan`
+                    : 'Tidak ada layanan'}
+                </span>
               </div>
             </div>
 
-            <div className="bg-slate-50/80 rounded-3xl p-6 border border-slate-200/80 shadow-xs hover:border-blue-300 hover:shadow-lg hover:bg-white transition-all space-y-3 relative hover-lift">
-              <div className="w-10 h-10 rounded-2xl bg-blue-700 text-white flex items-center justify-center font-black text-sm shadow-xs">
-                4
-              </div>
-              <h3 className="font-bold text-base text-gray-900">Penerbitan Sekdes & QR</h3>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                Sekdes menerbitkan surat ber-QR untuk diunduh.
-              </p>
-              <div className="text-[11px] font-semibold text-blue-700 bg-blue-50 p-2 rounded-xl">
-                ⏱ Terbit Sah & Resmi
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Div 3: Standar Legalitas & Keamanan Dokumen Digital (Full-Width Emerald Background Banner Band) */}
-      <section className="w-full bg-gradient-to-b from-[#1e3a5f] via-[#1d4ed8] to-[#172554] py-16 sm:py-24 text-white relative overflow-hidden">
-        {/* Concentric Circle Orbit Watermark */}
-        <div className="absolute -right-24 -top-24 w-96 h-96 rounded-full border border-white/10 pointer-events-none" />
-        <div className="absolute -right-12 -top-12 w-72 h-72 rounded-full border border-white/10 pointer-events-none" />
-        <div className="absolute -left-20 bottom-0 w-80 h-80 rounded-full border border-white/10 pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
-            <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-blue-200 text-xs font-black border border-white/20">
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-300" />
-                <span>KEAMANAN & LEGALITAS TERVERIFIKASI</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight">
-                Surat Resmi dengan QR
-              </h2>
-              <p className="text-sm text-blue-100/90 leading-relaxed font-medium">
-                Setiap surat memiliki nomor registrasi dan QR untuk verifikasi.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3 shrink-0">
-              <Link
-                to="/lacak"
-                className="px-5 py-3 rounded-2xl bg-white text-blue-900 font-extrabold text-xs sm:text-sm hover:bg-blue-50 transition-all shadow-lg flex items-center gap-2 press-down"
-              >
-                <Search className="w-4 h-4 text-blue-700" />
-                <span>Uji Pelacak Surat Demo</span>
-                <ArrowRight className="w-3.5 h-3.5 text-blue-700" />
-              </Link>
-            </div>
-          </div>
-
-          {/* 3 Callout Cards on Banner */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white/10 backdrop-blur-md border border-white/15 p-6 rounded-3xl space-y-3 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/30 text-white flex items-center justify-center border border-white/20">
-                <Lock className="w-6 h-6 text-blue-200" />
-              </div>
-              <h3 className="font-extrabold text-lg text-white">Verifikasi QR</h3>
-              <p className="text-xs text-blue-100/80 leading-relaxed">
-                Pindai QR untuk memeriksa keaslian surat.
-              </p>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-md border border-white/15 p-6 rounded-3xl space-y-3 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/30 text-white flex items-center justify-center border border-white/20">
-                <Clock className="w-6 h-6 text-blue-200" />
-              </div>
-              <h3 className="font-extrabold text-lg text-white">Proses Terpantau</h3>
-              <p className="text-xs text-blue-100/80 leading-relaxed">
-                Pantau status tanpa datang ke balai desa.
-              </p>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-md border border-white/15 p-6 rounded-3xl space-y-3 hover:bg-white/15 transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/30 text-white flex items-center justify-center border border-white/20">
-              </div>
-              <h3 className="font-extrabold text-lg text-white">Gratis</h3>
-              <p className="text-xs text-blue-100/80 leading-relaxed">
-                Tidak ada biaya administrasi.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Div 4: Katalog Surat & Filter Pencarian (Full-Width Pure White Band) */}
-      <section className="w-full bg-white py-16 sm:py-24 border-b border-slate-200/80 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200 pb-5">
-            <div className="space-y-1">
-              <div className="text-xs font-bold text-blue-700 uppercase tracking-widest">Katalog Layanan Digital</div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">
-                Pilih jenis surat
-              </h2>
-            </div>
-
-            {/* Search Box */}
-            <div className="relative max-w-sm w-full">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Cari nama atau kode surat..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50/80 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all shadow-2xs"
-              />
-            </div>
-          </div>
-
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer ${
-                  selectedCategory === cat
-                    ? 'bg-blue-700 text-white shadow-xs scale-102'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-blue-50 hover:text-blue-800'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Surat Catalog Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredSuratTypes.map((s) => (
-              <div key={s.id} className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs flex flex-col justify-between hover:border-blue-300 hover:shadow-xl transition-all duration-300 hover-lift group">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-black text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
-                      {s.kode}
+            {/* Category Pills */}
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 -mx-1 px-1">
+              {categories.map((cat) => {
+                const isSelected = selectedCategory === cat;
+                const count = categoryCounts[cat] || 0;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 ${
+                      isSelected
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200/80'
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                      isSelected ? 'bg-blue-500 text-white' : 'bg-slate-200/70 text-slate-600'
+                    }`}>
+                      {count}
                     </span>
-                    <span className="text-[10px] text-slate-500 font-bold bg-slate-50 px-2 py-0.5 rounded-md border border-slate-100">{s.waktu}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Clean Letter Cards Grid */}
+          {paginatedSuratTypes.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              {paginatedSuratTypes.map((s) => (
+                <div 
+                  key={s.id}
+                  className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 hover:border-blue-500 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-lg border border-blue-100/80">
+                        {s.kode}
+                      </span>
+                      <span className="text-[11px] font-semibold text-slate-500 bg-slate-50 px-2.5 py-0.5 rounded-full border border-slate-100">
+                        {s.kategori}
+                      </span>
+                    </div>
+
+                    <h3 className="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
+                      {s.nama}
+                    </h3>
+
+                    <div className="pt-2 border-t border-slate-100 space-y-1.5 text-[11px] text-slate-600">
+                      <div className="font-bold text-slate-700">Persyaratan Utama:</div>
+                      <div className="space-y-1">
+                        {s.syarat.slice(0, 2).map((req, rIdx) => (
+                          <div key={rIdx} className="flex items-center gap-1.5 text-slate-500 truncate">
+                            <span className="w-1 h-1 rounded-full bg-blue-600 shrink-0" />
+                            <span className="truncate">{req}</span>
+                          </div>
+                        ))}
+                        {s.syarat.length > 2 && (
+                          <span className="text-blue-600 text-[10px] font-semibold pl-2.5">
+                            +{s.syarat.length - 2} dokumen lainnya
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
-                  <h3 className="font-black text-base text-gray-900 group-hover:text-blue-700 transition-colors leading-snug">
-                    {s.nama}
-                  </h3>
-                </div>
-
-                <div className="pt-4 border-t border-gray-100 mt-5 flex items-center justify-between gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedSurat(s)}
-                    className="text-xs font-bold text-slate-600 hover:text-blue-700 hover:underline cursor-pointer"
-                  >
-                    Syarat
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (user) navigate('/dashboard');
-                      else navigate('/login');
-                    }}
-                    className="px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] shadow-2xs transition-all press-down cursor-pointer"
-                  >
-                    Ajukan
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Div 5: Pertanyaan Umum (FAQ) & Pusat Bantuan (Full-Width Emerald Background Banner Band) */}
-      <section className="w-full bg-gradient-to-b from-[#1e3a5f] via-[#1d4ed8] to-[#172554] py-16 sm:py-24 text-white relative overflow-hidden">
-        {/* Ambient Glows */}
-        <div className="absolute left-10 top-1/2 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute right-10 bottom-10 w-96 h-96 bg-indigo-300/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center space-y-3 mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-blue-200 text-xs font-black border border-white/20">
-              <FileQuestion className="w-3.5 h-3.5 text-blue-300" />
-              <span>PERTANYAAN UMUM PERSURATAN (FAQ)</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight">
-              Hal yang Sering Ditanyakan Warga
-            </h2>
-            <p className="text-xs sm:text-sm text-blue-100/90 max-w-xl mx-auto font-medium">
-              Jawaban singkat tentang pengajuan dan surat digital.
-            </p>
-          </div>
-
-          <div className="space-y-3.5 mb-10">
-            {faqs.map((f, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <div 
-                  key={idx} 
-                  className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl overflow-hidden transition-all duration-300 hover:border-blue-300/40"
-                >
-                  <button
-                    onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-white hover:bg-white/5 transition-colors cursor-pointer"
-                  >
-                    <span>{f.q}</span>
-                    {isOpen ? (
-                      <ChevronUp className="w-4 h-4 text-blue-300 shrink-0" />
-                    ) : (
-                      <ChevronDown className="w-4 h-4 text-blue-200/80 shrink-0" />
-                    )}
-                  </button>
-                  {isOpen && (
-                    <div className="p-5 pt-0 text-xs sm:text-sm text-blue-50/95 border-t border-white/10 bg-black/10 leading-relaxed animate-fade-in">
-                      {f.a}
+                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 text-xs text-slate-400">
+                      <span className="flex items-center gap-1 text-slate-500 font-medium">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        {s.waktu}
+                      </span>
+                      <span>•</span>
+                      <span className="text-emerald-600 font-bold">{s.biaya}</span>
                     </div>
-                  )}
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectedSurat(s)}
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer shadow-xs shadow-blue-600/20 active:scale-95"
+                    >
+                      <span>Ajukan</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white rounded-3xl border border-slate-200/80 p-10 text-center space-y-3 shadow-2xs">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+                <Search className="w-6 h-6" />
+              </div>
+              <div>
+                <h4 className="text-base font-bold text-slate-900">Layanan tidak ditemukan</h4>
+                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                  Tidak ada jenis surat yang cocok dengan kata kunci "{searchQuery}" pada kategori {selectedCategory}.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('Semua');
+                }}
+                className="inline-flex px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors cursor-pointer"
+              >
+                Reset Filter & Pencarian
+              </button>
+            </div>
+          )}
+
+          {/* ================= PAGINATION BAR ================= */}
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 pb-6 border-t border-slate-100/80">
+              <div className="text-xs text-slate-500 font-medium order-2 sm:order-1">
+                Halaman <span className="font-bold text-slate-800">{safeCurrentPage}</span> dari{' '}
+                <span className="font-bold text-slate-800">{totalPages}</span>
+              </div>
+
+              <div className="inline-flex items-center gap-1.5 order-1 sm:order-2">
+                {/* Previous Button */}
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(safeCurrentPage - 1)}
+                  disabled={safeCurrentPage === 1}
+                  className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1 shadow-2xs cursor-pointer"
+                  aria-label="Halaman Sebelumnya"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span className="hidden sm:inline">Sebelumnya</span>
+                </button>
+
+                {/* Page Number Pills */}
+                {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => {
+                  const isActive = pageNum === safeCurrentPage;
+                  return (
+                    <button
+                      key={pageNum}
+                      type="button"
+                      onClick={() => handlePageChange(pageNum)}
+                      aria-label={`Halaman ${pageNum}`}
+                      className={`w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+                        isActive
+                          ? 'bg-blue-600 text-white shadow-xs'
+                          : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/80'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                {/* Next Button */}
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(safeCurrentPage + 1)}
+                  disabled={safeCurrentPage === totalPages}
+                  className="px-3 py-2 rounded-xl border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1 shadow-2xs cursor-pointer"
+                  aria-label="Halaman Berikutnya"
+                >
+                  <span className="hidden sm:inline">Berikutnya</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+        </div>
+      )}
+
+      {/* =========================================================================
+          TAB 2: LACAK STATUS (TRACKING)
+          ========================================================================= */}
+      {activeTab === 'lacak' && (
+        <div className="max-w-2xl mx-auto space-y-6">
+          {/* Tracking Search Input */}
+          <div className="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs space-y-3">
+            <form onSubmit={(e) => { e.preventDefault(); executeSearchTracking(trackingKeyword); }} className="flex gap-2">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Masukkan nomor resi (contoh: REQ-20260818-001)"
+                  value={trackingKeyword}
+                  onChange={(e) => setTrackingKeyword(e.target.value)}
+                  className="w-full pl-9.5 pr-3 py-2.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs sm:text-sm font-mono focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 transition-all text-slate-800"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={isSearchingTracking}
+                className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-1.5 cursor-pointer shrink-0 shadow-xs shadow-blue-600/20"
+              >
+                {isSearchingTracking ? (
+                  <>
+                    <Clock className="w-3.5 h-3.5 animate-spin" />
+                    <span>Mencari...</span>
+                  </>
+                ) : (
+                  <span>Lacak</span>
+                )}
+              </button>
+            </form>
+
+            <div className="flex items-center gap-2 text-[11px] text-slate-400 pt-1">
+              <span>Contoh:</span>
+              {['REQ-20260818-001', 'REQ-20260818-002'].map((sample) => (
+                <button
+                  key={sample}
+                  type="button"
+                  onClick={() => {
+                    setTrackingKeyword(sample);
+                    executeSearchTracking(sample);
+                  }}
+                  className="font-mono text-blue-600 hover:underline cursor-pointer"
+                >
+                  {sample}
+                </button>
+              ))}
+            </div>
+
+            {searchTrackingError && (
+              <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-100 text-rose-700 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 shrink-0" />
+                <span>{searchTrackingError}</span>
+              </div>
+            )}
           </div>
 
-          {/* Helpdesk Callout Card */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
-            <div className="space-y-1">
-              <h4 className="text-base sm:text-lg font-black text-white">Perlu bantuan?</h4>
-              <p className="text-xs text-blue-100/80">
-                Petugas desa melayani Senin–Jumat, 08.00–15.30 WIB.
-              </p>
+          {/* Tracking Result Card */}
+          {hasSearchedTracking && trackingResults && trackingResults.length > 0 && (
+            <div className="space-y-4">
+              {trackingResults.map((item) => {
+                let statusLabel = 'Menunggu Persetujuan RT';
+                let statusColor = 'bg-amber-50 text-amber-800 border-amber-200';
+                
+                if (item.status === 'completed') {
+                  statusLabel = 'Selesai & Sah (TTE)';
+                  statusColor = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+                } else if (item.status === 'rejected') {
+                  statusLabel = 'Ditolak / Perlu Perbaikan';
+                  statusColor = 'bg-rose-50 text-rose-800 border-rose-200';
+                } else if (item.status === 'processed_sekdes' || item.status === 'approved_rt') {
+                  statusLabel = 'Verifikasi Kelurahan';
+                  statusColor = 'bg-blue-50 text-blue-800 border-blue-200';
+                }
+
+                return (
+                  <div key={item.id} className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs space-y-4">
+                    <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-mono font-bold text-slate-900">{item.nomor_resi}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleCopyResi(item.nomor_resi)}
+                            className="text-slate-400 hover:text-slate-600 cursor-pointer p-0.5 rounded"
+                            title="Salin Nomor Resi"
+                          >
+                            {copiedResi === item.nomor_resi ? (
+                              <Check className="w-3.5 h-3.5 text-emerald-600" />
+                            ) : (
+                              <Copy className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </div>
+                        <h4 className="text-base font-extrabold text-slate-900 mt-1">
+                          {item.surat_type?.nama_surat}
+                        </h4>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          Pemohon: <span className="font-semibold text-slate-700">{item.warga_profile?.nama_lengkap}</span>
+                        </p>
+                      </div>
+
+                      <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${statusColor}`}>
+                        {statusLabel}
+                      </span>
+                    </div>
+
+                    {/* Timeline logs */}
+                    {item.trackings && item.trackings.length > 0 && (
+                      <div className="space-y-2 pt-1">
+                        <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                          Riwayat Pemrosesan
+                        </div>
+                        <div className="space-y-2">
+                          {item.trackings.map((t, idx) => (
+                            <div key={t.id || idx} className="flex items-start gap-2.5 text-xs bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between text-slate-700">
+                                  <span className="font-bold">{t.status_stage} • {t.status_action}</span>
+                                  <span className="text-[11px] text-slate-400 font-mono">
+                                    {new Date(t.created_at).toLocaleDateString('id-ID')}
+                                  </span>
+                                </div>
+                                {t.catatan && <p className="text-slate-500 italic mt-0.5">{t.catatan}</p>}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Action */}
+                    {item.status === 'completed' && (
+                      <div className="pt-2 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setQrVerifyHash(item.qr_verification_hash || item.nomor_resi);
+                            setIsVerifyModalOpen(true);
+                          }}
+                          className="px-4 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-xs border border-blue-200 transition-colors flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <ShieldCheck className="w-3.5 h-3.5" />
+                          <span>Periksa Tanda Tangan QR</span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-            <a
-              href="https://wa.me/6281234567890"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0 px-5 py-2.5 rounded-2xl bg-white text-blue-900 font-extrabold text-xs hover:bg-blue-50 transition-all shadow-md flex items-center gap-2 press-down"
+          )}
+
+          {/* Simple Link to QR Verifier */}
+          <div className="text-center pt-2">
+            <button
+              type="button"
+              onClick={() => {
+                setQrVerifyHash(null);
+                setIsVerifyModalOpen(true);
+              }}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
             >
-              <Smartphone className="w-3.5 h-3.5 text-blue-700" />
-              <span>Konsultasi Petugas</span>
-            </a>
+              <QrCode className="w-3.5 h-3.5 text-slate-400" />
+              <span>Verifikasi keaslian surat fisik melalui kode QR</span>
+            </button>
           </div>
         </div>
-      </section>
+      )}
 
-      {/* Modal Detail Persyaratan Surat - Portaled, Auto-Centered, Highest Z-Index, No Blur */}
+      {/* Clean Detail & Application Modal */}
       {selectedSurat && createPortal(
         <div 
-          className="fixed inset-0 z-[999999] flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 font-sans overflow-y-auto animate-fade-in select-none"
+          className="fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-slate-950/60 font-sans backdrop-blur-xs animate-fade-in"
           onClick={(e) => {
             if (e.target === e.currentTarget) setSelectedSurat(null);
           }}
         >
           <div 
-            className="relative bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl modal-content my-auto max-h-[90vh] overflow-y-auto border border-slate-100 animate-scale-up"
+            className="relative bg-white rounded-3xl max-w-lg w-full p-6 space-y-5 shadow-2xl border border-slate-200"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-between items-start pb-4 border-b border-gray-100">
-              <div>
-                <span className="text-[10px] font-mono font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
-                  {selectedSurat.kode}
-                </span>
-                <h3 className="font-extrabold text-lg text-gray-900 mt-2">{selectedSurat.nama}</h3>
+            <div className="flex justify-between items-start pb-3 border-b border-slate-100">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-100">
+                    {selectedSurat.kode}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-500">
+                    {selectedSurat.kategori}
+                  </span>
+                </div>
+                <h3 className="text-lg font-black text-slate-900 leading-snug">
+                  {selectedSurat.nama}
+                </h3>
               </div>
               <button 
                 onClick={() => setSelectedSurat(null)} 
-                className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 cursor-pointer"
-                title="Tutup (ESC)"
+                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 cursor-pointer transition-colors"
+                title="Tutup"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -685,51 +893,64 @@ export const LayananSuratPage: React.FC = () => {
 
             <div className="space-y-4 text-xs">
               <div>
-                <div className="font-bold text-gray-800 uppercase tracking-wider mb-2">Persyaratan Dokumen:</div>
-                <ul className="space-y-2">
-                  {selectedSurat.syarat.map((syarat: string, i: number) => (
-                    <li key={i} className="flex items-start gap-2.5 text-gray-700">
-                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                <span className="font-bold text-slate-800 text-sm">Berkas Persyaratan yang Perlu Disiapkan:</span>
+                <div className="mt-2.5 space-y-2">
+                  {selectedSurat.syarat.map((syarat, i) => (
+                    <div key={i} className="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-700 font-medium">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                       <span>{syarat}</span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-100">
-                  <div className="text-gray-400 text-[10px]">Estimasi Waktu</div>
-                  <div className="font-bold text-blue-950">{selectedSurat.waktu}</div>
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-blue-50/60 border border-blue-100 text-xs text-slate-700">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-blue-600" />
+                  <span>Estimasi Pengerjaan: <strong>{selectedSurat.waktu}</strong></span>
                 </div>
-                <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-100">
-                  <div className="text-gray-400 text-[10px]">Biaya Administrasi</div>
-                  <div className="font-bold text-blue-800">{selectedSurat.biaya}</div>
-                </div>
+                <span className="text-emerald-700 font-bold bg-emerald-100 px-2.5 py-0.5 rounded-full text-[11px]">
+                  {selectedSurat.biaya}
+                </span>
               </div>
             </div>
 
-            <div className="pt-2 flex justify-end gap-2">
+            <div className="pt-2 flex justify-end gap-2.5">
               <button
+                type="button"
                 onClick={() => setSelectedSurat(null)}
-                className="px-4 py-2 rounded-xl border border-gray-200 text-xs font-bold text-gray-600 hover:bg-gray-50 cursor-pointer"
+                className="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer transition-colors"
               >
                 Tutup
               </button>
               <button
+                type="button"
                 onClick={() => {
                   setSelectedSurat(null);
-                  if (user) navigate('/dashboard');
-                  else navigate('/login');
+                  handleStartAjukan();
                 }}
-                className="px-5 py-2 rounded-xl bg-blue-700 text-white text-xs font-bold hover:bg-blue-800 transition-colors cursor-pointer shadow-xs"
+                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-2 shadow-sm shadow-blue-600/25 active:scale-95"
               >
-                Ajukan Surat Ini Sekarang
+                <span>{user ? 'Lanjut Pengajuan' : 'Masuk Akun & Ajukan'}</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>,
         document.body
       )}
+
+      {/* Modal QR Verification */}
+      {isVerifyModalOpen && (
+        <QrVerificationModal
+          hash={qrVerifyHash || undefined}
+          onClose={() => {
+            setIsVerifyModalOpen(false);
+            setQrVerifyHash(null);
+          }}
+        />
+      )}
+
     </div>
   );
 };

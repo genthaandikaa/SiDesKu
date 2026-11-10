@@ -1,6 +1,6 @@
 ---
-name: Flow Intelligence
-description: Analyze and communicate user, business, and system flows through features.
+name: flow-intelligence
+description: Analyze, map, and document user journeys, business processes, and FigJam flowcharts with decision logic.
 ---
 
 # Skill: Flow Intelligence

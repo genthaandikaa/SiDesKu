@@ -1,6 +1,6 @@
 ---
-name: Backend Engineering
-description: Follow Laravel + MySQL backend standards for API development, migrations, and server-side logic.
+name: backend-engineering
+description: Backend engineering skills for Laravel + MySQL, including controllers, models, migrations, and API contracts.
 ---
 
 # Skill: Backend Engineering (Laravel + MySQL)

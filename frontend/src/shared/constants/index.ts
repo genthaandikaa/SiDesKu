@@ -1,7 +1,7 @@
 export const APP_NAME = 'SiDesKu';
-export const VILLAGE_NAME = 'Desa Doko';
-export const DISTRICT_NAME = 'Kecamatan Ngasem';
-export const REGENCY_NAME = 'Kabupaten Kediri';
+export const VILLAGE_NAME = 'Kota Kediri';
+export const DISTRICT_NAME = 'Kecamatan PATEN Kota Kediri';
+export const REGENCY_NAME = 'Pemerintah Kota Kediri';
 
 export const USER_ROLES = {
   ADMIN: 'admin',

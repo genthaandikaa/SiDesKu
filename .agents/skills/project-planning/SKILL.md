@@ -1,6 +1,6 @@
 ---
-name: Project Planning
-description: Plan new projects and substantial features with PRD, requirements, and task breakdowns.
+name: project-planning
+description: Structured project planning, PRD authoring, acceptance criteria mapping, and task breakdowns.
 ---
 
 # Skill: Project Planning

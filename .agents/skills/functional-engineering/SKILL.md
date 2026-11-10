@@ -1,6 +1,6 @@
 ---
-name: Functional Engineering
-description: Implement complete user-facing behavior with proper state management and interaction contracts.
+name: functional-engineering
+description: Complete user-facing functional behavior engineering, contract definitions, and interaction states.
 ---
 
 # Skill: Functional Engineering

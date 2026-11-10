@@ -6,6 +6,7 @@
 “Design with intention. Prioritize clarity over decoration. Use restraint over excess. Never add visual complexity without meaningful purpose.”
 
 ## Avoid by default—not as absolute bans
+- **ATURAN PATEN (STRICT BAN)**: JANGAN PERNAH gunakan ikon Sparkles / Sparkle (`<Sparkles />`) atau badge klise artificial intelligence di landing page/UI desa. Itu adalah ciri khas AI slop. Gunakan ikon yang representatif (misal: Building2, FileText, MapPin) atau hapus badge dekoratif yang tidak perlu.
 - Repeated cards where a table, list, section, or plain layout is clearer.
 - Excessive badges, pills, gradients, shadows, borders, icons, and decorative labels.
 - Generic hero sections, arbitrary floating blobs, meaningless charts, and filler metrics.

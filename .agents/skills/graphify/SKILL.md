@@ -1,6 +1,6 @@
 ---
-name: Graphify Project Knowledge
-description: Create or refresh a navigable knowledge graph of the codebase using Graphify.
+name: graphify
+description: Create or refresh navigable knowledge graphs of the codebase using Graphify CLI.
 ---
 
 # Skill: Graphify Project Knowledge

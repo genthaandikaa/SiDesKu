@@ -1,6 +1,6 @@
 ---
-name: Code Architecture
-description: Inspect and design code architecture, module boundaries, dependencies, and data flow.
+name: code-architecture
+description: Inspect and define codebase architecture, module boundaries, entry points, and architectural decisions (ADRs).
 ---
 
 # Skill: Code Architecture

@@ -1,6 +1,6 @@
 ---
-name: Browser QA
-description: Verify the application as a user would, using the available browser and Playwright tooling.
+name: browser-qa
+description: End-to-end browser verification and QA workflows using Playwright for user flows and responsive auditing.
 ---
 
 # Skill: Browser QA

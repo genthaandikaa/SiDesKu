@@ -1,4 +1,258 @@
 flowchart TD
-  %% PROJECT-SPECIFIC: replace with a validated system flow.
-  A[Frontend] --> B[Backend API]
-  B --> C[(Database)]
+  subgraph faseSatu ["FASE 1: AKSES IDENTIFIKASI DAN AUTENTIKASI PENGGUNA"]
+    direction TB
+    startNode(["Mulai: Pengguna Akses Portal SiDesKu"]) --> checkReg{"Sudah Memiliki Akun?"}
+    checkReg -->|"Belum Punya Akun"| regForm["Isi Form Registrasi: NIK KK Nama No WhatsApp dan Password"]
+    regForm --> dukcapilVal{"Validasi NIK ke Basis Data Dukcapil"}
+    dukcapilVal -->|"NIK Tidak Ditemukan atau Palsu"| regFail["Registrasi Ditolak: Data NIK Tidak Sah"]
+    dukcapilVal -->|"NIK Sah dan Terdaftar"| sendOtp["Kirim 6 Digit OTP Verifikasi ke WhatsApp"]
+    sendOtp --> verifyOtp{"Input dan Verifikasi Kode OTP"}
+    verifyOtp -->|"OTP Kadaluarsa atau Salah"| sendOtp
+    verifyOtp -->|"OTP Benar"| regSuccess["Akun Aktif: Silakan Masuk"]
+    regSuccess --> loginInput["Input NIK atau Username dan Password"]
+    checkReg -->|"Sudah Punya Akun"| loginInput
+    loginInput --> credCheck{"Validasi Kredensial Database"}
+    credCheck -->|"Kredensial Cocok"| authSuccess["Autentikasi Berhasil: Terbitkan Sanctum Bearer Token"]
+    credCheck -->|"Password Salah"| failCount{"Percobaan Gagal Tiga Kali atau Lebih?"}
+    failCount -->|"Kurang 3x"| retryLogin["Peringatan: Password Salah"]
+    retryLogin --> loginInput
+    failCount -->|"Tiga Kali atau Lebih"| lockAccount["Kunci Akun Sementara 15 Menit Anti Brute Force"]
+    lockAccount --> resetPass["Kirim Tautan Reset Password via OTP WhatsApp"]
+    resetPass --> loginInput
+  end
+
+  subgraph faseDua ["FASE 2: PEMERIKSAAN PERAN DAN ROUTING AKSES RBAC"]
+    direction TB
+    authSuccess --> roleCheck{"Identifikasi Role Pengguna di Database"}
+    roleCheck -->|"warga"| dashWarga["Portal Dashboard Warga: Layanan Mandiri dan Partisipasi Publik"]
+    roleCheck -->|"rt"| dashRt["Dashboard Ketua RT: Inbox Verifikasi Lingkungan dan Kas RT"]
+    roleCheck -->|"rw"| dashRw["Dashboard Ketua RW: Koordinasi Wilayah dan Agregat RT"]
+    roleCheck -->|"sekdes_kasi"| dashKelurahan["Dashboard Pelayanan Kelurahan: Meja Registrasi dan Naskah Dinas"]
+    roleCheck -->|"kades_lurah"| dashKades["Dashboard Kepala Desa atau Lurah: Otoritas TTE dan Kebijakan"]
+    roleCheck -->|"camat"| dashCamat["Dashboard Camat: Loket PATEN dan Pelayanan Antar Kelurahan"]
+    roleCheck -->|"opd_kota"| dashCommand["Smart City Command Center: Integrasi PUPR Dinsos Disnaker Diskominfo"]
+  end
+
+  subgraph alurRt ["ALUR OPERASIONAL KETUA RT"]
+    direction TB
+    dashRt --> rtMenuChoice{"Pilih Menu Kerja RT"}
+    rtMenuChoice -->|"Verifikasi Surat"| rtInboxSurat["Buka Inbox Permohonan Surat Masuk Warga RT"]
+    rtMenuChoice -->|"Kelola Warga"| rtWargaTab["Kelola Basis Data Warga dan Peta Spasial Rumah RT"]
+    rtMenuChoice -->|"Kas Lingkungan"| rtKasTab["Catat Transaksi Kas RT Jimpitan dan Iuran Sampah"]
+    rtMenuChoice -->|"Konfirmasi Warga Baru"| rtConfirmTab["Verifikasi Pendaftaran Akun Warga Baru di RT"]
+    rtMenuChoice -->|"Inspeksi Kos Kontrakan"| rtKosTab["Inspeksi dan Validasi Listing Hunian Kos di Lingkungan RT"]
+    rtMenuChoice -->|"Audit Bansos Lapangan"| rtBansosTab["Ground Check Usulan Warga Penerima DTKS Bansos"]
+    
+    rtConfirmTab --> rtCheckDoc{"Cek Keabsahan KTP dan Domisili Nyata"}
+    rtCheckDoc -->|"Data Fiktif"| rtRejectWarga["Tolak Pendaftaran: Bukan Warga Setempat"]
+    rtCheckDoc -->|"Warga Benar"| rtApproveWarga["ACC Akun Warga: Terdaftar di RT"]
+    
+    rtKasTab --> rtInputKas["Input Catatan Pemasukan atau Pengeluaran Kas RT"]
+    rtInputKas --> rtKasReport["Terbitkan Laporan Keuangan Transparan Warga RT"]
+  end
+
+  subgraph alurRw ["ALUR OPERASIONAL KETUA RW"]
+    direction TB
+    dashRw --> rwMenuChoice{"Pilih Menu Kerja RW"}
+    rwMenuChoice -->|"Disposisi Surat Antar RT"| rwInboxSurat["Review Berkas Surat yang Telah di ACC RT"]
+    rwMenuChoice -->|"Koordinasi Teritori"| rwTerritory["Peta Batas Wilayah RW dan Monitoring Kinerja RT"]
+    rwMenuChoice -->|"Data Agregat RW"| rwDataWarga["Pencarian Data Agregat Kependudukan Seluruh RT"]
+    rwMenuChoice -->|"Kas dan Iuran RW"| rwKasTab["Kelola Kas RW untuk Subsidi Lingkungan dan Pos Kamling"]
+  end
+
+  subgraph alurKelurahan ["ALUR OPERASIONAL KELURAHAN DAN SEKDES"]
+    direction TB
+    dashKelurahan --> kelMenuChoice{"Pilih Menu Kerja Kelurahan"}
+    kelMenuChoice -->|"Meja Pelayanan Surat"| kelInboxSurat["Verifikasi Kelayakan Yuridis Berkas Masuk dari RW"]
+    kelMenuChoice -->|"Penomoran Resmi"| kelNumbering["Generate Nomor Surat Resmi Berdasarkan Kode Klasifikasi"]
+    kelMenuChoice -->|"Mutasi Kependudukan"| kelMutasi["Kelola Data Lahir Mati Pindah dan Datang"]
+    kelMenuChoice -->|"Katalog Bansos DTKS"| kelBansos["Rekapitulasi Usulan Bantuan Sosial dan DTKS Kelurahan"]
+    kelMenuChoice -->|"Paraf Sekdes"| kelParaf["Bubuhkan Paraf Digital Sekretaris Desa"]
+    kelNumbering --> kelParaf
+    kelParaf --> eskalasiKades["Disposisi Berkas ke Meja TTE Kades"]
+  end
+
+  subgraph alurKades ["ALUR OPERASIONAL KEPALA DESA ATAU LURAH"]
+    direction TB
+    dashKades --> kadesMenuChoice{"Pilih Menu Kerja Kades"}
+    kadesMenuChoice -->|"Meja TTE Kriptografis"| kadesInboxTte["Review Draf Surat Final yang Siap Ditandatangani"]
+    kadesMenuChoice -->|"Executive Monitoring"| kadesStats["Pantau Statistik Penduduk Realisasi APBDes dan Indeks Warga"]
+    kadesMenuChoice -->|"Publikasi Pengumuman"| kadesAnnounce["Review dan Setujui Pengumuman Resmi Desa"]
+    kadesMenuChoice -->|"Pengaduan Fasilitas"| kadesIssues["Pantau Peta Isu Lapangan dan Disposisi Pos APBDes"]
+    kadesMenuChoice -->|"Pengesahan LPJ APBDes"| kadesLpj["Otorisasi Laporan Pertanggungjawaban APBDes"]
+    
+    kadesInboxTte --> kadesTteDecision{"Keputusan Kades"}
+    kadesTteDecision -->|"Tolak Surat"| kadesRejectDoc["Tolak Surat Final Berikan Catatan Evaluasi"]
+    kadesTteDecision -->|"Setuju TTE"| kadesInputPin["Input PIN Kunci Otorisasi Digital Kades"]
+    kadesInputPin --> kadesPinCheck{"Validasi PIN Kunci Kades"}
+    kadesPinCheck -->|"PIN Salah"| kadesRetryPin["Peringatan: PIN Salah"]
+    kadesRetryPin --> kadesInputPin
+    kadesPinCheck -->|"PIN Cocok"| kadesSignAction["Enkripsi SHA-256 dan TTE Digital BSrE BSSN"]
+  end
+
+  subgraph alurCamat ["ALUR OPERASIONAL CAMAT DAN LOKET PATEN KECAMATAN"]
+    direction TB
+    dashCamat --> camatMenuChoice{"Pilih Menu Kerja Kecamatan"}
+    camatMenuChoice -->|"Loket PATEN Surat"| camatPatenInbox["Pemeriksaan Berkas Kewenangan PATEN: SKPWNI PBG IMB"]
+    camatMenuChoice -->|"TTE Camat"| camatSignBox["Otorisasi TTE Camat untuk Surat Keputusan Kecamatan"]
+    camatMenuChoice -->|"Evaluasi Wilayah"| camatEval["Monitoring Kinerja dan Pelayanan Seluruh Kelurahan se Kecamatan"]
+    
+    camatPatenInbox --> camatCheckDoc{"Verifikasi Berkas Operator PATEN"}
+    camatCheckDoc -->|"Berkas Belum Lengkap"| camatReturnKel["Kembalikan ke Kelurahan untuk Koreksi"]
+    camatCheckDoc -->|"Berkas Lengkap"| camatSignAction["Camat Bubuhkan TTE Digital Kecamatan"]
+  end
+
+  subgraph alurCommandCenter ["ALUR OPERASIONAL SMART CITY COMMAND CENTER KOTA"]
+    direction TB
+    dashCommand --> opdRouting{"Pilih Meja OPD Kota"}
+    opdRouting -->|"Dinas PUPR"| puprDesk["Meja Tanggap Darurat Infrastruktur dan Jalan Kota"]
+    opdRouting -->|"Dinas Sosial"| dinsosDesk["Pusat Validasi Big Data DTKS dan Audit Bansos Terpadu"]
+    opdRouting -->|"Disnaker"| disnakerDesk["Meja Pengawasan Bursa Karir dan Anti Loker Bodong"]
+    opdRouting -->|"Diskominfo"| diskominfoDesk["Pemantauan Uptime Server Big Data Lake dan Log Forensik Kriptografi"]
+    opdRouting -->|"Walikota Bupati"| executiveDesk["Executive City Dashboard: Heatmap Isu Kota dan Serapan APBD"]
+  end
+
+  subgraph faseSuratMandiri ["FASE 3 SAMPAI 9: SIKLUS HIDUP PERMOHONAN SURAT DIGITAL"]
+    direction TB
+    dashWarga --> pickSurat["Warga Pilih Layanan Surat Mandiri SKTM SKU Domisili"]
+    pickSurat --> checkMasterDoc{"Apakah Berkas Master KTP dan KK Lengkap di Profil?"}
+    checkMasterDoc -->|"Belum Lengkap"| uploadMasterDoc["Unggah Foto KTP KK Format PDF JPG Kurang 2MB"]
+    uploadMasterDoc --> fillDetail["Lengkapi Rincian Keperluan Surat"]
+    checkMasterDoc -->|"Lengkap"| fillDetail
+    fillDetail --> previewDraft["Review Draft Permohonan Surat Mandiri"]
+    previewDraft --> submitReq["Submit Permohonan: Terbitkan Resi REQ-YYYYMMDD-XXXX"]
+    submitReq --> rtInboxSurat
+    
+    rtInboxSurat --> rtDecision{"Keputusan Verifikasi Ketua RT"}
+    rtDecision -->|"Berkas Kurang atau Buram"| rtRevisionReq["Input Catatan Revisi Berkas ke Pemohon"]
+    rtRevisionReq --> wargaFixReq["Warga Unggah Perbaikan Berkas dari Dashboard"]
+    wargaFixReq --> rtInboxSurat
+    rtDecision -->|"Permohonan Tidak Layak"| rtRejectReq["Tolak Permohonan: Arsip Selesai"]
+    rtDecision -->|"Data Valid dan Layak"| rtAccReq["Ketua RT Klik ACC Pengantar RT Digital"]
+    rtAccReq --> rwInboxSurat
+    
+    rwInboxSurat --> rwDecision{"Keputusan Ketua RW"}
+    rwDecision -->|"Perlu Koreksi"| rwReturnReq["Kembalikan ke RT atau Warga"]
+    rwReturnReq --> rtInboxSurat
+    rwDecision -->|"Validasi Wilayah Disetujui"| rwAccReq["Ketua RW Klik Validasi Kewilayahan"]
+    rwAccReq --> kelInboxSurat
+    
+    kelInboxSurat --> kelCheckDoc{"Pemeriksaan Kelayakan Hukum oleh Kasi"}
+    kelCheckDoc -->|"Berkas Cacat Administrasi"| kelRejectReq["Tolak Berkas Kelurahan"]
+    kelCheckDoc -->|"Berkas Lengkap dan Sah"| kelNumbering
+    
+    eskalasiKades --> kadesInboxTte
+    kadesSignAction --> stampQrTte["Terbitkan Segel QR Code Kriptografis Unik dan Watermark PDF"]
+    stampQrTte --> patenCheckBranch{"Apakah Masuk Kewenangan PATEN Kecamatan?"}
+    patenCheckBranch -->|"Tidak: Selesai di Kelurahan"| letterComplete["Surat Resmi Kelurahan Sah dan Terbit"]
+    patenCheckBranch -->|"Ya: Wewenang Kecamatan SKPWNI PBG"| camatPatenInbox
+    camatSignAction --> letterComplete
+    
+    letterComplete --> syncCityData["Sinkronisasi Transaksi ke Big Data Lake Kota Diskominfo"]
+    syncCityData --> diskominfoDesk
+    letterComplete --> notifyWargaDone["Kirim Notifikasi WhatsApp: Berkas Telah Terbit ke Warga"]
+    notifyWargaDone --> wargaAccessDoc{"Pilihan Pengambilan Dokumen oleh Warga"}
+    wargaAccessDoc -->|"Unduh Digital"| downloadDoc["Warga Unduh PDF Sah dari Dashboard atau Ponsel"]
+    wargaAccessDoc -->|"Cetak Mandiri"| printKios["Cetak Fisik di Kios Balai Warga"]
+    downloadDoc & printKios --> presentToBank["Warga Bawa Surat ke Pihak Ketiga: Bank Kampus BPJS Dinas"]
+    presentToBank --> scanQrInstansi["Petugas Instansi Pindai QR Code Menggunakan Kamera"]
+    scanQrInstansi --> verifyHashLedger{"Audit Integritas Hash Database Smart City"}
+    verifyHashLedger -->|"Hash Cocok dan Identik"| docValidSah["Status: DOKUMEN ASLI SAH DAN TERCATAT RESMI DI PEMKOT"]
+    verifyHashLedger -->|"Hash Berbeda atau Palsu"| docInvalidFake["Peringatan: DOKUMEN PALSU ATAU TELAH DIMANIPULASI"]
+  end
+
+  subgraph faseInfrastrukturSpasial ["FASE 10: ALUR PENGADUAN FASILITAS PUBLIK DAN BENCANA SPASIAL"]
+    direction TB
+    dashWarga --> openLapor["Warga Buka Menu Pengaduan Kerusakan Fasilitas Publik"]
+    openLapor --> gpsLock{"Izin Akses GPS Ponsel"}
+    gpsLock -->|"Diizinkan"| autoGpsCoords["Kunci Koordinat Lat Long Presisi Tinggi"]
+    gpsLock -->|"Ditolak"| manualGpsPin["Tandai Titik Pin Manual pada Peta GIS"]
+    autoGpsCoords & manualGpsPin --> captureEvidence["Ambil Foto Bukti Kerusakan Fisik di Lokasi"]
+    captureEvidence --> aiVisionCheck{"Evaluasi AI Vision: Deteksi Keaslian Objek"}
+    aiVisionCheck -->|"Bukan Kerusakan atau Gambar Palsu"| aiRejectPhoto["Laporan Ditolak: Minta Foto Objek Riil"]
+    aiRejectPhoto --> captureEvidence
+    aiVisionCheck -->|"Objek Kerusakan Nyata"| aiSeverityLevel{"Klasifikasi Tingkat Keparahan AI"}
+    aiSeverityLevel -->|"Kritis: Jembatan Amblas Longsor"| pinRedAlert["Tetapkan PIN MERAH: Tanggap Darurat SLA Kurang 24 Jam"]
+    aiSeverityLevel -->|"Sedang: Aspal Lubang PJU Mati"| pinYellowAlert["Tetapkan PIN KUNING: Perbaikan Rutin SLA 3 sampai 5 Hari"]
+    pinRedAlert & pinYellowAlert --> liveGisBroadcast["Tampilkan Pin di Peta Spasial Publik dan Command Center"]
+    liveGisBroadcast --> communityVoting["Warga Sekitar Berikan Upvote Konfirmasi Lapangan"]
+    communityVoting --> quorumCheck{"Lolos Kuorum Validasi Sosial?"}
+    quorumCheck -->|"Laporan Fiktif"| cancelFakeReport["Laporan Dibatalkan dan Ditandai Fiktif"]
+    quorumCheck -->|"Laporan Terbukti Riil"| roadJurisdiction{"Klasifikasi Kewenangan Ruas Jalan"}
+    roadJurisdiction -->|"Jalan Lingkungan Desa"| kadesIssues
+    kadesIssues --> desaFunding["Alokasi Anggaran Kas Pelaksana Desa Pos APBDes"]
+    roadJurisdiction -->|"Jalan Poros Kecamatan"| camatEval
+    camatEval --> trantibDispatch["Disposisi ke Tim Trantib dan PU Seksi Wilayah"]
+    roadJurisdiction -->|"Jalan Kota atau Provinsi"| puprDesk
+    puprDesk --> puprDispatch["Disposisi Tim Reaksi Cepat Dinas PUPR Kota"]
+    desaFunding & trantibDispatch & puprDispatch --> pinBlueActive["Ubah Status Menjadi PIN BIRU: Petugas Sedang Mengerjakan"]
+    pinBlueActive --> fieldWorkAction["Tim Lapangan Melakukan Perbaikan Fisik di Lokasi"]
+    fieldWorkAction --> uploadProofAfter["Petugas Lapangan Unggah Foto Selesai di Titik GPS Sama"]
+    uploadProofAfter --> inspectorAudit{"Inspeksi Pengawas Teknis Lapangan"}
+    inspectorAudit -->|"Pekerjaan Belum Sesuai Spek"| fieldWorkAction
+    inspectorAudit -->|"Pekerjaan Sempurna"| pinGreenResolved["Ubah Status Menjadi PIN HIJAU: Tuntas dan Selesai"]
+    pinGreenResolved --> notifyCitizenResolved["Kirim Notifikasi Penyelesaian Lengkap ke Ponsel Warga"]
+  end
+
+  subgraph faseHunianSpasial ["FASE 11: PETA HUNIAN DAN KOS SPASIAL GIS BAGI PENDATANG BARU"]
+    direction TB
+    dashWarga --> hunianCitizenChoice{"Pilih Aktivitas Hunian"}
+    hunianCitizenChoice -->|"Cari Tempat Tinggal"| searchHunian["Pendatang atau Mahasiswa Buka Peta Spasial Hunian"]
+    hunianCitizenChoice -->|"Pasang Iklan Kos"| registerListing["Pemilik Hunian Daftarkan Properti Sewa Baru"]
+    
+    searchHunian --> filterHunian["Filter Berdasarkan Tipe: Kos Putri Putra Campur Kontrakan dan Harga"]
+    filterHunian --> interactiveGisMap["Peta Interaktif Tampilkan Pin Hunian dan Ketersediaan Kamar"]
+    interactiveGisMap --> clickPinHunian["Pilih Pin Properti: Review Fasilitas AC Wifi KM Dalam dan Galeri"]
+    clickPinHunian --> contactVerifiedOwner["Hubungi Pemilik via WhatsApp Terverifikasi RT"]
+    contactVerifiedOwner --> surveyAndDeal["Survei Fisik ke Lokasi dan Transaksi Sewa Aman Bebas Calo"]
+    
+    registerListing --> submitListingForm["Input Nama Hunian Tarif Fasilitas dan Tandai Titik GPS Lokasi"]
+    submitListingForm --> rtKosTab
+    rtKosTab --> rtInspectListing{"Pemeriksaan Lapangan dan Legalitas oleh Pengurus RT"}
+    rtInspectListing -->|"Properti Ilegal atau Rawan Keamanan"| rtRejectListing["Tolak Listing: Alasan Keamanan Lingkungan"]
+    rtInspectListing -->|"Properti Sah dan Lingkungan Tertib"| rtApproveListing["ACC Listing: Diberi Lencana Terverifikasi RT"]
+    rtApproveListing --> interactiveGisMap
+  end
+
+  subgraph fasePasarBebasUmkm ["FASE 12: PASAR BEBAS UMKM KOTA BERBASIS RADIUS JARAK TERDEKAT"]
+    direction TB
+    dashWarga --> marketCitizenChoice{"Pilih Aktivitas Pasar UMKM"}
+    marketCitizenChoice -->|"Belanja Produk Terdekat"| browseMarketList["Warga Buka Katalog Pasar Komunitas Kota"]
+    marketCitizenChoice -->|"Jual Dagangan Lapak"| createMerchantShop["Pelaku UMKM Buka Lapak dan Tambah Produk"]
+    
+    browseMarketList --> selectDistanceRadius{"Pilih Filter Radius Jarak Terdekat"}
+    selectDistanceRadius -->|"Radius 500 Meter"| radUnder500["Produk Sekitar Tetangga Satu Rukun Tetangga Kurang 500m"]
+    selectDistanceRadius -->|"Radius 1.5 Kilometer"| radUnder1500["Produk Sekitar Dusun dan RW Tetangga Kurang 1.5km"]
+    selectDistanceRadius -->|"Radius 3 Kilometer"| radUnder3000["Produk Satu Kelurahan Kurang 3km"]
+    selectDistanceRadius -->|"Radius 5 Kilometer"| radUnder5000["Produk Lintas Kelurahan Kurang 5km"]
+    selectDistanceRadius -->|"Seluruh Kota"| radAllCity["Jelajahi Seluruh Sentra Kuliner dan Usaha Kota"]
+    radUnder500 & radUnder1500 & radUnder3000 & radUnder5000 & radAllCity --> sortDistanceFeed["Urutkan Produk Berdasarkan Jarak Paling Dekat dari Posisi Warga"]
+    sortDistanceFeed --> pickProductItem["Pilih Menu Kuliner Belanja Harian atau Jasa Lokal"]
+    pickProductItem --> directWaOrder["Hubungi Penjual via WhatsApp: COD atau Pesan Antar Tetangga"]
+    
+    createMerchantShop --> submitProductData["Unggah Foto Produk Judul Harga Kategori dan Titik Koordinat Lapak"]
+    submitProductData --> checkShopCoords{"Validasi Titik Koordinat Lapak di Wilayah Kota"}
+    checkShopCoords -->|"Koordinat di Luar Batas Kota"| correctCoords["Minta Koreksi Titik Lokasi Lapak"]
+    correctCoords --> submitProductData
+    checkShopCoords -->|"Koordinat Sah"| publishShopProduct["Produk Otomatis Tayang di Feed Radius Terdekat"]
+    publishShopProduct --> sortDistanceFeed
+  end
+
+  subgraph faseBursaKarirDisnaker ["FASE 13: BURSA KARIR DAN LOKER KOTA TERPADU LINKEDIN STYLE"]
+    direction TB
+    dashWarga --> jobCitizenChoice{"Pilih Aktivitas Bursa Karir"}
+    jobCitizenChoice -->|"Mencari Pekerjaan"| searchJobFeed["Pencari Kerja Buka Feed Bursa Karir Kota"]
+    jobCitizenChoice -->|"Buka Lowongan Kerja"| postJobVacancy["Perusahaan atau Pelaku Usaha Pasang Lowongan Baru"]
+    
+    searchJobFeed --> filterJobs["Filter Bidang Kerja Tingkat Pengalaman dan Rentang Gaji Standar UMK"]
+    filterJobs --> listVerifiedJobs["Tampilkan Feed Loker Berstatus Disnaker Verified"]
+    listVerifiedJobs --> reviewJobDetail["Review Persyaratan Kualifikasi Benefit dan Lokasi Kantor"]
+    reviewJobDetail --> applyJobInstant["Kirim Lamaran Instan dan CV Portofolio ke Kontak HRD"]
+    
+    postJobVacancy --> inputJobReqs["Input Profil Perusahaan Deskripsi Tugas Kualifikasi dan Rentang Gaji"]
+    inputJobReqs --> disnakerDesk
+    disnakerDesk --> disnakerLegalAudit{"Audit Legalitas dan Anti Fraud oleh Disnaker Kota"}
+    disnakerLegalAudit -->|"Indikasi Pungli Penipuan atau Minta Uang Pendaftaran"| disnakerBlacklist["Tolak Lowongan dan Masukkan Akun ke Daftar Hitam"]
+    disnakerLegalAudit -->|"Perusahaan Terdaftar Resmi Memiliki NIB"| disnakerApprove["Terbitkan Loker Berstempel Resmi Disnaker Verified Anti Fraud"]
+    disnakerApprove --> listVerifiedJobs
+  end

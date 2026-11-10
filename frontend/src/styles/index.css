@@ -82,6 +82,22 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes tableExpandDown {
+  0% {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  35% {
+    opacity: 0.6;
+  }
+  100% {
+    max-height: 800px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes floatSlow {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
   50% { transform: translateY(-8px) rotate(1deg); }
@@ -116,9 +132,18 @@ body {
   display: flex;
   width: max-content;
   animation: marquee 35s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-slow {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+  will-change: transform;
 }
 
 .animate-marquee:hover,
+.animate-marquee-slow:hover,
 .animate-marquee-reverse:hover {
   animation-play-state: paused;
 }
@@ -127,6 +152,7 @@ body {
   display: flex;
   width: max-content;
   animation: marqueeReverse 35s linear infinite;
+  will-change: transform;
 }
 
 @keyframes orbitO {
@@ -195,6 +221,11 @@ body {
   animation: slideDown 0.25s ease both;
 }
 
+.animate-table-expand {
+  animation: tableExpandDown 340ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: max-height, opacity, transform;
+}
+
 .animate-float {
   animation: floatSlow 5s ease-in-out infinite;
 }
@@ -240,15 +271,53 @@ body {
 /* Modern Surface Components */
 .card-modern {
   background: #ffffff;
-  border: 1px solid #f1f5f9;
+  border: 1px solid rgba(226, 232, 240, 0.8);
   border-radius: 1.5rem;
-  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05), 0 2px 6px -2px rgba(15, 23, 42, 0.02);
+  box-shadow: 0 4px 20px -4px rgba(14, 165, 233, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.02);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-modern:hover {
-  border-color: #e2e8f0;
-  box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 16px 32px -8px rgba(14, 165, 233, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+}
+
+/* Premium Cohesive Blue Gradient Utilities (No Purple Clashing) */
+.bg-gradient-sky-blue {
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 60%, #1d4ed8 100%);
+}
+
+.text-gradient-sky-blue,
+.text-title-accent {
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 55%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.bg-radial-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.15) 0%, rgba(37, 99, 235, 0.08) 50%, transparent 80%);
+}
+
+/* 3D Perspective Card Tilt for Hero Mockup (Desktop only) */
+@media (min-width: 1024px) {
+  .perspective-mockup {
+    perspective: 1200px;
+  }
+  .tilted-mockup {
+    transform: rotateX(8deg) rotateY(-8deg) rotateZ(2deg);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .tilted-mockup:hover {
+    transform: rotateX(2deg) rotateY(-2deg) rotateZ(0deg);
+    box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+  }
+}
+
+@media (max-width: 1023px) {
+  .tilted-mockup {
+    transform: none !important;
+  }
 }
 
 .card-elevated-mockup {
@@ -280,7 +349,7 @@ body {
 
 /* Clean Gradient Text */
 .text-gradient-emerald {
-  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #6366f1 100%);
+  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #0284c7 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
