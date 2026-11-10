@@ -9,6 +9,11 @@ import {
   LogOut,
   LogIn,
   ChevronDown,
+  ShoppingBag,
+  Home,
+  Briefcase,
+  Layers,
+  ChevronRight
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { BrandLogo } from '@/shared/components/BrandLogo';
@@ -26,8 +31,11 @@ export const PublicNavbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [smartCityDropdownOpen, setSmartCityDropdownOpen] = useState(false);
+  const [mobileSmartCityOpen, setMobileSmartCityOpen] = useState(false);
   const profileRef = React.useRef<HTMLDivElement>(null);
   const navbarRef = React.useRef<HTMLDivElement>(null);
+  const smartCityDropdownRef = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,17 +45,20 @@ export const PublicNavbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu & profile dropdown on click/tap outside
+  // Close menus on click/tap outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Node;
+      if (smartCityDropdownRef.current && !smartCityDropdownRef.current.contains(target)) {
+        setSmartCityDropdownOpen(false);
+      }
       if (navbarRef.current && !navbarRef.current.contains(target)) {
         setMobileMenuOpen(false);
         setProfileDropdownOpen(false);
       }
     };
 
-    if (mobileMenuOpen || profileDropdownOpen) {
+    if (mobileMenuOpen || profileDropdownOpen || smartCityDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('touchstart', handleClickOutside);
     }
@@ -56,12 +67,13 @@ export const PublicNavbar: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('touchstart', handleClickOutside);
     };
-  }, [mobileMenuOpen, profileDropdownOpen]);
+  }, [mobileMenuOpen, profileDropdownOpen, smartCityDropdownOpen]);
 
   // Close mobile menu & dropdown on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setProfileDropdownOpen(false);
+    setSmartCityDropdownOpen(false);
   }, [location.pathname]);
 
   // Close on ESC key
@@ -70,6 +82,7 @@ export const PublicNavbar: React.FC = () => {
       if (e.key === 'Escape') {
         setMobileMenuOpen(false);
         setProfileDropdownOpen(false);
+        setSmartCityDropdownOpen(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -95,6 +108,42 @@ export const PublicNavbar: React.FC = () => {
   ];
 
   const activeLinks = user ? postLoginLinks : preLoginLinks;
+
+  const smartCitySubItems = [
+    {
+      name: 'Smart City Hub',
+      desc: 'Peta Spasial GIS & Portal Terpadu',
+      path: '/smart-city',
+      icon: Layers,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50',
+    },
+    {
+      name: 'Pasar Digital & UMKM',
+      desc: 'Produk Tetangga, QRIS & COD',
+      path: '/smart-city/umkm',
+      icon: ShoppingBag,
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-50',
+    },
+    {
+      name: 'Pencarian Kos & Hunian',
+      desc: 'Kamar Kos & Kontrakan Terverifikasi',
+      path: '/smart-city/kos',
+      icon: Home,
+      color: 'text-sky-600',
+      bgColor: 'bg-sky-50',
+    },
+    {
+      name: 'Bursa Kerja & Loker',
+      desc: 'Peluang Kerja Lokal & Lamar CV',
+      path: '/smart-city/loker',
+      icon: Briefcase,
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-50',
+    },
+  ];
+
   const isActive = (path: string) => {
     if (path === '/' && location.pathname === '/') return true;
     if (path === '/smart-city' && (
@@ -167,6 +216,71 @@ export const PublicNavbar: React.FC = () => {
                     </Link>
                   );
                 }
+                if (item.path === '/smart-city') {
+                  return (
+                    <div
+                      key={item.path}
+                      ref={smartCityDropdownRef}
+                      className="relative"
+                      onMouseEnter={() => setSmartCityDropdownOpen(true)}
+                      onMouseLeave={() => setSmartCityDropdownOpen(false)}
+                    >
+                      <button
+                        type="button"
+                        onClick={() => setSmartCityDropdownOpen((prev) => !prev)}
+                        className={`px-3 sm:px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 outline-none focus:outline-none inline-flex items-center gap-1 cursor-pointer ${
+                          active 
+                            ? 'bg-white text-sky-950 font-bold border border-slate-200/90 shadow-xs' 
+                            : 'border border-transparent text-slate-600 hover:text-sky-800 hover:bg-white/60'
+                        }`}
+                      >
+                        <span>{item.name}</span>
+                        <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform duration-200 ${smartCityDropdownOpen ? 'rotate-180 text-sky-600' : ''}`} />
+                      </button>
+
+                      {/* Dropdown Container with padding bridge so hover never breaks */}
+                      <div
+                        className={`absolute left-1/2 -translate-x-1/2 pt-2 w-72 z-50 transition-all duration-150 ${
+                          smartCityDropdownOpen
+                            ? 'opacity-100 visible translate-y-0 pointer-events-auto'
+                            : 'opacity-0 invisible -translate-y-1 pointer-events-none'
+                        }`}
+                      >
+                        <div className="bg-white/98 backdrop-blur-md rounded-2xl shadow-xl border border-sky-100 p-2 space-y-1">
+                          <div className="px-3 py-1.5 border-b border-slate-100 flex items-center justify-between">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-sky-600">Ekosistem Smart City</span>
+                            <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-sky-100 text-sky-700 font-bold">4 Modul</span>
+                          </div>
+                          {smartCitySubItems.map((sub) => {
+                            const SubIcon = sub.icon;
+                            const isSubActive = location.pathname === sub.path;
+                            return (
+                              <Link
+                                key={sub.path}
+                                to={sub.path}
+                                onClick={() => setSmartCityDropdownOpen(false)}
+                                className={`flex items-start gap-2.5 p-2 rounded-xl transition-all ${
+                                  isSubActive
+                                    ? 'bg-sky-50 text-sky-950 border border-sky-200/70 font-bold'
+                                    : 'hover:bg-slate-50 text-slate-700 hover:text-sky-900'
+                                }`}
+                              >
+                                <div className={`p-2 rounded-lg shrink-0 ${sub.bgColor} ${sub.color}`}>
+                                  <SubIcon className="w-4 h-4" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-xs font-bold leading-tight">{sub.name}</div>
+                                  <div className="text-[10px] text-slate-500 truncate mt-0.5">{sub.desc}</div>
+                                </div>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
                 return (
                   <Link
                     key={item.path}
@@ -303,20 +417,72 @@ export const PublicNavbar: React.FC = () => {
             )}
 
             <div className="space-y-1">
-              {activeLinks.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-4 py-2.5 rounded-2xl text-xs font-bold transition-all ${
-                    isActive(item.path) 
-                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-xs' 
-                      : 'text-slate-700 hover:bg-sky-50 hover:text-sky-700'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
+              {activeLinks.map((item) => {
+                if (item.path === '/smart-city') {
+                  const active = isActive(item.path);
+                  return (
+                    <div key={item.path} className="space-y-1">
+                      <button
+                        type="button"
+                        onClick={() => setMobileSmartCityOpen((prev) => !prev)}
+                        className={`w-full flex items-center justify-between px-4 py-2.5 rounded-2xl text-xs font-bold transition-all text-left ${
+                          active 
+                            ? 'bg-sky-50 text-sky-900 border border-sky-200/70' 
+                            : 'text-slate-700 hover:bg-sky-50 hover:text-sky-700'
+                        }`}
+                      >
+                        <span className="flex items-center gap-2">
+                          <Layers className="w-3.5 h-3.5 text-sky-600" />
+                          <span>Smart City</span>
+                        </span>
+                        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${mobileSmartCityOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {mobileSmartCityOpen && (
+                        <div className="pl-3 pr-1 py-1 space-y-1 border-l-2 border-sky-200 ml-4 animate-fade-in">
+                          {smartCitySubItems.map((sub) => {
+                            const SubIcon = sub.icon;
+                            const isSubActive = location.pathname === sub.path;
+                            return (
+                              <Link
+                                key={sub.path}
+                                to={sub.path}
+                                onClick={() => {
+                                  setMobileMenuOpen(false);
+                                  setMobileSmartCityOpen(false);
+                                }}
+                                className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                                  isSubActive
+                                    ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white font-bold shadow-2xs'
+                                    : 'text-slate-600 hover:text-sky-900 hover:bg-sky-50/60'
+                                }`}
+                              >
+                                <SubIcon className={`w-3.5 h-3.5 ${isSubActive ? 'text-white' : sub.color}`} />
+                                <span className="truncate">{sub.name}</span>
+                              </Link>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-4 py-2.5 rounded-2xl text-xs font-bold transition-all ${
+                      isActive(item.path) 
+                        ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-xs' 
+                        : 'text-slate-700 hover:bg-sky-50 hover:text-sky-700'
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
             </div>
 
             {!user && (

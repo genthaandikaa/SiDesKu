@@ -283,9 +283,9 @@ export const TransparansiApbdesPage: React.FC<TransparansiApbdesPageProps> = ({ 
 
       {/* HERO SECTION */}
       <section className="text-center max-w-3xl mx-auto space-y-4">
-        <h4 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">
+        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">
           Transparansi Anggaran & Tata Kelola
-        </h4>
+        </h1>
 
         {/* Segmented Switcher */}
         <div className="pt-2">
