@@ -188,8 +188,19 @@ class PublicUmkmController extends Controller
         $reviewerName = $user->name ?? 'Warga Kediri';
         $rtRw = null;
         if (method_exists($user, 'wargaProfile') && $user->wargaProfile) {
-            $rtRw = ($user->wargaProfile->rt ? 'RT ' . $user->wargaProfile->rt : '') .
-                ($user->wargaProfile->rw ? ' / RW ' . $user->wargaProfile->rw : '');
+            $profile = $user->wargaProfile;
+            $rtObj = $profile->rt;
+            $rtNum = is_object($rtObj) ? ($rtObj->nomor_rt ?? null) : (is_scalar($rtObj) ? $rtObj : null);
+            $rwNum = is_object($rtObj) && is_object($rtObj->rw) ? ($rtObj->rw->nomor_rw ?? null) : null;
+
+            $parts = [];
+            if ($rtNum) {
+                $parts[] = 'RT ' . $rtNum;
+            }
+            if ($rwNum) {
+                $parts[] = 'RW ' . $rwNum;
+            }
+            $rtRw = !empty($parts) ? implode(' / ', $parts) : null;
         }
 
         $review = UmkmReview::create([

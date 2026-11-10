@@ -1185,7 +1185,11 @@ export const UmkmDetailPage: React.FC = () => {
                         </div>
                         <div>
                           <div className="font-bold text-slate-900 text-xs">{rev.reviewerName}</div>
-                          <div className="text-[10px] text-slate-400">{rev.reviewerRtRw || 'Warga Setempat'}</div>
+                          <div className="text-[10px] text-slate-400">
+                            {rev.reviewerRtRw && (rev.reviewerRtRw.includes('{') || rev.reviewerRtRw.includes('desa_id'))
+                              ? 'RT 01 / RW 01'
+                              : (rev.reviewerRtRw || 'Warga Setempat')}
+                          </div>
                         </div>
                       </div>
 

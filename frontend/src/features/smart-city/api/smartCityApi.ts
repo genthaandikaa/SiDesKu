@@ -14,6 +14,7 @@ function transformUmkmFromBackend(raw: any): UmkmItem {
     kategori: raw.kategori,
     badgeTag: raw.badge_tag || raw.badgeTag,
     harga: Number(raw.harga) || 0,
+    ongkir: Number(raw.ongkir ?? 0),
     satuan: raw.satuan,
     deskripsi: raw.deskripsi || '',
     fotoUrl: raw.foto_url || raw.fotoUrl || '',
