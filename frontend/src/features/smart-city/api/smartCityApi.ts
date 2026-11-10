@@ -82,7 +82,7 @@ export const smartCityApi = {
         const transformed = res.data.data.map(transformUmkmFromBackend);
         // Sync to localStorage
         try {
-          localStorage.setItem('sidesku_smartcity_umkm_v2', JSON.stringify(transformed));
+          localStorage.setItem('sidesku_smartcity_umkm_v3', JSON.stringify(transformed));
         } catch {}
         return transformed;
       }

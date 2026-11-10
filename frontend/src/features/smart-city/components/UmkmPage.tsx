@@ -10,6 +10,7 @@ import {
   QrCode,
   Truck,
   ChevronRight,
+  ChevronDown,
   Store,
   X,
   Star,
@@ -38,18 +39,7 @@ import {
   calculateDistanceKm,
   formatDistance
 } from '../smartCityStorage';
-
-// Preset Wilayah Kota Kediri untuk Ubah Titik Lokasi Cepat
-const KEDIRI_PRESET_LOCATIONS = [
-  { name: 'Kelurahan Sukamaju / Doko', lat: -7.8185, lng: 112.0135, desc: 'Kec. Doko / Kediri Timur' },
-  { name: 'Simpang Lima Gumul (SLG)', lat: -7.8280, lng: 112.0450, desc: 'Pusat Ikonik Kabupaten / Kota' },
-  { name: 'Balai Kota / Pusat Kediri', lat: -7.8166, lng: 112.0118, desc: 'Pusat Pemerintahan & Perkantoran' },
-  { name: 'Kecamatan Mojoroto', lat: -7.8050, lng: 111.9950, desc: 'Area Kampus & Pemukiman Barat' },
-  { name: 'Kecamatan Pesantren', lat: -7.8350, lng: 112.0350, desc: 'Sentra UMKM & Industri Kreatif' },
-  { name: 'Kelurahan Banjaran', lat: -7.8130, lng: 112.0190, desc: 'Sentra Kuliner & Pasar Tradisional' },
-  { name: 'Kelurahan Bandar Lor', lat: -7.8220, lng: 111.9980, desc: 'Sentra Kain Tenun Ikat Bandar' },
-  { name: 'Kelurahan Ngletih', lat: -7.8420, lng: 112.0520, desc: 'Kawasan Hunian Asri Selatan' },
-];
+import { LocationPickerModal } from './LocationPickerModal';
 
 export const UmkmPage: React.FC = () => {
   const { user } = useAuth();
@@ -62,6 +52,7 @@ export const UmkmPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [distanceMode, setDistanceMode] = useState<string>('all'); // 'all', '1', '3', '5', '10', 'custom'
   const [customDistanceKm, setCustomDistanceKm] = useState<string>('2.5');
+  const [isDistanceDropdownOpen, setIsDistanceDropdownOpen] = useState(false);
   const [deliveryFilter, setDeliveryFilter] = useState<string>('all');
   const [paymentFilter, setPaymentFilter] = useState<string>('all');
   const [ratingFilter, setRatingFilter] = useState<string>('all');
@@ -92,11 +83,9 @@ export const UmkmPage: React.FC = () => {
     } catch {}
     return 'Kelurahan Sukamaju (Akurasi Tinggi)';
   });
-  const [isLocating, setIsLocating] = useState(false);
 
   // Modals
   const [showLocationModal, setShowLocationModal] = useState(false);
-  const [customLocationInput, setCustomLocationInput] = useState('');
   const [showAuthAlertModal, setShowAuthAlertModal] = useState(false);
   const [showStoreManagerModal, setShowStoreManagerModal] = useState(false);
   const [showQrisModal, setShowQrisModal] = useState<{
@@ -142,61 +131,6 @@ export const UmkmPage: React.FC = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, selectedCategory, distanceMode, customDistanceKm, deliveryFilter, paymentFilter, ratingFilter, sortBy]);
-
-  // Geolocation Handler
-  const handleDetectGps = () => {
-    if (!navigator.geolocation) {
-      alert('Browser Anda tidak mendukung deteksi lokasi otomatis.');
-      return;
-    }
-    setIsLocating(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const newCoords = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        };
-        const newLabel = 'GPS Riil Terdeteksi (Akurasi Tinggi)';
-        setUserLocation(newCoords);
-        setLocationLabel(newLabel);
-        setIsLocating(false);
-        setShowLocationModal(false);
-        try {
-          localStorage.setItem('sidesku_user_smartcity_location', JSON.stringify({ ...newCoords, label: newLabel }));
-        } catch {}
-      },
-      (err) => {
-        setIsLocating(false);
-        alert('Gagal mendeteksi GPS otomatis. Silakan pilih salah satu wilayah kota di bawah.');
-        console.warn('Geolocation fallback:', err);
-      },
-      { timeout: 8000, enableHighAccuracy: true }
-    );
-  };
-
-  // Select Preset Location
-  const handleSelectPresetLocation = (preset: typeof KEDIRI_PRESET_LOCATIONS[0]) => {
-    const newCoords = { lat: preset.lat, lng: preset.lng };
-    const newLabel = `${preset.name} (Pilihan Manual)`;
-    setUserLocation(newCoords);
-    setLocationLabel(newLabel);
-    setShowLocationModal(false);
-    try {
-      localStorage.setItem('sidesku_user_smartcity_location', JSON.stringify({ ...newCoords, label: newLabel }));
-    } catch {}
-  };
-
-  // Apply Custom Location Input
-  const handleApplyCustomLocation = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!customLocationInput.trim()) return;
-    const newLabel = `${customLocationInput.trim()} (Kustom)`;
-    setLocationLabel(newLabel);
-    setShowLocationModal(false);
-    try {
-      localStorage.setItem('sidesku_user_smartcity_location', JSON.stringify({ ...userLocation, label: newLabel }));
-    } catch {}
-  };
 
   // Filter & Sort Logic
   const filteredList = useMemo(() => {
@@ -288,6 +222,7 @@ export const UmkmPage: React.FC = () => {
     setSelectedCategory('Semua');
     setDistanceMode('all');
     setCustomDistanceKm('2.5');
+    setIsDistanceDropdownOpen(false);
     setDeliveryFilter('all');
     setPaymentFilter('all');
     setRatingFilter('all');
@@ -362,11 +297,6 @@ export const UmkmPage: React.FC = () => {
           
           {/* Left Title & Subtitle */}
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[11px] font-extrabold text-emerald-800">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>PASAR HYPERLOCAL WARGA • 0% KOMISI PLATFORM</span>
-            </div>
-
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
               Belanja Langsung dari Tetangga & UMKM Sekitar
             </h1>
@@ -495,21 +425,131 @@ export const UmkmPage: React.FC = () => {
               </select>
             </div>
 
-            {/* 2. Dropdown Jarak dengan Pilihan Kustom */}
-            <div>
+            {/* 2. Dropdown Jarak dengan Pilihan Kustom Langsung di Dropdown */}
+            <div className="relative">
               <label className="text-[10px] font-bold text-slate-400 block mb-1">Jarak Radius</label>
-              <select
-                value={distanceMode}
-                onChange={(e) => setDistanceMode(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              <button
+                type="button"
+                onClick={() => setIsDistanceDropdownOpen(!isDistanceDropdownOpen)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer flex items-center justify-between gap-1 text-left"
               >
-                <option value="all">Semua Jarak</option>
-                <option value="1">Maksimal 1 km</option>
-                <option value="3">Maksimal 3 km</option>
-                <option value="5">Maksimal 5 km</option>
-                <option value="10">Maksimal 10 km</option>
-                <option value="custom">Kustom Jarak Sendiri...</option>
-              </select>
+                <span className="truncate">
+                  {distanceMode === 'all'
+                    ? 'Semua Jarak'
+                    : distanceMode === 'custom'
+                    ? `Maks. ${customDistanceKm || '0'} km`
+                    : `Maks. ${distanceMode} km`}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              </button>
+
+              {isDistanceDropdownOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-20"
+                    onClick={() => setIsDistanceDropdownOpen(false)}
+                  />
+                  <div className="absolute top-full left-0 mt-1.5 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 p-3 space-y-2.5 z-30 animate-fade-in text-xs">
+                    <div className="font-bold text-slate-800 text-[11px] pb-1 border-b border-slate-100 flex items-center justify-between">
+                      <span>Pilih Radius Maksimal</span>
+                      {distanceMode !== 'all' && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDistanceMode('all');
+                            setIsDistanceDropdownOpen(false);
+                          }}
+                          className="text-[10px] text-blue-600 hover:underline font-semibold cursor-pointer"
+                        >
+                          Reset Jarak
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Quick Preset Buttons */}
+                    <div className="space-y-0.5">
+                      {[
+                        { id: 'all', label: 'Semua Jarak (Default)' },
+                        { id: '1', label: 'Maksimal 1 km (Sangat Dekat)' },
+                        { id: '3', label: 'Maksimal 3 km (Area Sekitar)' },
+                        { id: '5', label: 'Maksimal 5 km (Kecamatan)' },
+                        { id: '10', label: 'Maksimal 10 km (Kota Kediri)' },
+                      ].map((opt) => (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => {
+                            setDistanceMode(opt.id);
+                            setIsDistanceDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-2.5 py-1.5 rounded-lg font-medium transition-colors flex items-center justify-between cursor-pointer ${
+                            distanceMode === opt.id
+                              ? 'bg-blue-50 text-blue-700 font-bold'
+                              : 'text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          <span>{opt.label}</span>
+                          {distanceMode === opt.id && <Check className="w-3.5 h-3.5 text-blue-600" />}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Inline Custom Distance Form */}
+                    <div className="border-t border-slate-100 pt-2.5 space-y-2">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                        Atur Jarak Kustom:
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="number"
+                          min="0.1"
+                          max="50"
+                          step="0.5"
+                          value={customDistanceKm}
+                          onChange={(e) => setCustomDistanceKm(e.target.value)}
+                          placeholder="Contoh: 2.5"
+                          className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs font-bold text-slate-800 outline-none focus:border-blue-500 focus:bg-white"
+                        />
+                        <span className="text-[11px] font-bold text-slate-500">km</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (customDistanceKm && !isNaN(Number(customDistanceKm))) {
+                              setDistanceMode('custom');
+                              setIsDistanceDropdownOpen(false);
+                            }
+                          }}
+                          className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] shadow-2xs transition-colors shrink-0 cursor-pointer"
+                        >
+                          Terapkan
+                        </button>
+                      </div>
+
+                      {/* Quick Pills Inside Dropdown */}
+                      <div className="flex flex-wrap gap-1 pt-0.5">
+                        {['1.5', '2.5', '7.0', '15.0'].map((val) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => {
+                              setCustomDistanceKm(val);
+                              setDistanceMode('custom');
+                              setIsDistanceDropdownOpen(false);
+                            }}
+                            className={`px-2 py-0.5 rounded text-[10px] font-semibold border cursor-pointer ${
+                              distanceMode === 'custom' && customDistanceKm === val
+                                ? 'bg-blue-600 text-white border-blue-600'
+                                : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-blue-50 hover:text-blue-700'
+                            }`}
+                          >
+                            {val} km
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
             {/* 3. Dropdown Pengiriman (Murni Penjual-Pembeli) */}
@@ -571,43 +611,6 @@ export const UmkmPage: React.FC = () => {
             </div>
 
           </div>
-
-          {/* Custom Distance Input Field (When "custom" is selected) */}
-          {distanceMode === 'custom' && (
-            <div className="p-3 rounded-2xl bg-blue-50/50 border border-blue-200 flex flex-wrap items-center gap-3 text-xs animate-fade-in">
-              <span className="font-bold text-blue-900">Tentukan Jarak Maksimal yang Anda Inginkan:</span>
-              <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-blue-400 ring-2 ring-blue-100">
-                <input
-                  type="number"
-                  min="0.1"
-                  max="100"
-                  step="0.5"
-                  value={customDistanceKm}
-                  onChange={(e) => setCustomDistanceKm(e.target.value)}
-                  className="w-20 font-black text-blue-700 outline-none text-xs"
-                />
-                <span className="font-bold text-slate-600 text-xs">km dari lokasi saya</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-[11px]">
-                <span className="text-slate-400">Pilihan cepat:</span>
-                {['1.5', '2.5', '7.0', '15.0'].map((val) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setCustomDistanceKm(val)}
-                    className={`px-2 py-0.5 rounded-md border font-semibold cursor-pointer ${
-                      customDistanceKm === val
-                        ? 'bg-blue-600 text-white border-blue-600'
-                        : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'
-                    }`}
-                  >
-                    {val} km
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
         </div>
       </section>
 
@@ -733,7 +736,7 @@ export const UmkmPage: React.FC = () => {
                     <button
                       type="button"
                       onClick={() => handleQuickWa(item)}
-                      className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+                      className="flex-1 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-700 text-white font-bold text-xs shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
                     >
                       <Phone className="w-3.5 h-3.5" />
                       <span>Beli via WA</span>
@@ -832,103 +835,30 @@ export const UmkmPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          MODAL: UBAH TITIK LOKASI ANDA
+          MODAL: UBAH TITIK LOKASI ANDA (Leaflet Map + Presets + GPS Tanpa Alert)
           ========================================================================= */}
-      {showLocationModal && createPortal(
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-lg w-full space-y-5 shadow-2xl border border-sky-100 relative">
-            <button
-              type="button"
-              onClick={() => setShowLocationModal(false)}
-              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center">
-                <Compass className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="text-base font-black text-slate-900">Ubah Titik Lokasi Anda</h3>
-                <p className="text-xs text-slate-500">Sesuaikan lokasi untuk menghitung jarak akurat ke UMKM tetangga.</p>
-              </div>
-            </div>
-
-            {/* Current Active Location */}
-            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
-                <div>
-                  <span className="text-[10px] text-slate-400 block font-medium">Titik Lokasi Saat Ini</span>
-                  <span className="font-bold text-slate-800">{locationLabel}</span>
-                </div>
-              </div>
-              <span className="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">Aktif</span>
-            </div>
-
-            {/* Option 1: Browser GPS */}
-            <button
-              type="button"
-              onClick={handleDetectGps}
-              disabled={isLocating}
-              className="w-full py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer transition-all"
-            >
-              <Navigation className="w-4 h-4" />
-              <span>{isLocating ? 'Mendeteksi GPS...' : 'Gunakan GPS Perangkat Saya Sekarang'}</span>
-            </button>
-
-            {/* Option 2: Preset Kelurahan di Kediri */}
-            <div className="space-y-2 pt-1">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
-                ATAU PILIH WILAYAH KOTA KEDIRI
-              </span>
-              <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
-                {KEDIRI_PRESET_LOCATIONS.map((preset) => (
-                  <button
-                    key={preset.name}
-                    type="button"
-                    onClick={() => handleSelectPresetLocation(preset)}
-                    className="p-2.5 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left transition-colors cursor-pointer group"
-                  >
-                    <div className="font-bold text-slate-800 text-xs group-hover:text-blue-700 truncate">{preset.name}</div>
-                    <div className="text-[10px] text-slate-400 truncate">{preset.desc}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Option 3: Manual text input */}
-            <form onSubmit={handleApplyCustomLocation} className="space-y-2 pt-1 border-t border-slate-100">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
-                ATAU KETIK NAMA ALAMAT KUSTOM
-              </span>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Contoh: Jl. Dhoho No. 25, Kota Kediri"
-                  value={customLocationInput}
-                  onChange={(e) => setCustomLocationInput(e.target.value)}
-                  className="flex-1 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium outline-none focus:bg-white focus:border-blue-500"
-                />
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs cursor-pointer"
-                >
-                  Terapkan
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>,
-        document.body
-      )}
+      <LocationPickerModal
+        isOpen={showLocationModal}
+        onClose={() => setShowLocationModal(false)}
+        currentCoords={userLocation}
+        currentLabel={locationLabel}
+        onSaveLocation={(coords, label) => {
+          setUserLocation(coords);
+          setLocationLabel(label);
+          try {
+            localStorage.setItem(
+              'sidesku_user_smartcity_location',
+              JSON.stringify({ ...coords, label })
+            );
+          } catch {}
+        }}
+      />
 
       {/* =========================================================================
           RESTRICTED CITIZEN AUTHENTICATION ALERT MODAL
           ========================================================================= */}
       {showAuthAlertModal && createPortal(
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 animate-fade-in">
           <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full space-y-5 shadow-2xl border border-sky-100 relative">
             <button
               type="button"
@@ -989,7 +919,7 @@ export const UmkmPage: React.FC = () => {
           STORE MANAGER MODAL (Direct Seller)
           ========================================================================= */}
       {showStoreManagerModal && createPortal(
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-slate-950/70 backdrop-blur-sm animate-fade-in">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-slate-950/70 animate-fade-in">
           <div className="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-sky-100 overflow-hidden my-auto max-h-[92vh] flex flex-col">
             
             {/* Store Header Banner */}
@@ -1229,7 +1159,7 @@ export const UmkmPage: React.FC = () => {
           QRIS POPUP MODAL
           ========================================================================= */}
       {showQrisModal && createPortal(
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs animate-fade-in">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 animate-fade-in">
           <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-sm w-full text-center space-y-4 shadow-2xl border border-sky-100 relative">
             <button
               onClick={() => setShowQrisModal(null)}
