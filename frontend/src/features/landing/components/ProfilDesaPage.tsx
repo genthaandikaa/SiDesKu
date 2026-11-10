@@ -30,7 +30,7 @@ const SmoothExpandableRow: React.FC<SmoothExpandableRowProps> = ({ isOpen, child
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [height, setHeight] = useState<string | number>(isOpen ? 'auto' : 0);
   const [opacity, setOpacity] = useState(isOpen ? 1 : 0);
-  const [translateY, setTranslateY] = useState(isOpen ? 0 : -10);
+  const [translateY, setTranslateY] = useState(isOpen ? 0 : -8);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -39,9 +39,8 @@ const SmoothExpandableRow: React.FC<SmoothExpandableRowProps> = ({ isOpen, child
       setShouldRender(true);
       setHeight(0);
       setOpacity(0);
-      setTranslateY(-10);
+      setTranslateY(-8);
 
-      // Double rAF ensures the initial state is painted before animating
       const raf1 = requestAnimationFrame(() => {
         const raf2 = requestAnimationFrame(() => {
           if (contentRef.current) {
@@ -56,7 +55,7 @@ const SmoothExpandableRow: React.FC<SmoothExpandableRowProps> = ({ isOpen, child
 
       timer = setTimeout(() => {
         setHeight('auto');
-      }, 360);
+      }, 350);
 
       return () => {
         cancelAnimationFrame(raf1);
@@ -64,7 +63,6 @@ const SmoothExpandableRow: React.FC<SmoothExpandableRowProps> = ({ isOpen, child
       };
     } else {
       if (shouldRender) {
-        // Lock current height before collapsing down
         if (contentRef.current) {
           const currentHeight = contentRef.current.scrollHeight;
           setHeight(currentHeight);
@@ -74,14 +72,14 @@ const SmoothExpandableRow: React.FC<SmoothExpandableRowProps> = ({ isOpen, child
           const raf2 = requestAnimationFrame(() => {
             setHeight(0);
             setOpacity(0);
-            setTranslateY(-10);
+            setTranslateY(-8);
           });
           return () => cancelAnimationFrame(raf2);
         });
 
         timer = setTimeout(() => {
           setShouldRender(false);
-        }, 340);
+        }, 320);
 
         return () => {
           cancelAnimationFrame(raf1);
@@ -94,7 +92,7 @@ const SmoothExpandableRow: React.FC<SmoothExpandableRowProps> = ({ isOpen, child
   if (!shouldRender) return null;
 
   return (
-    <tr className="bg-slate-50/70 border-b border-slate-200">
+    <tr className="border-b border-slate-100 bg-slate-50/20">
       <td colSpan={4} className="p-0 overflow-hidden">
         <div
           ref={contentRef}
@@ -102,12 +100,12 @@ const SmoothExpandableRow: React.FC<SmoothExpandableRowProps> = ({ isOpen, child
             height: typeof height === 'number' ? `${height}px` : height,
             opacity,
             transform: `translateY(${translateY}px)`,
-            transition: 'height 340ms cubic-bezier(0.16, 1, 0.3, 1), opacity 280ms ease, transform 340ms cubic-bezier(0.16, 1, 0.3, 1)',
+            transition: 'height 320ms cubic-bezier(0.16, 1, 0.3, 1), opacity 260ms ease, transform 320ms cubic-bezier(0.16, 1, 0.3, 1)',
             overflow: 'hidden',
             willChange: 'height, opacity, transform',
           }}
         >
-          <div className="p-4 sm:p-6">
+          <div className="p-4 sm:p-6 pt-1 pb-6">
             {children}
           </div>
         </div>
@@ -117,7 +115,7 @@ const SmoothExpandableRow: React.FC<SmoothExpandableRowProps> = ({ isOpen, child
 };
 
 export const ProfilDesaPage: React.FC = () => {
-  const [activeKecamatan, setActiveKecamatan] = useState<number | null>(null);
+  const [activeKecamatan, setActiveKecamatan] = useState<number | null>(0);
 
   const kecamatanRows = [
     {
@@ -186,10 +184,10 @@ export const ProfilDesaPage: React.FC = () => {
             Mengenal Kota Lebih Dekat.
           </h1>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
-            Informasi pembagian wilayah administratif, tata kelola, dan komitmen pelayanan publik dalam satu ekosistem digital terpadu.
+            Informasi pembagian wilayah administratif, tata kelola, dan komitmen pelayanan publik dalam satu ekosistem terpadu.
           </p>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-1">
-            <a href="#wilayah" className="w-full sm:w-auto px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2">
+            <a href="#tabel-wilayah" className="w-full sm:w-auto px-6 py-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2">
               <span>Jelajahi Wilayah</span>
               <ArrowRight className="w-4 h-4" />
             </a>
@@ -205,7 +203,7 @@ export const ProfilDesaPage: React.FC = () => {
             <img src="/images/landing/about_img.webp" alt="Pusat Pemerintahan" className="w-full h-full object-cover" />
             <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-medium flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span>PUSAT PEMERINTAHAN TERPADU</span>
+              <span>PUSAT PEMERINTAHAN</span>
             </div>
           </div>
           <div className="p-3.5 sm:p-4 bg-slate-50/90 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 font-medium">
@@ -213,12 +211,12 @@ export const ProfilDesaPage: React.FC = () => {
               <Building2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span className="truncate">Kawasan Pusat Pemerintahan & Ruang Publik</span>
             </div>
-            <span className="font-mono text-slate-400 shrink-0 pl-2">40115</span>
+            <span className="font-mono text-slate-400 shrink-0 pl-2">64115</span>
           </div>
         </div>
       </section>
 
-      {/* TENTANG KOTA */}
+      {/* TENTANG KOTA (Ringkas & Bersih) */}
       <section className="space-y-6 pt-6 border-t border-slate-100">
         <div className="space-y-2">
           <div className="text-[11px] font-bold text-blue-600 uppercase tracking-wider">Tentang Kota</div>
@@ -227,57 +225,47 @@ export const ProfilDesaPage: React.FC = () => {
           </h2>
         </div>
 
-        {/* Responsive 3-Metric Cards: Compact on mobile, 3-column on tablet/desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-5">
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs hover:border-blue-400 hover:shadow-md transition-all flex flex-col justify-between space-y-3 group">
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                <span>Tingkat Pertama</span>
-                <span className="font-mono text-blue-600 bg-blue-50 px-2 py-0.5 rounded">ADM-01</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <span className="w-4 h-1 bg-slate-900 rounded-full" />
-                <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-600 transition-colors">Kecamatan</h3>
-              </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Wilayah kerja camat yang mengoordinasikan penyelenggaraan ketenteraman dan pelayanan umum.
-              </p>
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs hover:border-blue-400 hover:shadow-md transition-all space-y-3 group">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <span>Tingkat Pertama</span>
+              <span className="font-mono text-blue-600 bg-blue-50 px-2 py-0.5 rounded">ADM-01</span>
             </div>
-            <div className="pt-2.5 border-t border-slate-100 text-[11px] font-bold text-blue-600">Sentra PATEN</div>
+            <div className="flex items-center gap-2.5">
+              <span className="w-3.5 h-1 bg-blue-600 rounded-full" />
+              <h3 className="text-xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">Kecamatan</h3>
+            </div>
+            <p className="text-xs text-slate-500 font-medium pt-1 border-t border-slate-100">
+              Koordinasi penyelenggaraan pelayanan perkotaan
+            </p>
           </div>
 
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs hover:border-blue-400 hover:shadow-md transition-all flex flex-col justify-between space-y-3 group">
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                <span>Tingkat Kelurahan</span>
-                <span className="font-mono text-sky-600 bg-sky-50 px-2 py-0.5 rounded">ADM-02</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <span className="w-4 h-1 bg-slate-900 rounded-full" />
-                <h3 className="text-lg font-black text-slate-900 group-hover:text-sky-600 transition-colors">Kelurahan</h3>
-              </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Pusat layanan garis depan untuk administrasi kependudukan, perizinan mikro, dan ketertiban.
-              </p>
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs hover:border-sky-400 hover:shadow-md transition-all space-y-3 group">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <span>Tingkat Kelurahan</span>
+              <span className="font-mono text-sky-600 bg-sky-50 px-2 py-0.5 rounded">ADM-02</span>
             </div>
-            <div className="pt-2.5 border-t border-slate-100 text-[11px] font-bold text-sky-600">Administrasi Sipil</div>
+            <div className="flex items-center gap-2.5">
+              <span className="w-3.5 h-1 bg-sky-600 rounded-full" />
+              <h3 className="text-xl font-black text-slate-900 group-hover:text-sky-600 transition-colors">Kelurahan</h3>
+            </div>
+            <p className="text-xs text-slate-500 font-medium pt-1 border-t border-slate-100">
+              Pelayanan administratif garis depan warga
+            </p>
           </div>
 
-          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs hover:border-blue-400 hover:shadow-md transition-all flex flex-col justify-between space-y-3 group">
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                <span>Demografi Agregat</span>
-                <span className="font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">DUKCAPIL</span>
-              </div>
-              <div className="flex items-center gap-2.5">
-                <span className="w-4 h-1 bg-slate-900 rounded-full" />
-                <h3 className="text-lg font-black text-slate-900 group-hover:text-emerald-600 transition-colors">Jiwa Terdata</h3>
-              </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                Pembaruan berkala agregat kependudukan resmi untuk perencanaan subsidi dan fasilitas umum.
-              </p>
+          <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs hover:border-emerald-400 hover:shadow-md transition-all space-y-3 group">
+            <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+              <span>Demografi Agregat</span>
+              <span className="font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">DUKCAPIL</span>
             </div>
-            <div className="pt-2.5 border-t border-slate-100 text-[11px] font-bold text-emerald-600">Integrasi SAKIP</div>
+            <div className="flex items-center gap-2.5">
+              <span className="w-3.5 h-1 bg-emerald-600 rounded-full" />
+              <h3 className="text-xl font-black text-slate-900 group-hover:text-emerald-600 transition-colors">Jiwa Terdata</h3>
+            </div>
+            <p className="text-xs text-slate-500 font-medium pt-1 border-t border-slate-100">
+              Integrasi agregat kependudukan bersertifikasi
+            </p>
           </div>
         </div>
       </section>
@@ -289,41 +277,39 @@ export const ProfilDesaPage: React.FC = () => {
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Pelayanan Publik, Dengan Komitmen.</h2>
         </div>
 
-        {/* 2x2 Grid on Mobile, 4-Cols on Desktop */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
           {[
-            { num: '01', title: 'Transparansi', desc: 'Informasi publik terbuka dan mudah diakses melalui kanal resmi digital dan fisik.', color: 'blue', Icon: Eye, dot: 'bg-blue-600', label: 'Keterbukaan Data', textColor: 'text-blue-700', dotHover: 'group-hover:text-blue-200' },
-            { num: '02', title: 'Akuntabilitas', desc: 'Layanan terstandar, anggaran terukur, dan regulasi baku daerah yang dapat diaudit.', color: 'emerald', Icon: ShieldCheck, dot: 'bg-emerald-600', label: 'Audit Berkala', textColor: 'text-emerald-700', dotHover: 'group-hover:text-emerald-200' },
-            { num: '03', title: 'Responsivitas', desc: 'Tanggap terhadap kebutuhan warga dan penanganan laporan keluhan secara real-time.', color: 'amber', Icon: Zap, dot: 'bg-amber-600', label: 'SLA Pelaporan', textColor: 'text-amber-700', dotHover: 'group-hover:text-amber-200' },
-            { num: '04', title: 'Inklusivitas', desc: 'Layanan terjangkau semua lapisan masyarakat, ramah difabel dan kelompok rentan.', color: 'indigo', Icon: Users, dot: 'bg-indigo-600', label: 'Akses Universal', textColor: 'text-indigo-700', dotHover: 'group-hover:text-indigo-200' },
-          ].map(({ num, title, desc, Icon, dot, label, textColor, dotHover, color }) => (
-            <div key={num} className="bg-white rounded-3xl p-4 sm:p-6 border border-slate-200/90 shadow-2xs hover:border-blue-400 hover:shadow-md transition-all space-y-3 flex flex-col justify-between group">
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className={`text-2xl sm:text-3xl font-black text-slate-200 transition-colors ${dotHover}`}>{num}</span>
-                  <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-${color}-50 text-${color}-600 flex items-center justify-center shrink-0`}>
-                    <Icon className="w-4 h-4" />
-                  </div>
+            { num: '01', title: 'Transparansi', Icon: Eye, label: 'Keterbukaan Data', color: 'blue' },
+            { num: '02', title: 'Akuntabilitas', Icon: ShieldCheck, label: 'Audit Berkala', color: 'emerald' },
+            { num: '03', title: 'Responsivitas', Icon: Zap, label: 'SLA Real-time', color: 'amber' },
+            { num: '04', title: 'Inklusivitas', Icon: Users, label: 'Akses Universal', color: 'indigo' },
+          ].map(({ num, title, Icon, label, color }) => (
+            <div key={num} className="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:border-blue-400 hover:shadow-md transition-all space-y-3 flex flex-col justify-between group">
+              <div className="flex items-center justify-between">
+                <span className="text-2xl sm:text-3xl font-black text-slate-200 group-hover:text-slate-300 transition-colors">{num}</span>
+                <div className={`w-8 h-8 rounded-xl bg-${color}-50 text-${color}-600 flex items-center justify-center shrink-0`}>
+                  <Icon className="w-4 h-4" />
                 </div>
-                <h3 className="text-sm sm:text-base font-bold text-slate-900">{title}</h3>
-                <p className="text-[11px] sm:text-xs text-slate-500 leading-relaxed line-clamp-3 sm:line-clamp-none">{desc}</p>
               </div>
-              <div className={`pt-2.5 border-t border-slate-100 text-[10px] sm:text-[11px] font-bold ${textColor} flex items-center gap-1.5`}>
-                <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
-                <span className="truncate">{label}</span>
+              <div>
+                <h3 className="text-sm sm:text-base font-extrabold text-slate-900">{title}</h3>
+                <div className="text-[11px] font-semibold text-slate-500 mt-1 flex items-center gap-1.5">
+                  <span className={`w-1.5 h-1.5 rounded-full bg-${color}-500`} />
+                  <span>{label}</span>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* STRUKTUR WILAYAH */}
+      {/* STRUKTUR WILAYAH ADMINISTRATIF */}
       <section id="wilayah" className="space-y-6 pt-6 border-t border-slate-100">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
           <div>
             <div className="text-[11px] font-bold text-blue-600 uppercase tracking-wider">Hierarki Spasial</div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Struktur Wilayah Administratif</h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">Pembagian wilayah dari kota, kecamatan hingga lingkungan RT/RW.</p>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">Pembagian wilayah kota mulai dari kecamatan hingga lingkungan warga.</p>
           </div>
           <a href="#tabel-wilayah" className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
             <span>Lihat Seluruh Wilayah</span>
@@ -331,81 +317,73 @@ export const ProfilDesaPage: React.FC = () => {
           </a>
         </div>
 
-        {/* MOBILE VIEW (Swipeable Native Snap Cards) */}
+        {/* MOBILE VIEW (Horizontal Snap Carousel) */}
         <div className="block sm:hidden">
-          <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-2 px-1">
-            <span>Tingkatan Wilayah</span>
-            <span className="text-blue-600 text-[11px] font-semibold flex items-center gap-1">
-              Geser jenjang &rarr;
-            </span>
-          </div>
           <div className="flex gap-3 overflow-x-auto pb-3 pt-1 snap-x snap-mandatory scrollbar-none -mx-4 px-4">
             {[
-              { level: 'LEVEL 01', title: 'KOTA', sub: 'Pemerintah Kota Otonom', desc: 'Regulasi & Kebijakan Makro', Icon: Building2 },
-              { level: 'LEVEL 02', title: 'KECAMATAN', sub: 'Perangkat Daerah Wilayah', desc: 'Koordinasi Pembinaan', Icon: Landmark },
-              { level: 'LEVEL 03', title: 'KELURAHAN', sub: 'Penyelenggara Layanan Sipil', desc: 'Administrasi Warga', Icon: Building },
-              { level: 'MITRA LKK', title: 'RW', sub: 'Rukun Warga', desc: 'Integrasi Antar-Lingkungan', Icon: Network, muted: true },
-              { level: 'MITRA LKK', title: 'RT', sub: 'Rukun Tetangga', desc: 'Koordinasi Kerukunan', Icon: Home, muted: true },
-            ].map(({ level, title, sub, desc, Icon, muted }) => (
-              <div key={title} className="w-[72vw] max-w-[250px] shrink-0 snap-center bg-white rounded-3xl p-5 border border-slate-200/90 shadow-2xs space-y-3">
+              { level: 'LEVEL 01', title: 'KOTA', sub: 'Pemerintah Otonom', Icon: Building2 },
+              { level: 'LEVEL 02', title: 'KECAMATAN', sub: 'Perangkat Kewilayahan', Icon: Landmark },
+              { level: 'LEVEL 03', title: 'KELURAHAN', sub: 'Pelayanan Sipil', Icon: Building },
+              { level: 'MITRA LKK', title: 'RW', sub: 'Rukun Warga', Icon: Network, muted: true },
+              { level: 'MITRA LKK', title: 'RT', sub: 'Rukun Tetangga', Icon: Home, muted: true },
+            ].map(({ level, title, sub, Icon, muted }) => (
+              <div key={title} className="w-[68vw] max-w-[220px] shrink-0 snap-center bg-white rounded-3xl p-5 border border-slate-200/90 shadow-2xs space-y-3">
                 <div className="flex items-center justify-between">
                   <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md border ${muted ? 'text-slate-600 bg-slate-100 border-slate-200' : 'text-blue-700 bg-blue-50 border-blue-100'}`}>{level}</span>
                   <Icon className={`w-4 h-4 ${muted ? 'text-slate-400' : 'text-blue-600'}`} />
                 </div>
                 <div>
                   <h4 className="text-lg font-black text-slate-900">{title}</h4>
-                  <p className="text-xs text-slate-400 font-medium">{sub}</p>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">{sub}</p>
                 </div>
-                <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500">{desc}</div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* TABLET & DESKTOP VIEW (Grid) */}
+        {/* TABLET & DESKTOP VIEW (Clean 5-Cols Grid) */}
         <div className="hidden sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
           {[
-            { level: 'LEVEL 01', title: 'KOTA', sub: 'Pemerintah Kota Otonom', desc: 'Regulasi & Kebijakan Makro', Icon: Building2 },
-            { level: 'LEVEL 02', title: 'KECAMATAN', sub: 'Perangkat Daerah Wilayah', desc: 'Koordinasi Pembinaan', Icon: Landmark },
-            { level: 'LEVEL 03', title: 'KELURAHAN', sub: 'Penyelenggara Layanan Sipil', desc: 'Administrasi Warga', Icon: Building },
-            { level: 'MITRA LKK', title: 'RW', sub: 'Rukun Warga', desc: 'Integrasi Antar-Lingkungan', Icon: Network, muted: true },
-            { level: 'MITRA LKK', title: 'RT', sub: 'Rukun Tetangga', desc: 'Koordinasi Kerukunan', Icon: Home, muted: true },
-          ].map(({ level, title, sub, desc, Icon, muted }) => (
-            <div key={title} className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-2xs space-y-3">
+            { level: 'LEVEL 01', title: 'KOTA', sub: 'Pemerintah Otonom', Icon: Building2 },
+            { level: 'LEVEL 02', title: 'KECAMATAN', sub: 'Perangkat Kewilayahan', Icon: Landmark },
+            { level: 'LEVEL 03', title: 'KELURAHAN', sub: 'Pelayanan Sipil', Icon: Building },
+            { level: 'MITRA LKK', title: 'RW', sub: 'Rukun Warga', Icon: Network, muted: true },
+            { level: 'MITRA LKK', title: 'RT', sub: 'Rukun Tetangga', Icon: Home, muted: true },
+          ].map(({ level, title, sub, Icon, muted }) => (
+            <div key={title} className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-2xs space-y-3 hover:border-blue-300 transition-all">
               <div className="flex items-center justify-between">
                 <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md border ${muted ? 'text-slate-600 bg-slate-100 border-slate-200' : 'text-blue-700 bg-blue-50 border-blue-100'}`}>{level}</span>
                 <Icon className={`w-4 h-4 ${muted ? 'text-slate-400' : 'text-blue-600'}`} />
               </div>
               <div>
                 <h4 className="text-lg font-black text-slate-900">{title}</h4>
-                <p className="text-xs text-slate-400 font-medium">{sub}</p>
+                <p className="text-xs text-slate-500 font-medium mt-0.5">{sub}</p>
               </div>
-              <div className="pt-2 border-t border-slate-100 text-[11px] text-slate-500">{desc}</div>
             </div>
           ))}
         </div>
 
-        {/* Catatan Regulasi LKK */}
-        <div className="p-3.5 sm:p-4 rounded-2xl bg-blue-50/60 border border-blue-100 text-xs text-slate-600 leading-relaxed flex items-start gap-2.5">
-          <BookOpen className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+        {/* Catatan Regulasi LKK (Singkat & Jelas) */}
+        <div className="p-3.5 sm:p-4 rounded-2xl bg-blue-50/50 border border-blue-100/80 text-xs text-slate-600 leading-relaxed flex items-center gap-2.5">
+          <BookOpen className="w-4 h-4 text-blue-600 shrink-0" />
           <span>
-            <strong className="text-slate-800">Catatan Regulasi:</strong> RT (Rukun Tetangga) dan RW (Rukun Warga) merupakan Lembaga Kemasyarakatan Kelurahan (LKK) mitra resmi pemerintah kota dalam memelihara kerukunan serta membantu kelancaran pelayanan administrasi warga.
+            <strong className="text-slate-800">Catatan Regulasi:</strong> RT dan RW merupakan Lembaga Kemasyarakatan Kelurahan (LKK) mitra resmi pemerintah daerah, bukan jenjang birokrasi formal.
           </span>
         </div>
       </section>
 
       {/* TABEL KECAMATAN & DETAIL WILAYAH */}
-      <div id="tabel-wilayah" className="space-y-4 pt-4">
-        {/* DESKTOP & TABLET VIEW (md:block) - Standard Reference Table */}
-        <div className="hidden md:block bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-2xs">
+      <section id="tabel-wilayah" className="space-y-4 pt-4">
+        {/* DESKTOP & TABLET VIEW (md:block) */}
+        <div className="hidden md:block bg-white rounded-3xl border border-slate-200/80 overflow-hidden shadow-2xs">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
               <thead>
-                <tr className="bg-slate-50/80 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
-                  <th className="py-3.5 px-6">Kecamatan</th>
-                  <th className="py-3.5 px-6">Zona</th>
-                  <th className="py-3.5 px-6">Kelurahan</th>
-                  <th className="py-3.5 px-6 text-right">Detail</th>
+                <tr className="bg-white border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[11px]">
+                  <th className="py-4 px-6">Kecamatan</th>
+                  <th className="py-4 px-6">Zona</th>
+                  <th className="py-4 px-6">Kelurahan</th>
+                  <th className="py-4 px-6 text-right">Detail</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -414,7 +392,7 @@ export const ProfilDesaPage: React.FC = () => {
                   return (
                     <React.Fragment key={idx}>
                       <tr
-                        className={`transition-colors cursor-pointer ${isExpanded ? 'bg-blue-50/60 font-semibold' : 'hover:bg-slate-50/60'}`}
+                        className={`transition-colors cursor-pointer ${isExpanded ? 'bg-blue-50/30' : 'hover:bg-slate-50/60'}`}
                         onClick={() => setActiveKecamatan(isExpanded ? null : idx)}
                       >
                         <td className="py-4 px-6 font-bold text-slate-900 whitespace-nowrap">
@@ -425,60 +403,65 @@ export const ProfilDesaPage: React.FC = () => {
                         </td>
                         <td className="py-4 px-6 text-slate-600">{row.zona}</td>
                         <td className="py-4 px-6 font-semibold text-slate-900 whitespace-nowrap">
-                          <span className="bg-slate-100 px-2.5 py-1 rounded-md text-[11px] font-bold">{row.kelurahan}</span>
+                          {row.kelurahan}
                         </td>
                         <td className="py-4 px-6 text-right whitespace-nowrap">
                           <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); setActiveKecamatan(isExpanded ? null : idx); }}
-                            className="text-blue-600 font-semibold inline-flex items-center gap-1 cursor-pointer"
+                            className="text-blue-600 font-medium inline-flex items-center gap-1 cursor-pointer hover:text-blue-700 transition-colors"
                           >
                             <span>{isExpanded ? 'Tutup' : 'Lihat'}</span>
-                            <ChevronRight className={`w-3.5 h-3.5 transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} />
+                            {isExpanded ? (
+                              <ChevronDown className="w-3.5 h-3.5" />
+                            ) : (
+                              <ChevronRight className="w-3.5 h-3.5" />
+                            )}
                           </button>
                         </td>
                       </tr>
 
+                      {/* Smooth In-line Expandable Sub-table Card directly underneath */}
                       <SmoothExpandableRow isOpen={isExpanded}>
-                        <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-2xs space-y-4">
-                          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                            <h4 className="text-sm sm:text-base font-black text-slate-900">
+                        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-sm sm:text-base font-extrabold text-slate-900">
                               Kelurahan di {row.nama}
                             </h4>
                             <div className="flex items-center gap-2">
-                              <span className="text-[11px] font-bold text-slate-600 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200/80">
+                              <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
                                 {row.kelurahanList.length} Kelurahan
                               </span>
                               <button
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); setActiveKecamatan(null); }}
-                                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
-                                title="Tutup detail"
+                                className="p-1 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
+                                title="Tutup"
                               >
                                 <X className="w-4 h-4" />
                               </button>
                             </div>
                           </div>
 
-                          <div className="rounded-xl border border-slate-200/80 overflow-hidden shadow-2xs">
+                          <div className="rounded-xl border border-slate-100 overflow-hidden">
                             <table className="w-full text-left border-collapse text-xs">
                               <thead>
-                                <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider text-[10px]">
-                                  <th className="py-2.5 px-3.5 w-12 text-center">No</th>
-                                  <th className="py-2.5 px-3.5">Kelurahan</th>
-                                  <th className="py-2.5 px-3.5">Kode Pos</th>
-                                  <th className="py-2.5 px-3.5">Cakupan</th>
-                                  <th className="py-2.5 px-3.5">Alamat</th>
+                                <tr className="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                                  <th className="py-3 px-4 w-12 text-center">No</th>
+                                  <th className="py-3 px-4">Kelurahan</th>
+                                  <th className="py-3 px-4">Kode Pos</th>
+                                  <th className="py-3 px-4">Cakupan</th>
+                                  <th className="py-3 px-4">Alamat</th>
                                 </tr>
                               </thead>
-                              <tbody className="divide-y divide-slate-100 text-slate-700">
+                              <tbody className="divide-y divide-slate-100/80 text-slate-700">
                                 {row.kelurahanList.map((kel, i) => (
-                                  <tr key={i} className="hover:bg-blue-50/40 transition-colors">
-                                    <td className="py-2.5 px-3.5 text-center font-mono text-slate-400 text-[11px]">{i + 1}</td>
-                                    <td className="py-2.5 px-3.5 font-bold text-slate-900">{kel.nama}</td>
-                                    <td className="py-2.5 px-3.5 font-mono text-slate-500">{kel.kodePos}</td>
-                                    <td className="py-2.5 px-3.5 text-slate-600 font-medium">{kel.rtRw}</td>
-                                    <td className="py-2.5 px-3.5 text-slate-500">{kel.alamat}</td>
+                                  <tr key={i} className="hover:bg-slate-50/50 transition-colors">
+                                    <td className="py-3 px-4 text-center font-mono text-slate-400 text-[11px]">{i + 1}</td>
+                                    <td className="py-3 px-4 font-bold text-slate-900">{kel.nama}</td>
+                                    <td className="py-3 px-4 font-mono text-slate-500">{kel.kodePos}</td>
+                                    <td className="py-3 px-4 text-slate-600">{kel.rtRw}</td>
+                                    <td className="py-3 px-4 text-slate-500">{kel.alamat}</td>
                                   </tr>
                                 ))}
                               </tbody>
@@ -494,7 +477,7 @@ export const ProfilDesaPage: React.FC = () => {
           </div>
         </div>
 
-        {/* MOBILE VIEW (md:hidden) - Zero-Overflow Touch Accordion Cards */}
+        {/* MOBILE VIEW (md:hidden) */}
         <div className="md:hidden space-y-3">
           {kecamatanRows.map((row, idx) => {
             const isExpanded = activeKecamatan === idx;
@@ -509,7 +492,7 @@ export const ProfilDesaPage: React.FC = () => {
                 <div 
                   onClick={() => setActiveKecamatan(isExpanded ? null : idx)}
                   className={`p-4 flex items-center justify-between cursor-pointer select-none transition-colors ${
-                    isExpanded ? 'bg-blue-50/60' : 'hover:bg-slate-50/60 active:bg-slate-100/60'
+                    isExpanded ? 'bg-blue-50/40' : 'hover:bg-slate-50/60 active:bg-slate-100/60'
                   }`}
                 >
                   <div className="space-y-1">
@@ -521,20 +504,20 @@ export const ProfilDesaPage: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-lg text-[10px] font-bold">
+                    <span className="text-slate-700 text-[11px] font-semibold">
                       {row.kelurahan}
                     </span>
-                    <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-300 ${
-                      isExpanded ? 'rotate-90 bg-blue-600 text-white' : 'bg-slate-100 text-slate-500'
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                      isExpanded ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500'
                     }`}>
-                      <ChevronRight className="w-4 h-4" />
+                      {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                     </div>
                   </div>
                 </div>
 
                 {/* Mobile Smooth Accordion Body */}
                 {isExpanded && (
-                  <div className="border-t border-slate-100 bg-slate-50/60 p-3 sm:p-4 space-y-2.5 animate-fade-in">
+                  <div className="border-t border-slate-100 bg-slate-50/40 p-3 sm:p-4 space-y-2.5 animate-fade-in">
                     <div className="flex items-center justify-between text-xs font-bold text-slate-600 px-1 pb-1">
                       <span>Kelurahan di {row.nama}</span>
                       <button 
@@ -573,9 +556,9 @@ export const ProfilDesaPage: React.FC = () => {
             );
           })}
         </div>
-      </div>
+      </section>
 
-      {/* STRUKTUR PEMERINTAHAN (BAGAN BIROKRASI) */}
+      {/* STRUKTUR PEMERINTAHAN (BAGAN BIROKRASI - Ringkas & Elegan) */}
       <section className="space-y-6 pt-6 border-t border-slate-100">
         <div className="space-y-1">
           <div className="text-[11px] font-bold text-blue-600 uppercase tracking-wider">Bagan Birokrasi</div>
@@ -587,7 +570,7 @@ export const ProfilDesaPage: React.FC = () => {
           <div className="max-w-lg mx-auto bg-white rounded-3xl p-4 sm:p-5 border-2 border-blue-600 shadow-sm text-center space-y-1">
             <div className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Pimpinan Eksekutif Tertinggi</div>
             <h3 className="text-lg sm:text-xl font-black text-slate-900">Wali Kota & Wakil Wali Kota</h3>
-            <p className="text-xs text-slate-500">Kepala Daerah & Wakil Kepala Daerah Otonom</p>
+            <p className="text-xs text-slate-500 font-medium">Kepala Daerah & Wakil Kepala Daerah Otonom</p>
           </div>
 
           <div className="flex flex-col items-center">
@@ -599,7 +582,7 @@ export const ProfilDesaPage: React.FC = () => {
           <div className="max-w-md mx-auto bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs text-center space-y-1">
             <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Koordinator Administratif</div>
             <h4 className="text-base font-extrabold text-slate-900">Sekretariat Daerah (Sekda)</h4>
-            <p className="text-xs text-slate-500">Penyusun Kebijakan Daerah & Pengoordinasi Perangkat Kerja</p>
+            <p className="text-xs text-slate-500 font-medium">Penyusun Kebijakan Daerah & Pengoordinasi Perangkat Kerja</p>
           </div>
 
           <div className="flex flex-col items-center">
@@ -608,55 +591,51 @@ export const ProfilDesaPage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 pt-1">
+            {/* Pelaksana Teknis */}
             <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Fungsi Pelaksana Teknis</div>
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Pelaksana Teknis</div>
                   <h4 className="text-base font-black text-slate-900">Organisasi Perangkat Daerah (OPD)</h4>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
                   <Building2 className="w-4 h-4" />
                 </div>
               </div>
-              <div className="space-y-2.5 text-xs">
+              <div className="space-y-2 text-xs">
                 {[
-                  { title: 'Dinas-Dinas Teknis', sub: 'PU, Kesehatan, Pendidikan, Perhubungan' },
-                  { title: 'Badan Perencanaan & Pendapatan', sub: 'Bappeda, BPKAD, Bapenda' },
-                  { title: 'Inspektorat Daerah', sub: 'Pengawasan Internal & Akuntabilitas' },
-                ].map(({ title, sub }) => (
-                  <div key={title} className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-start justify-between gap-2.5">
-                    <div>
-                      <div className="font-bold text-slate-900">{title}</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">{sub}</div>
-                    </div>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  'Dinas-Dinas Teknis Perkotaan',
+                  'Badan Perencanaan & Pendapatan Daerah',
+                  'Inspektorat Pengawasan Daerah',
+                ].map((item) => (
+                  <div key={item} className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                    <span className="font-bold text-slate-900">{item}</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   </div>
                 ))}
               </div>
             </div>
 
+            {/* Satuan Kerja Kewilayahan */}
             <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-slate-100">
                 <div>
-                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Fungsi Garis Depan</div>
+                  <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Garis Depan Pelayanan</div>
                   <h4 className="text-base font-black text-slate-900">Satuan Kerja Kewilayahan</h4>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
                   <MapPin className="w-4 h-4" />
                 </div>
               </div>
-              <div className="space-y-2.5 text-xs">
+              <div className="space-y-2 text-xs">
                 {[
-                  { title: 'Kantor Kecamatan', sub: 'Pelaksana Urusan Pemerintahan Wilayah' },
-                  { title: 'Kantor Kelurahan', sub: 'Administrasi Lingkungan & Layanan KTP/KK' },
-                  { title: 'Lembaga Kemasyarakatan', sub: 'Fasilitasi Gotong Royong RW & RT' },
-                ].map(({ title, sub }) => (
-                  <div key={title} className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-start justify-between gap-2.5">
-                    <div>
-                      <div className="font-bold text-slate-900">{title}</div>
-                      <div className="text-[11px] text-slate-500 mt-0.5">{sub}</div>
-                    </div>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  'Kantor Kecamatan (Wilayah)',
+                  'Kantor Kelurahan (Layanan Warga)',
+                  'Lembaga Kemasyarakatan (RT / RW)',
+                ].map((item) => (
+                  <div key={item} className="p-3 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                    <span className="font-bold text-slate-900">{item}</span>
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   </div>
                 ))}
               </div>
@@ -666,12 +645,12 @@ export const ProfilDesaPage: React.FC = () => {
           <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
             <div className="flex items-center gap-2.5 text-slate-700 text-center sm:text-left">
               <FileText className="w-4 h-4 text-blue-600 shrink-0" />
-              <span className="text-slate-500">Sesuai Peraturan Daerah tentang Pembentukan & Susunan Perangkat Daerah.</span>
+              <span className="text-slate-600 font-medium">Berdasarkan Peraturan Daerah tentang Susunan Perangkat Daerah.</span>
             </div>
             <button
               type="button"
               onClick={() => alert('Dokumen Perda dapat diunduh melalui JDIH Resmi Kota.')}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold shrink-0 inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
+              className="w-full sm:w-auto px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold shrink-0 inline-flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-2xs"
             >
               <Download className="w-3.5 h-3.5 text-slate-500" />
               <span>Unduh Perda</span>
