@@ -1,6 +1,6 @@
 @echo off
 echo ===================================================
-echo Menjalankan Backend Laravel dan Frontend Vite siDes
+echo Menjalankan Backend Laravel dan Frontend Vite Nexora
 echo ===================================================
 
 start "Backend Laravel (Port 8000)" cmd /k "cd backend && php artisan serve --port=8000"

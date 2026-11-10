@@ -100,8 +100,8 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       kkCount: 42,
       wargaCount: 156,
       areaHectares: 4.2,
-      color: '#3b82f6', // Emerald
-      borderColor: '#1d4ed8',
+      color: '#2160E1', // Emerald
+      borderColor: '#1E50DA',
       center: [-7.81690, 112.04105],
       polygonCoords: [
         [-7.81580, 112.03980],
@@ -120,8 +120,8 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       kkCount: 38,
       wargaCount: 142,
       areaHectares: 5.1,
-      color: '#3b82f6', // Blue
-      borderColor: '#1d4ed8',
+      color: '#2160E1', // Blue
+      borderColor: '#1E50DA',
       center: [-7.81690, 112.04405],
       polygonCoords: [
         [-7.81580, 112.04230],
@@ -180,8 +180,8 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       kkCount: 36,
       wargaCount: 134,
       areaHectares: 3.6,
-      color: '#06b6d4', // Cyan
-      borderColor: '#0e7490',
+      color: '#168FEA', // Cyan
+      borderColor: '#1E50DA',
       center: [-7.82010, 112.04170],
       polygonCoords: [
         [-7.81940, 112.04020],
@@ -277,10 +277,10 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
 
       // Outer RW 01 Boundary (Dashed outline)
       const outerBoundary = L.polygon(rwOuterBoundaryCoords, {
-        color: '#1d4ed8',
+        color: '#1E50DA',
         weight: 3,
         dashArray: '8, 8',
-        fillColor: '#3b82f6',
+        fillColor: '#2160E1',
         fillOpacity: 0.05,
       }).addTo(map);
 

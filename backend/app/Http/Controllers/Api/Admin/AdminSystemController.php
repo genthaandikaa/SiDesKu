@@ -148,7 +148,7 @@ class AdminSystemController extends Controller
         $admin = $request->user();
 
         $exportData = [
-            'system' => 'SiDesKu - Sistem Informasi Desa Terpadu',
+            'system' => 'Nexora - Sistem Informasi Desa Terpadu',
             'version' => '2.0.0-PRO',
             'exported_at' => now()->toIso8601String(),
             'exported_by' => [
@@ -178,7 +178,7 @@ class AdminSystemController extends Controller
             'action' => 'DATABASE_BACKUP_EXPORT',
             'entity_type' => DesaSetting::class,
             'entity_id' => 1,
-            'description' => "Administrator mengekspor cadangan basis data lengkap sistem SiDesKu.",
+            'description' => "Administrator mengekspor cadangan basis data lengkap sistem Nexora.",
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
         ]);
@@ -229,7 +229,7 @@ class AdminSystemController extends Controller
         if (!isset($data['system']) && !isset($data['desa_settings']) && !isset($data['counts'])) {
             return response()->json([
                 'success' => false,
-                'message' => 'Struktur berkas JSON bukan berkas cadangan resmi SiDesKu.',
+                'message' => 'Struktur berkas JSON bukan berkas cadangan resmi Nexora.',
             ], 422);
         }
 
@@ -333,7 +333,7 @@ class AdminSystemController extends Controller
                 'message' => 'Pemulihan data (Restore) berhasil diproses. Data sistem telah disinkronkan kembali.',
                 'restored_items' => $restoredItems,
                 'snapshot_info' => [
-                    'system' => $data['system'] ?? 'SiDesKu Snapshot',
+                    'system' => $data['system'] ?? 'Nexora Snapshot',
                     'version' => $data['version'] ?? '2.0.0',
                     'exported_at' => $data['exported_at'] ?? null,
                 ],
@@ -410,7 +410,7 @@ class AdminSystemController extends Controller
         $baseline = [
             [
                 'action' => 'SYSTEM_INITIALIZATION',
-                'description' => 'Sistem Informasi Desa Terpadu SiDesKu berhasil diinisialisasi dan siap beroperasi.',
+                'description' => 'Sistem Informasi Desa Terpadu Nexora berhasil diinisialisasi dan siap beroperasi.',
                 'minutes_ago' => 120,
             ],
             [
@@ -441,7 +441,7 @@ class AdminSystemController extends Controller
                 'action' => $item['action'],
                 'description' => $item['description'],
                 'ip_address' => '127.0.0.1',
-                'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) SiDesKu/2.0',
+                'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Nexora/2.0',
                 'created_at' => now()->subMinutes($item['minutes_ago']),
                 'updated_at' => now()->subMinutes($item['minutes_ago']),
             ]);

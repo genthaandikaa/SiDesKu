@@ -130,7 +130,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
       lat: tokoLat,
       lng: tokoLng,
       waKontak: tokoWa.replace(/\D/g, ''),
-      qrisUrl: payQris ? payQrisUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SIDESKU_QRIS_DEFAULT' : undefined,
+      qrisUrl: payQris ? payQrisUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=NEXORA_QRIS_DEFAULT' : undefined,
       qrisNama: payQrisNama || tokoNama,
       metodePembayaran: {
         qris: payQris,

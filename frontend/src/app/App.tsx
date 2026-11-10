@@ -5,6 +5,9 @@ import { AuthProvider } from '@/providers';
 import { AppRoutes } from './routes';
 import { PwaInstallPrompt } from '@/shared/components/PwaInstallPrompt';
 import { ChatWidget } from '@/features/chat/components/ChatWidget';
+import { migrateLegacyBrandStorage } from '@/shared/lib/brandStorageMigration';
+
+migrateLegacyBrandStorage();
 
 interface Props {
   children: ReactNode;

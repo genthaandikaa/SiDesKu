@@ -491,7 +491,7 @@ export const QrVerificationModal: React.FC<QrVerificationModalProps> = ({ hash, 
                       <div className="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-blue-400 rounded-br-xl" />
 
                       {/* Moving Red/Green Laser Line */}
-                      <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent shadow-[0_0_12px_#60a5fa] animate-pulse" />
+                      <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-transparent shadow-[0_0_12px_#168FEA] animate-pulse" />
                     </div>
 
                     <div className="mt-4 px-3 py-1.5 rounded-full bg-slate-950/80 text-blue-300 text-[11px] font-bold tracking-wide backdrop-blur-md shadow-md border border-blue-500/30">

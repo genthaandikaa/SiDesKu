@@ -1,6 +1,6 @@
 <div align="center">
   <!-- Header Banner: Animated Dark Emerald Wave with Twinkling Stars & High-Contrast Crisp Typography -->
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:064e3b,100:10b981&height=220&section=header&text=SiDesKu&fontSize=48&fontAlignY=38&fontColor=ffffff&desc=Sistem%20Informasi%20Desa%20%26%20Digitalisasi%20Layanan%20Publik%20Terpadu&descAlignY=58&descSize=17&descColor=34d399&animation=twinkling" width="100%"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:0d1117,50:064e3b,100:10b981&height=220&section=header&text=Nexora&fontSize=48&fontAlignY=38&fontColor=ffffff&desc=Sistem%20Informasi%20Desa%20%26%20Digitalisasi%20Layanan%20Publik%20Terpadu&descAlignY=58&descSize=17&descColor=34d399&animation=twinkling" width="100%"/>
 
   <br/>
 
@@ -33,7 +33,7 @@
 ---
 
 ## 📌 Daftar Isi
-- [Tentang SiDesKu](#-tentang-sidesku)
+- [Tentang Nexora](#-tentang-Nexora)
 - [Masalah yang Diselesaikan](#-masalah-yang-diselesaikan)
 - [Fitur Utama](#-fitur-utama)
 - [Matriks Hak Akses (Role-Based Access Control)](#-matriks-hak-akses-role-based-access-control)
@@ -48,9 +48,9 @@
 
 ---
 
-## 🏛️ Tentang SiDesKu
+## 🏛️ Tentang Nexora
 
-**SiDesKu** (*Sistem Informasi Desa Terpadu*) adalah platform *Smart Village & E-Government* berbasis web modern yang dirancang untuk mentransformasi birokrasi konvensional di tingkat desa menjadi sistem administrasi digital yang **efisien, transparan, akuntabel, dan bebas pemalsuan**.
+**Nexora** (*Sistem Informasi Desa Terpadu*) adalah platform *Smart Village & E-Government* berbasis web modern yang dirancang untuk mentransformasi birokrasi konvensional di tingkat desa menjadi sistem administrasi digital yang **efisien, transparan, akuntabel, dan bebas pemalsuan**.
 
 Platform ini mengintegrasikan seluruh ekosistem pelayanan desa—mulai dari warga masyarakat di tingkat Rukun Tetangga (RT), pengurus Rukun Warga (RW), hingga jajaran perangkat pemerintah desa (Sekretaris Desa, Kepala Desa, dan Bendahara Desa)—ke dalam satu pintu layanan terpadu (*single-window service*).
 
@@ -58,7 +58,7 @@ Platform ini mengintegrasikan seluruh ekosistem pelayanan desa—mulai dari warg
 
 ## 💡 Masalah yang Diselesaikan
 
-| Tantangan Konvensional | Solusi Digital SiDesKu |
+| Tantangan Konvensional | Solusi Digital Nexora |
 | :--- | :--- |
 | **Birokrasi Rumit & Antrean Fisik:** Warga harus bolak-balik mendatangi rumah RT, RW, lalu ke balai desa hanya untuk selembar surat pengantar. | **Pengajuan Mandiri Online:** Warga dapat mengajukan surat kapan saja via smartphone/laptop dengan pelacakan nomor resi otomatis. |
 | **Resiko Dokumen Palsu:** Tanda tangan dan stempel basah rawan dipalsukan. | **Verifikasi Tanda Tangan QR Code Kriptografis:** Dokumen resmi disahkan dengan QR Code unik ber-hash yang dapat diverifikasi keasliannya oleh instansi publik (Bank, Dispendukcapil, Sekolah) secara real-time. |
@@ -171,7 +171,7 @@ flowchart TD
 ## 📂 Struktur Direktori
 
 ```text
-SiDesKu/
+Nexora/
 ├── backend/                       # RESTful API Backend (Laravel 13)
 │   ├── app/
 │   │   ├── Http/
@@ -244,7 +244,7 @@ php artisan key:generate
 # DB_CONNECTION=mysql
 # DB_HOST=127.0.0.1
 # DB_PORT=3306
-# DB_DATABASE=sidesku_db
+# DB_DATABASE=nexora_db
 # DB_USERNAME=root
 # DB_PASSWORD=
 
@@ -282,20 +282,20 @@ Setelah menjalankan `php artisan migrate:fresh --seed`, Anda dapat langsung logi
 
 | Peran (Role) | Username | Email | Kegunaan Pengujian |
 | :--- | :--- | :--- | :--- |
-| **Administrator** | `admin` | `admin@sidesku.desa.id` | Konfigurasi master data, template kop surat, dan user sistem. |
-| **Kepala Desa** | `kades` | `kades@sidesku.desa.id` | **Legalisasi & TTD QR Resmi permohonan surat warga, penetapan kebijakan & pengumuman.** |
-| **Sekretaris Desa** | `sekdes` | `sekdes@sidesku.desa.id` | **Tata laksana administrasi, register KK/warga, arsip surat, buat surat mandiri loket, dan Bansos.** |
-| **Bendahara Desa** | `bendahara_desa` | `bendahara.desa@sidesku.desa.id` | **Input realisasi pos APBDes dan pembukuan keuangan.** |
-| **Ketua RW 01** | `rw01` | `rw01@sidesku.desa.id` | **Monitoring demografi & koordinasi lingkungan tingkat RW.** |
-| **Ketua RT 01** | `rt01` | `rt01@sidesku.desa.id` | **Persetujuan awal surat pengantar (pending_rt $\rightarrow$ pending_kades) & kelola Kas RT 01.** |
-| **Warga 1 (Pemohon)**| `warga01` | `warga01@sidesku.desa.id` | **Mengajukan surat SKTM/SKU, cek resi, dan unduh PDF surat.** |
-| **Warga 2** | `warga02` | `warga02@sidesku.desa.id` | Pengajuan surat domisili dan kirim aspirasi pengaduan. |
+| **Administrator** | `admin` | `admin@nexora.local` | Konfigurasi master data, template kop surat, dan user sistem. |
+| **Kepala Desa** | `kades` | `kades@nexora.local` | **Legalisasi & TTD QR Resmi permohonan surat warga, penetapan kebijakan & pengumuman.** |
+| **Sekretaris Desa** | `sekdes` | `sekdes@nexora.local` | **Tata laksana administrasi, register KK/warga, arsip surat, buat surat mandiri loket, dan Bansos.** |
+| **Bendahara Desa** | `bendahara_desa` | `bendahara.desa@nexora.local` | **Input realisasi pos APBDes dan pembukuan keuangan.** |
+| **Ketua RW 01** | `rw01` | `rw01@nexora.local` | **Monitoring demografi & koordinasi lingkungan tingkat RW.** |
+| **Ketua RT 01** | `rt01` | `rt01@nexora.local` | **Persetujuan awal surat pengantar (pending_rt $\rightarrow$ pending_kades) & kelola Kas RT 01.** |
+| **Warga 1 (Pemohon)**| `warga01` | `warga01@nexora.local` | **Mengajukan surat SKTM/SKU, cek resi, dan unduh PDF surat.** |
+| **Warga 2** | `warga02` | `warga02@nexora.local` | Pengajuan surat domisili dan kirim aspirasi pengaduan. |
 
 ---
 
 ## 📡 Referensi Endpoint API
 
-Berikut adalah beberapa endpoint representatif dari sistem SiDesKu:
+Berikut adalah beberapa endpoint representatif dari sistem Nexora:
 
 ### 🌐 Publik (Tanpa Autentikasi)
 | Metode | Endpoint | Deskripsi |

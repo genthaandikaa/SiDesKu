@@ -59,7 +59,7 @@ class PushNotificationController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Perangkat berhasil didaftarkan untuk notifikasi Web Push SiDesKu.',
+            'message' => 'Perangkat berhasil didaftarkan untuk notifikasi Web Push Nexora.',
             'data' => [
                 'id' => $subscription->id,
                 'created_at' => $subscription->created_at,
@@ -108,10 +108,10 @@ class PushNotificationController extends Controller
 
         $sentCount = $this->webPushService->sendToUser(
             $user,
-            'SiDesKu: Uji Coba Berhasil',
+            'Nexora: Uji Coba Berhasil',
             'Notifikasi Web Push aktif dan berhasil terhubung dengan akun Anda.',
             '/dashboard',
-            'sidesku-test-push'
+            'Nexora-test-push'
         );
 
         return response()->json([

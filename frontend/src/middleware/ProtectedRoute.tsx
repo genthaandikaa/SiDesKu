@@ -15,7 +15,7 @@ export const ProtectedDashboardRoute: React.FC = () => {
             S
           </div>
           <div className="text-xs font-bold text-gray-500 font-mono">
-            Memuat SiDesKu Smart City Hub Kota Kediri...
+            Memuat Nexora Smart City Hub Kota Kediri...
           </div>
         </div>
       </div>

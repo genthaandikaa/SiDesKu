@@ -98,8 +98,8 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
       totalRt: 6,
       totalKk: 225,
       totalWarga: 828,
-      color: '#3b82f6', // Emerald
-      borderColor: '#1d4ed8',
+      color: '#2160E1', // Emerald
+      borderColor: '#1E50DA',
       center: [-7.81830, 112.04300],
       polygonCoords: [
         [-7.81570, 112.03960],
@@ -115,7 +115,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           ketua: 'Supriyadi',
           kk: 42,
           warga: 156,
-          color: '#3b82f6',
+          color: '#2160E1',
           center: [-7.81690, 112.04105],
           polygonCoords: [
             [-7.81580, 112.03980],
@@ -131,7 +131,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           ketua: 'Hendra Gunawan',
           kk: 38,
           warga: 142,
-          color: '#3b82f6',
+          color: '#2160E1',
           center: [-7.81690, 112.04405],
           polygonCoords: [
             [-7.81580, 112.04230],
@@ -179,7 +179,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           ketua: 'Bambang Sugiono',
           kk: 36,
           warga: 134,
-          color: '#06b6d4',
+          color: '#168FEA',
           center: [-7.82010, 112.04170],
           polygonCoords: [
             [-7.81940, 112.04020],
@@ -215,8 +215,8 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
       totalRt: 4,
       totalKk: 160,
       totalWarga: 590,
-      color: '#3b82f6', // Blue
-      borderColor: '#1d4ed8',
+      color: '#2160E1', // Blue
+      borderColor: '#1E50DA',
       center: [-7.82350, 112.04350],
       polygonCoords: [
         [-7.82120, 112.03960],
@@ -232,7 +232,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           ketua: 'Sutrisno',
           kk: 45,
           warga: 165,
-          color: '#3b82f6',
+          color: '#2160E1',
           center: [-7.82230, 112.04150],
           polygonCoords: [
             [-7.82130, 112.03980],
@@ -248,7 +248,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           ketua: 'Wahyu Widodo',
           kk: 40,
           warga: 145,
-          color: '#0284c7',
+          color: '#168FEA',
           center: [-7.82230, 112.04450],
           polygonCoords: [
             [-7.82130, 112.04300],
@@ -264,7 +264,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           ketua: 'Agus Salim',
           kk: 38,
           warga: 140,
-          color: '#0369a1',
+          color: '#2160E1',
           center: [-7.82460, 112.04150],
           polygonCoords: [
             [-7.82350, 112.03980],
@@ -280,7 +280,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
           ketua: 'Tri Handoko',
           kk: 37,
           warga: 140,
-          color: '#075985',
+          color: '#1E50DA',
           center: [-7.82460, 112.04450],
           polygonCoords: [
             [-7.82350, 112.04300],
@@ -957,7 +957,7 @@ export const DesaTerritoryMap: React.FC<DesaTerritoryMapProps> = ({
                     type: 'Polygon',
                     coordinates: [drawnPoints.map((p) => [p[1], p[0]])],
                   };
-                  localStorage.setItem('sidesku_custom_boundary', JSON.stringify(geoJson));
+                  localStorage.setItem('nexora_custom_boundary', JSON.stringify(geoJson));
                   api.put('/settings/desa', { territory_geojson: JSON.stringify(geoJson) }).catch(() => {});
                   setDrawSuccessAlert('Batas wilayah berhasil digenerate otomatis dan tersimpan di server desa!');
                   setIsDrawingMode(false);

@@ -241,10 +241,10 @@ const SEED_LOKER: LokerItem[] = [
 // STORAGE HANDLERS WITH LOCALSTORAGE BACKING
 // ============================================================================
 
-const STORAGE_KEY_UMKM = 'sidesku_smartcity_umkm_v3';
-const STORAGE_KEY_KOS = 'sidesku_smartcity_kos_data';
-const STORAGE_KEY_LOKER = 'sidesku_smartcity_loker_data';
-const STORAGE_KEY_LAMARAN = 'sidesku_smartcity_lamaran_data';
+const STORAGE_KEY_UMKM = 'nexora_smartcity_umkm_v3';
+const STORAGE_KEY_KOS = 'nexora_smartcity_kos_data';
+const STORAGE_KEY_LOKER = 'nexora_smartcity_loker_data';
+const STORAGE_KEY_LAMARAN = 'nexora_smartcity_lamaran_data';
 
 // --- UMKM ---
 export function getStoredUmkmList(): UmkmItem[] {

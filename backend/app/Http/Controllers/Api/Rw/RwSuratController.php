@@ -64,7 +64,7 @@ class RwSuratController extends Controller
     {
         return response()->json([
             'success' => false,
-            'message' => 'Alur persetujuan surat resmi SiDesKu adalah langsung dari RT ke Kantor Desa (Bypass RW). Verifikasi surat oleh RW telah dinonaktifkan.',
+            'message' => 'Alur persetujuan surat resmi Nexora adalah langsung dari RT ke Kantor Desa (Bypass RW). Verifikasi surat oleh RW telah dinonaktifkan.',
         ], 403);
     }
 
@@ -72,7 +72,7 @@ class RwSuratController extends Controller
     {
         return response()->json([
             'success' => false,
-            'message' => 'Alur persetujuan surat resmi SiDesKu adalah langsung dari RT ke Kantor Desa (Bypass RW). Penolakan surat oleh RW telah dinonaktifkan.',
+            'message' => 'Alur persetujuan surat resmi Nexora adalah langsung dari RT ke Kantor Desa (Bypass RW). Penolakan surat oleh RW telah dinonaktifkan.',
         ], 403);
     }
 }

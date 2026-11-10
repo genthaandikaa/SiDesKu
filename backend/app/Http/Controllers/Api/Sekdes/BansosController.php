@@ -180,7 +180,7 @@ class BansosController extends Controller
                         "biaya tebus 💸 : *GRATIS (Rp 0,-)*\n" .
                         "no. urut antrean 🎫 : *{$p->nomor_antrean}*\n" .
                         "kode barcode 🔢 : *{$p->qr_bantuan_code}*\n\n" .
-                        "NB 📌 : *Tunjukkan NIK asli atau Kode QR ({$p->qr_bantuan_code}) pada aplikasi SiDesKu saat pengambilan bantuan di balai desa.*\n\n" .
+                        "NB 📌 : *Tunjukkan NIK asli atau Kode QR ({$p->qr_bantuan_code}) pada aplikasi Nexora saat pengambilan bantuan di balai desa.*\n\n" .
                         "Salam hangat dari {$namaDesa} 🌾✨";
 
                     $broadcastLogs[] = [
@@ -215,7 +215,7 @@ class BansosController extends Controller
                     $webPush->sendToUser(
                         $userTarget,
                         "Pencairan {$bansos->nama_bantuan}",
-                        "Undangan penyaluran bantuan tahap {$bansos->tahap}. Cek nomor antrean Anda di aplikasi SiDesKu.",
+                        "Undangan penyaluran bantuan tahap {$bansos->tahap}. Cek nomor antrean Anda di aplikasi Nexora.",
                         '/dashboard?tab=bansos',
                         'bansos-' . $bansos->id
                     );

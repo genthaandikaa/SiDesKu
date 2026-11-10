@@ -203,7 +203,7 @@ export const ChatWidget: React.FC = () => {
 
   const handleOpenFullPage = () => {
     setIsOpen(false);
-    window.dispatchEvent(new CustomEvent('sidesku-navigate-menu', { detail: 'pesan' }));
+    window.dispatchEvent(new CustomEvent('nexora-navigate-menu', { detail: 'pesan' }));
   };
 
   const filteredContacts = contacts.filter((c) =>

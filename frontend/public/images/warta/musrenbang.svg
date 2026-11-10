@@ -48,6 +48,6 @@
   <!-- Bottom Right Seal Stamp -->
   <g transform="translate(640, 75)" opacity="0.9">
     <circle cx="50" cy="30" r="26" fill="none" stroke="#4F46E5" stroke-width="1.5" stroke-dasharray="3,3"/>
-    <text x="50" y="34" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="800" fill="#4F46E5" text-anchor="middle">siDes DOKO</text>
+    <text x="50" y="34" font-family="Plus Jakarta Sans, sans-serif" font-size="9" font-weight="800" fill="#4F46E5" text-anchor="middle">Nexora DOKO</text>
   </g>
 </svg>

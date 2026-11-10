@@ -57,7 +57,7 @@ class WebPushService
 
         $publicKey = $this->getPublicKey();
         $privateKey = config('services.webpush.private_key') ?: env('VAPID_PRIVATE_KEY');
-        $subject = config('services.webpush.subject') ?: env('VAPID_SUBJECT', 'mailto:admin@sidesku.desa.id');
+        $subject = config('services.webpush.subject') ?: env('VAPID_SUBJECT', 'mailto:admin@nexora.local');
 
         if (!$publicKey || !$privateKey) {
             Log::info('[WebPush] VAPID keys belum dikonfigurasi di backend, notifikasi push ditangguhkan.');
@@ -149,12 +149,12 @@ class WebPushService
 
             // Bersihkan payload dari data sensitif (NIK, nama lengkap pribadi, alamat)
             $cleanPayload = [
-                'title' => $payload['title'] ?? 'SiDesKu Notifikasi',
+                'title' => $payload['title'] ?? 'Nexora Notifikasi',
                 'body' => $payload['body'] ?? 'Ada pembaruan layanan desa untuk Anda.',
                 'icon' => $payload['icon'] ?? '/logo-kediri.png',
                 'badge' => $payload['badge'] ?? '/favicon.svg',
                 'url' => $payload['url'] ?? '/dashboard',
-                'tag' => $payload['tag'] ?? 'sidesku-notif',
+                'tag' => $payload['tag'] ?? 'nexora-notif',
                 'timestamp' => now()->timestamp,
             ];
 
@@ -198,7 +198,7 @@ class WebPushService
             'title' => $title,
             'body' => $body,
             'url' => $url ?: '/dashboard',
-            'tag' => $tag ?: 'sidesku-user-' . $user->id,
+            'tag' => $tag ?: 'nexora-user-' . $user->id,
         ];
 
         foreach ($subscriptions as $sub) {

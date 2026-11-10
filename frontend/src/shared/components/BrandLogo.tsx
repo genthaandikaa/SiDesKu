@@ -22,22 +22,22 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 
   // Significant, bold height for official governmental shield emblem
   const iconSizes = {
-    sm: 'h-10 w-auto max-w-[36px]',
-    md: 'h-13 sm:h-15 w-auto max-w-[52px]',
-    lg: 'h-16 sm:h-20 w-auto max-w-[70px]',
-    xl: 'h-22 sm:h-26 w-auto max-w-[90px]',
+    sm: 'h-10 w-10',
+    md: 'h-11 w-11 sm:h-12 sm:w-12',
+    lg: 'h-16 w-16 sm:h-20 sm:w-20',
+    xl: 'h-22 w-22 sm:h-26 sm:w-26',
   };
 
   const textSizes = {
     sm: 'text-sm sm:text-base font-extrabold',
-    md: 'text-base sm:text-lg lg:text-xl font-black',
+    md: 'text-[clamp(0.9rem,1.1vw,1.125rem)] font-black',
     lg: 'text-lg sm:text-xl lg:text-2xl font-black',
     xl: 'text-2xl sm:text-3xl font-black',
   };
 
   // Auto-detect Village/City Location from User Profile when Logged In
   let villageName = overrideVillage;
-  let detectedSubtitle = subtitleText || 'Pemerintah Kota Kediri • Smart City Hub';
+  let detectedSubtitle = subtitleText || 'Wilayah Kota Kediri';
 
   if (user) {
     const dusun = (user as any).warga_profile?.rt?.rw?.dusun?.nama_dusun;
@@ -54,7 +54,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   }
 
   return (
-    <div className={`flex items-center gap-3.5 select-none group ${className}`}>
+    <div className={`flex min-w-0 items-center gap-2.5 select-none group ${className}`}>
       
       {/* Official Lambang Candra Birawa Kediri (Tall, Prominent & Majestic) */}
       <div className={`relative flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300 ${iconSizes[size]}`}>
@@ -66,28 +66,14 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       </div>
 
       {/* Dynamic Typography */}
-      <div className="flex flex-col justify-center">
-        <div className={`tracking-tight leading-tight flex items-center gap-1.5 ${isDark ? 'text-white' : 'text-slate-900'} ${textSizes[size]}`}>
-          {user ? (
-            <>
-              <span>SiDesKu</span>
-              <span className="text-blue-600 font-extrabold">
-                Smart City
-              </span>
-            </>
-          ) : (
-            <>
-              <span>Kota</span>
-              <span className="text-blue-600 font-extrabold">
-                Kediri
-              </span>
-            </>
-          )}
+      <div className="flex min-w-0 flex-col justify-center">
+        <div className={`flex min-w-0 flex-nowrap items-center gap-x-1 whitespace-nowrap tracking-tight leading-tight ${isDark ? 'text-white' : 'text-slate-900'} ${textSizes[size]}`}>
+          <span>Nexora</span>
         </div>
         
         {showSubtitle && (
-          <div className={`text-[11px] sm:text-xs font-semibold leading-tight mt-1 flex items-center gap-1.5 ${isDark ? 'text-blue-200/80' : 'text-slate-500'}`}>
-            <span>{detectedSubtitle}</span>
+          <div className={`mt-1 min-w-0 text-[11px] font-semibold leading-tight sm:text-xs ${isDark ? 'text-blue-200/80' : 'text-slate-500'}`}>
+            <span className="block truncate" title={detectedSubtitle}>{detectedSubtitle}</span>
           </div>
         )}
       </div>

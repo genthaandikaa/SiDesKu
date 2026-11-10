@@ -180,8 +180,8 @@ export const KadesStrukturVisiMisiView: React.FC = () => {
       setTimeout(() => setSaveSuccess(false), 4500);
     } catch {
       // Even if network fails, persist locally for instant preview
-      localStorage.setItem('sidesku_desa_visi', visi);
-      localStorage.setItem('sidesku_desa_misi', misi);
+      localStorage.setItem('nexora_desa_visi', visi);
+      localStorage.setItem('nexora_desa_misi', misi);
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 4500);
     } finally {

@@ -109,7 +109,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
             <div className="w-16 sm:w-20 shrink-0 flex justify-end">
               <div className="w-12 h-12 rounded-xl border border-slate-200 bg-slate-50 flex flex-col items-center justify-center text-[9px] text-slate-500 font-bold p-1 text-center">
                 <Building2 className="w-4 h-4 text-blue-700 mb-0.5" />
-                <span>SiDesKu</span>
+                <span>Nexora</span>
               </div>
             </div>
           </div>
@@ -240,7 +240,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
               <div className="py-2 flex justify-center">
                 <div className="p-2 border border-slate-300 rounded-xl bg-slate-50 flex items-center gap-2">
                   <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent('https://sidesku.desa.id/verifikasi/lpj/2026/DOKO-KEDIRI')}`}
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent(`${window.location.origin}/verifikasi/lpj/2026/DOKO-KEDIRI`)}`}
                     alt="QR Validasi"
                     className="w-14 h-14 object-contain"
                   />
@@ -261,7 +261,7 @@ export const CetakLpjModal: React.FC<CetakLpjModalProps> = ({ apbdesData, desa, 
               <div className="py-2 flex justify-center">
                 <div className="p-2 border border-slate-300 rounded-xl bg-slate-50 flex items-center gap-2">
                   <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent('https://sidesku.desa.id/verifikasi/bku/2026/BENDAHARA-DOKO')}`}
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent(`${window.location.origin}/verifikasi/bku/2026/BENDAHARA-DOKO`)}`}
                     alt="QR Kasir"
                     className="w-14 h-14 object-contain"
                   />

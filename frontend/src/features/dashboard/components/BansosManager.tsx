@@ -45,7 +45,7 @@ export const BansosManager: React.FC<BansosManagerProps> = ({ isKades = false })
   useEffect(() => {
     // Instant cache rehydration for seamless tab switching
     try {
-      const cached = sessionStorage.getItem('sides_bansos_cache');
+      const cached = sessionStorage.getItem('nexora_bansos_cache');
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -67,7 +67,7 @@ export const BansosManager: React.FC<BansosManagerProps> = ({ isKades = false })
       if (res.data.success) {
         setBansosList(res.data.data);
         try {
-          sessionStorage.setItem('sides_bansos_cache', JSON.stringify(res.data.data));
+          sessionStorage.setItem('nexora_bansos_cache', JSON.stringify(res.data.data));
         } catch {}
         if (res.data.data.length > 0) {
           const firstId = res.data.data[0].id;

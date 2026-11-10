@@ -164,7 +164,7 @@ export const PushNotificationManager: React.FC<PushNotificationManagerProps> = (
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-slate-900">Notifikasi Web Push SiDesKu</h3>
+              <h3 className="text-sm font-bold text-slate-900">Notifikasi Web Push Nexora</h3>
               <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-md bg-blue-100 text-blue-800">
                 Prioritas Rp0
               </span>
@@ -299,9 +299,9 @@ export const PushNotificationManager: React.FC<PushNotificationManagerProps> = (
             </div>
 
             <div className="text-center">
-              <h3 className="text-base font-bold text-slate-900">Izinkan Notifikasi SiDesKu?</h3>
+              <h3 className="text-base font-bold text-slate-900">Izinkan Notifikasi Nexora?</h3>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                Browser Anda akan menampilkan kotak konfirmasi izin. SiDesKu hanya mengirimkan informasi penting terkait surat, bansos, pesan, dan agenda desa Anda.
+                Browser Anda akan menampilkan kotak konfirmasi izin. Nexora hanya mengirimkan informasi penting terkait surat, bansos, pesan, dan agenda desa Anda.
               </p>
             </div>
 

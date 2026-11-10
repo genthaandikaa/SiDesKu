@@ -2,6 +2,8 @@ export const DEFAULT_PAGE_SIZE = 8;
 
 export const DASHBOARD_ROLES = [
   'admin',
+  'kecamatan',
+  'kabupaten_kota',
   'kades',
   'sekdes',
   'bendahara_desa',

@@ -128,7 +128,7 @@ export const KosPage: React.FC = () => {
     if (navigator.share) {
       navigator.share({
         title: item.nama,
-        text: `Lihat info sewa ${item.nama} (${item.tipe}) di SiDesKu Smart City Kediri.`,
+        text: `Lihat info sewa ${item.nama} (${item.tipe}) di Nexora Smart City Kediri.`,
         url: window.location.href
       }).catch(() => {});
     } else {
@@ -140,7 +140,7 @@ export const KosPage: React.FC = () => {
 
   const getWaLink = (item: HunianItem) => {
     const text = encodeURIComponent(
-      `Halo *${item.pemilikNama}*, saya tertarik dengan sewa hunian *"${item.nama}"* seharga Rp ${item.harga.toLocaleString('id-ID')} / ${item.periode} di SiDesKu Smart City Kediri. Apakah masih ada sisa kamar kosong?`
+      `Halo *${item.pemilikNama}*, saya tertarik dengan sewa hunian *"${item.nama}"* seharga Rp ${item.harga.toLocaleString('id-ID')} / ${item.periode} di Nexora Smart City Kediri. Apakah masih ada sisa kamar kosong?`
     );
     return `https://wa.me/${item.pemilikWa}?text=${text}`;
   };

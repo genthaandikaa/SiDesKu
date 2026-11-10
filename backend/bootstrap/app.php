@@ -16,6 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
             'tenant' => \App\Http\Middleware\EnsureTenantContext::class,
+            'regional.readonly' => \App\Http\Middleware\RestrictRegionalRoleAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

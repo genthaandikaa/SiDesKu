@@ -1,7 +1,7 @@
 flowchart TD
   subgraph faseSatu ["FASE 1: AKSES IDENTIFIKASI DAN AUTENTIKASI PENGGUNA"]
     direction TB
-    startNode(["Mulai: Pengguna Akses Portal SiDesKu"]) --> checkReg{"Sudah Memiliki Akun?"}
+    startNode(["Mulai: Pengguna Akses Portal Nexora"]) --> checkReg{"Sudah Memiliki Akun?"}
     checkReg -->|"Belum Punya Akun"| regForm["Isi Form Registrasi: NIK KK Nama No WhatsApp dan Password"]
     regForm --> dukcapilVal{"Validasi NIK ke Basis Data Dukcapil"}
     dukcapilVal -->|"NIK Tidak Ditemukan atau Palsu"| regFail["Registrasi Ditolak: Data NIK Tidak Sah"]

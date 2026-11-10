@@ -1,4 +1,4 @@
-// SiDesKu Web Push & Notification Service Worker
+// Nexora Web Push & Notification Service Worker
 // Standard W3C Push API & Notifications API (Rp0 Operational Cost)
 
 // PWA Lifecycle: install & activate
@@ -31,7 +31,7 @@ self.addEventListener('push', function (event) {
     }
   }
 
-  const title = data.title || 'SiDesKu - Notifikasi Desa';
+  const title = data.title || 'Nexora - Notifikasi Desa';
   const options = {
     body: data.body || 'Ada pembaruan pelayanan desa untuk Anda.',
     icon: data.icon || '/logo-kediri.png',
@@ -40,7 +40,7 @@ self.addEventListener('push', function (event) {
       url: data.url || '/dashboard',
       timestamp: data.timestamp || Date.now(),
     },
-    tag: data.tag || 'sidesku-notif',
+    tag: data.tag || 'nexora-notif',
     vibrate: [100, 50, 100],
     renotify: true,
   };

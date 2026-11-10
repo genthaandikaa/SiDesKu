@@ -203,14 +203,14 @@ export const HomePage: React.FC = () => {
       rating: 5,
     },
     {
-      quote: "Cari tempat kos dekat kampus sangat mudah lewat Peta Hunian Spasial SiDesKu. Lokasinya akurat dan sudah ada lencana verifikasi RT jadi bebas penipuan calo.",
+      quote: "Cari tempat kos dekat kampus sangat mudah lewat Peta Hunian Spasial Nexora. Lokasinya akurat dan sudah ada lencana verifikasi RT jadi bebas penipuan calo.",
       author: "Siti Rahmawati",
       role: "Mahasiswa Pendatang Baru di Kota Kediri",
       avatar: "/images/landing/Author.png",
       rating: 5,
     },
     {
-      quote: "Melamar kerja lewat Bursa Karir SiDesKu jauh lebih tenang karena seluruh perusahaannya diaudit dan diverifikasi langsung oleh Disnaker Kota Kediri, bebas pungli!",
+      quote: "Melamar kerja lewat Bursa Karir Nexora jauh lebih tenang karena seluruh perusahaannya diaudit dan diverifikasi langsung oleh Disnaker Kota Kediri, bebas pungli!",
       author: "Kevin Pratama",
       role: "Pencari Kerja Kota Kediri",
       avatar: "/images/landing/person1.png",
@@ -220,8 +220,8 @@ export const HomePage: React.FC = () => {
 
   const faqs = [
     {
-      q: "Berapa biaya pengurusan dokumen administrasi dan surat di SiDesKu?",
-      a: "Seluruh pengurusan dokumen administrasi pemerintahan dan persuratan di SiDesKu 100% Bebas Biaya (Rp 0,-). Pelayanan publik ini disediakan secara gratis tanpa pungutan liar apapun.",
+      q: "Berapa biaya pengurusan dokumen administrasi dan surat di Nexora?",
+      a: "Seluruh pengurusan dokumen administrasi pemerintahan dan persuratan di Nexora 100% Bebas Biaya (Rp 0,-). Pelayanan publik ini disediakan secara gratis tanpa pungutan liar apapun.",
     },
     {
       q: "Berapa lama proses pembuatan surat dan disposisi hingga selesai?",
@@ -233,7 +233,7 @@ export const HomePage: React.FC = () => {
     },
     {
       q: "Bagaimana keterhubungan sistem dari lingkungan warga hingga ke tingkat Kota?",
-      a: "SiDesKu mengintegrasikan tata kelola dari unit terkecil (RT/RW), Kelurahan, Kecamatan (Loket PATEN), hingga Command Center Kota Kediri (PUPR, Dinsos, Disnaker, dan Diskominfo).",
+      a: "Nexora mengintegrasikan tata kelola dari unit terkecil (RT/RW), Kelurahan, Kecamatan (Loket PATEN), hingga Command Center Kota Kediri (PUPR, Dinsos, Disnaker, dan Diskominfo).",
     },
   ];
 
@@ -699,7 +699,7 @@ export const HomePage: React.FC = () => {
                     <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-400" />
                   </div>
-                  <span className="text-[10px] font-mono text-slate-400">sidesku.desa.id/persuratan</span>
+                  <span className="text-[10px] font-mono text-slate-400">Nexora/layanan-surat</span>
                   <span className="text-[10px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200/60">
                     Live Valid
                   </span>

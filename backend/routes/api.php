@@ -64,7 +64,7 @@ Route::get('/public/umkms/{id}/reviews', [PublicUmkmController::class, 'reviews'
 Route::get('/warga/dokumen/file/{userId}/{filename}', [\App\Http\Controllers\Api\Warga\WargaDokumenController::class, 'serveFile'])->name('api.warga.dokumen.file');
 
 // protected routes
-Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
+Route::middleware(['auth:sanctum', 'tenant', 'regional.readonly'])->group(function () {
 
     // Web Push Notification System (Standar VAPID Rp0)
     Route::get('/push/status', [\App\Http\Controllers\Api\PushNotificationController::class, 'getStatus']);
@@ -86,10 +86,10 @@ Route::middleware(['auth:sanctum', 'tenant'])->group(function () {
     Route::match(['put', 'post'], '/auth/profile', [AuthController::class, 'updateProfile']);
     Route::match(['put', 'post'], '/auth/password', [AuthController::class, 'updatePassword']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
-
     // Smart City UMKM & Review (Khusus Warga Terdaftar)
     Route::post('/umkms', [PublicUmkmController::class, 'store']);
     Route::post('/umkms/{id}/reviews', [PublicUmkmController::class, 'storeReview']);
+    Route::get('/regional/overview', [\App\Http\Controllers\Api\Regional\RegionalOverviewController::class, '__invoke']);
     Route::get('/notifikasi-logs', [PublicInfoController::class, 'getNotifikasiLogs']);
     Route::get('/pengumumans', [PengumumanController::class, 'index']);
     Route::get('/pengumumans/{id}', [PengumumanController::class, 'show']);

@@ -152,7 +152,7 @@ class PublicSuratController extends Controller
             'legalitas' => [
                 'penandatangan' => ($desa ? $desa->nama_kades : 'Drs. H. Bambang Prasetyo, M.Si') . ' (Kepala Desa Doko / Lurah)',
                 'nip' => $desa ? $desa->nip_kades : '19680514 199403 1 004',
-                'payung_hukum' => 'Sah secara administrasi desa berdasarkan verifikasi registrasi digital SiDesKu dan Permendagri No. 2/2019 tentang Tata Naskah Dinas Desa.',
+                'payung_hukum' => 'Sah secara administrasi desa berdasarkan verifikasi registrasi digital Nexora dan Permendagri No. 2/2019 tentang Tata Naskah Dinas Desa.',
                 'keterangan' => 'Dokumen bertanda tangan Barcode & QR Code ini terdaftar resmi dalam arsip persuratan digital Pemerintah Desa.',
                 'status_tte' => $statusTte,
             ],

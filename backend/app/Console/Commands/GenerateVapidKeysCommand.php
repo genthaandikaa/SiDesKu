@@ -73,7 +73,7 @@ class GenerateVapidKeysCommand extends Command
         }
 
         if (!str_contains($envContent, 'VAPID_SUBJECT=')) {
-            $envContent .= "\nVAPID_SUBJECT=mailto:admin@sidesku.desa.id";
+            $envContent .= "\nVAPID_SUBJECT=mailto:admin@nexora.local";
         }
 
         file_put_contents($envPath, $envContent);

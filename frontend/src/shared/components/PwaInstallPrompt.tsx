@@ -17,7 +17,7 @@ export const PwaInstallPrompt: React.FC = () => {
       e.preventDefault();
       setDeferredPrompt(e);
       // Cek apakah user sudah pernah menutup prompt hari ini
-      const dismissed = localStorage.getItem('sidesku_pwa_dismissed');
+      const dismissed = localStorage.getItem('nexora_pwa_dismissed');
       if (!dismissed) {
         setShowPrompt(true);
       }
@@ -62,7 +62,7 @@ export const PwaInstallPrompt: React.FC = () => {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    localStorage.setItem('sidesku_pwa_dismissed', 'true');
+    localStorage.setItem('nexora_pwa_dismissed', 'true');
   };
 
   return (
@@ -84,7 +84,7 @@ export const PwaInstallPrompt: React.FC = () => {
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                Pasang SiDesKu di HP
+                Pasang Nexora di HP
                 <span className="px-1.5 py-0.5 text-[9px] bg-blue-100 text-blue-800 rounded font-semibold">PWA</span>
               </h4>
               <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">

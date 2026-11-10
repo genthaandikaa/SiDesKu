@@ -46,6 +46,8 @@ import {
   Megaphone,
   ShoppingBag,
   Briefcase,
+  Phone,
+  Share2,
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { useAuth } from '@/shared/context/AuthContext';
@@ -66,6 +68,7 @@ const KopSuratSetting = React.lazy(() => import('./KopSuratSetting').then((m) =>
 const KadesStrukturVisiMisiView = React.lazy(() => import('./KadesStrukturVisiMisiView').then((m) => ({ default: m.KadesStrukturVisiMisiView })));
 const PusatPesanView = React.lazy(() => import('./PusatPesanView').then((m) => ({ default: m.PusatPesanView })));
 const WargaSmartCityManager = React.lazy(() => import('@/features/smart-city').then((m) => ({ default: m.WargaSmartCityManager })));
+const RegionalOverviewDashboard = React.lazy(() => import('./RegionalOverviewDashboard').then((m) => ({ default: m.RegionalOverviewDashboard })));
 
 import { KeuanganDesaWargaView } from './KeuanganDesaWargaView';
 import { AspirasiPengaduanWargaView } from './AspirasiPengaduanWargaView';
@@ -213,6 +216,13 @@ export const DashboardLayout: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const roleSlug = user?.role?.slug || 'warga';
+  const isRegionalRole = ['kecamatan', 'kabupaten_kota'].includes(roleSlug);
+
+  useEffect(() => {
+    document.documentElement.classList.add('nexora-dashboard-theme');
+    return () => document.documentElement.classList.remove('nexora-dashboard-theme');
+  }, []);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -232,7 +242,7 @@ export const DashboardLayout: React.FC = () => {
       if (path.startsWith('/dashboard/profil')) return 'profil_saya';
       if (path.startsWith('/dashboard/notifikasi')) return 'notifikasi';
       if (queryTab) return queryTab;
-      const saved = localStorage.getItem('sides_active_dashboard_tab');
+      const saved = localStorage.getItem(`nexora_active_dashboard_tab_${roleSlug}`) || localStorage.getItem('nexora_active_dashboard_tab');
       if (saved) return saved;
     } catch (e) {
       // ignore
@@ -244,7 +254,8 @@ export const DashboardLayout: React.FC = () => {
   const handleMenuNavigate = (menuId: string) => {
     setActiveMenu(menuId);
     try {
-      localStorage.setItem('sides_active_dashboard_tab', menuId);
+      localStorage.setItem(`nexora_active_dashboard_tab_${roleSlug}`, menuId);
+      localStorage.setItem('nexora_active_dashboard_tab', menuId);
     } catch (e) {
       // ignore
     }
@@ -405,7 +416,7 @@ export const DashboardLayout: React.FC = () => {
     } else if (queryTab) {
       resolvedMenu = queryTab.replace(/-/g, '_');
     } else if (path === '/dashboard' || path === '') {
-      const saved = localStorage.getItem('sides_active_dashboard_tab');
+      const saved = localStorage.getItem(`nexora_active_dashboard_tab_${roleSlug}`) || localStorage.getItem('nexora_active_dashboard_tab');
       if (saved && saved !== 'beranda') {
         resolvedMenu = saved;
         navigate(`/dashboard?tab=${saved}`, { replace: true });
@@ -414,7 +425,8 @@ export const DashboardLayout: React.FC = () => {
 
     setActiveMenu(resolvedMenu);
     try {
-      localStorage.setItem('sides_active_dashboard_tab', resolvedMenu);
+      localStorage.setItem(`nexora_active_dashboard_tab_${roleSlug}`, resolvedMenu);
+      localStorage.setItem('nexora_active_dashboard_tab', resolvedMenu);
     } catch (e) {
       // ignore
     }
@@ -424,7 +436,7 @@ export const DashboardLayout: React.FC = () => {
   const [notifications, setNotifications] = useState<NotificationItem[]>([
     {
       id: 1,
-      title: 'Portal Digital SiDesKu Aktif',
+      title: 'Portal Digital Nexora Aktif',
       desc: 'Pelayanan surat pengantar mandiri warga langsung terverifikasi oleh Ketua RT dan dilegalisasi tanda tangan QR resmi Kepala Desa.',
       time: 'Hari ini',
       category: 'umum',
@@ -622,11 +634,14 @@ export const DashboardLayout: React.FC = () => {
   const [hasLoadedSurats, setHasLoadedSurats] = useState(false);
   const [isSearchingSurat, setIsSearchingSurat] = useState(false);
 
-  const roleSlug = user?.role?.slug || 'warga';
 
   // Lazy fetch surats & surat-types catalog when search is focused/opened
   useEffect(() => {
     if (isSearchOpen && !hasLoadedSurats) {
+      if (isRegionalRole) {
+        setHasLoadedSurats(true);
+        return;
+      }
       setIsSearchingSurat(true);
       Promise.all([
         api.get('/surats').catch(() => ({ data: [] })),
@@ -666,7 +681,7 @@ export const DashboardLayout: React.FC = () => {
           setIsSearchingSurat(false);
         });
     }
-  }, [isSearchOpen, hasLoadedSurats]);
+  }, [isSearchOpen, hasLoadedSurats, isRegionalRole]);
 
   // Global keyboard shortcut (Ctrl+K / Cmd+K and Esc)
   useEffect(() => {
@@ -722,6 +737,7 @@ export const DashboardLayout: React.FC = () => {
   const [unreadPengumumanCount, setUnreadPengumumanCount] = useState(0);
 
   useEffect(() => {
+    if (isRegionalRole) return;
     const fetchUnreadPengumumanCount = async () => {
       try {
         const response = await api.get('/pengumuman/unread-count');
@@ -734,12 +750,13 @@ export const DashboardLayout: React.FC = () => {
     };
 
     fetchUnreadPengumumanCount();
-  }, []);
+  }, [isRegionalRole]);
 
   // badge & state chat pesan logic
   const [chatUnreadCount, setChatUnreadCount] = useState(0);
 
   useEffect(() => {
+    if (isRegionalRole) return;
     const fetchChatUnreadCount = async () => {
       try {
         const response = await api.get('/chat/unread-count');
@@ -754,7 +771,7 @@ export const DashboardLayout: React.FC = () => {
     fetchChatUnreadCount();
     const interval = setInterval(fetchChatUnreadCount, 6000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isRegionalRole]);
 
   useEffect(() => {
     const handleSideNav = (e: any) => {
@@ -762,8 +779,8 @@ export const DashboardLayout: React.FC = () => {
         handleMenuNavigate(e.detail);
       }
     };
-    window.addEventListener('sidesku-navigate-menu', handleSideNav);
-    return () => window.removeEventListener('sidesku-navigate-menu', handleSideNav);
+    window.addEventListener('nexora-navigate-menu', handleSideNav);
+    return () => window.removeEventListener('nexora-navigate-menu', handleSideNav);
   }, []);
 
   // Build the exact grouped navigation tree for each role
@@ -962,6 +979,85 @@ export const DashboardLayout: React.FC = () => {
               { id: 'profil_saya', label: 'Profil Akun', icon: UserIcon },
             ],
           },
+        ];
+
+      case 'kecamatan':
+        return [
+          {
+            title: 'Ringkasan Wilayah',
+            items: [
+              { id: 'beranda', label: 'Dashboard Kecamatan', icon: Home },
+              { id: 'monitoring_desa', label: 'Desa Binaan', icon: Building2 },
+            ],
+          },
+          {
+            title: 'Layanan & Evaluasi',
+            items: [
+              { id: 'layanan_surat', label: 'Monitoring Pelayanan Desa', icon: FileText },
+              { id: 'rekomendasi_layanan', label: 'Rekap Rekomendasi Layanan', icon: CheckCircle2 },
+              { id: 'evaluasi_pelayanan', label: 'Evaluasi Pelayanan Desa', icon: Activity },
+            ],
+          },
+          {
+            title: 'Aspirasi & Koordinasi',
+            items: [
+              { id: 'pengaduan_warga', label: 'Aspirasi & Pengaduan Wilayah', icon: MessageSquare },
+              { id: 'koordinasi_desa', label: 'Koordinasi Antar-Desa', icon: Phone },
+            ],
+          },
+          {
+            title: 'Informasi & Laporan',
+            items: [
+              { id: 'pengumuman_regional', label: 'Pengumuman Desa', icon: Newspaper },
+              { id: 'agenda_regional', label: 'Agenda Kecamatan', icon: Calendar },
+              { id: 'laporan_wilayah', label: 'Laporan Kecamatan', icon: TrendingUp },
+            ],
+          },
+          {
+            title: 'Akun & Preferensi',
+            items: [{ id: 'profil_saya', label: 'Profil Saya', icon: UserIcon }],
+          },
+        ];
+
+      case 'kabupaten_kota':
+        return [
+          {
+            title: 'Ringkasan Wilayah',
+            items: [
+              { id: 'beranda', label: 'Executive Dashboard', icon: Home },
+            ],
+          },
+          {
+            title: 'Struktur Wilayah',
+            items: [
+              { id: 'monitoring_kecamatan', label: 'Monitoring Kecamatan', icon: Layers },
+              { id: 'monitoring_desa', label: 'Monitoring Desa', icon: Building2 },
+              { id: 'struktur_wilayah', label: 'Struktur Wilayah Kabupaten', icon: MapPin },
+            ],
+          },
+          {
+            title: 'Layanan & Aspirasi Publik',
+            items: [
+              { id: 'layanan_surat', label: 'Monitoring Pelayanan Publik', icon: FileText },
+              { id: 'pengaduan_warga', label: 'Aspirasi & Pengaduan', icon: MessageSquare },
+              { id: 'disposisi_pengaduan', label: 'Rekap Disposisi Pengaduan', icon: Share2 },
+            ],
+          },
+          {
+            title: 'Program & Informasi',
+            items: [
+              { id: 'program_sosial', label: 'Program Sosial Terpublikasi', icon: HeartHandshake },
+              { id: 'pengumuman_regional', label: 'Pengumuman Desa', icon: Newspaper },
+            ],
+          },
+          {
+            title: 'Analisis & Pelaporan',
+            items: [
+              { id: 'analisis_kinerja', label: 'Analisis Kinerja Wilayah', icon: Activity },
+              { id: 'laporan_wilayah', label: 'Laporan Terintegrasi', icon: TrendingUp },
+            ],
+          },
+          { title: 'Akun & Preferensi', items: [{ id: 'profil_saya', label: 'Profil Saya', icon: UserIcon }] },
         ];
 
       case 'admin':
@@ -1202,6 +1298,10 @@ export const DashboardLayout: React.FC = () => {
       );
     }
 
+    if (isRegionalRole) {
+      return <RegionalOverviewDashboard roleSlug={roleSlug} activeSubmenu={activeMenu} />;
+    }
+
     // 2. Specific Views
     if (activeMenu === 'kelola_desa' || activeMenu === 'tambah_desa') {
       return <SuperAdminTenantView initialAction={activeMenu === 'tambah_desa' ? 'create' : 'list'} onNavigate={handleMenuNavigate} />;
@@ -1240,7 +1340,7 @@ export const DashboardLayout: React.FC = () => {
   const displayName = user?.warga_profile?.nama_lengkap || user?.name || user?.username || 'Pengguna';
 
   return (
-    <div className="min-h-screen bg-[#f4f8f5] flex text-[#0f241d] font-sans relative">
+    <div className="nexora-dashboard-theme min-h-screen bg-[#f4f8f5] flex text-[#0f241d] font-sans relative">
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div 
@@ -1257,13 +1357,13 @@ export const DashboardLayout: React.FC = () => {
         ${isSidebarOpen ? 'translate-x-0 z-50' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Header Branding (h-16 matches topbar perfectly) */}
-        <div className="h-16 flex items-center px-6 border-b border-[#e8efe9] justify-between shrink-0">
-          <Link to="/" className="hover:opacity-95 transition-opacity">
-            <BrandLogo size="md" />
+        <div className="h-16 flex items-center gap-2 px-4 sm:px-6 border-b border-[#e8efe9] justify-between shrink-0">
+          <Link to="/" className="min-w-0 flex-1 overflow-hidden transition-opacity hover:opacity-95">
+            <BrandLogo size="md" className="w-full min-w-0 gap-2" />
           </Link>
           <button
             onClick={() => setIsSidebarOpen(false)}
-            className="lg:hidden p-1.5 text-gray-400 hover:text-gray-600 rounded-lg cursor-pointer"
+            className="lg:hidden shrink-0 p-1.5 text-gray-400 hover:text-gray-600 rounded-lg cursor-pointer"
             aria-label="Tutup Sidebar"
           >
             <X size={20} />
@@ -1656,7 +1756,7 @@ export const DashboardLayout: React.FC = () => {
 
                     {/* Footer Hint */}
                     <div className="p-2.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400 px-4 shrink-0">
-                      <span>Pencarian cepat terintegrasi SiDesKu</span>
+                      <span>Pencarian cepat terintegrasi Nexora</span>
                       <button
                         type="button"
                         onClick={() => setIsSearchOpen(false)}
@@ -1785,11 +1885,11 @@ export const DashboardLayout: React.FC = () => {
               </button>
 
               {isProfileOpen && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-3xl shadow-xl border border-slate-200 py-2 z-50 animate-slide-down space-y-1">
-                  <div className="px-4 py-2.5 border-b border-slate-100">
+                <div className="absolute right-0 mt-2 w-[min(18rem,calc(100vw-1.5rem))] overflow-hidden rounded-3xl border border-slate-200 bg-white py-2 shadow-xl z-50 animate-slide-down space-y-1">
+                  <div className="min-w-0 overflow-hidden border-b border-slate-100 px-4 py-2.5">
                     <div className="text-xs font-bold text-slate-400 uppercase">Pengguna Aktif</div>
-                    <div className="text-xs font-black text-slate-900 truncate">{displayName}</div>
-                    <div className="text-[11px] text-slate-500 font-mono">{user?.email || user?.username}</div>
+                    <div className="max-w-full truncate text-xs font-black text-slate-900" title={displayName}>{displayName}</div>
+                    <div className="block max-w-full truncate font-mono text-[11px] text-slate-500" title={user?.email || user?.username}>{user?.email || user?.username}</div>
                   </div>
 
                   <button
@@ -1799,8 +1899,8 @@ export const DashboardLayout: React.FC = () => {
                     }}
                     className="w-full px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-blue-50 hover:text-blue-800 flex items-center gap-2.5 transition-colors cursor-pointer"
                   >
-                    <UserIcon size={14} />
-                    <span>Profil & Data Diri</span>
+                    <UserIcon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                    <span className="min-w-0 truncate">Profil & Data Diri</span>
                   </button>
 
                   <div className="pt-1 border-t border-slate-100">
@@ -1808,8 +1908,8 @@ export const DashboardLayout: React.FC = () => {
                       onClick={handleLogout}
                       className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                     >
-                      <LogOut size={14} />
-                      <span>Keluar dari Akun</span>
+                      <LogOut className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      <span className="min-w-0 truncate">Keluar dari Akun</span>
                     </button>
                   </div>
                 </div>
@@ -1822,7 +1922,7 @@ export const DashboardLayout: React.FC = () => {
         {/* Dynamic Main Body */}
         <div className="flex-1 p-4 sm:p-5 lg:p-6 xl:p-8">
           <div className="dashboard-rounded-tables max-w-7xl mx-auto">
-            <PushNotificationBanner />
+            {!isRegionalRole && <PushNotificationBanner />}
             <React.Suspense fallback={<DashboardLoadingFallback />}>
               {renderContent()}
             </React.Suspense>

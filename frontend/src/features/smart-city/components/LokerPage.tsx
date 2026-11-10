@@ -178,7 +178,7 @@ export const LokerPage: React.FC = () => {
 
   const getWaLink = (item: LokerItem) => {
     const text = encodeURIComponent(
-      `Halo HRD *${item.perusahaan}*, saya melihat lowongan pekerjaan posisi *"${item.posisi}"* di portal SiDesKu Smart City Kediri. Saya ingin menanyakan proses lamaran kerja ini.`
+      `Halo HRD *${item.perusahaan}*, saya melihat lowongan pekerjaan posisi *"${item.posisi}"* di portal Nexora Smart City Kediri. Saya ingin menanyakan proses lamaran kerja ini.`
     );
     return `https://wa.me/${item.waHrd}?text=${text}`;
   };

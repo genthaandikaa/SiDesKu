@@ -59,7 +59,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
   const [kartuKeluargas, setKartuKeluargas] = useState<any[]>([]);
   const [kasData, setKasData] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'antrean' | 'warga' | 'kas' | 'konfirmasi_warga'>(() => {
-    const saved = localStorage.getItem('sides_rt_active_tab');
+    const saved = localStorage.getItem('nexora_rt_active_tab');
     if (saved === 'warga' || saved === 'kas' || saved === 'antrean' || saved === 'konfirmasi_warga') return saved as any;
     return 'antrean';
   });
@@ -92,7 +92,7 @@ export const RtDashboard: React.FC<RtDashboardProps> = ({ activeSubmenu = 'beran
 
   const handleSetActiveTab = (tab: 'antrean' | 'warga' | 'kas' | 'konfirmasi_warga') => {
     setActiveTab(tab);
-    localStorage.setItem('sides_rt_active_tab', tab);
+    localStorage.setItem('nexora_rt_active_tab', tab);
     setTimeout(() => {
       tabsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 50);

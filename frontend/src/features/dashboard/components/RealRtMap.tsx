@@ -106,10 +106,10 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
 
       // Add RT 01 Spatial Boundary Polygon
       const boundary = L.polygon(rtBoundaryCoords, {
-        color: '#3b82f6',
+        color: '#2160E1',
         weight: 3,
         dashArray: '6, 8',
-        fillColor: '#3b82f6',
+        fillColor: '#2160E1',
         fillOpacity: 0.12,
       }).addTo(map);
 
@@ -152,7 +152,7 @@ export const RealRtMap: React.FC<RealRtMapProps> = ({
 
     if (boundaryLayerRef.current) {
       boundaryLayerRef.current.setStyle({
-        color: activeLayer === 'satellite' ? '#60a5fa' : '#3b82f6',
+        color: activeLayer === 'satellite' ? '#168FEA' : '#2160E1',
         weight: activeLayer === 'satellite' ? 3.5 : 3,
         fillOpacity: activeLayer === 'satellite' ? 0.2 : 0.12,
       });

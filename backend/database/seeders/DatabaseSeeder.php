@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Roles
         $roles = [
-            ['name' => 'Super Admin', 'slug' => 'super_admin', 'display_name' => 'Super Administrator Platform', 'description' => 'Pengelola multi-tenant platform SiDesKu lintas desa'],
+            ['name' => 'Super Admin', 'slug' => 'super_admin', 'display_name' => 'Super Administrator Platform', 'description' => 'Pengelola multi-tenant platform Nexora lintas desa'],
             ['name' => 'Admin Desa', 'slug' => 'admin', 'display_name' => 'Administrator Desa', 'description' => 'Akses penuh administrasi dan operasional untuk desa bersangkutan'],
             ['name' => 'Kepala Desa', 'slug' => 'kades', 'display_name' => 'Kepala Desa', 'description' => 'Monitoring analitik desa, persetujuan kebijakan dan laporan umum'],
             ['name' => 'Sekretaris Desa', 'slug' => 'sekdes', 'display_name' => 'Sekretaris Desa', 'description' => 'Pengelolaan administrasi persuratan dan legalisasi stempel QR resmi'],
@@ -83,7 +83,7 @@ class DatabaseSeeder extends Seeder
                 'role_id' => $roleMap['super_admin']->id,
                 'desa_id' => null,
                 'name' => 'Super Administrator Platform',
-                'email' => 'superadmin@sidesku.desa.id',
+                'email' => 'superadmin@nexora.local',
                 'phone_number' => '081299999999',
                 'password' => $defaultPassword,
                 'is_active' => true,
@@ -92,9 +92,9 @@ class DatabaseSeeder extends Seeder
 
         $adminUser = User::create([
             'role_id' => $roleMap['admin']->id,
-            'name' => 'Administrator SIDes',
+            'name' => 'Administrator Nexora',
             'username' => 'admin',
-            'email' => 'admin@sidesku.desa.id',
+            'email' => 'admin@nexora.local',
             'phone_number' => '081234567890',
             'password' => $defaultPassword,
             'is_active' => true,
@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleMap['kades']->id,
             'name' => 'Drs. H. Bambang Prasetyo, M.Si',
             'username' => 'kades',
-            'email' => 'kades@sidesku.desa.id',
+            'email' => 'kades@nexora.local',
             'phone_number' => '081234567891',
             'password' => $defaultPassword,
             'is_active' => true,
@@ -114,7 +114,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleMap['sekdes']->id,
             'name' => 'Ahmad Fauzi, S.Kom',
             'username' => 'sekdes',
-            'email' => 'sekdes@sidesku.desa.id',
+            'email' => 'sekdes@nexora.local',
             'phone_number' => '081234567892',
             'password' => $defaultPassword,
             'is_active' => true,
@@ -124,7 +124,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleMap['bendahara_desa']->id,
             'name' => 'Ratna Dewi Kusuma, S.E',
             'username' => 'bendahara_desa',
-            'email' => 'bendahara.desa@sidesku.desa.id',
+            'email' => 'bendahara.desa@nexora.local',
             'phone_number' => '081234567893',
             'password' => $defaultPassword,
             'is_active' => true,
@@ -135,7 +135,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleMap['rw']->id,
             'name' => 'Suryanto (Ketua RW 01)',
             'username' => 'rw01',
-            'email' => 'rw01@sidesku.desa.id',
+            'email' => 'rw01@nexora.local',
             'phone_number' => '081234567894',
             'password' => $defaultPassword,
             'is_active' => true,
@@ -145,7 +145,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleMap['rt']->id,
             'name' => 'Supriyadi (Ketua RT 01)',
             'username' => 'rt01',
-            'email' => 'rt01@sidesku.desa.id',
+            'email' => 'rt01@nexora.local',
             'phone_number' => '081234567895',
             'password' => $defaultPassword,
             'is_active' => true,
@@ -156,7 +156,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleMap['warga']->id,
             'name' => 'Bambang Utomo',
             'username' => 'warga01',
-            'email' => 'warga01@sidesku.desa.id',
+            'email' => 'warga01@nexora.local',
             'phone_number' => '085712345678',
             'password' => $defaultPassword,
             'is_active' => true,
@@ -166,7 +166,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $roleMap['warga']->id,
             'name' => 'Siti Rahmawati',
             'username' => 'warga02',
-            'email' => 'warga02@sidesku.desa.id',
+            'email' => 'warga02@nexora.local',
             'phone_number' => '085887654321',
             'password' => $defaultPassword,
             'is_active' => true,
@@ -561,11 +561,11 @@ class DatabaseSeeder extends Seeder
 
         // 14. Berita & Pengumuman
         Berita::create([
-            'judul' => 'Desa Doko Ngasem Luncurkan Sistem Pelayanan Publik Digital Terpadu SIDes',
-            'slug' => 'desa-doko-luncurkan-sistem-pelayanan-publik-digital-sides',
+            'judul' => 'Desa Doko Ngasem Luncurkan Sistem Pelayanan Publik Digital Terpadu Nexora',
+            'slug' => 'desa-doko-luncurkan-sistem-pelayanan-publik-digital-Nexora',
             'kategori' => 'Pemerintahan',
             'ringkasan' => 'Sebagai upaya meningkatkan efisiensi dan transparansi, Pemerintah Desa Doko resmi mengadopsi platform digital desa terintegrasi dari tingkat RT hingga Kantor Desa.',
-            'konten' => 'Pemerintah Desa Doko, Kecamatan Ngasem, Kabupaten Kediri melakukan inovasi pelayanan birokrasi masyarakat berbasis digital. Melalui platform SIDes (Sistem Informasi Desa Terpadu), warga tidak lagi perlu bolak-balik fisik membawa berkas kertas...',
+            'konten' => 'Pemerintah Desa Doko, Kecamatan Ngasem, Kabupaten Kediri melakukan inovasi pelayanan birokrasi masyarakat berbasis digital. Melalui platform Nexora (Sistem Informasi Desa Terpadu), warga tidak lagi perlu bolak-balik fisik membawa berkas kertas...',
             'view_count' => 342,
             'is_published' => true,
             'published_at' => now()->subDays(3),
@@ -616,5 +616,7 @@ class DatabaseSeeder extends Seeder
                 \Illuminate\Support\Facades\DB::table($tbl)->whereNull('desa_id')->update(['desa_id' => 1]);
             }
         }
+
+        $this->call(RegionalRoleSeeder::class);
     }
 }

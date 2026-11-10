@@ -16,6 +16,61 @@ html {
   color: #0f172a;
 }
 
+/* Scoped dashboard palette; public pages keep their existing colors. */
+.nexora-dashboard-theme {
+  --color-blue-50: color-mix(in srgb, #2160e1 4%, white);
+  --color-blue-100: color-mix(in srgb, #2160e1 8%, white);
+  --color-blue-200: color-mix(in srgb, #2160e1 18%, white);
+  --color-blue-300: color-mix(in srgb, #2160e1 34%, white);
+  --color-blue-400: #168fea;
+  --color-blue-500: #2565eb;
+  --color-blue-600: #2160e1;
+  --color-blue-700: #1e50da;
+  --color-blue-800: color-mix(in srgb, #1e50da 82%, black);
+  --color-blue-900: color-mix(in srgb, #1e50da 68%, black);
+  --color-blue-950: color-mix(in srgb, #1e50da 52%, black);
+
+  --color-indigo-50: var(--color-blue-50);
+  --color-indigo-100: var(--color-blue-100);
+  --color-indigo-200: var(--color-blue-200);
+  --color-indigo-300: var(--color-blue-300);
+  --color-indigo-400: var(--color-blue-400);
+  --color-indigo-500: var(--color-blue-500);
+  --color-indigo-600: var(--color-blue-600);
+  --color-indigo-700: var(--color-blue-700);
+  --color-indigo-800: var(--color-blue-800);
+  --color-indigo-900: var(--color-blue-900);
+  --color-indigo-950: var(--color-blue-950);
+
+  --color-sky-50: var(--color-blue-50);
+  --color-sky-100: var(--color-blue-100);
+  --color-sky-200: var(--color-blue-200);
+  --color-sky-300: var(--color-blue-300);
+  --color-sky-400: var(--color-blue-400);
+  --color-sky-500: var(--color-blue-500);
+  --color-sky-600: var(--color-blue-600);
+  --color-sky-700: var(--color-blue-700);
+  --color-sky-800: var(--color-blue-800);
+  --color-sky-900: var(--color-blue-900);
+  --color-sky-950: var(--color-blue-950);
+
+  --color-cyan-50: var(--color-blue-50);
+  --color-cyan-100: var(--color-blue-100);
+  --color-cyan-200: var(--color-blue-200);
+  --color-cyan-300: var(--color-blue-300);
+  --color-cyan-400: var(--color-blue-400);
+  --color-cyan-500: var(--color-blue-500);
+  --color-cyan-600: var(--color-blue-600);
+  --color-cyan-700: var(--color-blue-700);
+  --color-cyan-800: var(--color-blue-800);
+  --color-cyan-900: var(--color-blue-900);
+  --color-cyan-950: var(--color-blue-950);
+}
+
+.nexora-dashboard-theme *:focus-visible {
+  outline-color: color-mix(in srgb, #2160e1 30%, transparent);
+}
+
 * {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;

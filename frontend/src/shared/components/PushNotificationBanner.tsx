@@ -15,7 +15,7 @@ export const PushNotificationBanner: React.FC<PushNotificationBannerProps> = ({ 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    const isDismissed = sessionStorage.getItem('sidesku_push_banner_dismissed') === 'true';
+    const isDismissed = sessionStorage.getItem('nexora_push_banner_dismissed') === 'true';
     if (isDismissed) {
       setDismissed(true);
       setLoading(false);
@@ -53,7 +53,7 @@ export const PushNotificationBanner: React.FC<PushNotificationBannerProps> = ({ 
 
   const handleDismiss = () => {
     setDismissed(true);
-    sessionStorage.setItem('sidesku_push_banner_dismissed', 'true');
+    sessionStorage.setItem('nexora_push_banner_dismissed', 'true');
   };
 
   // Jangan tampilkan jika: loading, dismissed, tidak didukung, sudah subscribe, atau izin sudah ditolak keras
@@ -71,7 +71,7 @@ export const PushNotificationBanner: React.FC<PushNotificationBannerProps> = ({ 
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs sm:text-sm font-extrabold tracking-tight">
-                Aktifkan Notifikasi SiDesKu di HP
+                Aktifkan Notifikasi Nexora di HP
               </span>
               <span className="px-2 py-0.5 rounded-full bg-blue-500/50 text-[10px] font-bold uppercase tracking-wider text-blue-100 border border-blue-400/30">
                 Penting

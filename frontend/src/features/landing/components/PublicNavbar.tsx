@@ -323,11 +323,11 @@ export const PublicNavbar: React.FC = () => {
 
                 {/* Profile Dropdown Menu */}
                 {profileDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-sky-100 py-2 z-50 animate-fade-in space-y-1">
-                    <div className="px-4 py-2 border-b border-slate-100">
+                  <div className="absolute right-0 mt-2 w-[min(18rem,calc(100vw-1.5rem))] overflow-hidden rounded-2xl border border-sky-100 bg-white py-2 shadow-xl z-50 animate-fade-in space-y-1">
+                    <div className="min-w-0 overflow-hidden border-b border-slate-100 px-4 py-2">
                       <div className="text-[10px] font-bold text-sky-600 uppercase tracking-wider">Akun Terdaftar</div>
-                      <div className="text-sm font-black text-slate-900 truncate">{displayName}</div>
-                      <div className="text-[11px] text-slate-500 font-mono">{user.email || user.username}</div>
+                      <div className="max-w-full truncate text-sm font-black text-slate-900" title={displayName}>{displayName}</div>
+                      <div className="block max-w-full truncate font-mono text-[11px] text-slate-500" title={user.email || user.username}>{user.email || user.username}</div>
                     </div>
 
                     <Link
@@ -335,8 +335,8 @@ export const PublicNavbar: React.FC = () => {
                       onClick={() => setProfileDropdownOpen(false)}
                       className="w-full px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-sky-50 hover:text-sky-700 flex items-center gap-2.5 transition-colors outline-none focus:outline-none"
                     >
-                      <LayoutDashboard className="w-4 h-4 text-sky-600" />
-                      <span>Buka Panel Layanan</span>
+                      <LayoutDashboard className="h-4 w-4 shrink-0 text-sky-600" />
+                      <span className="min-w-0 truncate">Buka Panel Layanan</span>
                     </Link>
 
                     <Link
@@ -344,8 +344,8 @@ export const PublicNavbar: React.FC = () => {
                       onClick={() => setProfileDropdownOpen(false)}
                       className="w-full px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 flex items-center gap-2.5 transition-colors outline-none focus:outline-none"
                     >
-                      <Search className="w-4 h-4 text-slate-400" />
-                      <span>Riwayat Berkas Saya</span>
+                      <Search className="h-4 w-4 shrink-0 text-slate-400" />
+                      <span className="min-w-0 truncate">Riwayat Berkas Saya</span>
                     </Link>
 
                     <div className="pt-1 border-t border-slate-100">
@@ -354,8 +354,8 @@ export const PublicNavbar: React.FC = () => {
                         onClick={handleLogout}
                         className="w-full px-4 py-2.5 text-xs font-bold text-rose-600 hover:bg-rose-50 flex items-center gap-2.5 transition-colors outline-none focus:outline-none cursor-pointer"
                       >
-                        <LogOut className="w-4 h-4 text-rose-500" />
-                        <span>Keluar Akun (Logout)</span>
+                        <LogOut className="h-4 w-4 shrink-0 text-rose-500" />
+                        <span className="min-w-0 truncate">Keluar Akun (Logout)</span>
                       </button>
                     </div>
                   </div>

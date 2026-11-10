@@ -2951,7 +2951,7 @@ export const KadesDashboard: React.FC<KadesDashboardProps> = ({ activeSubmenu = 
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
                 <div className="flex items-center justify-between text-xs font-bold">
-                  <span className="text-slate-900">3. Digitalisasi Pelayanan Surat Mandiri (SiDesKu Pro)</span>
+                  <span className="text-slate-900">3. Digitalisasi Pelayanan Surat Mandiri (Nexora Pro)</span>
                   <span className="text-sky-700 font-mono">100% Terimplementasi</span>
                 </div>
                 <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">

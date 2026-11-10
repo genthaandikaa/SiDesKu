@@ -7,7 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const backendTarget = env.VITE_BACKEND_TARGET || process.env.VITE_BACKEND_TARGET || 'http://127.0.0.1:8001';
+  const backendTarget = env.VITE_BACKEND_TARGET || process.env.VITE_BACKEND_TARGET || 'http://127.0.0.1:8000';
 
   return {
     plugins: [
@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.svg', 'logo-kediri.png', 'pwa-192x192.png', 'pwa-512x512.png', 'apple-touch-icon.png', 'sw-push.js'],
         manifest: {
-          name: 'SiDesKu - Sistem Informasi Desa & Pelayanan Digital',
-          short_name: 'SiDesKu',
+          name: 'Nexora - Sistem Informasi Desa & Pelayanan Digital',
+          short_name: 'Nexora',
           description: 'Aplikasi Tata Kelola Pemerintahan Desa dan Pelayanan Publik Digital',
           theme_color: '#059669',
           background_color: '#ffffff',

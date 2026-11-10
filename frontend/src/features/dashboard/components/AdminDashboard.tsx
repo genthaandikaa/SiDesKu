@@ -217,7 +217,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
 
   const [rbacMatrix, setRbacMatrix] = useState<Record<string, Record<string, boolean>>>(() => {
     try {
-      const saved = localStorage.getItem('sidesku_dynamic_rbac_matrix');
+      const saved = localStorage.getItem('nexora_dynamic_rbac_matrix');
       return saved ? JSON.parse(saved) : defaultRbacMatrix;
     } catch {
       return defaultRbacMatrix;
@@ -237,14 +237,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
   };
 
   const handleSaveRbac = () => {
-    localStorage.setItem('sidesku_dynamic_rbac_matrix', JSON.stringify(rbacMatrix));
+    localStorage.setItem('nexora_dynamic_rbac_matrix', JSON.stringify(rbacMatrix));
     setRbacSaveAlert('Konfigurasi Hak Akses Berhasil Disimpan! Perubahan wewenang peran baru telah diterapkan langsung ke sistem tanpa perlu modifikasi kode program.');
     setTimeout(() => setRbacSaveAlert(null), 5000);
   };
 
   const handleResetRbac = () => {
     setRbacMatrix(defaultRbacMatrix);
-    localStorage.removeItem('sidesku_dynamic_rbac_matrix');
+    localStorage.removeItem('nexora_dynamic_rbac_matrix');
     setRbacSaveAlert('Hak akses berhasil dikembalikan ke standar awal UU Desa.');
     setTimeout(() => setRbacSaveAlert(null), 4000);
   };
@@ -431,7 +431,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
         const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(res.data.backup, null, 2));
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute('href', dataStr);
-        downloadAnchor.setAttribute('download', `sidesku_backup_${new Date().toISOString().slice(0, 10)}.json`);
+        downloadAnchor.setAttribute('download', `Nexora_backup_${new Date().toISOString().slice(0, 10)}.json`);
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
@@ -1436,7 +1436,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
               <div>
                 <h2 className="text-sm sm:text-base font-bold text-slate-900 mb-1 flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-blue-600 shrink-0" />
-                  <span>Matriks Hak Akses & Peran Sistem (Dynamic RBAC SiDesKu)</span>
+                  <span>Matriks Hak Akses & Peran Sistem (Dynamic RBAC Nexora)</span>
                 </h2>
               </div>
 
@@ -2299,7 +2299,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                       <div className="p-2.5 rounded-xl bg-white border border-blue-100 text-[11px] space-y-1">
                         <div className="flex justify-between">
                           <span className="text-slate-400">Sistem:</span>
-                          <span className="font-semibold text-slate-700">{restorePreview.system || 'SiDesKu'}</span>
+                          <span className="font-semibold text-slate-700">{restorePreview.system || 'Nexora'}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-slate-400">Versi:</span>
@@ -2510,7 +2510,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
                   <label className="block font-semibold text-slate-700 mb-1">Email</label>
                   <input
                     type="email"
-                    placeholder="nama@sidesku.desa.id"
+                    placeholder="nama@nexora.local"
                     value={newUserForm.email}
                     onChange={(e) => setNewUserForm({ ...newUserForm, email: e.target.value })}
                     className="w-full px-3.5 py-2.5 sm:py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-blue-600 transition"
@@ -2744,7 +2744,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ activeSubmenu = 
             </div>
 
             <p className="text-xs text-slate-600 leading-relaxed">
-              Pastikan berkas JSON cadangan yang Anda pilih berasal dari sumber resmi sistem SiDesKu. Apakah Anda yakin ingin melanjutkan?
+              Pastikan berkas JSON cadangan yang Anda pilih berasal dari sumber resmi sistem Nexora. Apakah Anda yakin ingin melanjutkan?
             </p>
 
             <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5 text-xs">

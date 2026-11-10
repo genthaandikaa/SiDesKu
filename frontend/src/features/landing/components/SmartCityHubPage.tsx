@@ -259,7 +259,7 @@ const SEED_LOKER: LokerItem[] = [
     deskripsi: [
       'Mengelola pencatatan administrasi unit usaha logistik dan kios desa.',
       'Melayani warga dalam pengurusan berkas digital dan informasi produk.',
-      'Mampu mengoperasikan Microsoft Excel, Google Sheets, dan aplikasi SiDesKu.',
+      'Mampu mengoperasikan Microsoft Excel, Google Sheets, dan aplikasi Nexora.',
     ],
     waHrd: '6281234567891',
   },
@@ -683,7 +683,7 @@ export const SmartCityHubPage: React.FC = () => {
                         Pemilik: <strong className="text-slate-800">{item.pemilikNama}</strong>
                       </span>
                       <a
-                        href={`https://wa.me/${item.pemilikWa}?text=${encodeURIComponent(`Halo ${item.pemilikNama}, saya tertarik dengan info sewa hunian "${item.nama}" yang terdaftar di SiDesKu Smart City. Apakah unit masih tersedia?`)}`}
+                        href={`https://wa.me/${item.pemilikWa}?text=${encodeURIComponent(`Halo ${item.pemilikNama}, saya tertarik dengan info sewa hunian "${item.nama}" yang terdaftar di Nexora Smart City. Apakah unit masih tersedia?`)}`}
                         target="_blank"
                         rel="noreferrer"
                         className="px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px] shadow-xs flex items-center gap-1.5 cursor-pointer transition-all"

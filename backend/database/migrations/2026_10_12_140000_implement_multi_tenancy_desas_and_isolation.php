@@ -125,7 +125,7 @@ return new class extends Migration
                     'name' => 'Super Admin',
                     'slug' => 'super_admin',
                     'display_name' => 'Super Administrator Platform',
-                    'description' => 'Pengelola multi-tenant platform SiDesKu lintas desa',
+                    'description' => 'Pengelola multi-tenant platform Nexora lintas desa',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

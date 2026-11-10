@@ -25,6 +25,12 @@ class AdminUserController extends Controller
             'wargaProfile.kartuKeluarga',
         ]);
 
+        if (!$request->user()?->isSuperAdmin()) {
+            $query->whereDoesntHave('role', function ($roleQuery) {
+                $roleQuery->whereIn('slug', ['kecamatan', 'kabupaten_kota']);
+            });
+        }
+
         if ($request->has('role_id') && $request->role_id !== 'all' && !empty($request->role_id)) {
             $query->where('role_id', $request->role_id);
         }
@@ -56,7 +62,7 @@ class AdminUserController extends Controller
 
         $users = $query->orderByDesc('id')->get();
 
-        $roles = Role::orderBy('id')->get();
+        $roles = $this->availableRolesFor($request);
 
         $stats = [
             'total' => User::count(),
@@ -78,9 +84,9 @@ class AdminUserController extends Controller
     /**
      * Get all available system roles.
      */
-    public function roles(): JsonResponse
+    public function roles(Request $request): JsonResponse
     {
-        $roles = Role::orderBy('id')->get();
+        $roles = $this->availableRolesFor($request);
         return response()->json([
             'success' => true,
             'data' => $roles,
@@ -99,6 +105,7 @@ class AdminUserController extends Controller
             'phone_number' => 'nullable|string|max:255',
             'role_id' => 'required|exists:roles,id',
             'password' => 'required|string|min:6',
+            'desa_id' => 'nullable|integer|exists:desas,id',
             'nik' => 'nullable|string|size:16|unique:warga_profiles,nik',
             'rt_id' => 'nullable|exists:rts,id',
         ], [
@@ -118,6 +125,20 @@ class AdminUserController extends Controller
         }
 
         $targetRole = Role::findOrFail($request->role_id);
+        $isRegionalRole = in_array($targetRole->slug, ['kecamatan', 'kabupaten_kota'], true);
+        if ($isRegionalRole && !$request->user()->isSuperAdmin()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hanya Super Admin yang dapat menetapkan role kecamatan atau kabupaten/kota.',
+            ], 403);
+        }
+        if ($isRegionalRole && !$request->filled('desa_id')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pilih desa acuan untuk menentukan cakupan wilayah akun.',
+            ], 422);
+        }
+
         if ($targetRole->slug === 'super_admin' && !$request->user()->hasRole('super_admin')) {
             return response()->json([
                 'success' => false,
@@ -137,7 +158,7 @@ class AdminUserController extends Controller
         }
 
         $user = User::create([
-            'desa_id' => $request->user()->desa_id,
+            'desa_id' => $isRegionalRole ? $request->desa_id : $request->user()->desa_id,
             'role_id' => $request->role_id,
             'name' => $request->name,
             'username' => $request->username,
@@ -191,6 +212,9 @@ class AdminUserController extends Controller
         }
 
         $user = User::findOrFail($id);
+        if ($this->isRegionalAccount($user) && !$currentUser->isSuperAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Hanya Super Admin yang dapat mengelola akun wilayah.'], 403);
+        }
         $user->is_active = !$user->is_active;
         $user->save();
 
@@ -233,6 +257,9 @@ class AdminUserController extends Controller
         }
 
         $user = User::findOrFail($id);
+        if ($this->isRegionalAccount($user) && !$request->user()->isSuperAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Hanya Super Admin yang dapat mengelola akun wilayah.'], 403);
+        }
         $user->password = Hash::make($request->new_password);
         $user->save();
 
@@ -258,12 +285,16 @@ class AdminUserController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
         $user = User::findOrFail($id);
+        if ($this->isRegionalAccount($user) && !$request->user()->isSuperAdmin()) {
+            return response()->json(['success' => false, 'message' => 'Hanya Super Admin yang dapat mengelola akun wilayah.'], 403);
+        }
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => "nullable|email|max:255|unique:users,email,{$id}",
             'phone_number' => 'nullable|string|max:255',
             'role_id' => 'required|exists:roles,id',
+            'desa_id' => 'nullable|integer|exists:desas,id',
         ]);
 
         if ($validator->fails()) {
@@ -273,11 +304,29 @@ class AdminUserController extends Controller
             ], 422);
         }
 
+        $targetRole = Role::findOrFail($request->role_id);
+        $regionalRoles = ['kecamatan', 'kabupaten_kota'];
+        $changesRegionalAccess = in_array($targetRole->slug, $regionalRoles, true)
+            || in_array($user->role?->slug, $regionalRoles, true);
+        if ($changesRegionalAccess && !$request->user()->isSuperAdmin()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Hanya Super Admin yang dapat mengubah akun dengan akses wilayah.',
+            ], 403);
+        }
+        if (in_array($targetRole->slug, $regionalRoles, true) && !$request->input('desa_id', $user->desa_id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pilih desa acuan untuk menentukan cakupan wilayah akun.',
+            ], 422);
+        }
+
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
             'phone_number' => $request->phone_number,
             'role_id' => $request->role_id,
+            ...($changesRegionalAccess ? ['desa_id' => $request->input('desa_id', $user->desa_id)] : []),
         ]);
 
         ActivityLog::create([
@@ -295,5 +344,20 @@ class AdminUserController extends Controller
             'message' => "Data pengguna {$user->username} berhasil diperbarui.",
             'data' => $user->load(['role', 'wargaProfile']),
         ]);
+    }
+
+    private function availableRolesFor(Request $request)
+    {
+        $query = Role::query()->orderBy('id');
+        if (!$request->user()?->isSuperAdmin()) {
+            $query->whereNotIn('slug', ['super_admin', 'kecamatan', 'kabupaten_kota']);
+        }
+
+        return $query->get();
+    }
+
+    private function isRegionalAccount(User $user): bool
+    {
+        return in_array($user->role?->slug, ['kecamatan', 'kabupaten_kota'], true);
     }
 }

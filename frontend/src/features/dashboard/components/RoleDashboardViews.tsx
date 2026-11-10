@@ -1030,7 +1030,7 @@ export const AgendaDesaView: React.FC = () => {
 
   const [events, setEvents] = useState<AgendaItem[]>(() => {
     try {
-      const saved = localStorage.getItem('sidesku_agenda_events_v2');
+      const saved = localStorage.getItem('nexora_agenda_events_v2');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -1090,7 +1090,7 @@ export const AgendaDesaView: React.FC = () => {
       if (res.data && Array.isArray(res.data.data) && res.data.data.length > 0) {
         setEvents(res.data.data);
         try {
-          localStorage.setItem('sidesku_agenda_events_v2', JSON.stringify(res.data.data));
+          localStorage.setItem('nexora_agenda_events_v2', JSON.stringify(res.data.data));
         } catch {
           // ignore
         }
@@ -1223,7 +1223,7 @@ export const AgendaDesaView: React.FC = () => {
         setEvents((prev) => {
           const next = prev.map((item) => (item.id === editingAgenda.id ? { ...item, ...updatedItem } : item));
           try {
-            localStorage.setItem('sidesku_agenda_events_v2', JSON.stringify(next));
+            localStorage.setItem('nexora_agenda_events_v2', JSON.stringify(next));
           } catch {
             // ignore
           }
@@ -1242,7 +1242,7 @@ export const AgendaDesaView: React.FC = () => {
           setEvents((prev) => {
             const next = [createdItem, ...prev.filter((x) => x.id !== createdItem.id)];
             try {
-              localStorage.setItem('sidesku_agenda_events_v2', JSON.stringify(next));
+              localStorage.setItem('nexora_agenda_events_v2', JSON.stringify(next));
             } catch {
               // ignore
             }
@@ -1257,7 +1257,7 @@ export const AgendaDesaView: React.FC = () => {
           setEvents((prev) => {
             const next = [localAgenda, ...prev];
             try {
-              localStorage.setItem('sidesku_agenda_events_v2', JSON.stringify(next));
+              localStorage.setItem('nexora_agenda_events_v2', JSON.stringify(next));
             } catch {
               // ignore
             }
@@ -1309,7 +1309,7 @@ export const AgendaDesaView: React.FC = () => {
         setSelectedDetail(null);
       }
       try {
-        localStorage.setItem('sidesku_agenda_events_v2', JSON.stringify(updated));
+        localStorage.setItem('nexora_agenda_events_v2', JSON.stringify(updated));
       } catch {
         // ignore
       }

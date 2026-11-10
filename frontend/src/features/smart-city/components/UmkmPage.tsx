@@ -65,7 +65,7 @@ export const UmkmPage: React.FC = () => {
   // User Geolocation State
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>(() => {
     try {
-      const saved = localStorage.getItem('sidesku_user_smartcity_location');
+      const saved = localStorage.getItem('Nexora_user_smartcity_location');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed?.lat && parsed?.lng) return { lat: parsed.lat, lng: parsed.lng };
@@ -75,7 +75,7 @@ export const UmkmPage: React.FC = () => {
   });
   const [locationLabel, setLocationLabel] = useState<string>(() => {
     try {
-      const saved = localStorage.getItem('sidesku_user_smartcity_location');
+      const saved = localStorage.getItem('Nexora_user_smartcity_location');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed?.label) return parsed.label;
@@ -232,7 +232,7 @@ export const UmkmPage: React.FC = () => {
   // Direct Quick WA Order from Grid Card
   const handleQuickWa = (item: UmkmItem) => {
     const text = encodeURIComponent(
-      `Halo *${item.tokoNama}*, saya melihat produk *"${item.nama}"* (Rp ${item.harga.toLocaleString('id-ID')}) di SiDesKu Smart City Kediri. Pengiriman langsung oleh penjual ya? Apakah stok masih tersedia?`
+      `Halo *${item.tokoNama}*, saya melihat produk *"${item.nama}"* (Rp ${item.harga.toLocaleString('id-ID')}) di Nexora Smart City Kediri. Pengiriman langsung oleh penjual ya? Apakah stok masih tersedia?`
     );
     window.open(`https://wa.me/${item.waKontak}?text=${text}`, '_blank');
   };
@@ -847,7 +847,7 @@ export const UmkmPage: React.FC = () => {
           setLocationLabel(label);
           try {
             localStorage.setItem(
-              'sidesku_user_smartcity_location',
+              'Nexora_user_smartcity_location',
               JSON.stringify({ ...coords, label })
             );
           } catch {}
@@ -880,7 +880,7 @@ export const UmkmPage: React.FC = () => {
                 Wajib Masuk / Terdaftar Sebagai Warga Kota
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Layanan buka lapak dagang dan upload produk UMKM di SiDesKu hanya diperuntukkan bagi warga terverifikasi domisili RT/RW setempat. Warga dari luar daerah tidak diizinkan berjualan demi menjaga ekosistem ekonomi tetangga yang adil, jujur, dan aman.
+                Layanan buka lapak dagang dan upload produk UMKM di Nexora hanya diperuntukkan bagi warga terverifikasi domisili RT/RW setempat. Warga dari luar daerah tidak diizinkan berjualan demi menjaga ekosistem ekonomi tetangga yang adil, jujur, dan aman.
               </p>
             </div>
 

@@ -28,7 +28,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
   highlightValue = '96.75%',
   highlightLabel = 'Kecepatan Penerbitan & Kepuasan Warga',
   trendText = '+12.8% vs bulan lalu',
-  color = '#3b82f6',
+  color = '#2160E1',
 }) => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [selectedRange, setSelectedRange] = useState<'month' | 'halfYear' | 'year'>('halfYear');
@@ -74,13 +74,13 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
 
   // Donut / Pie Slice Calculations (Curated Cohesive Emerald-Teal Palette)
   const sliceColors = [
-    '#2563eb', // Emerald 600
-    '#4f46e5', // Teal 600
-    '#3b82f6', // Emerald 500
-    '#6366f1', // Teal 500
-    '#60a5fa', // Emerald 400
+    '#2565EB', // Emerald 600
+    '#1E50DA', // Teal 600
+    '#2160E1', // Emerald 500
+    '#1E50DA', // Teal 500
+    '#168FEA', // Emerald 400
     '#2dd4bf', // Teal 400
-    '#1d4ed8', // Emerald 700
+    '#1E50DA', // Emerald 700
     '#0f766e', // Teal 700
   ];
 
@@ -330,17 +330,17 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
           >
             <defs>
               <linearGradient id="barGradientEmerald" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#3b82f6" />
-                <stop offset="100%" stopColor="#2563eb" />
+                <stop offset="0%" stopColor="#2160E1" />
+                <stop offset="100%" stopColor="#2565EB" />
               </linearGradient>
               <linearGradient id="barGradientHover" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#60a5fa" />
-                <stop offset="100%" stopColor="#3b82f6" />
+                <stop offset="0%" stopColor="#168FEA" />
+                <stop offset="100%" stopColor="#2160E1" />
               </linearGradient>
               <linearGradient id="areaGradientEmerald" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.32" />
-                <stop offset="65%" stopColor="#3b82f6" stopOpacity="0.08" />
-                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.00" />
+                <stop offset="0%" stopColor="#2160E1" stopOpacity="0.32" />
+                <stop offset="65%" stopColor="#2160E1" stopOpacity="0.08" />
+                <stop offset="100%" stopColor="#2160E1" stopOpacity="0.00" />
               </linearGradient>
               <filter id="barGlow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="blur" />
@@ -414,7 +414,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
                         cy={computedY}
                         r={isHovered ? 6.5 : 4.5}
                         fill="#ffffff"
-                        stroke="#2563eb"
+                        stroke="#2565EB"
                         strokeWidth={isHovered ? 3 : 2.5}
                         className="transition-all duration-200 drop-shadow-xs"
                       />
@@ -472,7 +472,7 @@ export const AreaSplineChart: React.FC<AreaSplineChartProps> = ({
                   x={b.x + barWidth / 2}
                   y={computedY - 10}
                   textAnchor="middle"
-                  fill="#1d4ed8"
+                  fill="#1E50DA"
                   fontSize="11"
                   fontWeight="800"
                   className="animate-fade-in"

@@ -215,7 +215,7 @@ class SuratController extends Controller
                 'nomor_tujuan' => $surat->wargaProfile->no_hp_wa,
                 'jenis_notifikasi' => 'SURAT_READY',
                 'judul' => 'Surat Selesai & Sah',
-                'pesan' => "Halo {$surat->wargaProfile->nama_lengkap}, surat permohonan {$surat->suratType->nama_surat} ({$nomorResmi}) telah SELESAI dan disahkan dengan tanda tangan QR resmi. Anda dapat mengunduh dokumen PDF sah di portal SIDes.",
+                'pesan' => "Halo {$surat->wargaProfile->nama_lengkap}, surat permohonan {$surat->suratType->nama_surat} ({$nomorResmi}) telah SELESAI dan disahkan dengan tanda tangan QR resmi. Anda dapat mengunduh dokumen PDF sah di portal Nexora.",
                 'status_pengiriman' => 'TERKIRIM',
             ]);
         }

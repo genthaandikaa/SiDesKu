@@ -1,6 +1,6 @@
 # Master Flowchart: Smart City & Urban Innovation (SDG 8, 9 & 11)
 
-**FigJam Dedicated Board:** [SiDesKu Smart City Full Lifecycle - Complete Multi-Role Operations](https://www.figma.com/board/6r07oF5LAHnjYxXbuFLPw1)  
+**FigJam Dedicated Board:** [Nexora Smart City Full Lifecycle - Complete Multi-Role Operations](https://www.figma.com/board/6r07oF5LAHnjYxXbuFLPw1)
 **Versi:** 3.0 (Exhaustive Multi-Role Workflows, Zero Dead-Ends & End-to-End Decision Logic)
 
 ---

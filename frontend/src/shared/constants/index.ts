@@ -1,10 +1,12 @@
-export const APP_NAME = 'SiDesKu';
+export const APP_NAME = 'Nexora';
 export const VILLAGE_NAME = 'Kota Kediri';
 export const DISTRICT_NAME = 'Kecamatan PATEN Kota Kediri';
 export const REGENCY_NAME = 'Pemerintah Kota Kediri';
 
 export const USER_ROLES = {
   ADMIN: 'admin',
+  KECAMATAN: 'kecamatan',
+  KABUPATEN_KOTA: 'kabupaten_kota',
   KADES: 'kades',
   SEKDES: 'sekdes',
   BENDAHARA_DESA: 'bendahara_desa',

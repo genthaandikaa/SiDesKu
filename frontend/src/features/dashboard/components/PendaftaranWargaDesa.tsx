@@ -408,7 +408,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
             <div className="p-4 sm:p-5 rounded-2xl bg-blue-50/70 border border-blue-200/90 text-slate-800 space-y-3 shadow-2xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <span className="text-[10px] text-blue-800 font-bold uppercase tracking-wider block">Kredensial Login SiDesKu:</span>
+                  <span className="text-[10px] text-blue-800 font-bold uppercase tracking-wider block">Kredensial Login Nexora:</span>
                   <div className="flex items-center gap-2 mt-1">
                     <span className="px-2.5 py-1 rounded-lg bg-white text-slate-800 font-mono font-bold text-xs border border-blue-200 shadow-2xs">
                       ID: {warga.nik}
@@ -441,7 +441,7 @@ const WargaDetailModal: React.FC<WargaDetailModalProps> = ({
                   {warga.no_hp_wa && (
                     <a
                       href={`https://wa.me/${warga.no_hp_wa.replace(/\D/g, '')}?text=${encodeURIComponent(
-                        `Halo Bapak/Ibu ${warga.nama_lengkap},\nAkun portal desa SiDesKu Anda telah aktif:\n• NIK: ${warga.nik}\n• Password: ${pw} (Format Tanggal Lahir)\nSilakan masuk di portal layanan mandiri desa.`
+                        `Halo Bapak/Ibu ${warga.nama_lengkap},\nAkun portal desa Nexora Anda telah aktif:\n• NIK: ${warga.nik}\n• Password: ${pw} (Format Tanggal Lahir)\nSilakan masuk di portal layanan mandiri desa.`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -613,7 +613,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
 
   const handleCopyCredentials = (w: WargaItem) => {
     const pw = formatDobPassword(w.tanggal_lahir);
-    const text = `Halo Bapak/Ibu ${w.nama_lengkap},\nAkun portal desa SiDesKu Anda telah aktif:\n• NIK: ${w.nik}\n• Password: ${pw} (Format Tanggal lahir)\nSilakan masuk di portal layanan mandiri desa.`;
+    const text = `Halo Bapak/Ibu ${w.nama_lengkap},\nAkun portal desa Nexora Anda telah aktif:\n• NIK: ${w.nik}\n• Password: ${pw} (Format Tanggal lahir)\nSilakan masuk di portal layanan mandiri desa.`;
     navigator.clipboard.writeText(text);
     setCopiedId(w.id);
     setTimeout(() => setCopiedId(null), 2500);
@@ -802,7 +802,7 @@ export const PendaftaranWargaDesa: React.FC = () => {
             {lastRegistered.warga.no_hp_wa && (
               <a
                 href={`https://wa.me/${lastRegistered.warga.no_hp_wa.replace(/\D/g, '')}?text=${encodeURIComponent(
-                  `Halo Bapak/Ibu ${lastRegistered.warga.nama_lengkap}, akun portal desa SiDesKu Anda telah resmi terdaftar oleh Kantor Desa Doko. Anda dapat login langsung menggunakan NIK: ${lastRegistered.warga.nik} dan password tanggal lahir Anda.`
+                  `Halo Bapak/Ibu ${lastRegistered.warga.nama_lengkap}, akun portal desa Nexora Anda telah resmi terdaftar oleh Kantor Desa Doko. Anda dapat login langsung menggunakan NIK: ${lastRegistered.warga.nik} dan password tanggal lahir Anda.`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"

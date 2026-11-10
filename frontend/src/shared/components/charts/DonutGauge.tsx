@@ -12,13 +12,13 @@ interface DonutGaugeProps {
 
 const colorMap = {
   blue: {
-    stroke: '#3b82f6',
-    bg: '#eff6ff',
+    stroke: '#2160E1',
+    bg: 'color-mix(in srgb, #2160E1 6%, white)',
     text: 'text-blue-700',
     track: '#f1f5f9',
   },
   indigo_alt: {
-    stroke: '#6366f1',
+    stroke: '#1E50DA',
     bg: '#f0fdfa',
     text: 'text-indigo-700',
     track: '#f1f5f9',
@@ -30,8 +30,8 @@ const colorMap = {
     track: '#f1f5f9',
   },
   sky: {
-    stroke: '#0ea5e9',
-    bg: '#f0f9ff',
+    stroke: '#168FEA',
+    bg: 'color-mix(in srgb, #2160E1 5%, white)',
     text: 'text-sky-700',
     track: '#f1f5f9',
   },
@@ -42,8 +42,8 @@ const colorMap = {
     track: '#f1f5f9',
   },
   indigo: {
-    stroke: '#6366f1',
-    bg: '#eef2ff',
+    stroke: '#1E50DA',
+    bg: 'color-mix(in srgb, #1E50DA 6%, white)',
     text: 'text-indigo-700',
     track: '#f1f5f9',
   },

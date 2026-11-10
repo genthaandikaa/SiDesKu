@@ -58,7 +58,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
   const [currentPage, setCurrentPage] = useState(1);
   const [isPublished, setIsPublished] = useState<boolean>(() => {
     try {
-      const saved = localStorage.getItem('sides_apbdes_is_published');
+      const saved = localStorage.getItem('nexora_apbdes_is_published');
       return saved !== null ? saved === 'true' : true;
     } catch {
       return true;
@@ -69,7 +69,7 @@ export const BendaharaDashboard: React.FC<BendaharaDashboardProps> = ({ activeSu
     const next = !isPublished;
     setIsPublished(next);
     try {
-      localStorage.setItem('sides_apbdes_is_published', String(next));
+      localStorage.setItem('nexora_apbdes_is_published', String(next));
     } catch {
       // ignore
     }
