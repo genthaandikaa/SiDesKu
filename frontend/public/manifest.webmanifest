@@ -1,13 +1,13 @@
 {
-  "name": "Nexora - Sistem Informasi Desa & Pelayanan Digital",
-  "short_name": "Nexora",
-  "description": "Aplikasi Tata Kelola Pemerintahan Desa dan Pelayanan Publik Digital",
+  "name": "SiDesKu - Sistem Informasi Desa & Pelayanan Digital",
+  "short_name": "SiDesKu",
+  "description": "Aplikasi Tata Kelola Pemerintahan Desa dan Pelayanan Publik Digital Terpadu Kabupaten Kediri",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
-  "theme_color": "#059669",
+  "theme_color": "#0284c7",
   "lang": "id",
   "gcm_sender_id": "103953800507",
   "icons": [

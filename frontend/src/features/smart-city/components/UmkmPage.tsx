@@ -655,7 +655,7 @@ export const UmkmPage: React.FC = () => {
                     />
                     {/* Distance Chip (Left) */}
                     <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/80 text-[11px] font-extrabold text-slate-800 shadow-2xs flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-rose-500" />
+                      <MapPin className="w-3.5 h-3.5 text-slate-700" />
                       <span>{distLabel} dari Anda</span>
                     </div>
 
