@@ -34,6 +34,7 @@ import {
   getStoredLamaranList,
   KEDIRI_DEFAULT_COORDS
 } from '../smartCityStorage';
+import { detectSmartCityLocation } from '../services/locationService';
 
 interface WargaSmartCityManagerProps {
   initialTab?: 'umkm' | 'kos' | 'loker';
@@ -87,25 +88,18 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
   const [payCod, setPayCod] = useState(true);
   const [payDo, setPayDo] = useState(true);
 
-  const handleDetectUmkmGps = () => {
-    if (!navigator.geolocation) {
-      alert('Perangkat Anda tidak mendukung deteksi lokasi otomatis.');
-      return;
-    }
+  const handleDetectUmkmGps = async () => {
     setIsDetectingUmkmGps(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setTokoLat(pos.coords.latitude);
-        setTokoLng(pos.coords.longitude);
-        setIsDetectingUmkmGps(false);
-        showToast('Titik koordinat GPS toko berhasil dikunci!');
-      },
-      () => {
-        setIsDetectingUmkmGps(false);
-        alert('Gagal mendeteksi koordinat. Menggunakan koordinat pusat Kediri.');
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    );
+    try {
+      const loc = await detectSmartCityLocation();
+      setTokoLat(loc.lat);
+      setTokoLng(loc.lng);
+      showToast(`Titik koordinat toko berhasil dikunci (${loc.label})!`);
+    } catch {
+      showToast('Menggunakan koordinat default wilayah.');
+    } finally {
+      setIsDetectingUmkmGps(false);
+    }
   };
 
   const handleSaveUmkm = (e: React.FormEvent) => {
@@ -187,25 +181,18 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
   const [facKasur, setFacKasur] = useState(true);
   const [facParkir, setFacParkir] = useState(true);
 
-  const handleDetectKosGps = () => {
-    if (!navigator.geolocation) {
-      alert('Perangkat Anda tidak mendukung deteksi lokasi otomatis.');
-      return;
-    }
+  const handleDetectKosGps = async () => {
     setIsDetectingKosGps(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setKosLat(pos.coords.latitude);
-        setKosLng(pos.coords.longitude);
-        setIsDetectingKosGps(false);
-        showToast('Titik koordinat GPS hunian terkunci!');
-      },
-      () => {
-        setIsDetectingKosGps(false);
-        alert('Gagal mendeteksi koordinat GPS.');
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    );
+    try {
+      const loc = await detectSmartCityLocation();
+      setKosLat(loc.lat);
+      setKosLng(loc.lng);
+      showToast(`Titik koordinat hunian berhasil dikunci (${loc.label})!`);
+    } catch {
+      showToast('Menggunakan koordinat default wilayah.');
+    } finally {
+      setIsDetectingKosGps(false);
+    }
   };
 
   const handleSaveKos = (e: React.FormEvent) => {

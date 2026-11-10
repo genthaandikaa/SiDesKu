@@ -58,7 +58,9 @@ export const UmkmDetailPage: React.FC = () => {
   // User Geolocation for Distance Display
   const [userLocation] = useState<{ lat: number; lng: number }>(() => {
     try {
-      const saved = localStorage.getItem('sidesku_user_smartcity_location');
+      const saved =
+        localStorage.getItem('sidesku_user_smartcity_location') ||
+        localStorage.getItem('Nexora_user_smartcity_location');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed?.lat && parsed?.lng) return { lat: parsed.lat, lng: parsed.lng };

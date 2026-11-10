@@ -65,7 +65,9 @@ export const UmkmPage: React.FC = () => {
   // User Geolocation State
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>(() => {
     try {
-      const saved = localStorage.getItem('Nexora_user_smartcity_location');
+      const saved =
+        localStorage.getItem('sidesku_user_smartcity_location') ||
+        localStorage.getItem('Nexora_user_smartcity_location');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed?.lat && parsed?.lng) return { lat: parsed.lat, lng: parsed.lng };
@@ -75,7 +77,9 @@ export const UmkmPage: React.FC = () => {
   });
   const [locationLabel, setLocationLabel] = useState<string>(() => {
     try {
-      const saved = localStorage.getItem('Nexora_user_smartcity_location');
+      const saved =
+        localStorage.getItem('sidesku_user_smartcity_location') ||
+        localStorage.getItem('Nexora_user_smartcity_location');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed?.label) return parsed.label;
@@ -846,10 +850,9 @@ export const UmkmPage: React.FC = () => {
           setUserLocation(coords);
           setLocationLabel(label);
           try {
-            localStorage.setItem(
-              'Nexora_user_smartcity_location',
-              JSON.stringify({ ...coords, label })
-            );
+            const data = JSON.stringify({ ...coords, label });
+            localStorage.setItem('sidesku_user_smartcity_location', data);
+            localStorage.setItem('Nexora_user_smartcity_location', data);
           } catch {}
         }}
       />

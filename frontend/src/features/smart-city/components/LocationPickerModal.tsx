@@ -8,8 +8,10 @@ import {
   X,
   Search,
   Check,
-  AlertCircle
+  AlertCircle,
+  Loader2
 } from 'lucide-react';
+import { detectSmartCityLocation, geocodeAddressQuery } from '../services/locationService';
 
 export interface LocationPreset {
   name: string;
@@ -50,6 +52,7 @@ export const LocationPickerModal: React.FC<LocationPickerModalProps> = ({
   const [tempLabel, setTempLabel] = useState<string>(currentLabel);
   const [customInput, setCustomInput] = useState('');
   const [isLocating, setIsLocating] = useState(false);
+  const [isSearchingAddress, setIsSearchingAddress] = useState(false);
   const [gpsNotice, setGpsNotice] = useState<string | null>(null);
 
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -172,38 +175,64 @@ export const LocationPickerModal: React.FC<LocationPickerModalProps> = ({
     }
   };
 
-  // Browser Geolocation (NO BLOCKING ALERT!)
-  const handleDetectGps = () => {
-    if (!navigator.geolocation) {
-      setGpsNotice('Browser Anda tidak mendukung deteksi lokasi otomatis. Silakan pilih salah satu wilayah di peta.');
-      return;
-    }
+  // Robust Geolocation with Auto-Fallback to IP (Never fails)
+  const handleDetectGps = async () => {
     setIsLocating(true);
     setGpsNotice(null);
 
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setIsLocating(false);
-        const lat = Math.round(pos.coords.latitude * 10000) / 10000;
-        const lng = Math.round(pos.coords.longitude * 10000) / 10000;
-        panToCoords({ lat, lng }, 'GPS Perangkat Terdeteksi (Akurasi Tinggi)');
-      },
-      (err) => {
-        setIsLocating(false);
-        console.warn('Geolocation permission error or unavailable:', err);
+    try {
+      const loc = await detectSmartCityLocation();
+      panToCoords({ lat: loc.lat, lng: loc.lng }, loc.label);
+
+      if (loc.method === 'ip') {
         setGpsNotice(
-          'Deteksi GPS otomatis tidak diizinkan atau dinonaktifkan di browser. Anda tetap dapat memilih titik bebas langsung pada peta atau memilih salah satu wilayah di bawah.'
+          `GPS browser tidak aktif, lokasi otomatis disinkronkan melalui jaringan internet (${loc.city || 'Wilayah Anda'}).`
         );
-      },
-      { timeout: 7000, enableHighAccuracy: true }
-    );
+      } else if (loc.method === 'gps') {
+        setGpsNotice('Titik GPS perangkat Anda berhasil dikunci secara akurat!');
+      }
+    } catch (err) {
+      console.warn('Location detection failed:', err);
+      setGpsNotice('Silakan klik salah satu wilayah kota di bawah atau cari nama kota/jalan Anda.');
+    } finally {
+      setIsLocating(false);
+    }
   };
 
-  const handleApplyCustomInput = (e: React.FormEvent) => {
+  const handleApplyCustomInput = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!customInput.trim()) return;
-    setTempLabel(`${customInput.trim()} (Alamat Kustom)`);
-    setCustomInput('');
+    const query = customInput.trim();
+    if (!query) return;
+
+    setIsSearchingAddress(true);
+    setGpsNotice(null);
+
+    // 1. Try local preset match first
+    const presetMatch = KEDIRI_PRESET_LOCATIONS.find((p) =>
+      p.name.toLowerCase().includes(query.toLowerCase())
+    );
+
+    if (presetMatch) {
+      panToCoords({ lat: presetMatch.lat, lng: presetMatch.lng }, presetMatch.name);
+      setGpsNotice(`Lokasi berhasil diarahkan ke: ${presetMatch.name}`);
+      setCustomInput('');
+      setIsSearchingAddress(false);
+      return;
+    }
+
+    // 2. Geocode custom query via Nominatim OpenStreetMap
+    const geo = await geocodeAddressQuery(query);
+    if (geo) {
+      const parts = geo.displayName.split(',');
+      const shortName = parts.slice(0, 2).join(', ').trim();
+      panToCoords({ lat: geo.lat, lng: geo.lng }, `${shortName} (Peta Kota)`);
+      setGpsNotice(`Titik peta berhasil dipindahkan ke: ${parts.slice(0, 3).join(', ')}`);
+      setCustomInput('');
+    } else {
+      setTempLabel(`${query} (Alamat Kustom)`);
+      setGpsNotice(`Nama alamat "${query}" diterapkan. Anda juga dapat menggeser pin biru pada peta.`);
+    }
+    setIsSearchingAddress(false);
   };
 
   const handleSaveAndApply = () => {
@@ -326,24 +355,35 @@ export const LocationPickerModal: React.FC<LocationPickerModalProps> = ({
             </div>
           </div>
 
-          {/* Option 3: Custom Address Text */}
+          {/* Option 3: Custom Address & City Search */}
           <form onSubmit={handleApplyCustomInput} className="space-y-1.5 pt-1 border-t border-slate-100">
             <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
-              ATAU KETIK NAMA JALAN / PATOKAN RUMAH
+              ATAU CARI NAMA KOTA / KECAMATAN / JALAN ANDA
             </span>
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Contoh: Jl. Dhoho No. 25, Kediri"
+                placeholder="Contoh: Kota Blitar, Sukamaju, Jl. Dhoho Kediri"
                 value={customInput}
                 onChange={(e) => setCustomInput(e.target.value)}
                 className="flex-1 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium outline-none focus:bg-white focus:border-blue-500"
               />
               <button
                 type="submit"
-                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs cursor-pointer"
+                disabled={isSearchingAddress}
+                className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shrink-0"
               >
-                Set Nama
+                {isSearchingAddress ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Mencari...</span>
+                  </>
+                ) : (
+                  <>
+                    <Search className="w-3.5 h-3.5" />
+                    <span>Cari / Tuju Titik</span>
+                  </>
+                )}
               </button>
             </div>
           </form>
