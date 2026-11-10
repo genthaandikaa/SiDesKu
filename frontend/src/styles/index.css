@@ -299,19 +299,25 @@ body {
   background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.15) 0%, rgba(37, 99, 235, 0.08) 50%, transparent 80%);
 }
 
-/* 3D Perspective Card Tilt for Hero Mockup */
-.perspective-mockup {
-  perspective: 1200px;
+/* 3D Perspective Card Tilt for Hero Mockup (Desktop only) */
+@media (min-width: 1024px) {
+  .perspective-mockup {
+    perspective: 1200px;
+  }
+  .tilted-mockup {
+    transform: rotateX(8deg) rotateY(-8deg) rotateZ(2deg);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .tilted-mockup:hover {
+    transform: rotateX(2deg) rotateY(-2deg) rotateZ(0deg);
+    box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+  }
 }
 
-.tilted-mockup {
-  transform: rotateX(8deg) rotateY(-8deg) rotateZ(2deg);
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.tilted-mockup:hover {
-  transform: rotateX(2deg) rotateY(-2deg) rotateZ(0deg);
-  box-shadow: 0 20px 35px -8px rgba(15, 23, 42, 0.08), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+@media (max-width: 1023px) {
+  .tilted-mockup {
+    transform: none !important;
+  }
 }
 
 .card-elevated-mockup {

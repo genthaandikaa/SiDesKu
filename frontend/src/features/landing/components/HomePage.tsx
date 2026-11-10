@@ -39,6 +39,30 @@ export const HomePage: React.FC = () => {
   const [beritas, setBeritas] = useState<Berita[]>([]);
   const [pengumumans, setPengumumans] = useState<Pengumuman[]>([]);
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
+  const [activeFeatureIndex, setActiveFeatureIndex] = useState(0);
+  const [activeTestimonialIndex, setActiveTestimonialIndex] = useState(0);
+  const featureScrollRef = React.useRef<HTMLDivElement>(null);
+  const testimonialScrollRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollToFeature = (idx: number) => {
+    setActiveFeatureIndex(idx);
+    if (featureScrollRef.current) {
+      const card = featureScrollRef.current.children[idx] as HTMLElement;
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+    }
+  };
+
+  const scrollToTestimonial = (idx: number) => {
+    setActiveTestimonialIndex(idx);
+    if (testimonialScrollRef.current) {
+      const card = testimonialScrollRef.current.children[idx] as HTMLElement;
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+    }
+  };
 
   // Stats number counting animation starting from 0
   const [countWarga, setCountWarga] = useState(0);
@@ -231,23 +255,23 @@ export const HomePage: React.FC = () => {
             {/* City Scale Badge */}
 
             {/* Massive Bold Headline with Structured Gradient */}
-            <h1 className="text-3xl sm:text-4xl text-title-accent lg:text-5xl font-extrabold tracking-tight leading-[1.15]">
+            <h1 className="text-2xl sm:text-4xl text-title-accent lg:text-5xl font-extrabold tracking-tight leading-[1.18] sm:leading-[1.15]">
               Ekosistem Kota Cerdas, <br className="hidden sm:inline" />
               <span className="text-title-accent">
                 Pelayanan Publik Tanpa Batas.
               </span>
             </h1>
 
-            {/* Descriptive Subtitle */}
-            <p className="text-base sm:text-md text-slate-600 leading-relaxed font-normal max-w-xl">
-              Transformasi digital terintegrasi dari RT, RW, Kelurahan, Kecamatan hingga Command Center Kota Kediri. Dilengkapi Pencarian Kos, Pasar UMKM, serta Bursa Karir/loker.
+            {/* Descriptive Subtitle - Simple & Clear for Regular Citizens */}
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-xl">
+              Layanan digital terpadu warga Kota Kediri: urus surat mandiri, cek resi dokumen ber-QR, info kos, pasar UMKM, dan bursa kerja tanpa perlu antre di kantor.
             </p>
 
             {/* Action Buttons (Flowora Style: Primary Gradient Pill + Secondary Outlined Pill) */}
-            <div className="flex flex-wrap items-center gap-3.5 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
               <Link
                 to="/smart-city"
-                className="px-7 py-3.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-sky-500/25 transition-all press-down flex items-center gap-2.5 group"
+                className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-sky-500/25 transition-all press-down flex items-center justify-center gap-2.5 group"
               >
                 <span>Jelajahi Smart City Hub</span>
                 <ArrowRight className="w-4.5 h-4.5 group-hover:translate-x-1 transition-transform" />
@@ -255,10 +279,65 @@ export const HomePage: React.FC = () => {
 
               <Link
                 to="/layanan-surat"
-                className="px-6 py-3.5 rounded-full bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm sm:text-base border border-slate-200/90 shadow-2xs hover:border-sky-300 transition-all press-down flex items-center gap-2"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm sm:text-base border border-slate-200/90 shadow-2xs hover:border-sky-300 transition-all press-down flex items-center justify-center gap-2"
               >
                 <FileText className="w-4 h-4 text-blue-600" />
                 <span>Layanan Persuratan</span>
+              </Link>
+            </div>
+
+            {/* Quick Access Tiles - Super Easy for Regular Citizens (Orang Awam) on Mobile & Tablet */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3">
+              <Link
+                to="/layanan-surat"
+                className="p-3 rounded-2xl bg-white/90 border border-slate-200/90 hover:border-sky-300 hover:bg-sky-50/40 shadow-2xs transition-all flex items-center gap-2.5 group cursor-pointer"
+              >
+                <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <FileText className="w-4.5 h-4.5" />
+                </div>
+                <div className="text-left overflow-hidden">
+                  <div className="text-xs font-black text-slate-900 group-hover:text-sky-700 transition-colors truncate">Buat Surat</div>
+                  <div className="text-[10px] text-slate-400 truncate">14+ Jenis Mandiri</div>
+                </div>
+              </Link>
+
+              <Link
+                to="/lacak"
+                className="p-3 rounded-2xl bg-white/90 border border-slate-200/90 hover:border-blue-300 hover:bg-blue-50/40 shadow-2xs transition-all flex items-center gap-2.5 group cursor-pointer"
+              >
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <Search className="w-4.5 h-4.5" />
+                </div>
+                <div className="text-left overflow-hidden">
+                  <div className="text-xs font-black text-slate-900 group-hover:text-blue-700 transition-colors truncate">Lacak Berkas</div>
+                  <div className="text-[10px] text-slate-400 truncate">Resi & Segel QR</div>
+                </div>
+              </Link>
+
+              <Link
+                to="/smart-city"
+                className="p-3 rounded-2xl bg-white/90 border border-slate-200/90 hover:border-emerald-300 hover:bg-emerald-50/40 shadow-2xs transition-all flex items-center gap-2.5 group cursor-pointer"
+              >
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <Home className="w-4.5 h-4.5" />
+                </div>
+                <div className="text-left overflow-hidden">
+                  <div className="text-xs font-black text-slate-900 group-hover:text-emerald-700 transition-colors truncate">Smart City</div>
+                  <div className="text-[10px] text-slate-400 truncate">Kos, UMKM & Loker</div>
+                </div>
+              </Link>
+
+              <Link
+                to="/transparansi"
+                className="p-3 rounded-2xl bg-white/90 border border-slate-200/90 hover:border-amber-300 hover:bg-amber-50/40 shadow-2xs transition-all flex items-center gap-2.5 group cursor-pointer"
+              >
+                <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <TrendingUp className="w-4.5 h-4.5" />
+                </div>
+                <div className="text-left overflow-hidden">
+                  <div className="text-xs font-black text-slate-900 group-hover:text-amber-700 transition-colors truncate">Transparansi</div>
+                  <div className="text-[10px] text-slate-400 truncate">Anggaran & Bansos</div>
+                </div>
               </Link>
             </div>
 
@@ -399,31 +478,31 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          TRUST LOGOS STRIP (Flowora "Loved by innovative teams" Style)
+          TRUST LOGOS STRIP (Responsive Civic Badges)
           ========================================================================= */}
-      <section className="w-full bg-white/80 border-y border-slate-200/60 py-6 sm:py-8 relative z-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+      <section className="w-full bg-white/80 border-y border-slate-200/60 py-5 sm:py-8 relative z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3.5">
+          <p className="text-[11px] sm:text-xs font-bold text-slate-400 uppercase tracking-widest">
             Terintegrasi dengan Standar Pelayanan Pemerintahan & Keamanan Siber
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 opacity-75 grayscale hover:grayscale-0 transition-all duration-300">
-            <div className="flex items-center gap-2 font-black text-xs text-slate-700">
+          <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center items-center gap-2.5 sm:gap-6 lg:gap-10">
+            <div className="p-2 sm:p-0 rounded-xl bg-slate-50/80 sm:bg-transparent border sm:border-0 border-slate-100 flex items-center justify-center gap-2 font-black text-xs text-slate-700">
               <Building2 className="w-4 h-4 text-sky-600" />
               <span>Kemendagri RI</span>
             </div>
-            <div className="flex items-center gap-2 font-black text-xs text-slate-700">
+            <div className="p-2 sm:p-0 rounded-xl bg-slate-50/80 sm:bg-transparent border sm:border-0 border-slate-100 flex items-center justify-center gap-2 font-black text-xs text-slate-700">
               <ShieldCheck className="w-4 h-4 text-blue-600" />
               <span>BSSN - TTE Sah</span>
             </div>
-            <div className="flex items-center gap-2 font-black text-xs text-slate-700">
+            <div className="p-2 sm:p-0 rounded-xl bg-slate-50/80 sm:bg-transparent border sm:border-0 border-slate-100 flex items-center justify-center gap-2 font-black text-xs text-slate-700">
               <Users className="w-4 h-4 text-sky-600" />
               <span>Dispendukcapil Kediri</span>
             </div>
-            <div className="flex items-center gap-2 font-black text-xs text-slate-700">
+            <div className="p-2 sm:p-0 rounded-xl bg-slate-50/80 sm:bg-transparent border sm:border-0 border-slate-100 flex items-center justify-center gap-2 font-black text-xs text-slate-700">
               <Zap className="w-4 h-4 text-amber-500" />
               <span>Perum BULOG & Bapanas</span>
             </div>
-            <div className="flex items-center gap-2 font-black text-xs text-slate-700">
+            <div className="col-span-2 sm:col-span-auto p-2 sm:p-0 rounded-xl bg-slate-50/80 sm:bg-transparent border sm:border-0 border-slate-100 flex items-center justify-center gap-2 font-black text-xs text-slate-700">
               <Award className="w-4 h-4 text-emerald-600" />
               <span>DPMPD Jawa Timur</span>
             </div>
@@ -432,23 +511,136 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          FEATURE MARQUEE (Flowora "Everything you need to get work done" Style)
+          FEATURE SHOWCASE (Responsive: Swipeable on Mobile, Grid on Tablet, Marquee on Desktop)
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 relative overflow-hidden">
+      <section className="w-full py-12 sm:py-20 lg:py-24 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-2xl mx-auto space-y-3 mb-10">
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+          <div className="text-center max-w-2xl mx-auto space-y-2.5 mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
               Semua Kebutuhan Dalam
               <br />
-              Satu Website
+              Satu Portal Kota
             </h2>
+            <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+              Layanan administrasi kependudukan, perizinan, hingga ekosistem ekonomi dan hunian kota.
+            </p>
+          </div>
+
+          {/* MOBILE VIEW (Swipeable Native Snap Carousel + Indicator Dots) */}
+          <div className="block sm:hidden">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-2 px-1">
+              <span>Layanan Terpadu ({activeFeatureIndex + 1}/{bentoFeatures.length})</span>
+              <span className="text-sky-600 text-[11px] font-semibold flex items-center gap-1">
+                Geser layanan &rarr;
+              </span>
+            </div>
+            <div 
+              ref={featureScrollRef}
+              onScroll={(e) => {
+                const el = e.currentTarget;
+                const cardWidth = el.scrollWidth / bentoFeatures.length;
+                const idx = Math.round(el.scrollLeft / cardWidth);
+                if (idx !== activeFeatureIndex && idx >= 0 && idx < bentoFeatures.length) {
+                  setActiveFeatureIndex(idx);
+                }
+              }}
+              className="flex gap-3.5 overflow-x-auto pb-2 pt-1 snap-x snap-mandatory scrollbar-none -mx-4 px-4"
+            >
+              {bentoFeatures.map((feature) => {
+                const Icon = feature.icon;
+                return (
+                  <Link
+                    key={feature.id}
+                    to={feature.link}
+                    className="w-[84vw] max-w-[320px] shrink-0 snap-center bg-white rounded-3xl p-5 border border-slate-200/90 shadow-xs active:scale-[0.98] transition-all flex flex-col justify-between"
+                  >
+                    <div className="space-y-3.5">
+                      <div className={`w-11 h-11 rounded-2xl flex items-center justify-center shadow-2xs ${feature.iconBg}`}>
+                        <Icon className="w-5 h-5 stroke-[1.8]" />
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="text-[10px] font-bold text-sky-700 uppercase tracking-wider">
+                          {feature.tag}
+                        </div>
+                        <h3 className="text-base font-extrabold text-slate-900">
+                          {feature.title}
+                        </h3>
+                        <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
+                          {feature.desc}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-sky-600">
+                      <span>Akses Layanan</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Mobile Swipe Pagination Dots */}
+            <div className="flex items-center justify-center gap-1.5 pt-3">
+              {bentoFeatures.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => scrollToFeature(idx)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    activeFeatureIndex === idx
+                      ? "w-6 bg-sky-600"
+                      : "w-2 bg-slate-200 hover:bg-slate-300"
+                  }`}
+                  aria-label={`Lihat layanan ${idx + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* TABLET VIEW (Clean 2-Column Responsive Grid) */}
+          <div className="hidden sm:grid lg:hidden sm:grid-cols-2 gap-4">
+            {bentoFeatures.map((feature) => {
+              const Icon = feature.icon;
+              return (
+                <Link
+                  key={feature.id}
+                  to={feature.link}
+                  className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xs hover:shadow-md hover:border-sky-300 transition-all flex flex-col justify-between group cursor-pointer"
+                >
+                  <div className="space-y-4">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center group-hover:scale-105 transition-transform shadow-2xs ${feature.iconBg}`}>
+                      <Icon className="w-6 h-6 stroke-[1.8]" />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <div className="text-[10px] font-bold text-sky-700 uppercase tracking-wider">
+                        {feature.tag}
+                      </div>
+                      <h3 className="text-base font-extrabold text-slate-900 group-hover:text-sky-700 transition-colors">
+                        {feature.title}
+                      </h3>
+                      <p className="text-xs text-slate-500 leading-relaxed">
+                        {feature.desc}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="pt-5 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-sky-600 group-hover:text-sky-700">
+                    <span>Akses Layanan</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              );
+            })}
           </div>
 
         </div>
 
-        {/* Horizontal Infinite Marquee Running Right-to-Left */}
-        <div className="relative w-full overflow-hidden py-4 group">
+        {/* DESKTOP VIEW (Horizontal Infinite Marquee Running Right-to-Left with Pause on Hover) */}
+        <div className="hidden lg:block relative w-full overflow-hidden py-4 group">
           {/* Gradient Edge Masks */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
@@ -504,8 +696,8 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
-            {/* Left: Interactive Resident Visual Showcase */}
-            <div className="lg:col-span-6 relative">
+            {/* Left (Desktop) / Bottom (Mobile): Interactive Resident Visual Showcase */}
+            <div className="lg:col-span-6 relative order-2 lg:order-1">
               <div className="rounded-3xl overflow-hidden shadow-2xl border border-sky-100 bg-white relative">
                 
                 {/* Simulated Admin Portal Preview Header */}
@@ -548,8 +740,8 @@ export const HomePage: React.FC = () => {
 
             </div>
 
-            {/* Right: Feature Bulletpoints & Mobile Mockup Preview */}
-            <div className="lg:col-span-6 space-y-6">
+            {/* Right (Desktop) / Top (Mobile): Feature Bulletpoints & Mobile Mockup Preview */}
+            <div className="lg:col-span-6 space-y-6 order-1 lg:order-2">
               <div className="space-y-3">
                 <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight">
                   Ajukan, Pantau, dan Terima Surat Tanpa Perlu Antre
@@ -586,10 +778,10 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="pt-2 flex items-center gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <Link
                   to="/layanan-surat"
-                  className="px-6 py-3 rounded-full bg-slate-900 hover:bg-black text-white font-bold text-xs sm:text-sm transition-all shadow-md press-down flex items-center gap-2"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-slate-900 hover:bg-black text-white font-bold text-xs sm:text-sm transition-all shadow-md press-down flex items-center justify-center gap-2"
                 >
                   <span>Pelajari Katalog Surat</span>
                   <ArrowRight className="w-4 h-4" />
@@ -597,7 +789,7 @@ export const HomePage: React.FC = () => {
 
                 <Link
                   to="/lacak"
-                  className="text-xs sm:text-sm font-bold text-sky-700 hover:text-sky-800 underline underline-offset-4 flex items-center gap-1"
+                  className="w-full sm:w-auto text-center py-2 text-xs sm:text-sm font-bold text-sky-700 hover:text-sky-800 underline underline-offset-4 flex items-center justify-center gap-1"
                 >
                   <span>Cek Resi Sekarang</span>
                 </Link>
@@ -611,74 +803,179 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          KEY STATS STRIP (Flowora Modern Stats Counter Strip)
+          KEY STATS STRIP (Flowora Modern Stats Counter Strip - Responsive Grid)
           ========================================================================= */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-        <div className="bg-white/95 backdrop-blur-xl border border-sky-100 rounded-3xl p-6 sm:p-8 shadow-xl shadow-sky-500/5 grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14">
+        <div className="bg-white/95 backdrop-blur-xl border border-sky-100 rounded-3xl p-4 sm:p-8 shadow-xl shadow-sky-500/5 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 text-center">
           
-          <div className="space-y-1.5 p-3">
-            <div className="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto mb-2 shadow-2xs">
-              <Users className="w-5 h-5" />
+          <div className="space-y-1 p-2.5 sm:p-3 rounded-2xl bg-slate-50/50 sm:bg-transparent border sm:border-0 border-slate-100/80">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto mb-1.5 shadow-2xs">
+              <Users className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <div className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight">
               {countWarga.toLocaleString()}+
             </div>
-            <div className="text-xs font-bold text-slate-600">Penduduk Terdata</div>
-            <div className="text-[10px] text-sky-700 font-semibold">{countDusun} Kelurahan/Desa • 3 Kecamatan • {countRt} Lingkungan RT</div>
+            <div className="text-xs font-bold text-slate-700">Penduduk Terdata</div>
+            <div className="text-[10px] text-sky-700 font-semibold line-clamp-1">{countDusun} Kelurahan • {countRt} RT</div>
           </div>
 
-          <div className="space-y-1.5 p-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2 shadow-2xs">
-              <CheckCircle2 className="w-5 h-5" />
+          <div className="space-y-1 p-2.5 sm:p-3 rounded-2xl bg-slate-50/50 sm:bg-transparent border sm:border-0 border-slate-100/80">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-1.5 shadow-2xs">
+              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-sky-600 tracking-tight">
+            <div className="text-xl sm:text-3xl font-black text-sky-600 tracking-tight">
               {countSurat.toLocaleString()}+
             </div>
-            <div className="text-xs font-bold text-slate-600">Surat Sah Terbit</div>
-            <div className="text-[10px] text-sky-700 font-semibold">100% Legal Ber-QR Code</div>
+            <div className="text-xs font-bold text-slate-700">Surat Sah Terbit</div>
+            <div className="text-[10px] text-sky-700 font-semibold line-clamp-1">100% Legal Ber-QR Code</div>
           </div>
 
-          <div className="space-y-1.5 p-3">
-            <div className="w-10 h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto mb-2 shadow-2xs">
-              <Clock className="w-5 h-5" />
+          <div className="space-y-1 p-2.5 sm:p-3 rounded-2xl bg-slate-50/50 sm:bg-transparent border sm:border-0 border-slate-100/80">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center mx-auto mb-1.5 shadow-2xs">
+              <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            <div className="text-xl sm:text-3xl font-black text-slate-900 tracking-tight">
               &lt; {countSla} Menit
             </div>
-            <div className="text-xs font-bold text-slate-600">Rata-rata Waktu SLA</div>
-            <div className="text-[10px] text-sky-600 font-semibold">Disposisi Cepat Real-Time</div>
+            <div className="text-xs font-bold text-slate-700">Rata-rata Waktu SLA</div>
+            <div className="text-[10px] text-sky-600 font-semibold line-clamp-1">Disposisi Cepat Real-Time</div>
           </div>
 
-          <div className="space-y-1.5 p-3">
-            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-2 shadow-2xs">
-              <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+          <div className="space-y-1 p-2.5 sm:p-3 rounded-2xl bg-slate-50/50 sm:bg-transparent border sm:border-0 border-slate-100/80">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto mb-1.5 shadow-2xs">
+              <Star className="w-4 h-4 sm:w-5 sm:h-5 fill-amber-400 text-amber-400" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-sky-600 tracking-tight">
+            <div className="text-xl sm:text-3xl font-black text-sky-600 tracking-tight">
               4.9 / 5.0
             </div>
-            <div className="text-xs font-bold text-slate-600">Indeks Kepuasan Publik</div>
-            <div className="text-[10px] text-emerald-600 font-semibold">Bebas Pungli (Rp 0,-)</div>
+            <div className="text-xs font-bold text-slate-700">Indeks Kepuasan</div>
+            <div className="text-[10px] text-emerald-600 font-semibold line-clamp-1">Bebas Pungli (Rp 0,-)</div>
           </div>
 
         </div>
       </section>
 
       {/* =========================================================================
-          TESTIMONIALS (Flowora Modern Review Cards - Animated Marquee)
+          TESTIMONIALS (Responsive: Swipeable on Mobile, Grid on Tablet, Marquee on Desktop)
           ========================================================================= */}
-      <section className="w-full py-16 sm:py-24 bg-gradient-to-b from-white via-sky-50/20 to-white relative overflow-hidden">
+      <section className="w-full py-12 sm:py-20 bg-gradient-to-b from-white via-sky-50/20 to-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          <div className="text-center max-w-2xl mx-auto space-y-3 mb-10">
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              Review Warga, Mahasiswa & Pelaku Usaha
+          <div className="text-center max-w-2xl mx-auto space-y-2.5 mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+              Review Warga Kota Kediri
             </h2>
+            <p className="text-xs sm:text-sm text-slate-500">
+              Pengalaman nyata masyarakat dalam mengurus dokumen dan mengakses layanan kota.
+            </p>
+          </div>
+
+          {/* MOBILE VIEW (Swipeable Native Snap Reviews + Indicator Dots) */}
+          <div className="block sm:hidden">
+            <div className="flex items-center justify-between text-xs font-bold text-slate-400 mb-2 px-1">
+              <span>Ulasan Warga ({activeTestimonialIndex + 1}/{testimonials.length})</span>
+              <span className="text-sky-600 text-[11px] font-semibold flex items-center gap-1">
+                Geser ulasan &rarr;
+              </span>
+            </div>
+            <div 
+              ref={testimonialScrollRef}
+              onScroll={(e) => {
+                const el = e.currentTarget;
+                const cardWidth = el.scrollWidth / testimonials.length;
+                const idx = Math.round(el.scrollLeft / cardWidth);
+                if (idx !== activeTestimonialIndex && idx >= 0 && idx < testimonials.length) {
+                  setActiveTestimonialIndex(idx);
+                }
+              }}
+              className="flex gap-3.5 overflow-x-auto pb-2 pt-1 snap-x snap-mandatory scrollbar-none -mx-4 px-4"
+            >
+              {testimonials.map((t, idx) => (
+                <div
+                  key={idx}
+                  className="w-[84vw] max-w-[320px] shrink-0 snap-center bg-white rounded-3xl p-5 border border-slate-200/90 shadow-xs flex flex-col justify-between"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-1 text-amber-400">
+                      {[...Array(t.rating)].map((_, i) => (
+                        <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                    <p className="text-xs text-slate-700 leading-relaxed italic line-clamp-4">
+                      "{t.quote}"
+                    </p>
+                  </div>
+
+                  <div className="pt-4 mt-3 border-t border-slate-100 flex items-center gap-3">
+                    <img
+                      src={t.avatar}
+                      alt={t.author}
+                      className="w-9 h-9 rounded-full object-cover bg-sky-100 ring-2 ring-sky-200 shrink-0"
+                    />
+                    <div>
+                      <div className="font-extrabold text-xs text-slate-900">{t.author}</div>
+                      <div className="text-[10px] text-slate-500 line-clamp-1">{t.role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Mobile Swipe Pagination Dots */}
+            <div className="flex items-center justify-center gap-1.5 pt-3">
+              {testimonials.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => scrollToTestimonial(idx)}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    activeTestimonialIndex === idx
+                      ? "w-6 bg-sky-600"
+                      : "w-2 bg-slate-200 hover:bg-slate-300"
+                  }`}
+                  aria-label={`Lihat ulasan ${idx + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* TABLET VIEW (Clean 2-Column Grid) */}
+          <div className="hidden sm:grid lg:hidden sm:grid-cols-2 gap-4">
+            {testimonials.map((t, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xs flex flex-col justify-between"
+              >
+                <div className="space-y-3.5">
+                  <div className="flex items-center gap-1 text-amber-400">
+                    {[...Array(t.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic">
+                    "{t.quote}"
+                  </p>
+                </div>
+
+                <div className="pt-5 mt-4 border-t border-slate-100 flex items-center gap-3">
+                  <img
+                    src={t.avatar}
+                    alt={t.author}
+                    className="w-10 h-10 rounded-full object-cover bg-sky-100 ring-2 ring-sky-200 shrink-0"
+                  />
+                  <div>
+                    <div className="font-extrabold text-xs sm:text-sm text-slate-900">{t.author}</div>
+                    <div className="text-[11px] text-slate-500">{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
         </div>
 
-        {/* Horizontal Infinite Marquee Running Right-to-Left */}
-        <div className="relative w-full overflow-hidden py-4 group">
+        {/* DESKTOP VIEW (Infinite Marquee) */}
+        <div className="hidden lg:block relative w-full overflow-hidden py-4 group">
           {/* Subtle Ambient Vignette / Gradient Edge Masks */}
           <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
           <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
@@ -723,10 +1020,16 @@ export const HomePage: React.FC = () => {
           ========================================================================= */}
       <section className="w-full bg-white py-16 sm:py-20 border-t border-slate-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-3 mb-10">
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight">
-              FAQ
+          <div className="text-center space-y-2 mb-8 sm:mb-12">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 border border-sky-200/60 text-sky-700 text-xs font-bold">
+              Pusat Bantuan & Regulasi
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+              Pertanyaan yang Sering Diajukan
             </h2>
+            <p className="text-xs sm:text-sm text-slate-500 max-w-lg mx-auto">
+              Jawaban cepat dan ringkas seputar tata cara buat surat, biaya layanan, dan legalitas dokumen.
+            </p>
           </div>
 
           <div className="space-y-3.5">

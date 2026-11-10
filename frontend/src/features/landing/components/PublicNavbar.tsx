@@ -204,7 +204,7 @@ export const PublicNavbar: React.FC = () => {
                   className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-xs shadow-md shadow-sky-500/25 transition-all press-down hover-glow whitespace-nowrap outline-none focus:outline-none"
                 >
                   <LogIn className="w-3.5 h-3.5" />
-                  <span>Masuk Portal</span>
+                  <span>Login</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -272,7 +272,7 @@ export const PublicNavbar: React.FC = () => {
                   className="w-full py-2.5 text-center text-xs font-bold rounded-2xl bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white shadow-md shadow-sky-500/20 flex items-center justify-center gap-1.5"
                 >
                   <LogIn className="w-3.5 h-3.5" />
-                  <span>Masuk Portal Layanan</span>
+                  <span>Login</span>
                 </Link>
               </div>
             )}

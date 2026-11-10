@@ -37,11 +37,15 @@ export const PublicFooter: React.FC = () => {
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-sky-600 shrink-0" />
-                <span>(0354) 682-991 • Layanan Pengaduan 24 Jam</span>
+                <a href="tel:0354682991" className="hover:text-sky-700 hover:underline">
+                  (0354) 682-991 • Layanan Pengaduan 24 Jam
+                </a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-sky-600 shrink-0" />
-                <span>smartcity@kotakediri.go.id</span>
+                <a href="mailto:smartcity@kotakediri.go.id" className="hover:text-sky-700 hover:underline">
+                  smartcity@kotakediri.go.id
+                </a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-sky-600 shrink-0" />
