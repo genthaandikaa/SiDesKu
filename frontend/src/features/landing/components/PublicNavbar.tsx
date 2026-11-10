@@ -91,7 +91,7 @@ export const PublicNavbar: React.FC = () => {
 
   const preLoginLinks: NavItem[] = [
     { name: 'Beranda', path: '/' },
-    { name: 'Profil Kota', path: '/profil' },
+    { name: 'Profil', path: '/profil' },
     { name: 'Layanan Surat', path: '/layanan-surat' },
     { name: 'Transparansi', path: '/transparansi' },
     { name: 'Smart City', path: '/smart-city' },
@@ -100,7 +100,7 @@ export const PublicNavbar: React.FC = () => {
 
   const postLoginLinks: NavItem[] = [
     { name: 'Beranda', path: '/' },
-    { name: 'Profil Kota', path: '/profil' },
+    { name: 'Profil', path: '/profil' },
     { name: 'Layanan Surat', path: '/layanan-surat' },
     { name: 'Transparansi', path: '/transparansi' },
     { name: 'Smart City', path: '/smart-city' },

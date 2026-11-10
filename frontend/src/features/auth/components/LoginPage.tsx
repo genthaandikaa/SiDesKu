@@ -194,10 +194,10 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                 <span>Beranda</span>
               </Link>
               <Link
-                to="/smart-city"
+                to="/profil"
                 className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
               >
-                <span>Smart City Hub</span>
+                <span>Profil</span>
               </Link>
               <Link
                 to="/layanan-surat"
@@ -212,16 +212,16 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                 <span>Transparansi</span>
               </Link>
               <Link
+                to="/smart-city"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Smart City</span>
+              </Link>
+              <Link
                 to="/berita"
                 className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
               >
-                <span>Warta Kota</span>
-              </Link>
-              <Link
-                to="/profil"
-                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-              >
-                <span>Profil Kota</span>
+                <span>Berita</span>
               </Link>
             </nav>
           </div>
@@ -447,7 +447,6 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
         <div className="flex items-center gap-4 mt-1 sm:mt-0 font-bold text-slate-500">
           <Link to="/" className="hover:text-blue-700">Privasi</Link>
           <Link to="/" className="hover:text-blue-700">Syarat & Ketentuan</Link>
-          <Link to="/smart-city" className="hover:text-blue-700">Smart City Hub</Link>
         </div>
       </footer>
       

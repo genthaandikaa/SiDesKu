@@ -270,14 +270,6 @@ export const HomePage: React.FC = () => {
             {/* Action Buttons (Flowora Style: Primary Gradient Pill + Secondary Outlined Pill) */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
               <Link
-                to="/smart-city"
-                className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-sky-500/25 transition-all press-down flex items-center justify-center gap-2.5 group"
-              >
-                <span>Jelajahi Smart City Hub</span>
-                <ArrowRight className="w-4.5 h-4.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-
-              <Link
                 to="/layanan-surat"
                 className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-white hover:bg-slate-50 text-slate-700 font-bold text-sm sm:text-base border border-slate-200/90 shadow-2xs hover:border-sky-300 transition-all press-down flex items-center justify-center gap-2"
               >

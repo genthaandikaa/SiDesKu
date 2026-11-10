@@ -67,11 +67,6 @@ export const PublicFooter: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/smart-city" className="hover:text-sky-600 transition-colors flex items-center gap-1.5 text-slate-600">
-                  <ChevronRight className="w-3.5 h-3.5 text-sky-400" /> Smart City Hub (Hunian, Pasar & Loker)
-                </Link>
-              </li>
-              <li>
                 <Link to="/layanan-surat" className="hover:text-sky-600 transition-colors flex items-center gap-1.5 text-slate-600">
                   <ChevronRight className="w-3.5 h-3.5 text-sky-400" /> Layanan & Lacak Surat
                 </Link>

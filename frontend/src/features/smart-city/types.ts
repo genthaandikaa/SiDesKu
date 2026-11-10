@@ -4,17 +4,22 @@ export interface UmkmItem {
   wargaNama?: string;
   nama: string;
   tokoNama: string;
-  kategori: 'Kuliner' | 'Pertanian' | 'Kerajinan' | 'Jasa & Servis' | 'Sembako' | 'Fashion' | 'Lainnya';
+  kelurahan?: string;
+  rtRw?: string;
+  kategori: 'Kuliner & Kudapan' | 'Bahan Pokok & Sembako' | 'Kriya & Kerajinan' | 'Jasa Panggilan' | 'Fashion & Batik' | string;
+  badgeTag?: string; // e.g. 'SIAP ANTAR (COD)', 'KEBUTUHAN POKOK', 'KRIYA WARGA', 'JASA KILAT', 'PRODUKSI SENDIRI', 'KUDAPAN HANGAT'
   harga: number;
   satuan?: string;
   deskripsi: string;
   fotoUrl: string;
+  galeri?: string[];
   alamat: string;
   lat: number;
   lng: number;
   waKontak: string;
   qrisUrl?: string;
   qrisNama?: string;
+  qrisNmid?: string;
   metodePembayaran: {
     qris: boolean;
     cod: boolean;
@@ -23,7 +28,20 @@ export interface UmkmItem {
   };
   statusToko: 'Buka' | 'Tutup';
   rating: number;
-  terjual: number;
+  terjualText?: string;
+  terjual?: number;
+  bukaJamText?: string;
+  isJasa?: boolean;
+  // Specific Food Details
+  pilihanAyam?: { nama: string; hargaExtra: number }[];
+  pilihanSambal?: string[];
+  keteranganHalal?: string;
+  keteranganHigienis?: string;
+  // Specific Jasa Details
+  pilihanLayananJasa?: { id: string; nama: string; harga: number; unitText?: string }[];
+  garansiText?: string;
+  sertifikasiText?: string;
+  radiusMaxKm?: number;
   createdAt: string;
 }
 
