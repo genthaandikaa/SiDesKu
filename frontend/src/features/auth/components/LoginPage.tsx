@@ -175,55 +175,67 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
         className="absolute bottom-16 left-1/4 w-6 h-6 opacity-35 pointer-events-none animate-float-gentle -z-10 hidden sm:block" 
       />
 
-      {/* Header */}
-      <header className="relative z-30 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-3 sm:py-4 flex items-center justify-between shrink-0">
-        <Link to="/" className="hover:opacity-95 transition-opacity shrink-0 outline-none focus:outline-none">
-          <BrandLogo size="md" />
-        </Link>
+      {/* Header - Symmetrical Centered Bar */}
+      <header className="relative z-30 w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-3 sm:py-4">
+        <div className="grid grid-cols-2 lg:grid-cols-[auto_1fr_auto] items-center gap-4 w-full">
+          <div className="flex items-center justify-start shrink-0">
+            <Link to="/" className="hover:opacity-95 transition-opacity shrink-0 outline-none focus:outline-none">
+              <BrandLogo size="sm" subtitleText="Pemerintah Kota Kediri" />
+            </Link>
+          </div>
 
-        {/* Center Nav Links - Pill Capsule with Image 1 Items */}
-        <nav className="hidden lg:flex items-center gap-1 bg-white/95 backdrop-blur-md p-1.5 rounded-full border border-slate-200/80 shadow-md shadow-blue-950/5">
-          <Link
-            to="/"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Beranda</span>
-          </Link>
-          <Link
-            to="/profil"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Direktori Desa</span>
-          </Link>
-          <Link
-            to="/layanan-surat"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Layanan Surat</span>
-          </Link>
-          <Link
-            to="/lacak"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Lacak Surat</span>
-          </Link>
-          <Link
-            to="/berita"
-            className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
-          >
-            <span>Warta</span>
-          </Link>
-        </nav>
+          {/* Center Nav Links - Symmetrical Center Position */}
+          <div className="hidden lg:flex items-center justify-center px-2">
+            <nav className="inline-flex items-center justify-center gap-1 bg-white/95 backdrop-blur-md p-1.5 rounded-full border border-slate-200/80 shadow-xs">
+              <Link
+                to="/"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Beranda</span>
+              </Link>
+              <Link
+                to="/smart-city"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Smart City Hub</span>
+              </Link>
+              <Link
+                to="/layanan-surat"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Layanan Surat</span>
+              </Link>
+              <Link
+                to="/transparansi"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Transparansi</span>
+              </Link>
+              <Link
+                to="/berita"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Warta Kota</span>
+              </Link>
+              <Link
+                to="/profil"
+                className="px-3.5 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-blue-800 hover:bg-blue-50/80 transition-all outline-none"
+              >
+                <span>Profil Kota</span>
+              </Link>
+            </nav>
+          </div>
 
-        {/* Right Action */}
-        <div className="flex items-center gap-2 shrink-0">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-blue-800 bg-white hover:bg-blue-50 border border-slate-200/80 transition-all shadow-2xs whitespace-nowrap outline-none"
-          >
-            <ArrowLeft size={13} />
-            <span>Kembali ke Beranda</span>
-          </Link>
+          {/* Right Action */}
+          <div className="flex items-center justify-end gap-2 shrink-0">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-extrabold text-slate-700 hover:text-blue-800 bg-white hover:bg-blue-50 border border-slate-200/80 transition-all shadow-2xs whitespace-nowrap outline-none"
+            >
+              <ArrowLeft size={13} />
+              <span>Kembali ke Beranda</span>
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -380,7 +392,7 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                 </div>
 
                 <div className="text-[10px] text-center text-slate-400 pt-1">
-                  Belum memiliki akun? Hubungi kantor desa.
+                  Belum memiliki akun? Hubungi kantor kelurahan / kecamatan PATEN.
                 </div>
               </form>
 
@@ -402,24 +414,24 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
                 <div className="absolute inset-0 bg-blue-300/20 rounded-full blur-2xl -z-10 group-hover:bg-blue-400/30 transition-colors" />
                 <img
                   src="/images/landing/ilustrasi-login.svg"
-                  alt="Ilustrasi layanan surat desa digital"
+                  alt="Ilustrasi layanan administrasi kota cerdas digital"
                   className="w-full max-w-[340px] xl:max-w-[370px] object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500 z-10"
                 />
 
                 <div className="absolute -top-2 -left-2 sm:left-2 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-blue-100 animate-float">
                   <div className="w-6 h-6 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-black"><CheckCircle2 className="w-3.5 h-3.5" /></div>
-                  <div className="text-left text-[10px]"><div className="font-extrabold text-slate-900 leading-tight">TTD Barcode & QR Sah</div><div className="text-[8px] text-blue-600 font-semibold">Kepala Desa Doko</div></div>
+                  <div className="text-left text-[10px]"><div className="font-extrabold text-slate-900 leading-tight">TTE BSrE & QR Sah</div><div className="text-[8px] text-blue-600 font-semibold">Camat & Lurah Terintegrasi</div></div>
                 </div>
 
                 <div className="absolute -bottom-2 right-2 sm:right-4 z-20 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-2xl shadow-lg border border-blue-100 animate-float-gentle">
                   <div className="w-6 h-6 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-black"><Zap className="w-3.5 h-3.5" /></div>
-                  <div className="text-left text-[10px]"><div className="font-extrabold text-slate-900 leading-tight">&lt; 15 Menit Layanan</div><div className="text-[8px] text-slate-500 font-medium">100% Bebas Biaya</div></div>
+                  <div className="text-left text-[10px]"><div className="font-extrabold text-slate-900 leading-tight">&lt; 15 Menit Layanan</div><div className="text-[8px] text-slate-500 font-medium">100% Bebas Pungli</div></div>
                 </div>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-2 pt-4 z-20">
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-blue-200 shadow-2xs text-[11px] font-black text-slate-800 hover:border-blue-400 transition-colors"><ShieldCheck className="w-3.5 h-3.5 text-blue-600" /><span>Legalitas QR Dispendukcapil</span></div>
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-blue-200 shadow-2xs text-[11px] font-black text-slate-800 hover:border-blue-400 transition-colors"><Building2 className="w-3.5 h-3.5 text-indigo-600" /><span>Pemerintah Desa Doko</span></div>
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-blue-200 shadow-2xs text-[11px] font-black text-slate-800 hover:border-blue-400 transition-colors"><ShieldCheck className="w-3.5 h-3.5 text-blue-600" /><span>Legalitas Dispendukcapil & BSrE</span></div>
+                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md border border-blue-200 shadow-2xs text-[11px] font-black text-slate-800 hover:border-blue-400 transition-colors"><Building2 className="w-3.5 h-3.5 text-blue-600" /><span>Pemerintah Kota Kediri</span></div>
               </div>
             </div>
           </div>
@@ -431,11 +443,11 @@ export const LoginPage: React.FC<AuthPageProps> = () => {
 
       {/* Footer */}
       <footer className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-12 py-2.5 sm:py-3 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-slate-400 font-medium border-t border-slate-100 shrink-0">
-        <div>© {new Date().getFullYear()} Pemerintah Desa Doko, Kec. Ngasem, Kab. Kediri.</div>
+        <div>© {new Date().getFullYear()} Pemerintah Kota Kediri • SiDesKu Smart City & Urban Innovation Platform.</div>
         <div className="flex items-center gap-4 mt-1 sm:mt-0 font-bold text-slate-500">
           <Link to="/" className="hover:text-blue-700">Privasi</Link>
           <Link to="/" className="hover:text-blue-700">Syarat & Ketentuan</Link>
-          <Link to="/lacak" className="hover:text-blue-700">Bantuan</Link>
+          <Link to="/smart-city" className="hover:text-blue-700">Smart City Hub</Link>
         </div>
       </footer>
       

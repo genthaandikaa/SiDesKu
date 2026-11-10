@@ -16,8 +16,7 @@ import {
   CheckCheck,
   CheckCircle2,
   Building2,
-  Shield,
-  Sparkles
+  Shield
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { useAuth } from '@/shared/context/AuthContext';
@@ -555,7 +554,6 @@ export const PusatPesanView: React.FC = () => {
 
                 {messages.length === 0 ? (
                   <div className="text-center py-20 text-slate-400">
-                    <Sparkles className="w-8 h-8 mx-auto mb-2 text-blue-500 stroke-1" />
                     <p className="font-bold text-xs text-slate-700">Mulai Percakapan Anda</p>
                     <p className="text-[11px] text-slate-500 mt-1">
                       Kirim pesan pertanyaan, koordinasi surat, atau konfirmasi berkas di bawah.

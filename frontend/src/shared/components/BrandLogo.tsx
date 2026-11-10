@@ -35,9 +35,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     xl: 'text-2xl sm:text-3xl font-black',
   };
 
-  // Auto-detect Village (Desa) Location from User Profile when Logged In
+  // Auto-detect Village/City Location from User Profile when Logged In
   let villageName = overrideVillage;
-  let detectedSubtitle = subtitleText || 'Pemerintah Kabupaten Kediri';
+  let detectedSubtitle = subtitleText || 'Pemerintah Kota Kediri • Smart City Hub';
 
   if (user) {
     const dusun = (user as any).warga_profile?.rt?.rw?.dusun?.nama_dusun;
@@ -47,20 +47,20 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     villageName = villageName || 'Doko';
 
     if (rt && rw) {
-      detectedSubtitle = subtitleText || `RT ${rt} / RW ${rw} • ${dusun || 'Desa ' + villageName}`;
+      detectedSubtitle = subtitleText || `RT ${rt} / RW ${rw} • Kel./Desa ${villageName} • Kota Kediri`;
     } else {
-      detectedSubtitle = subtitleText || `Kec. Ngasem, Kab. Kediri`;
+      detectedSubtitle = subtitleText || `Wilayah Kota Kediri`;
     }
   }
 
   return (
     <div className={`flex items-center gap-3.5 select-none group ${className}`}>
       
-      {/* Official Lambang Candra Birawa Kabupaten Kediri (Tall, Prominent & Majestic) */}
+      {/* Official Lambang Candra Birawa Kediri (Tall, Prominent & Majestic) */}
       <div className={`relative flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300 ${iconSizes[size]}`}>
         <img 
           src="/images/logo-kediri.png" 
-          alt="Lambang Kabupaten Kediri" 
+          alt="Lambang Kota Kediri" 
           className="h-full w-auto object-contain filter drop-shadow-md"
         />
       </div>
@@ -70,15 +70,15 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         <div className={`tracking-tight leading-tight flex items-center gap-1.5 ${isDark ? 'text-white' : 'text-slate-900'} ${textSizes[size]}`}>
           {user ? (
             <>
-              <span>SIDes</span>
-              <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 bg-clip-text text-transparent font-black">
-                {villageName}
+              <span>SiDesKu</span>
+              <span className="text-blue-600 font-extrabold">
+                Smart City
               </span>
             </>
           ) : (
             <>
-              <span>Kabupaten</span>
-              <span className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 bg-clip-text text-transparent font-black">
+              <span>Kota</span>
+              <span className="text-blue-600 font-extrabold">
                 Kediri
               </span>
             </>

@@ -71,6 +71,16 @@ class GlobalErrorBoundary extends Component<Props, State> {
 export const App: React.FC = () => {
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      if (import.meta.env.DEV) {
+        // Unregister service workers in development to prevent caching Vite HMR and causing WebKit/Safari crashes
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          for (const registration of registrations) {
+            registration.unregister();
+          }
+        });
+        return;
+      }
+
       navigator.serviceWorker
         .register('/sw-push.js', { scope: '/' })
         .then((reg) => {

@@ -22,11 +22,11 @@ const notifyUnauthenticated = () => {
 
 export const getBaseApiUrl = (): string => {
   const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl && typeof envUrl === 'string' && envUrl.trim()) {
+  if (envUrl && typeof envUrl === 'string' && envUrl.trim() && !envUrl.includes('localhost:8000')) {
     const clean = envUrl.trim().replace(/\/+$/, '');
     return clean.endsWith('/api') ? clean : clean + '/api';
   }
-  return 'http://localhost:8000/api';
+  return '/api';
 };
 
 const api = axios.create({
