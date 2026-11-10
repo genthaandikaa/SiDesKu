@@ -6,3 +6,4 @@ export { LokerPage } from './components/LokerPage';
 export { WargaSmartCityManager } from './components/WargaSmartCityManager';
 export * from './types';
 export * from './smartCityStorage';
+export * from './api/smartCityApi';

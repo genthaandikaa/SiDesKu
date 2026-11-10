@@ -28,6 +28,8 @@ export interface UmkmItem {
   };
   statusToko: 'Buka' | 'Tutup';
   rating: number;
+  reviewsCount?: number;
+  reviews?: UmkmReviewItem[];
   terjualText?: string;
   terjual?: number;
   bukaJamText?: string;
@@ -42,6 +44,17 @@ export interface UmkmItem {
   garansiText?: string;
   sertifikasiText?: string;
   radiusMaxKm?: number;
+  createdAt: string;
+}
+
+export interface UmkmReviewItem {
+  id: number | string;
+  umkmId: string;
+  userId?: number | null;
+  rating: number;
+  komentar: string;
+  reviewerName: string;
+  reviewerRtRw?: string;
   createdAt: string;
 }
 

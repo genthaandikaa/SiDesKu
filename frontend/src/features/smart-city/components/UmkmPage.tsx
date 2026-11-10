@@ -19,29 +19,52 @@ import {
   UserPlus,
   BadgeCheck,
   Info,
+  SlidersHorizontal,
+  RotateCcw,
+  Navigation,
+  Compass,
+  Check,
   Image as ImageIcon
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { Pagination } from '@/shared/components/Pagination';
 import { UmkmItem } from '../types';
 import {
+  smartCityApi
+} from '../api/smartCityApi';
+import {
   getStoredUmkmList,
-  saveStoredUmkmItem,
   KEDIRI_DEFAULT_COORDS,
   calculateDistanceKm,
   formatDistance
 } from '../smartCityStorage';
 
+// Preset Wilayah Kota Kediri untuk Ubah Titik Lokasi Cepat
+const KEDIRI_PRESET_LOCATIONS = [
+  { name: 'Kelurahan Sukamaju / Doko', lat: -7.8185, lng: 112.0135, desc: 'Kec. Doko / Kediri Timur' },
+  { name: 'Simpang Lima Gumul (SLG)', lat: -7.8280, lng: 112.0450, desc: 'Pusat Ikonik Kabupaten / Kota' },
+  { name: 'Balai Kota / Pusat Kediri', lat: -7.8166, lng: 112.0118, desc: 'Pusat Pemerintahan & Perkantoran' },
+  { name: 'Kecamatan Mojoroto', lat: -7.8050, lng: 111.9950, desc: 'Area Kampus & Pemukiman Barat' },
+  { name: 'Kecamatan Pesantren', lat: -7.8350, lng: 112.0350, desc: 'Sentra UMKM & Industri Kreatif' },
+  { name: 'Kelurahan Banjaran', lat: -7.8130, lng: 112.0190, desc: 'Sentra Kuliner & Pasar Tradisional' },
+  { name: 'Kelurahan Bandar Lor', lat: -7.8220, lng: 111.9980, desc: 'Sentra Kain Tenun Ikat Bandar' },
+  { name: 'Kelurahan Ngletih', lat: -7.8420, lng: 112.0520, desc: 'Kawasan Hunian Asri Selatan' },
+];
+
 export const UmkmPage: React.FC = () => {
   const { user } = useAuth();
 
   const [umkmList, setUmkmList] = useState<UmkmItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Search & Filter State (All Dropdowns)
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
-  const [distanceFilter, setDistanceFilter] = useState<'all' | '1' | '3' | '5' | '10'>('all');
+  const [distanceMode, setDistanceMode] = useState<string>('all'); // 'all', '1', '3', '5', '10', 'custom'
+  const [customDistanceKm, setCustomDistanceKm] = useState<string>('2.5');
   const [deliveryFilter, setDeliveryFilter] = useState<string>('all');
   const [paymentFilter, setPaymentFilter] = useState<string>('all');
-  const [minRatingFilter, setMinRatingFilter] = useState<boolean>(false);
+  const [ratingFilter, setRatingFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'distance' | 'rating' | 'price' | 'popular'>('distance');
 
   // Pagination State
@@ -49,11 +72,31 @@ export const UmkmPage: React.FC = () => {
   const PAGE_SIZE = 6;
 
   // User Geolocation State
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>(KEDIRI_DEFAULT_COORDS);
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number }>(() => {
+    try {
+      const saved = localStorage.getItem('sidesku_user_smartcity_location');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.lat && parsed?.lng) return { lat: parsed.lat, lng: parsed.lng };
+      }
+    } catch {}
+    return KEDIRI_DEFAULT_COORDS;
+  });
+  const [locationLabel, setLocationLabel] = useState<string>(() => {
+    try {
+      const saved = localStorage.getItem('sidesku_user_smartcity_location');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.label) return parsed.label;
+      }
+    } catch {}
+    return 'Kelurahan Sukamaju (Akurasi Tinggi)';
+  });
   const [isLocating, setIsLocating] = useState(false);
-  const [locationLabel, setLocationLabel] = useState<string>('Kelurahan Sukamaju (Akurasi Tinggi)');
 
   // Modals
+  const [showLocationModal, setShowLocationModal] = useState(false);
+  const [customLocationInput, setCustomLocationInput] = useState('');
   const [showAuthAlertModal, setShowAuthAlertModal] = useState(false);
   const [showStoreManagerModal, setShowStoreManagerModal] = useState(false);
   const [showQrisModal, setShowQrisModal] = useState<{
@@ -75,17 +118,33 @@ export const UmkmPage: React.FC = () => {
   const [uploadEstimasi, setUploadEstimasi] = useState('15 - 30 Menit (Fresh Cook)');
   const [publishSuccessToast, setPublishSuccessToast] = useState(false);
 
+  // Initial Fetch & Sync from Backend API
   useEffect(() => {
-    setUmkmList(getStoredUmkmList());
-  }, []);
+    let isMounted = true;
+    const loadData = async () => {
+      setIsLoading(true);
+      const data = await smartCityApi.getUmkmList({
+        user_lat: userLocation.lat,
+        user_lng: userLocation.lng,
+      });
+      if (isMounted) {
+        setUmkmList(data);
+        setIsLoading(false);
+      }
+    };
+    loadData();
+    return () => {
+      isMounted = false;
+    };
+  }, [userLocation]);
 
   // Reset to first page when search/filter changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedCategory, distanceFilter, deliveryFilter, paymentFilter, minRatingFilter, sortBy]);
+  }, [searchQuery, selectedCategory, distanceMode, customDistanceKm, deliveryFilter, paymentFilter, ratingFilter, sortBy]);
 
-  // Handle GPS detection
-  const handleDetectLocation = () => {
+  // Geolocation Handler
+  const handleDetectGps = () => {
     if (!navigator.geolocation) {
       alert('Browser Anda tidak mendukung deteksi lokasi otomatis.');
       return;
@@ -93,26 +152,56 @@ export const UmkmPage: React.FC = () => {
     setIsLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setUserLocation({
+        const newCoords = {
           lat: pos.coords.latitude,
           lng: pos.coords.longitude
-        });
-        setLocationLabel('GPS Riil Terdeteksi (Akurasi Tinggi)');
+        };
+        const newLabel = 'GPS Riil Terdeteksi (Akurasi Tinggi)';
+        setUserLocation(newCoords);
+        setLocationLabel(newLabel);
         setIsLocating(false);
+        setShowLocationModal(false);
+        try {
+          localStorage.setItem('sidesku_user_smartcity_location', JSON.stringify({ ...newCoords, label: newLabel }));
+        } catch {}
       },
       (err) => {
         setIsLocating(false);
-        setLocationLabel('Kelurahan Sukamaju / Kota Kediri');
+        alert('Gagal mendeteksi GPS otomatis. Silakan pilih salah satu wilayah kota di bawah.');
         console.warn('Geolocation fallback:', err);
       },
       { timeout: 8000, enableHighAccuracy: true }
     );
   };
 
+  // Select Preset Location
+  const handleSelectPresetLocation = (preset: typeof KEDIRI_PRESET_LOCATIONS[0]) => {
+    const newCoords = { lat: preset.lat, lng: preset.lng };
+    const newLabel = `${preset.name} (Pilihan Manual)`;
+    setUserLocation(newCoords);
+    setLocationLabel(newLabel);
+    setShowLocationModal(false);
+    try {
+      localStorage.setItem('sidesku_user_smartcity_location', JSON.stringify({ ...newCoords, label: newLabel }));
+    } catch {}
+  };
+
+  // Apply Custom Location Input
+  const handleApplyCustomLocation = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customLocationInput.trim()) return;
+    const newLabel = `${customLocationInput.trim()} (Kustom)`;
+    setLocationLabel(newLabel);
+    setShowLocationModal(false);
+    try {
+      localStorage.setItem('sidesku_user_smartcity_location', JSON.stringify({ ...userLocation, label: newLabel }));
+    } catch {}
+  };
+
   // Filter & Sort Logic
   const filteredList = useMemo(() => {
     let result = umkmList.filter((item) => {
-      // 1. Search Query: instant match (even single character)
+      // 1. Search Query: instant search
       const q = searchQuery.toLowerCase().trim();
       if (q) {
         const matchTitle = item.nama.toLowerCase().includes(q);
@@ -130,23 +219,33 @@ export const UmkmPage: React.FC = () => {
         return false;
       }
 
-      // 3. Distance Filter
+      // 3. Distance Filter (Dropdown & Custom Input)
       const dist = calculateDistanceKm(userLocation.lat, userLocation.lng, item.lat, item.lng);
-      if (distanceFilter === '1' && dist > 1) return false;
-      if (distanceFilter === '3' && dist > 3) return false;
-      if (distanceFilter === '5' && dist > 5) return false;
-      if (distanceFilter === '10' && dist > 10) return false;
+      let maxDistLimit: number | null = null;
+      if (distanceMode === '1') maxDistLimit = 1;
+      else if (distanceMode === '3') maxDistLimit = 3;
+      else if (distanceMode === '5') maxDistLimit = 5;
+      else if (distanceMode === '10') maxDistLimit = 10;
+      else if (distanceMode === 'custom' && customDistanceKm && !isNaN(Number(customDistanceKm))) {
+        maxDistLimit = Number(customDistanceKm);
+      }
 
-      // 4. Delivery Filter
+      if (maxDistLimit !== null && dist > maxDistLimit) {
+        return false;
+      }
+
+      // 4. Delivery Filter: Direct Seller Only
       if (deliveryFilter === 'cod' && !item.metodePembayaran?.cod) return false;
-      if (deliveryFilter === 'do' && !item.metodePembayaran?.do) return false;
+      if (deliveryFilter === 'ambil' && !item.metodePembayaran?.do) return false;
 
       // 5. Payment Filter
       if (paymentFilter === 'qris' && !item.metodePembayaran?.qris) return false;
       if (paymentFilter === 'cod' && !item.metodePembayaran?.cod) return false;
 
       // 6. Rating Filter
-      if (minRatingFilter && item.rating < 4.5) return false;
+      if (ratingFilter === '4.5' && item.rating < 4.5) return false;
+      if (ratingFilter === '4.8' && item.rating < 4.8) return false;
+      if (ratingFilter === '5.0' && item.rating < 5.0) return false;
 
       return true;
     });
@@ -163,7 +262,7 @@ export const UmkmPage: React.FC = () => {
     });
 
     return result;
-  }, [umkmList, searchQuery, selectedCategory, distanceFilter, deliveryFilter, paymentFilter, minRatingFilter, sortBy, userLocation]);
+  }, [umkmList, searchQuery, selectedCategory, distanceMode, customDistanceKm, deliveryFilter, paymentFilter, ratingFilter, sortBy, userLocation]);
 
   // Paginated List
   const paginatedList = useMemo(() => {
@@ -174,20 +273,31 @@ export const UmkmPage: React.FC = () => {
   // Popular search chips
   const popularKeywords = ['Nasi Liwet', 'Beras Rojolele', 'Servis AC', 'Batik'];
 
-  // Categories list
-  const categoryPills = [
-    'Semua',
-    'Kuliner & Kudapan',
-    'Bahan Pokok & Sembako',
-    'Kriya & Kerajinan',
-    'Jasa Panggilan',
-    'Fashion & Batik'
-  ];
+  // Check if any filter is active
+  const hasActiveFilters = Boolean(
+    searchQuery ||
+    selectedCategory !== 'Semua' ||
+    distanceMode !== 'all' ||
+    deliveryFilter !== 'all' ||
+    paymentFilter !== 'all' ||
+    ratingFilter !== 'all'
+  );
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setSelectedCategory('Semua');
+    setDistanceMode('all');
+    setCustomDistanceKm('2.5');
+    setDeliveryFilter('all');
+    setPaymentFilter('all');
+    setRatingFilter('all');
+    setSortBy('distance');
+  };
 
   // Direct Quick WA Order from Grid Card
   const handleQuickWa = (item: UmkmItem) => {
     const text = encodeURIComponent(
-      `Halo *${item.tokoNama}*, saya melihat produk *"${item.nama}"* (Rp ${item.harga.toLocaleString('id-ID')}) di SiDesKu Smart City Kediri. Apakah stok masih tersedia?`
+      `Halo *${item.tokoNama}*, saya melihat produk *"${item.nama}"* (Rp ${item.harga.toLocaleString('id-ID')}) di SiDesKu Smart City Kediri. Pengiriman langsung oleh penjual ya? Apakah stok masih tersedia?`
     );
     window.open(`https://wa.me/${item.waKontak}?text=${text}`, '_blank');
   };
@@ -201,15 +311,15 @@ export const UmkmPage: React.FC = () => {
     }
   };
 
-  // Handle Publish New Product from Store Manager
-  const handlePublishProduct = (e: React.FormEvent) => {
+  // Handle Publish New Product from Store Manager (Calls Backend API)
+  const handlePublishProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!uploadNama.trim()) {
       alert('Silakan masukkan nama produk.');
       return;
     }
-    const newItem: UmkmItem = {
-      id: `umkm-${Date.now()}`,
+
+    const newItemPayload: Partial<UmkmItem> = {
       nama: uploadNama.trim(),
       tokoNama: user?.name ? `Usaha ${user.name}` : 'Warung Bu Dewi Sukamaju',
       kelurahan: 'Kel. Sukamaju',
@@ -218,32 +328,23 @@ export const UmkmPage: React.FC = () => {
       badgeTag: 'PRODUKSI SENDIRI',
       harga: Number(uploadHarga) || 25000,
       satuan: uploadSatuan || 'Porsi',
-      deskripsi: uploadDeskripsi.trim() || 'Produk segar olahan warga lokal tanpa bahan pengawet.',
+      deskripsi: uploadDeskripsi.trim() || 'Produk segar olahan warga lokal tanpa bahan pengawet. Pengantaran langsung oleh penjual.',
       fotoUrl: uploadFotoUrl.trim() || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
-      galeri: [uploadFotoUrl.trim() || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'],
       alamat: 'Jl. Kaliurang Gg. Mawar No. 4, Kel. Sukamaju',
       lat: userLocation.lat + (Math.random() - 0.5) * 0.005,
       lng: userLocation.lng + (Math.random() - 0.5) * 0.005,
       waKontak: '6281234567801',
-      qrisUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126570014ID.LINKAJA.WWW01189360091100213192025204581253033605802ID5918WARUNG_BU_DEWI6006KEDIRI62070703A016304E1F2',
-      qrisNama: user?.name ? `QRIS ${user.name.toUpperCase()}` : 'QRIS WARUNG BU DEWI',
-      qrisNmid: 'ID10293847281',
       metodePembayaran: {
         qris: uploadQris,
         cod: uploadCod,
         do: true,
         transfer: true
       },
-      statusToko: 'Buka',
-      rating: 5.0,
-      terjualText: 'Baru • Fresh Cook',
-      terjual: 1,
       bukaJamText: uploadEstimasi,
-      createdAt: new Date().toISOString()
     };
 
-    const updated = saveStoredUmkmItem(newItem);
-    setUmkmList(updated);
+    const saved = await smartCityApi.createUmkmProduct(newItemPayload);
+    setUmkmList(prev => [saved, ...prev.filter(p => p.id !== saved.id)]);
     setUploadNama('');
     setUploadDeskripsi('');
     setPublishSuccessToast(true);
@@ -254,7 +355,7 @@ export const UmkmPage: React.FC = () => {
     <div className="space-y-8 font-sans pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
 
       {/* =========================================================================
-          HERO BANNER (Matching Stitch Mockup 1)
+          HERO BANNER
           ========================================================================= */}
       <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-2xs relative overflow-hidden">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
@@ -271,7 +372,7 @@ export const UmkmPage: React.FC = () => {
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Dukung usaha mikro kota tanpa biaya perantara. Deteksi jarak real-time GPS, pembayaran QRIS langsung atau COD/DO antar mandiri.
+              Dukung usaha mikro kota tanpa biaya perantara. Deteksi jarak real-time GPS, pembayaran QRIS langsung atau COD diantar langsung oleh penjual secara mandiri.
             </p>
           </div>
 
@@ -287,11 +388,10 @@ export const UmkmPage: React.FC = () => {
               </div>
               <button
                 type="button"
-                onClick={handleDetectLocation}
-                disabled={isLocating}
-                className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 text-[11px] font-bold text-blue-700 transition-all cursor-pointer shadow-2xs"
+                onClick={() => setShowLocationModal(true)}
+                className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-blue-400 text-[11px] font-bold text-blue-700 transition-all cursor-pointer shadow-2xs shrink-0"
               >
-                {isLocating ? 'Mendeteksi...' : 'Ubah Titik Lokasi'}
+                Ubah Titik Lokasi
               </button>
             </div>
 
@@ -309,10 +409,10 @@ export const UmkmPage: React.FC = () => {
       </section>
 
       {/* =========================================================================
-          SEARCH BAR & POPULAR KEYWORDS
+          SEARCH BAR & DROPDOWN FILTER SECTION (Strictly Dropdowns with Custom Distance)
           ========================================================================= */}
       <section className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-2xs space-y-4">
-        {/* Input */}
+        {/* Search Input */}
         <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="relative flex-1">
             <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -355,105 +455,158 @@ export const UmkmPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Category Pills */}
-        <div className="pt-2 border-t border-slate-100 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-          {categoryPills.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            return (
+        {/* =====================================================================
+            UNIFIED DROPDOWN FILTER BAR (Kategori, Jarak, Pengiriman, Metode, Rating, Urutkan)
+            ===================================================================== */}
+        <div className="pt-3 border-t border-slate-100 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-xs font-black text-slate-800 uppercase tracking-wider">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
+              <span>Filter Produk & Pengiriman</span>
+            </div>
+            {hasActiveFilters && (
               <button
-                key={cat}
                 type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
-                  isSelected
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200/80'
-                }`}
+                onClick={handleResetFilters}
+                className="text-xs font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 hover:underline cursor-pointer"
               >
-                {cat}
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset Semua Filter</span>
               </button>
-            );
-          })}
-        </div>
-
-        {/* Filter Bar (Jarak, Pengiriman, Metode Bayar, Rating, Urutkan) */}
-        <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
-          
-          {/* Left Filters */}
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-slate-500 font-bold text-[11px] mr-1">Jarak:</span>
-            {[
-              { id: 'all', label: 'Semua Jarak' },
-              { id: '1', label: '1 km' },
-              { id: '3', label: '3 km' },
-              { id: '5', label: '5 km' },
-              { id: '10', label: '10 km' }
-            ].map((d) => (
-              <button
-                key={d.id}
-                type="button"
-                onClick={() => setDistanceFilter(d.id as any)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  distanceFilter === d.id
-                    ? 'bg-blue-50 text-blue-700 border border-blue-300 font-bold'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300'
-                }`}
-              >
-                {d.label}
-              </button>
-            ))}
-
-            {/* Dropdown Pengiriman */}
-            <select
-              value={deliveryFilter}
-              onChange={(e) => setDeliveryFilter(e.target.value)}
-              className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-semibold outline-none cursor-pointer"
-            >
-              <option value="all">Semua Pengiriman</option>
-              <option value="cod">Siap Antar (COD)</option>
-              <option value="do">Delivery Order (DO)</option>
-            </select>
-
-            {/* Dropdown Metode Bayar */}
-            <select
-              value={paymentFilter}
-              onChange={(e) => setPaymentFilter(e.target.value)}
-              className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-semibold outline-none cursor-pointer"
-            >
-              <option value="all">Metode Bayar</option>
-              <option value="qris">QRIS Pedagang</option>
-              <option value="cod">Tunai / COD</option>
-            </select>
-
-            {/* Rating Filter Button */}
-            <button
-              type="button"
-              onClick={() => setMinRatingFilter(!minRatingFilter)}
-              className={`px-3 py-1.5 rounded-lg border text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
-                minRatingFilter
-                  ? 'bg-amber-50 border-amber-300 text-amber-800'
-                  : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
-              }`}
-            >
-              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>4.5+</span>
-            </button>
+            )}
           </div>
 
-          {/* Right Sort Dropdown */}
-          <div className="flex items-center gap-2">
-            <span className="text-slate-400 text-xs">Urutkan:</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold outline-none cursor-pointer"
-            >
-              <option value="distance">Jarak Terdekat (GPS)</option>
-              <option value="rating">Rating Tertinggi</option>
-              <option value="price">Harga Termurah</option>
-              <option value="popular">Paling Banyak Terjual</option>
-            </select>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2.5 text-xs">
+            
+            {/* 1. Dropdown Kategori */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Kategori</label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="Semua">Semua Kategori</option>
+                <option value="Kuliner & Kudapan">Kuliner & Kudapan</option>
+                <option value="Bahan Pokok & Sembako">Bahan Pokok & Sembako</option>
+                <option value="Kriya & Kerajinan">Kriya & Kerajinan</option>
+                <option value="Jasa Panggilan">Jasa Panggilan</option>
+                <option value="Fashion & Batik">Fashion & Batik</option>
+              </select>
+            </div>
+
+            {/* 2. Dropdown Jarak dengan Pilihan Kustom */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Jarak Radius</label>
+              <select
+                value={distanceMode}
+                onChange={(e) => setDistanceMode(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="all">Semua Jarak</option>
+                <option value="1">Maksimal 1 km</option>
+                <option value="3">Maksimal 3 km</option>
+                <option value="5">Maksimal 5 km</option>
+                <option value="10">Maksimal 10 km</option>
+                <option value="custom">Kustom Jarak Sendiri...</option>
+              </select>
+            </div>
+
+            {/* 3. Dropdown Pengiriman (Murni Penjual-Pembeli) */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Metode Pengantaran</label>
+              <select
+                value={deliveryFilter}
+                onChange={(e) => setDeliveryFilter(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="all">Semua Pengiriman</option>
+                <option value="cod">Diantar Langsung Penjual (COD)</option>
+                <option value="ambil">Ambil Sendiri di Lapak</option>
+              </select>
+            </div>
+
+            {/* 4. Dropdown Metode Bayar */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Metode Pembayaran</label>
+              <select
+                value={paymentFilter}
+                onChange={(e) => setPaymentFilter(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="all">Semua Metode</option>
+                <option value="qris">QRIS Penjual Langsung</option>
+                <option value="cod">Tunai / Bayar di Tempat</option>
+              </select>
+            </div>
+
+            {/* 5. Dropdown Rating */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Rating Penilaian</label>
+              <select
+                value={ratingFilter}
+                onChange={(e) => setRatingFilter(e.target.value)}
+                className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="all">Semua Rating</option>
+                <option value="4.5">★ 4.5 Ke Atas</option>
+                <option value="4.8">★ 4.8 Ke Atas</option>
+                <option value="5.0">★ 5.0 Sempurna</option>
+              </select>
+            </div>
+
+            {/* 6. Dropdown Urutkan */}
+            <div>
+              <label className="text-[10px] font-bold text-slate-400 block mb-1">Urutkan Hasil</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="w-full px-3 py-2 rounded-xl bg-blue-50/60 border border-blue-200 text-blue-900 text-xs font-bold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
+              >
+                <option value="distance">Jarak Terdekat (GPS)</option>
+                <option value="rating">Rating Tertinggi</option>
+                <option value="price">Harga Termurah</option>
+                <option value="popular">Paling Banyak Terjual</option>
+              </select>
+            </div>
+
           </div>
+
+          {/* Custom Distance Input Field (When "custom" is selected) */}
+          {distanceMode === 'custom' && (
+            <div className="p-3 rounded-2xl bg-blue-50/50 border border-blue-200 flex flex-wrap items-center gap-3 text-xs animate-fade-in">
+              <span className="font-bold text-blue-900">Tentukan Jarak Maksimal yang Anda Inginkan:</span>
+              <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-xl border border-blue-400 ring-2 ring-blue-100">
+                <input
+                  type="number"
+                  min="0.1"
+                  max="100"
+                  step="0.5"
+                  value={customDistanceKm}
+                  onChange={(e) => setCustomDistanceKm(e.target.value)}
+                  className="w-20 font-black text-blue-700 outline-none text-xs"
+                />
+                <span className="font-bold text-slate-600 text-xs">km dari lokasi saya</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[11px]">
+                <span className="text-slate-400">Pilihan cepat:</span>
+                {['1.5', '2.5', '7.0', '15.0'].map((val) => (
+                  <button
+                    key={val}
+                    type="button"
+                    onClick={() => setCustomDistanceKm(val)}
+                    className={`px-2 py-0.5 rounded-md border font-semibold cursor-pointer ${
+                      customDistanceKm === val
+                        ? 'bg-blue-600 text-white border-blue-600'
+                        : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'
+                    }`}
+                  >
+                    {val} km
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
         </div>
       </section>
@@ -475,7 +628,7 @@ export const UmkmPage: React.FC = () => {
       </div>
 
       {/* =========================================================================
-          3-COLUMN PRODUCT CARDS GRID (Matching Screen 1)
+          3-COLUMN PRODUCT CARDS GRID
           ========================================================================= */}
       {paginatedList.length > 0 ? (
         <div className="space-y-6">
@@ -505,7 +658,7 @@ export const UmkmPage: React.FC = () => {
 
                     {/* Status / Category Tag (Right) */}
                     <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black tracking-wider uppercase shadow-2xs">
-                      {item.badgeTag || (item.isJasa ? 'JASA KILAT' : 'SIAP ANTAR')}
+                      {item.badgeTag || (item.isJasa ? 'JASA KILAT' : 'DIANTAR PENJUAL')}
                     </div>
                   </div>
 
@@ -538,16 +691,16 @@ export const UmkmPage: React.FC = () => {
                         <span className="text-emerald-700 font-semibold">{item.bukaJamText || 'Buka Hari Ini'}</span>
                       </div>
 
-                      {/* Payment Tags */}
+                      {/* Direct Seller Payment & Delivery Tags */}
                       <div className="flex flex-wrap items-center gap-1.5 pt-1">
                         {item.metodePembayaran?.cod && (
                           <span className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-blue-700 font-bold text-[10px]">
-                            Bisa COD / DO
+                            Diantar Langsung Penjual (COD)
                           </span>
                         )}
                         {item.metodePembayaran?.qris && (
                           <span className="px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-100 text-emerald-700 font-bold text-[10px]">
-                            QRIS Pedagang
+                            QRIS Penjual Langsung
                           </span>
                         )}
                       </div>
@@ -622,14 +775,7 @@ export const UmkmPage: React.FC = () => {
           </p>
           <button
             type="button"
-            onClick={() => {
-              setSearchQuery('');
-              setSelectedCategory('Semua');
-              setDistanceFilter('all');
-              setDeliveryFilter('all');
-              setPaymentFilter('all');
-              setMinRatingFilter(false);
-            }}
+            onClick={handleResetFilters}
             className="px-4 py-2 rounded-xl bg-blue-50 text-blue-700 font-bold text-xs hover:bg-blue-100 transition-colors"
           >
             Reset Semua Filter
@@ -638,7 +784,8 @@ export const UmkmPage: React.FC = () => {
       )}
 
       {/* =========================================================================
-          TRANSPARANSI & KEBERPIHAKAN BANNER (Matching Stitch Mockup 1 Bottom)
+          TRANSPARANSI & KEBERPIHAKAN BANNER
+          (Pengiriman murni penjual-pembeli mandiri, tanpa perantara pihak ketiga)
           ========================================================================= */}
       <section className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-2xs space-y-6">
         <div className="text-center space-y-1">
@@ -671,18 +818,111 @@ export const UmkmPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Card 3 */}
+          {/* Card 3: Pure Direct Seller Delivery */}
           <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
             <div className="w-10 h-10 rounded-xl bg-sky-100 text-sky-800 flex items-center justify-center font-black text-sm">
               <Truck className="w-5 h-5" />
             </div>
-            <h4 className="text-sm font-extrabold text-slate-900">Pengantaran Antar RW Cepat</h4>
+            <h4 className="text-sm font-extrabold text-slate-900">Pengantaran Langsung Penjual</h4>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Dukungan pengantaran mandiri langsung antar gang, titip di pos ronda terdekat, atau COD hangat tanpa batas pesanan minimum.
+              Transaksi dan pengantaran dilakukan langsung oleh penjual kepada pembeli secara mandiri atau COD tanpa perantara pihak ketiga, aman dan bebas biaya perantara.
             </p>
           </div>
         </div>
       </section>
+
+      {/* =========================================================================
+          MODAL: UBAH TITIK LOKASI ANDA
+          ========================================================================= */}
+      {showLocationModal && createPortal(
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-lg w-full space-y-5 shadow-2xl border border-sky-100 relative">
+            <button
+              type="button"
+              onClick={() => setShowLocationModal(false)}
+              className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center">
+                <Compass className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-base font-black text-slate-900">Ubah Titik Lokasi Anda</h3>
+                <p className="text-xs text-slate-500">Sesuaikan lokasi untuk menghitung jarak akurat ke UMKM tetangga.</p>
+              </div>
+            </div>
+
+            {/* Current Active Location */}
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
+                <div>
+                  <span className="text-[10px] text-slate-400 block font-medium">Titik Lokasi Saat Ini</span>
+                  <span className="font-bold text-slate-800">{locationLabel}</span>
+                </div>
+              </div>
+              <span className="text-[10px] text-emerald-700 bg-emerald-100 font-bold px-2 py-0.5 rounded-full">Aktif</span>
+            </div>
+
+            {/* Option 1: Browser GPS */}
+            <button
+              type="button"
+              onClick={handleDetectGps}
+              disabled={isLocating}
+              className="w-full py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer transition-all"
+            >
+              <Navigation className="w-4 h-4" />
+              <span>{isLocating ? 'Mendeteksi GPS...' : 'Gunakan GPS Perangkat Saya Sekarang'}</span>
+            </button>
+
+            {/* Option 2: Preset Kelurahan di Kediri */}
+            <div className="space-y-2 pt-1">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
+                ATAU PILIH WILAYAH KOTA KEDIRI
+              </span>
+              <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                {KEDIRI_PRESET_LOCATIONS.map((preset) => (
+                  <button
+                    key={preset.name}
+                    type="button"
+                    onClick={() => handleSelectPresetLocation(preset)}
+                    className="p-2.5 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 text-left transition-colors cursor-pointer group"
+                  >
+                    <div className="font-bold text-slate-800 text-xs group-hover:text-blue-700 truncate">{preset.name}</div>
+                    <div className="text-[10px] text-slate-400 truncate">{preset.desc}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Option 3: Manual text input */}
+            <form onSubmit={handleApplyCustomLocation} className="space-y-2 pt-1 border-t border-slate-100">
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
+                ATAU KETIK NAMA ALAMAT KUSTOM
+              </span>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Contoh: Jl. Dhoho No. 25, Kota Kediri"
+                  value={customLocationInput}
+                  onChange={(e) => setCustomLocationInput(e.target.value)}
+                  className="flex-1 px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs font-medium outline-none focus:bg-white focus:border-blue-500"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs cursor-pointer"
+                >
+                  Terapkan
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>,
+        document.body
+      )}
 
       {/* =========================================================================
           RESTRICTED CITIZEN AUTHENTICATION ALERT MODAL
@@ -707,8 +947,11 @@ export const UmkmPage: React.FC = () => {
                 <span>Akses Khusus Warga Setempat</span>
               </div>
               <h3 className="text-lg font-black text-slate-900 leading-tight">
-                Wajib Login
+                Wajib Masuk / Terdaftar Sebagai Warga Kota
               </h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Layanan buka lapak dagang dan upload produk UMKM di SiDesKu hanya diperuntukkan bagi warga terverifikasi domisili RT/RW setempat. Warga dari luar daerah tidak diizinkan berjualan demi menjaga ekosistem ekonomi tetangga yang adil, jujur, dan aman.
+              </p>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 text-xs text-slate-600">
@@ -727,15 +970,15 @@ export const UmkmPage: React.FC = () => {
                 className="flex-1 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 text-center transition-all cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <LogIn className="w-4 h-4" />
-                <span>Login</span>
+                <span>Masuk / Login</span>
               </Link>
-              {/* <Link
+              <Link
                 to="/register"
                 className="flex-1 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 font-bold text-xs text-center transition-all cursor-pointer flex items-center justify-center gap-1.5"
               >
                 <UserPlus className="w-4 h-4" />
                 <span>Daftar Akun</span>
-              </Link> */}
+              </Link>
             </div>
           </div>
         </div>,
@@ -743,7 +986,7 @@ export const UmkmPage: React.FC = () => {
       )}
 
       {/* =========================================================================
-          STORE MANAGER MODAL (Matching Stitch Mockup 3: Warung Bu Dewi)
+          STORE MANAGER MODAL (Direct Seller)
           ========================================================================= */}
       {showStoreManagerModal && createPortal(
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-5 overflow-y-auto bg-slate-950/70 backdrop-blur-sm animate-fade-in">
@@ -775,7 +1018,7 @@ export const UmkmPage: React.FC = () => {
                     <span>•</span>
                     <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> Sukamaju, Kec. Doko</span>
                     <span>•</span>
-                    <span>★ 4.9 (42 Ulasan Warga)</span>
+                    <span>★ 4.9 (Ulasan Pelanggan)</span>
                     <span>•</span>
                     <span className="text-emerald-300 font-bold">● Buka 08:00 - 20:00 WIB</span>
                   </div>
@@ -804,7 +1047,7 @@ export const UmkmPage: React.FC = () => {
               {publishSuccessToast && (
                 <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Produk baru berhasil dipublikasikan dan langsung muncul di etalase pasar warga!</span>
+                  <span>Produk baru berhasil dipublikasikan dan langsung tersinkronisasi ke katalog pasar warga!</span>
                 </div>
               )}
 
@@ -900,7 +1143,7 @@ export const UmkmPage: React.FC = () => {
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <label className="text-[10px] font-black uppercase tracking-wider text-slate-500 block mb-1">
-                          METODE PEMBAYARAN
+                          METODE PENGIRIMAN & BAYAR
                         </label>
                         <div className="space-y-1.5 pt-1">
                           <label className="flex items-center gap-2 cursor-pointer">
@@ -910,7 +1153,7 @@ export const UmkmPage: React.FC = () => {
                               onChange={(e) => setUploadQris(e.target.checked)}
                               className="rounded text-blue-600"
                             />
-                            <span className="font-semibold text-slate-700">QRIS SiDesKu Toko</span>
+                            <span className="font-semibold text-slate-700">QRIS Langsung Toko</span>
                           </label>
                           <label className="flex items-center gap-2 cursor-pointer">
                             <input
@@ -919,7 +1162,7 @@ export const UmkmPage: React.FC = () => {
                               onChange={(e) => setUploadCod(e.target.checked)}
                               className="rounded text-blue-600"
                             />
-                            <span className="font-semibold text-slate-700">Bisa COD / Bayar di Tempat</span>
+                            <span className="font-semibold text-slate-700">Diantar Langsung Penjual (COD)</span>
                           </label>
                         </div>
                       </div>
@@ -952,51 +1195,6 @@ export const UmkmPage: React.FC = () => {
                 </form>
               </div>
 
-              {/* Katalog Produk Warung Bu Dewi */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-base font-black text-slate-900">Katalog Produk Warung Bu Dewi</h3>
-                    <p className="text-xs text-slate-500">{umkmList.length} produk aktif tayang di katalog pasar warga</p>
-                  </div>
-                  <span className="text-xs text-slate-400">Urutkan: Terbaru</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {umkmList.slice(0, 3).map((prod) => (
-                    <div key={prod.id} className="p-4 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-2xs">
-                      <div className="relative aspect-4/3 rounded-xl overflow-hidden bg-slate-100">
-                        <img src={prod.fotoUrl} alt={prod.nama} className="w-full h-full object-cover" />
-                        <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-black">
-                          ● Aktif • Stok Tersedia
-                        </span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="text-[10px] font-extrabold uppercase text-slate-400">{prod.kategori}</div>
-                        <div className="font-extrabold text-slate-900 text-xs truncate">{prod.nama}</div>
-                        <div className="text-sm font-black text-blue-700">Rp {prod.harga.toLocaleString('id-ID')}</div>
-                      </div>
-                      <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
-                        <button
-                          type="button"
-                          onClick={() => alert(`Fitur edit produk ${prod.nama} siap digunakan.`)}
-                          className="font-bold text-slate-600 hover:text-blue-600"
-                        >
-                          Edit Produk
-                        </button>
-                        <Link
-                          to={`/smart-city/umkm/${prod.id}`}
-                          onClick={() => setShowStoreManagerModal(false)}
-                          className="font-bold text-blue-600 hover:underline"
-                        >
-                          Lihat Halaman
-                        </Link>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
               {/* Bottom QRIS Info */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-3">
@@ -1005,7 +1203,7 @@ export const UmkmPage: React.FC = () => {
                   </div>
                   <div>
                     <div className="font-extrabold text-slate-900">QRIS Resmi Terverifikasi Pemkot • NMID: ID10293847281</div>
-                    <div className="text-slate-500 text-[11px]">QRIS Siap Terima Pembayaran Langsung ke Rekening Bu Dewi (Tanpa Potongan Biaya Admin).</div>
+                    <div className="text-slate-500 text-[11px]">QRIS Siap Terima Pembayaran Langsung ke Rekening Penjual (Tanpa Potongan Biaya Admin).</div>
                   </div>
                 </div>
                 <button
@@ -1059,7 +1257,6 @@ export const UmkmPage: React.FC = () => {
 
             <div className="p-4 bg-white border-2 border-slate-200 rounded-2xl inline-block shadow-inner relative">
               <svg className="w-48 h-48 mx-auto" viewBox="0 0 100 100" fill="currentColor">
-                {/* QR Finder Corners */}
                 <rect x="5" y="5" width="25" height="25" fill="#0f172a" rx="4" />
                 <rect x="8" y="8" width="19" height="19" fill="#ffffff" rx="2" />
                 <rect x="11" y="11" width="13" height="13" fill="#0f172a" rx="2" />
@@ -1072,7 +1269,6 @@ export const UmkmPage: React.FC = () => {
                 <rect x="8" y="73" width="19" height="19" fill="#ffffff" rx="2" />
                 <rect x="11" y="76" width="13" height="13" fill="#0f172a" rx="2" />
 
-                {/* Timing patterns and matrix data cells */}
                 <rect x="35" y="11" width="5" height="5" fill="#0f172a" />
                 <rect x="45" y="11" width="5" height="5" fill="#0f172a" />
                 <rect x="55" y="11" width="5" height="5" fill="#0f172a" />
@@ -1090,14 +1286,13 @@ export const UmkmPage: React.FC = () => {
                 <rect x="65" y="75" width="10" height="15" fill="#0f172a" />
                 <rect x="80" y="70" width="15" height="10" fill="#0f172a" />
 
-                {/* Center QRIS logo badge */}
                 <rect x="42" y="42" width="16" height="16" fill="#0284c7" rx="3" />
                 <path d="M46 50 L50 54 L54 46" stroke="#ffffff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
 
             <p className="text-[11px] text-slate-500 leading-snug">
-              Scan menggunakan GoPay, OVO, Dana, BCA, Livin Mandiri, atau m-Banking apapun tanpa biaya admin tambahan.
+              Scan menggunakan GoPay, OVO, Dana, BCA, Livin Mandiri, atau m-Banking apapun tanpa potongan biaya admin tambahan.
             </p>
 
             <div className="pt-2">
