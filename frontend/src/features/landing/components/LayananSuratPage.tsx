@@ -31,7 +31,7 @@ export interface SuratItem {
   waktu: string;
   biaya: string;
   syarat: string[];
-  kegunaan: string;
+  kegunaan?: string;
 }
 
 interface LayananSuratPageProps {
@@ -282,7 +282,7 @@ export const LayananSuratPage: React.FC<LayananSuratPageProps> = ({ initialTab =
               waktu: item.kode_surat === 'SKM' ? 'Prioritas (10 Menit)' : '10-15 Menit',
               biaya: 'Gratis',
               syarat: parsedSyarat.length > 0 ? parsedSyarat : ['KTP Asli', 'Kartu Keluarga'],
-              kegunaan: item.template_body ? item.template_body.slice(0, 140) + '...' : 'Pelayanan administratif permohonan surat resmi warga.'
+              kegunaan: ''
             };
           });
           setSuratTypes(mapped);
@@ -360,7 +360,6 @@ export const LayananSuratPage: React.FC<LayananSuratPageProps> = ({ initialTab =
       const matchSearch = !q || 
         s.nama.toLowerCase().includes(q) || 
         s.kode.toLowerCase().includes(q) ||
-        s.kegunaan.toLowerCase().includes(q) ||
         s.syarat.some(sy => sy.toLowerCase().includes(q));
       return matchCategory && matchSearch;
     });
@@ -560,10 +559,6 @@ export const LayananSuratPage: React.FC<LayananSuratPageProps> = ({ initialTab =
                     <h3 className="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
                       {s.nama}
                     </h3>
-
-                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
-                      {s.kegunaan}
-                    </p>
 
                     <div className="pt-2 border-t border-slate-100 space-y-1.5 text-[11px] text-slate-600">
                       <div className="font-bold text-slate-700">Persyaratan Utama:</div>
@@ -898,17 +893,10 @@ export const LayananSuratPage: React.FC<LayananSuratPageProps> = ({ initialTab =
 
             <div className="space-y-4 text-xs">
               <div>
-                <span className="font-bold text-slate-800">Kegunaan & Manfaat:</span>
-                <p className="text-slate-600 mt-1 leading-relaxed bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                  {selectedSurat.kegunaan}
-                </p>
-              </div>
-
-              <div>
-                <span className="font-bold text-slate-800">Berkas Persyaratan yang Perlu Disiapkan:</span>
-                <div className="mt-2 space-y-1.5">
+                <span className="font-bold text-slate-800 text-sm">Berkas Persyaratan yang Perlu Disiapkan:</span>
+                <div className="mt-2.5 space-y-2">
                   {selectedSurat.syarat.map((syarat, i) => (
-                    <div key={i} className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-50 border border-slate-100 text-slate-700 font-medium">
+                    <div key={i} className="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100 text-slate-700 font-medium">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                       <span>{syarat}</span>
                     </div>

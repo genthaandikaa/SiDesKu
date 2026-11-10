@@ -142,7 +142,7 @@ export const PublicFooter: React.FC = () => {
             © {new Date().getFullYear()} SMK KARTANEGARA WATES. Hak Cipta Dilindungi.
           </div>
           <div className="flex items-center gap-4 text-xs">
-            <span className="text-slate-400">SiDesKu v2.5</span>
+            <span className="text-slate-400">Nexora 1.0</span>
           </div>
         </div>
       </div>

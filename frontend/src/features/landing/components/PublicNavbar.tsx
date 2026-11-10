@@ -205,7 +205,6 @@ export const PublicNavbar: React.FC = () => {
                 >
                   <LogIn className="w-3.5 h-3.5" />
                   <span>Login</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             )}
