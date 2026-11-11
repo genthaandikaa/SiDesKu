@@ -11,6 +11,10 @@ class RegionalRoleSeeder extends Seeder
 {
     public function run(): void
     {
+        // Keep demo logins available in local development without introducing
+        // a predictable default password in production deployments.
+        $localDemoPassword = app()->environment(['local', 'testing']) ? 'password123' : null;
+
         $roles = [
             [
                 'name' => 'Kecamatan',
@@ -40,14 +44,14 @@ class RegionalRoleSeeder extends Seeder
                 'username' => env('NEXORA_KECAMATAN_USERNAME', 'kecamatan01'),
                 'email' => 'kecamatan.ngasem@nexora.local',
                 'name' => 'Petugas Kecamatan Ngasem',
-                'password' => env('NEXORA_KECAMATAN_PASSWORD'),
+                'password' => env('NEXORA_KECAMATAN_PASSWORD') ?: $localDemoPassword,
             ],
             [
                 'role' => 'kabupaten_kota',
                 'username' => env('NEXORA_KABUPATEN_USERNAME', 'kabupaten01'),
                 'email' => 'admin.kediri@nexora.local',
                 'name' => 'Petugas Kabupaten Kediri',
-                'password' => env('NEXORA_KABUPATEN_PASSWORD'),
+                'password' => env('NEXORA_KABUPATEN_PASSWORD') ?: $localDemoPassword,
             ],
         ];
 
