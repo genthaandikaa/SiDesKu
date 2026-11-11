@@ -1,13 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Activity, AlertCircle, Building2, CalendarDays, CheckCircle2, Download, FileText, Megaphone, Phone, Users } from 'lucide-react';
 import api from '@/shared/lib/axios';
+import { KecamatanWorkspace } from './KecamatanWorkspace';
+import { KabupatenWorkspace } from './KabupatenWorkspace';
 
-interface VillageSummary {
+export interface VillageSummary {
   id: number; nama_desa: string; kecamatan: string; kabupaten: string; telepon?: string | null; email?: string | null;
   jumlah_pengguna_aktif: number; jumlah_warga: number; jumlah_surat: number; surat_selesai: number; surat_diproses: number;
   pengaduan_aktif: number; program_bansos_aktif: number;
 }
-interface RegionalOverview {
+export interface RegionalOverview {
   scope: { role: string; nama_wilayah: string; tingkat: string };
   totals: Omit<VillageSummary, 'id' | 'nama_desa' | 'kecamatan' | 'kabupaten'> & { jumlah_desa: number };
   desa: VillageSummary[];
@@ -36,6 +38,8 @@ export const RegionalOverviewDashboard: React.FC<Props> = ({ roleSlug, activeSub
   }, []);
 
   const isDistrict = roleSlug === 'kecamatan';
+  if (isDistrict) return <KecamatanWorkspace activeSubmenu={activeSubmenu} overview={overview} loading={loading} error={error} />;
+  if (roleSlug === 'kabupaten_kota') return <KabupatenWorkspace activeSubmenu={activeSubmenu} overview={overview} loading={loading} error={error} />;
   const title = overview ? `${overview.scope.tingkat} ${overview.scope.nama_wilayah}` : (isDistrict ? 'Dashboard Kecamatan' : 'Executive Dashboard Kabupaten/Kota');
   const totals = overview?.totals;
   const cards = [

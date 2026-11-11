@@ -2,6 +2,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Briefcase,
+  Home,
+  ChevronRight,
   MapPin,
   Search,
   CheckCircle2,
@@ -9,10 +11,8 @@ import {
   Upload,
   PlusCircle,
   ShieldCheck,
-  ChevronRight,
   ChevronLeft,
   RotateCcw,
-  Building2,
   SlidersHorizontal,
   ExternalLink,
   Award,
@@ -141,19 +141,33 @@ export const LokerPage: React.FC = () => {
   return (
     <div className="w-full pb-20 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
-        {/* Hero Section */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-slate-200">
-          <div className="max-w-3xl">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Peluang Kerja & Jasa Keahlian Warga
-            </h1>
-            <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-              Temukan lowongan formal dan kemitraan jasa mandiri terverifikasi di wilayah kota dengan standar gaji transparan, penempatan terdekat, serta jaminan bebas biaya perantara.
-            </p>
-          </div>
+        <nav aria-label="Breadcrumb" className="mb-4 inline-flex flex-wrap items-center gap-2 rounded-full border border-slate-200/90 bg-white/90 px-3.5 py-1.5 text-xs font-semibold text-slate-500 shadow-2xs backdrop-blur-sm">
+          <Link to="/" className="inline-flex items-center gap-1 transition-colors hover:text-blue-700">
+            <Home className="h-3.5 w-3.5 text-slate-400" />
+            <span>Beranda</span>
+          </Link>
+          <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-300" />
+          <span className="inline-flex items-center gap-1 font-bold text-slate-900">
+            <Briefcase className="h-3.5 w-3.5 text-blue-600" />
+            <span>Bursa Kerja</span>
+          </span>
+        </nav>
 
-          {/* Action CTAs */}
-          <div className="flex items-center gap-3 shrink-0">
+        {/* Hero Section */}
+        <section className="mb-6 rounded-3xl border border-slate-200/90 bg-white p-5 shadow-2xs sm:p-7 lg:p-8">
+          <div className="flex flex-col items-start justify-between gap-5 lg:flex-row lg:items-center sm:gap-6">
+            <div className="max-w-2xl space-y-2">
+              <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700">
+                <Briefcase className="h-3.5 w-3.5 text-blue-600" />
+                <span>Peluang Kerja Terverifikasi</span>
+              </div>
+              <h1 className="text-xl font-black leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                Peluang Kerja & Jasa Keahlian Warga
+              </h1>
+            </div>
+
+            {/* Action CTAs */}
+            <div className="flex w-full shrink-0 flex-col gap-2.5 sm:flex-row lg:w-auto">
             <Link
               to="/smart-city/loker/profil"
               className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-blue-200 bg-white hover:bg-blue-50/70 text-blue-700 text-sm font-semibold transition-all shadow-xs"
@@ -168,8 +182,9 @@ export const LokerPage: React.FC = () => {
               <PlusCircle className="w-4 h-4" />
               <span>Pasang Lowongan / Jasa</span>
             </Link>
+            </div>
           </div>
-        </div>
+        </section>
 
         {/* Search & Filter Bar (Matching Stitch Screen 2 Filter Controls) */}
         <div className="mt-6 bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/90 shadow-xs">
@@ -380,11 +395,6 @@ export const LokerPage: React.FC = () => {
                         </p>
                       </div>
 
-                      {/* Summary Description */}
-                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl line-clamp-2">
-                        {job.ringkasan || job.deskripsi[0]}
-                      </p>
-
                       {/* Skill Tags */}
                       {job.tags && job.tags.length > 0 && (
                         <div className="flex flex-wrap items-center gap-1.5 pt-1">
@@ -399,25 +409,6 @@ export const LokerPage: React.FC = () => {
                         </div>
                       )}
 
-                      {/* Required Documents Tags */}
-                      {job.syaratDokumen && job.syaratDokumen.length > 0 && (
-                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Syarat Berkas:</span>
-                          {job.syaratDokumen.slice(0, 3).map((dok, idx) => (
-                            <span
-                              key={idx}
-                              className="px-2 py-0.5 rounded-md bg-sky-50 text-blue-700 text-[10px] font-bold border border-sky-200"
-                            >
-                              {dok}
-                            </span>
-                          ))}
-                          {job.syaratDokumen.length > 3 && (
-                            <span className="text-[10px] text-slate-400 font-bold">
-                              +{job.syaratDokumen.length - 3} berkas
-                            </span>
-                          )}
-                        </div>
-                      )}
                     </div>
 
                     {/* Right Column: Salary Block & Actions */}

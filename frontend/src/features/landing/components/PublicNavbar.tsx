@@ -114,7 +114,6 @@ export const PublicNavbar: React.FC = () => {
   const smartCitySubItems = [
     {
       name: 'All Store',
-      desc: 'Belanja Produk Warga & UMKM Lokal',
       path: '/smart-city/umkm',
       icon: ShoppingBag,
       color: 'text-amber-600',
@@ -122,7 +121,6 @@ export const PublicNavbar: React.FC = () => {
     },
     {
       name: 'Pencarian Kos & Hunian',
-      desc: 'Kamar Kos & Kontrakan Terverifikasi',
       path: '/smart-city/kos',
       icon: Home,
       color: 'text-sky-600',
@@ -130,7 +128,6 @@ export const PublicNavbar: React.FC = () => {
     },
     {
       name: 'Bursa Kerja & Loker',
-      desc: 'Peluang Kerja Lokal & Lamar CV',
       path: '/smart-city/loker',
       icon: Briefcase,
       color: 'text-emerald-600',
@@ -247,18 +244,17 @@ export const PublicNavbar: React.FC = () => {
                                 key={sub.path}
                                 to={sub.path}
                                 onClick={() => setSmartCityDropdownOpen(false)}
-                                className={`flex items-start gap-2.5 p-2 rounded-xl transition-all ${
+                                className={`relative flex items-center justify-center rounded-xl px-10 py-3 text-center transition-all ${
                                   isSubActive
                                     ? 'bg-sky-50 text-sky-950 border border-sky-200/70 font-bold'
                                     : 'hover:bg-slate-50 text-slate-700 hover:text-sky-900'
                                 }`}
                               >
-                                <div className={`p-2 rounded-lg shrink-0 ${sub.bgColor} ${sub.color}`}>
+                                <div className={`absolute left-2 rounded-lg p-2 ${sub.bgColor} ${sub.color}`}>
                                   <SubIcon className="w-4 h-4" />
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="text-xs font-bold leading-tight">{sub.name}</div>
-                                  <div className="text-[10px] text-slate-500 truncate mt-0.5">{sub.desc}</div>
+                                <div className="w-full min-w-0">
+                                  <div className="truncate text-center text-xs font-bold leading-tight">{sub.name}</div>
                                 </div>
                               </Link>
                             );

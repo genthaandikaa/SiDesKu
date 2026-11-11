@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   ShoppingBag,
+  Home,
   MapPin,
   Search,
   CheckCircle2,
@@ -318,6 +319,17 @@ export const UmkmPage: React.FC = () => {
 
   return (
     <div className="space-y-8 font-sans pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+      <nav aria-label="Breadcrumb" className="relative top-4 inline-flex flex-wrap items-center gap-2 rounded-full border border-slate-200/90 bg-white/90 px-3.5 py-1.5 text-xs font-semibold text-slate-500 shadow-2xs backdrop-blur-sm">
+        <Link to="/" className="inline-flex items-center gap-1 transition-colors hover:text-blue-700">
+          <Home className="h-3.5 w-3.5 text-slate-400" />
+          <span>Beranda</span>
+        </Link>
+        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-300" />
+        <span className="inline-flex items-center gap-1 font-bold text-slate-900">
+          <ShoppingBag className="h-3.5 w-3.5 text-blue-600" />
+          <span>All Store</span>
+        </span>
+      </nav>
 
       {/* =========================================================================
           HERO BANNER (Responsive & Balanced for Mobile, Tablet & Desktop)
@@ -336,9 +348,6 @@ export const UmkmPage: React.FC = () => {
               Belanja Langsung dari Tetangga & UMKM Sekitar
             </h1>
 
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-              Dukung usaha mikro kota tanpa biaya perantara. Deteksi jarak real-time GPS, pembayaran QRIS langsung atau COD diantar langsung oleh penjual secara mandiri.
-            </p>
           </div>
 
           {/* Right Action: Geolocation Card & CTA Button */}
@@ -898,10 +907,7 @@ export const UmkmPage: React.FC = () => {
           <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
             <Search className="w-5 h-5 text-slate-400" />
           </div>
-          <h4 className="text-base font-bold text-slate-800">Tidak ada produk yang cocok</h4>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
-            Coba kurangi filter jarak atau ganti kata kunci pencarian Anda untuk melihat produk tetangga lainnya.
-          </p>
+          <h4 className="text-base font-bold text-slate-800">Belum ada produk</h4>
           <button
             type="button"
             onClick={handleResetFilters}

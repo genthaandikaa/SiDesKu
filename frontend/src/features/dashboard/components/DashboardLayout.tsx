@@ -247,9 +247,17 @@ export const DashboardLayout: React.FC = () => {
       if (path.startsWith('/dashboard/keuangan')) return 'keuangan_desa';
       if (path.startsWith('/dashboard/profil')) return 'profil_saya';
       if (path.startsWith('/dashboard/notifikasi')) return 'notifikasi';
-      if (queryTab) return queryTab;
+      if (queryTab) {
+        if (roleSlug === 'kecamatan' && queryTab === 'monitoring_desa') return 'beranda';
+        if (roleSlug === 'kabupaten_kota' && ['peta_wilayah', 'peta-wilayah'].includes(queryTab)) return 'beranda';
+        return queryTab;
+      }
       const saved = localStorage.getItem(`nexora_active_dashboard_tab_${roleSlug}`) || localStorage.getItem('nexora_active_dashboard_tab');
-      if (saved) return saved;
+      if (saved) {
+        if (roleSlug === 'kecamatan' && saved === 'monitoring_desa') return 'beranda';
+        if (roleSlug === 'kabupaten_kota' && saved === 'peta_wilayah') return 'beranda';
+        return saved;
+      }
     } catch (e) {
       // ignore
     }
@@ -337,6 +345,22 @@ export const DashboardLayout: React.FC = () => {
     const path = location.pathname.replace(/\/$/, '');
     const searchParams = new URLSearchParams(location.search);
     const queryTab = searchParams.get('tab') || searchParams.get('menu');
+
+    const savedTab = localStorage.getItem(`nexora_active_dashboard_tab_${roleSlug}`) || localStorage.getItem('nexora_active_dashboard_tab');
+    if (roleSlug === 'kecamatan' && (queryTab === 'monitoring_desa' || (!queryTab && savedTab === 'monitoring_desa'))) {
+      localStorage.setItem(`nexora_active_dashboard_tab_${roleSlug}`, 'beranda');
+      localStorage.setItem('nexora_active_dashboard_tab', 'beranda');
+      setActiveMenu('beranda');
+      navigate('/dashboard', { replace: true });
+      return;
+    }
+    if (roleSlug === 'kabupaten_kota' && (['peta_wilayah', 'peta-wilayah'].includes(queryTab || '') || (!queryTab && savedTab === 'peta_wilayah'))) {
+      localStorage.setItem(`nexora_active_dashboard_tab_${roleSlug}`, 'beranda');
+      localStorage.setItem('nexora_active_dashboard_tab', 'beranda');
+      setActiveMenu('beranda');
+      navigate('/dashboard', { replace: true });
+      return;
+    }
 
     let resolvedMenu = 'beranda';
     if (path.startsWith('/dashboard/smart-city-umkm/tambah')) {
@@ -862,9 +886,9 @@ export const DashboardLayout: React.FC = () => {
           {
             title: 'Smart City Warga',
             items: [
-              { id: 'smart_city_umkm', label: 'Toko & UMKM Saya', icon: ShoppingBag },
+              { id: 'smart_city_umkm', label: 'Kelola UMKM Saya', icon: ShoppingBag },
               { id: 'smart_city_kos', label: 'Kelola Kos & Hunian', icon: Home },
-              { id: 'smart_city_loker', label: 'Bursa Kerja & Loker', icon: Briefcase },
+              { id: 'smart_city_loker', label: 'Kelola Lowongan Saya', icon: Briefcase },
             ],
           },
           {
@@ -1038,7 +1062,6 @@ export const DashboardLayout: React.FC = () => {
             title: 'Ringkasan Wilayah',
             items: [
               { id: 'beranda', label: 'Dashboard Kecamatan', icon: Home },
-              { id: 'monitoring_desa', label: 'Desa Binaan', icon: Building2 },
             ],
           },
           {
