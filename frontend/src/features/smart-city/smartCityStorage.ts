@@ -669,6 +669,37 @@ export function submitStoredLamaran(lamaran: LamaranLoker): LamaranLoker[] {
   return updated;
 }
 
+export function sanitizeJobSeekerProfile(p: JobSeekerProfile): JobSeekerProfile {
+  const cleaned: JobSeekerProfile = { ...p };
+  // Sanitize salary
+  if (cleaned.preferensi) {
+    let gaji = cleaned.preferensi.gaji || '';
+    if (gaji.includes('4.800.000') || gaji.includes('4800000')) {
+      gaji = '4.8 - 5.5 jt / bulan';
+    } else if (gaji.includes('5.200.000') || gaji.includes('5200000')) {
+      gaji = '5.2 jt / bulan';
+    } else if (gaji.startsWith('Rp ')) {
+      gaji = gaji.replace(/^Rp\s*/, '').replace(/\.000\.000/g, ' jt').replace(/\.000/g, ' rb');
+    }
+    cleaned.preferensi = {
+      ...cleaned.preferensi,
+      gaji: gaji || '4.8 - 5.5 jt / bulan'
+    };
+  }
+
+  // Sanitize berkas pendukung
+  if (Array.isArray(cleaned.berkasPendukung)) {
+    cleaned.berkasPendukung = cleaned.berkasPendukung.map((b) => ({
+      ...b,
+      judul: b.judul.replace(/BNSP/gi, 'Keahlian Terpadu'),
+      subjudul: b.subjudul.replace(/BLK Disnaker/gi, 'Pusat Pelatihan Kerja').replace(/Disnaker/gi, 'Ketenagakerjaan'),
+      noReg: b.noReg.replace(/Reg\.\s*BNSP/gi, 'No. SK').replace(/BNSP/gi, 'SK')
+    }));
+  }
+
+  return cleaned;
+}
+
 // --- JOB SEEKER PROFILE ---
 export function getStoredJobSeekerProfile(): JobSeekerProfile {
   try {
@@ -676,11 +707,11 @@ export function getStoredJobSeekerProfile(): JobSeekerProfile {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (parsed && parsed.nama) {
-        return { ...DEFAULT_JOB_SEEKER_PROFILE, ...parsed };
+        return sanitizeJobSeekerProfile({ ...DEFAULT_JOB_SEEKER_PROFILE, ...parsed });
       }
     }
   } catch {}
-  return DEFAULT_JOB_SEEKER_PROFILE;
+  return sanitizeJobSeekerProfile(DEFAULT_JOB_SEEKER_PROFILE);
 }
 
 export function saveStoredJobSeekerProfile(profile: JobSeekerProfile): JobSeekerProfile {

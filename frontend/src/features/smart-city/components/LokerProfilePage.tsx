@@ -18,7 +18,7 @@ import {
   ChevronRight,
   ShieldCheck,
   MapPin,
-  DollarSign,
+  Banknote,
   Clock,
   Sparkles,
   Check,
@@ -34,7 +34,8 @@ import { smartCityApi } from '../api/smartCityApi';
 import {
   getStoredJobSeekerProfile,
   saveStoredJobSeekerProfile,
-  getStoredLamaranList
+  getStoredLamaranList,
+  sanitizeJobSeekerProfile
 } from '../smartCityStorage';
 import { useAuth } from '@/shared/context/AuthContext';
 
@@ -59,7 +60,8 @@ export const LokerProfilePage: React.FC = () => {
     window.scrollTo(0, 0);
 
     // Fetch from backend API
-    smartCityApi.getJobSeekerProfile().then((p) => {
+    smartCityApi.getJobSeekerProfile().then((raw) => {
+      const p = sanitizeJobSeekerProfile(raw);
       if (user?.name && (!p.nama || p.nama === 'Budi Pratama')) {
         p.nama = user.name;
       }
@@ -70,7 +72,8 @@ export const LokerProfilePage: React.FC = () => {
       setEditGaji(p.preferensi.gaji);
       setEditArea(p.preferensi.area);
     }).catch(() => {
-      const p = getStoredJobSeekerProfile();
+      const raw = getStoredJobSeekerProfile();
+      const p = sanitizeJobSeekerProfile(raw);
       if (user?.name && (!p.nama || p.nama === 'Budi Pratama')) {
         p.nama = user.name;
       }
@@ -678,7 +681,7 @@ export const LokerProfilePage: React.FC = () => {
 
                   <div>
                     <div className="flex items-center gap-1.5 text-slate-500 font-medium">
-                      <DollarSign className="w-3.5 h-3.5 text-blue-600" />
+                      <Banknote className="w-3.5 h-3.5 text-blue-600" />
                       <span>Ekspektasi Gaji</span>
                     </div>
                     <p className="font-bold text-slate-900 mt-0.5">{profile.preferensi.gaji}</p>

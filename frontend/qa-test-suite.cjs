@@ -564,11 +564,15 @@ async function sleep(ms) {
         await sleep(1000);
 
         // Fill New Product Form
-        const namaProdukInput = page.locator('input[placeholder*="Contoh: Sayur Asem"], input[placeholder*="Nama Produk"]').first();
+        const namaProdukInput = page.locator('input[placeholder*="Nasi Liwet"], input[placeholder*="Contoh: Sayur Asem"], input[placeholder*="Nama Produk"]').first();
         if (await namaProdukInput.isVisible()) {
           await namaProdukInput.fill('Sambal Bawang Kediri Botolan');
+          const tokoInput = page.locator('input[placeholder*="Warung Barokah"]').first();
+          if (await tokoInput.isVisible()) await tokoInput.fill('Warung Barokah Bu Dewi');
           const hargaInput = page.locator('input[type="number"]').first();
           if (await hargaInput.isVisible()) await hargaInput.fill('18000');
+          const kontakInput = page.locator('input[placeholder*="08"]').first();
+          if (await kontakInput.isVisible()) await kontakInput.fill('081234567890');
           const descInput = page.locator('textarea').first();
           if (await descInput.isVisible()) await descInput.fill('Sambal bawang pedas nampol dengan minyak kelapa asli tanpa pengawet.');
 
