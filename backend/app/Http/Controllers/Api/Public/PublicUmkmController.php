@@ -188,8 +188,19 @@ class PublicUmkmController extends Controller
         $reviewerName = $user->name ?? 'Warga Kediri';
         $rtRw = null;
         if (method_exists($user, 'wargaProfile') && $user->wargaProfile) {
-            $rtRw = ($user->wargaProfile->rt ? 'RT ' . $user->wargaProfile->rt : '') .
-                ($user->wargaProfile->rw ? ' / RW ' . $user->wargaProfile->rw : '');
+            $profile = $user->wargaProfile;
+            $rtObj = $profile->rt;
+            $rtNum = is_object($rtObj) ? ($rtObj->nomor_rt ?? null) : (is_scalar($rtObj) ? $rtObj : null);
+            $rwNum = is_object($rtObj) && is_object($rtObj->rw) ? ($rtObj->rw->nomor_rw ?? null) : null;
+
+            $parts = [];
+            if ($rtNum) {
+                $parts[] = 'RT ' . $rtNum;
+            }
+            if ($rwNum) {
+                $parts[] = 'RW ' . $rwNum;
+            }
+            $rtRw = !empty($parts) ? implode(' / ', $parts) : null;
         }
 
         $review = UmkmReview::create([
@@ -238,6 +249,7 @@ class PublicUmkmController extends Controller
             'nama' => 'required|string|max:255',
             'kategori' => 'required|string|max:100',
             'harga' => 'required|numeric|min:0',
+            'ongkir' => 'nullable|numeric|min:0',
             'satuan' => 'nullable|string|max:50',
             'deskripsi' => 'nullable|string|max:2000',
             'foto_url' => 'nullable|string',
@@ -258,6 +270,54 @@ class PublicUmkmController extends Controller
         $id = 'umkm-' . time() . '-' . rand(100, 999);
         $tokoNama = $request->input('toko_nama') ?: ($user->name ? "Usaha {$user->name}" : 'Warung Warga');
 
+        // Process Foto Produk (dari Base64 Galeri/Kamera atau URL)
+        $fotoUrl = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80';
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = 'prod_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/umkm_produk'), $filename);
+            $fotoUrl = '/uploads/umkm_produk/' . $filename;
+        } elseif ($rawFoto = $request->input('foto_url')) {
+            if (str_starts_with($rawFoto, 'data:image/')) {
+                $uploadResult = \App\Services\FileUploadSecurityService::processBase64Upload(
+                    $rawFoto,
+                    ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
+                    5 * 1024 * 1024,
+                    'umkm_produk',
+                    'prod_' . time()
+                );
+                if (!empty($uploadResult['success']) && !empty($uploadResult['url'])) {
+                    $fotoUrl = $uploadResult['url'];
+                }
+            } else {
+                $fotoUrl = $rawFoto;
+            }
+        }
+
+        // Process QRIS Toko (dari Base64 Galeri/Kamera atau URL)
+        $qrisUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SIDESKU_QRIS_DEMO';
+        if ($request->hasFile('qris_file')) {
+            $file = $request->file('qris_file');
+            $filename = 'qris_' . time() . '_' . bin2hex(random_bytes(4)) . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/umkm_qris'), $filename);
+            $qrisUrl = '/uploads/umkm_qris/' . $filename;
+        } elseif ($rawQris = $request->input('qris_url')) {
+            if (str_starts_with($rawQris, 'data:image/')) {
+                $uploadResult = \App\Services\FileUploadSecurityService::processBase64Upload(
+                    $rawQris,
+                    ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'],
+                    5 * 1024 * 1024,
+                    'umkm_qris',
+                    'qris_' . time()
+                );
+                if (!empty($uploadResult['success']) && !empty($uploadResult['url'])) {
+                    $qrisUrl = $uploadResult['url'];
+                }
+            } else {
+                $qrisUrl = $rawQris;
+            }
+        }
+
         $umkm = Umkm::create([
             'id' => $id,
             'desa_id' => $user->desa_id ?? 1,
@@ -269,15 +329,16 @@ class PublicUmkmController extends Controller
             'kategori' => $request->input('kategori'),
             'badge_tag' => $request->input('badge_tag', 'PRODUKSI SENDIRI'),
             'harga' => (float) $request->input('harga'),
+            'ongkir' => (float) $request->input('ongkir', 0),
             'satuan' => $request->input('satuan', 'Porsi'),
             'deskripsi' => $request->input('deskripsi', 'Produk segar olahan warga lokal tanpa bahan pengawet.'),
-            'foto_url' => $request->input('foto_url', 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'),
-            'galeri' => [$request->input('foto_url', 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80')],
+            'foto_url' => $fotoUrl,
+            'galeri' => [$fotoUrl],
             'alamat' => $request->input('alamat', 'Kota Kediri'),
             'lat' => $request->input('lat', -7.8166),
             'lng' => $request->input('lng', 112.0118),
             'wa_kontak' => $request->input('wa_kontak', '6281234567801'),
-            'qris_url' => $request->input('qris_url', 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SIDESKU_QRIS_DEMO'),
+            'qris_url' => $qrisUrl,
             'qris_nama' => 'QRIS ' . strtoupper($tokoNama),
             'qris_nmid' => 'ID10293847281',
             'metode_pembayaran' => [
@@ -300,6 +361,67 @@ class PublicUmkmController extends Controller
             'message' => 'Produk UMKM berhasil dipublikasikan!',
             'data' => $umkm
         ], 201);
+    }
+
+    /**
+     * Get UMKM items owned by authenticated citizen.
+     */
+    public function myUmkms(Request $request): JsonResponse
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated',
+                'data' => []
+            ], 401);
+        }
+
+        $items = Umkm::where('user_id', $user->id)
+            ->with('reviews')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $items
+        ]);
+    }
+
+    /**
+     * Delete an UMKM item owned by authenticated citizen.
+     */
+    public function destroy(Request $request, $id): JsonResponse
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthenticated'
+            ], 401);
+        }
+
+        $umkm = Umkm::where('id', $id)->first();
+        if (!$umkm) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Produk tidak ditemukan.'
+            ], 404);
+        }
+
+        if ($umkm->user_id && (int) $umkm->user_id !== (int) $user->id) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda tidak memiliki hak akses untuk menghapus produk ini.'
+            ], 403);
+        }
+
+        $umkm->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Produk berhasil dihapus.'
+        ]);
     }
 
     /**

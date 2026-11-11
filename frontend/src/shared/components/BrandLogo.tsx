@@ -68,7 +68,8 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       {/* Dynamic Typography */}
       <div className="flex min-w-0 flex-col justify-center">
         <div className={`flex min-w-0 flex-nowrap items-center gap-x-1 whitespace-nowrap tracking-tight leading-tight ${isDark ? 'text-white' : 'text-slate-900'} ${textSizes[size]}`}>
-          <span>Nexora</span>
+          <span>Kota</span>
+          <span className="text-blue-600 font-extrabold">Kediri</span>
         </div>
         
         {showSubtitle && (

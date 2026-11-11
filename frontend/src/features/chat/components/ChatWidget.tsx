@@ -222,7 +222,7 @@ export const ChatWidget: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-40 bg-blue-600 hover:bg-blue-700 text-white p-3.5 sm:px-4 sm:py-3 rounded-full shadow-lg flex items-center gap-2.5 transition-all duration-200 hover:scale-105 cursor-pointer group"
+          className="fixed bottom-20 lg:bottom-6 right-4 sm:right-6 z-40 bg-blue-600 hover:bg-blue-700 text-white p-3.5 sm:px-4 sm:py-3 rounded-full shadow-lg flex items-center gap-2.5 transition-all duration-200 hover:scale-105 cursor-pointer group"
           title="Pusat Pesan & Chat Terenkripsi Desa"
         >
           <div className="relative">

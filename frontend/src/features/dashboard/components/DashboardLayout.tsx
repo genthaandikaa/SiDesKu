@@ -231,6 +231,12 @@ export const DashboardLayout: React.FC = () => {
       const path = typeof window !== 'undefined' ? window.location.pathname.replace(/\/$/, '') : '';
       const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
       const queryTab = searchParams.get('tab') || searchParams.get('menu');
+      if (path.startsWith('/dashboard/smart-city-umkm/tambah')) return 'smart_city_umkm_tambah';
+      if (path.startsWith('/dashboard/smart-city-umkm')) return 'smart_city_umkm';
+      if (path.startsWith('/dashboard/smart-city-kos/tambah')) return 'smart_city_kos_tambah';
+      if (path.startsWith('/dashboard/smart-city-kos')) return 'smart_city_kos';
+      if (path.startsWith('/dashboard/smart-city-loker/tambah')) return 'smart_city_loker_tambah';
+      if (path.startsWith('/dashboard/smart-city-loker')) return 'smart_city_loker';
       if (path.startsWith('/dashboard/ajukan')) return 'ajukan_surat';
       if (path.startsWith('/dashboard/berkas')) return 'berkas_kependudukan';
       if (path.startsWith('/dashboard/status-surat') || path.startsWith('/dashboard/status_surat')) return 'status_surat';
@@ -261,6 +267,12 @@ export const DashboardLayout: React.FC = () => {
     }
 
     const pathToMenu: Record<string, string> = {
+      smart_city_umkm: '/dashboard/smart-city-umkm',
+      smart_city_kos: '/dashboard/smart-city-kos',
+      smart_city_loker: '/dashboard/smart-city-loker',
+      smart_city_umkm_tambah: '/dashboard/smart-city-umkm/tambah',
+      smart_city_kos_tambah: '/dashboard/smart-city-kos/tambah',
+      smart_city_loker_tambah: '/dashboard/smart-city-loker/tambah',
       beranda: '/dashboard',
       ajukan_surat: '/dashboard/ajukan',
       berkas_kependudukan: '/dashboard/berkas',
@@ -327,7 +339,19 @@ export const DashboardLayout: React.FC = () => {
     const queryTab = searchParams.get('tab') || searchParams.get('menu');
 
     let resolvedMenu = 'beranda';
-    if (path.startsWith('/dashboard/kelola-desa')) {
+    if (path.startsWith('/dashboard/smart-city-umkm/tambah')) {
+      resolvedMenu = 'smart_city_umkm_tambah';
+    } else if (path.startsWith('/dashboard/smart-city-umkm')) {
+      resolvedMenu = 'smart_city_umkm';
+    } else if (path.startsWith('/dashboard/smart-city-kos/tambah')) {
+      resolvedMenu = 'smart_city_kos_tambah';
+    } else if (path.startsWith('/dashboard/smart-city-kos')) {
+      resolvedMenu = 'smart_city_kos';
+    } else if (path.startsWith('/dashboard/smart-city-loker/tambah')) {
+      resolvedMenu = 'smart_city_loker_tambah';
+    } else if (path.startsWith('/dashboard/smart-city-loker')) {
+      resolvedMenu = 'smart_city_loker';
+    } else if (path.startsWith('/dashboard/kelola-desa')) {
       resolvedMenu = 'kelola_desa';
     } else if (path.startsWith('/dashboard/tambah-desa')) {
       resolvedMenu = 'tambah_desa';
@@ -1317,10 +1341,14 @@ export const DashboardLayout: React.FC = () => {
       if (roleSlug === 'warga') return <AspirasiPengaduanWargaView />;
     }
     if (activeMenu.startsWith('smart_city_')) {
-      const initialTab = activeMenu.replace('smart_city_', '') as 'umkm' | 'kos' | 'loker';
+      const isCreate = activeMenu.endsWith('_tambah') || location.pathname.endsWith('/tambah');
+      let section: 'umkm' | 'kos' | 'loker' = 'umkm';
+      if (activeMenu.includes('kos')) section = 'kos';
+      if (activeMenu.includes('loker')) section = 'loker';
+
       return (
         <React.Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Memuat Smart City Warga...</div>}>
-          <WargaSmartCityManager initialTab={initialTab} />
+          <WargaSmartCityManager activeSection={section} isCreateMode={isCreate} onNavigate={handleMenuNavigate} />
         </React.Suspense>
       );
     }
@@ -1381,7 +1409,10 @@ export const DashboardLayout: React.FC = () => {
               {group.items.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeMenu === item.id || 
-                  (item.id.startsWith('agenda_') && activeMenu.startsWith('agenda_'));
+                  (item.id.startsWith('agenda_') && activeMenu.startsWith('agenda_')) ||
+                  (item.id === 'smart_city_umkm' && activeMenu.startsWith('smart_city_umkm')) ||
+                  (item.id === 'smart_city_kos' && activeMenu.startsWith('smart_city_kos')) ||
+                  (item.id === 'smart_city_loker' && activeMenu.startsWith('smart_city_loker'));
                 return (
                   <button
                     key={item.id}

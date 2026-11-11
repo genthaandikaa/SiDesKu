@@ -26,6 +26,7 @@ class Umkm extends Model
         'kategori',
         'badge_tag',
         'harga',
+        'ongkir',
         'satuan',
         'deskripsi',
         'foto_url',
@@ -54,6 +55,7 @@ class Umkm extends Model
 
     protected $casts = [
         'harga' => 'float',
+        'ongkir' => 'float',
         'rating' => 'float',
         'reviews_count' => 'integer',
         'terjual' => 'integer',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Store,
   ShoppingBag,
@@ -18,7 +18,15 @@ import {
   Sparkles,
   Phone,
   FileText,
-  AlertCircle
+  AlertCircle,
+  ArrowLeft,
+  ChevronRight,
+  User,
+  Users,
+  Camera,
+  Image as ImageIcon,
+  X,
+  RotateCcw
 } from 'lucide-react';
 import { UmkmItem, HunianItem, LokerItem, LamaranLoker } from '../types';
 import {
@@ -34,15 +42,27 @@ import {
   getStoredLamaranList,
   KEDIRI_DEFAULT_COORDS
 } from '../smartCityStorage';
+import { detectSmartCityLocation } from '../services/locationService';
+import { smartCityApi } from '../api/smartCityApi';
+import { useAuth } from '@/shared/context/AuthContext';
 
 interface WargaSmartCityManagerProps {
+  activeSection?: 'umkm' | 'kos' | 'loker';
+  isCreateMode?: boolean;
+  onNavigate?: (menuId: string) => void;
   initialTab?: 'umkm' | 'kos' | 'loker';
 }
 
-export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ initialTab = 'umkm' }) => {
-  const [activeTab, setActiveTab] = useState<'umkm' | 'kos' | 'loker'>(initialTab);
+export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
+  activeSection = 'umkm',
+  isCreateMode = false,
+  onNavigate,
+  initialTab = 'umkm',
+}) => {
+  const currentSection = activeSection || initialTab;
+  const { user } = useAuth();
 
-  // Lists
+  // Lists (Specific to this authenticated citizen)
   const [umkmList, setUmkmList] = useState<UmkmItem[]>([]);
   const [kosList, setKosList] = useState<HunianItem[]>([]);
   const [lokerList, setLokerList] = useState<LokerItem[]>([]);
@@ -52,33 +72,118 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    setUmkmList(getStoredUmkmList());
-    setKosList(getStoredKosList());
-    setLokerList(getStoredLokerList());
+    // 1. Fetch authenticated citizen's personal UMKM products from backend
+    smartCityApi.getMyUmkmList().then((res: UmkmItem[]) => {
+      if (res && Array.isArray(res)) {
+        setUmkmList(res);
+      }
+    }).catch(() => {
+      setUmkmList([]);
+    });
+
+    // 2. Kos & Loker (Filter by citizen's name / ownership)
+    const storedKos = getStoredKosList();
+    const storedLoker = getStoredLokerList();
+
+    if (user?.name) {
+      const uName = user.name.toLowerCase();
+      setKosList(storedKos.filter(k => k.pemilikNama && k.pemilikNama.toLowerCase().includes(uName)));
+      setLokerList(storedLoker.filter(l => l.perusahaan && l.perusahaan.toLowerCase().includes(uName)));
+    } else {
+      setKosList([]);
+      setLokerList([]);
+    }
+
     setLamaranList(getStoredLamaranList());
-  }, []);
+  }, [user]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3000);
+    setTimeout(() => setToastMessage(null), 3500);
   };
 
   // =========================================================================
   // 1. UMKM FORM STATE
   // =========================================================================
-  const [showAddUmkm, setShowAddUmkm] = useState(false);
   const [tokoNama, setTokoNama] = useState('');
   const [produkNama, setProdukNama] = useState('');
-  const [produkKategori, setProdukKategori] = useState<any>('Kuliner');
+  const [produkKategori, setProdukKategori] = useState<any>('Kuliner & Kudapan');
   const [produkHarga, setProdukHarga] = useState<number>(20000);
-  const [produkSatuan, setProdukSatuan] = useState('porsi');
+  const [produkOngkir, setProdukOngkir] = useState<number>(0);
+  const [produkSatuan, setProdukSatuan] = useState('Porsi');
   const [produkDeskripsi, setProdukDeskripsi] = useState('');
   const [produkFotoUrl, setProdukFotoUrl] = useState('');
+  const [produkFotoNama, setProdukFotoNama] = useState('');
+  const [isProcessingFoto, setIsProcessingFoto] = useState(false);
+  const fileInputUmkmRef = useRef<HTMLInputElement>(null);
+  const cameraInputUmkmRef = useRef<HTMLInputElement>(null);
+
   const [tokoAlamat, setTokoAlamat] = useState('');
   const [tokoWa, setTokoWa] = useState('');
   const [tokoLat, setTokoLat] = useState<number>(KEDIRI_DEFAULT_COORDS.lat);
   const [tokoLng, setTokoLng] = useState<number>(KEDIRI_DEFAULT_COORDS.lng);
   const [isDetectingUmkmGps, setIsDetectingUmkmGps] = useState(false);
+
+  // Client-side image compressor for gallery/camera uploads
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target?.result as string;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const maxDim = 1200;
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            }
+          } else {
+            if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', 0.85));
+          } else {
+            resolve(e.target?.result as string);
+          }
+        };
+        img.onerror = reject;
+      };
+      reader.onerror = reject;
+    });
+  };
+
+  const handleSelectProdukFoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Mohon pilih file gambar (JPG, PNG, WEBP).');
+      return;
+    }
+    setIsProcessingFoto(true);
+    try {
+      const dataUrl = await compressImage(file);
+      setProdukFotoUrl(dataUrl);
+      setProdukFotoNama(file.name || 'Foto Kamera Produk');
+      showToast('Foto produk berhasil dipilih!');
+    } catch {
+      alert('Gagal memproses foto. Silakan coba lagi.');
+    } finally {
+      setIsProcessingFoto(false);
+      e.target.value = '';
+    }
+  };
 
   // Payment Options
   const [payQris, setPayQris] = useState(true);
@@ -87,50 +192,47 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
   const [payCod, setPayCod] = useState(true);
   const [payDo, setPayDo] = useState(true);
 
-  const handleDetectUmkmGps = () => {
-    if (!navigator.geolocation) {
-      alert('Perangkat Anda tidak mendukung deteksi lokasi otomatis.');
-      return;
-    }
+  const handleDetectUmkmGps = async () => {
     setIsDetectingUmkmGps(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setTokoLat(pos.coords.latitude);
-        setTokoLng(pos.coords.longitude);
-        setIsDetectingUmkmGps(false);
-        showToast('Titik koordinat GPS toko berhasil dikunci!');
-      },
-      () => {
-        setIsDetectingUmkmGps(false);
-        alert('Gagal mendeteksi koordinat. Menggunakan koordinat pusat Kediri.');
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    );
+    try {
+      const loc = await detectSmartCityLocation();
+      setTokoLat(loc.lat);
+      setTokoLng(loc.lng);
+      showToast(`Titik koordinat toko berhasil dikunci (${loc.label})!`);
+    } catch {
+      showToast('Menggunakan koordinat default wilayah.');
+    } finally {
+      setIsDetectingUmkmGps(false);
+    }
   };
 
-  const handleSaveUmkm = (e: React.FormEvent) => {
+  const handleSaveUmkm = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!produkNama || !tokoNama || !tokoWa) {
+    if (!produkNama.trim() || !tokoNama.trim() || !tokoWa.trim()) {
       alert('Mohon isi nama produk, nama toko, dan nomor WhatsApp.');
       return;
     }
 
     const newItem: UmkmItem = {
       id: `umkm-${Date.now()}`,
-      nama: produkNama,
-      tokoNama,
+      nama: produkNama.trim(),
+      tokoNama: tokoNama.trim(),
+      kelurahan: 'Kel. Sukamaju',
+      rtRw: 'RT 03 / RW 04',
       kategori: produkKategori,
-      harga: Number(produkHarga),
-      satuan: produkSatuan || 'pcs',
-      deskripsi: produkDeskripsi || 'Produk UMKM lokal warga Kediri.',
+      badgeTag: 'PRODUKSI SENDIRI',
+      harga: Number(produkHarga) || 0,
+      ongkir: Number(produkOngkir) || 0,
+      satuan: produkSatuan || 'Porsi',
+      deskripsi: produkDeskripsi.trim() || 'Produk segar olahan warga lokal tanpa bahan pengawet. Pengantaran langsung oleh penjual.',
       fotoUrl:
-        produkFotoUrl ||
-        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
-      alamat: tokoAlamat || 'Kota Kediri',
+        produkFotoUrl.trim() ||
+        'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+      alamat: tokoAlamat.trim() || 'Kota Kediri',
       lat: tokoLat,
       lng: tokoLng,
       waKontak: tokoWa.replace(/\D/g, ''),
-      qrisUrl: payQris ? payQrisUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=NEXORA_QRIS_DEFAULT' : undefined,
+      qrisUrl: payQris ? payQrisUrl || 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=SIDESKU_QRIS_DEFAULT' : undefined,
       qrisNama: payQrisNama || tokoNama,
       metodePembayaran: {
         qris: payQris,
@@ -144,21 +246,36 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
       createdAt: new Date().toISOString()
     };
 
-    const updated = saveStoredUmkmItem(newItem);
-    setUmkmList(updated);
-    setShowAddUmkm(false);
+    try {
+      const created = await smartCityApi.createUmkmProduct(newItem);
+      if (created) {
+        setUmkmList(prev => [created, ...prev.filter(p => p.id !== created.id)]);
+      } else {
+        setUmkmList(prev => [newItem, ...prev.filter(p => p.id !== newItem.id)]);
+      }
+    } catch {
+      setUmkmList(prev => [newItem, ...prev.filter(p => p.id !== newItem.id)]);
+    }
+
+    saveStoredUmkmItem(newItem);
     showToast('Toko & Produk berhasil disimpan dan langsung tayang di portal UMKM!');
 
     // Reset Form
     setProdukNama('');
     setProdukDeskripsi('');
     setProdukFotoUrl('');
+
+    // Navigate back to list URL
+    if (onNavigate) {
+      onNavigate('smart_city_umkm');
+    }
   };
 
-  const handleDeleteUmkm = (id: string) => {
+  const handleDeleteUmkm = async (id: string) => {
     if (confirm('Hapus produk ini dari pasar UMKM?')) {
-      const updated = deleteStoredUmkmItem(id);
-      setUmkmList(updated);
+      await smartCityApi.deleteMyUmkm(id);
+      deleteStoredUmkmItem(id);
+      setUmkmList(prev => prev.filter(u => u.id !== id));
       showToast('Produk berhasil dihapus.');
     }
   };
@@ -166,51 +283,69 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
   // =========================================================================
   // 2. KOS FORM STATE
   // =========================================================================
-  const [showAddKos, setShowAddKos] = useState(false);
   const [kosNama, setKosNama] = useState('');
-  const [kosTipe, setKosTipe] = useState<any>('Kos Putri');
+  const [kosTipe, setKosTipe] = useState<'Kos Putri' | 'Kos Putra' | 'Kos Campur' | 'Kontrakan Rumah'>('Kos Campur');
   const [kosHarga, setKosHarga] = useState<number>(650000);
   const [kosPeriode, setKosPeriode] = useState<'bulan' | 'tahun'>('bulan');
   const [kosAlamat, setKosAlamat] = useState('');
-  const [kosSisaKamar, setKosSisaKamar] = useState<number>(3);
+  const [kosDeskripsi, setKosDeskripsi] = useState('');
+  const [kosLat, setKosLat] = useState<number>(KEDIRI_DEFAULT_COORDS.lat);
+  const [kosLng, setKosLng] = useState<number>(KEDIRI_DEFAULT_COORDS.lng);
+  const [kosSisaKamar, setKosSisaKamar] = useState<number>(2);
   const [kosPemilikNama, setKosPemilikNama] = useState('');
   const [kosPemilikWa, setKosPemilikWa] = useState('');
   const [kosFotoUrl, setKosFotoUrl] = useState('');
-  const [kosLat, setKosLat] = useState<number>(KEDIRI_DEFAULT_COORDS.lat);
-  const [kosLng, setKosLng] = useState<number>(KEDIRI_DEFAULT_COORDS.lng);
+  const [kosFotoNama, setKosFotoNama] = useState('');
+  const [isProcessingKosFoto, setIsProcessingKosFoto] = useState(false);
+  const fileInputKosRef = useRef<HTMLInputElement>(null);
+  const cameraInputKosRef = useRef<HTMLInputElement>(null);
+
+  const handleSelectKosFoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      alert('Mohon pilih file gambar (JPG, PNG, WEBP).');
+      return;
+    }
+    setIsProcessingKosFoto(true);
+    try {
+      const dataUrl = await compressImage(file);
+      setKosFotoUrl(dataUrl);
+      setKosFotoNama(file.name || 'Foto Kamera Hunian');
+      showToast('Foto unit hunian berhasil dipilih!');
+    } catch {
+      alert('Gagal memproses foto. Silakan coba lagi.');
+    } finally {
+      setIsProcessingKosFoto(false);
+      e.target.value = '';
+    }
+  };
   const [isDetectingKosGps, setIsDetectingKosGps] = useState(false);
 
-  // Facilities Checkbox
+  // Fasilitas checkboxes
   const [facWifi, setFacWifi] = useState(true);
   const [facAc, setFacAc] = useState(false);
   const [facKmDalam, setFacKmDalam] = useState(true);
   const [facKasur, setFacKasur] = useState(true);
   const [facParkir, setFacParkir] = useState(true);
 
-  const handleDetectKosGps = () => {
-    if (!navigator.geolocation) {
-      alert('Perangkat Anda tidak mendukung deteksi lokasi otomatis.');
-      return;
-    }
+  const handleDetectKosGps = async () => {
     setIsDetectingKosGps(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setKosLat(pos.coords.latitude);
-        setKosLng(pos.coords.longitude);
-        setIsDetectingKosGps(false);
-        showToast('Titik koordinat GPS hunian terkunci!');
-      },
-      () => {
-        setIsDetectingKosGps(false);
-        alert('Gagal mendeteksi koordinat GPS.');
-      },
-      { timeout: 10000, enableHighAccuracy: true }
-    );
+    try {
+      const loc = await detectSmartCityLocation();
+      setKosLat(loc.lat);
+      setKosLng(loc.lng);
+      showToast(`Titik koordinat hunian berhasil dikunci (${loc.label})!`);
+    } catch {
+      showToast('Menggunakan koordinat default wilayah.');
+    } finally {
+      setIsDetectingKosGps(false);
+    }
   };
 
   const handleSaveKos = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!kosNama || !kosPemilikNama || !kosPemilikWa) {
+    if (!kosNama.trim() || !kosPemilikNama.trim() || !kosPemilikWa.trim()) {
       alert('Mohon isi nama hunian, nama pemilik, dan nomor WhatsApp.');
       return;
     }
@@ -224,19 +359,20 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
 
     const newKos: HunianItem = {
       id: `kos-${Date.now()}`,
-      nama: kosNama,
+      nama: kosNama.trim(),
       tipe: kosTipe,
       harga: Number(kosHarga),
       periode: kosPeriode,
-      alamat: kosAlamat || 'Kota Kediri',
+      alamat: kosAlamat.trim() || 'Kota Kediri',
+      deskripsi: kosDeskripsi.trim() || 'Hunian kos nyaman dan strategis di kawasan warga Kota Kediri.',
       lat: kosLat,
       lng: kosLng,
       sisaKamar: Number(kosSisaKamar),
       fasilitas: fasList,
-      pemilikNama: kosPemilikNama,
+      pemilikNama: kosPemilikNama.trim(),
       pemilikWa: kosPemilikWa.replace(/\D/g, ''),
       fotoUrl:
-        kosFotoUrl ||
+        kosFotoUrl.trim() ||
         'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80',
       terverifikasi: true,
       createdAt: new Date().toISOString()
@@ -244,12 +380,18 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
 
     const updated = saveStoredKosItem(newKos);
     setKosList(updated);
-    setShowAddKos(false);
     showToast('Hunian kos berhasil disimpan dan langsung tayang di portal!');
 
     // Reset Form
     setKosNama('');
+    setKosDeskripsi('');
     setKosFotoUrl('');
+    setKosFotoNama('');
+
+    // Navigate back to list URL
+    if (onNavigate) {
+      onNavigate('smart_city_kos');
+    }
   };
 
   const handleDeleteKos = (id: string) => {
@@ -263,40 +405,39 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
   // =========================================================================
   // 3. LOKER FORM STATE
   // =========================================================================
-  const [showAddLoker, setShowAddLoker] = useState(false);
   const [lokerPosisi, setLokerPosisi] = useState('');
   const [lokerPerusahaan, setLokerPerusahaan] = useState('');
-  const [lokerKategori, setLokerKategori] = useState<any>('Administrasi');
+  const [lokerKategori, setLokerKategori] = useState<any>('F&B / Kuliner');
   const [lokerTipeKerja, setLokerTipeKerja] = useState<any>('Full-time');
   const [lokerGajiMin, setLokerGajiMin] = useState<number>(2000000);
   const [lokerGajiMax, setLokerGajiMax] = useState<number>(3000000);
   const [lokerLokasi, setLokerLokasi] = useState('');
   const [lokerPendidikan, setLokerPendidikan] = useState('SMA / SMK Sederajat');
-  const [lokerPengalaman, setLokerPengalaman] = useState('Terbuka Fresh Graduate');
+  const [lokerPengalaman, setLokerPengalaman] = useState('Fresh Graduate / 1 Tahun');
   const [lokerSyaratCv, setLokerSyaratCv] = useState(true);
-  const [lokerDescText, setLokerDescText] = useState('');
   const [lokerWaHrd, setLokerWaHrd] = useState('');
+  const [lokerDescText, setLokerDescText] = useState('');
 
   const handleSaveLoker = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!lokerPosisi || !lokerPerusahaan || !lokerWaHrd) {
-      alert('Mohon isi posisi pekerjaan, nama perusahaan, dan nomor WA HRD.');
+    if (!lokerPosisi.trim() || !lokerPerusahaan.trim() || !lokerWaHrd.trim()) {
+      alert('Mohon isi posisi pekerjaan, nama usaha/perusahaan, dan nomor kontak HRD.');
       return;
     }
 
     const descLines = lokerDescText
       ? lokerDescText.split('\n').filter((l) => l.trim().length > 0)
-      : ['Bertanggung jawab pada tugas harian sesuai arahan pimpinan usaha.', 'Disiplin, jujur, dan berintegritas tinggi.'];
+      : ['Disiplin, jujur, dan bertanggung jawab', 'Mampu bekerja sama dalam tim'];
 
     const newLoker: LokerItem = {
       id: `loker-${Date.now()}`,
-      posisi: lokerPosisi,
-      perusahaan: lokerPerusahaan,
+      posisi: lokerPosisi.trim(),
+      perusahaan: lokerPerusahaan.trim(),
       kategori: lokerKategori,
       tipeKerja: lokerTipeKerja,
       gajiMin: Number(lokerGajiMin),
       gajiMax: Number(lokerGajiMax),
-      lokasi: lokerLokasi || 'Kediri',
+      lokasi: lokerLokasi.trim() || 'Kediri',
       lat: KEDIRI_DEFAULT_COORDS.lat,
       lng: KEDIRI_DEFAULT_COORDS.lng,
       pendidikan: lokerPendidikan,
@@ -312,12 +453,16 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
 
     const updated = saveStoredLokerItem(newLoker);
     setLokerList(updated);
-    setShowAddLoker(false);
     showToast('Lowongan pekerjaan berhasil diterbitkan di portal Loker!');
 
     // Reset Form
     setLokerPosisi('');
     setLokerDescText('');
+
+    // Navigate back to list URL
+    if (onNavigate) {
+      onNavigate('smart_city_loker');
+    }
   };
 
   const handleDeleteLoker = (id: string) => {
@@ -329,7 +474,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
   };
 
   return (
-    <div className="space-y-8 font-sans max-w-6xl mx-auto">
+    <div className="space-y-6 font-sans max-w-6xl mx-auto pb-16">
       
       {/* Toast Notification */}
       {toastMessage && (
@@ -339,380 +484,395 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
         </div>
       )}
 
-      {/* Header Info */}
-      <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-2xs space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="text-[11px] font-bold text-blue-600 uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Smart City Warga Mandiri</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
-              Pusat Manajemen Usaha, Kos & Loker
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl">
-              Kelola toko UMKM Anda, atur sewa kos, atau pasang lowongan kerja. Setiap perubahan akan otomatis tayang dan dapat diakses seluruh warga melalui landing page Smart City.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <a
-              href="/smart-city"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors flex items-center gap-1.5"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span>Lihat Halaman Publik</span>
-            </a>
-          </div>
-        </div>
-
-        {/* Tab Switcher */}
-        <div className="pt-2 border-t border-slate-100 flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => setActiveTab('umkm')}
-            className={`py-2 px-4 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'umkm'
-                ? 'bg-amber-500 text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            <ShoppingBag className="w-4 h-4" />
-            <span>Toko UMKM Saya ({umkmList.length})</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('kos')}
-            className={`py-2 px-4 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'kos'
-                ? 'bg-blue-600 text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            <Home className="w-4 h-4" />
-            <span>Kelola Kos & Hunian ({kosList.length})</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('loker')}
-            className={`py-2 px-4 rounded-xl text-xs font-extrabold transition-all flex items-center gap-2 cursor-pointer ${
-              activeTab === 'loker'
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            <Briefcase className="w-4 h-4" />
-            <span>Lowongan Kerja ({lokerList.length})</span>
-          </button>
-        </div>
-      </div>
-
       {/* =========================================================================
-          TAB 1: UMKM MANAGER
+          MODE 1: DEDICATED CREATE FORM PAGE (SEPARATE URL & FULL BLUE UI)
           ========================================================================= */}
-      {activeTab === 'umkm' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="font-extrabold text-lg text-slate-900">Katalog Produk UMKM Anda</h3>
+      {isCreateMode ? (
+        <div className="space-y-6 animate-fade-in">
+          {/* Top Breadcrumb Navigation */}
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200">
             <button
               type="button"
-              onClick={() => setShowAddUmkm(!showAddUmkm)}
-              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-2xs"
+              onClick={() => onNavigate?.(`smart_city_${currentSection}`)}
+              className="flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-blue-600 transition-colors cursor-pointer py-1"
             >
-              <Plus className="w-4 h-4" />
-              <span>{showAddUmkm ? 'Tutup Form' : 'Tambah Dagangan Baru'}</span>
+              <ArrowLeft className="w-4 h-4" />
+              <span>
+                {currentSection === 'umkm' && 'Kembali ke Toko & UMKM Saya'}
+                {currentSection === 'kos' && 'Kembali ke Kelola Kos & Hunian'}
+                {currentSection === 'loker' && 'Kembali ke Bursa Kerja & Loker'}
+              </span>
             </button>
+
+            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+              Formulir Penambahan Data
+            </span>
           </div>
 
-          {/* Form Tambah UMKM */}
-          {showAddUmkm && (
-            <div className="bg-white rounded-3xl border border-amber-200 p-6 shadow-sm space-y-5 animate-fade-in">
-              <div className="border-b border-slate-100 pb-3">
-                <h4 className="font-extrabold text-base text-slate-900">Pengaturan Toko & Upload Dagangan</h4>
-                <p className="text-xs text-slate-500">Lengkapi informasi toko, aktifkan pelacakan koordinat GPS, dan atur opsi pembayaran.</p>
+          {/* FORM: UMKM */}
+          {currentSection === 'umkm' && (
+            <div className="bg-white rounded-3xl border border-blue-200/90 p-6 sm:p-8 shadow-xs space-y-6">
+              <div className="border-b border-slate-100 pb-4">
+                <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md inline-block mb-1">
+                  Katalog Pasar Warga
+                </span>
+                <h3 className="text-xl font-extrabold text-slate-900">Tambah Produk / Dagangan UMKM Baru</h3>
               </div>
 
-              <form onSubmit={handleSaveUmkm} className="space-y-4 text-xs">
-                
-                {/* Store Profile */}
+              <form onSubmit={handleSaveUmkm} className="space-y-5 text-xs">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block font-bold text-slate-700 mb-1">Nama Toko / Usaha *</label>
                     <input
                       type="text"
                       required
-                      placeholder="Contoh: Pusat Oleh-Oleh Bu Siti Doko"
+                      placeholder="Contoh: Warung Barokah Bu Dewi"
                       value={tokoNama}
                       onChange={(e) => setTokoNama(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 text-slate-800"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Nomor WhatsApp Pesanan *</label>
+                    <label className="block font-bold text-slate-700 mb-1">Nama Produk / Menu *</label>
                     <input
-                      type="tel"
+                      type="text"
                       required
-                      placeholder="Contoh: 08123456789"
-                      value={tokoWa}
-                      onChange={(e) => setTokoWa(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 text-slate-800"
+                      placeholder="Contoh: Nasi Liwet Ayam Rempah"
+                      value={produkNama}
+                      onChange={(e) => setProdukNama(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     />
                   </div>
                 </div>
 
-                {/* Location GPS Mandatory Section */}
-                <div className="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-2">
+                {/* GPS Pin Point */}
+                <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200/80 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-amber-900 flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-amber-600" />
-                      Titik Lokasi Toko (Wajib Aktif)
+                    <span className="font-extrabold text-blue-950 flex items-center gap-1.5">
+                      <MapPin className="w-4 h-4 text-blue-600" />
+                      <span>Titik Lokasi Toko / Dapur Masak (GPS)</span>
                     </span>
                     <button
                       type="button"
                       onClick={handleDetectUmkmGps}
                       disabled={isDetectingUmkmGps}
-                      className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-2xs cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
                     >
-                      <Navigation className={`w-3.5 h-3.5 ${isDetectingUmkmGps ? 'animate-spin' : ''}`} />
-                      <span>{isDetectingUmkmGps ? 'Mengunci GPS...' : 'Kunci GPS Toko Sekarang'}</span>
+                      <Navigation className="w-3.5 h-3.5" />
+                      <span>{isDetectingUmkmGps ? 'Mendeteksi...' : 'Kunci Titik GPS Sekarang'}</span>
                     </button>
                   </div>
-                  <p className="text-[11px] text-amber-800 leading-relaxed">
-                    Sistem akan menggunakan koordinat ini untuk menghitung jarak real-time pembeli (1 km, 5 km, 10 km) di landing page.
+                  <p className="text-[11px] text-blue-900 leading-relaxed">
+                    Koordinat saat ini: <strong className="font-mono">{tokoLat.toFixed(5)}, {tokoLng.toFixed(5)}</strong>. Koordinat ini digunakan oleh sistem untuk menghitung jarak real-time pembeli tetangga ke toko Anda.
                   </p>
-                  <div className="text-[11px] font-mono text-slate-600 pt-1">
-                    Koordinat Terkunci: <strong>{tokoLat.toFixed(5)}</strong>, <strong>{tokoLng.toFixed(5)}</strong>
-                  </div>
                 </div>
 
-                {/* Product Detail */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="sm:col-span-2">
-                    <label className="block font-bold text-slate-700 mb-1">Nama Barang Dagangan *</label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Contoh: Tahu Kuning & Stik Tahu Gurih Khas Kediri"
-                      value={produkNama}
-                      onChange={(e) => setProdukNama(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 text-slate-800"
-                    />
-                  </div>
-
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block font-bold text-slate-700 mb-1">Kategori Produk</label>
                     <select
                       value={produkKategori}
-                      onChange={(e) => setProdukKategori(e.target.value as any)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 text-slate-800"
+                      onChange={(e) => setProdukKategori(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     >
-                      <option value="Kuliner">Kuliner</option>
-                      <option value="Pertanian">Pertanian</option>
-                      <option value="Kerajinan">Kerajinan</option>
-                      <option value="Jasa & Servis">Jasa & Servis</option>
-                      <option value="Sembako">Sembako</option>
+                      <option value="Kuliner & Kudapan">Kuliner & Kudapan</option>
+                      <option value="Bahan Pokok & Sembako">Bahan Pokok & Sembako</option>
+                      <option value="Kriya & Kerajinan">Kriya & Kerajinan</option>
+                      <option value="Jasa Panggilan">Jasa Panggilan</option>
+                      <option value="Fashion & Batik">Fashion & Batik</option>
                     </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Nomor WhatsApp Usaha (Menerima Pesanan) *</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="081234567890"
+                      value={tokoWa}
+                      onChange={(e) => setTokoWa(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
+                    />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Harga Produk (Rp) *</label>
+                    <label className="block font-bold text-slate-700 mb-1">Harga Produk Satuan (Rp) *</label>
                     <input
                       type="number"
                       required
                       min="0"
                       value={produkHarga}
                       onChange={(e) => setProdukHarga(Number(e.target.value))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 text-slate-800 font-bold"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800 font-bold"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Satuan</label>
+                    <label className="block font-bold text-slate-700 mb-1">Satuan Produk</label>
                     <input
                       type="text"
-                      placeholder="porsi / besek / kg / pcs"
+                      placeholder="Porsi / Pincuk / Pcs / Kg / Besek"
                       value={produkSatuan}
                       onChange={(e) => setProdukSatuan(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 text-slate-800"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     />
                   </div>
                 </div>
 
+                {/* Biaya Pengantaran / Ongkir Ditentukan Penjual */}
+                <div className="p-4 rounded-2xl bg-white border border-slate-200/90 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="block font-bold text-slate-700 text-xs">
+                      BIAYA ONGKIR PENGANTARAN (DITENTUKAN OLEH ANDA SEBAGAI PENJUAL)
+                    </label>
+                    <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
+                      Atur Mandiri
+                    </span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <div className="relative flex-1">
+                      <span className="absolute left-3.5 top-2.5 text-xs font-bold text-slate-400">Rp</span>
+                      <input
+                        type="number"
+                        min="0"
+                        step="1000"
+                        value={produkOngkir}
+                        onChange={(e) => setProdukOngkir(Number(e.target.value) || 0)}
+                        className="w-full pl-9 pr-3.5 py-2.5 text-xs font-bold rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500"
+                        placeholder="0"
+                      />
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => setProdukOngkir(0)}
+                        className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                          produkOngkir === 0
+                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
+                            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                        }`}
+                      >
+                        Gratis (Rp 0)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setProdukOngkir(2000)}
+                        className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                          produkOngkir === 2000
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                        }`}
+                      >
+                        Rp 2.000
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setProdukOngkir(5000)}
+                        className={`px-3 py-2 text-xs font-bold rounded-xl border transition-all cursor-pointer ${
+                          produkOngkir === 5000
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                        }`}
+                      >
+                        Rp 5.000
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Upload Foto Produk dari Galeri / Kamera */}
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">URL Foto Produk</label>
+                  <label className="block font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Camera className="w-4 h-4 text-blue-600" />
+                      <span>Foto Produk / Dagangan UMKM</span>
+                    </span>
+                    {produkFotoUrl ? (
+                      <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> Foto Siap Diunggah
+                      </span>
+                    ) : (
+                      <span className="text-[11px] font-medium text-slate-400">
+                        Bisa langsung foto atau ambil dari galeri
+                      </span>
+                    )}
+                  </label>
+
+                  {/* Hidden file inputs: standard file picker & mobile direct camera */}
                   <input
-                    type="url"
-                    placeholder="https://images.unsplash.com/... (atau biarkan kosong untuk foto standar)"
-                    value={produkFotoUrl}
-                    onChange={(e) => setProdukFotoUrl(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 text-slate-800"
+                    ref={fileInputUmkmRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleSelectProdukFoto}
                   />
+                  <input
+                    ref={cameraInputUmkmRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                    onChange={handleSelectProdukFoto}
+                  />
+
+                  {produkFotoUrl ? (
+                    <div className="rounded-2xl border-2 border-blue-200 bg-slate-50 overflow-hidden shadow-2xs">
+                      <div className="relative aspect-video w-full max-h-72 bg-slate-900/10 flex items-center justify-center overflow-hidden">
+                        <img
+                          src={produkFotoUrl}
+                          alt="Pratinjau Foto Dagangan"
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-xs text-white text-[10px] font-extrabold flex items-center gap-1 shadow-xs">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                          <span>Foto Terpilih</span>
+                        </span>
+                      </div>
+
+                      <div className="p-3 bg-white border-t border-slate-200/90 flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-xs text-slate-600">
+                          <ImageIcon className="w-4 h-4 text-blue-600 shrink-0" />
+                          <span className="font-bold truncate max-w-xs">{produkFotoNama || 'Foto Dagangan Terpilih'}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => cameraInputUmkmRef.current?.click()}
+                            className="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <Camera className="w-3.5 h-3.5" />
+                            <span>Foto Ulang Kamera</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => fileInputUmkmRef.current?.click()}
+                            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <ImageIcon className="w-3.5 h-3.5" />
+                            <span>Ganti Galeri</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setProdukFotoUrl('');
+                              setProdukFotoNama('');
+                            }}
+                            className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>Hapus</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-2xl border-2 border-dashed border-slate-300 hover:border-blue-400 bg-slate-50/70 p-6 sm:p-7 text-center transition-all">
+                      <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2.5 shadow-2xs">
+                        <Camera className="w-6 h-6" />
+                      </div>
+
+                      <h4 className="font-extrabold text-sm text-slate-800 mb-1">
+                        Pilih Foto dari Galeri atau Ambil Foto Kamera
+                      </h4>
+
+                      <div className="flex flex-wrap items-center justify-center gap-2.5">
+                        <button
+                          type="button"
+                          onClick={() => cameraInputUmkmRef.current?.click()}
+                          disabled={isProcessingFoto}
+                          className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                        >
+                          <Camera className="w-4 h-4" />
+                          <span>Ambil Foto</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => fileInputUmkmRef.current?.click()}
+                          disabled={isProcessingFoto}
+                          className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-2xs cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                        >
+                          <ImageIcon className="w-4 h-4 text-blue-600" />
+                          <span>Pilih File</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div>
                   <label className="block font-bold text-slate-700 mb-1">Deskripsi Produk Singkat</label>
                   <textarea
                     rows={2}
-                    placeholder="Jelaskan keunggulan dan rasa produk dagangan Anda..."
+                    placeholder="Jelaskan rasa, racikan rempah, dan keunggulan produk Anda..."
                     value={produkDeskripsi}
                     onChange={(e) => setProdukDeskripsi(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-amber-500 text-slate-800"
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                   />
                 </div>
 
-                {/* Payment Options (QRIS, COD, DO) */}
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
-                  <div className="font-bold text-slate-800">Opsi Pembayaran & Layanan Antar:</div>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <label className="flex items-center gap-2 font-bold text-slate-700 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={payQris}
-                        onChange={(e) => setPayQris(e.target.checked)}
-                        className="rounded text-amber-600 focus:ring-amber-500"
-                      />
-                      <span>Terima QRIS</span>
-                    </label>
-
-                    <label className="flex items-center gap-2 font-bold text-slate-700 cursor-pointer">
+                {/* Metode Pembayaran Diterima */}
+                <div className="pt-2 border-t border-slate-100">
+                  <label className="block font-bold text-slate-700 mb-2">Pilihan Pengantaran & Pembayaran</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={payCod}
                         onChange={(e) => setPayCod(e.target.checked)}
-                        className="rounded text-amber-600 focus:ring-amber-500"
+                        className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span>Bisa Bayar di Tempat (COD)</span>
+                      <div>
+                        <span className="font-bold text-slate-800 block">Diantar Langsung Penjual (COD)</span>
+                        <span className="text-[10px] text-slate-400">Bayar tunai di tempat saat pesanan sampai</span>
+                      </div>
                     </label>
 
-                    <label className="flex items-center gap-2 font-bold text-slate-700 cursor-pointer">
+                    <label className="flex items-center gap-2.5 p-3 rounded-xl border border-slate-200 bg-slate-50/50 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={payDo}
-                        onChange={(e) => setPayDo(e.target.checked)}
-                        className="rounded text-amber-600 focus:ring-amber-500"
+                        checked={payQris}
+                        onChange={(e) => setPayQris(e.target.checked)}
+                        className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span>Bisa Delivery Order (DO)</span>
+                      <div>
+                        <span className="font-bold text-slate-800 block">QRIS Langsung Toko</span>
+                        <span className="text-[10px] text-slate-400">Pembayaran digital langsung ke rekening penjual</span>
+                      </div>
                     </label>
                   </div>
-
-                  {payQris && (
-                    <div className="pt-2 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">Nama Merchant QRIS</label>
-                        <input
-                          type="text"
-                          placeholder="Contoh: QRIS TOKO BU SITI"
-                          value={payQrisNama}
-                          onChange={(e) => setPayQrisNama(e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] font-bold text-slate-600 mb-1">URL Barcode QRIS</label>
-                        <input
-                          type="url"
-                          placeholder="Link gambar barcode QRIS Anda"
-                          value={payQrisUrl}
-                          onChange={(e) => setPayQrisUrl(e.target.value)}
-                          className="w-full px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-slate-800"
-                        />
-                      </div>
-                    </div>
-                  )}
                 </div>
 
-                <div className="pt-2 flex justify-end gap-2">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
                   <button
                     type="button"
-                    onClick={() => setShowAddUmkm(false)}
-                    className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200"
+                    onClick={() => onNavigate?.('smart_city_umkm')}
+                    className="px-5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-xs transition cursor-pointer"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold shadow-md cursor-pointer"
+                    className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
                   >
-                    Simpan & Terbitkan ke Landing
+                    Publikasikan Produk Sekarang
                   </button>
                 </div>
               </form>
             </div>
           )}
 
-          {/* List UMKM */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {umkmList.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs flex flex-col justify-between space-y-3"
-              >
-                <div className="flex items-start gap-3">
-                  <img
-                    src={item.fotoUrl}
-                    alt={item.nama}
-                    className="w-16 h-16 rounded-xl object-cover shrink-0"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <span className="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">
-                      {item.kategori}
-                    </span>
-                    <h4 className="font-extrabold text-sm text-slate-900 truncate mt-1">{item.nama}</h4>
-                    <div className="text-xs font-black text-blue-600">Rp {item.harga.toLocaleString('id-ID')}</div>
-                    <div className="text-[11px] text-slate-400 truncate">{item.tokoNama}</div>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <span className="text-emerald-700 font-bold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    Tayang di Landing
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteUmkm(item.id)}
-                    className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
-                    title="Hapus Dagangan"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          TAB 2: KOS MANAGER
-          ========================================================================= */}
-      {activeTab === 'kos' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="font-extrabold text-lg text-slate-900">Daftar Hunian & Kos Anda</h3>
-            <button
-              type="button"
-              onClick={() => setShowAddKos(!showAddKos)}
-              className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-2xs"
-            >
-              <Plus className="w-4 h-4" />
-              <span>{showAddKos ? 'Tutup Form' : 'Pasang Kos Baru'}</span>
-            </button>
-          </div>
-
-          {showAddKos && (
-            <div className="bg-white rounded-3xl border border-blue-200 p-6 shadow-sm space-y-5 animate-fade-in">
-              <div className="border-b border-slate-100 pb-3">
-                <h4 className="font-extrabold text-base text-slate-900">Formulir Pasang Hunian / Kos</h4>
-                <p className="text-xs text-slate-500">Lengkapi data hunian, kamar kosong, fasilitas, dan kunci titik lokasi GPS.</p>
+          {/* FORM: KOS */}
+          {currentSection === 'kos' && (
+            <div className="bg-white rounded-3xl border border-blue-200/90 p-6 sm:p-8 shadow-xs space-y-6">
+              <div className="border-b border-slate-100 pb-4">
+                <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md inline-block mb-1">
+                  Peta Hunian Spasial
+                </span>
               </div>
 
               <form onSubmit={handleSaveKos} className="space-y-4 text-xs">
@@ -722,13 +882,12 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                     <input
                       type="text"
                       required
-                      placeholder="Contoh: Kos Putri Griya Asri Doko"
+                      placeholder="Contoh: Kos Graha Asri Putri Dekat Kampus"
                       value={kosNama}
                       onChange={(e) => setKosNama(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     />
                   </div>
-
                   <div>
                     <label className="block font-bold text-slate-700 mb-1">Tipe Hunian</label>
                     <select
@@ -736,17 +895,39 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                       onChange={(e) => setKosTipe(e.target.value as any)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     >
+                      <option value="Kos Campur">Kos Campur</option>
                       <option value="Kos Putri">Kos Putri</option>
                       <option value="Kos Putra">Kos Putra</option>
-                      <option value="Kos Campur">Kos Campur</option>
                       <option value="Kontrakan Rumah">Kontrakan Rumah</option>
                     </select>
                   </div>
                 </div>
 
+                {/* GPS Pin */}
+                <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200/80 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-extrabold text-blue-950 flex items-center gap-1.5">
+                      <MapPin className="w-4 h-4 text-blue-600" />
+                      <span>Titik Lokasi GPS Rumah Kos</span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleDetectKosGps}
+                      disabled={isDetectingKosGps}
+                      className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-2xs cursor-pointer transition-colors"
+                    >
+                      <Navigation className="w-3.5 h-3.5" />
+                      <span>{isDetectingKosGps ? 'Mendeteksi...' : 'Kunci Titik GPS Sekarang'}</span>
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-blue-900 leading-relaxed">
+                    Koordinat saat ini: <strong className="font-mono">{kosLat.toFixed(5)}, {kosLng.toFixed(5)}</strong>. Koordinat ini digunakan peta interaktif agar pencari kos bisa langsung navigasi ke rumah Anda.
+                  </p>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Tarif Sewa (Rp) *</label>
+                    <label className="block font-bold text-slate-700 mb-1">Harga Sewa (Rp) *</label>
                     <input
                       type="number"
                       required
@@ -756,7 +937,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800 font-bold"
                     />
                   </div>
-
                   <div>
                     <label className="block font-bold text-slate-700 mb-1">Periode Sewa</label>
                     <select
@@ -768,12 +948,12 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                       <option value="tahun">Per Tahun</option>
                     </select>
                   </div>
-
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Sisa Kamar Kosong</label>
+                    <label className="block font-bold text-slate-700 mb-1">Sisa Kamar Kosong *</label>
                     <input
                       type="number"
-                      min="1"
+                      required
+                      min="0"
                       value={kosSisaKamar}
                       onChange={(e) => setKosSisaKamar(Number(e.target.value))}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
@@ -781,46 +961,24 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                   </div>
                 </div>
 
-                {/* GPS Location Section */}
-                <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-extrabold text-blue-900 flex items-center gap-1.5">
-                      <MapPin className="w-4 h-4 text-blue-600" />
-                      Lokasi GPS Kos (Wajib untuk Akurasi Jarak)
-                    </span>
-                    <button
-                      type="button"
-                      onClick={handleDetectKosGps}
-                      disabled={isDetectingKosGps}
-                      className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] flex items-center gap-1.5 shadow-2xs cursor-pointer"
-                    >
-                      <Navigation className={`w-3.5 h-3.5 ${isDetectingKosGps ? 'animate-spin' : ''}`} />
-                      <span>{isDetectingKosGps ? 'Mengunci...' : 'Kunci Titik GPS Hunian'}</span>
-                    </button>
-                  </div>
-                  <div className="text-[11px] font-mono text-slate-600">
-                    Koordinat: <strong>{kosLat.toFixed(5)}</strong>, <strong>{kosLng.toFixed(5)}</strong>
-                  </div>
-                </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Nama Pemilik *</label>
+                    <label className="block font-bold text-slate-700 mb-1">Nama Pemilik / Pengelola *</label>
                     <input
                       type="text"
                       required
-                      placeholder="Nama pemilik kos..."
+                      placeholder="Contoh: Ibu Hj. Mahmudah"
                       value={kosPemilikNama}
                       onChange={(e) => setKosPemilikNama(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     />
                   </div>
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">WhatsApp Pemilik *</label>
+                    <label className="block font-bold text-slate-700 mb-1">No. WhatsApp Pemilik *</label>
                     <input
                       type="tel"
                       required
-                      placeholder="Contoh: 08123456789"
+                      placeholder="081234567890"
                       value={kosPemilikWa}
                       onChange={(e) => setKosPemilikWa(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
@@ -828,32 +986,151 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                   </div>
                 </div>
 
+                {/* Upload Foto Unit Kos dari Galeri / Kamera */}
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Alamat Lengkap</label>
+                  <label className="block font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <Camera className="w-4 h-4 text-blue-600" />
+                      <span>Foto Kamar / Bangunan Kos</span>
+                    </span>
+                    {kosFotoUrl ? (
+                      <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" /> Foto Siap Diunggah
+                      </span>
+                    ) : (
+                      <span className="text-[11px] font-medium text-slate-400">
+                        Bisa langsung foto atau ambil dari galeri
+                      </span>
+                    )}
+                  </label>
+
+                  {/* Hidden file inputs: standard file picker & mobile direct camera */}
                   <input
-                    type="text"
-                    placeholder="Jl. Kenanga No. 18, RT 02 / RW 01..."
-                    value={kosAlamat}
-                    onChange={(e) => setKosAlamat(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
+                    ref={fileInputKosRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleSelectKosFoto}
+                  />
+                  <input
+                    ref={cameraInputKosRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                    onChange={handleSelectKosFoto}
+                  />
+
+                  {kosFotoUrl ? (
+                    <div className="rounded-2xl border-2 border-blue-200 bg-slate-50 overflow-hidden shadow-2xs">
+                      <div className="relative aspect-video w-full max-h-72 bg-slate-900/10 flex items-center justify-center overflow-hidden">
+                        <img
+                          src={kosFotoUrl}
+                          alt="Pratinjau Foto Unit Kos"
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-xs text-white text-[10px] font-extrabold flex items-center gap-1 shadow-xs">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                          <span>Foto Terpilih</span>
+                        </span>
+                      </div>
+
+                      <div className="p-3 bg-white border-t border-slate-200/90 flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-xs text-slate-600">
+                          <ImageIcon className="w-4 h-4 text-blue-600 shrink-0" />
+                          <span className="font-bold truncate max-w-xs">{kosFotoNama || 'Foto Hunian Terpilih'}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => cameraInputKosRef.current?.click()}
+                            className="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <Camera className="w-3.5 h-3.5" />
+                            <span>Foto Ulang Kamera</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => fileInputKosRef.current?.click()}
+                            className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <ImageIcon className="w-3.5 h-3.5" />
+                            <span>Ganti Galeri</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setKosFotoUrl('');
+                              setKosFotoNama('');
+                            }}
+                            className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span>Hapus</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-2xl border-2 border-dashed border-slate-300 hover:border-blue-400 bg-slate-50/70 p-6 sm:p-7 text-center transition-all">
+                      <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-2.5 shadow-2xs">
+                        <Home className="w-6 h-6" />
+                      </div>
+
+                      <h4 className="font-extrabold text-sm text-slate-800 mb-1">
+                        Pilih Foto Kamar dari Galeri atau Ambil Foto Kamera
+                      </h4>
+
+                      <div className="flex flex-wrap items-center justify-center gap-2.5">
+                        <button
+                          type="button"
+                          onClick={() => cameraInputKosRef.current?.click()}
+                          disabled={isProcessingKosFoto}
+                          className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                        >
+                          <Camera className="w-4 h-4" />
+                          <span>Ambil Foto</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => fileInputKosRef.current?.click()}
+                          disabled={isProcessingKosFoto}
+                          className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs flex items-center gap-2 shadow-2xs cursor-pointer transition-all active:scale-95 disabled:opacity-50"
+                        >
+                          <ImageIcon className="w-4 h-4 text-blue-600" />
+                          <span>Pilih File</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Deskripsi Kos & Aturan Tambahan */}
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1 flex items-center justify-between">
+                    <span className="flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-blue-600" />
+                      <span>Deskripsi Hunian & Aturan Kos</span>
+                    </span>
+                    <span className="text-[11px] font-normal text-slate-400">
+                      Opsional tapi disarankan
+                    </span>
+                  </label>
+                  <textarea
+                    rows={3}
+                    placeholder="Jelaskan kenyamanan kos, aturan jam malam, akses kunci gerbang, dekat kampus apa, sistem listrik token/gratis, dan keunggulan hunian Anda..."
+                    value={kosDeskripsi}
+                    onChange={(e) => setKosDeskripsi(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800 text-xs"
                   />
                 </div>
 
-                <div>
-                  <label className="block font-bold text-slate-700 mb-1">URL Foto Hunian</label>
-                  <input
-                    type="url"
-                    placeholder="https://images.unsplash.com/..."
-                    value={kosFotoUrl}
-                    onChange={(e) => setKosFotoUrl(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
-                  />
-                </div>
-
-                {/* Facilities Checklist */}
-                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                  <div className="font-bold text-slate-800">Fasilitas Tersedia:</div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {/* Fasilitas Checkbox */}
+                <div className="pt-2">
+                  <label className="block font-bold text-slate-700 mb-2">Fasilitas Kamar & Rumah</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
                         type="checkbox"
@@ -861,7 +1138,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                         onChange={(e) => setFacWifi(e.target.checked)}
                         className="rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span>WiFi Cepat</span>
+                      <span className="font-medium text-slate-700">WiFi Cepat</span>
                     </label>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -870,7 +1147,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                         onChange={(e) => setFacAc(e.target.checked)}
                         className="rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span>AC Dingin</span>
+                      <span className="font-medium text-slate-700">AC Dingin</span>
                     </label>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -879,7 +1156,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                         onChange={(e) => setFacKmDalam(e.target.checked)}
                         className="rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span>KM Dalam</span>
+                      <span className="font-medium text-slate-700">Kamar Mandi Dalam</span>
                     </label>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -888,7 +1165,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                         onChange={(e) => setFacKasur(e.target.checked)}
                         className="rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span>Kasur Springbed</span>
+                      <span className="font-medium text-slate-700">Kasur Springbed</span>
                     </label>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -897,97 +1174,41 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                         onChange={(e) => setFacParkir(e.target.checked)}
                         className="rounded text-blue-600 focus:ring-blue-500"
                       />
-                      <span>Parkir Aman</span>
+                      <span className="font-medium text-slate-700">Parkir Aman</span>
                     </label>
                   </div>
                 </div>
 
-                <div className="pt-2 flex justify-end gap-2">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
                   <button
                     type="button"
-                    onClick={() => setShowAddKos(false)}
-                    className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200"
+                    onClick={() => onNavigate?.('smart_city_kos')}
+                    className="px-5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-xs transition cursor-pointer"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-md cursor-pointer"
+                    className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
                   >
-                    Simpan & Terbitkan ke Portal Kos
+                    Daftarkan Kos / Hunian Sekarang
                   </button>
                 </div>
               </form>
             </div>
           )}
 
-          {/* List Kos */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {kosList.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white rounded-2xl border border-slate-200 p-4 shadow-2xs flex flex-col justify-between space-y-3"
-              >
-                <div className="flex items-start gap-3">
-                  <img
-                    src={item.fotoUrl}
-                    alt={item.nama}
-                    className="w-16 h-16 rounded-xl object-cover shrink-0"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
-                      {item.tipe}
-                    </span>
-                    <h4 className="font-extrabold text-sm text-slate-900 truncate mt-1">{item.nama}</h4>
-                    <div className="text-xs font-black text-blue-600">
-                      Rp {item.harga.toLocaleString('id-ID')} /{item.periode}
-                    </div>
-                    <div className="text-[11px] text-slate-400 truncate">Sisa {item.sisaKamar} Kamar</div>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                  <span className="text-emerald-700 font-bold flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    Aktif di Pencarian
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteKos(item.id)}
-                    className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
-                    title="Hapus Kos"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          TAB 3: LOKER MANAGER & PELAMAR
-          ========================================================================= */}
-      {activeTab === 'loker' && (
-        <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h3 className="font-extrabold text-lg text-slate-900">Lowongan Pekerjaan & Pelamar</h3>
-            <button
-              type="button"
-              onClick={() => setShowAddLoker(!showAddLoker)}
-              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-2xs"
-            >
-              <Plus className="w-4 h-4" />
-              <span>{showAddLoker ? 'Tutup Form' : 'Pasang Lowongan Baru'}</span>
-            </button>
-          </div>
-
-          {showAddLoker && (
-            <div className="bg-white rounded-3xl border border-emerald-200 p-6 shadow-sm space-y-5 animate-fade-in">
-              <div className="border-b border-slate-100 pb-3">
-                <h4 className="font-extrabold text-base text-slate-900">Formulir Pasang Lowongan Kerja</h4>
-                <p className="text-xs text-slate-500">Pasang lowongan pekerjaan bagi warga Kediri dengan kualifikasi dan berkas CV digital.</p>
+          {/* FORM: LOKER */}
+          {currentSection === 'loker' && (
+            <div className="bg-white rounded-3xl border border-blue-200/90 p-6 sm:p-8 shadow-xs space-y-6">
+              <div className="border-b border-slate-100 pb-4">
+                <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md inline-block mb-1">
+                  Bursa Karir Digital
+                </span>
+                <h3 className="text-xl font-extrabold text-slate-900">Pasang Lowongan Pekerjaan Baru</h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Pasang lowongan pekerjaan bagi warga Kediri dengan kualifikasi dan berkas CV digital.
+                </p>
               </div>
 
               <form onSubmit={handleSaveLoker} className="space-y-4 text-xs">
@@ -997,209 +1218,534 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({ in
                     <input
                       type="text"
                       required
-                      placeholder="Contoh: Staf Administrasi & Kasir"
+                      placeholder="Contoh: Barista & Kasir Cafe"
                       value={lokerPosisi}
                       onChange={(e) => setLokerPosisi(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 text-slate-800"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     />
                   </div>
-
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Nama Perusahaan / Usaha *</label>
+                    <label className="block font-bold text-slate-700 mb-1">Nama Usaha / Perusahaan *</label>
                     <input
                       type="text"
                       required
-                      placeholder="Contoh: CV Berkah Pangan Mandiri"
+                      placeholder="Contoh: Kopi Titik Nol Kediri"
                       value={lokerPerusahaan}
                       onChange={(e) => setLokerPerusahaan(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 text-slate-800"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Bidang Keahlian</label>
-                    <select
-                      value={lokerKategori}
-                      onChange={(e) => setLokerKategori(e.target.value as any)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 text-slate-800"
-                    >
-                      <option value="Administrasi">Administrasi</option>
-                      <option value="IT & Digital">IT & Digital</option>
-                      <option value="F&B / Kuliner">F&B / Kuliner</option>
-                      <option value="Teknik & Bengkel">Teknik & Bengkel</option>
-                      <option value="Pendidikan">Pendidikan</option>
-                      <option value="Perdagangan & Retail">Perdagangan & Retail</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">Tipe Kerja</label>
-                    <select
-                      value={lokerTipeKerja}
-                      onChange={(e) => setLokerTipeKerja(e.target.value as any)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 text-slate-800"
-                    >
-                      <option value="Full-time">Full-time</option>
-                      <option value="Part-time">Part-time</option>
-                      <option value="Harian">Harian</option>
-                      <option value="Freelance">Freelance</option>
-                      <option value="Magang">Magang</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block font-bold text-slate-700 mb-1">WhatsApp HRD *</label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="08123456789"
-                      value={lokerWaHrd}
-                      onChange={(e) => setLokerWaHrd(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 text-slate-800"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Gaji Minimal (Rp)</label>
+                    <label className="block font-bold text-slate-700 mb-1">Kategori Pekerjaan</label>
+                    <select
+                      value={lokerKategori}
+                      onChange={(e) => setLokerKategori(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
+                    >
+                      <option value="F&B / Kuliner">F&B / Kuliner</option>
+                      <option value="Administrasi">Administrasi</option>
+                      <option value="Teknik & Bengkel">Teknik & Bengkel</option>
+                      <option value="IT & Digital">IT & Digital</option>
+                      <option value="Pendidikan">Pendidikan</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Tipe Pekerjaan</label>
+                    <select
+                      value={lokerTipeKerja}
+                      onChange={(e) => setLokerTipeKerja(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
+                    >
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Magang">Magang</option>
+                      <option value="Freelance">Freelance</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Estimasi Gaji Min (Rp)</label>
                     <input
                       type="number"
+                      min="0"
                       value={lokerGajiMin}
                       onChange={(e) => setLokerGajiMin(Number(e.target.value))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 text-slate-800"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800 font-bold"
                     />
                   </div>
-
                   <div>
-                    <label className="block font-bold text-slate-700 mb-1">Gaji Maksimal (Rp)</label>
+                    <label className="block font-bold text-slate-700 mb-1">Estimasi Gaji Max (Rp)</label>
                     <input
                       type="number"
+                      min="0"
                       value={lokerGajiMax}
                       onChange={(e) => setLokerGajiMax(Number(e.target.value))}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 text-slate-800"
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800 font-bold"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Pendidikan Minimal</label>
+                    <input
+                      type="text"
+                      placeholder="SMA / SMK / D3 / S1"
+                      value={lokerPendidikan}
+                      onChange={(e) => setLokerPendidikan(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 mb-1">Pengalaman</label>
+                    <input
+                      type="text"
+                      placeholder="Fresh Graduate / Minimal 1 Tahun"
+                      value={lokerPengalaman}
+                      onChange={(e) => setLokerPengalaman(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Tanggung Jawab & Deskripsi (Pisahkan baris baru)</label>
-                  <textarea
-                    rows={3}
-                    placeholder="Contoh:&#10;Mencatat pembukuan harian keluar masuk kas&#10;Melayani pembayaran kasir tablet"
-                    value={lokerDescText}
-                    onChange={(e) => setLokerDescText(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-emerald-500 text-slate-800"
+                  <label className="block font-bold text-slate-700 mb-1">No. WhatsApp HRD / Kontak Pelamar *</label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="081234567890"
+                    value={lokerWaHrd}
+                    onChange={(e) => setLokerWaHrd(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                   />
                 </div>
 
-                <label className="flex items-center gap-2 font-bold text-slate-700 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={lokerSyaratCv}
-                    onChange={(e) => setLokerSyaratCv(e.target.checked)}
-                    className="rounded text-emerald-600 focus:ring-emerald-500"
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Deskripsi & Kualifikasi Lowongan (1 baris per poin)</label>
+                  <textarea
+                    rows={3}
+                    placeholder="• Usia maksimal 28 tahun&#10;• Memiliki ketertarikan di bidang hospitality&#10;• Ramah dan komunikatif"
+                    value={lokerDescText}
+                    onChange={(e) => setLokerDescText(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-blue-500 text-slate-800"
                   />
-                  <span>Wajib Upload Berkas CV (PDF/DOCX)</span>
-                </label>
+                </div>
 
-                <div className="pt-2 flex justify-end gap-2">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
                   <button
                     type="button"
-                    onClick={() => setShowAddLoker(false)}
-                    className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200"
+                    onClick={() => onNavigate?.('smart_city_loker')}
+                    className="px-5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-xs transition cursor-pointer"
                   >
                     Batal
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-md cursor-pointer"
+                    className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
                   >
-                    Terbitkan Lowongan ke Bursa Kerja
+                    Terbitkan Lowongan Sekarang
                   </button>
                 </div>
               </form>
             </div>
           )}
+        </div>
+      ) : (
+        /* =========================================================================
+            MODE 2: LIST VIEW FOR THE ACTIVE SIDEBAR SECTION (NO INTERNAL TABS!)
+            ========================================================================= */
+        <div className="space-y-6 animate-fade-in">
 
-          {/* List Loker & Pelamar */}
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {lokerList.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs flex flex-col justify-between space-y-3"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-                        {item.tipeKerja}
+          {/* Section 1: UMKM Store Catalog */}
+          {currentSection === 'umkm' && (
+            <div className="space-y-6">
+              {/* Banner Top */}
+              <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-2xs space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Toko & UMKM Saya
+                      </h2>
+                      <span className="px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-black">
+                        {umkmList.length} Produk
                       </span>
-                      <h4 className="font-extrabold text-base text-slate-900 mt-1">{item.posisi}</h4>
-                      <div className="text-xs text-slate-500">{item.perusahaan}</div>
-                      <div className="text-xs font-black text-blue-600 mt-1">
-                        Rp {item.gajiMin.toLocaleString('id-ID')} - Rp {item.gajiMax.toLocaleString('id-ID')}
-                      </div>
                     </div>
+                    <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
+                      Kelola produk dagangan Anda. Seluruh produk aktif otomatis tayang dan dapat dipesan warga sekitar tanpa potongan komisi.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <a
+                      href="/smart-city/umkm"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors flex items-center gap-1.5"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Lihat Etalase Publik</span>
+                    </a>
 
                     <button
                       type="button"
-                      onClick={() => handleDeleteLoker(item.id)}
-                      className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
-                      title="Hapus Lowongan"
+                      onClick={() => onNavigate?.('smart_city_umkm_tambah')}
+                      className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Plus className="w-4 h-4" />
+                      <span>+ Tambah Dagangan Baru</span>
                     </button>
                   </div>
-
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <span>{item.jumlahPelamar} Berkas Pelamar</span>
-                    <span className="text-emerald-600 font-bold">Aktif di Bursa Kerja</span>
-                  </div>
                 </div>
-              ))}
-            </div>
+              </div>
 
-            {/* Rekap Pelamar Masuk */}
-            {lamaranList.length > 0 && (
-              <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-2xs space-y-4">
-                <h4 className="font-extrabold text-base text-slate-900 flex items-center gap-2">
-                  <FileText className="w-4 h-4 text-blue-600" />
-                  <span>Berkas Lamaran Kerja Masuk ({lamaranList.length})</span>
-                </h4>
-
-                <div className="divide-y divide-slate-100">
-                  {lamaranList.map((lamaran) => (
-                    <div key={lamaran.id} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              {/* Product Cards Grid or Empty State */}
+              {umkmList.length === 0 ? (
+                <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 sm:p-12 text-center space-y-4 shadow-2xs">
+                  <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-inner">
+                    <Store className="w-8 h-8" />
+                  </div>
+                  <div className="max-w-md mx-auto space-y-1.5">
+                    <h3 className="text-base sm:text-lg font-extrabold text-slate-800">
+                      Anda Belum Memiliki Dagangan UMKM
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                      Daftarkan toko dan produk kuliner, sembako, atau jasa Anda sekarang. Produk Anda akan otomatis tampil di katalog pasar warga dan dapat diorder tetangga sekitar tanpa potongan biaya.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate?.('smart_city_umkm_tambah')}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Buka Toko & Tambah Dagangan Pertama</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {umkmList.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
+                    >
                       <div>
-                        <div className="font-bold text-slate-900">{lamaran.pelamarNama}</div>
-                        <div className="text-slate-500">
-                          Posisi: <strong>{lamaran.lokerPosisi}</strong> ({lamaran.lokerPerusahaan})
+                        <div className="relative aspect-video w-full bg-slate-100 overflow-hidden">
+                          <img
+                            src={item.fotoUrl}
+                            alt={item.nama}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur-xs text-[10px] font-extrabold text-blue-700 shadow-2xs">
+                            {item.kategori}
+                          </span>
                         </div>
-                        <div className="text-[11px] text-slate-400">
-                          Pendidikan: {lamaran.pendidikanTerakhir} • Berkas: {lamaran.cvFileName}
+
+                        <div className="p-4 space-y-2">
+                          <div className="text-[11px] text-slate-500 font-bold">{item.tokoNama}</div>
+                          <h4 className="font-extrabold text-sm text-slate-900 leading-snug line-clamp-1">{item.nama}</h4>
+                          <div className="flex items-center justify-between pt-1">
+                            <span className="text-base font-black text-blue-700">Rp {item.harga.toLocaleString('id-ID')}</span>
+                            <span className="text-xs text-slate-400 font-medium">/{item.satuan || 'porsi'}</span>
+                          </div>
+
+                          {/* Ongkir Penjual Badge */}
+                          <div className="pt-1 flex flex-wrap gap-1">
+                            {Number(item.ongkir ?? 0) === 0 ? (
+                              <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                                🛵 Gratis Ongkir
+                              </span>
+                            ) : (
+                              <span className="text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
+                                🛵 Ongkir Rp {Number(item.ongkir).toLocaleString('id-ID')}
+                              </span>
+                            )}
+                            <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">
+                              ● Tayang di Landing
+                            </span>
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="px-4 pb-4 pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
                         <a
-                          href={`https://wa.me/${lamaran.pelamarWa.replace(/\D/g, '')}`}
+                          href={`/smart-city/umkm/${item.id}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 font-bold hover:bg-emerald-100 flex items-center gap-1"
+                          className="text-blue-600 hover:underline font-bold text-[11px] flex items-center gap-1"
                         >
-                          <Phone className="w-3.5 h-3.5" />
-                          <span>Hubungi Pelamar</span>
+                          <span>Lihat Halaman</span>
+                          <ChevronRight className="w-3 h-3" />
                         </a>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteUmkm(item.id)}
+                          className="text-slate-400 hover:text-rose-600 transition-colors p-1.5 rounded-lg hover:bg-rose-50 cursor-pointer"
+                          title="Hapus Produk"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
                   ))}
                 </div>
+              )}
+            </div>
+          )}
+
+          {/* Section 2: Kos & Hunian */}
+          {currentSection === 'kos' && (
+            <div className="space-y-6">
+              {/* Banner Top */}
+              <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-2xs space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Kelola Kos & Hunian
+                      </h2>
+                      <span className="px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-black">
+                        {kosList.length} Unit
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
+                      Atur unit kos dan kontrakan Anda agar warga dan mahasiswa dapat menemukan kamar kosong secara langsung.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <a
+                      href="/smart-city/kos"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors flex items-center gap-1.5"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Lihat Peta Hunian Publik</span>
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('smart_city_kos_tambah')}
+                      className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>+ Tambah Unit Kos Baru</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
+
+              {/* Kos Cards Grid or Empty State */}
+              {kosList.length === 0 ? (
+                <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 sm:p-12 text-center space-y-4 shadow-2xs">
+                  <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-inner">
+                    <Home className="w-8 h-8" />
+                  </div>
+                  <div className="max-w-md mx-auto space-y-1.5">
+                    <h3 className="text-base sm:text-lg font-extrabold text-slate-800">
+                      Anda Belum Memiliki Unit Kos atau Kontrakan Terdaftar
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate?.('smart_city_kos_tambah')}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>+ Tambah Unit Kos Pertama</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {kosList.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs hover:shadow-md transition-all flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="relative aspect-video w-full bg-slate-100 overflow-hidden">
+                          <img
+                            src={item.fotoUrl}
+                            alt={item.nama}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          <span className="absolute top-2.5 right-2.5 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur-xs text-[10px] font-extrabold text-blue-700 shadow-2xs">
+                            {item.tipe}
+                          </span>
+                        </div>
+
+                        <div className="p-4 space-y-2">
+                          <h4 className="font-extrabold text-sm text-slate-900 leading-snug line-clamp-1">{item.nama}</h4>
+                          <div className="text-[11px] text-slate-500 flex items-center gap-1">
+                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="truncate">{item.alamat}</span>
+                          </div>
+                          <div className="flex items-center justify-between pt-1">
+                            <span className="text-base font-black text-blue-700">Rp {item.harga.toLocaleString('id-ID')}</span>
+                            <span className="text-xs text-slate-400 font-medium">/{item.periode}</span>
+                          </div>
+
+                          <div className="flex items-center gap-2 pt-1 text-[11px]">
+                            <span className="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                              Sisa {item.sisaKamar} Kamar
+                            </span>
+                          </div>
+
+                          {item.deskripsi && (
+                            <p className="text-[11px] text-slate-500 line-clamp-2 leading-relaxed pt-1 border-t border-slate-100/80">
+                              {item.deskripsi}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="px-4 pb-4 pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                        <a
+                          href="/smart-city/kos"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline font-bold text-[11px] flex items-center gap-1"
+                        >
+                          <span>Lihat di Peta</span>
+                          <ChevronRight className="w-3 h-3" />
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteKos(item.id)}
+                          className="text-slate-400 hover:text-rose-600 transition-colors p-1.5 rounded-lg hover:bg-rose-50 cursor-pointer"
+                          title="Hapus Kos"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Section 3: Loker & Bursa Kerja */}
+          {currentSection === 'loker' && (
+            <div className="space-y-6">
+              {/* Banner Top */}
+              <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-2xs space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
+                        Bursa Kerja & Lowongan
+                      </h2>
+                      <span className="px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-[10px] font-black">
+                        {lokerList.length} Lowongan
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
+                      Pasang lowongan kerja dan kelola berkas pelamar kerja dari warga lokal secara langsung.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <a
+                      href="/smart-city/loker"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors flex items-center gap-1.5"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Lihat Bursa Karir Publik</span>
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('smart_city_loker_tambah')}
+                      className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
+                    >
+                      <Plus className="w-4 h-4" />
+                      <span>+ Pasang Lowongan Baru</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Loker List or Empty State */}
+              {lokerList.length === 0 ? (
+                <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 sm:p-12 text-center space-y-4 shadow-2xs">
+                  <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-inner">
+                    <Briefcase className="w-8 h-8" />
+                  </div>
+                  <div className="max-w-md mx-auto space-y-1.5">
+                    <h3 className="text-base sm:text-lg font-extrabold text-slate-800">
+                      Anda Belum Membuka Lowongan Kerja
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onNavigate?.('smart_city_loker_tambah')}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Pasang Lowongan Kerja Pertama</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {lokerList.map((item) => (
+                    <div
+                      key={item.id}
+                      className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-2xs hover:shadow-md transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-extrabold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md">
+                            {item.kategori}
+                          </span>
+                          <span className="text-xs font-semibold text-slate-400">•</span>
+                          <span className="text-xs font-bold text-slate-600">{item.perusahaan}</span>
+                        </div>
+                        <h4 className="font-extrabold text-base text-slate-900">{item.posisi}</h4>
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
+                          <span className="font-bold text-emerald-700">Rp {item.gajiMin.toLocaleString('id-ID')} - Rp {item.gajiMax.toLocaleString('id-ID')}</span>
+                          <span>•</span>
+                          <span>{item.tipeKerja}</span>
+                          <span>•</span>
+                          <span>{item.pendidikan}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <a
+                          href="/smart-city/loker"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3.5 py-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold text-xs border border-slate-200 transition-colors"
+                        >
+                          Lihat Pelamar ({item.jumlahPelamar || 0})
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteLoker(item.id)}
+                          className="p-2 text-slate-400 hover:text-rose-600 rounded-xl hover:bg-rose-50 transition-colors cursor-pointer"
+                          title="Hapus Lowongan"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
       )}
 
