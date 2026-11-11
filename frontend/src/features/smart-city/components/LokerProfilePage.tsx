@@ -183,7 +183,7 @@ export const LokerProfilePage: React.FC = () => {
                   <span>Warga Kota Kediri</span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Gunakan akun warga yang didaftarkan kelurahan/RT setempat. NIK otomatis terverifikasi dan mendapat prioritas penempatan program kerja lokal Disnaker & mitra BUMDes.
+                  Gunakan akun warga yang didaftarkan kelurahan/RT setempat. NIK otomatis terverifikasi dan mendapat prioritas penempatan program kerja lokal dan kemitraan usaha.
                 </p>
               </div>
 

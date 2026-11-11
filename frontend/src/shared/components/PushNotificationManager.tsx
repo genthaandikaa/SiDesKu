@@ -224,52 +224,11 @@ export const PushNotificationManager: React.FC<PushNotificationManagerProps> = (
           </div>
         )}
 
-        {/* Value Proposition List */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-slate-600">
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-bold text-slate-800">Status Surat Real-Time</p>
-              <p className="text-[11px] text-slate-500 mt-0.5">Notifikasi instan saat surat diverifikasi RT atau disahkan Kades.</p>
-            </div>
-          </div>
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-bold text-slate-800">Pusat Pesan Desa</p>
-              <p className="text-[11px] text-slate-500 mt-0.5">Dapatkan kabar pesan masuk dari perangkat desa atau sesama warga.</p>
-            </div>
-          </div>
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
-            <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-bold text-slate-800">Bebas Pulsa & Kuota (Rp0)</p>
-              <p className="text-[11px] text-slate-500 mt-0.5">Menggunakan standar terbuka W3C VAPID tanpa biaya gateway berbayar.</p>
-            </div>
-          </div>
-        </div>
-
         {/* Action Buttons */}
         <div className="pt-2 flex flex-wrap items-center gap-3">
           {status.isSubscribed ? (
             <>
-              <button
-                type="button"
-                disabled={actionLoading}
-                onClick={handleTestPush}
-                className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-2 cursor-pointer disabled:opacity-50"
-              >
-                {actionLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                Kirim Uji Coba Notifikasi
-              </button>
-              <button
-                type="button"
-                disabled={actionLoading}
-                onClick={handleUnsubscribe}
-                className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition cursor-pointer disabled:opacity-50"
-              >
-                Nonaktifkan Notifikasi
-              </button>
+            {/*  */}
             </>
           ) : (
             <button
@@ -282,11 +241,6 @@ export const PushNotificationManager: React.FC<PushNotificationManagerProps> = (
               Aktifkan Notifikasi Web Push
             </button>
           )}
-
-          <p className="text-[11px] text-slate-400 flex items-center gap-1.5 ml-auto">
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-            Privasi terlindungi: payload tidak memuat NIK atau dokumen privat.
-          </p>
         </div>
       </div>
 

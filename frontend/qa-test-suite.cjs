@@ -411,6 +411,25 @@ async function sleep(ms) {
       recordTest('Suite 5', 'Public Loker Catalog Loaded from Database', 'FAILED', `Only ${jobCount} jobs found`);
     }
 
+    // 5.1.1 Verify Disnaker/BNSP/NIB/STANDAR GAJI and UMK are NOT displayed on catalog
+    const hasDisnaker = await page.locator('text=Terverifikasi Disnaker').isVisible();
+    const hasBnsp = await page.locator('text=Sertifikasi BNSP').isVisible();
+    const hasStandarGaji = await page.locator('text=STANDAR GAJI BULANAN').isVisible();
+    const hasDiAtasUmk = await page.locator('text=di atas UMK').isVisible();
+    const hasJtSalary = await page.locator('text=jt').count() > 0;
+
+    if (!hasDisnaker && !hasBnsp && !hasStandarGaji && !hasDiAtasUmk) {
+      recordTest('Suite 5', 'Catalog Cleanup (No Disnaker/BNSP/STANDAR GAJI/UMK)', 'PASSED', 'Unwanted tags successfully removed');
+    } else {
+      recordTest('Suite 5', 'Catalog Cleanup (No Disnaker/BNSP/STANDAR GAJI/UMK)', 'FAILED', 'Some unwanted elements were still found');
+    }
+
+    if (hasJtSalary) {
+      recordTest('Suite 5', 'Salary Concise "jt" Format Displayed', 'PASSED', 'e.g. 4.9 - 5.5 jt');
+    } else {
+      recordTest('Suite 5', 'Salary Concise "jt" Format Displayed', 'FAILED', 'jt format not found');
+    }
+
     // 5.2 Filter / Search Loker
     const lokerSearchInput = page.locator('input[placeholder*="posisi"]').first();
     if (await lokerSearchInput.isVisible()) {
@@ -429,6 +448,21 @@ async function sleep(ms) {
     const isDetailVisible = await detailTitle.isVisible();
     if (isDetailVisible) {
       recordTest('Suite 5', 'Loker Detail Page Navigation', 'PASSED', await detailTitle.innerText());
+
+      // 5.3.1 Verify NIB, Disnaker notice & detail gaji
+      const hasNibDetail = await page.locator('text=NIB:').isVisible();
+      const hasDisnakerDetail = await page.locator('text=pengawasan Dinas Ketenagakerjaan').isVisible();
+      const detailGajiJt = await page.locator('text=jt / bln').first().isVisible();
+
+      if (!hasNibDetail && !hasDisnakerDetail) {
+        recordTest('Suite 5', 'Detail Page Cleanup (No NIB & No Disnaker Notice)', 'PASSED');
+      } else {
+        recordTest('Suite 5', 'Detail Page Cleanup (No NIB & No Disnaker Notice)', 'FAILED', 'NIB or Disnaker notice still visible');
+      }
+
+      if (detailGajiJt) {
+        recordTest('Suite 5', 'Detail Page Concise "jt / bln" Salary', 'PASSED');
+      }
     }
 
     // 5.4 Click Fast Apply Button

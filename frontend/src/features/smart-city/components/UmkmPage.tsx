@@ -327,8 +327,8 @@ export const UmkmPage: React.FC = () => {
           
           {/* Left Title & Subtitle */}
           <div className="space-y-2 sm:space-y-3 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-black uppercase tracking-wider">
-              <ShoppingBag className="w-3.5 h-3.5 text-amber-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold">
+              <ShoppingBag className="w-3.5 h-3.5 text-blue-600" />
               <span>All Store • Pasar Produk Warga Kediri</span>
             </div>
 

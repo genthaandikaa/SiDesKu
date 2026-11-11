@@ -204,7 +204,7 @@ export const BuatSuratSekdesView: React.FC = () => {
               onClick={handleReset}
               className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition-all cursor-pointer"
             >
-              <span>+ Terbitkan Surat Lain</span>
+              <span>Terbitkan Surat Lain</span>
             </button>
           </div>
         </div>

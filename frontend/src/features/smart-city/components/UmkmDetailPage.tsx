@@ -454,7 +454,7 @@ export const UmkmDetailPage: React.FC = () => {
                 </div>
                 <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-slate-900/90 backdrop-blur-xs text-white text-[10px] sm:text-xs font-bold shadow-sm flex items-center gap-1 sm:gap-1.5">
                   <Award className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Sertifikasi BNSP Resmi</span>
+                  <span>Teknisi Berpengalaman & Teruji</span>
                 </div>
               </div>
 

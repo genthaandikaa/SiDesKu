@@ -1427,7 +1427,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                       className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
                     >
                       <Plus className="w-4 h-4" />
-                      <span>+ Tambah Dagangan Baru</span>
+                      <span>Tambah Dagangan Baru</span>
                     </button>
                   </div>
                 </div>
@@ -1565,7 +1565,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                       className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
                     >
                       <Plus className="w-4 h-4" />
-                      <span>+ Tambah Unit Kos Baru</span>
+                      <span>Tambah Unit Kos Baru</span>
                     </button>
                   </div>
                 </div>
@@ -1697,7 +1697,7 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                       className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-md shadow-blue-600/20 cursor-pointer transition-all active:scale-95"
                     >
                       <Plus className="w-4 h-4" />
-                      <span>+ Pasang Lowongan Baru</span>
+                      <span>Pasang Lowongan Baru</span>
                     </button>
                   </div>
                 </div>

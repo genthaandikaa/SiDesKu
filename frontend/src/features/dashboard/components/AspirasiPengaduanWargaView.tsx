@@ -164,7 +164,7 @@ export const AspirasiPengaduanWargaView: React.FC = () => {
     <div className="space-y-6 page-enter font-sans max-w-6xl mx-auto">
       {/* Toast Feedback */}
       {toastMessage && (
-        <div className="fixed top-5 right-5 z-[9999999] bg-blue-950/90 text-white px-4 py-3 rounded-2xl shadow-xl border border-blue-400/40 backdrop-blur-md flex items-center gap-2 text-xs font-bold animate-fade-in">
+        <div className="fixed top-5 right-5 z-[9999999] bg-blue-950/90 text-white px-4 py-3 rounded-2xl shadow-xl border border-blue-400/40 flex items-center gap-2 text-xs font-bold animate-fade-in">
           <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
           <span>{toastMessage}</span>
         </div>
@@ -348,13 +348,10 @@ export const AspirasiPengaduanWargaView: React.FC = () => {
 
       {/* Modal Formulir Pengaduan Baru */}
       {showModal && createPortal(
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 overflow-y-auto">
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 space-y-5 shadow-2xl my-auto max-h-[92vh] overflow-y-auto animate-scale-up">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-wider text-blue-800 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200">
-                  Formulir Aspirasi & Pengaduan
-                </span>
                 <h3 className="text-lg font-black text-slate-900 mt-1">Sampaikan Aspirasi / Aduan</h3>
                 <p className="text-xs text-slate-500">Laporan akan diteruskan ke Pengurus RT {rtNomor} dan Desa {user?.desa?.nama_desa || 'Doko'}</p>
               </div>

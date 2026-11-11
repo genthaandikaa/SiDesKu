@@ -30,7 +30,8 @@ import {
   getStoredLokerById,
   getStoredLokerList,
   getStoredJobSeekerProfile,
-  submitStoredLamaran
+  submitStoredLamaran,
+  formatGajiJt
 } from '../smartCityStorage';
 import { useAuth } from '@/shared/context/AuthContext';
 
@@ -220,10 +221,6 @@ export const LokerApplyPage: React.FC = () => {
 
         {/* Page Header */}
         <div className="pb-6 border-b border-slate-200">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
-            PENGAJUAN BERKAS DIGITAL SIDESKU
-          </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Lamar Posisi: {job.posisi}
           </h1>
@@ -376,10 +373,10 @@ export const LokerApplyPage: React.FC = () => {
                 {/* WhatsApp */}
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 tracking-wider uppercase mb-1.5">
-                    Kontak WhatsApp *
+                    Kontak WhatsApp
                   </label>
                   <input
-                    type="tel"
+                    type="number"
                     value={applicantWa}
                     onChange={(e) => setApplicantWa(e.target.value)}
                     placeholder="081234567890"
@@ -512,7 +509,6 @@ export const LokerApplyPage: React.FC = () => {
                     />
                   </div>
                   <span className="block text-xs text-slate-400 mt-1">
-                    Pastikan akses tautan publik atau dapat dilihat tanpa permintaan izin khusus.
                   </span>
                 </div>
 
@@ -593,10 +589,6 @@ export const LokerApplyPage: React.FC = () => {
                   placeholder="Tulis pesan singkat atau perkenalan diri secara ringkas untuk HRD (maksimal 300 karakter)..."
                   className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
                 />
-                <div className="mt-2 flex items-center justify-between text-xs text-slate-400">
-                  <span>Fokuskan pada kesiapan kerja & domisili terdekat.</span>
-                  <span className="font-medium text-slate-500">{recruiterNote.length} / 300</span>
-                </div>
               </div>
             </div>
 
@@ -659,10 +651,10 @@ export const LokerApplyPage: React.FC = () => {
                 <div className="flex justify-between items-center py-1 border-b border-slate-50">
                   <span className="text-slate-500 font-medium inline-flex items-center gap-1.5">
                     <DollarSign className="w-3.5 h-3.5 text-slate-400" />
-                    <span>Standar Gaji</span>
+                    <span>Estimasi Gaji</span>
                   </span>
                   <span className="font-bold text-blue-600">
-                    Rp {job.gajiMin.toLocaleString('id-ID')} – {job.gajiMax.toLocaleString('id-ID')}
+                    {formatGajiJt(job.gajiMin, job.gajiMax)}
                   </span>
                 </div>
 
@@ -692,25 +684,6 @@ export const LokerApplyPage: React.FC = () => {
                   <span className="font-semibold text-slate-800">{job.batasPengajuan || '31 Maret 2025'}</span>
                 </div>
               </div>
-            </div>
-
-            {/* Tips Kurasi Berkas */}
-            <div className="p-5 rounded-3xl bg-blue-50/50 border border-blue-100 space-y-2">
-              <div className="flex items-center gap-2 text-blue-800 font-bold text-xs uppercase tracking-wider">
-                <Sparkles className="w-4 h-4 text-blue-600" />
-                <span>Tips Kurasi Berkas</span>
-              </div>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                Pastikan nomor kontak WhatsApp aktif dan data pengalaman administrasi tercantum jelas pada berkas CV utama.
-              </p>
-            </div>
-
-            {/* Trust Box */}
-            <div className="p-4 rounded-3xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600 leading-relaxed flex items-start gap-2.5">
-              <ShieldCheck className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-              <p>
-                Proses rekrutmen ini <strong>100% bebas biaya</strong> dan diawasi langsung oleh Dinas Tenaga Kerja & Tim SiDesKu.
-              </p>
             </div>
           </div>
         </div>

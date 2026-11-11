@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import { LokerItem } from '../types';
 import { smartCityApi } from '../api/smartCityApi';
-import { getStoredLokerById, getStoredLokerList } from '../smartCityStorage';
+import { getStoredLokerById, getStoredLokerList, formatGajiJt } from '../smartCityStorage';
 
 export const LokerDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -107,10 +107,6 @@ export const LokerDetailPage: React.FC = () => {
             <div className="space-y-3">
               {/* Badges */}
               <div className="flex flex-wrap items-center gap-2 text-xs">
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full font-semibold bg-sky-50 text-sky-700 border border-sky-200">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-sky-600" />
-                  {job.tagVerifikasi || 'Lowongan Terverifikasi Resmi'}
-                </span>
                 <span className="inline-flex items-center px-3 py-1 rounded-full font-semibold bg-blue-50 text-blue-700 border border-blue-200">
                   {job.tipeKerja}
                 </span>
@@ -135,12 +131,6 @@ export const LokerDetailPage: React.FC = () => {
                     <MapPin className="w-3.5 h-3.5 text-slate-400" />
                     Penempatan {job.lokasi}
                   </span>
-                  {job.nib && (
-                    <>
-                      <span className="text-slate-300">•</span>
-                      <span className="text-slate-500">NIB: {job.nib}</span>
-                    </>
-                  )}
                 </div>
               </div>
             </div>
@@ -186,17 +176,14 @@ export const LokerDetailPage: React.FC = () => {
           {/* 4-Metric Quick Stat Grid (Matching Stitch Screen 3) */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
             {/* Stat 1: Gaji */}
-            <div className="p-4 rounded-2xl bg-sky-50/50 border border-sky-100">
+            <div className="p-4 rounded-2xl bg-sky-50/50 border border-sky-100 flex flex-col justify-center">
               <span className="block text-[11px] font-bold text-slate-400 tracking-wider uppercase">
-                {job.gajiLabel || 'Estimasi Gaji Bulanan'}
+                Estimasi Gaji
               </span>
               <div className="text-base sm:text-lg font-extrabold text-blue-700 mt-1">
-                Rp {job.gajiMin.toLocaleString('id-ID')} – {job.gajiMax.toLocaleString('id-ID')}
+                {formatGajiJt(job.gajiMin, job.gajiMax)}
                 <span className="text-xs font-normal text-slate-500 ml-1">/ bln</span>
               </div>
-              <span className="block text-xs text-slate-500 mt-1">
-                Pajak PPh ditanggung perusahaan
-              </span>
             </div>
 
             {/* Stat 2: Waktu Kerja */}
@@ -426,14 +413,6 @@ export const LokerDetailPage: React.FC = () => {
                   <span>Tanya via Chat SiDesKu</span>
                 </a>
               </div>
-
-              {/* Trust Badge Box */}
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-600 leading-relaxed flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                <p>
-                  Proses rekrutmen ini <strong>100% bebas pungutan biaya</strong> dan dilindungi oleh pengawasan Dinas Ketenagakerjaan.
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -447,7 +426,7 @@ export const LokerDetailPage: React.FC = () => {
               Estimasi Gaji
             </span>
             <span className="text-sm font-extrabold text-blue-700">
-              Rp {job.gajiMin.toLocaleString('id-ID')}
+              {formatGajiJt(job.gajiMin, job.gajiMax)}
             </span>
           </div>
 

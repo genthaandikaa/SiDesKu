@@ -42,6 +42,51 @@ export function formatDistance(distanceKm: number): string {
   return `${distanceKm.toFixed(1)} km`;
 }
 
+/**
+ * Format representasi rentang gaji dalam format singkat 'jt' (contoh: 3 - 5 jt, 4.9 - 5.5 jt)
+ */
+export function formatGajiJt(min?: number, max?: number): string {
+  const minVal = min || 0;
+  const maxVal = max || 0;
+
+  const formatVal = (val: number): string => {
+    if (val >= 1_000_000) {
+      const inJt = val / 1_000_000;
+      const formatted = Number.isInteger(inJt) ? inJt.toString() : inJt.toFixed(1).replace(/\.0$/, '');
+      return `${formatted}jt`;
+    }
+    if (val >= 1_000) {
+      const inRb = val / 1_000;
+      const formatted = Number.isInteger(inRb) ? inRb.toString() : inRb.toFixed(0);
+      return `${formatted}rb`;
+    }
+    return val.toLocaleString('id-ID');
+  };
+
+  if (!minVal && !maxVal) return 'Gaji Kompetitif';
+  if (minVal && !maxVal) return formatVal(minVal);
+  if (!minVal && maxVal) return `s.d ${formatVal(maxVal)}`;
+  if (minVal === maxVal) return formatVal(minVal);
+
+  if (minVal >= 1_000_000 && maxVal >= 1_000_000) {
+    const minJt = minVal / 1_000_000;
+    const maxJt = maxVal / 1_000_000;
+    const minStr = Number.isInteger(minJt) ? minJt.toString() : minJt.toFixed(1).replace(/\.0$/, '');
+    const maxStr = Number.isInteger(maxJt) ? maxJt.toString() : maxJt.toFixed(1).replace(/\.0$/, '');
+    return `${minStr} - ${maxStr} jt`;
+  }
+
+  if (minVal >= 1_000 && maxVal >= 1_000 && maxVal < 1_000_000) {
+    const minRb = minVal / 1_000;
+    const maxRb = maxVal / 1_000;
+    const minStr = Number.isInteger(minRb) ? minRb.toString() : minRb.toFixed(0);
+    const maxStr = Number.isInteger(maxRb) ? maxRb.toString() : maxRb.toFixed(0);
+    return `${minStr} - ${maxStr} rb`;
+  }
+
+  return `${formatVal(minVal)} - ${formatVal(maxVal)}`;
+}
+
 // ============================================================================
 // SEED DATA: UMKM (Pure Dynamic Backend API - 50 items seeded in Laravel DB)
 // ============================================================================
@@ -139,21 +184,17 @@ const SEED_LOKER: LokerItem[] = [
     id: 'loker-1',
     posisi: 'Staf Administrasi & Pendataan Warga',
     perusahaan: 'PT Solusi Distribusi Kota',
-    kodeReg: 'Kode Reg: DSK-8812',
-    nib: '9120308821033',
     companyLogoText: 'SD',
     mitraStatus: 'Mitra Resmi Terverifikasi',
-    tagVerifikasi: 'Terverifikasi Disnaker',
     kategori: 'Administrasi',
     tipeKerja: 'Penuh Waktu (Full-time)',
     lokasi: 'Kecamatan Pusat',
     distanceText: '1.2 km dari Anda',
     lat: -7.8166,
     lng: 112.0118,
-    gajiLabel: 'STANDAR GAJI BULANAN',
+    gajiLabel: 'Estimasi Gaji',
     gajiMin: 4900000,
     gajiMax: 5500000,
-    gajiSubtext: '/ bulan • di atas UMK',
     pendidikan: 'Min. SMK / D3 / S1',
     pengalaman: 'Fresh Graduate / 1 tahun',
     syaratCv: true,
@@ -187,14 +228,14 @@ const SEED_LOKER: LokerItem[] = [
       'Berdomisili di wilayah Kecamatan Pusat atau bersedia bertugas di lokasi kantor (WFO).'
     ],
     benefits: [
-      { title: 'Gaji Pokok Kompetitif', desc: 'Sesuai standar UMK kota dengan transparansi PPh.', icon: 'money' },
+      { title: 'Gaji Pokok Kompetitif', desc: 'Sesuai standar penempatan dengan transparansi PPh.', icon: 'money' },
       { title: 'Jaminan Sosial Lengkap', desc: 'BPJS Kesehatan & BPJS Ketenagakerjaan aktif.', icon: 'shield' },
       { title: 'Tunjangan Operasional', desc: 'Tunjangan transportasi harian & uang makan.', icon: 'transport' },
       { title: 'Pengembangan Karir', desc: 'Jenjang karir jelas & pelatihan digital bersertifikasi.', icon: 'growth' }
     ],
     waHrd: '6281234567810',
     emailHrd: 'karir@distribusikota.co.id',
-    disnakerVerified: true,
+    disnakerVerified: false,
     tanggalPosting: 'Pembaruan Real-Time',
     jumlahPelamar: 42,
     createdAt: '2026-11-01'
@@ -205,7 +246,6 @@ const SEED_LOKER: LokerItem[] = [
     perusahaan: 'Paguyuban Teknisi Mandiri Sejahtera',
     companyLogoText: 'PT',
     mitraStatus: 'Mitra Komunitas Kota',
-    tagVerifikasi: 'Sertifikasi BNSP',
     kategori: 'Teknik & Bengkel',
     tipeKerja: 'Jasa Mandiri / Freelance',
     isJasaMitra: true,
@@ -213,10 +253,9 @@ const SEED_LOKER: LokerItem[] = [
     distanceText: '800 m dari Anda',
     lat: -7.8185,
     lng: 112.0142,
-    gajiLabel: 'TARIF JASA TEKNISI',
+    gajiLabel: 'Estimasi Biaya Jasa',
     gajiMin: 75000,
     gajiMax: 150000,
-    gajiSubtext: '/ unit pengerjaan',
     pendidikan: 'SMK Teknik Pendingin / Pengalaman 1 th',
     pengalaman: 'Minimal 1 tahun atau punya alat dasar',
     syaratCv: false,
@@ -230,7 +269,7 @@ const SEED_LOKER: LokerItem[] = [
     batasPengajuan: 'Terbuka Sepanjang Tahun',
     kuotaKebutuhan: '5 Orang',
     waktuProses: '1 - 2 hari kerja',
-    deskripsiDetail: 'Program kemitraan mandiri Disnaker bersama Paguyuban Teknisi untuk mempertemukan teknisi bersertifikasi dengan warga perumahan yang membutuhkan servis AC cepat dan terstandar.',
+    deskripsiDetail: 'Program kemitraan mandiri bersama Paguyuban Teknisi untuk mempertemukan teknisi bersertifikasi dengan warga perumahan yang membutuhkan servis AC cepat dan terstandar.',
     deskripsi: [
       'Menerima order panggilan servis cuci dan perawatan AC warga sekitar melalui aplikasi.',
       'Melakukan pengecekan tekanan freon, pembersihan evaporator, dan pipa drainase.',
@@ -249,11 +288,11 @@ const SEED_LOKER: LokerItem[] = [
     benefits: [
       { title: 'Penghasilan Langsung Cair', desc: 'Bagi hasil transparan langsung masuk dompet digital setiap pekerjaan selesai.', icon: 'money' },
       { title: 'Radius Panggilan Terdekat', desc: 'Sistem memprioritaskan order di sekitar tempat tinggal mitra.', icon: 'transport' },
-      { title: 'Sertifikasi & Pelatihan', desc: 'Dukungan sertifikasi BNSP resmi berkala dari Pemkot.', icon: 'growth' },
+      { title: 'Keahlian & Pelatihan', desc: 'Dukungan pelatihan berkala dari mitra industri.', icon: 'growth' },
       { title: 'Perlindungan Komunitas', desc: 'Didukung paguyuban resmi dan perlindungan keselamatan kerja.', icon: 'shield' }
     ],
     waHrd: '6281234567812',
-    disnakerVerified: true,
+    disnakerVerified: false,
     tanggalPosting: 'Hari ini',
     jumlahPelamar: 18,
     createdAt: '2026-11-03'
@@ -264,17 +303,15 @@ const SEED_LOKER: LokerItem[] = [
     perusahaan: 'Kopi Seduh Mandiri',
     companyLogoText: 'KS',
     mitraStatus: 'Usaha Mikro Binaan Kota',
-    tagVerifikasi: 'UMKM Binaan Resmi',
     kategori: 'F&B / Kuliner',
     tipeKerja: 'Shift Fleksibel',
     lokasi: 'Jl. Kaliurang',
     distanceText: '2.4 km dari Anda',
     lat: -7.825,
     lng: 112.025,
-    gajiLabel: 'STANDAR GAJI & TUNJANGAN',
+    gajiLabel: 'Estimasi Gaji',
     gajiMin: 3200000,
     gajiMax: 4000000,
-    gajiSubtext: '/ bulan + Uang Makan Harian',
     pendidikan: 'SMA / SMK Sederajat',
     pengalaman: 'Terbuka untuk pemula yang ingin belajar',
     syaratCv: true,
@@ -311,7 +348,7 @@ const SEED_LOKER: LokerItem[] = [
       { title: 'Jadwal Shift Fleksibel', desc: 'Bisa menyesuaikan jam kuliah atau aktivitas keluarga.', icon: 'shield' }
     ],
     waHrd: '6281234567811',
-    disnakerVerified: true,
+    disnakerVerified: false,
     tanggalPosting: '2 hari lalu',
     jumlahPelamar: 29,
     createdAt: '2026-11-04'
@@ -322,17 +359,15 @@ const SEED_LOKER: LokerItem[] = [
     perusahaan: 'Pusat Distribusi Sembako Warga',
     companyLogoText: 'PD',
     mitraStatus: 'BUMD Partner',
-    tagVerifikasi: 'Terverifikasi Disnaker',
     kategori: 'Perdagangan & Retail',
     tipeKerja: 'Penuh Waktu',
     lokasi: 'Kawasan Industri Timur',
     distanceText: '4.1 km dari Anda',
     lat: -7.8105,
     lng: 112.0054,
-    gajiLabel: 'STANDAR GAJI BULANAN',
+    gajiLabel: 'Estimasi Gaji',
     gajiMin: 5100000,
     gajiMax: 5800000,
-    gajiSubtext: '/ bulan • BPJS TK & Kesehatan',
     pendidikan: 'SMA / SMK Sederajat',
     pengalaman: 'Fresh Graduate / Pengalaman 1 th',
     syaratCv: true,
@@ -434,10 +469,10 @@ const DEFAULT_JOB_SEEKER_PROFILE: JobSeekerProfile = {
   berkasPendukung: [
     {
       id: 'bp-1',
-      judul: 'Sertifikat BNSP Administrasi',
+      judul: 'Sertifikat Keahlian Administrasi',
       status: 'Valid',
       subjudul: 'Terbit 2024 • PDF (840 KB)',
-      noReg: 'Reg. BNSP-9018',
+      noReg: 'No. SK-9018',
       icon: 'award'
     },
     {
@@ -452,8 +487,8 @@ const DEFAULT_JOB_SEEKER_PROFILE: JobSeekerProfile = {
       id: 'bp-3',
       judul: 'Pelatihan Excel Korporat',
       status: 'Valid',
-      subjudul: 'BLK Disnaker • 40 Jam Sesi',
-      noReg: 'Sertifikat: BLK-2023',
+      subjudul: 'Pusat Pelatihan Kerja • 40 Jam Sesi',
+      noReg: 'Sertifikat: PK-2023',
       icon: 'ribbon'
     }
   ],
@@ -466,8 +501,8 @@ const DEFAULT_JOB_SEEKER_PROFILE: JobSeekerProfile = {
   preferensi: {
     area: 'Kecamatan Pusat / Sukamaju',
     radius: 'Radius maksimal 15 km dari domisili',
-    gaji: 'Rp 4.800.000+ / bulan',
-    gajiSub: 'Sesuai UMK wilayah & tunjangan',
+    gaji: '4.8 jt / bulan',
+    gajiSub: 'Sesuai kualifikasi & penempatan',
     tipe: 'Penuh Waktu (Full-time)',
     tipeSub: 'Tersedia untuk sistem kontrak PKWT / tetap'
   }

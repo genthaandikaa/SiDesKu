@@ -289,11 +289,6 @@ export const BerkasKependudukanView: React.FC<BerkasKependudukanViewProps> = ({ 
       {/* Header Banner: Solusi Cukup Sekali Upload (Clean White & Emerald Accent) */}
       <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-2xs space-y-4">
         <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/70 text-blue-800 text-[11px] font-black">
-            <ShieldCheck className="w-4 h-4 text-blue-600" />
-            <span>Master Berkas Kependudukan Terpadu</span>
-          </div>
-
           <div className="max-w-2xl space-y-1.5">
             <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900">
               Cukup Upload Sekali, Otomatis untuk Semua Surat Desa
