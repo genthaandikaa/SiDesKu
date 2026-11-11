@@ -56,3 +56,7 @@ backend/public/uploads/lampiran/*
 
 dev-dist/
 frontend/dev-dist/
+
+# Local config
+.agents/
+
