@@ -75,7 +75,7 @@ const DEFAULT_SURAT_TYPES: SuratItem[] = [
     kategori: 'Kependudukan',
     waktu: '15 Menit',
     biaya: 'Gratis',
-    syarat: ['Foto Kartu Keluarga (KK)', 'Surat Pengantar RT/RW', 'KTP Lama / Surat Kehilangan (bila hilang/rusak)'],
+    syarat: ['Foto Kartu Keluarga (KK)', 'KTP Lama (jika ada)', 'Surat Kehilangan Kepolisian (jika hilang)'],
     kegunaan: 'Permohonan penerbitan, penggantian, atau rekam biometrik KTP Elektronik di Dispendukcapil.'
   },
   {
@@ -85,7 +85,7 @@ const DEFAULT_SURAT_TYPES: SuratItem[] = [
     kategori: 'Kependudukan',
     waktu: '15 Menit',
     biaya: 'Gratis',
-    syarat: ['KK Asli Lama', 'Buku Nikah / Akta Cerai', 'Surat Keterangan Lahir / Pindah'],
+    syarat: ['Kartu Keluarga Lama', 'Buku Nikah / Akta Perkawinan', 'Surat Pindah (jika datang dari luar kota)'],
     kegunaan: 'Pembuatan KK baru, penambahan anggota keluarga, atau pemutakhiran data Kartu Keluarga.'
   },
   {
@@ -95,7 +95,7 @@ const DEFAULT_SURAT_TYPES: SuratItem[] = [
     kategori: 'Bantuan & Sosial',
     waktu: '15 Menit',
     biaya: 'Gratis',
-    syarat: ['Foto KTP Pemohon', 'Foto Kartu Keluarga (KK)', 'Surat Pengantar RT'],
+    syarat: ['Foto KTP Pemohon', 'Foto Kartu Keluarga (KK)', 'Surat Pengantar RT/RW', 'Foto Rumah Tampak Depan'],
     kegunaan: 'Syarat beasiswa, KIP Kuliah, keringanan biaya rumah sakit, atau subsidi bantuan sosial.'
   },
   {
@@ -105,7 +105,7 @@ const DEFAULT_SURAT_TYPES: SuratItem[] = [
     kategori: 'Kependudukan',
     waktu: '10 Menit',
     biaya: 'Gratis',
-    syarat: ['Foto KTP Pemohon', 'Foto Kartu Keluarga (KK)'],
+    syarat: ['Foto KTP Pemohon', 'Foto Kartu Keluarga (KK)', 'Surat Pengantar RT/RW Setempat'],
     kegunaan: 'Pembukaan rekening perbankan, kelengkapan perizinan, dan syarat lamaran pekerjaan.'
   },
   {

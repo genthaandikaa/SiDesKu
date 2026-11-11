@@ -1957,9 +1957,11 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                                     </span>
                                   )}
                                 </div>
-                                <p className="text-[10px] text-slate-500 mt-0.5 leading-snug">
-                                  {dok.desc}
-                                </p>
+                                {(dok as any).desc && (
+                                  <p className="text-[10px] text-slate-500 mt-0.5 leading-snug">
+                                    {(dok as any).desc}
+                                  </p>
+                                )}
                               </div>
                             </button>
                           );

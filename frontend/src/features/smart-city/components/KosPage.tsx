@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Home,
   MapPin,
@@ -35,6 +35,7 @@ import {
 } from '../smartCityStorage';
 
 export const KosPage: React.FC = () => {
+  const navigate = useNavigate();
   const [kosList, setKosList] = useState<HunianItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedType, setSelectedType] = useState<string>('Semua');
@@ -418,8 +419,8 @@ export const KosPage: React.FC = () => {
                       <div className="grid grid-cols-2 gap-2 pt-1">
                         <button
                           type="button"
-                          onClick={() => setSelectedKos(item)}
-                          className="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors text-center cursor-pointer"
+                          onClick={() => navigate(`/smart-city/kos/${item.id}`)}
+                          className="w-full py-2 px-3 rounded-xl bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white text-xs font-bold transition-all text-center cursor-pointer shadow-2xs"
                         >
                           Detail Kamar
                         </button>

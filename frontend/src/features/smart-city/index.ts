@@ -2,6 +2,7 @@ export { SmartCityHubPage } from './components/SmartCityHubPage';
 export { UmkmPage } from './components/UmkmPage';
 export { UmkmDetailPage } from './components/UmkmDetailPage';
 export { KosPage } from './components/KosPage';
+export { KosDetailPage } from './components/KosDetailPage';
 export { LokerPage } from './components/LokerPage';
 export { LokerDetailPage } from './components/LokerDetailPage';
 export { LokerApplyPage } from './components/LokerApplyPage';

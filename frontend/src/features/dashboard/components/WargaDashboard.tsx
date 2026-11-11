@@ -1026,10 +1026,6 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       )}
                     </button>
                   </div>
-                  <div className="text-[11px] text-slate-500 font-medium text-center flex items-center justify-center gap-1.5">
-                    <ShieldCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                    <span>Layanan resmi Pemerintah Desa Doko • Gratis tanpa pungutan biaya</span>
-                  </div>
                 </div>
               </form>
             </div>
