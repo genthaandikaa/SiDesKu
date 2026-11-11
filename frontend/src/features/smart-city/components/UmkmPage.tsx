@@ -327,6 +327,11 @@ export const UmkmPage: React.FC = () => {
           
           {/* Left Title & Subtitle */}
           <div className="space-y-2 sm:space-y-3 max-w-2xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-black uppercase tracking-wider">
+              <ShoppingBag className="w-3.5 h-3.5 text-amber-600" />
+              <span>All Store • Pasar Produk Warga Kediri</span>
+            </div>
+
             <h1 className="text-xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
               Belanja Langsung dari Tetangga & UMKM Sekitar
             </h1>
@@ -700,9 +705,9 @@ export const UmkmPage: React.FC = () => {
                   className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold outline-none focus:bg-white focus:border-blue-500 shadow-2xs cursor-pointer"
                 >
                   <option value="all">Semua Rating</option>
-                  <option value="4.5">★ 4.5 Ke Atas</option>
-                  <option value="4.8">★ 4.8 Ke Atas</option>
-                  <option value="5.0">★ 5.0 Sempurna</option>
+                  <option value="4.5">Rating 4.5 Ke Atas</option>
+                  <option value="4.8">Rating 4.8 Ke Atas</option>
+                  <option value="5.0">Rating 5.0 Sempurna</option>
                 </select>
               </div>
 
@@ -890,8 +895,8 @@ export const UmkmPage: React.FC = () => {
         </div>
       ) : (
         <div className="p-12 text-center bg-white rounded-3xl border border-slate-200/90 space-y-3">
-          <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl">
-            🔍
+          <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
+            <Search className="w-5 h-5 text-slate-400" />
           </div>
           <h4 className="text-base font-bold text-slate-800">Tidak ada produk yang cocok</h4>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">

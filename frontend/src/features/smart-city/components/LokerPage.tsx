@@ -536,9 +536,10 @@ export const LokerPage: React.FC = () => {
           <button
             type="button"
             onClick={() => alert('Laporan pelanggaran rekrutmen dapat diteruskan ke Tim Satgas Pengawasan Tenaga Kerja Dinas Ketenagakerjaan via SiDesKu.')}
-            className="font-bold text-blue-700 hover:text-blue-900 transition-colors whitespace-nowrap shrink-0"
+            className="font-bold text-blue-700 hover:text-blue-900 transition-colors whitespace-nowrap shrink-0 inline-flex items-center gap-1"
           >
-            Lapor Pelanggaran →
+            <span>Lapor Pelanggaran</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

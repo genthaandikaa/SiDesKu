@@ -109,7 +109,9 @@ export const AppRoutes: React.FC = () => {
           <Route path="/berita" element={<BeritaPage />} />
 
           {/* Smart City Pages (Dedicated URLs & Pages) */}
-          <Route path="/smart-city" element={<SmartCityHubPage />} />
+          <Route path="/smart-city" element={<Navigate to="/smart-city/umkm" replace />} />
+          <Route path="/all-store" element={<UmkmPage />} />
+          <Route path="/all-store/:id" element={<UmkmDetailPage />} />
           <Route path="/smart-city/umkm" element={<UmkmPage />} />
           <Route path="/smart-city/umkm/:id" element={<UmkmDetailPage />} />
           <Route path="/smart-city/kos" element={<KosPage />} />

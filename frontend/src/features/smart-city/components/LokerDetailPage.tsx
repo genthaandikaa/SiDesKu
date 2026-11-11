@@ -12,6 +12,8 @@ import {
   Share2,
   ChevronRight,
   ArrowLeft,
+  ArrowRight,
+  Home,
   FileText,
   ListChecks,
   Gift,
@@ -80,18 +82,21 @@ export const LokerDetailPage: React.FC = () => {
   return (
     <div className="w-full pb-28 sm:pb-20 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
-        {/* Breadcrumb (Matching Stitch Screen 3) */}
-        <nav className="flex items-center gap-2 text-xs text-slate-500 mb-6 flex-wrap">
-          <Link to="/" className="hover:text-blue-600 transition-colors">
-            Beranda
+        {/* Breadcrumb (Decorated with vector SVG icons) */}
+        <nav aria-label="Breadcrumb" className="inline-flex items-center gap-2 text-xs text-slate-500 mb-6 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-2xs backdrop-blur-sm flex-wrap">
+          <Link to="/" className="hover:text-blue-600 transition-colors inline-flex items-center gap-1 font-medium text-slate-600">
+            <Home className="w-3.5 h-3.5 text-slate-400" />
+            <span>Beranda</span>
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <Link to="/smart-city/loker" className="hover:text-blue-600 transition-colors">
-            Bursa Kerja
+          <Link to="/smart-city/loker" className="hover:text-blue-600 transition-colors inline-flex items-center gap-1 font-medium text-slate-600">
+            <Briefcase className="w-3.5 h-3.5 text-slate-400" />
+            <span>Bursa Kerja</span>
           </Link>
           <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-slate-800 font-semibold truncate max-w-xs sm:max-w-md">
-            {job.posisi}
+          <span className="text-slate-900 font-bold truncate max-w-xs sm:max-w-md inline-flex items-center gap-1">
+            <FileText className="w-3.5 h-3.5 text-blue-600" />
+            <span>{job.posisi}</span>
           </span>
         </nav>
 
@@ -147,7 +152,8 @@ export const LokerDetailPage: React.FC = () => {
                   to={`/smart-city/loker/${job.id}/lamar`}
                   className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm transition-all shadow-sm hover:shadow-md"
                 >
-                  <span>▶ {isJasa ? 'Daftar Kemitraan' : 'Lamar Sekarang'}</span>
+                  <span>{isJasa ? 'Daftar Kemitraan' : 'Lamar Sekarang'}</span>
+                  <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
 
                 {/* Bookmark Toggle */}
@@ -406,7 +412,8 @@ export const LokerDetailPage: React.FC = () => {
                   to={`/smart-city/loker/${job.id}/lamar`}
                   className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm transition-all shadow-sm hover:shadow-md text-center"
                 >
-                  <span>▶ {isJasa ? 'Daftar Kemitraan' : 'Lamar Sekarang'}</span>
+                  <span>{isJasa ? 'Daftar Kemitraan' : 'Lamar Sekarang'}</span>
+                  <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
 
                 <a
@@ -448,7 +455,8 @@ export const LokerDetailPage: React.FC = () => {
             to={`/smart-city/loker/${job.id}/lamar`}
             className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-bold shadow-md hover:bg-blue-700"
           >
-            <span>{isJasa ? 'Daftar Mitra' : 'Lamar Sekarang'} ▶</span>
+            <span>{isJasa ? 'Daftar Mitra' : 'Lamar Sekarang'}</span>
+            <ArrowRight className="w-3.5 h-3.5 ml-1 inline" />
           </Link>
         </div>
       </div>

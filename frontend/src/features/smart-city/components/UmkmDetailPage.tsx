@@ -25,7 +25,8 @@ import {
   Send,
   LogIn,
   User,
-  Heart
+  Heart,
+  Home
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { UmkmItem, UmkmReviewItem } from '../types';
@@ -263,7 +264,7 @@ export const UmkmDetailPage: React.FC = () => {
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Kembali ke Pasar UMKM</span>
+          <span>Kembali ke All Store</span>
         </Link>
       </div>
     );
@@ -311,13 +312,13 @@ export const UmkmDetailPage: React.FC = () => {
     if (currentItem.isJasa) {
       message =
         `Halo *${currentItem.tokoNama}*, saya ingin memesan jasa kunjungan teknisi melalui SiDesKu Smart City Kediri:\n\n` +
-        `📦 *RINCIAN LAYANAN (${orderCode})*\n` +
+        `*--- RINCIAN LAYANAN (${orderCode}) ---*\n` +
         `• *Layanan:* ${activeJasa?.nama || currentItem.nama}\n` +
         `• *Jumlah:* ${jasaUnitQty} unit\n` +
         `• *Jadwal Kunjungan:* Sesi ${jasaSesi === 'pagi' ? 'Pagi (09:00 - 12:00 WIB)' : 'Siang (13:00 - 16:00 WIB)'}\n` +
         `• *Metode Bayar:* ${checkoutPaymentMethod === 'qris' ? 'QRIS Langsung Toko (Lunas via Transfer)' : 'Tunai / COD usai servis'}\n` +
         `• *Estimasi Biaya:* Rp ${totalJasaPrice.toLocaleString('id-ID')}\n\n` +
-        `📍 *DATA PEMESAN & ALAMAT KUNJUNGAN*\n` +
+        `*--- DATA PEMESAN & ALAMAT KUNJUNGAN ---*\n` +
         `• *Nama Pemesan:* ${buyerName.trim()}\n` +
         `• *No. WhatsApp:* ${buyerPhone.trim()}\n` +
         `• *Alamat Rumah:* ${buyerAddress.trim()}\n` +
@@ -330,7 +331,7 @@ export const UmkmDetailPage: React.FC = () => {
     } else {
       message =
         `Halo *${currentItem.tokoNama}*, saya ingin memesan produk dari etalase SiDesKu Smart City Kediri:\n\n` +
-        `📦 *RINCIAN PESANAN (${orderCode})*\n` +
+        `*--- RINCIAN PESANAN (${orderCode}) ---*\n` +
         `• *Produk:* ${currentItem.nama}\n` +
         (currentItem.pilihanAyam ? `• *Pilihan Potongan:* ${orderPilihanAyam}\n` : '') +
         (currentItem.pilihanSambal ? `• *Pilihan Sambal:* ${orderPilihanSambal}\n` : '') +
@@ -338,7 +339,7 @@ export const UmkmDetailPage: React.FC = () => {
         `• *Pengantaran:* ${orderDeliveryType === 'penjual' ? (sellerOngkir === 0 ? 'Diantar Langsung oleh Penjual (Gratis Ongkir / Rp 0)' : `Diantar Langsung oleh Penjual (+Rp ${sellerOngkir.toLocaleString('id-ID')})`) : 'Ambil Sendiri di Lapak Penjual (Gratis)'}\n` +
         `• *Metode Bayar:* ${checkoutPaymentMethod === 'qris' ? 'QRIS Langsung Toko (Lunas via Transfer)' : 'Tunai / Bayar di Tempat (COD Mandiri)'}\n` +
         `• *Total Tagihan:* Rp ${totalFoodPrice.toLocaleString('id-ID')}\n\n` +
-        `📍 *DATA PEMESAN & ALAMAT PENGANTARAN*\n` +
+        `*--- DATA PEMESAN & ALAMAT PENGANTARAN ---*\n` +
         `• *Nama Pemesan:* ${buyerName.trim()}\n` +
         `• *No. WhatsApp:* ${buyerPhone.trim()}\n` +
         (orderDeliveryType === 'penjual' ? `• *Alamat Pengantaran:* ${buyerAddress.trim()}\n` : '• *Pengambilan:* Ambil Sendiri di Lapak Penjual\n') +
@@ -407,30 +408,28 @@ export const UmkmDetailPage: React.FC = () => {
       {/* =========================================================================
           TOP NAVIGATION BAR & VERIFIED BADGE (Mobile-Optimized)
           ========================================================================= */}
-      <div className="flex items-center justify-between gap-2 pt-1 pb-0.5">
-        <Link
-          to="/smart-city/umkm"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-blue-700 font-bold text-xs transition-colors shrink-0"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span className="hidden sm:inline">Katalog Pasar UMKM</span>
-          <span className="sm:hidden">Kembali</span>
-        </Link>
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-1 pb-1">
+        <nav aria-label="Breadcrumb" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-2xs backdrop-blur-sm text-xs font-semibold text-slate-500 overflow-x-auto max-w-full">
+          <Link to="/" className="inline-flex items-center gap-1 hover:text-blue-700 transition-colors">
+            <Home className="w-3.5 h-3.5 text-slate-400" />
+            <span className="hidden sm:inline">Beranda</span>
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+          <Link to="/smart-city/umkm" className="inline-flex items-center gap-1 hover:text-blue-700 transition-colors">
+            <ShoppingBag className="w-3.5 h-3.5 text-blue-500" />
+            <span>All Store</span>
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+          <span className="text-slate-500 hidden sm:inline">{currentItem.kategori}</span>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0 hidden sm:inline" />
+          <span className="text-slate-900 font-bold truncate max-w-[150px] sm:max-w-[220px]">{currentItem.nama}</span>
+        </nav>
 
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="hidden md:flex items-center gap-1.5 text-xs text-slate-400 font-medium truncate">
-            <span>/</span>
-            <span className="text-slate-500">{currentItem.kategori}</span>
-            <span>/</span>
-            <span className="font-bold text-slate-800 truncate max-w-[200px]">{currentItem.nama}</span>
-          </div>
-
-          <div className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[10px] sm:text-[11px] font-extrabold text-emerald-800 shrink-0">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span className="truncate max-w-[150px] sm:max-w-none">
-              Lapak Terverifikasi {currentItem.kelurahan || 'Kota Kediri'}
-            </span>
-          </div>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-200/80 text-[11px] font-extrabold text-emerald-800 shrink-0 shadow-2xs">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+          <span className="truncate max-w-[180px] sm:max-w-none">
+            Lapak Terverifikasi {currentItem.kelurahan || 'Kota Kediri'}
+          </span>
         </div>
       </div>
 
@@ -754,8 +753,9 @@ export const UmkmDetailPage: React.FC = () => {
                     <span className="text-xl sm:text-2xl lg:text-3xl font-black text-blue-700">Rp {currentItem.harga.toLocaleString('id-ID')}</span>
                     <span className="text-xs font-semibold text-slate-500 ml-1.5">/ {currentItem.satuan || 'porsi'}</span>
                   </div>
-                  <span className="text-[11px] sm:text-xs font-extrabold text-emerald-700 bg-emerald-100/70 px-2.5 sm:px-3 py-1 rounded-lg">
-                    ✓ Tanpa Biaya Admin
+                  <span className="text-[11px] sm:text-xs font-extrabold text-emerald-700 bg-emerald-100/70 px-2.5 sm:px-3 py-1 rounded-lg inline-flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Tanpa Biaya Admin</span>
                   </span>
                 </div>
 
@@ -864,7 +864,7 @@ export const UmkmDetailPage: React.FC = () => {
                         <span className="block font-bold truncate">Diantar Langsung oleh Penjual (COD)</span>
                         <span className="block text-[10px] text-slate-500 font-normal mt-0.5 truncate">
                           {sellerOngkir === 0
-                            ? '✨ Penjual menggratiskan ongkir untuk pesanan ini'
+                            ? 'Gratis ongkir langsung dari penjual untuk pesanan ini'
                             : `* Ongkir Rp ${sellerOngkir.toLocaleString('id-ID')} diatur langsung oleh penjual`}
                         </span>
                       </div>

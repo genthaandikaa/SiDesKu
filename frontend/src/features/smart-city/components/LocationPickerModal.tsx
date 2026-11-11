@@ -112,7 +112,7 @@ export const LocationPickerModal: React.FC<LocationPickerModalProps> = ({
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             font-size: 16px;
             cursor: pointer;
-          ">📍</div>`,
+          "><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>`,
           iconSize: [32, 32],
           iconAnchor: [16, 32]
         });
@@ -304,8 +304,9 @@ export const LocationPickerModal: React.FC<LocationPickerModalProps> = ({
 
             <div className="w-full h-40 sm:h-44 rounded-2xl border border-slate-200 overflow-hidden relative shadow-inner bg-slate-100">
               <div ref={mapContainerRef} className="w-full h-full" style={{ zIndex: 1 }} />
-              <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-700 shadow-2xs pointer-events-none z-[1000]">
-                📍 Titik: {tempCoords.lat.toFixed(4)}, {tempCoords.lng.toFixed(4)}
+              <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-lg border border-slate-200 text-[10px] font-bold text-slate-700 shadow-2xs pointer-events-none z-[1000] inline-flex items-center gap-1">
+                <MapPin className="w-3 h-3 text-rose-500 shrink-0" />
+                <span>Titik: {tempCoords.lat.toFixed(4)}, {tempCoords.lng.toFixed(4)}</span>
               </div>
             </div>
           </div>

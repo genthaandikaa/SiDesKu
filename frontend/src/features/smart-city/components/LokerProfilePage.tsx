@@ -25,7 +25,9 @@ import {
   X,
   MoreVertical,
   Bell,
-  Bookmark
+  Bookmark,
+  Home,
+  ArrowRight
 } from 'lucide-react';
 import { JobSeekerProfile, LamaranLoker } from '../types';
 import { smartCityApi } from '../api/smartCityApi';
@@ -141,6 +143,83 @@ export const LokerProfilePage: React.FC = () => {
     showToast('Perubahan profil berhasil disimpan!');
   };
 
+  if (!user) {
+    return (
+      <div className="w-full pb-20 font-sans">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-2 text-xs text-slate-500 mb-6">
+            <Link to="/" className="hover:text-blue-600 transition-colors">
+              Beranda
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <Link to="/smart-city/loker" className="hover:text-blue-600 transition-colors">
+              Bursa Kerja
+            </Link>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-slate-800 font-semibold">Profil Pencari Kerja</span>
+          </nav>
+
+          {/* Auth Gate Card */}
+          <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-10 shadow-xs text-center space-y-6">
+            <div className="w-16 h-16 rounded-2xl bg-sky-50 text-blue-600 flex items-center justify-center mx-auto shadow-2xs">
+              <ShieldCheck className="w-8 h-8 text-blue-600" />
+            </div>
+
+            <div className="space-y-2 max-w-lg mx-auto">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                Masuk untuk Mengakses Profil & Riwayat Lamaran
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Untuk menjaga privasi berkas kependudukan dan kurasi bursa kerja terpercaya, Anda perlu masuk ke akun terlebih dahulu sebelum melihat CV aktif, sertifikat, dan memantau status lamaran.
+              </p>
+            </div>
+
+            {/* Demographics Information: Warga Kediri vs Luar Kediri */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-2xl mx-auto pt-2">
+              <div className="p-4 sm:p-5 rounded-2xl bg-sky-50/70 border border-sky-100 space-y-2">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-xs uppercase tracking-wider">
+                  <Building2 className="w-4 h-4 text-blue-600" />
+                  <span>Warga Kota Kediri</span>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Gunakan akun warga yang didaftarkan kelurahan/RT setempat. NIK otomatis terverifikasi dan mendapat prioritas penempatan program kerja lokal Disnaker & mitra BUMDes.
+                </p>
+              </div>
+
+              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-slate-700 font-bold text-xs uppercase tracking-wider">
+                  <Briefcase className="w-4 h-4 text-slate-500" />
+                  <span>Pencari Kerja Luar Daerah</span>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Bagi pencari kerja dari luar wilayah Kota Kediri (Kabupaten Kediri, Nganjuk, Tulungagung, Surabaya, dsb), Anda tetap dapat melamar lowongan kerja bertanda terbuka luas.
+                </p>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-3">
+              <Link
+                to="/login?redirect=/smart-city/loker/profil"
+                className="w-full sm:w-auto px-7 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-extrabold text-xs shadow-md shadow-blue-600/20 transition-all flex items-center justify-center gap-2"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Masuk ke Akun Saya</span>
+              </Link>
+              <Link
+                to="/smart-city/loker"
+                className="w-full sm:w-auto px-6 py-3 rounded-2xl border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors flex items-center justify-center gap-2"
+              >
+                <span>Jelajahi Lowongan Terbuka</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (!profile) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center font-sans">
@@ -163,6 +242,24 @@ export const LokerProfilePage: React.FC = () => {
       )}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
+        {/* Breadcrumb Navigation */}
+        <nav aria-label="Breadcrumb" className="inline-flex items-center gap-2 text-xs text-slate-500 mb-6 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-2xs backdrop-blur-sm flex-wrap">
+          <Link to="/" className="hover:text-blue-600 transition-colors inline-flex items-center gap-1 font-medium text-slate-600">
+            <Home className="w-3.5 h-3.5 text-slate-400" />
+            <span>Beranda</span>
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+          <Link to="/smart-city/loker" className="hover:text-blue-600 transition-colors inline-flex items-center gap-1 font-medium text-slate-600">
+            <Briefcase className="w-3.5 h-3.5 text-slate-400" />
+            <span>Bursa Kerja</span>
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+          <span className="text-slate-900 font-bold flex items-center gap-1">
+            <FileText className="w-3.5 h-3.5 text-blue-600" />
+            <span>Profil & CV Saya</span>
+          </span>
+        </nav>
+
         {/* Profile Header Banner (Matching Stitch Screen 1) */}
         <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -457,9 +554,10 @@ export const LokerProfilePage: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setActiveTab('riwayat')}
-                    className="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                    className="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors gap-1"
                   >
-                    Lihat Seluruh Riwayat ({lamaranList.length}) →
+                    <span>Lihat Seluruh Riwayat ({lamaranList.length})</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
@@ -613,9 +711,10 @@ export const LokerProfilePage: React.FC = () => {
                     e.preventDefault();
                     showToast('Kebijakan Privasi Data Tenaga Kerja SiDesKu aktif sesuai regulasi perlindungan data pribadi.');
                   }}
-                  className="inline-block text-xs font-bold text-blue-700 hover:text-blue-900 pt-1"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900 pt-1"
                 >
-                  Pengaturan Privasi & Izin Data →
+                  <span>Pengaturan Privasi & Izin Data</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>

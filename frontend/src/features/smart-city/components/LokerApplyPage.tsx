@@ -4,6 +4,7 @@ import {
   Briefcase,
   ChevronRight,
   ArrowLeft,
+  ArrowRight,
   CheckCircle2,
   FileText,
   UploadCloud,
@@ -19,7 +20,9 @@ import {
   Sparkles,
   Info,
   Check,
-  ExternalLink
+  ExternalLink,
+  Globe,
+  Home
 } from 'lucide-react';
 import { LokerItem, LamaranLoker, JobSeekerProfile } from '../types';
 import { smartCityApi } from '../api/smartCityApi';
@@ -44,10 +47,12 @@ export const LokerApplyPage: React.FC = () => {
   const [applicantNik, setApplicantNik] = useState('');
   const [applicantEmail, setApplicantEmail] = useState('');
   const [applicantWa, setApplicantWa] = useState('');
-  const [activeCvName, setActiveCvName] = useState('CV_Budi_Pratama_Terbaru.pdf');
-  const [cvFileSize, setCvFileSize] = useState('1.4 MB');
+  const [applicantCategory, setApplicantCategory] = useState<'warga_kediri' | 'luar_kediri'>('warga_kediri');
+  const [applicantDomisili, setApplicantDomisili] = useState('Kota Kediri');
+  const [activeCvName, setActiveCvName] = useState('CV_Lamaran_Terbaru.pdf');
+  const [cvFileSize, setCvFileSize] = useState('1.2 MB');
   const [portfolioUrl, setPortfolioUrl] = useState('');
-  const [attachedPortfolioName, setAttachedPortfolioName] = useState<string | null>('Portofolio_Administrasi_Budi.pdf');
+  const [attachedPortfolioName, setAttachedPortfolioName] = useState<string | null>(null);
   const [recruiterNote, setRecruiterNote] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,24 +61,35 @@ export const LokerApplyPage: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    // Load seeker profile
+    if (user) {
+      setApplicantName(user.warga_profile?.nama_lengkap || user.name || '');
+      setApplicantNik(user.warga_profile?.nik || '3571••••••••0001');
+      setApplicantEmail(user.email || '');
+      setApplicantWa(user.phone_number || '');
+      setApplicantDomisili(user.warga_profile?.alamat || user.warga_profile?.alamat_ktp || 'Kota Kediri');
+      setApplicantCategory('warga_kediri');
+    } else {
+      setApplicantName('');
+      setApplicantNik('');
+      setApplicantEmail('');
+      setApplicantWa('');
+      setApplicantDomisili('Kota Kediri');
+      setApplicantCategory('warga_kediri');
+    }
+
+    // Load seeker profile template for CV info
     smartCityApi.getJobSeekerProfile().then((seeker) => {
       setProfile(seeker);
-      setApplicantName(user?.name || seeker.nama);
-      setApplicantNik(seeker.nik);
-      setApplicantEmail(user?.email || seeker.email);
-      setApplicantWa(user?.phone_number || seeker.telepon);
-      setActiveCvName(seeker.cvUtama.name);
-      setCvFileSize(seeker.cvUtama.size);
+      if (user) {
+        if (!applicantName) setApplicantName(user.name || seeker.nama);
+      }
+      if (seeker.cvUtama?.name) {
+        setActiveCvName(seeker.cvUtama.name);
+        setCvFileSize(seeker.cvUtama.size);
+      }
     }).catch(() => {
       const seeker = getStoredJobSeekerProfile();
       setProfile(seeker);
-      setApplicantName(user?.name || seeker.nama);
-      setApplicantNik(seeker.nik);
-      setApplicantEmail(user?.email || seeker.email);
-      setApplicantWa(user?.phone_number || seeker.telepon);
-      setActiveCvName(seeker.cvUtama.name);
-      setCvFileSize(seeker.cvUtama.size);
     });
 
     if (id) {
@@ -170,21 +186,27 @@ export const LokerApplyPage: React.FC = () => {
     <div className="w-full pb-20 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
         {/* Breadcrumb & Back Link (Matching Stitch Screen 4) */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
-          <nav className="flex items-center gap-2 text-xs text-slate-500 flex-wrap">
-            <Link to="/" className="hover:text-blue-600 transition-colors">
-              Beranda
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+          <nav aria-label="Breadcrumb" className="inline-flex items-center gap-2 text-xs text-slate-500 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-2xs backdrop-blur-sm flex-wrap">
+            <Link to="/" className="hover:text-blue-600 transition-colors inline-flex items-center gap-1 font-medium text-slate-600">
+              <Home className="w-3.5 h-3.5 text-slate-400" />
+              <span>Beranda</span>
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-            <Link to="/smart-city/loker" className="hover:text-blue-600 transition-colors">
-              Bursa Kerja
+            <Link to="/smart-city/loker" className="hover:text-blue-600 transition-colors inline-flex items-center gap-1 font-medium text-slate-600">
+              <Briefcase className="w-3.5 h-3.5 text-slate-400" />
+              <span>Bursa Kerja</span>
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-            <Link to={`/smart-city/loker/${job.id}`} className="hover:text-blue-600 transition-colors truncate max-w-xs">
-              {job.posisi}
+            <Link to={`/smart-city/loker/${job.id}`} className="hover:text-blue-600 transition-colors inline-flex items-center gap-1 font-medium text-slate-600 truncate max-w-[180px]">
+              <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+              <span className="truncate">{job.posisi}</span>
             </Link>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-            <span className="text-slate-800 font-semibold">Formulir Lamaran</span>
+            <span className="text-slate-900 font-bold flex items-center gap-1">
+              <FileText className="w-3.5 h-3.5 text-blue-600" />
+              <span>Formulir Lamaran</span>
+            </span>
           </nav>
 
           <Link
@@ -214,31 +236,105 @@ export const LokerApplyPage: React.FC = () => {
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: 4 Numbered Steps Form */}
           <form onSubmit={handleSubmitApplication} className="lg:col-span-8 space-y-8">
+            {/* Guest Banner if not logged in */}
+            {!user && (
+              <div className="p-4 rounded-3xl bg-amber-50/90 border border-amber-200/90 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs shadow-2xs">
+                <div className="flex items-start gap-2.5 text-amber-950">
+                  <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold block">Melamar sebagai Pelamar Mandiri / Belum Masuk</span>
+                    <span className="text-amber-800 text-[11px] block mt-0.5">
+                      Punya Akun Warga Kediri? <Link to={`/login?redirect=/smart-city/loker/${job.id}/lamar`} className="font-bold underline text-amber-900 hover:text-blue-700">Masuk Akun</Link> agar NIK terverifikasi otomatis. Pelamar dari luar Kota Kediri tetap dapat melamar langsung melalui formulir di bawah.
+                    </span>
+                  </div>
+                </div>
+                <Link
+                  to={`/login?redirect=/smart-city/loker/${job.id}/lamar`}
+                  className="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shrink-0 transition shadow-2xs"
+                >
+                  Masuk Akun
+                </Link>
+              </div>
+            )}
+
             {/* Step 1: Data Diri Pelamar */}
             <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs">
-              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100 flex-wrap gap-2">
                 <div className="flex items-center gap-3">
                   <span className="w-7 h-7 rounded-lg bg-blue-600 text-white font-extrabold text-sm flex items-center justify-center shrink-0">
                     1
                   </span>
                   <h2 className="text-base sm:text-lg font-bold text-slate-900">Data Diri Pelamar</h2>
                 </div>
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
-                  Akun Warga Terverifikasi
-                </span>
+                {user ? (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    Akun Warga Terverifikasi
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                    <ShieldCheck className="w-3.5 h-3.5 text-slate-500" />
+                    Pelamar Mandiri / Umum
+                  </span>
+                )}
               </div>
 
-              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Demographic Category Selector for Non-login */}
+              {!user && (
+                <div className="mt-4 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <label className="block text-[11px] font-bold text-slate-600 uppercase tracking-wider">
+                    Asal Wilayah Pelamar
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setApplicantCategory('warga_kediri');
+                        setApplicantDomisili('Kota Kediri');
+                      }}
+                      className={`p-2.5 rounded-xl border text-left font-medium transition-all ${
+                        applicantCategory === 'warga_kediri'
+                          ? 'bg-blue-50 border-blue-400 text-blue-900 font-bold shadow-2xs'
+                          : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                        <span>Domisili Kota Kediri</span>
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setApplicantCategory('luar_kediri');
+                        setApplicantDomisili('Kab. Kediri / Luar Kota');
+                      }}
+                      className={`p-2.5 rounded-xl border text-left font-medium transition-all ${
+                        applicantCategory === 'luar_kediri'
+                          ? 'bg-blue-50 border-blue-400 text-blue-900 font-bold shadow-2xs'
+                          : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-100'
+                      }`}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <Globe className="w-3.5 h-3.5 text-sky-600 shrink-0" />
+                        <span>Luar Kota Kediri (Pencari Kerja Nasional)</span>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Nama Lengkap */}
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 tracking-wider uppercase mb-1.5">
-                    Nama Lengkap
+                    Nama Lengkap *
                   </label>
                   <input
                     type="text"
                     value={applicantName}
                     onChange={(e) => setApplicantName(e.target.value)}
+                    placeholder="Contoh: Budi Pratama / Nama Anda"
                     required
                     className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
@@ -247,25 +343,31 @@ export const LokerApplyPage: React.FC = () => {
                 {/* NIK */}
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 tracking-wider uppercase mb-1.5">
-                    Nomor Induk Kependudukan
+                    Nomor Induk Kependudukan (NIK) *
                   </label>
                   <input
                     type="text"
                     value={applicantNik}
-                    readOnly
-                    className="w-full px-4 py-2.5 bg-slate-100/80 border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 cursor-not-allowed"
+                    onChange={(e) => setApplicantNik(e.target.value)}
+                    readOnly={Boolean(user)}
+                    placeholder="16 digit NIK KTP Anda"
+                    required
+                    className={`w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 transition-all ${
+                      user ? 'bg-slate-100/80 cursor-not-allowed text-slate-600' : 'bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500'
+                    }`}
                   />
                 </div>
 
-                {/* Email */}
+                {/* Domisili / Asal Kota */}
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 tracking-wider uppercase mb-1.5">
-                    Surat Elektronik
+                    Domisili / Kota Asal *
                   </label>
                   <input
-                    type="email"
-                    value={applicantEmail}
-                    onChange={(e) => setApplicantEmail(e.target.value)}
+                    type="text"
+                    value={applicantDomisili}
+                    onChange={(e) => setApplicantDomisili(e.target.value)}
+                    placeholder="Contoh: Kota Kediri / Kab. Nganjuk"
                     required
                     className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
@@ -274,12 +376,28 @@ export const LokerApplyPage: React.FC = () => {
                 {/* WhatsApp */}
                 <div>
                   <label className="block text-[11px] font-bold text-slate-500 tracking-wider uppercase mb-1.5">
-                    Kontak WhatsApp
+                    Kontak WhatsApp *
                   </label>
                   <input
                     type="tel"
                     value={applicantWa}
                     onChange={(e) => setApplicantWa(e.target.value)}
+                    placeholder="081234567890"
+                    required
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  />
+                </div>
+
+                {/* Email (Full width on sm) */}
+                <div className="sm:col-span-2">
+                  <label className="block text-[11px] font-bold text-slate-500 tracking-wider uppercase mb-1.5">
+                    Surat Elektronik (Email) *
+                  </label>
+                  <input
+                    type="email"
+                    value={applicantEmail}
+                    onChange={(e) => setApplicantEmail(e.target.value)}
+                    placeholder="nama.anda@email.com"
                     required
                     className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
@@ -288,7 +406,11 @@ export const LokerApplyPage: React.FC = () => {
 
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2 text-xs text-slate-500">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span>Data tersinkronisasi resmi dari KTP & Profil Kependudukan Terpadu SiDesKu.</span>
+                <span>
+                  {user 
+                    ? 'Data tersinkronisasi resmi dari KTP & Profil Kependudukan Terpadu SiDesKu.'
+                    : 'Berkas diajukan sebagai Pelamar Mandiri ke HRD mitra rekrutmen SiDesKu.'}
+                </span>
               </div>
             </div>
 
@@ -499,18 +621,10 @@ export const LokerApplyPage: React.FC = () => {
                 ) : (
                   <>
                     <span>Kirim Lamaran Sekarang</span>
-                    <span>▶</span>
+                    <ArrowRight className="w-4 h-4 ml-1" />
                   </>
                 )}
               </button>
-            </div>
-
-            {/* Security Footnote */}
-            <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 flex items-start gap-2.5 text-xs text-slate-600">
-              <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-              <p>
-                Dengan mengirim berkas, data profil dan CV Anda akan diteruskan secara aman ke portal verifikasi HR <strong>{job.perusahaan}</strong> melalui kanal resmi SiDesKu.
-              </p>
             </div>
           </form>
 
@@ -535,31 +649,46 @@ export const LokerApplyPage: React.FC = () => {
 
               <div className="space-y-2.5 text-xs">
                 <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                  <span className="text-slate-500 font-medium">💼 Tipe Komitmen</span>
+                  <span className="text-slate-500 font-medium inline-flex items-center gap-1.5">
+                    <Briefcase className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Tipe Komitmen</span>
+                  </span>
                   <span className="font-semibold text-slate-800">{job.tipeKerja}</span>
                 </div>
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                  <span className="text-slate-500 font-medium">💰 Standar Gaji</span>
+                  <span className="text-slate-500 font-medium inline-flex items-center gap-1.5">
+                    <DollarSign className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Standar Gaji</span>
+                  </span>
                   <span className="font-bold text-blue-600">
                     Rp {job.gajiMin.toLocaleString('id-ID')} – {job.gajiMax.toLocaleString('id-ID')}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                  <span className="text-slate-500 font-medium">🛡️ Fasilitas Pokok</span>
+                  <span className="text-slate-500 font-medium inline-flex items-center gap-1.5">
+                    <ShieldCheck className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Fasilitas Pokok</span>
+                  </span>
                   <span className="font-semibold text-slate-800 text-right max-w-[170px] truncate">
                     {job.fasilitasUtama ? job.fasilitasUtama.split('\n')[0] : 'BPJS Lengkap'}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-50">
-                  <span className="text-slate-500 font-medium">📍 Wilayah Tugas</span>
+                  <span className="text-slate-500 font-medium inline-flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Wilayah Tugas</span>
+                  </span>
                   <span className="font-semibold text-slate-800">{job.lokasi}</span>
                 </div>
 
                 <div className="flex justify-between items-center py-1">
-                  <span className="text-slate-500 font-medium">📅 Batas Pengajuan</span>
+                  <span className="text-slate-500 font-medium inline-flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Batas Pengajuan</span>
+                  </span>
                   <span className="font-semibold text-slate-800">{job.batasPengajuan || '31 Maret 2025'}</span>
                 </div>
               </div>

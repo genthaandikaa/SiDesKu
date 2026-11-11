@@ -481,7 +481,7 @@ export const RwDashboard: React.FC<RwDashboardProps> = ({ activeSubmenu = 'beran
       pic: 'Kader Kesehatan RW 01',
       status: 'Jadwal Rutin Bulanan',
       jam: '08.00 - 11.30 WIB',
-      icon: '🩺',
+      icon: 'activity',
       lat: -7.81710,
       lng: 112.04380,
       bg: 'bg-rose-50 border-rose-200 text-rose-800',
