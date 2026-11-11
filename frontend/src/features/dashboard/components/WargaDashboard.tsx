@@ -114,7 +114,6 @@ const defaultSuratTypes: SuratType[] = [
     kode_surat: 'SKTP',
     nama_surat: 'Surat Pembuatan / E-KTP',
     format_nomor: '471/{NO}/418.66.04/{TAHUN}',
-    persyaratan_json: ['Foto Kartu Keluarga (KK)', 'Surat Pengantar RT/RW', 'KTP Lama (bila rusak/ganti)'],
     masa_berlaku_hari: 30,
     is_active: true,
   },
@@ -1114,12 +1113,6 @@ export const WargaDashboard: React.FC<WargaDashboardProps> = ({ activeSubmenu = 
                       <h3 className="font-black text-sm text-slate-900 group-hover:text-blue-800 transition-colors leading-snug">
                         {t.nama_surat}
                       </h3>
-                      <div className="text-[11px] text-slate-500 mt-2 space-y-1">
-                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Syarat Berkas:</div>
-                        <p className="line-clamp-2 text-slate-600 leading-relaxed">
-                          {t.persyaratan_json?.join(' • ') || 'KTP & KK Asli'}
-                        </p>
-                      </div>
                     </div>
                   </div>
 
