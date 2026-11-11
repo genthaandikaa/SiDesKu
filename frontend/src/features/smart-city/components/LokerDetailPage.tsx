@@ -279,6 +279,45 @@ export const LokerDetailPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Section 2.5: Dokumen Persyaratan yang Wajib Dikirim */}
+            <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs">
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div className="flex items-center gap-2.5">
+                  <FileText className="w-5 h-5 text-blue-600" />
+                  <h2 className="text-lg font-bold text-slate-900">Dokumen Persyaratan yang Wajib Dikirim</h2>
+                </div>
+                <span className="text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-200">
+                  {(job.syaratDokumen && job.syaratDokumen.length > 0 ? job.syaratDokumen.length : 2)} Berkas Wajib
+                </span>
+              </div>
+
+              <div className="mt-4 space-y-3">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Pemberi kerja mewajibkan pelamar melampirkan berkas berikut untuk seleksi administrasi:
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  {(job.syaratDokumen && job.syaratDokumen.length > 0
+                    ? job.syaratDokumen
+                    : ['Curriculum Vitae (CV / Resume)', 'KTP / Identitas Kependudukan']
+                  ).map((dok, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center gap-3 p-3 rounded-2xl bg-sky-50/60 border border-sky-100 text-xs"
+                    >
+                      <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-2xs font-extrabold">
+                        <Check className="w-4 h-4 stroke-[3]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span className="font-extrabold text-slate-800 block truncate">{dok}</span>
+                        <span className="text-[10px] text-blue-600 font-semibold">Wajib Dilampirkan</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             {/* Section 3: Benefit & Fasilitas (4 Cards in 2x2 Grid) */}
             <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs">
               <div className="flex items-center gap-2.5 pb-4 border-b border-slate-100">

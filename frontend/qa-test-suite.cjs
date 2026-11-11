@@ -529,11 +529,11 @@ async function sleep(ms) {
 
     // 6.1 Citizen Login as Bambang Utomo
     await page.goto(`${BASE_URL}/login`, { waitUntil: 'domcontentloaded' });
-    await sleep(800);
+    await sleep(1000);
 
-    const userInput = page.locator('input[placeholder*="NIK"], input[placeholder*="username"], input[type="text"]').first();
-    const passInput = page.locator('input[placeholder*="password"], input[type="password"]').first();
-    const loginSubmitBtn = page.locator('button:has-text("Masuk"), button:has-text("Login")').first();
+    const userInput = page.locator('input[id="desktop-login-username"], input:visible').first();
+    const passInput = page.locator('input[id="desktop-login-password"], input[type="password"]:visible').first();
+    const loginSubmitBtn = page.locator('button[type="submit"]:visible, button:has-text("Masuk"):visible').first();
 
     if (await userInput.isVisible() && await passInput.isVisible()) {
       await userInput.fill('warga01');
@@ -611,11 +611,29 @@ async function sleep(ms) {
           if (await usahaInput.isVisible()) await usahaInput.fill('Warung Berkah Bambang Utomo');
           if (await kontakInput.isVisible()) await kontakInput.fill('085712345678');
 
+          // Verify document requirement selection is present
+          const docRequirementTitle = page.locator('text=Dokumen Persyaratan yang Wajib Dikirim Pelamar').first();
+          if (await docRequirementTitle.isVisible()) {
+            recordTest('Suite 6', 'Document Requirements Selector (CV, Portofolio, Ijazah, dll) Present', 'PASSED');
+            // Toggle Portofolio
+            const portofolioBtn = page.locator('button:has-text("Portofolio")').first();
+            if (await portofolioBtn.isVisible()) {
+              await portofolioBtn.click();
+              await sleep(300);
+            }
+          }
+
           const submitLokerBtn = page.locator('button:has-text("Terbitkan Lowongan Sekarang"), button[type="submit"]:has-text("Terbitkan"), button[type="submit"]').last();
           if (await submitLokerBtn.isVisible()) {
             await submitLokerBtn.click();
             await sleep(1500);
             recordTest('Suite 6', 'Warga Pasang Lowongan / Loker Baru Berhasil', 'PASSED', 'Job published to portal');
+
+            // Verify lowongan count is only 1 (not 5 seed items)
+            const countBadge = page.locator('text=1 Lowongan').first();
+            if (await countBadge.isVisible()) {
+              recordTest('Suite 6', 'Citizen Personal Lowongan Count Isolation Verified', 'PASSED', 'Exactly 1 lowongan owned by citizen');
+            }
           }
         }
       }

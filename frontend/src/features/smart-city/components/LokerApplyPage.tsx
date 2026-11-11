@@ -254,6 +254,32 @@ export const LokerApplyPage: React.FC = () => {
               </div>
             )}
 
+            {/* Required Documents Alert from Recruiter */}
+            {job && job.syaratDokumen && job.syaratDokumen.length > 0 && (
+              <div className="p-4 sm:p-5 rounded-2xl bg-sky-50/70 border border-sky-200/80 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-blue-900 font-extrabold text-xs">
+                    <FileText className="w-4 h-4 text-blue-600" />
+                    <span>Dokumen yang Wajib Dilampirkan ({job.syaratDokumen.length} Berkas)</span>
+                  </div>
+                  <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800">
+                    Instruksi Perekrut
+                  </span>
+                </div>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {job.syaratDokumen.map((dok, dIdx) => (
+                    <span
+                      key={dIdx}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white border border-sky-200 text-xs font-bold text-slate-800 shadow-2xs"
+                    >
+                      <Check className="w-3.5 h-3.5 text-blue-600 stroke-[3]" />
+                      <span>{dok}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Step 1: Data Diri Pelamar */}
             <div className="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs">
               <div className="flex items-center justify-between pb-4 border-b border-slate-100 flex-wrap gap-2">
@@ -487,8 +513,14 @@ export const LokerApplyPage: React.FC = () => {
                   </span>
                   <h2 className="text-base sm:text-lg font-bold text-slate-900">Portofolio & Dokumen Pendukung</h2>
                 </div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                  Opsional
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
+                  job?.syaratDokumen?.some(d => d.includes('Portofolio') || d.includes('Ijazah') || d.includes('Sertifikat'))
+                    ? 'bg-rose-50 text-rose-700 border-rose-200'
+                    : 'bg-slate-100 text-slate-600 border-slate-200'
+                }`}>
+                  {job?.syaratDokumen?.some(d => d.includes('Portofolio') || d.includes('Ijazah') || d.includes('Sertifikat'))
+                    ? 'Wajib Dilampirkan'
+                    : 'Opsional'}
                 </span>
               </div>
 
@@ -572,8 +604,14 @@ export const LokerApplyPage: React.FC = () => {
                   </span>
                   <h2 className="text-base sm:text-lg font-bold text-slate-900">Catatan untuk Tim Rekruiter</h2>
                 </div>
-                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                  Opsional
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
+                  job?.syaratDokumen?.some(d => d.includes('Portofolio') || d.includes('Ijazah') || d.includes('Sertifikat'))
+                    ? 'bg-rose-50 text-rose-700 border-rose-200'
+                    : 'bg-slate-100 text-slate-600 border-slate-200'
+                }`}>
+                  {job?.syaratDokumen?.some(d => d.includes('Portofolio') || d.includes('Ijazah') || d.includes('Sertifikat'))
+                    ? 'Wajib Dilampirkan'
+                    : 'Opsional'}
                 </span>
               </div>
 

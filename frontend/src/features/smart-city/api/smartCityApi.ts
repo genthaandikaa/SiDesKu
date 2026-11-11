@@ -96,6 +96,8 @@ function transformLokerFromBackend(raw: any): LokerItem {
     pendidikan: raw.pendidikan || '',
     pengalaman: raw.pengalaman || '',
     syaratCv: Boolean(raw.syarat_cv),
+    syaratDokumen: Array.isArray(raw.syarat_dokumen) ? raw.syarat_dokumen : undefined,
+    userId: raw.user_id,
     ringkasan: raw.ringkasan || '',
     deskripsi: Array.isArray(raw.deskripsi) ? raw.deskripsi : (raw.ringkasan ? [raw.ringkasan] : []),
     tags: Array.isArray(raw.tags) ? raw.tags : [],
@@ -358,6 +360,66 @@ export const smartCityApi = {
       console.warn('Failed to fetch Loker detail from backend, falling back to local storage:', err);
     }
     return getStoredLokerById(id) || null;
+  },
+
+  /**
+   * Get lowongan created by authenticated citizen
+   */
+  getMyLokerList: async (): Promise<LokerItem[]> => {
+    try {
+      const res = await api.get('/public/my-lokers');
+      if (res.data?.status === 'success' && Array.isArray(res.data?.data)) {
+        return res.data.data.map(transformLokerFromBackend);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch my lokers from backend:', err);
+    }
+    return [];
+  },
+
+  /**
+   * Create new loker by citizen
+   */
+  createLoker: async (payload: Partial<LokerItem>): Promise<LokerItem> => {
+    const backendPayload = {
+      posisi: payload.posisi,
+      perusahaan: payload.perusahaan,
+      kategori: payload.kategori,
+      tipe_kerja: payload.tipeKerja,
+      gaji_min: payload.gajiMin,
+      gaji_max: payload.gajiMax,
+      pendidikan: payload.pendidikan,
+      pengalaman: payload.pengalaman,
+      wa_hrd: payload.waHrd,
+      deskripsi: payload.deskripsi,
+      syarat_dokumen: payload.syaratDokumen,
+      syarat_cv: payload.syaratCv,
+      lokasi: payload.lokasi,
+      lat: payload.lat,
+      lng: payload.lng,
+    };
+    try {
+      const res = await api.post('/public/lokers', backendPayload);
+      if (res.data?.status === 'success' && res.data?.data) {
+        return transformLokerFromBackend(res.data.data);
+      }
+    } catch (err) {
+      console.warn('Failed to create loker in backend, using local storage fallback:', err);
+    }
+    return payload as LokerItem;
+  },
+
+  /**
+   * Delete loker by ID
+   */
+  deleteLoker: async (id: string): Promise<boolean> => {
+    try {
+      await api.delete(`/public/lokers/${id}`);
+      return true;
+    } catch (err) {
+      console.warn('Failed to delete loker in backend:', err);
+      return false;
+    }
   },
 
   /**

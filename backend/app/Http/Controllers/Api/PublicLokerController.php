@@ -97,6 +97,103 @@ class PublicLokerController extends Controller
     }
 
     /**
+     * Get list of lokers created by the authenticated citizen
+     */
+    public function getMyLokers(Request $request)
+    {
+        $user = auth('sanctum')->user();
+        if (!$user) {
+            return response()->json([
+                'status' => 'success',
+                'total' => 0,
+                'data' => []
+            ]);
+        }
+
+        $lokers = Loker::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'total' => $lokers->count(),
+            'data' => $lokers
+        ]);
+    }
+
+    /**
+     * Store new loker created by citizen
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'posisi' => 'required|string|max:150',
+            'perusahaan' => 'required|string|max:150',
+            'kategori' => 'required|string|max:100',
+            'tipe_kerja' => 'required|string|max:100',
+            'gaji_min' => 'required|numeric|min:0',
+            'gaji_max' => 'required|numeric|min:0',
+            'pendidikan' => 'nullable|string|max:100',
+            'pengalaman' => 'nullable|string|max:100',
+            'wa_hrd' => 'required|string|max:50',
+            'deskripsi' => 'nullable|array',
+            'syarat_dokumen' => 'nullable|array',
+            'syarat_cv' => 'nullable|boolean',
+            'lokasi' => 'nullable|string|max:150',
+            'lat' => 'nullable|numeric',
+            'lng' => 'nullable|numeric',
+        ]);
+
+        $user = auth('sanctum')->user();
+
+        $loker = Loker::create([
+            'id' => 'loker-' . time() . '-' . Str::lower(Str::random(5)),
+            'user_id' => $user ? $user->id : null,
+            'posisi' => $validated['posisi'],
+            'perusahaan' => $validated['perusahaan'],
+            'kategori' => $validated['kategori'],
+            'tipe_kerja' => $validated['tipe_kerja'],
+            'gaji_label' => 'Estimasi Gaji',
+            'gaji_min' => $validated['gaji_min'],
+            'gaji_max' => $validated['gaji_max'],
+            'pendidikan' => $validated['pendidikan'] ?? 'Min. SMA / SMK Sederajat',
+            'pengalaman' => $validated['pengalaman'] ?? 'Fresh Graduate dipersilakan',
+            'wa_hrd' => $validated['wa_hrd'],
+            'deskripsi' => $validated['deskripsi'] ?? ['Kualifikasi dan tanggung jawab terlampir'],
+            'syarat_dokumen' => $validated['syarat_dokumen'] ?? ['Curriculum Vitae (CV / Resume)'],
+            'syarat_cv' => $validated['syarat_cv'] ?? true,
+            'lokasi' => $validated['lokasi'] ?? 'Kota Kediri',
+            'lat' => $validated['lat'] ?? -7.8166,
+            'lng' => $validated['lng'] ?? 112.0118,
+            'disnaker_verified' => false,
+            'is_active' => true,
+            'tanggal_posting' => 'Hari ini',
+            'jumlah_pelamar' => 0,
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Lowongan pekerjaan berhasil diterbitkan!',
+            'data' => $loker
+        ], 201);
+    }
+
+    /**
+     * Delete loker
+     */
+    public function destroy($id)
+    {
+        $loker = Loker::find($id);
+        if ($loker) {
+            $loker->delete();
+        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Lowongan berhasil dihapus'
+        ]);
+    }
+
+    /**
      * Submit fast-apply job application
      */
     public function apply(Request $request, $id)

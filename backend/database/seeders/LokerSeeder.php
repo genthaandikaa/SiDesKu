@@ -35,6 +35,11 @@ class LokerSeeder extends Seeder
                 'pendidikan' => 'Min. SMK / D3 / S1',
                 'pengalaman' => 'Fresh Graduate / 1 tahun',
                 'syarat_cv' => true,
+                'syarat_dokumen' => [
+                    'Curriculum Vitae (CV / Resume)',
+                    'Ijazah & Transkrip Nilai',
+                    'KTP / Identitas Kependudukan'
+                ],
                 'ringkasan' => 'Pendidikan min. SMK/D3, mahir spreadsheet dan aplikasi kantor, teliti dalam pengarsipan berkas. Penempatan kantor operasional cabang pusat kota.',
                 'tags' => ['Spreadsheet', 'Arsip Digital', 'BPJS Ketenagakerjaan'],
                 'waktu_kerja' => "Senin - Jumat\n08.30 - 17.00 WIB",
@@ -98,6 +103,11 @@ class LokerSeeder extends Seeder
                 'pendidikan' => 'SMK Teknik Pendingin / Pengalaman 1 th',
                 'pengalaman' => 'Minimal 1 tahun atau punya alat dasar',
                 'syarat_cv' => false,
+                'syarat_dokumen' => [
+                    'KTP / Identitas Kependudukan',
+                    'Sertifikat Keahlian / Pelatihan',
+                    'Surat Pengalaman Kerja / Paklaring'
+                ],
                 'ringkasan' => 'Pengalaman min. 1 tahun, memiliki alat servis dasar mandiri. Sistem bagi hasil transparan langsung cair per panggilan servis rumah tinggal atau ruko warga.',
                 'tags' => ['Cuci AC', 'Isi Freon', 'Jadwal Bebas'],
                 'waktu_kerja' => 'Fleksibel / Sesuai Panggilan Warga',
@@ -156,6 +166,10 @@ class LokerSeeder extends Seeder
                 'pendidikan' => 'SMA / SMK Sederajat',
                 'pengalaman' => 'Terbuka untuk pemula yang ingin belajar',
                 'syarat_cv' => true,
+                'syarat_dokumen' => [
+                    'Curriculum Vitae (CV / Resume)',
+                    'KTP / Identitas Kependudukan'
+                ],
                 'ringkasan' => 'Ramah, komunikatif, bersedia bekerja dalam tim shift. Disediakan pelatihan espresso brewing dasar dan sistem kasir digital POS.',
                 'tags' => ['Espresso Machine', 'Pelayanan Tamu', '+ Uang Makan'],
                 'waktu_kerja' => 'Shift Pagi / Sore (6-8 Jam/Hari)',
@@ -214,6 +228,11 @@ class LokerSeeder extends Seeder
                 'pendidikan' => 'SMA / SMK Sederajat',
                 'pengalaman' => 'Fresh Graduate / Pengalaman 1 th',
                 'syarat_cv' => true,
+                'syarat_dokumen' => [
+                    'Curriculum Vitae (CV / Resume)',
+                    'Ijazah & Transkrip Nilai',
+                    'KTP / Identitas Kependudukan'
+                ],
                 'ringkasan' => 'Fisik sehat dan disiplin, bertanggung jawab dalam pencatatan stok opname berkala, pemilahan barang masuk, serta pengepakan muatan armada harian.',
                 'tags' => ['Stok Opname', 'Handling Barang', 'Insentif Kehadiran'],
                 'waktu_kerja' => "Senin - Sabtu\n07.00 - 15.30 WIB",

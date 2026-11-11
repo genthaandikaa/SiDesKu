@@ -85,6 +85,9 @@ export interface HunianItem {
 export interface LokerItem {
   id: string;
   wargaId?: string;
+  userId?: number | string;
+  authorNik?: string;
+  authorName?: string;
   posisi: string;
   perusahaan: string;
   kodeReg?: string;
@@ -105,6 +108,7 @@ export interface LokerItem {
   pendidikan: string;
   pengalaman: string;
   syaratCv: boolean;
+  syaratDokumen?: string[];
   ringkasan?: string;
   deskripsi: string[];
   tags?: string[];

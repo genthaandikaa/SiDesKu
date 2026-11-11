@@ -38,7 +38,12 @@ import {
   DollarSign,
   Tag,
   Info,
-  Wand2
+  Wand2,
+  GraduationCap,
+  Award,
+  FileCheck,
+  HeartPulse,
+  BadgeCheck
 } from 'lucide-react';
 import { UmkmItem, HunianItem, LokerItem, LamaranLoker } from '../types';
 import {
@@ -62,6 +67,87 @@ import { useAuth } from '@/shared/context/AuthContext';
 const PublicUmkmCatalog = React.lazy(() => import('./UmkmPage').then((m) => ({ default: m.UmkmPage })));
 const PublicKosCatalog = React.lazy(() => import('./KosPage').then((m) => ({ default: m.KosPage })));
 const PublicLokerCatalog = React.lazy(() => import('./LokerPage').then((m) => ({ default: m.LokerPage })));
+
+export const AVAILABLE_DOKUMEN_SYARAT = [
+  {
+    id: 'Curriculum Vitae (CV / Resume)',
+    label: 'Curriculum Vitae (CV / Resume)',
+    icon: FileText,
+    badge: 'Populer'
+  },
+  {
+    id: 'KTP / Identitas Kependudukan',
+    label: 'KTP / Identitas Kependudukan',
+    icon: ShieldCheck,
+    badge: 'Prioritas Warga'
+  },
+  {
+    id: 'Portofolio Karya / Hasil Kerja',
+    label: 'Portofolio Karya / Hasil Kerja',
+    icon: Briefcase,
+    badge: null
+  },
+  {
+    id: 'Ijazah & Transkrip Nilai',
+    label: 'Ijazah & Transkrip Nilai',
+    icon: GraduationCap,
+    badge: null
+  },
+  {
+    id: 'Sertifikat Keahlian / Pelatihan',
+    label: 'Sertifikat Keahlian / Pelatihan',
+    icon: Award,
+    badge: null
+  },
+  {
+    id: 'Surat Pengalaman Kerja / Paklaring',
+    label: 'Surat Pengalaman Kerja / Paklaring',
+    icon: FileCheck,
+    badge: null
+  },
+  {
+    id: 'Surat Keterangan Sehat',
+    label: 'Surat Keterangan Sehat',
+    icon: HeartPulse,
+    badge: null
+  },
+  {
+    id: 'SKCK Aktif',
+    label: 'SKCK (Catatan Kepolisian)',
+    icon: BadgeCheck,
+    badge: null
+  }
+];
+
+export const isMyLokerItem = (l: LokerItem, user: any): boolean => {
+  if (!user) return false;
+  // Exclude default public seeds from citizen personal list
+  if (['loker-1', 'loker-2', 'loker-3', 'loker-4'].includes(l.id)) {
+    return false;
+  }
+  if (l.userId && user.id && String(l.userId) === String(user.id)) return true;
+  const userNik = user.nik || user.warga_profile?.nik;
+  if (l.authorNik && userNik && l.authorNik === userNik) return true;
+  const userName = (user.name || user.warga_profile?.nama_lengkap || '').toLowerCase();
+  if (l.authorName && userName && l.authorName.toLowerCase() === userName) return true;
+  if (l.id && l.id.startsWith('loker-citizen-')) return true;
+  if (l.perusahaan && userName && l.perusahaan.toLowerCase().includes(userName)) return true;
+  return false;
+};
+
+export const isMyKosItem = (k: HunianItem, user: any): boolean => {
+  if (!user) return false;
+  if (['kos-1', 'kos-2', 'kos-3', 'kos-4'].includes(k.id)) {
+    return false;
+  }
+  if ((k as any).userId && user.id && String((k as any).userId) === String(user.id)) return true;
+  const userNik = user.nik || user.warga_profile?.nik;
+  if ((k as any).authorNik && userNik && (k as any).authorNik === userNik) return true;
+  const userName = (user.name || user.warga_profile?.nama_lengkap || '').toLowerCase();
+  if (k.pemilikNama && userName && k.pemilikNama.toLowerCase().includes(userName)) return true;
+  if (k.id && k.id.startsWith('kos-citizen-')) return true;
+  return false;
+};
 
 interface WargaSmartCityManagerProps {
   activeSection?: 'umkm' | 'kos' | 'loker';
@@ -103,18 +189,22 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
       setUmkmList([]);
     });
 
-    // 2. Kos & Loker (Filter by citizen's name / ownership)
-    const storedKos = getStoredKosList();
-    const storedLoker = getStoredLokerList();
+    // 2. Fetch authenticated citizen's personal Loker
+    smartCityApi.getMyLokerList().then((res: LokerItem[]) => {
+      if (res && Array.isArray(res) && res.length > 0) {
+        setLokerList(res);
+      } else {
+        const storedLoker = getStoredLokerList();
+        setLokerList(storedLoker.filter(l => isMyLokerItem(l, user)));
+      }
+    }).catch(() => {
+      const storedLoker = getStoredLokerList();
+      setLokerList(storedLoker.filter(l => isMyLokerItem(l, user)));
+    });
 
-    if (user?.name) {
-      const uName = user.name.toLowerCase();
-      setKosList(storedKos.filter(k => k.pemilikNama && k.pemilikNama.toLowerCase().includes(uName)));
-      setLokerList(storedLoker.filter(l => l.perusahaan && l.perusahaan.toLowerCase().includes(uName)));
-    } else {
-      setKosList([]);
-      setLokerList([]);
-    }
+    // 3. Fetch authenticated citizen's personal Kos
+    const storedKos = getStoredKosList();
+    setKosList(storedKos.filter(k => isMyKosItem(k, user)));
 
     setLamaranList(getStoredLamaranList());
   }, [user]);
@@ -437,8 +527,18 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
   const [lokerPendidikan, setLokerPendidikan] = useState('SMA / SMK Sederajat');
   const [lokerPengalaman, setLokerPengalaman] = useState('Fresh Graduate / 1 Tahun');
   const [lokerSyaratCv, setLokerSyaratCv] = useState(true);
+  const [lokerSyaratDokumen, setLokerSyaratDokumen] = useState<string[]>([
+    'Curriculum Vitae (CV / Resume)',
+    'KTP / Identitas Kependudukan'
+  ]);
   const [lokerWaHrd, setLokerWaHrd] = useState('');
   const [lokerDescText, setLokerDescText] = useState('');
+
+  const toggleSyaratDokumen = (docName: string) => {
+    setLokerSyaratDokumen((prev) =>
+      prev.includes(docName) ? prev.filter((d) => d !== docName) : [...prev, docName]
+    );
+  };
 
   const handleAutoFormatLokerDesc = () => {
     if (!lokerDescText.trim()) {
@@ -466,10 +566,15 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
     showToast(`Draf formulir ${type.toUpperCase()} berhasil disimpan di perangkat.`);
   };
 
-  const handleSaveLoker = (e: React.FormEvent) => {
+  const handleSaveLoker = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!lokerPosisi.trim() || !lokerPerusahaan.trim() || !lokerWaHrd.trim()) {
       alert('Mohon isi posisi pekerjaan, nama usaha/perusahaan, dan nomor kontak HRD.');
+      return;
+    }
+
+    if (lokerSyaratDokumen.length === 0) {
+      alert('Mohon pilih minimal 1 dokumen persyaratan yang wajib dikirim oleh pelamar.');
       return;
     }
 
@@ -478,29 +583,39 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
       : ['Disiplin, jujur, dan bertanggung jawab', 'Mampu bekerja sama dalam tim'];
 
     const newLoker: LokerItem = {
-      id: `loker-${Date.now()}`,
+      id: `loker-citizen-${Date.now()}`,
+      userId: user?.id,
+      authorNik: (user as any)?.nik || (user as any)?.warga_profile?.nik,
+      authorName: user?.name || (user as any)?.warga_profile?.nama_lengkap,
       posisi: lokerPosisi.trim(),
       perusahaan: lokerPerusahaan.trim(),
       kategori: lokerKategori,
       tipeKerja: lokerTipeKerja,
       gajiMin: Number(lokerGajiMin),
       gajiMax: Number(lokerGajiMax),
-      lokasi: lokerLokasi.trim() || 'Kediri',
+      lokasi: lokerLokasi.trim() || 'Kota Kediri',
       lat: KEDIRI_DEFAULT_COORDS.lat,
       lng: KEDIRI_DEFAULT_COORDS.lng,
       pendidikan: lokerPendidikan,
       pengalaman: lokerPengalaman,
-      syaratCv: lokerSyaratCv,
+      syaratCv: lokerSyaratDokumen.includes('Curriculum Vitae (CV / Resume)'),
+      syaratDokumen: lokerSyaratDokumen,
       deskripsi: descLines,
       waHrd: lokerWaHrd.replace(/\D/g, ''),
-      disnakerVerified: true,
+      disnakerVerified: false,
       tanggalPosting: 'Hari ini',
       jumlahPelamar: 0,
       createdAt: new Date().toISOString()
     };
 
-    const updated = saveStoredLokerItem(newLoker);
-    setLokerList(updated);
+    // Save to backend and local storage
+    try {
+      await smartCityApi.createLoker(newLoker);
+    } catch {}
+    saveStoredLokerItem(newLoker);
+
+    // Only update citizen's own list
+    setLokerList((prev) => [newLoker, ...prev.filter((l) => l.id !== newLoker.id)]);
     showToast('Lowongan pekerjaan berhasil diterbitkan di portal Loker!');
 
     // Reset Form
@@ -513,10 +628,13 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
     }
   };
 
-  const handleDeleteLoker = (id: string) => {
+  const handleDeleteLoker = async (id: string) => {
     if (confirm('Hapus lowongan ini dari portal?')) {
-      const updated = deleteStoredLokerItem(id);
-      setLokerList(updated);
+      try {
+        await smartCityApi.deleteLoker(id);
+      } catch {}
+      deleteStoredLokerItem(id);
+      setLokerList((prev) => prev.filter((l) => l.id !== id));
       showToast('Lowongan berhasil dihapus.');
     }
   };
@@ -577,38 +695,14 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
               {/* Hero Header & Tips Box */}
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pt-1">
                 <div className="space-y-1.5 flex-1">
-                  <p className="text-[10px] font-black uppercase tracking-wider text-blue-600">
-                    • KATALOG PASAR WARGA KEDIRI
-                  </p>
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                      Tambah Produk / Dagangan UMKM Baru
+                      Tambah Produk
                     </h1>
-                    <span className="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
-                      Lapak Aktif
-                    </span>
                   </div>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
                     Promosikan kuliner, jajanan, atau produk lokal Anda agar terjangkau oleh tetangga sekitar Kelurahan.
                   </p>
-                </div>
-
-                {/* Top Right Tips Penjualan Cepat */}
-                <div className="shrink-0 bg-amber-50/80 border border-amber-200 rounded-2xl p-3.5 shadow-2xs flex items-start gap-3 max-w-sm">
-                  <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Lightbulb className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-black text-amber-950">TIPS PENJUALAN CEPAT</span>
-                      <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-200/90 text-amber-900">
-                        Penting
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-amber-900 leading-snug">
-                      Pasang foto asli yang jernih dan cantumkan WhatsApp aktif untuk respons pesanan instan.
-                    </p>
-                  </div>
                 </div>
               </div>
 
@@ -702,9 +796,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                     <div>
                       <div className="flex items-center justify-between mb-1">
                         <label className="block font-bold text-slate-700">Nomor WhatsApp Pemesanan *</label>
-                        <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-1">
-                          <Check className="w-3 h-3 text-emerald-600" /> Terverifikasi SiDesKu
-                        </span>
                       </div>
                       <div className="relative">
                         <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -726,10 +817,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                       <span className="font-extrabold text-blue-950 flex items-center gap-2 text-xs">
                         <Navigation className="w-4 h-4 text-blue-600" />
                         <span>Titik Lokasi Toko / Dapur Masak (GPS)</span>
-                        <span className="px-2 py-0.5 rounded-md bg-emerald-100/80 text-emerald-800 text-[10px] font-extrabold flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                          Sinyal Kuat
-                        </span>
                       </span>
                       <button
                         type="button"
@@ -741,9 +828,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                         <span>{isDetectingUmkmGps ? 'Mendeteksi...' : 'Perbarui Titik GPS'}</span>
                       </button>
                     </div>
-                    <p className="text-[11px] text-blue-900 leading-relaxed text-xs">
-                      Sistem otomatis menghitung estimasi jarak antar-warga & ongkos kirim ke rumah tetangga pemesan.
-                    </p>
                     <div className="text-[11px] text-blue-800 font-mono bg-white/70 px-3 py-1.5 rounded-lg border border-blue-100 flex items-center gap-2">
                       <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                       <span>• Koordinat: {tokoLat.toFixed(5)}, {tokoLng.toFixed(5)} (Akurasi GPS Tinggi ±5m - Pocanan RT 01)</span>
@@ -1085,10 +1169,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
 
                 {/* Form Footer Action Bar */}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
-                  <div className="flex items-center gap-2 text-xs text-slate-500">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Semua field wajib telah terisi otomatis</span>
-                  </div>
 
                   <div className="flex items-center gap-3 shrink-0">
                     <button
@@ -1154,38 +1234,14 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
               {/* Hero Header & Tips Box */}
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 pt-1">
                 <div className="space-y-1.5 flex-1">
-                  <p className="text-[10px] font-black uppercase tracking-wider text-blue-600">
-                    • KATALOG HUNIAN WARGA KEDIRI
-                  </p>
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                       Tambah Unit Kos & Hunian Sewa Baru
                     </h1>
-                    <span className="px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold">
-                      Lapak Kos Aktif
-                    </span>
                   </div>
                   <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
                     Daftarkan kamar kos, kontrakan, atau paviliun hunian Anda agar mudah ditemukan mahasiswa, pekerja, dan pencari hunian di Kota Kediri.
                   </p>
-                </div>
-
-                {/* Top Right Tips Hunian Cepat */}
-                <div className="shrink-0 bg-amber-50/80 border border-amber-200 rounded-2xl p-3.5 shadow-2xs flex items-start gap-3 max-w-sm">
-                  <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Lightbulb className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-black text-amber-950">TIPS HUNIAN CEPAT LAKU</span>
-                      <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-amber-200/90 text-amber-900">
-                        Penting
-                      </span>
-                    </div>
-                    <p className="text-[11px] text-amber-900 leading-snug">
-                      Sertakan fasilitas lengkap (AC/WiFi) dan foto kamar yang terang untuk menarik calon penyewa.
-                    </p>
-                  </div>
                 </div>
               </div>
 
@@ -1410,10 +1466,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                       <span className="font-extrabold text-blue-950 flex items-center gap-2 text-xs">
                         <Navigation className="w-4 h-4 text-blue-600" />
                         <span>Titik Lokasi GPS Rumah Kos</span>
-                        <span className="px-2 py-0.5 rounded-md bg-emerald-100/80 text-emerald-800 text-[10px] font-extrabold flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                          Sinyal Kuat
-                        </span>
                       </span>
                       <button
                         type="button"
@@ -1448,9 +1500,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                     <div>
                       <div className="flex items-center justify-between mb-1">
                         <label className="block font-bold text-slate-700">No. WhatsApp Pemilik *</label>
-                        <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-1">
-                          <Check className="w-3 h-3 text-emerald-600" /> Terverifikasi SiDesKu
-                        </span>
                       </div>
                       <div className="relative">
                         <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -1611,8 +1660,6 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                 {/* Form Footer Action Bar */}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
                   <div className="flex items-center gap-2 text-xs text-slate-500">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Semua field hunian tersimpan dalam draf</span>
                   </div>
 
                   <div className="flex items-center gap-3 shrink-0">
@@ -1670,29 +1717,14 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                   <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
                   <span className="text-blue-700 font-bold">Pasang Lowongan Baru</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                  <span>Mode Verifikasi Kependudukan Aktif</span>
-                </div>
               </div>
 
               {/* Hero Header & Verifikasi Warga Box */}
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-1">
                 <div className="space-y-2 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider">
-                      <Briefcase className="w-3 h-3" /> Bursa Karir Digital
-                    </span>
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200 text-[10px] font-bold">
-                      Kota Kediri Inklusif
-                    </span>
-                  </div>
                   <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                     Pasang Lowongan Pekerjaan Baru
                   </h1>
-                  <p className="text-xs sm:text-sm text-slate-600 max-w-2xl leading-relaxed">
-                    Publikasikan lowongan pekerjaan bagi warga Kota Kediri. Rekrut kandidat potensial dengan kualifikasi terstruktur dan data pelamar yang langsung terverifikasi secara kependudukan RT/RW.
-                  </p>
                 </div>
 
                 {/* Right Card: Verifikasi Warga */}
@@ -1876,6 +1908,63 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                         <option value="3+ Tahun">3+ Tahun</option>
                         <option value="Tidak Memerlukan Pengalaman">Tidak Memerlukan Pengalaman</option>
                       </select>
+                    </div>
+
+                    {/* Dokumen & Berkas yang Wajib Dikirim Pelamar */}
+                    <div className="col-span-1 md:col-span-2 pt-4 border-t border-slate-100 space-y-3">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                          <label className="block font-extrabold text-slate-800 text-xs">
+                            Dokumen Persyaratan yang Wajib Dikirim Pelamar *
+                          </label>
+                        </div>
+                        <span className="text-[10px] font-extrabold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200 shrink-0">
+                          {lokerSyaratDokumen.length} Berkas Dipilih
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {AVAILABLE_DOKUMEN_SYARAT.map((dok) => {
+                          const isSelected = lokerSyaratDokumen.includes(dok.id);
+                          const IconComp = dok.icon;
+                          return (
+                            <button
+                              key={dok.id}
+                              type="button"
+                              onClick={() => toggleSyaratDokumen(dok.id)}
+                              className={`flex items-start gap-3 p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                                isSelected
+                                  ? 'bg-blue-50/70 border-blue-400 ring-1 ring-blue-500/20'
+                                  : 'bg-slate-50 border-slate-200 hover:bg-slate-100/80 hover:border-slate-300'
+                              }`}
+                            >
+                              <div
+                                className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 mt-0.5 transition-colors ${
+                                  isSelected ? 'bg-blue-600 text-white' : 'border border-slate-300 bg-white'
+                                }`}
+                              >
+                                {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <IconComp className={`w-3.5 h-3.5 ${isSelected ? 'text-blue-600' : 'text-slate-400'}`} />
+                                  <span className={`font-bold text-xs ${isSelected ? 'text-blue-900' : 'text-slate-700'}`}>
+                                    {dok.label}
+                                  </span>
+                                  {dok.badge && (
+                                    <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-700">
+                                      {dok.badge}
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-[10px] text-slate-500 mt-0.5 leading-snug">
+                                  {dok.desc}
+                                </p>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2342,12 +2431,26 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                         </div>
                         <h4 className="font-extrabold text-base text-slate-900">{item.posisi}</h4>
                         <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                          <span className="font-bold text-emerald-700">Rp {item.gajiMin.toLocaleString('id-ID')} - Rp {item.gajiMax.toLocaleString('id-ID')}</span>
+                          <span className="font-bold text-blue-700">{formatGajiJt(item.gajiMin, item.gajiMax)}</span>
                           <span>•</span>
                           <span>{item.tipeKerja}</span>
                           <span>•</span>
                           <span>{item.pendidikan}</span>
                         </div>
+                        {item.syaratDokumen && item.syaratDokumen.length > 0 && (
+                          <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                            <span className="text-[10px] text-slate-400 font-bold">Syarat Berkas:</span>
+                            {item.syaratDokumen.map((dok, dIdx) => (
+                              <span
+                                key={dIdx}
+                                className="text-[10px] font-semibold text-blue-700 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200 flex items-center gap-1"
+                              >
+                                <Check className="w-2.5 h-2.5 stroke-[3]" />
+                                {dok}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">

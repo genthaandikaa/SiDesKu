@@ -63,6 +63,9 @@ Route::get('/public/umkms/{id}/reviews', [PublicUmkmController::class, 'reviews'
 
 // Smart City: Bursa Kerja, Loker & Karir Warga (Publik)
 Route::get('/public/lokers', [PublicLokerController::class, 'index']);
+Route::get('/public/my-lokers', [PublicLokerController::class, 'getMyLokers']);
+Route::post('/public/lokers', [PublicLokerController::class, 'store']);
+Route::delete('/public/lokers/{id}', [PublicLokerController::class, 'destroy']);
 Route::get('/public/lokers/{id}', [PublicLokerController::class, 'show']);
 Route::post('/public/lokers/{id}/apply', [PublicLokerController::class, 'apply']);
 Route::get('/public/loker-profile', [PublicLokerController::class, 'getSeekerProfile']);

@@ -398,6 +398,26 @@ export const LokerPage: React.FC = () => {
                           ))}
                         </div>
                       )}
+
+                      {/* Required Documents Tags */}
+                      {job.syaratDokumen && job.syaratDokumen.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                          <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Syarat Berkas:</span>
+                          {job.syaratDokumen.slice(0, 3).map((dok, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2 py-0.5 rounded-md bg-sky-50 text-blue-700 text-[10px] font-bold border border-sky-200"
+                            >
+                              {dok}
+                            </span>
+                          ))}
+                          {job.syaratDokumen.length > 3 && (
+                            <span className="text-[10px] text-slate-400 font-bold">
+                              +{job.syaratDokumen.length - 3} berkas
+                            </span>
+                          )}
+                        </div>
+                      )}
                     </div>
 
                     {/* Right Column: Salary Block & Actions */}
