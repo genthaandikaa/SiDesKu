@@ -319,7 +319,7 @@ export const PublicNavbar: React.FC = () => {
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-bold text-xs shadow-md shadow-sky-500/20 transition-all press-down outline-none focus:outline-none cursor-pointer"
                 >
-                  <span>Layanan Utama</span>
+                  <span>Masuk</span>
                   <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${profileDropdownOpen ? 'rotate-180' : ''}`} />
                 </button>
 

@@ -15,6 +15,9 @@ const UmkmPage = React.lazy(() => import('@/features/smart-city').then(m => ({ d
 const UmkmDetailPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.UmkmDetailPage })));
 const KosPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.KosPage })));
 const LokerPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.LokerPage })));
+const LokerDetailPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.LokerDetailPage })));
+const LokerApplyPage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.LokerApplyPage })));
+const LokerProfilePage = React.lazy(() => import('@/features/smart-city').then(m => ({ default: m.LokerProfilePage })));
 const LoginPage = React.lazy(() => import('@/features/auth/components/LoginPage').then(m => ({ default: m.LoginPage })));
 const RegisterPage = React.lazy(() => import('@/features/auth/components/RegisterPage').then(m => ({ default: m.RegisterPage })));
 
@@ -111,6 +114,9 @@ export const AppRoutes: React.FC = () => {
           <Route path="/smart-city/umkm/:id" element={<UmkmDetailPage />} />
           <Route path="/smart-city/kos" element={<KosPage />} />
           <Route path="/smart-city/loker" element={<LokerPage />} />
+          <Route path="/smart-city/loker/profil" element={<LokerProfilePage />} />
+          <Route path="/smart-city/loker/:id" element={<LokerDetailPage />} />
+          <Route path="/smart-city/loker/:id/lamar" element={<LokerApplyPage />} />
 
           {/* Convenient Direct Aliases */}
           <Route path="/umkm" element={<UmkmPage />} />
@@ -119,6 +125,9 @@ export const AppRoutes: React.FC = () => {
           <Route path="/kos" element={<KosPage />} />
           <Route path="/hunian" element={<KosPage />} />
           <Route path="/loker" element={<LokerPage />} />
+          <Route path="/loker/profil" element={<LokerProfilePage />} />
+          <Route path="/loker/:id" element={<LokerDetailPage />} />
+          <Route path="/loker/:id/lamar" element={<LokerApplyPage />} />
         </Route>
 
         {/* Auth Routes */}

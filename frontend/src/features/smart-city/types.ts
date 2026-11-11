@@ -87,22 +87,45 @@ export interface LokerItem {
   wargaId?: string;
   posisi: string;
   perusahaan: string;
-  kategori: 'Administrasi' | 'IT & Digital' | 'F&B / Kuliner' | 'Teknik & Bengkel' | 'Pendidikan' | 'Perdagangan & Retail' | 'Jasa Warga';
-  tipeKerja: 'Full-time' | 'Part-time' | 'Harian' | 'Freelance' | 'Magang';
+  kodeReg?: string;
+  nib?: string;
+  companyLogoText?: string;
+  mitraStatus?: string;
+  tagVerifikasi?: string;
+  kategori: 'Administrasi' | 'IT & Digital' | 'F&B / Kuliner' | 'Teknik & Bengkel' | 'Pendidikan' | 'Perdagangan & Retail' | 'Jasa Warga' | string;
+  tipeKerja: 'Full-time' | 'Part-time' | 'Harian' | 'Freelance' | 'Magang' | string;
+  distanceText?: string;
+  gajiLabel?: string;
   gajiMin: number;
   gajiMax: number;
+  gajiSubtext?: string;
   lokasi: string;
   lat: number;
   lng: number;
   pendidikan: string;
   pengalaman: string;
   syaratCv: boolean;
+  ringkasan?: string;
   deskripsi: string[];
+  tags?: string[];
+  waktuKerja?: string;
+  levelPekerjaan?: string;
+  fasilitasUtama?: string;
+  bidang?: string;
+  alamatKantor?: string;
+  batasPengajuan?: string;
+  kuotaKebutuhan?: string;
+  waktuProses?: string;
+  deskripsiDetail?: string;
+  tanggungJawab?: string[];
+  persyaratan?: string[];
+  benefits?: { title: string; desc: string; icon: string }[];
   waHrd: string;
   emailHrd?: string;
   disnakerVerified: boolean;
   tanggalPosting: string;
   jumlahPelamar: number;
+  isJasaMitra?: boolean;
   createdAt: string;
 }
 
@@ -115,10 +138,50 @@ export interface LamaranLoker {
   pelamarNik?: string;
   pelamarWa: string;
   pelamarEmail: string;
-  pendidikanTerakhir: string;
+  pendidikanTerakhir?: string;
   cvFileName: string;
   cvFileUrl?: string;
+  portofolioUrl?: string;
+  portofolioFileName?: string;
   catatan?: string;
-  status: 'Terkirim' | 'Ditinjau' | 'Wawancara' | 'Diterima';
+  status: 'Terkirim' | 'Berkas Diterima HR - Wawancara Dijadwalkan' | 'Ditinjau' | 'Selesai Seleksi' | 'Diterima' | string;
+  substatusText?: string;
   tanggalLamar: string;
+  iconType?: 'building' | 'coffee' | 'tools' | 'briefcase';
+}
+
+export interface JobSeekerProfile {
+  nama: string;
+  nik: string;
+  domisili: string;
+  statusKerja: string;
+  terakhirUpdate: string;
+  email: string;
+  telepon: string;
+  avatarUrl?: string;
+  cvUtama: {
+    name: string;
+    size: string;
+    lastUpdated: string;
+    atsPassed: boolean;
+    fileUrl?: string;
+  };
+  berkasPendukung: Array<{
+    id: string;
+    judul: string;
+    status: 'Valid' | 'Terverifikasi' | string;
+    subjudul: string;
+    noReg: string;
+    icon: 'award' | 'graduation' | 'ribbon' | 'file';
+    fileUrl?: string;
+  }>;
+  keahlian: string[];
+  preferensi: {
+    area: string;
+    radius: string;
+    gaji: string;
+    gajiSub: string;
+    tipe: string;
+    tipeSub: string;
+  };
 }

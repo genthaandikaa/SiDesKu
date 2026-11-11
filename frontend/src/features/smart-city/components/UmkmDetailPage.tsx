@@ -517,14 +517,9 @@ export const UmkmDetailPage: React.FC = () => {
               <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-start gap-3 text-xs text-emerald-950">
                 <Award className="w-5 h-5 text-emerald-700 shrink-0 mt-0.5" />
                 <div>
-                  <strong className="block text-emerald-950 font-black text-xs">Garansi Dingin 30 Hari Penuh (RESMI)</strong>
+                  <strong className="block text-emerald-950 font-black text-xs">Garansi 30 Hari</strong>
                   <span className="text-emerald-800 leading-relaxed text-[11px] sm:text-xs">Bila AC kembali bocor atau kurang dingin dalam 30 hari pasca pengerjaan, teknisi hadir kembali tanpa biaya jasa tambahan.</span>
                 </div>
-              </div>
-
-              <div className="text-[11px] text-slate-400 flex items-center gap-1.5 pt-1">
-                <ShieldCheck className="w-4 h-4 text-slate-400" />
-                <span>Harga pasti sesuai kesepakatan awal tanpa biaya tersembunyi. Pembayaran langsung ke penyedia jasa.</span>
               </div>
             </div>
 
@@ -1153,9 +1148,6 @@ export const UmkmDetailPage: React.FC = () => {
             />
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
-              <span className="text-[10px] sm:text-[11px] text-slate-400">
-                Ulasan warga membantu menjaga transparansi dan kualitas UMKM tetangga kita.
-              </span>
               <button
                 type="submit"
                 disabled={isSubmittingReview}
@@ -1238,7 +1230,7 @@ export const UmkmDetailPage: React.FC = () => {
                   </div>
 
                   <div className="text-[10px] text-slate-400 pt-2 border-t border-slate-200/60 flex items-center justify-between">
-                    <span>Ulasan Pembelian Terverifikasi</span>
+                    <span>Ulasan Pembeli</span>
                     <span>{new Date(rev.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                   </div>
                 </div>
