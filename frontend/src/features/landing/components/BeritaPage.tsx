@@ -3,10 +3,7 @@ import { createPortal } from 'react-dom';
 import { 
   Newspaper, 
   Search, 
-  Calendar, 
   Eye, 
-  ChevronRight, 
-  BellRing, 
   X, 
   Globe, 
   Building2, 
@@ -14,9 +11,7 @@ import {
   HeartPulse, 
   ShoppingBag, 
   Users, 
-  Clock, 
-  ArrowRight,
-  Bookmark
+  ArrowRight
 } from 'lucide-react';
 import api from '@/shared/lib/axios';
 import { Berita, Pengumuman } from '@/shared/types';
@@ -89,6 +84,37 @@ const defaultBeritas: Berita[] = [
     is_published: true,
     published_at: '2026-08-16T13:00:00.000000Z',
   },
+  {
+    id: -1,
+    judul: 'Dari Kampung untuk Kota: Warga Kediri Bergerak Menata Lingkungan yang Lebih Nyaman',
+    slug: 'warga-kediri-menata-lingkungan-lebih-nyaman',
+    kategori: 'Sosial',
+    ringkasan: 'Kerja bakti, ruang terbuka, dan kolaborasi warga menjadi langkah sederhana yang mengubah kualitas lingkungan dari tingkat kampung.',
+    konten: `Pagi belum sepenuhnya terang ketika beberapa warga mulai berkumpul di ujung gang. Ada yang membawa sapu lidi, ada yang menyiapkan bibit tanaman, sementara anak-anak membantu mengumpulkan pot kecil yang akan ditata di sepanjang jalan. Kegiatan itu mungkin terlihat sederhana, tetapi bagi warga, inilah cara memulai perubahan: dari ruang yang paling dekat dengan kehidupan sehari-hari.
+
+Dalam beberapa bulan terakhir, sejumlah lingkungan di Kota Kediri kembali menghidupkan kegiatan bersama untuk merawat kawasan tempat tinggal. Fokusnya bukan hanya membersihkan selokan atau mengangkut sampah. Warga juga membicarakan hal-hal yang sering luput dari perhatian, seperti penerangan gang, jalur aman untuk anak-anak, tempat duduk bagi lansia, dan ruang kecil tempat tetangga bisa saling menyapa.
+
+Perubahan biasanya dimulai dari percakapan singkat. Ketua RT mengajak warga memetakan titik yang sering tergenang saat hujan. Pemilik warung menceritakan bagian jalan yang gelap pada malam hari. Orang tua mengusulkan agar area bermain anak dijauhkan dari jalur kendaraan. Catatan-catatan itu kemudian dibawa ke pertemuan warga agar kebutuhan yang paling mendesak dapat disepakati bersama.
+
+Di salah satu kampung, saluran air yang kerap tersumbat menjadi persoalan utama. Warga membagi jadwal pemeriksaan, membersihkan bagian yang mudah dijangkau, lalu melaporkan kerusakan yang memerlukan penanganan lebih lanjut. Mereka juga menandai lokasi rawan genangan agar petugas dan warga memiliki gambaran yang sama ketika melakukan pengecekan. Langkah ini tidak menyelesaikan semua masalah dalam sehari, tetapi membuat tindak lanjut lebih jelas.
+
+Ruang terbuka kecil juga mulai mendapat perhatian. Lahan yang sebelumnya jarang digunakan dibersihkan dan ditanami tanaman yang mudah dirawat. Beberapa bangku sederhana ditempatkan di sisi yang teduh. Pada sore hari, tempat itu menjadi ruang singgah bagi warga yang pulang bekerja, anak-anak yang bermain, dan lansia yang ingin berbincang di luar rumah. Kehadiran ruang bersama memberi kesempatan bagi tetangga untuk bertemu tanpa harus menunggu acara besar.
+
+Kegiatan lingkungan yang bertahan biasanya memiliki pembagian peran yang ringan dan masuk akal. Warga tidak harus selalu hadir dalam jumlah besar. Ada yang menyiram tanaman sebelum berangkat kerja, ada yang memeriksa lampu jalan saat pulang, dan ada pula yang menghubungi pengurus ketika menemukan kerusakan. Dengan begitu, tanggung jawab tidak bertumpu pada satu atau dua orang saja.
+
+Kolaborasi dengan pemerintah setempat membantu warga memilah kebutuhan yang dapat dikerjakan secara mandiri dan kebutuhan yang memerlukan dukungan teknis. Perbaikan kecil dapat dijadwalkan melalui kerja bersama, sementara persoalan seperti kerusakan fasilitas umum atau saluran utama perlu diteruskan kepada perangkat terkait. Informasi lokasi, foto kondisi, dan waktu kejadian membuat laporan lebih mudah dipahami dan ditindaklanjuti.
+
+Warga juga belajar bahwa lingkungan yang nyaman bukan hanya soal tampilan. Kebersihan berpengaruh pada kesehatan, penerangan membantu rasa aman, dan ruang terbuka yang terawat membuat interaksi sosial lebih mudah tumbuh. Ketika warga saling mengenal, mereka lebih cepat mengetahui jika ada tetangga yang membutuhkan bantuan atau jika muncul persoalan yang perlu segera dibicarakan.
+
+Tantangan tetap ada. Jadwal kerja yang berbeda membuat tidak semua orang dapat mengikuti kegiatan pada waktu yang sama. Sebagian kebutuhan juga membutuhkan biaya dan perawatan jangka panjang. Karena itu, pengurus lingkungan mencoba membuat agenda sederhana, mencatat kebutuhan secara terbuka, dan mengevaluasi kegiatan setelah beberapa waktu. Cara ini membantu warga melihat apa yang sudah berjalan dan apa yang masih perlu diperbaiki.
+
+Menata lingkungan bukan pekerjaan sekali selesai. Tanaman perlu dirawat, saluran perlu diperiksa kembali, dan fasilitas bersama perlu dijaga agar tetap berguna. Namun, setiap langkah kecil memberi hasil yang dapat dirasakan langsung: jalan yang lebih bersih, gang yang lebih terang, dan ruang yang terasa lebih ramah bagi semua usia.
+
+Dari tingkat kampung, kebiasaan bekerja bersama dapat memberi dampak yang lebih luas bagi kota. Warga memahami kebutuhan lingkungannya, pemerintah memperoleh informasi yang lebih dekat dengan kondisi lapangan, dan tindak lanjut dapat direncanakan dengan lebih tepat. Kota yang nyaman tumbuh dari banyak tindakan sederhana yang dilakukan secara konsisten, satu lingkungan demi satu lingkungan.`,
+    view_count: 2750,
+    is_published: true,
+    published_at: '2026-09-01T08:00:00.000000Z',
+  },
 ];
 
 const categoryConfigs = [
@@ -160,7 +186,7 @@ export const BeritaPage: React.FC = () => {
     try {
       const d = new Date(dateStr);
       if (isNaN(d.getTime())) return 'Terkini';
-      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+      return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).replace(/[A-Za-zÀ-ÿ]{3,}/, (month) => month.toLowerCase());
     } catch {
       return 'Terkini';
     }
@@ -177,8 +203,18 @@ export const BeritaPage: React.FC = () => {
     return matchCat && matchSearch;
   });
 
+  const showEditorialSections = selectedKategori === 'Semua' && !searchQuery;
+  const popularBerita = showEditorialSections
+    ? filteredBeritas.find((berita) => berita.id === -1)
+      || [...filteredBeritas].sort((a, b) => (b.view_count || 0) - (a.view_count || 0))[0]
+      || null
+    : null;
+  const editorialIds = new Set(popularBerita ? [popularBerita.id] : []);
+  const remainingBeritas = showEditorialSections
+    ? filteredBeritas.filter((berita) => !editorialIds.has(berita.id))
+    : filteredBeritas;
   const pageSize = 6;
-  const paginatedBeritas = filteredBeritas.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const paginatedBeritas = remainingBeritas.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <div className="page-enter relative w-full overflow-hidden flex flex-col font-sans text-slate-800">
@@ -197,27 +233,6 @@ export const BeritaPage: React.FC = () => {
         <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal max-w-2xl mx-auto mb-6">
           Kumpulan berita resmi, dokumentasi infrastruktur kota, peluang bursa karir Disnaker, agenda publik, dan pengumuman pemerintahan kota.
         </p>
-
-        {/* Search Bar Minimalis */}
-        <div className="max-w-xl mx-auto relative mb-6">
-          <Search className="w-4 h-4 text-sky-500 absolute left-4.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Cari topik atau judul berita..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-12 py-3 bg-white rounded-full border border-sky-200 shadow-md shadow-sky-500/5 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 cursor-pointer"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
 
         {/* Kategori Filter Pill Halus */}
         <div className="flex items-center justify-center gap-1.5 overflow-x-auto no-scrollbar py-1">
@@ -254,20 +269,19 @@ export const BeritaPage: React.FC = () => {
       {/* Main Content Area */}
       <section className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4 pb-14 space-y-8">
         
-        {/* Featured Story (Ditampilkan jika di Semua kategori & halaman 1 tanpa pencarian) */}
-        {selectedKategori === 'Semua' && !searchQuery && filteredBeritas.length > 0 && currentPage === 1 && (
+        {popularBerita && (
           <div 
-            onClick={() => setSelectedBerita(filteredBeritas[0])}
+            onClick={() => setSelectedBerita(popularBerita)}
             className="bg-white rounded-3xl overflow-hidden border border-sky-100 shadow-lg hover:border-sky-300 hover:shadow-xl transition-all grid grid-cols-1 md:grid-cols-12 gap-0 group cursor-pointer"
           >
             <div className="md:col-span-6 h-60 md:h-auto overflow-hidden bg-slate-900 relative">
               <img
-                src="/images/event.jpg"
-                alt={filteredBeritas[0].judul}
+                src={popularBerita.gambar_cover || '/images/event.jpg'}
+                alt={popularBerita.judul}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <span className="absolute top-3.5 left-3.5 bg-gradient-to-r from-sky-500 to-blue-600 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full shadow-md">
-                Warta Terkini
+                Berita Populer
               </span>
             </div>
 
@@ -275,27 +289,27 @@ export const BeritaPage: React.FC = () => {
               <div className="space-y-2.5">
                 <div className="flex items-center gap-2 text-xs text-slate-400">
                   <span className="font-mono text-sky-800 font-bold bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-200">
-                    {filteredBeritas[0].kategori}
+                    {popularBerita.kategori}
                   </span>
                   <span>•</span>
-                  <span>{formatBeritaDate(filteredBeritas[0].published_at)}</span>
+                  <span>{formatBeritaDate(popularBerita.published_at)}</span>
                   <span>•</span>
                   <span>3 mnt baca</span>
                 </div>
 
                 <h2 className="text-lg sm:text-xl font-black text-slate-900 group-hover:text-sky-700 transition-colors leading-snug">
-                  {filteredBeritas[0].judul}
+                  {popularBerita.judul}
                 </h2>
 
                 <p className="text-xs sm:text-sm text-slate-500 leading-relaxed line-clamp-3">
-                  {filteredBeritas[0].ringkasan || filteredBeritas[0].konten}
+                  {popularBerita.ringkasan || popularBerita.konten}
                 </p>
               </div>
 
               <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                 <span className="flex items-center gap-1.5 text-slate-400 font-medium">
                   <Eye className="w-3.5 h-3.5 text-sky-600" />
-                  {filteredBeritas[0].view_count || 120} pembaca
+                  {popularBerita.view_count || 120} pembaca
                 </span>
                 <span className="font-extrabold text-sky-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                   Baca Artikel Lengkap <ArrowRight className="w-3.5 h-3.5" />
@@ -305,61 +319,68 @@ export const BeritaPage: React.FC = () => {
           </div>
         )}
 
-        {/* Grid Artikel Warta: Bersih, Rapi & Lega */}
-        {filteredBeritas.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {/* Search follows the featured popular story */}
+        <div className="max-w-xl mx-auto w-full relative">
+          <Search className="w-4 h-4 text-sky-500 absolute left-4.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Cari topik atau judul berita..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-12 py-3 bg-white rounded-full border border-sky-200 shadow-md shadow-sky-500/5 text-xs sm:text-sm font-medium text-slate-800 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all"
+          />
+          {searchQuery && (
+            <button type="button" onClick={() => setSearchQuery('')} className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600 rounded-full hover:bg-slate-100 cursor-pointer" aria-label="Hapus pencarian">
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+
+        {paginatedBeritas.length > 0 ? (
+          <section className="space-y-4">
+            <div className="flex items-end justify-between gap-3">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-600">Jelajahi kabar lainnya</p>
+                <h2 className="text-xl sm:text-2xl font-black text-slate-900">Berita Lainnya</h2>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {paginatedBeritas.map((b, idx) => {
-              const thumb = idx % 3 === 0 ? '/images/event.jpg' : idx % 3 === 1 ? '/images/kursus.jpg' : '/images/landing/about_img.webp';
+              const thumb = b.gambar_cover || (idx % 3 === 0 ? '/images/event.jpg' : idx % 3 === 1 ? '/images/kursus.jpg' : '/images/landing/about_img.webp');
               return (
-                <div 
+                <button
                   key={b.id}
+                  type="button"
                   onClick={() => setSelectedBerita(b)}
-                  className="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-xs hover:border-sky-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+                  className="w-full text-left bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-xs hover:border-sky-300 hover:shadow-md transition-all duration-300 flex group cursor-pointer"
                 >
-                  <div>
-                    <div className="h-44 w-full overflow-hidden bg-slate-100 relative">
+                    <div className="w-32 sm:w-40 shrink-0 min-h-36 overflow-hidden bg-slate-100 relative">
                       <img
                         src={thumb}
                         alt={b.judul}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <span className="absolute top-3 left-3 text-[10px] font-black text-sky-900 bg-white/95 backdrop-blur-md px-2.5 py-0.5 rounded-full shadow-2xs border border-sky-100">
-                        {b.kategori}
-                      </span>
                     </div>
-
-                    <div className="p-5 space-y-2.5">
-                      <div className="flex items-center justify-between text-[11px] text-slate-400">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3 text-sky-600" />
-                          {formatBeritaDate(b.published_at)}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Eye className="w-3 h-3 text-slate-400" />
-                          {b.view_count || 120}
-                        </span>
+                    <div className="min-w-0 flex-1 p-4 sm:p-5 flex flex-col justify-center gap-2">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-400">
+                        <span className="font-bold text-sky-700">{b.kategori}</span>
+                        <span aria-hidden="true">•</span>
+                        <span>{formatBeritaDate(b.published_at)}</span>
                       </div>
-
                       <h3 className="font-extrabold text-sm sm:text-base text-slate-900 group-hover:text-sky-700 transition-colors line-clamp-2 leading-snug">
                         {b.judul}
                       </h3>
                       <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed">
                         {b.ringkasan || b.konten}
                       </p>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-700">Baca berita <ArrowRight className="w-3 h-3" /></span>
                     </div>
-                  </div>
-
-                  <div className="p-5 pt-0">
-                    <div className="w-full py-2 rounded-full bg-sky-50 text-sky-800 text-xs font-bold text-center group-hover:bg-sky-100 transition-colors border border-sky-200/70 flex items-center justify-center gap-1">
-                      <span>Baca Selengkapnya</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </div>
-                  </div>
-                </div>
+                </button>
               );
             })}
-          </div>
-        ) : (
+            </div>
+          </section>
+        ) : filteredBeritas.length === 0 ? (
           <div className="bg-white rounded-3xl border border-sky-100 p-10 text-center space-y-3">
             <Newspaper className="w-10 h-10 text-sky-300 mx-auto" />
             <h4 className="font-bold text-sm text-slate-900">Belum Ada Warta yang Cocok</h4>
@@ -367,11 +388,11 @@ export const BeritaPage: React.FC = () => {
               Tidak ditemukan artikel untuk kata kunci "{searchQuery}". Silakan coba kata kunci lain.
             </p>
           </div>
-        )}
+        ) : null}
 
         <Pagination
           currentPage={currentPage}
-          totalItems={filteredBeritas.length}
+          totalItems={remainingBeritas.length}
           pageSize={pageSize}
           onPageChange={setCurrentPage}
           itemLabel="warta desa"
@@ -420,7 +441,7 @@ export const BeritaPage: React.FC = () => {
 
               <div className="h-48 rounded-2xl overflow-hidden bg-slate-100">
                 <img 
-                  src="/images/event.jpg" 
+                  src={selectedBerita.gambar_cover || '/images/event.jpg'}
                   alt="" 
                   className="w-full h-full object-cover"
                 />

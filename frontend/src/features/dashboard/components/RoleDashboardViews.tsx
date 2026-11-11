@@ -2910,7 +2910,12 @@ export const NotifikasiView: React.FC<{
       <PushNotificationManager className="mb-6" />
 
       <div className="space-y-3">
-        {notifs.map((n) => (
+        {notifs.length === 0 ? (
+          <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
+            <p className="text-sm font-bold text-slate-800">Belum ada pengumuman atau agenda baru.</p>
+            <p className="mt-1 text-xs text-slate-500">Pembaruan dari desa dalam cakupan wilayah akan muncul di sini.</p>
+          </div>
+        ) : notifs.map((n) => (
           <div 
             key={n.id} 
             onClick={() => onSelectNotification?.(n)}

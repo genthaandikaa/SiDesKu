@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ChatMessage;
 use App\Models\ChatRoom;
+use App\Models\Desa;
 use App\Models\User;
 use App\Models\WargaProfile;
 use Illuminate\Http\JsonResponse;
@@ -26,7 +27,13 @@ class ChatController extends Controller
             ->where('id', '!=', $user->id)
             ->where('is_active', true);
 
-        if ($desaId) {
+        if ($user->hasRole(['kecamatan', 'kabupaten_kota'])) {
+            $regionalDesaIds = $this->regionalDesaIds($user);
+            $query->whereIn('desa_id', $regionalDesaIds)
+                ->whereHas('role', fn($role) => $role->whereIn('slug', [
+                    'kecamatan', 'kabupaten_kota', 'kades', 'sekdes', 'admin', 'admin_desa',
+                ]));
+        } elseif ($desaId) {
             $query->where('desa_id', $desaId);
         }
 
@@ -35,7 +42,7 @@ class ChatController extends Controller
             $category = 'warga';
             if (in_array($roleSlug, ['super_admin', 'admin', 'sekdes', 'kades', 'bendahara_desa', 'perangkat_desa', 'staf', 'kaur', 'kasi'])) {
                 $category = 'aparatur_desa';
-            } elseif (in_array($roleSlug, ['rt', 'rw', 'ketua_rt', 'ketua_rw'])) {
+            } elseif (in_array($roleSlug, ['rt', 'rw', 'ketua_rt', 'ketua_rw', 'kecamatan', 'kabupaten_kota'])) {
                 $category = 'pengurus_wilayah';
             }
 
@@ -163,6 +170,16 @@ class ChatController extends Controller
         $user = $request->user();
         $targetUserId = (int)$request->target_user_id;
         $roomType = $request->room_type ?? 'direct';
+        $targetUser = User::with('role')->findOrFail($targetUserId);
+
+        if ($user->hasRole(['kecamatan', 'kabupaten_kota']) && (
+            $roomType !== 'direct' || !$this->canRegionalUserContact($user, $targetUser)
+        )) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Kontak berada di luar cakupan wilayah atau bukan kontak koordinasi yang diizinkan.',
+            ], 403);
+        }
 
         $room = ChatRoom::where(function ($q) use ($user, $targetUserId) {
             $q->where(function ($sub) use ($user, $targetUserId) {
@@ -175,7 +192,6 @@ class ChatController extends Controller
         ->first();
 
         if (!$room) {
-            $targetUser = User::find($targetUserId);
             $room = ChatRoom::create([
                 'desa_id' => $user->desa_id ?? $targetUser->desa_id,
                 'room_type' => $roomType,
@@ -457,5 +473,31 @@ class ChatController extends Controller
             'success' => true,
             'data' => $message,
         ], 201);
+    }
+
+    /** @return array<int> */
+    private function regionalDesaIds(User $user): array
+    {
+        $anchorDesa = Desa::query()->whereKey($user->desa_id)->where('is_active', true)->first();
+        if (!$anchorDesa) {
+            return [];
+        }
+
+        $areaColumn = $user->hasRole('kecamatan') ? 'kecamatan' : 'kabupaten';
+        return Desa::query()
+            ->where('is_active', true)
+            ->where($areaColumn, $anchorDesa->{$areaColumn})
+            ->pluck('id')
+            ->map(fn($id) => (int) $id)
+            ->all();
+    }
+
+    private function canRegionalUserContact(User $user, User $target): bool
+    {
+        $allowedRoles = ['kecamatan', 'kabupaten_kota', 'kades', 'sekdes', 'admin', 'admin_desa'];
+        return $target->is_active
+            && $target->role
+            && in_array($target->role->slug, $allowedRoles, true)
+            && in_array((int) $target->desa_id, $this->regionalDesaIds($user), true);
     }
 }

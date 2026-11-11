@@ -457,7 +457,7 @@ export const DashboardLayout: React.FC = () => {
   }, [location.pathname, location.search]);
 
   // Interactive Notifications System (Dynamic & Role-Aware)
-  const [notifications, setNotifications] = useState<NotificationItem[]>([
+  const [notifications, setNotifications] = useState<NotificationItem[]>(isRegionalRole ? [] : [
     {
       id: 1,
       title: 'Portal Digital Nexora Aktif',
@@ -493,6 +493,33 @@ export const DashboardLayout: React.FC = () => {
     const fetchUserNotifications = async () => {
       try {
         const role = user?.role?.slug || 'warga';
+        if (['kecamatan', 'kabupaten_kota'].includes(role)) {
+          const response = await api.get('/regional/overview');
+          const overview = response.data?.data;
+          const regionalNotifications: NotificationItem[] = [
+            ...(Array.isArray(overview?.pengumuman) ? overview.pengumuman.slice(0, 8).map((item: any) => ({
+              id: `pengumuman-${item.id}`,
+              title: item.judul || 'Pengumuman Desa',
+              desc: `${item.desa || 'Desa dalam cakupan'} · ${item.isi || ''}`,
+              time: item.tanggal_mulai ? new Date(item.tanggal_mulai).toLocaleDateString('id-ID') : 'Terbaru',
+              category: 'pengumuman',
+              unread: false,
+              meta: { actionLabel: 'Buka Pengumuman Wilayah', targetMenu: 'pengumuman_regional' },
+            })) : []),
+            ...(Array.isArray(overview?.agenda) ? overview.agenda.slice(0, 8).map((item: any) => ({
+              id: `agenda-${item.id}`,
+              title: item.judul || 'Agenda Desa',
+              desc: `${item.desa || 'Desa dalam cakupan'} · ${item.tempat || 'Lokasi belum dicantumkan'}`,
+              time: item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : 'Terbaru',
+              category: 'agenda',
+              unread: false,
+              meta: { actionLabel: 'Buka Agenda Wilayah', targetMenu: 'agenda_regional' },
+            })) : []),
+          ];
+          if (isMounted) setNotifications(regionalNotifications);
+          return;
+        }
+
         if (role === 'warga') {
           const [suratsRes, pengaduanRes] = await Promise.all([
             api.get('/warga/surats').catch(() => api.get('/surats')).catch(() => ({ data: [] })),
@@ -780,7 +807,6 @@ export const DashboardLayout: React.FC = () => {
   const [chatUnreadCount, setChatUnreadCount] = useState(0);
 
   useEffect(() => {
-    if (isRegionalRole) return;
     const fetchChatUnreadCount = async () => {
       try {
         const response = await api.get('/chat/unread-count');
@@ -795,7 +821,7 @@ export const DashboardLayout: React.FC = () => {
     fetchChatUnreadCount();
     const interval = setInterval(fetchChatUnreadCount, 6000);
     return () => clearInterval(interval);
-  }, [isRegionalRole]);
+  }, []);
 
   useEffect(() => {
     const handleSideNav = (e: any) => {
@@ -809,7 +835,8 @@ export const DashboardLayout: React.FC = () => {
 
   // Build the exact grouped navigation tree for each role
   const getNavGroups = (): NavGroup[] => {
-    switch (roleSlug) {
+    const roleGroups: NavGroup[] = (() => {
+      switch (roleSlug) {
       case 'warga':
         return [
           {
@@ -1039,7 +1066,11 @@ export const DashboardLayout: React.FC = () => {
           },
           {
             title: 'Akun & Preferensi',
-            items: [{ id: 'profil_saya', label: 'Profil Saya', icon: UserIcon }],
+            items: [
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
+              { id: 'notifikasi', label: 'Notifikasi', icon: Bell },
+              { id: 'profil_saya', label: 'Profil Saya', icon: UserIcon },
+            ],
           },
         ];
 
@@ -1081,7 +1112,14 @@ export const DashboardLayout: React.FC = () => {
               { id: 'laporan_wilayah', label: 'Laporan Terintegrasi', icon: TrendingUp },
             ],
           },
-          { title: 'Akun & Preferensi', items: [{ id: 'profil_saya', label: 'Profil Saya', icon: UserIcon }] },
+          {
+            title: 'Akun & Preferensi',
+            items: [
+              { id: 'pesan', label: 'Pusat Pesan & Chat', icon: MessageSquare, badge: chatUnreadCount > 0 ? chatUnreadCount.toString() : '', badgeColor: 'bg-blue-600 text-white' },
+              { id: 'notifikasi', label: 'Notifikasi', icon: Bell },
+              { id: 'profil_saya', label: 'Profil Saya', icon: UserIcon },
+            ],
+          },
         ];
 
       case 'admin':
@@ -1149,14 +1187,56 @@ export const DashboardLayout: React.FC = () => {
           },
         ];
 
-      default:
-        return [
-          {
-            title: 'Menu Utama',
-            items: [{ id: 'beranda', label: 'Beranda', icon: Home }],
-          },
-        ];
-    }
+        default:
+          return [
+            {
+              title: 'Menu Utama',
+              items: [{ id: 'beranda', label: 'Beranda', icon: Home }],
+            },
+          ];
+      }
+    })();
+
+    const smartCityGroups: NavGroup[] = [
+      {
+        title: 'Smart City',
+        items: [
+          { id: 'smart_city_umkm', label: 'Kelola UMKM Saya', icon: ShoppingBag },
+          { id: 'smart_city_kos', label: 'Kelola Kos & Hunian', icon: Home },
+          { id: 'smart_city_loker', label: 'Kelola Lowongan Saya', icon: Briefcase },
+        ],
+      },
+    ];
+    const roleItems = roleGroups.flatMap((group) => group.items);
+    const isAccountItem = (id: string) =>
+      ['pesan', 'chat', 'notifikasi', 'profil', 'profil_saya'].includes(id);
+    const isInformationItem = (id: string) =>
+      id.startsWith('agenda_') ||
+      id.startsWith('pengumuman') ||
+      id === 'buat_pengumuman' ||
+      id.startsWith('aspirasi') ||
+      id.startsWith('pengaduan') ||
+      id.startsWith('keuangan_desa') ||
+      id === 'data_keuangan' ||
+      id === 'program_sosial' ||
+      id.startsWith('laporan_wilayah') ||
+      ['publikasi_laporan', 'laporan_keuangan', 'ekspor_laporan', 'statistik_sistem', 'log_aktivitas', 'rekap_statistik', 'analisis_kinerja'].includes(id);
+    const accountItems = roleItems.filter((item) => isAccountItem(item.id));
+    const informationItems = roleItems.filter((item) =>
+      !isAccountItem(item.id) && isInformationItem(item.id)
+    );
+    const serviceItems = roleItems.filter((item) =>
+      !item.id.startsWith('smart_city_') &&
+      !isAccountItem(item.id) &&
+      !isInformationItem(item.id)
+    );
+
+    return [
+      ...(serviceItems.length ? [{ title: 'Layanan', items: serviceItems }] : []),
+      ...smartCityGroups,
+      ...(informationItems.length ? [{ title: 'Informasi', items: informationItems }] : []),
+      ...(accountItems.length ? [{ title: 'Akun & Komunikasi', items: accountItems }] : []),
+    ];
   };
 
   const navGroups = getNavGroups();
@@ -1322,11 +1402,24 @@ export const DashboardLayout: React.FC = () => {
       );
     }
 
+    // 2. Specific Views
+    if (activeMenu.startsWith('smart_city_')) {
+      const isCreate = activeMenu.endsWith('_tambah') || location.pathname.endsWith('/tambah');
+      let section: 'umkm' | 'kos' | 'loker' = 'umkm';
+      if (activeMenu.includes('kos')) section = 'kos';
+      if (activeMenu.includes('loker')) section = 'loker';
+
+      return (
+        <React.Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Memuat fitur Smart City...</div>}>
+          <WargaSmartCityManager activeSection={section} isCreateMode={isCreate} onNavigate={handleMenuNavigate} />
+        </React.Suspense>
+      );
+    }
+
     if (isRegionalRole) {
       return <RegionalOverviewDashboard roleSlug={roleSlug} activeSubmenu={activeMenu} />;
     }
 
-    // 2. Specific Views
     if (activeMenu === 'kelola_desa' || activeMenu === 'tambah_desa') {
       return <SuperAdminTenantView initialAction={activeMenu === 'tambah_desa' ? 'create' : 'list'} onNavigate={handleMenuNavigate} />;
     }
@@ -1340,19 +1433,6 @@ export const DashboardLayout: React.FC = () => {
     if (activeMenu === 'aspirasi_warga' || activeMenu === 'pengaduan') {
       if (roleSlug === 'warga') return <AspirasiPengaduanWargaView />;
     }
-    if (activeMenu.startsWith('smart_city_')) {
-      const isCreate = activeMenu.endsWith('_tambah') || location.pathname.endsWith('/tambah');
-      let section: 'umkm' | 'kos' | 'loker' = 'umkm';
-      if (activeMenu.includes('kos')) section = 'kos';
-      if (activeMenu.includes('loker')) section = 'loker';
-
-      return (
-        <React.Suspense fallback={<div className="p-8 text-center text-xs text-slate-500">Memuat Smart City Warga...</div>}>
-          <WargaSmartCityManager activeSection={section} isCreateMode={isCreate} onNavigate={handleMenuNavigate} />
-        </React.Suspense>
-      );
-    }
-
     // 3. Primary Role Dashboards
     if (roleSlug === 'warga') return <WargaDashboard activeSubmenu={activeMenu} onNavigate={handleMenuNavigate} />;
     if (roleSlug === 'rt') return <RtDashboard activeSubmenu={activeMenu} onNavigate={handleMenuNavigate} />;

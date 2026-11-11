@@ -147,7 +147,7 @@ export const SmartCityHubPage: React.FC = () => {
   }, [activeMapFilter]);
 
   return (
-    <div className="space-y-12 sm:space-y-16 font-sans pb-16">
+    <div className="w-full space-y-12 px-4 pb-16 font-sans sm:space-y-16 sm:px-6 lg:px-8">
       
       {/* Hero Section */}
       <section className="text-center max-w-4xl mx-auto space-y-4 pt-2">
