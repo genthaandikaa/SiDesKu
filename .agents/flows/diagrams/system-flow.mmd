@@ -1,13 +1,13 @@
-flowchart TD
+flowchart LR
   subgraph faseSatu ["FASE 1: AKSES IDENTIFIKASI DAN AUTENTIKASI PENGGUNA"]
     direction TB
     startNode(["Mulai: Pengguna Akses Portal Nexora"]) --> checkReg{"Sudah Memiliki Akun?"}
     checkReg -->|"Belum Punya Akun"| regForm["Isi Form Registrasi: NIK KK Nama No WhatsApp dan Password"]
-    regForm --> dukcapilVal{"Validasi NIK ke Basis Data Dukcapil"}
-    dukcapilVal -->|"NIK Tidak Ditemukan atau Palsu"| regFail["Registrasi Ditolak: Data NIK Tidak Sah"]
+    regForm --> dukcapilVal{"Validasi NIK ke Basis Data Kependudukan"}
+    dukcapilVal -->|"NIK Tidak Valid"| regFail["Registrasi Ditolak: Data NIK Tidak Sah"]
     dukcapilVal -->|"NIK Sah dan Terdaftar"| sendOtp["Kirim 6 Digit OTP Verifikasi ke WhatsApp"]
     sendOtp --> verifyOtp{"Input dan Verifikasi Kode OTP"}
-    verifyOtp -->|"OTP Kadaluarsa atau Salah"| sendOtp
+    verifyOtp -->|"OTP Salah"| sendOtp
     verifyOtp -->|"OTP Benar"| regSuccess["Akun Aktif: Silakan Masuk"]
     regSuccess --> loginInput["Input NIK atau Username dan Password"]
     checkReg -->|"Sudah Punya Akun"| loginInput
@@ -107,18 +107,18 @@ flowchart TD
     dashCommand --> opdRouting{"Pilih Meja OPD Kota"}
     opdRouting -->|"Dinas PUPR"| puprDesk["Meja Tanggap Darurat Infrastruktur dan Jalan Kota"]
     opdRouting -->|"Dinas Sosial"| dinsosDesk["Pusat Validasi Big Data DTKS dan Audit Bansos Terpadu"]
-    opdRouting -->|"Disnaker"| disnakerDesk["Meja Pengawasan Bursa Karir dan Anti Loker Bodong"]
+    opdRouting -->|"Disnaker"| disnakerDesk["Meja Pengawasan Bursa Karir dan Tenaga Kerja Kota"]
     opdRouting -->|"Diskominfo"| diskominfoDesk["Pemantauan Uptime Server Big Data Lake dan Log Forensik Kriptografi"]
     opdRouting -->|"Walikota Bupati"| executiveDesk["Executive City Dashboard: Heatmap Isu Kota dan Serapan APBD"]
   end
 
   subgraph faseSuratMandiri ["FASE 3 SAMPAI 9: SIKLUS HIDUP PERMOHONAN SURAT DIGITAL"]
     direction TB
-    dashWarga --> pickSurat["Warga Pilih Layanan Surat Mandiri SKTM SKU Domisili"]
-    pickSurat --> checkMasterDoc{"Apakah Berkas Master KTP dan KK Lengkap di Profil?"}
-    checkMasterDoc -->|"Belum Lengkap"| uploadMasterDoc["Unggah Foto KTP KK Format PDF JPG Kurang 2MB"]
-    uploadMasterDoc --> fillDetail["Lengkapi Rincian Keperluan Surat"]
-    checkMasterDoc -->|"Lengkap"| fillDetail
+    dashWarga --> pickSurat["Warga Buka Katalog Surat dan Pilih Jenis Layanan Surat"]
+    pickSurat --> openFormPengajuan["Buka Halaman Form Pengajuan Surat Khusus"]
+    openFormPengajuan --> viewDetailSyarat["Tinjau Persyaratan Berkas Lengkap Sesuai Jenis Surat"]
+    viewDetailSyarat --> uploadFileSyarat["Unggah File Dokumen Lampiran Pemohon"]
+    uploadFileSyarat --> fillDetail["Lengkapi Rincian Keterangan dan Tujuan Pengajuan"]
     fillDetail --> previewDraft["Review Draft Permohonan Surat Mandiri"]
     previewDraft --> submitReq["Submit Permohonan: Terbitkan Resi REQ-YYYYMMDD-XXXX"]
     submitReq --> rtInboxSurat
@@ -194,7 +194,7 @@ flowchart TD
     pinGreenResolved --> notifyCitizenResolved["Kirim Notifikasi Penyelesaian Lengkap ke Ponsel Warga"]
   end
 
-  subgraph faseHunianSpasial ["FASE 11: PETA HUNIAN DAN KOS SPASIAL GIS BAGI PENDATANG BARU"]
+  subgraph faseHunianSpasial ["FASE 11: PETA HUNIAN DAN KOS SPASIAL GIS DEDICATED URL"]
     direction TB
     dashWarga --> hunianCitizenChoice{"Pilih Aktivitas Hunian"}
     hunianCitizenChoice -->|"Cari Tempat Tinggal"| searchHunian["Pendatang atau Mahasiswa Buka Peta Spasial Hunian"]
@@ -202,33 +202,36 @@ flowchart TD
     
     searchHunian --> filterHunian["Filter Berdasarkan Tipe: Kos Putri Putra Campur Kontrakan dan Harga"]
     filterHunian --> interactiveGisMap["Peta Interaktif Tampilkan Pin Hunian dan Ketersediaan Kamar"]
-    interactiveGisMap --> clickPinHunian["Pilih Pin Properti: Review Fasilitas AC Wifi KM Dalam dan Galeri"]
-    clickPinHunian --> contactVerifiedOwner["Hubungi Pemilik via WhatsApp Terverifikasi RT"]
+    interactiveGisMap --> clickPinHunian["Klik Tombol Detail Kamar pada Kartu Hunian"]
+    clickPinHunian --> navigateKosDetailPage["Navigasi ke Dedicated Page Baru URL smart-city-kos-id"]
+    navigateKosDetailPage --> viewFullKosDetail["Akses Halaman Lengkap: Galeri Fasilitas Aturan QRIS dan GPS"]
+    viewFullKosDetail --> contactVerifiedOwner["Hubungi Pemilik via WhatsApp Terverifikasi"]
     contactVerifiedOwner --> surveyAndDeal["Survei Fisik ke Lokasi dan Transaksi Sewa Aman Bebas Calo"]
     
     registerListing --> submitListingForm["Input Nama Hunian Tarif Fasilitas dan Tandai Titik GPS Lokasi"]
     submitListingForm --> rtKosTab
     rtKosTab --> rtInspectListing{"Pemeriksaan Lapangan dan Legalitas oleh Pengurus RT"}
-    rtInspectListing -->|"Properti Ilegal atau Rawan Keamanan"| rtRejectListing["Tolak Listing: Alasan Keamanan Lingkungan"]
-    rtInspectListing -->|"Properti Sah dan Lingkungan Tertib"| rtApproveListing["ACC Listing: Diberi Lencana Terverifikasi RT"]
+    rtInspectListing -->|"Properti Bermasalah"| rtRejectListing["Tolak Listing: Alasan Keamanan Lingkungan"]
+    rtInspectListing -->|"Properti Sah dan Tertib"| rtApproveListing["ACC Listing: Diberi Lencana Terverifikasi RT"]
     rtApproveListing --> interactiveGisMap
   end
 
-  subgraph fasePasarBebasUmkm ["FASE 12: PASAR BEBAS UMKM KOTA BERBASIS RADIUS JARAK TERDEKAT"]
+  subgraph fasePasarBebasUmkm ["FASE 12: ALL STORE PASAR PRODUK WARGA BERBASIS RADIUS TERDEKAT"]
     direction TB
-    dashWarga --> marketCitizenChoice{"Pilih Aktivitas Pasar UMKM"}
-    marketCitizenChoice -->|"Belanja Produk Terdekat"| browseMarketList["Warga Buka Katalog Pasar Komunitas Kota"]
-    marketCitizenChoice -->|"Jual Dagangan Lapak"| createMerchantShop["Pelaku UMKM Buka Lapak dan Tambah Produk"]
+    dashWarga --> marketCitizenChoice{"Pilih Aktivitas All Store"}
+    marketCitizenChoice -->|"Belanja Produk Terdekat"| browseMarketList["Warga Buka Katalog All Store Pasar Warga"]
+    marketCitizenChoice -->|"Jual Dagangan Lapak"| createMerchantShop["Pelaku Usaha Buka Lapak dan Tambah Produk"]
     
     browseMarketList --> selectDistanceRadius{"Pilih Filter Radius Jarak Terdekat"}
-    selectDistanceRadius -->|"Radius 500 Meter"| radUnder500["Produk Sekitar Tetangga Satu Rukun Tetangga Kurang 500m"]
+    selectDistanceRadius -->|"Radius 500 Meter"| radUnder500["Produk Sekitar Tetangga Satu RT Kurang 500m"]
     selectDistanceRadius -->|"Radius 1.5 Kilometer"| radUnder1500["Produk Sekitar Dusun dan RW Tetangga Kurang 1.5km"]
     selectDistanceRadius -->|"Radius 3 Kilometer"| radUnder3000["Produk Satu Kelurahan Kurang 3km"]
     selectDistanceRadius -->|"Radius 5 Kilometer"| radUnder5000["Produk Lintas Kelurahan Kurang 5km"]
     selectDistanceRadius -->|"Seluruh Kota"| radAllCity["Jelajahi Seluruh Sentra Kuliner dan Usaha Kota"]
     radUnder500 & radUnder1500 & radUnder3000 & radUnder5000 & radAllCity --> sortDistanceFeed["Urutkan Produk Berdasarkan Jarak Paling Dekat dari Posisi Warga"]
     sortDistanceFeed --> pickProductItem["Pilih Menu Kuliner Belanja Harian atau Jasa Lokal"]
-    pickProductItem --> directWaOrder["Hubungi Penjual via WhatsApp: COD atau Pesan Antar Tetangga"]
+    pickProductItem --> openUmkmDetail["Navigasi ke Dedicated Page All Store smart-city-umkm-id"]
+    openUmkmDetail --> directWaOrder["Hubungi Penjual via WhatsApp: COD atau Pesan Antar"]
     
     createMerchantShop --> submitProductData["Unggah Foto Produk Judul Harga Kategori dan Titik Koordinat Lapak"]
     submitProductData --> checkShopCoords{"Validasi Titik Koordinat Lapak di Wilayah Kota"}
@@ -238,21 +241,29 @@ flowchart TD
     publishShopProduct --> sortDistanceFeed
   end
 
-  subgraph faseBursaKarirDisnaker ["FASE 13: BURSA KARIR DAN LOKER KOTA TERPADU LINKEDIN STYLE"]
+  subgraph faseBursaKarirDisnaker ["FASE 13: BURSA KARIR DAN LOKER INKLUSIF KOTA DEDICATED URL"]
     direction TB
     dashWarga --> jobCitizenChoice{"Pilih Aktivitas Bursa Karir"}
     jobCitizenChoice -->|"Mencari Pekerjaan"| searchJobFeed["Pencari Kerja Buka Feed Bursa Karir Kota"]
-    jobCitizenChoice -->|"Buka Lowongan Kerja"| postJobVacancy["Perusahaan atau Pelaku Usaha Pasang Lowongan Baru"]
+    jobCitizenChoice -->|"Buka Lowongan Kerja"| postJobVacancy["Warga Pelaku Usaha Buka Formulir Pasang Lowongan Baru"]
     
-    searchJobFeed --> filterJobs["Filter Bidang Kerja Tingkat Pengalaman dan Rentang Gaji Standar UMK"]
-    filterJobs --> listVerifiedJobs["Tampilkan Feed Loker Berstatus Disnaker Verified"]
-    listVerifiedJobs --> reviewJobDetail["Review Persyaratan Kualifikasi Benefit dan Lokasi Kantor"]
-    reviewJobDetail --> applyJobInstant["Kirim Lamaran Instan dan CV Portofolio ke Kontak HRD"]
+    searchJobFeed --> filterJobs["Filter Bidang Kerja Tingkat Pengalaman dan Gaji Format Singkat Jt"]
+    filterJobs --> listVerifiedJobs["Tampilkan Feed Loker Bersih dari Label Birokrasi"]
+    listVerifiedJobs --> clickJobCard["Klik Kartu Loker: Navigasi ke URL Mandiri smart-city-loker-id"]
+    clickJobCard --> reviewJobRequirements["Review Rincian Pekerjaan dan Daftar Berkas Wajib yang Ditentukan Pengiklan"]
+    reviewJobRequirements --> clickApplyButton["Klik Tombol Lamar Sekarang"]
+    clickApplyButton --> checkAuthApplicant{"Apakah Pencari Kerja Sudah Login Akun?"}
+    checkAuthApplicant -->|"Belum Login"| showPrivacyGate["Tampilkan Modal Gerbang Autentikasi untuk Perlindungan Data"]
+    showPrivacyGate --> loginInput
+    checkAuthApplicant -->|"Sudah Login"| openFastApplyPage["Buka Halaman Lamar Cepat URL smart-city-loker-id-lamar"]
+    openFastApplyPage --> uploadSelectedDocs["Lengkapi dan Lampirkan Berkas yang Diwajibkan Pengiklan"]
+    uploadSelectedDocs --> submitApplicationAction["Kirim Lamaran Instan dan CV Portofolio ke Kontak Pengelola"]
     
-    postJobVacancy --> inputJobReqs["Input Profil Perusahaan Deskripsi Tugas Kualifikasi dan Rentang Gaji"]
-    inputJobReqs --> disnakerDesk
-    disnakerDesk --> disnakerLegalAudit{"Audit Legalitas dan Anti Fraud oleh Disnaker Kota"}
-    disnakerLegalAudit -->|"Indikasi Pungli Penipuan atau Minta Uang Pendaftaran"| disnakerBlacklist["Tolak Lowongan dan Masukkan Akun ke Daftar Hitam"]
-    disnakerLegalAudit -->|"Perusahaan Terdaftar Resmi Memiliki NIB"| disnakerApprove["Terbitkan Loker Berstempel Resmi Disnaker Verified Anti Fraud"]
-    disnakerApprove --> listVerifiedJobs
+    postJobVacancy --> fillJobStageOne["Tahap 1: Input Identitas Posisi Nama Usaha dan Kategori"]
+    fillJobStageOne --> fillJobStageTwo["Tahap 2: Input Kompensasi Gaji Jt dan Pilih Dokumen Persyaratan Wajib"]
+    fillJobStageTwo --> selectApplicantDocs["Multi Select: CV KTP Portofolio Ijazah Sertifikat Paklaring Sehat SKCK"]
+    selectApplicantDocs --> fillJobStageThree["Tahap 3: Input No WhatsApp Kontak Pengelola dan Kualifikasi Deskripsi"]
+    fillJobStageThree --> publishCitizenJob["Klik Terbitkan Lowongan Sekarang"]
+    publishCitizenJob --> isolateCitizenLoker["Simpan dengan User ID Warga: Terisolasi Bersih dari Seed Publik"]
+    isolateCitizenLoker --> listVerifiedJobs
   end
