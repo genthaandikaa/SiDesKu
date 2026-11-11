@@ -155,7 +155,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
         `Alamat : *${alamat}*\n` +
         `Agenda Acara : *${announcement.judul}*\n` +
         `Hari & Tanggal : *${t?.hariTanggal || announcement.tanggal || 'Kamis, 13 Agustus 2026'}*\n` +
-        `waktu ⏰ : *${t?.jam || t?.sesi || '08:30 WIB - Selesai'}*\n` +
+        `Waktu : *${t?.jam || t?.sesi || '08:30 WIB - Selesai'}*\n` +
         `Lokasi : *${t?.tempat || t?.lokasi || 'Pendopo Balai Desa Doko'}*\n` +
         `Alokasi Bantuan : *${t?.alokasi || t?.keperluan || '30 Kg Beras CBP (Alokasi Juli - September 2026)'}*\n` +
         `Biaya Tebus : *GRATIS (Rp 0,-)*\n` +
@@ -174,7 +174,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
         `Wilayah : *RT 01 / RW 01 Dusun Krajan*\n` +
         `Agenda Kegiatan : *${announcement.judul}*\n` +
         `Hari & Tanggal : *${t?.hariTanggal || announcement.tanggal || 'Minggu, 24 Agustus 2026'}*\n` +
-        `waktu ⏰ : *${t?.jam || '06:30 WIB - Selesai'}*\n` +
+        `Waktu : *${t?.jam || '06:30 WIB - Selesai'}*\n` +
         `Lokasi Kumpul : *${t?.tempat || 'Balai RW 01 & Saluran Air Utama'}*\n` +
         `Keperluan : *Pembersihan selokan lingkungan & pencegahan genangan air*\n` +
         `Biaya Konsumsi : *Swadaya / Kas RT (Gratis Warga)*\n` +
@@ -186,12 +186,12 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
 
     if (isKtp) {
       return (
-        `🪪 Jadwal Pelayanan Rekam KTP-El Keliling Dispendukcapil :\n\n` +
+        `Jadwal Pelayanan Rekam KTP-El Keliling Dispendukcapil :\n\n` +
         `Nama Pemohon : *${namaWarga}*\n` +
         `NIK : *${nik}*\n` +
-        `agenda layanan 🪪 : *${announcement.judul}*\n` +
+        `Agenda Layanan : *${announcement.judul}*\n` +
         `Hari & Tanggal : *${t?.hariTanggal || announcement.tanggal || 'Senin, 17 Agustus 2026'}*\n` +
-        `waktu ⏰ : *${t?.jam || '08:30 - 14:00 WIB'}*\n` +
+        `Waktu : *${t?.jam || '08:30 - 14:00 WIB'}*\n` +
         `Lokasi : *${t?.tempat || 'Ruang Pelayanan Balai Desa Doko'}*\n` +
         `Persyaratan Berkas : *Fotokopi KK, Akta Kelahiran & berpakaian rapi berkerah*\n` +
         `Biaya Retribusi : *GRATIS (Rp 0,-)*\n` +
@@ -208,9 +208,9 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
         `Nama Peserta : *${namaWarga}*\n` +
         `Kegiatan : *${announcement.judul}*\n` +
         `Hari & Tanggal : *${t?.hariTanggal || announcement.tanggal || 'Sabtu, 22 Agustus 2026'}*\n` +
-        `waktu ⏰ : *${t?.jam || '08:00 - 11:30 WIB'}*\n` +
+        `Waktu : *${t?.jam || '08:00 - 11:30 WIB'}*\n` +
         `Lokasi Posyandu : *${t?.tempat || 'Balai RT 01 / Posyandu Cempaka'}*\n` +
-        `layanan medis 🩺 : *Penimbangan balita, imunisasi & cek tensi darah lansia*\n` +
+        `Layanan Medis : *Penimbangan balita, imunisasi & cek tensi darah lansia*\n` +
         `Biaya Pemeriksaan : *GRATIS (Rp 0,-)*\n` +
         `No. Urut Antrean : *${t?.noUrut || 1}*\n\n` +
         `Catatan : *Jangan lupa membawa Buku KIA/KMS balita atau kartu kontrol lansia.* \n\n` +
@@ -223,7 +223,7 @@ export const PengumumanView: React.FC<{ canCreate?: boolean; initialOpenCreate?:
       `Judul Warta : *${announcement.judul}*\n` +
       `Ditujukan Kepada : *${namaWarga}*\n` +
       `Hari & Tanggal : *${t?.hariTanggal || announcement.tanggal || 'Hari Ini'}*\n` +
-      `waktu ⏰ : *${t?.jam || t?.sesi || 'Waktu Setempat'}*\n` +
+      `Waktu : *${t?.jam || t?.sesi || 'Waktu Setempat'}*\n` +
       `Lokasi : *${t?.tempat || t?.lokasi || 'Balai Desa Doko'}*\n` +
       `Keterangan : *${announcement.isi || t?.keperluan || 'Informasi kegiatan desa'}*\n` +
       `No. Tiket : *${t?.noUrut || 1}*\n\n` +

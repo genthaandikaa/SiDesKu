@@ -165,19 +165,22 @@ export const KosPage: React.FC = () => {
     <div className="space-y-10 font-sans pb-16">
       
       {/* Breadcrumb & Navigation */}
-      <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 pt-2">
-        <div className="flex items-center gap-2">
-          <Link to="/smart-city" className="hover:text-blue-600 transition-colors flex items-center gap-1 font-medium">
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Smart City Hub</span>
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
+        <nav aria-label="Breadcrumb" className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-200/90 shadow-2xs backdrop-blur-sm font-semibold text-slate-500">
+          <Link to="/" className="inline-flex items-center gap-1 hover:text-blue-700 transition-colors">
+            <Home className="w-3.5 h-3.5 text-slate-400" />
+            <span>Beranda</span>
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-400" />
-          <span className="font-bold text-slate-800">Pencarian Kos & Hunian Warga</span>
-        </div>
+          <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />
+          <span className="inline-flex items-center gap-1 text-slate-900 font-bold">
+            <Building2 className="w-3.5 h-3.5 text-blue-600" />
+            <span>Peta Kos & Hunian</span>
+          </span>
+        </nav>
 
         <Link
           to="/dashboard?menu=smart_city_kos"
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold transition-all border border-blue-200"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold transition-all border border-blue-200 shadow-2xs text-xs"
         >
           <PlusCircle className="w-3.5 h-3.5" />
           <span>Kelola / Pasang Kos Anda</span>

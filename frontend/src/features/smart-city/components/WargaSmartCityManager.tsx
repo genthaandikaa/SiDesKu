@@ -1487,12 +1487,14 @@ export const WargaSmartCityManager: React.FC<WargaSmartCityManagerProps> = ({
                           {/* Ongkir Penjual Badge */}
                           <div className="pt-1 flex flex-wrap gap-1">
                             {Number(item.ongkir ?? 0) === 0 ? (
-                              <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
-                                🛵 Gratis Ongkir
+                              <span className="text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
+                                <Truck className="w-3 h-3 text-emerald-600" />
+                                <span>Gratis Ongkir</span>
                               </span>
                             ) : (
-                              <span className="text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md">
-                                🛵 Ongkir Rp {Number(item.ongkir).toLocaleString('id-ID')}
+                              <span className="text-[10px] font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md inline-flex items-center gap-1">
+                                <Truck className="w-3 h-3 text-slate-500" />
+                                <span>Ongkir Rp {Number(item.ongkir).toLocaleString('id-ID')}</span>
                               </span>
                             )}
                             <span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">

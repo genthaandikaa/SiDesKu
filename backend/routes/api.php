@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\PengumumanController;
 use App\Http\Controllers\Api\Public\PublicInfoController;
 use App\Http\Controllers\Api\Public\PublicSuratController;
 use App\Http\Controllers\Api\Public\PublicUmkmController;
+use App\Http\Controllers\Api\PublicLokerController;
 use App\Http\Controllers\Api\Rt\KasRtController;
 use App\Http\Controllers\Api\Rt\RtPengaduanController;
 use App\Http\Controllers\Api\Rt\RtSuratController;
@@ -59,6 +60,14 @@ Route::post('/chat/support/{ticket}/messages', [\App\Http\Controllers\Api\ChatCo
 Route::get('/public/umkms', [PublicUmkmController::class, 'index']);
 Route::get('/public/umkms/{id}', [PublicUmkmController::class, 'show']);
 Route::get('/public/umkms/{id}/reviews', [PublicUmkmController::class, 'reviews']);
+
+// Smart City: Bursa Kerja, Loker & Karir Warga (Publik)
+Route::get('/public/lokers', [PublicLokerController::class, 'index']);
+Route::get('/public/lokers/{id}', [PublicLokerController::class, 'show']);
+Route::post('/public/lokers/{id}/apply', [PublicLokerController::class, 'apply']);
+Route::get('/public/loker-profile', [PublicLokerController::class, 'getSeekerProfile']);
+Route::post('/public/loker-profile', [PublicLokerController::class, 'saveSeekerProfile']);
+Route::get('/public/loker-applications', [PublicLokerController::class, 'getApplications']);
 
 // Dokumen Kependudukan (UU PDP)
 Route::get('/warga/dokumen/file/{userId}/{filename}', [\App\Http\Controllers\Api\Warga\WargaDokumenController::class, 'serveFile'])->name('api.warga.dokumen.file');

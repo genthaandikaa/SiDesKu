@@ -236,7 +236,7 @@ export const RwTerritoryMap: React.FC<RwTerritoryMapProps> = ({
       id: 'posyandu_terpadu',
       nama: 'Posyandu Terpadu Balita & Lansia Cempaka',
       tipe: 'Layanan Kesehatan Warga',
-      icon: '🩺',
+      icon: 'activity',
       lat: -7.81710,
       lng: 112.04380,
       desc: 'Fasilitas penimbangan rutin balita, PMT, dan posbindu kesehatan lansia se-RW 01.'

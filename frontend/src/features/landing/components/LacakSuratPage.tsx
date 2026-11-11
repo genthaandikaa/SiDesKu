@@ -250,15 +250,27 @@ export const LacakSuratPage: React.FC = () => {
                     </div>
 
                     <div className="text-left sm:text-right space-y-1">
-                      <span className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-black shadow-2xs ${
+                      <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black shadow-2xs ${
                         item.status === 'completed' ? 'bg-emerald-50 text-emerald-800 border border-emerald-300' :
                         item.status === 'rejected' ? 'bg-rose-50 text-rose-800 border border-rose-300' :
                         'bg-amber-50 text-amber-800 border border-amber-300'
                       }`}>
-                        {item.status === 'completed' ? '✓ Dokumen Selesai & Sah' :
-                         item.status === 'rejected' ? '✕ Permohonan Ditolak' :
-                         ['processed_sekdes', 'approved_rt'].includes(item.status) ? '⏳ Antrean Meja Desa' :
-                         item.status === 'pending_rw' ? '⏳ Antrean Meja Desa' : '⏳ Verifikasi RT'}
+                        {item.status === 'completed' ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Dokumen Selesai & Sah</span>
+                          </>
+                        ) : item.status === 'rejected' ? (
+                          <>
+                            <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
+                            <span>Permohonan Ditolak</span>
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="w-3.5 h-3.5 text-amber-600" />
+                            <span>{['processed_sekdes', 'approved_rt', 'pending_rw'].includes(item.status) ? 'Antrean Meja Desa' : 'Verifikasi RT'}</span>
+                          </>
+                        )}
                       </span>
                       <div className="text-[11px] text-slate-400 font-mono">
                         Diajukan: {new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
