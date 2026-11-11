@@ -143,6 +143,7 @@ export interface LamaranLoker {
   cvFileUrl?: string;
   portofolioUrl?: string;
   portofolioFileName?: string;
+  portofolioFileUrl?: string;
   catatan?: string;
   status: 'Terkirim' | 'Berkas Diterima HR - Wawancara Dijadwalkan' | 'Ditinjau' | 'Selesai Seleksi' | 'Diterima' | string;
   substatusText?: string;

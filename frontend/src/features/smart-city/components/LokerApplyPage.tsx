@@ -22,6 +22,7 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { LokerItem, LamaranLoker, JobSeekerProfile } from '../types';
+import { smartCityApi } from '../api/smartCityApi';
 import {
   getStoredLokerById,
   getStoredLokerList,
@@ -54,25 +55,39 @@ export const LokerApplyPage: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const seeker = getStoredJobSeekerProfile();
-    setProfile(seeker);
 
-    // Default with citizen profile or logged in user
-    setApplicantName(user?.name || seeker.nama);
-    setApplicantNik(seeker.nik);
-    setApplicantEmail(user?.email || seeker.email);
-    setApplicantWa(user?.phone_number || seeker.telepon);
-    setActiveCvName(seeker.cvUtama.name);
-    setCvFileSize(seeker.cvUtama.size);
+    // Load seeker profile
+    smartCityApi.getJobSeekerProfile().then((seeker) => {
+      setProfile(seeker);
+      setApplicantName(user?.name || seeker.nama);
+      setApplicantNik(seeker.nik);
+      setApplicantEmail(user?.email || seeker.email);
+      setApplicantWa(user?.phone_number || seeker.telepon);
+      setActiveCvName(seeker.cvUtama.name);
+      setCvFileSize(seeker.cvUtama.size);
+    }).catch(() => {
+      const seeker = getStoredJobSeekerProfile();
+      setProfile(seeker);
+      setApplicantName(user?.name || seeker.nama);
+      setApplicantNik(seeker.nik);
+      setApplicantEmail(user?.email || seeker.email);
+      setApplicantWa(user?.phone_number || seeker.telepon);
+      setActiveCvName(seeker.cvUtama.name);
+      setCvFileSize(seeker.cvUtama.size);
+    });
 
     if (id) {
-      const found = getStoredLokerById(id);
-      if (found) {
-        setJob(found);
-      } else {
-        const list = getStoredLokerList();
-        if (list.length > 0) setJob(list[0]);
-      }
+      smartCityApi.getLokerDetail(id).then((found) => {
+        if (found) {
+          setJob(found);
+        } else {
+          const list = getStoredLokerList();
+          if (list.length > 0) setJob(list[0]);
+        }
+      }).catch(() => {
+        const found = getStoredLokerById(id);
+        if (found) setJob(found);
+      });
     }
   }, [id, user]);
 
@@ -92,13 +107,29 @@ export const LokerApplyPage: React.FC = () => {
     }
   };
 
-  const handleSubmitApplication = (e: React.FormEvent) => {
+  const handleSubmitApplication = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!job) return;
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
+    try {
+      await smartCityApi.submitLokerApplication(job.id, {
+        pelamar_nama: applicantName,
+        pelamar_nik: applicantNik,
+        pelamar_wa: applicantWa,
+        pelamar_email: applicantEmail,
+        cv_file_name: activeCvName,
+        portofolio_url: portfolioUrl.trim() || undefined,
+        portofolio_file_name: attachedPortfolioName || undefined,
+        catatan: recruiterNote.trim() || undefined,
+      });
+
+      setIsSubmitting(false);
+      setSubmittedSuccessfully(true);
+    } catch (err) {
+      console.error('Submit application error:', err);
+      // Fallback
       const newLamaran: LamaranLoker = {
         id: `lamaran-${Date.now()}`,
         lokerId: job.id,
@@ -121,7 +152,7 @@ export const LokerApplyPage: React.FC = () => {
       submitStoredLamaran(newLamaran);
       setIsSubmitting(false);
       setSubmittedSuccessfully(true);
-    }, 700);
+    }
   };
 
   if (!job) {

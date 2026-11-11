@@ -21,6 +21,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { LokerItem } from '../types';
+import { smartCityApi } from '../api/smartCityApi';
 import {
   getStoredLokerList,
   KEDIRI_DEFAULT_COORDS,
@@ -31,6 +32,7 @@ import {
 export const LokerPage: React.FC = () => {
   const navigate = useNavigate();
   const [lokerList, setLokerList] = useState<LokerItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Semua');
   const [selectedLocation, setSelectedLocation] = useState<string>('Semua');
@@ -42,7 +44,25 @@ export const LokerPage: React.FC = () => {
   const itemsPerPage = 4;
 
   useEffect(() => {
-    setLokerList(getStoredLokerList());
+    let isMounted = true;
+    setIsLoading(true);
+    smartCityApi.getLokerList()
+      .then((data) => {
+        if (isMounted) {
+          setLokerList(data);
+          setIsLoading(false);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setLokerList(getStoredLokerList());
+          setIsLoading(false);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Filter logic

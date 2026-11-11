@@ -1,6 +1,15 @@
 import api from '@/shared/lib/axios';
-import { UmkmItem, UmkmReviewItem } from '../types';
-import { getStoredUmkmList, saveStoredUmkmItem } from '../smartCityStorage';
+import { UmkmItem, UmkmReviewItem, LokerItem, LamaranLoker, JobSeekerProfile } from '../types';
+import {
+  getStoredUmkmList,
+  saveStoredUmkmItem,
+  getStoredLokerList,
+  getStoredLokerById,
+  getStoredJobSeekerProfile,
+  saveStoredJobSeekerProfile,
+  getStoredLamaranList,
+  submitStoredLamaran
+} from '../smartCityStorage';
 
 // Transform backend snake_case response to frontend UmkmItem
 function transformUmkmFromBackend(raw: any): UmkmItem {
@@ -59,6 +68,108 @@ function transformReviewFromBackend(raw: any): UmkmReviewItem {
     reviewerName: raw.reviewer_name || raw.reviewerName || 'Warga Kediri',
     reviewerRtRw: raw.reviewer_rt_rw || raw.reviewerRtRw,
     createdAt: raw.created_at || raw.createdAt || new Date().toISOString(),
+  };
+}
+
+function transformLokerFromBackend(raw: any): LokerItem {
+  return {
+    id: raw.id,
+    wargaId: raw.user_id ? String(raw.user_id) : undefined,
+    posisi: raw.posisi,
+    perusahaan: raw.perusahaan,
+    kodeReg: raw.kode_reg,
+    nib: raw.nib,
+    companyLogoText: raw.company_logo_text,
+    mitraStatus: raw.mitra_status,
+    tagVerifikasi: raw.tag_verifikasi,
+    kategori: raw.kategori,
+    tipeKerja: raw.tipe_kerja,
+    isJasaMitra: Boolean(raw.is_jasa_mitra),
+    lokasi: raw.lokasi,
+    distanceText: raw.distance_text,
+    lat: Number(raw.lat) || 0,
+    lng: Number(raw.lng) || 0,
+    gajiLabel: raw.gaji_label,
+    gajiMin: Number(raw.gaji_min) || 0,
+    gajiMax: Number(raw.gaji_max) || 0,
+    gajiSubtext: raw.gaji_subtext,
+    pendidikan: raw.pendidikan || '',
+    pengalaman: raw.pengalaman || '',
+    syaratCv: Boolean(raw.syarat_cv),
+    ringkasan: raw.ringkasan || '',
+    deskripsi: Array.isArray(raw.deskripsi) ? raw.deskripsi : (raw.ringkasan ? [raw.ringkasan] : []),
+    tags: Array.isArray(raw.tags) ? raw.tags : [],
+    waktuKerja: raw.waktu_kerja,
+    levelPekerjaan: raw.level_pekerjaan,
+    fasilitasUtama: raw.fasilitas_utama,
+    bidang: raw.bidang,
+    alamatKantor: raw.alamat_kantor,
+    batasPengajuan: raw.batas_pengajuan,
+    kuotaKebutuhan: raw.kuota_kebutuhan,
+    waktuProses: raw.waktu_proses,
+    deskripsiDetail: raw.deskripsi_detail,
+    tanggungJawab: Array.isArray(raw.tanggung_jawab) ? raw.tanggung_jawab : undefined,
+    persyaratan: Array.isArray(raw.persyaratan) ? raw.persyaratan : undefined,
+    benefits: Array.isArray(raw.benefits) ? raw.benefits : undefined,
+    waHrd: raw.wa_hrd || '',
+    emailHrd: raw.email_hrd,
+    disnakerVerified: Boolean(raw.disnaker_verified),
+    tanggalPosting: raw.tanggal_posting || 'Pembaruan Real-Time',
+    jumlahPelamar: Number(raw.jumlah_pelamar) || 0,
+    createdAt: raw.created_at || new Date().toISOString()
+  };
+}
+
+function transformLamaranFromBackend(raw: any): LamaranLoker {
+  return {
+    id: raw.id,
+    lokerId: raw.loker_id,
+    lokerPosisi: raw.loker_posisi,
+    lokerPerusahaan: raw.loker_perusahaan,
+    pelamarNama: raw.pelamar_nama,
+    pelamarNik: raw.pelamar_nik,
+    pelamarWa: raw.pelamar_wa,
+    pelamarEmail: raw.pelamar_email,
+    pendidikanTerakhir: raw.pendidikan_terakhir,
+    cvFileName: raw.cv_file_name,
+    cvFileUrl: raw.cv_file_url,
+    portofolioUrl: raw.portofolio_url,
+    portofolioFileName: raw.portofolio_file_name,
+    portofolioFileUrl: raw.portofolio_file_url,
+    catatan: raw.catatan,
+    status: raw.status || 'Berkas Diterima HR - Wawancara Dijadwalkan',
+    substatusText: raw.substatus_text || 'Undangan via WhatsApp & Email',
+    tanggalLamar: raw.tanggal_lamar || new Date().toLocaleDateString('id-ID'),
+    iconType: raw.icon_type || 'building'
+  };
+}
+
+function transformProfileFromBackend(raw: any): JobSeekerProfile {
+  return {
+    nama: raw.nama || 'Budi Pratama',
+    nik: raw.nik || '3204•••• •••• 1002',
+    domisili: raw.domisili || 'RW 04, Desa Mekar Mukti',
+    statusKerja: raw.status_kerja || 'Siap Bekerja (Open to Work)',
+    terakhirUpdate: raw.terakhir_update || 'Diperbarui 2 hari lalu',
+    email: raw.email || 'budi.pratama@warga.sidesku.id',
+    telepon: raw.telepon || '0812-8921-7740',
+    avatarUrl: raw.avatar_url,
+    cvUtama: raw.cv_utama || {
+      name: 'CV_Budi_Pratama_Terbaru.pdf',
+      size: '1.4 MB',
+      lastUpdated: '14 Mei 2025',
+      atsPassed: true
+    },
+    berkasPendukung: Array.isArray(raw.berkas_pendukung) ? raw.berkas_pendukung : [],
+    keahlian: Array.isArray(raw.keahlian) ? raw.keahlian : [],
+    preferensi: raw.preferensi || {
+      area: 'Kecamatan Pusat / Sukamaju',
+      radius: 'Radius maksimal 15 km dari domisili',
+      gaji: 'Rp 4.800.000+ / bulan',
+      gajiSub: 'Sesuai UMK wilayah & tunjangan',
+      tipe: 'Penuh Waktu (Full-time)',
+      tipeSub: 'Tersedia untuk sistem kontrak PKWT / tetap'
+    }
   };
 }
 
@@ -207,5 +318,157 @@ export const smartCityApi = {
       console.warn('Failed to delete citizen personal UMKM:', err);
       return false;
     }
+  },
+
+  /**
+   * Fetch Loker list from backend API with localStorage fallback
+   */
+  getLokerList: async (params?: {
+    q?: string;
+    kategori?: string;
+    lokasi?: string;
+    tipe_kerja?: string;
+    quick_filter?: string;
+  }): Promise<LokerItem[]> => {
+    try {
+      const res = await api.get('/public/lokers', { params });
+      if (res.data?.status === 'success' && Array.isArray(res.data?.data)) {
+        const transformed = res.data.data.map(transformLokerFromBackend);
+        try {
+          localStorage.setItem('nexora_smartcity_loker_data', JSON.stringify(transformed));
+        } catch {}
+        return transformed;
+      }
+    } catch (err) {
+      console.warn('Smart city Loker backend API fetch failed, falling back to local storage:', err);
+    }
+    return getStoredLokerList();
+  },
+
+  /**
+   * Get single Loker detail by ID from backend API
+   */
+  getLokerDetail: async (id: string): Promise<LokerItem | null> => {
+    try {
+      const res = await api.get(`/public/lokers/${id}`);
+      if (res.data?.status === 'success' && res.data?.data) {
+        return transformLokerFromBackend(res.data.data);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch Loker detail from backend, falling back to local storage:', err);
+    }
+    return getStoredLokerById(id) || null;
+  },
+
+  /**
+   * Submit fast-apply job application to backend API
+   */
+  submitLokerApplication: async (
+    lokerId: string,
+    payload: {
+      pelamar_nama: string;
+      pelamar_nik?: string;
+      pelamar_wa: string;
+      pelamar_email: string;
+      cv_file_name: string;
+      cv_file_url?: string;
+      portofolio_url?: string;
+      portofolio_file_name?: string;
+      portofolio_file_url?: string;
+      catatan?: string;
+    }
+  ): Promise<LamaranLoker> => {
+    try {
+      const res = await api.post(`/public/lokers/${lokerId}/apply`, payload);
+      if (res.data?.status === 'success' && res.data?.data) {
+        const created = transformLamaranFromBackend(res.data.data);
+        submitStoredLamaran(created);
+        return created;
+      }
+    } catch (err) {
+      console.warn('Failed to submit application to backend, saving locally:', err);
+    }
+    const fallbackLamaran: LamaranLoker = {
+      id: `lamaran-${Date.now()}`,
+      lokerId: lokerId,
+      lokerPosisi: 'Staf Terdaftar',
+      lokerPerusahaan: 'Mitra Usaha Kota',
+      pelamarNama: payload.pelamar_nama,
+      pelamarNik: payload.pelamar_nik,
+      pelamarWa: payload.pelamar_wa,
+      pelamarEmail: payload.pelamar_email,
+      cvFileName: payload.cv_file_name,
+      portofolioUrl: payload.portofolio_url,
+      portofolioFileName: payload.portofolio_file_name,
+      catatan: payload.catatan,
+      status: 'Berkas Diterima HR - Wawancara Dijadwalkan',
+      substatusText: 'Undangan via WhatsApp & Email',
+      tanggalLamar: new Date().toLocaleDateString('id-ID'),
+      iconType: 'building'
+    };
+    submitStoredLamaran(fallbackLamaran);
+    return fallbackLamaran;
+  },
+
+  /**
+   * Get job seeker profile from backend API
+   */
+  getJobSeekerProfile: async (): Promise<JobSeekerProfile> => {
+    try {
+      const res = await api.get('/public/loker-profile');
+      if (res.data?.status === 'success' && res.data?.data) {
+        const transformed = transformProfileFromBackend(res.data.data);
+        saveStoredJobSeekerProfile(transformed);
+        return transformed;
+      }
+    } catch (err) {
+      console.warn('Failed to fetch seeker profile from backend:', err);
+    }
+    return getStoredJobSeekerProfile();
+  },
+
+  /**
+   * Save / update job seeker profile in backend API
+   */
+  saveJobSeekerProfile: async (profile: JobSeekerProfile): Promise<JobSeekerProfile> => {
+    try {
+      const payload = {
+        nama: profile.nama,
+        nik: profile.nik,
+        domisili: profile.domisili,
+        status_kerja: profile.statusKerja,
+        email: profile.email,
+        telepon: profile.telepon,
+        cv_utama: profile.cvUtama,
+        berkas_pendukung: profile.berkasPendukung,
+        keahlian: profile.keahlian,
+        preferensi: profile.preferensi
+      };
+      const res = await api.post('/public/loker-profile', payload);
+      if (res.data?.status === 'success' && res.data?.data) {
+        const updated = transformProfileFromBackend(res.data.data);
+        saveStoredJobSeekerProfile(updated);
+        return updated;
+      }
+    } catch (err) {
+      console.warn('Failed to save seeker profile to backend:', err);
+    }
+    saveStoredJobSeekerProfile(profile);
+    return profile;
+  },
+
+  /**
+   * Get submitted applications list from backend API
+   */
+  getLokerApplications: async (): Promise<LamaranLoker[]> => {
+    try {
+      const res = await api.get('/public/loker-applications');
+      if (res.data?.status === 'success' && Array.isArray(res.data?.data)) {
+        return res.data.data.map(transformLamaranFromBackend);
+      }
+    } catch (err) {
+      console.warn('Failed to fetch applications from backend:', err);
+    }
+    return getStoredLamaranList();
   },
 };

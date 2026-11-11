@@ -28,6 +28,7 @@ import {
   Bookmark
 } from 'lucide-react';
 import { JobSeekerProfile, LamaranLoker } from '../types';
+import { smartCityApi } from '../api/smartCityApi';
 import {
   getStoredJobSeekerProfile,
   saveStoredJobSeekerProfile,
@@ -54,19 +55,36 @@ export const LokerProfilePage: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const p = getStoredJobSeekerProfile();
-    // Default name with logged-in user if available
-    if (user?.name && (!p.nama || p.nama === 'Budi Pratama')) {
-      p.nama = user.name;
-    }
-    setProfile(p);
-    setLamaranList(getStoredLamaranList());
 
-    setEditNama(p.nama);
-    setEditDomisili(p.domisili);
-    setEditStatusKerja(p.statusKerja);
-    setEditGaji(p.preferensi.gaji);
-    setEditArea(p.preferensi.area);
+    // Fetch from backend API
+    smartCityApi.getJobSeekerProfile().then((p) => {
+      if (user?.name && (!p.nama || p.nama === 'Budi Pratama')) {
+        p.nama = user.name;
+      }
+      setProfile(p);
+      setEditNama(p.nama);
+      setEditDomisili(p.domisili);
+      setEditStatusKerja(p.statusKerja);
+      setEditGaji(p.preferensi.gaji);
+      setEditArea(p.preferensi.area);
+    }).catch(() => {
+      const p = getStoredJobSeekerProfile();
+      if (user?.name && (!p.nama || p.nama === 'Budi Pratama')) {
+        p.nama = user.name;
+      }
+      setProfile(p);
+      setEditNama(p.nama);
+      setEditDomisili(p.domisili);
+      setEditStatusKerja(p.statusKerja);
+      setEditGaji(p.preferensi.gaji);
+      setEditArea(p.preferensi.area);
+    });
+
+    smartCityApi.getLokerApplications().then((apps) => {
+      setLamaranList(apps);
+    }).catch(() => {
+      setLamaranList(getStoredLamaranList());
+    });
   }, [user]);
 
   const showToast = (msg: string) => {
@@ -92,7 +110,7 @@ export const LokerProfilePage: React.FC = () => {
           lastUpdated: 'Hari ini'
         }
       };
-      saveStoredJobSeekerProfile(updatedProfile);
+      smartCityApi.saveJobSeekerProfile(updatedProfile);
       setProfile(updatedProfile);
       showToast(`Berkas CV berhasil diperbarui: ${file.name}`);
     }
@@ -117,7 +135,7 @@ export const LokerProfilePage: React.FC = () => {
         area: editArea
       }
     };
-    saveStoredJobSeekerProfile(updated);
+    smartCityApi.saveJobSeekerProfile(updated);
     setProfile(updated);
     setIsEditModalOpen(false);
     showToast('Perubahan profil berhasil disimpan!');

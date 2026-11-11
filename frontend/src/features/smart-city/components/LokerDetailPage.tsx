@@ -25,6 +25,7 @@ import {
   Check
 } from 'lucide-react';
 import { LokerItem } from '../types';
+import { smartCityApi } from '../api/smartCityApi';
 import { getStoredLokerById, getStoredLokerList } from '../smartCityStorage';
 
 export const LokerDetailPage: React.FC = () => {
@@ -37,14 +38,24 @@ export const LokerDetailPage: React.FC = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     if (!id) return;
-    const found = getStoredLokerById(id);
-    if (found) {
-      setJob(found);
-    } else {
-      // Fallback to first job
-      const list = getStoredLokerList();
-      if (list.length > 0) setJob(list[0]);
-    }
+
+    let isMounted = true;
+    smartCityApi.getLokerDetail(id)
+      .then((data) => {
+        if (isMounted && data) {
+          setJob(data);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          const found = getStoredLokerById(id);
+          if (found) setJob(found);
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
   const handleShare = () => {
@@ -162,11 +173,6 @@ export const LokerDetailPage: React.FC = () => {
                 >
                   {copiedLink ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
                 </button>
-              </div>
-
-              <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                <span>Verifikasi NIK Instan via Akun Warga</span>
               </div>
             </div>
           </div>
